@@ -17,6 +17,8 @@
 
 package com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui
 
+import androidx.lifecycle.SavedStateHandle
+
 import com.mihaicristiancondrea.android.apps.apptoolkit.core.analytics.models.AppScreenTracking
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.utils.constants.ToolkitTileIds
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.analytics.ToolUsageTracker
@@ -29,8 +31,9 @@ import kotlin.random.Random
 /** Rolls the Dice Roll tool's die. Closing the sheet shows a one again. */
 class DiceRollToolViewModel(
     telemetryRepository: TelemetryRepository,
+    private val savedStateHandle: SavedStateHandle = SavedStateHandle(),
 ) : LoggedScreenViewModel<DiceRollToolUiState, DiceRollToolEvent>(
-    initialState = DiceRollToolUiState(),
+    initialState = DiceRollToolUiState(result = savedStateHandle["result"] ?: 1),
     telemetryRepository = telemetryRepository,
     screenName = AppScreenTracking.Screens.NUMBERS.name,
     viewModelName = "DiceRollToolViewModel",
@@ -48,12 +51,12 @@ class DiceRollToolViewModel(
         launchReport(action = Actions.ROLL) {
             val result: Int = Random.nextInt(from = 1, until = 7)
             setState { copy(result = result, request = request + 1) }
+            savedStateHandle["result"] = currentState.result
             usage.markUsed()
         }
     }
 
     private fun dismiss() {
-        setState { DiceRollToolUiState() }
         usage.endSession()
     }
 

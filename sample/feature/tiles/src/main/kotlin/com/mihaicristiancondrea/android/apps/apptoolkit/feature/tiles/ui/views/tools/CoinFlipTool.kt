@@ -21,7 +21,16 @@ import androidx.annotation.DrawableRes
 import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
+import androidx.compose.foundation.Canvas
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.background
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.geometry.Size
+import androidx.compose.ui.platform.LocalView
+import androidx.compose.ui.platform.LocalHapticFeedback
+import androidx.compose.ui.hapticfeedback.HapticFeedbackType
+import kotlin.math.abs
+import kotlin.math.cos
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -41,6 +50,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -62,14 +72,18 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.Ge
 
 
 @Composable
-fun CoinFlipTool(side: CoinSide, flipRequest: Int, onFlip: () -> Unit) {
+fun CoinFlipTool(side: CoinSide, flipRequest: Int, onFlip: () -> Unit, compact: Boolean = false) {
+    val haptic = LocalHapticFeedback.current
+    val view = LocalView.current
+    var lastRequest by remember { mutableIntStateOf(flipRequest) }
     var flipping by remember { mutableStateOf(false) }
-    var rotationTarget by remember { mutableFloatStateOf(0f) }
+    var rotationTarget by remember { mutableFloatStateOf(if (side == CoinSide.Heads) 0f else 180f) }
 
     LaunchedEffect(flipRequest) {
-        if (flipRequest > 0) {
+        if (flipRequest != lastRequest) {
+            lastRequest = flipRequest
             flipping = true
-            rotationTarget += 1800f + (if (side == CoinSide.Heads) 0f else 180f)
+            rotationTarget += 1800f + (((if (side == CoinSide.Heads) 0f else 180f) - rotationTarget % 360f + 360f) % 360f)
         }
     }
 
@@ -80,7 +94,7 @@ fun CoinFlipTool(side: CoinSide, flipRequest: Int, onFlip: () -> Unit) {
             easing = FastOutSlowInEasing
         ),
         label = "coin-rotation",
-        finishedListener = { flipping = false }
+        finishedListener = { flipping = false; if (flipRequest > 0) if (view.hasWindowFocus()) haptic.performHapticFeedback(HapticFeedbackType.LongPress) }
     )
 
     val scale by animateFloatAsState(
@@ -110,7 +124,7 @@ fun CoinFlipTool(side: CoinSide, flipRequest: Int, onFlip: () -> Unit) {
                 }
         )
 
-        Text(
+        if (!compact) Text(
             text = if (flipping) {
                 stringResource(id = R.string.tool_coin_flip_waiting)
             } else {
@@ -125,9 +139,9 @@ fun CoinFlipTool(side: CoinSide, flipRequest: Int, onFlip: () -> Unit) {
             color = MaterialTheme.colorScheme.onSurfaceVariant,
         )
 
-        Spacer(modifier = Modifier.height(SizeConstants.SmallSize))
+        if (!compact) Spacer(modifier = Modifier.height(SizeConstants.SmallSize))
 
-        GeneralButton(
+        if (!compact) GeneralButton(
             onClick = {
                 if (!flipping) {
                     onFlip()
@@ -149,15 +163,14 @@ private fun Coin(
     val normalizedRotation = (rotationY % 360f + 360f) % 360f
     val isBackVisible = normalizedRotation in 90f..270f
 
-    Box(
-        modifier = modifier
-            .size(120.dp)
-            .graphicsLayer {
-                this.rotationY = rotationY
-                cameraDistance = 12f * density
-            },
-        contentAlignment = Alignment.Center
-    ) {
+    Box(modifier = modifier.size(120.dp), contentAlignment = Alignment.Center) {
+        val rim = MaterialTheme.colorScheme.primary
+        Canvas(Modifier.fillMaxSize()) {
+            val width = (size.width * abs(cos(Math.toRadians(rotationY.toDouble())).toFloat())).coerceAtLeast(8.dp.toPx())
+            drawOval(rim, topLeft = Offset(center.x - width / 2f,0f), size = Size(width,size.height))
+        }
+        Box(Modifier.fillMaxSize().graphicsLayer { this.rotationY = rotationY; cameraDistance = 12f * density }, contentAlignment = Alignment.Center) {
+
         if (isBackVisible) {
             Box(Modifier.graphicsLayer { this.rotationY = 180f }) {
                 CoinFace(
@@ -173,6 +186,7 @@ private fun Coin(
                 tint = MaterialTheme.colorScheme.onPrimaryContainer
             )
         }
+    }
     }
 }
 

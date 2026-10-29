@@ -42,20 +42,20 @@ class DecisionToolViewModelsTest {
     }
 
     @Test
-    fun `coin flip publishes a new request and resets on dismiss`() {
+    fun `coin flip publishes a new request and retains the outcome on dismiss`() {
         val viewModel = CoinFlipToolViewModel(telemetryRepository = FakeTelemetryRepository())
 
         viewModel.onEvent(CoinFlipToolEvent.Flip)
         assertEquals(1, viewModel.state.value.request)
 
         viewModel.onEvent(CoinFlipToolEvent.Dismiss)
-        assertEquals(CoinFlipToolUiState(), viewModel.state.value)
-        assertEquals(CoinSide.Heads, viewModel.state.value.side)
+        assertEquals(1, viewModel.state.value.request)
+        assertTrue(viewModel.state.value.side in CoinSide.entries)
         assertTrue(viewModel.messages.value.isEmpty())
     }
 
     @Test
-    fun `dice roll stays in range and resets on dismiss`() {
+    fun `dice roll stays in range and retains the outcome on dismiss`() {
         val viewModel = DiceRollToolViewModel(telemetryRepository = FakeTelemetryRepository())
 
         viewModel.onEvent(DiceRollToolEvent.Roll)
@@ -63,7 +63,7 @@ class DecisionToolViewModelsTest {
         assertEquals(1, viewModel.state.value.request)
 
         viewModel.onEvent(DiceRollToolEvent.Dismiss)
-        assertEquals(DiceRollToolUiState(), viewModel.state.value)
+        assertEquals(1, viewModel.state.value.request)
         assertTrue(viewModel.messages.value.isEmpty())
     }
 

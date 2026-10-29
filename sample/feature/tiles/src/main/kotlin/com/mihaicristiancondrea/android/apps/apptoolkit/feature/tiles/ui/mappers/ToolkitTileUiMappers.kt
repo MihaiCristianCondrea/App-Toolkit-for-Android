@@ -40,7 +40,7 @@ internal fun List<ToolkitTileCategoryData>.toUiModels(): ImmutableList<ToolkitTi
         )
     }.toImmutableList()
 
-private fun ToolkitTileData.toUiModel(): ToolkitTile {
+internal fun ToolkitTileData.toUiModel(): ToolkitTile {
     val visuals = id.tileVisuals()
     return ToolkitTile(
         id = id,
@@ -55,14 +55,19 @@ private fun ToolkitTileData.toUiModel(): ToolkitTile {
 }
 
 private fun String.categoryVisuals(): CategoryVisuals = when (this) {
-    "sensors" -> CategoryVisuals(R.string.tiles_category_sensors, ToolkitTileIcon.Compass)
+    "sensors" -> CategoryVisuals(R.string.section_sensors, ToolkitTileIcon.Compass)
     "utilities" -> CategoryVisuals(R.string.tiles_category_utilities, ToolkitTileIcon.Dice)
-    "system" -> CategoryVisuals(R.string.tiles_category_system, ToolkitTileIcon.FlashDimmer)
+    "chance" -> CategoryVisuals(R.string.section_chance, ToolkitTileIcon.Dice)
+    "measure" -> CategoryVisuals(R.string.measure_title, ToolkitTileIcon.Ruler)
+    "sound" -> CategoryVisuals(R.string.section_sound, ToolkitTileIcon.Water)
+    "system" -> CategoryVisuals(R.string.section_light, ToolkitTileIcon.FlashDimmer)
     "wellbeing" -> CategoryVisuals(R.string.tiles_category_wellbeing, ToolkitTileIcon.Breathing)
     else -> error("Unknown Toolkit Tiles category: $this")
 }
 
 private fun String.tileVisuals(): TileVisuals = when (this) {
+    ToolkitTileIds.DECISION_WHEEL -> TileVisuals(R.string.wheel_title, R.string.wheel_summary, ToolkitTileIcon.Wheel)
+    ToolkitTileIds.WATER_EJECT -> TileVisuals(R.string.water_title, R.string.water_summary, ToolkitTileIcon.Water)
     ToolkitTileIds.BUBBLE_LEVEL -> TileVisuals(
         R.string.tile_bubble_level_title,
         R.string.tile_bubble_level_summary,
@@ -124,8 +129,8 @@ private fun String.tileVisuals(): TileVisuals = when (this) {
     )
 
     ToolkitTileIds.SOS -> TileVisuals(
-        R.string.tile_sos_title,
-        R.string.tile_sos_summary,
+        R.string.morse_sos_title,
+        R.string.morse_sos_summary,
         ToolkitTileIcon.Sos
     )
 

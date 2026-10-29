@@ -26,6 +26,13 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.SheetValue
 import androidx.compose.material3.rememberBottomSheetState
+import androidx.activity.compose.BackHandler
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.fields.GeneralTextField
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.fields.GeneralTextFieldStyle
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -92,6 +99,9 @@ private const val APP_DETAILS_INTERACTION_SOURCE: String = "app_details"
  */
 @Composable
 fun AppsListScreen() {
+    val shellSearch = LocalShellSearch.current
+    var pageQuery by rememberSaveable { mutableStateOf("") }
+    BackHandler(enabled = shellSearch == null && pageQuery.isNotEmpty()) { pageQuery = "" }
     val viewModel: AppsListViewModel = koinViewModel()
     val state: AppListUiState by viewModel.state.collectAsStateWithLifecycle()
     val telemetry = LocalTelemetry.current
@@ -181,7 +191,8 @@ fun AppsListScreen() {
             detailsActionLauncher = detailsActionLauncher,
             windowWidthSizeClass = rememberWindowWidthSizeClass(),
             contentPadding = contentPadding(),
-            searchQuery = LocalShellSearch.current?.query.orEmpty(),
+            searchQuery = shellSearch?.query ?: pageQuery,
+            onSearchQueryChanged = if (shellSearch == null) { { pageQuery = it } } else null,
             listAdUnitId = listAdsConfig.bannerAdUnitId.takeIf { adsEnabled && it.isNotBlank() },
             detailsAdsConfig = detailsAdsConfig,
         )
@@ -217,6 +228,7 @@ internal fun AppsListScreenContent(
     modifier: Modifier = Modifier,
     contentPadding: PaddingValues = PaddingValues(),
     searchQuery: String = "",
+    onSearchQueryChanged: ((String) -> Unit)? = null,
     listAdUnitId: String? = null,
     detailsAdsConfig: AdsConfig = AdsConfig(),
 ) {
@@ -248,6 +260,10 @@ internal fun AppsListScreenContent(
             onShareClick = onShareClick,
             windowWidthSizeClass = windowWidthSizeClass,
             searchQuery = searchQuery,
+            searchField = onSearchQueryChanged?.let { change -> {
+                GeneralTextField(value = searchQuery, onValueChange = change, style = GeneralTextFieldStyle.Search,
+                    placeholder = stringResource(R.string.apps_search_hint))
+            } },
         )
     }
 

@@ -25,12 +25,13 @@ The developer's app catalogue: listing, details, favorites, and install state.
 - The Get it on Google Play badge the detail sheet shows.
 - The random-app button, declared by `AppsListScreen` through `ScreenHost(fabs)`; it scales out
   while there is no app to open.
-- Filtering the grid by the tab's search field (`LocalShellSearch`): an app matches by name,
+- Filtering the grid through `LocalShellSearch` when hosted as a tab, or a saved native search field
+  in the grid header when hosted as a drawer page: an app matches by name,
   package or description, after the filter chips.
 
 ## Does not own
 
-- Its registration as a tab, done by `:sample:app`'s `appGraph`.
+- Its registration as a drawer page, done by `:sample:app`'s `appGraph`.
 - Widget rendering, owned by [`:sample:widget`](../../widget/README.md), which reads this module's
   repository.
 

@@ -19,6 +19,8 @@ package com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.mapper
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.ReceiptLong
+import androidx.compose.material.icons.automirrored.outlined.RotateRight
+import androidx.compose.material.icons.outlined.WaterDrop
 import androidx.compose.material.icons.outlined.AddCircleOutline
 import androidx.compose.material.icons.outlined.Casino
 import androidx.compose.material.icons.outlined.CheckCircle
@@ -45,6 +47,7 @@ import androidx.compose.material3.toShape
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
+import androidx.compose.ui.graphics.luminance
 import androidx.compose.ui.graphics.vector.ImageVector
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.R
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.models.ToolkitTileStatus
@@ -61,6 +64,8 @@ internal fun ToolkitTile.previewTextResId(): Int = when (id) {
 }
 
 internal fun ToolkitTileIcon.imageVector(): ImageVector = when (this) {
+    ToolkitTileIcon.Wheel -> Icons.AutoMirrored.Outlined.RotateRight
+    ToolkitTileIcon.Water -> Icons.Outlined.WaterDrop
     ToolkitTileIcon.Protractor -> Icons.Outlined.SquareFoot
     ToolkitTileIcon.BillSplitter -> Icons.AutoMirrored.Outlined.ReceiptLong
     ToolkitTileIcon.RandomNumber -> Icons.Outlined.Numbers
@@ -86,28 +91,16 @@ internal fun ToolkitTileIcon.imageVector(): ImageVector = when (this) {
 @OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
 internal fun ToolkitTileIcon.backgroundShape(): Shape = when (this) {
-    ToolkitTileIcon.Level,
-    ToolkitTileIcon.Compass,
-    ToolkitTileIcon.Protractor,
-    ToolkitTileIcon.Converter,
-    ToolkitTileIcon.Timer -> MaterialShapes.Cookie9Sided
-
-    ToolkitTileIcon.Breathing,
-    ToolkitTileIcon.BillSplitter,
-    ToolkitTileIcon.Palette -> MaterialShapes.SoftBurst
-
-    ToolkitTileIcon.FlashDimmer,
-    ToolkitTileIcon.ScreenLight,
-    ToolkitTileIcon.Counter -> MaterialShapes.Flower
-
-    ToolkitTileIcon.Coin,
-    ToolkitTileIcon.Dice,
-    ToolkitTileIcon.Ruler,
-    ToolkitTileIcon.Morse -> MaterialShapes.Cookie12Sided
-
-    ToolkitTileIcon.RandomNumber,
-    ToolkitTileIcon.Sos -> MaterialShapes.Gem
-}.toShape()
+    ToolkitTileIcon.Compass -> com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.catalog.Cookie8Shape
+    ToolkitTileIcon.Level -> com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.catalog.Cookie16Shape
+    ToolkitTileIcon.Sos, ToolkitTileIcon.Morse -> MaterialShapes.Cookie7Sided.toShape()
+    ToolkitTileIcon.FlashDimmer -> MaterialShapes.Burst.toShape()
+    ToolkitTileIcon.Water, ToolkitTileIcon.Protractor, ToolkitTileIcon.Converter, ToolkitTileIcon.Timer -> MaterialShapes.Cookie9Sided.toShape()
+    ToolkitTileIcon.Breathing, ToolkitTileIcon.BillSplitter, ToolkitTileIcon.Palette -> MaterialShapes.SoftBurst.toShape()
+    ToolkitTileIcon.ScreenLight, ToolkitTileIcon.Counter -> MaterialShapes.Flower.toShape()
+    ToolkitTileIcon.Coin, ToolkitTileIcon.Dice, ToolkitTileIcon.Ruler, ToolkitTileIcon.Wheel -> MaterialShapes.Cookie12Sided.toShape()
+    ToolkitTileIcon.RandomNumber -> MaterialShapes.Gem.toShape()
+}
 
 internal fun ToolkitTileStatus.labelResId(): Int = when (this) {
     ToolkitTileStatus.Added -> R.string.tiles_status_added
@@ -125,48 +118,20 @@ internal fun ToolkitTileStatus.icon(): ImageVector = when (this) {
 
 @Composable
 internal fun ToolkitTileIcon.iconColors(): StatusColors {
-    val isDark = androidx.compose.foundation.isSystemInDarkTheme()
+    val dark = MaterialTheme.colorScheme.surface.luminance() < .5f
     return when (this) {
-        ToolkitTileIcon.Level,
-        ToolkitTileIcon.Compass,
-        ToolkitTileIcon.Ruler,
-        ToolkitTileIcon.Protractor,
-        ToolkitTileIcon.Timer -> StatusColors(
-            container = if (isDark) Color(0xFF006A60) else Color(0xFF00A091),
-            content = if (isDark) Color(0xFF74DED1) else Color(0xFF006A60),
-        )
-
+        ToolkitTileIcon.Level, ToolkitTileIcon.Compass, ToolkitTileIcon.Water -> StatusColors(
+            container = if (dark) Color(0xFF006A60) else Color(0xFF00A091),
+            content = if (dark) Color(0xFF74DED1) else Color(0xFF006A60))
         ToolkitTileIcon.Breathing -> StatusColors(
-            container = if (isDark) Color(0xFF8B4100) else Color(0xFFFF8B26),
-            content = if (isDark) Color(0xFFFFB88E) else Color(0xFF8B4100),
-        )
-
-        ToolkitTileIcon.Coin,
-        ToolkitTileIcon.Dice,
-        ToolkitTileIcon.Counter,
-        ToolkitTileIcon.Converter,
-        ToolkitTileIcon.BillSplitter,
-        ToolkitTileIcon.RandomNumber,
-        ToolkitTileIcon.Morse -> StatusColors(
-            container = if (isDark) Color(0xFF6B5E00) else Color(0xFFE2C900),
-            content = if (isDark) Color(0xFFFBE44D) else Color(0xFF6B5E00),
-        )
-
-        ToolkitTileIcon.ScreenLight,
-        ToolkitTileIcon.FlashDimmer -> StatusColors(
-            container = if (isDark) Color(0xFF91005A) else Color(0xFFE2008E),
-            content = if (isDark) Color(0xFFFFB0D3) else Color(0xFF91005A),
-        )
-
-        ToolkitTileIcon.Palette -> StatusColors(
-            container = if (isDark) Color(0xFF7A4E00) else Color(0xFFFFB84D),
-            content = if (isDark) Color(0xFFFFDDA8) else Color(0xFF7A4E00),
-        )
-
-        ToolkitTileIcon.Sos -> StatusColors(
-            container = if (isDark) Color(0xFFB10000) else Color(0xFFEE0000),
-            content = if (isDark) Color(0xFFFFDAD6) else Color(0xFFB10000),
-        )
+            container = if (dark) Color(0xFF8B4100) else Color(0xFFFF8B26),
+            content = if (dark) Color(0xFFFFB88E) else Color(0xFF8B4100))
+        ToolkitTileIcon.Sos, ToolkitTileIcon.Morse, ToolkitTileIcon.ScreenLight -> StatusColors(
+            container = if (dark) Color(0xFF91005A) else Color(0xFFE2008E),
+            content = if (dark) Color(0xFFFFB0D3) else Color(0xFF91005A))
+        else -> StatusColors(
+            container = if (dark) Color(0xFF6B5E00) else Color(0xFFE2C900),
+            content = if (dark) Color(0xFFFBE44D) else Color(0xFF6B5E00))
     }
 }
 

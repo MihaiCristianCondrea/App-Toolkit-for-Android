@@ -20,6 +20,8 @@ package com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.repo
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.local.preferences.FakeToolkitTilesPreferencesDataSource
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.local.quicksettings.QuickSettingsTilesLocalDataSource
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.models.ToolkitTileStatus
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.models.MeasureTools
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.models.PlayTools
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.NumbersCalculateTools
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.NumbersChanceTools
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.NumbersSecondaryTools
@@ -47,29 +49,30 @@ class AdditionalToolsCatalogTest {
             quickSettingsDataSource = source,
         )
         val categories = repository.currentTileCategories()
-        val catalogIds = categories.flatMap { it.tiles }.map { it.id }.toSet()
+        val catalogIds = categories.filter { it.id !in setOf("chance", "measure") }.flatMap { it.tiles }.map { it.id }.toSet()
 
-        assertTrue(ToolkitTileIds.PROTRACTOR in catalogIds)
+        assertFalse(ToolkitTileIds.PROTRACTOR in catalogIds)
         assertFalse(ToolkitTileIds.BILL_SPLITTER in catalogIds)
         assertFalse(ToolkitTileIds.UNIT_CONVERTER in catalogIds)
         assertFalse(ToolkitTileIds.RANDOM_NUMBER in catalogIds)
         assertFalse(ToolkitTileIds.COUNTER in catalogIds)
         assertFalse(ToolkitTileIds.DICE_ROLL in catalogIds)
 
-        val protractor = categories.flatMap { it.tiles }.single { it.id == ToolkitTileIds.PROTRACTOR }
+        val protractor = MeasureTools.single { it.id == ToolkitTileIds.PROTRACTOR }
         assertNull(protractor.requestKey)
         assertEquals(ToolkitTileStatus.Available, protractor.status)
 
-        val visuals = categories.toUiModels().flatMap { it.tiles }.single { it.id == ToolkitTileIds.PROTRACTOR }
+        val visuals = MeasureTools.single { it.id == ToolkitTileIds.PROTRACTOR }
         assertTrue(visuals.titleResId != 0 && visuals.summaryResId != 0)
-        assertEquals("sensors", categories.single { category -> category.tiles.any { it.id == ToolkitTileIds.PROTRACTOR } }.id)
+        assertFalse(catalogIds.any { id -> PlayTools.any { it.id == id } })
+        assertTrue(ToolkitTileIds.WATER_EJECT in catalogIds)
 
         assertEquals(
-            listOf(ToolkitTileIds.BILL_SPLITTER, ToolkitTileIds.UNIT_CONVERTER),
+            listOf(ToolkitTileIds.UNIT_CONVERTER, ToolkitTileIds.BILL_SPLITTER),
             NumbersCalculateTools.map { it.id },
         )
         assertEquals(
-            listOf(ToolkitTileIds.COUNTER, ToolkitTileIds.RANDOM_NUMBER, ToolkitTileIds.DICE_ROLL),
+            listOf(ToolkitTileIds.COUNTER, ToolkitTileIds.REACTION_TEST),
             NumbersChanceTools.map { it.id },
         )
         assertTrue(NumbersSecondaryTools.all { it.titleResId != 0 && it.summaryResId != 0 })

@@ -57,7 +57,7 @@ class ExpandedToolsViewModelsTest {
     }
 
     @Test
-    fun `unit converter view model updates bidirectionally and resets on dismiss`() {
+    fun `unit converter view model updates bidirectionally and preserves inputs on dismiss`() {
         val viewModel = UnitConverterToolViewModel(
             repository = UnitConversionRepository(),
             telemetryRepository = FakeTelemetryRepository(),
@@ -79,11 +79,12 @@ class ExpandedToolsViewModelsTest {
         assertTrue(viewModel.state.value.invalidInput)
 
         viewModel.onEvent(UnitConverterToolEvent.Dismiss)
-        assertEquals(UnitConverterToolUiState(), viewModel.state.value)
+        assertEquals("-500", viewModel.state.value.left)
+        assertTrue(viewModel.state.value.invalidInput)
     }
 
     @Test
-    fun `ruler view model clamps range and scale, persists calibration, and restores saved scale on dismiss`() {
+    fun `ruler view model clamps range and scale, persists calibration, and keeps its draft and units on dismiss`() {
         val preferences = FakeToolkitTilesPreferencesDataSource()
         val repository = RulerRepository(preferences = preferences)
         val viewModel = RulerToolViewModel(
@@ -104,8 +105,8 @@ class ExpandedToolsViewModelsTest {
         assertTrue(viewModel.state.value.inches)
 
         viewModel.onEvent(RulerToolEvent.Dismiss)
-        assertEquals(1.25f, viewModel.state.value.scale)
-        assertFalse(viewModel.state.value.inches)
+        assertEquals(1.8f, viewModel.state.value.scale)
+        assertTrue(viewModel.state.value.inches)
     }
 
     @Test

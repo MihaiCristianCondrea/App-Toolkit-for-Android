@@ -91,10 +91,15 @@ fun ToolkitToolBottomSheet(
     onClose: () -> Unit,
     onAddTile: () -> Unit,
     onSetupTile: () -> Unit,
+    startReaction: Boolean = false,
 ) {
     when (tile.id) {
         ToolkitTileIds.SCREEN_LIGHT -> {
             ScreenLightToolRoute(onClose = onClose)
+            return
+        }
+        ToolkitTileIds.PROTRACTOR -> {
+            ProtractorToolRoute(onClose = onClose)
             return
         }
         ToolkitTileIds.RULER -> {
@@ -120,7 +125,7 @@ fun ToolkitToolBottomSheet(
             verticalArrangement = Arrangement.spacedBy(SizeConstants.LargeSize),
         ) {
             ToolSheetHeader(tile = tile, onClose = onClose)
-            ToolInteractiveContent(tile = tile)
+            ToolInteractiveContent(tile = tile, startReaction = startReaction)
             ToolIntegrationSection(
                 tile = tile,
                 onAddTile = onAddTile,
@@ -206,19 +211,22 @@ private fun ToolStatusSummary(tile: ToolkitTile) {
 @Composable
 private fun ToolInteractiveContent(
     tile: ToolkitTile,
+    startReaction: Boolean,
 ) {
     when (tile.id) {
+        ToolkitTileIds.WATER_EJECT -> com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.navigation.WaterEjectToolRoute()
+        ToolkitTileIds.DECISION_WHEEL -> com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.navigation.DecisionWheelToolRoute()
         ToolkitTileIds.COIN_FLIP -> CoinFlipToolRoute()
         ToolkitTileIds.DICE_ROLL -> DiceRollToolRoute()
         ToolkitTileIds.COUNTER -> CounterToolRoute()
         ToolkitTileIds.COMPASS -> CompassToolRoute()
         ToolkitTileIds.BUBBLE_LEVEL -> LevelToolRoute()
-        ToolkitTileIds.REACTION_TEST -> ReactionTestToolRoute()
+        ToolkitTileIds.REACTION_TEST -> ReactionTestToolRoute(autoStart = startReaction)
         ToolkitTileIds.SOS -> SosToolRoute()
         ToolkitTileIds.MORSE -> MorseToolRoute()
         ToolkitTileIds.BREATHING -> BreathingToolRoute()
         ToolkitTileIds.FLASH_DIMMER -> FlashDimmerToolRoute()
-        ToolkitTileIds.PROTRACTOR -> ProtractorToolRoute()
+        ToolkitTileIds.PROTRACTOR -> Unit
         ToolkitTileIds.BILL_SPLITTER -> BillSplitterToolRoute()
         ToolkitTileIds.RANDOM_NUMBER -> RandomNumberToolRoute()
         ToolkitTileIds.UNIT_CONVERTER -> UnitConverterToolRoute()

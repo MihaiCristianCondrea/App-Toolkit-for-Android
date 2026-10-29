@@ -18,6 +18,7 @@
 package com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui
 
 import com.mihaicristiancondrea.android.apps.apptoolkit.core.analytics.models.AppScreenTracking
+import androidx.lifecycle.SavedStateHandle
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.repositories.RulerRepository
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.analytics.ToolUsageTracker
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.contracts.RulerToolEvent
@@ -29,19 +30,19 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.LoggedScr
 class RulerToolViewModel(
     private val repository: RulerRepository,
     telemetryRepository: TelemetryRepository,
+    private val savedStateHandle: SavedStateHandle = SavedStateHandle(),
 ) : LoggedScreenViewModel<RulerToolUiState, RulerToolEvent>(
-    initialState = RulerToolUiState(),
+    initialState = RulerToolUiState(scale = savedStateHandle["draftScale"] ?: 1f,
+        start = savedStateHandle["start"] ?: 0f, end = savedStateHandle["end"] ?: .5f, inches = savedStateHandle["inches"] ?: false),
     telemetryRepository = telemetryRepository,
     screenName = AppScreenTracking.Screens.TOOLKIT_TILES.name,
     viewModelName = "RulerToolViewModel",
 ) {
     private val usage = ToolUsageTracker(telemetryRepository, ToolkitTileIds.RULER)
-    private var savedScale = 1f
 
     init {
         repository.scale.collectReport(action = Actions.LOAD, onError = { setState { copy(saveFailed = true) } }) { scale ->
-            savedScale = scale
-            setState { copy(scale = scale) }
+            if (!savedStateHandle.contains("draftScale")) setState { copy(scale = scale) }
         }
     }
 
@@ -53,20 +54,25 @@ class RulerToolViewModel(
                 usage.markUsed()
             }
             is RulerToolEvent.ScaleChanged -> {
-                if (event.scale.isFinite()) setState { copy(scale = event.scale.coerceIn(0.5f, 2f), saveFailed = false) }
+                if (!event.scale.isFinite()) return
+                setState { copy(scale = event.scale.coerceIn(0.5f, 2f), saveFailed = false) }
             }
             RulerToolEvent.SaveScale -> {
                 val scale = currentState.scale
                 launchReport(action = Actions.SAVE, onError = { setState { copy(saveFailed = true) } }) {
                     repository.saveScale(scale)
+                    savedStateHandle.remove<Float>("draftScale")
                 }
             }
             RulerToolEvent.ToggleUnits -> setState { copy(inches = !inches) }
             RulerToolEvent.Dismiss -> {
-                setState { RulerToolUiState(scale = savedScale) }
                 usage.endSession()
             }
         }
+        savedStateHandle["start"] = currentState.start
+        savedStateHandle["end"] = currentState.end
+        savedStateHandle["inches"] = currentState.inches
+        if (event is RulerToolEvent.ScaleChanged) savedStateHandle["draftScale"] = currentState.scale
     }
 
     private object Actions {

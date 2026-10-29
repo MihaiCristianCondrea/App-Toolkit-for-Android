@@ -41,8 +41,24 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalResources
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.Sensors
+import androidx.compose.material.icons.rounded.FlashlightOn
+import androidx.compose.material.icons.rounded.Speaker
+import androidx.compose.material.icons.rounded.SelfImprovement
+import androidx.compose.ui.res.stringResource
+import androidx.lifecycle.compose.LifecycleStartEffect
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.states.LiveToolsUiState
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.catalog.QuickToolsWidgets
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.catalog.ToolSection
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.catalog.ToolWorkspace
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.mappers.imageVector
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.contracts.CompassToolEvent
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.contracts.LevelToolEvent
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.contracts.FlashDimmerToolEvent
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.compose.LocalLifecycleOwner
@@ -99,7 +115,24 @@ private val TilesScreen = AppScreenTracking.Screens.TOOLKIT_TILES
  * request and the tab's search query, and re-reads tile membership on every resume.
  */
 @Composable
-fun ToolkitTilesScreen() {
+fun ToolkitTilesScreen(extraTools: Boolean = false) {
+    val compass: CompassToolViewModel = koinViewModel(key = "overview-compass")
+    val level: LevelToolViewModel = koinViewModel(key = "overview-level")
+    val flash: FlashDimmerToolViewModel = koinViewModel()
+    LifecycleStartEffect(flash) { onStopOrDispose { flash.onEvent(FlashDimmerToolEvent.Dismiss) } }
+    val heading by compass.state.collectAsStateWithLifecycle()
+    val tilt by level.state.collectAsStateWithLifecycle()
+    val torch by flash.state.collectAsStateWithLifecycle()
+    LifecycleStartEffect(compass, level, extraTools) {
+        if (!extraTools) {
+            compass.onEvent(CompassToolEvent.StartSensor)
+            level.onEvent(LevelToolEvent.StartSensor)
+        }
+        onStopOrDispose {
+            compass.onEvent(CompassToolEvent.StopSensor)
+            level.onEvent(LevelToolEvent.StopSensor)
+        }
+    }
     val viewModel: ToolkitTilesViewModel = koinViewModel()
     val state: ToolkitTilesUiState by viewModel.state.collectAsStateWithLifecycle()
     val messages: ImmutableList<UiMessage> by viewModel.messages.collectAsStateWithLifecycle()
@@ -139,6 +172,9 @@ fun ToolkitTilesScreen() {
         ) {
             ToolkitTilesScreenContent(
                 state = state,
+                live = LiveToolsUiState(heading.azimuth, tilt.pitch, tilt.roll, torch.torch),
+                extraTools = extraTools,
+                onFlashLevel = { flash.onEvent(FlashDimmerToolEvent.LevelChanged(it)) },
                 contentPadding = contentPadding(),
                 onEvent = viewModel::onEvent,
                 searchQuery = LocalShellSearch.current?.query.orEmpty(),
@@ -159,6 +195,9 @@ internal fun ToolkitTilesScreenContent(
     contentPadding: PaddingValues,
     onEvent: (ToolkitTilesEvent) -> Unit,
     searchQuery: String = "",
+    live: LiveToolsUiState = LiveToolsUiState(),
+    extraTools: Boolean = false,
+    onFlashLevel: (Int) -> Unit = {},
 ) {
     ScreenStateHandler(
         state = state.categories,
@@ -172,161 +211,62 @@ internal fun ToolkitTilesScreenContent(
             contentPadding = contentPadding,
             onEvent = onEvent,
             searchQuery = searchQuery,
+            live = live, extraTools = extraTools, onFlashLevel = onFlashLevel,
         )
     }
 }
 
 @Composable
 private fun ToolkitTilesCatalog(
-    categories: ImmutableList<ToolkitTileCategory>,
-    state: ToolkitTilesUiState,
-    contentPadding: PaddingValues,
-    onEvent: (ToolkitTilesEvent) -> Unit,
-    searchQuery: String,
+    categories: ImmutableList<ToolkitTileCategory>, state: ToolkitTilesUiState,
+    contentPadding: PaddingValues, onEvent: (ToolkitTilesEvent) -> Unit, searchQuery: String,
+    live: LiveToolsUiState, extraTools: Boolean, onFlashLevel: (Int) -> Unit,
 ) {
     val showAds = rememberAdsEnabled()
     val telemetry = LocalTelemetry.current
-    var selectedTile by remember { mutableStateOf<ToolkitTile?>(null) }
-    var quickToolDialog by remember { mutableStateOf<ToolkitQuickTool?>(null) }
-    val resources = LocalContext.current.resources
-    val filteredCategories = remember(categories, state.selectedFilter, searchQuery, resources) {
-        categories.filterFor(state.selectedFilter).search(searchQuery, resources::getString)
+    var selectedId by androidx.compose.runtime.saveable.rememberSaveable { mutableStateOf<String?>(null) }
+    val resources = LocalResources.current
+    val filtered = categories.filter { if (extraTools) it.id == "utilities" else it.id !in setOf("utilities", "chance", "measure") }
+        .toImmutableList().search(searchQuery, resources::getString)
+    val ad = ToolkitTilesListItem.Ad("ad_trailing", AdsConstants.QUICK_TOOLS_NATIVE_AD_UNIT_ID)
+    fun open(tile: ToolkitTile) {
+        telemetry.logViewItem(itemId = tile.id, itemName = tile.id, itemCategory = "quick_tools")
+        selectedId = tile.id
     }
-    val searching = searchQuery.isNotBlank()
-    val listItems = remember(filteredCategories) {
-        buildList {
-            filteredCategories.forEach { category ->
-                add(ToolkitTilesListItem.Category(category))
-            }
-            if (isNotEmpty()) {
-                add(
-                    index = (filteredCategories.size / 2).coerceAtLeast(1),
-                    element = ToolkitTilesListItem.Ad(
-                        id = "ad_trailing",
-                        adUnitId = AdsConstants.QUICK_TOOLS_NATIVE_AD_UNIT_ID,
-                    )
-                )
-            }
-        }.toImmutableList()
-    }
-
-    val visibleListItems = remember(listItems, state.loadedAdIds, showAds) {
-        listItems
-            .filter { item -> item.isVisible(loadedAdIds = state.loadedAdIds, showAds = showAds) }
-            .let { visibleItems ->
-                visibleItems.mapIndexed { index, item ->
-                    PositionedToolkitTilesListItem(
-                        item = item,
-                        position = groupedItemPosition(index, visibleItems.size),
-                    )
-                }
-            }
-            .toImmutableList()
-    }
-    val preloadedAdItems = remember(listItems, state.loadedAdIds, showAds) {
-        if (!showAds) return@remember persistentListOf()
-        listItems
-            .filterIsInstance<ToolkitTilesListItem.Ad>()
-            .filterNot { adItem -> adItem.id in state.loadedAdIds }
-            .toImmutableList()
-    }
-
-    Box(modifier = Modifier.fillMaxSize()) {
-        // Four bounded groups do not need lazy reuse while their expanded heights animate.
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .verticalScroll(rememberScrollState())
-                .padding(
-                    start = SizeConstants.LargeSize,
-                    top = contentPadding.calculateTopPadding() + SizeConstants.LargeSize,
-                    end = SizeConstants.LargeSize,
-                    bottom = contentPadding.calculateBottomPadding() + SizeConstants.LargeSize,
-                ),
-            verticalArrangement = Arrangement.spacedBy(SizeConstants.ExtraTinySize),
-        ) {
-            TilesFilters(
-                categories = categories,
-                selectedFilter = state.selectedFilter,
-                onFilterSelected = { filter -> onEvent(ToolkitTilesEvent.FilterSelected(filter)) },
-            )
-            Spacer(modifier = Modifier.height(SizeConstants.SmallSize))
-            if (listItems.isEmpty()) {
-                Box(modifier = Modifier.animateVisibility(index = 0)) {
-                    EmptyFilterCard()
-                }
-            } else {
-                visibleListItems.forEachIndexed { index, positionedItem ->
-                    val item = positionedItem.item
-                    val position = positionedItem.position
-                    key(state.selectedFilter, item.stableKey) {
-                        when (item) {
-                            is ToolkitTilesListItem.Category -> {
-                                val category = item.category
-                                val forcedExpanded = searching || state.selectedFilter != ToolkitTilesFilter.All
-                                val expanded = forcedExpanded || category.id in state.expandedCategoryIds
-                                TileCategorySection(
-                                    category = category,
-                                    position = position,
-                                    expanded = expanded,
-                                    collapsible = !forcedExpanded,
-                                    modifier = Modifier.animateVisibility(index = index),
-                                    selectedFilter = state.selectedFilter,
-                                    onToggle = { onEvent(ToolkitTilesEvent.CategoryToggled(category.id)) },
-                                    onPreviewTile = { tile ->
-                                        telemetry.logViewItem(
-                                            itemId = tile.id,
-                                            itemName = tile.id,
-                                            itemCategory = category.id,
-                                        )
-                                        if (tile.quickTool == ToolkitQuickTool.MaterialColors) {
-                                            quickToolDialog = ToolkitQuickTool.MaterialColors
-                                        } else {
-                                            selectedTile = tile
-                                        }
-                                    },
-                                )
-                            }
-                            is ToolkitTilesListItem.Ad -> {
-                                QuickToolsNativeAdCard(
-                                    adUnitId = item.adUnitId,
-                                    position = position,
-                                    initiallyLoaded = item.id in state.loadedAdIds,
-                                    onStatusChanged = { isLoaded ->
-                                        onEvent(ToolkitTilesEvent.AdStatusChanged(item.id, isLoaded))
-                                    },
-                                )
-                            }
-                        }
+    Box(Modifier.fillMaxSize()) {
+        ToolWorkspace(contentPadding) {
+            if (filtered.isEmpty()) EmptyFilterCard()
+            filtered.forEachIndexed { index, category ->
+                Box(Modifier.animateVisibility(index)) {
+                    ToolSection(stringResource(category.titleResId), when (category.id) {
+                        "sensors" -> Icons.Rounded.Sensors
+                        "system" -> Icons.Rounded.FlashlightOn
+                        "sound" -> Icons.Rounded.Speaker
+                        "wellbeing" -> Icons.Rounded.SelfImprovement
+                        else -> category.icon.imageVector()
+                    }) {
+                        QuickToolsWidgets(category.tiles, live, ::open, onFlashLevel)
                     }
                 }
+                if (!extraTools && index == 0 && showAds && searchQuery.isBlank() && ad.id in state.loadedAdIds) {
+                    QuickToolsNativeAdCard(adUnitId = ad.adUnitId,
+                        position = com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.GroupedItemPosition.SINGLE,
+                        initiallyLoaded = true,
+                        onStatusChanged = { onEvent(ToolkitTilesEvent.AdStatusChanged(ad.id, it)) })
+                }
             }
-            Spacer(modifier = Modifier.height(SizeConstants.SmallSize))
-            Box(modifier = Modifier.animateVisibility(index = visibleListItems.size)) {
-                HowToAddTilesCard()
-            }
-            NavigationBarSpacer()
         }
-
-        HiddenAdPreloaders(
-            adItems = preloadedAdItems,
-            onEvent = onEvent,
-        )
+        if (!extraTools && showAds && searchQuery.isBlank() && ad.id !in state.loadedAdIds) {
+            HiddenAdPreloaders(adItems = persistentListOf(ad), onEvent = onEvent)
+        }
     }
-
-    selectedTile?.let { selected ->
-        val tile = categories.asSequence().flatMap { it.tiles }
-            .firstOrNull { it.id == selected.id } ?: selected
-        ToolkitToolBottomSheet(
-            tile = tile,
-            onClose = { selectedTile = null },
+    val tile = categories.flatMap { it.tiles }.firstOrNull { it.id == selectedId }
+    if (tile?.quickTool == ToolkitQuickTool.MaterialColors) {
+        MaterialColorsToolDialog(onClose = { selectedId = null })
+    } else if (tile != null) {
+        ToolkitToolBottomSheet(tile, onClose = { selectedId = null },
             onAddTile = { onEvent(ToolkitTilesEvent.AddTileClicked(tile.requestKey)) },
-            onSetupTile = { onEvent(ToolkitTilesEvent.TileSetupClicked(tile.id)) },
-        )
-    }
-
-    if (quickToolDialog == ToolkitQuickTool.MaterialColors) {
-        MaterialColorsToolDialog(onClose = { quickToolDialog = null })
+            onSetupTile = { onEvent(ToolkitTilesEvent.TileSetupClicked(tile.id)) })
     }
 }
 

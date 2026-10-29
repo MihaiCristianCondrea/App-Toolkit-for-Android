@@ -17,7 +17,11 @@
 
 package com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.contracts
 
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.models.BillCurrency
+
 sealed interface BillSplitterToolEvent {
+    data class CurrencySelected(val currency: BillCurrency) : BillSplitterToolEvent
+    data class TipEnabled(val enabled: Boolean) : BillSplitterToolEvent
     data class BillChanged(val input: String) : BillSplitterToolEvent
     data class TipSelected(val percent: Int) : BillSplitterToolEvent
     data class PeopleChanged(val input: String) : BillSplitterToolEvent

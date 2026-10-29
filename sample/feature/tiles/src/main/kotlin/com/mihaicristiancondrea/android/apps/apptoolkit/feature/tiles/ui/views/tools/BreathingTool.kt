@@ -37,6 +37,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.res.stringResource
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.R
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.models.BreathingPhase
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.models.BreathingState
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.ResultPill
@@ -55,13 +57,7 @@ fun BreathingTool(state: BreathingState) {
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier.fillMaxWidth()
     ) {
-        Row(
-            horizontalArrangement = Arrangement.spacedBy(SizeConstants.MediumSize),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            ResultPill(label = state.phase.name.replace("_", " "))
-            ResultPill(label = "${state.secondsLeft}s")
-        }
+
         Box(
             modifier = Modifier
                 .size(SizeConstants.TwoHundredSize)
@@ -89,6 +85,18 @@ fun BreathingTool(state: BreathingState) {
                     else -> MaterialTheme.colorScheme.onSurfaceVariant
                 }
             )
+        }
+        Row(
+            horizontalArrangement = Arrangement.spacedBy(4.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            ResultPill(label = stringResource(when (state.phase) {
+                BreathingPhase.INHALE -> R.string.breathe_inhale
+                BreathingPhase.EXHALE -> R.string.breathe_exhale
+                BreathingPhase.HOLD_FULL, BreathingPhase.HOLD_EMPTY -> R.string.breathe_hold
+                else -> R.string.morse_ready
+            }))
+            ResultPill(label = "${state.secondsLeft}s", start = false)
         }
     }
 }

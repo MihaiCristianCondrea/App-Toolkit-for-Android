@@ -17,6 +17,17 @@
 
 package com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.tools
 
+import androidx.compose.foundation.layout.BoxWithConstraints
+import androidx.compose.foundation.layout.size
+import androidx.compose.material3.FilledIconButton
+import androidx.compose.material3.OutlinedIconButton
+import androidx.compose.material3.Icon
+import androidx.compose.material3.Text
+import androidx.compose.ui.platform.LocalHapticFeedback
+import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.hapticfeedback.HapticFeedbackType
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -125,6 +136,29 @@ private fun CounterToolPreview() {
                 onDecrement = {},
                 onReset = {},
             )
+        }
+    }
+}
+
+/** The overview counter fills the space between two 64 dp controls, including long counts. */
+@Composable
+internal fun CounterControls(count: Int, onIncrement: () -> Unit, onDecrement: () -> Unit) {
+    val haptic = LocalHapticFeedback.current
+    Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+        Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+            OutlinedIconButton(onClick = { haptic.performHapticFeedback(HapticFeedbackType.TextHandleMove); onDecrement() }, enabled = count > 0, modifier = Modifier.size(64.dp)) {
+                Icon(Icons.Outlined.Remove, stringResource(R.string.tool_counter_decrement))
+            }
+            Surface(Modifier.weight(1f), shape = CircleShape, color = MaterialTheme.colorScheme.primaryContainer) {
+                BoxWithConstraints(Modifier.padding(horizontal = 12.dp, vertical = 16.dp), contentAlignment = Alignment.Center) {
+                    val density = LocalDensity.current
+                    val fit = with(density) { (maxWidth.toPx() / (count.toString().length * .75f)).toSp() }
+                    Text(count.toString(), fontSize = if (fit.value < 45f) fit else 45.sp, maxLines = 1, style = MaterialTheme.typography.displayMedium)
+                }
+            }
+            FilledIconButton(onClick = { haptic.performHapticFeedback(HapticFeedbackType.TextHandleMove); onIncrement() }, enabled = count < Int.MAX_VALUE, modifier = Modifier.size(64.dp)) {
+                Icon(Icons.Outlined.Add, stringResource(R.string.tool_counter_increment))
+            }
         }
     }
 }

@@ -35,7 +35,8 @@ class ToolkitTilesPinningTest {
     @Test
     fun `only unpinned tile services are marked not added on supported Android versions`() = runTest {
         val tiles = repository(supportsPinning = true).currentTileCategories().flatMap { it.tiles }
-        assertEquals(2, tiles.count { it.status == ToolkitTileStatus.NotAdded })
+        assertEquals(setOf("coin_flip", "dice_roll", "counter", "flash_dimmer"),
+            tiles.filter { it.status == ToolkitTileStatus.NotAdded }.mapNotNull { it.requestKey }.toSet())
         assertTrue(tiles.filter { it.requestKey == null }.all { it.status == ToolkitTileStatus.Available })
     }
 

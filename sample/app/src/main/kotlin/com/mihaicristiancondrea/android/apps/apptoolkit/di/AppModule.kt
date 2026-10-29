@@ -18,7 +18,7 @@
 package com.mihaicristiancondrea.android.apps.apptoolkit.di
 
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.main.ui.MainViewModel
-import com.mihaicristiancondrea.android.apps.apptoolkit.app.navigation.AppsListRoute
+import com.mihaicristiancondrea.android.apps.apptoolkit.app.navigation.PlayRoute
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.navigation.NumbersRoute
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.navigation.ToolkitTilesRoute
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.di.AppToolkitDiConstants
@@ -53,12 +53,12 @@ val appModule: Module = module {
     single<List<String>>(qualifier = named(name = AppToolkitDiConstants.STARTUP_ENTRIES)) {
         listOf(
             androidContext().getString(TilesR.string.tiles_title),
-            androidContext().getString(TilesR.string.numbers_title),
-            androidContext().getString(AppsR.string.apps_tools_title),
+            androidContext().getString(TilesR.string.measure_title),
+            androidContext().getString(TilesR.string.play_title),
         )
     }
 
     single<List<String>>(qualifier = named(name = AppToolkitDiConstants.STARTUP_VALUES)) {
-        listOf(ToolkitTilesRoute.ROUTE_ID, NumbersRoute.ROUTE_ID, AppsListRoute.ROUTE_ID)
+        listOf(ToolkitTilesRoute.ROUTE_ID, NumbersRoute.ROUTE_ID, PlayRoute.ROUTE_ID)
     }
 }

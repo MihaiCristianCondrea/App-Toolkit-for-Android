@@ -78,6 +78,8 @@ class MorseRepository(
         true
     }
 
+    fun previewCode(message: String): String = message.uppercase(Locale.ROOT).mapNotNull { MORSE_ALPHABET[it] }.joinToString(" ")
+
     /** Waits for an in-flight torch call to finish before completing shutdown. */
     suspend fun stop() = playbackMutex.withLock { stopPlayback() }
 

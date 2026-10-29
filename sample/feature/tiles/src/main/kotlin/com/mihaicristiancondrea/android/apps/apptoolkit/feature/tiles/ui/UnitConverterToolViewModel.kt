@@ -17,6 +17,8 @@
 
 package com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui
 
+import androidx.lifecycle.SavedStateHandle
+
 import com.mihaicristiancondrea.android.apps.apptoolkit.core.analytics.models.AppScreenTracking
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.models.ConversionUnit
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.repositories.UnitConversionRepository
@@ -30,16 +32,28 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.LoggedScr
 class UnitConverterToolViewModel(
     private val repository: UnitConversionRepository,
     telemetryRepository: TelemetryRepository,
+    private val savedStateHandle: SavedStateHandle = SavedStateHandle(),
 ) : LoggedScreenViewModel<UnitConverterToolUiState, UnitConverterToolEvent>(
-    initialState = UnitConverterToolUiState(),
+    initialState = UnitConverterToolUiState(
+        category = com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.models.ConversionCategory.entries.firstOrNull { it.name == savedStateHandle.get<String>("category") } ?: com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.models.ConversionCategory.Length,
+        from = ConversionUnit.entries.firstOrNull { it.name == savedStateHandle.get<String>("from") } ?: ConversionUnit.Metre,
+        to = ConversionUnit.entries.firstOrNull { it.name == savedStateHandle.get<String>("to") } ?: ConversionUnit.Centimetre,
+        left = savedStateHandle["left"] ?: "1", right = savedStateHandle["right"] ?: "100", editingLeft = savedStateHandle["editingLeft"] ?: true,
+    ),
     telemetryRepository = telemetryRepository,
     screenName = AppScreenTracking.Screens.NUMBERS.name,
     viewModelName = "UnitConverterToolViewModel",
 ) {
     private val usage = ToolUsageTracker(telemetryRepository, ToolkitTileIds.UNIT_CONVERTER)
 
+    init { recalculate(trackUse = false) }
+
     override fun handleEvent(event: UnitConverterToolEvent) {
         when (event) {
+            UnitConverterToolEvent.Swap -> {
+                setState { copy(from = to, to = from, left = right, right = left, editingLeft = !editingLeft) }
+                recalculate()
+            }
             is UnitConverterToolEvent.CategorySelected -> {
                 if (event.category == currentState.category) return
                 val units = ConversionUnit.entries.filter { it.category == event.category }
@@ -60,13 +74,18 @@ class UnitConverterToolViewModel(
                 recalculate()
             }
             UnitConverterToolEvent.Dismiss -> {
-                setState { UnitConverterToolUiState() }
                 usage.endSession()
             }
         }
+        savedStateHandle["category"] = currentState.category.name
+        savedStateHandle["from"] = currentState.from.name
+        savedStateHandle["to"] = currentState.to.name
+        savedStateHandle["left"] = currentState.left
+        savedStateHandle["right"] = currentState.right
+        savedStateHandle["editingLeft"] = currentState.editingLeft
     }
 
-    private fun recalculate() {
+    private fun recalculate(trackUse: Boolean = true) {
         val state = currentState
         val input = if (state.editingLeft) state.left else state.right
         val result = if (state.editingLeft) repository.convert(input, state.from, state.to)
@@ -75,6 +94,6 @@ class UnitConverterToolViewModel(
             if (editingLeft) copy(right = result.orEmpty(), invalidInput = input.isNotBlank() && result == null)
             else copy(left = result.orEmpty(), invalidInput = input.isNotBlank() && result == null)
         }
-        if (result != null) usage.markUsed()
+        if (trackUse && result != null) usage.markUsed()
     }
 }

@@ -25,12 +25,12 @@ import java.math.RoundingMode
 
 class BillSplitterRepository {
     /** Uses two decimal places; each share rounds up so the collected amount covers the bill. */
-    fun split(billInput: String, tipPercent: Int, peopleInput: String): BillSplit? {
+    fun split(billInput: String, tipPercent: Int, peopleInput: String, fractionDigits: Int = 2): BillSplit? {
         val bill = billInput.toToolDecimalOrNull() ?: return null
         val people = peopleInput.toToolLongOrNull() ?: return null
-        if (bill.signum() < 0 || bill.scale() > 2 || people < 1 || tipPercent !in 0..100) return null
-        val tip = bill.multiply(BigDecimal(tipPercent)).movePointLeft(2).setScale(2, RoundingMode.HALF_UP)
-        val total = bill.add(tip).setScale(2, RoundingMode.UNNECESSARY)
-        return BillSplit(tip = tip, total = total, perPerson = total.divide(BigDecimal(people), 2, RoundingMode.CEILING))
+        if (bill.signum() < 0 || bill.scale() > fractionDigits || fractionDigits !in 0..2 || people < 1 || tipPercent !in 0..100) return null
+        val tip = bill.multiply(BigDecimal(tipPercent)).movePointLeft(2).setScale(fractionDigits, RoundingMode.HALF_UP)
+        val total = bill.add(tip).setScale(fractionDigits, RoundingMode.UNNECESSARY)
+        return BillSplit(tip = tip, total = total, perPerson = total.divide(BigDecimal(people), fractionDigits, RoundingMode.CEILING))
     }
 }

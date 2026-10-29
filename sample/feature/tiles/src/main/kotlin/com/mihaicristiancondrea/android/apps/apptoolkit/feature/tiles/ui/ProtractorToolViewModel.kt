@@ -17,6 +17,8 @@
 
 package com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui
 
+import androidx.lifecycle.SavedStateHandle
+
 import com.mihaicristiancondrea.android.apps.apptoolkit.core.analytics.models.AppScreenTracking
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.analytics.ToolUsageTracker
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.contracts.ProtractorToolEvent
@@ -27,8 +29,9 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.LoggedScr
 
 class ProtractorToolViewModel(
     telemetryRepository: TelemetryRepository,
+    private val savedStateHandle: SavedStateHandle = SavedStateHandle(),
 ) : LoggedScreenViewModel<ProtractorToolUiState, ProtractorToolEvent>(
-    initialState = ProtractorToolUiState(),
+    initialState = ProtractorToolUiState(angle = savedStateHandle["angle"] ?: 45f),
     telemetryRepository = telemetryRepository,
     screenName = AppScreenTracking.Screens.TOOLKIT_TILES.name,
     viewModelName = "ProtractorToolViewModel",
@@ -42,10 +45,8 @@ class ProtractorToolViewModel(
                 setState { copy(angle = event.angle.coerceIn(0f, 180f)) }
                 usage.markUsed()
             }
-            ProtractorToolEvent.Dismiss -> {
-                setState { ProtractorToolUiState() }
-                usage.endSession()
-            }
+            ProtractorToolEvent.Dismiss -> usage.endSession()
         }
+        savedStateHandle["angle"] = currentState.angle
     }
 }

@@ -14,8 +14,8 @@ libraries with the host's own feature modules.
 - App-only bridges that intentionally connect otherwise independent features, such as the About
   version-tap callback to the Components unlock repository.
 - Serializable route keys, each in its own file under `app/navigation/` with explicit serialized identities.
-- `appGraph`, the one declaration that names every host feature: the Tiles, Numbers and Apps tabs, the
-  components page, the drawer, the overflow menu and the settings shortcut's deep link, on top of
+- `appGraph`, the one declaration that names every host feature: the Quick Tools, Measure and Play & Decide tabs, the
+  Apps and app-only tools pages, the components page, the drawer, the overflow menu and the settings shortcut's deep link, on top of
   the Toolkit's pages from `toolkitGraph { }`. `startKeyFor` maps the stored start page to its tab.
 - The drawer header's `app_logo`.
 - The sample onboarding provider, owned by

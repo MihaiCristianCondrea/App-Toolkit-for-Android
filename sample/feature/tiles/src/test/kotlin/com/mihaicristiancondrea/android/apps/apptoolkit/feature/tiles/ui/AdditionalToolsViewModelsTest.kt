@@ -44,7 +44,7 @@ class AdditionalToolsViewModelsTest {
     }
 
     @Test
-    fun `protractor validates angles and resets on dismiss`() {
+    fun `protractor validates angles and retains its angle on dismiss`() {
         val viewModel = ProtractorToolViewModel(FakeTelemetryRepository())
         viewModel.onEvent(ProtractorToolEvent.AngleChanged(45f))
         viewModel.onEvent(ProtractorToolEvent.AngleChanged(Float.NaN))
@@ -54,7 +54,7 @@ class AdditionalToolsViewModelsTest {
         viewModel.onEvent(ProtractorToolEvent.AngleChanged(-10f))
         assertEquals(0f, viewModel.state.value.angle)
         viewModel.onEvent(ProtractorToolEvent.Dismiss)
-        assertEquals(ProtractorToolUiState(), viewModel.state.value)
+        assertEquals(0f, viewModel.state.value.angle)
     }
 
     @Test
@@ -74,7 +74,7 @@ class AdditionalToolsViewModelsTest {
         viewModel.onEvent(BillSplitterToolEvent.TipSelected(99))
         assertEquals(20, viewModel.state.value.tipPercent)
         viewModel.onEvent(BillSplitterToolEvent.Dismiss)
-        assertEquals(BillSplitterToolUiState(), viewModel.state.value)
+        assertEquals(BigDecimal("40.00"), viewModel.state.value.result?.perPerson)
     }
 
     @Test
@@ -140,7 +140,7 @@ class AdditionalToolsViewModelsTest {
         viewModel.onEvent(RandomNumberToolEvent.Generate)
         assertEquals(2L, viewModel.state.value.result)
         viewModel.onEvent(RandomNumberToolEvent.Dismiss)
-        assertEquals(RandomNumberToolUiState(), viewModel.state.value)
+        assertEquals(2L, viewModel.state.value.result)
     }
 
     @Test

@@ -22,6 +22,11 @@ import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.spring
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.ui.draw.clip
+import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
+import androidx.compose.material3.MaterialShapes
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.catalog.Cookie8Shape
+import androidx.compose.material3.toShape
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -68,7 +73,7 @@ import kotlin.math.roundToInt
  * `marketing/ui/src/kit/tool-bodies.js`; the rose is laid out on a 200-unit square, as the web one is.
  */
 @Composable
-fun CompassTool(azimuth: Float) {
+fun CompassTool(azimuth: Float, compact: Boolean = false) {
     val heading = azimuth.roundToInt().mod(FULL_TURN)
     val direction = stringResource(DIRECTIONS[((heading + 22) / 45) % DIRECTIONS.size])
     // The rose turns the short way round: 359° to 1° is a 2° turn, not 358°.
@@ -102,7 +107,8 @@ fun CompassTool(azimuth: Float) {
     ) {
         Canvas(
             modifier = Modifier
-                .size(272.dp)
+                .size(if (compact) 112.dp else 272.dp)
+                .clip(Cookie8Shape)
                 .semantics { contentDescription = description },
         ) {
             drawRose(rotation, names, colors, textMeasurer)
@@ -110,15 +116,15 @@ fun CompassTool(azimuth: Float) {
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
             Text(
                 text = stringResource(R.string.tile_service_azimuth_format, heading),
-                style = MaterialTheme.typography.displayMedium.copy(fontFeatureSettings = "tnum"),
+                style = (if (compact) MaterialTheme.typography.headlineSmall else MaterialTheme.typography.displayMedium).copy(fontFeatureSettings = "tnum"),
                 fontWeight = FontWeight.Bold,
             )
             Text(
                 text = direction,
-                style = MaterialTheme.typography.headlineSmall,
+                style = if (compact) MaterialTheme.typography.bodySmall else MaterialTheme.typography.headlineSmall,
                 color = accent.content,
             )
-            Text(
+            if (!compact) Text(
                 text = stringResource(R.string.tool_compass_magnetic_north),
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,

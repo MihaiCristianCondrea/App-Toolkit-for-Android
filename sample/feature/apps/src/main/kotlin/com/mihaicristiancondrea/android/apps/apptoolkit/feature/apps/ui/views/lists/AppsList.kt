@@ -87,6 +87,7 @@ fun AppsList(
     windowWidthSizeClass: AppWindowWidthSizeClass,
     adFrequency: Int = AdsConstants.APPS_LIST_AD_FREQUENCY,
     searchQuery: String = "",
+    searchField: @Composable (() -> Unit)? = null,
 ) {
     val apps: ImmutableList<AppSummary> = remember(
         allApps,
@@ -133,6 +134,7 @@ fun AppsList(
         onAppClick = onAppClick,
         onShareClick = onShareClick,
         adUnitId = adUnitId.orEmpty(),
+        searchField = searchField,
     )
 }
 
@@ -156,6 +158,7 @@ private fun AppsGrid(
     onAppClick: (AppSummary) -> Unit,
     onShareClick: (AppSummary) -> Unit,
     adUnitId: String,
+    searchField: @Composable (() -> Unit)?,
 ) {
     val adCache: NativeAdCache = rememberNativeAdCache()
 
@@ -173,6 +176,7 @@ private fun AppsGrid(
         verticalArrangement = Arrangement.spacedBy(SizeConstants.LargeSize),
         horizontalArrangement = Arrangement.spacedBy(SizeConstants.LargeSize),
     ) {
+        if (searchField != null) item(span = { GridItemSpan(columnCount) }, contentType = "search") { searchField() }
         // The chips enter one after another on their own, ahead of the cards.
         item(span = { GridItemSpan(columnCount) }, contentType = "filters") {
             AppsListFilters(

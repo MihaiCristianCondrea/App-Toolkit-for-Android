@@ -60,16 +60,7 @@ fun MorseTool(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(SizeConstants.MediumSize),
     ) {
-        ResultPill(
-            label = stringResource(
-                when {
-                    !playback.isAvailable -> R.string.flash_dimmer_unavailable
-                    playback.isActive -> R.string.morse_active
-                    else -> R.string.morse_ready
-                }
-            ),
-            modifier = Modifier.fillMaxWidth(),
-        )
+        SignalPanel(playback.isActive, stringResource(R.string.morse_mode), state.previewCode.ifEmpty { "—" })
 
         OutlinedTextField(
             value = state.input,

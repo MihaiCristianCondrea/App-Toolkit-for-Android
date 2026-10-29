@@ -65,6 +65,12 @@ import org.koin.core.qualifier.named
 import org.koin.dsl.module
 
 val tilesModule: Module = module {
+    single<com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.local.audio.SpeakerAudioDataSource> {
+        com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.local.audio.AndroidSpeakerAudioDataSource(context = androidContext(), dispatchers = get())
+    }
+    single { com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.repositories.WaterEjectRepository(audio = get()) }
+    viewModel { com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.WaterEjectToolViewModel(repository = get(), telemetryRepository = get()) }
+    viewModel { com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.WheelToolViewModel(telemetryRepository = get(), savedStateHandle = get()) }
     single<TorchDataSource> { AndroidTorchDataSource(context = androidContext()) }
     single<SensorLocalDataSource> {
         AndroidSensorLocalDataSource(context = androidContext(), dispatchers = get())
@@ -107,13 +113,13 @@ val tilesModule: Module = module {
         )
     }
     single { BillSplitterRepository() }
-    viewModel { ProtractorToolViewModel(telemetryRepository = get()) }
-    viewModel { BillSplitterToolViewModel(repository = get(), telemetryRepository = get()) }
-    viewModel { RandomNumberToolViewModel(telemetryRepository = get()) }
+    viewModel { ProtractorToolViewModel(telemetryRepository = get(), savedStateHandle = get()) }
+    viewModel { BillSplitterToolViewModel(repository = get(), telemetryRepository = get(), savedStateHandle = get()) }
+    viewModel { RandomNumberToolViewModel(telemetryRepository = get(), savedStateHandle = get()) }
     single { UnitConversionRepository() }
     single { RulerRepository(preferences = get()) }
-    viewModel { UnitConverterToolViewModel(repository = get(), telemetryRepository = get()) }
-    viewModel { RulerToolViewModel(repository = get(), telemetryRepository = get()) }
+    viewModel { UnitConverterToolViewModel(repository = get(), telemetryRepository = get(), savedStateHandle = get()) }
+    viewModel { RulerToolViewModel(repository = get(), telemetryRepository = get(), savedStateHandle = get()) }
     viewModel { ScreenLightToolViewModel(telemetryRepository = get()) }
     single { CounterRepository(preferencesDataSource = get(), dispatchers = get()) }
     single {
@@ -128,14 +134,14 @@ val tilesModule: Module = module {
             telemetryRepository = get(),
         )
     }
-    viewModel { CoinFlipToolViewModel(telemetryRepository = get()) }
-    viewModel { DiceRollToolViewModel(telemetryRepository = get()) }
+    viewModel { CoinFlipToolViewModel(telemetryRepository = get(), savedStateHandle = get()) }
+    viewModel { DiceRollToolViewModel(telemetryRepository = get(), savedStateHandle = get()) }
     viewModel { CounterToolViewModel(repository = get(), telemetryRepository = get()) }
     viewModel { CompassToolViewModel(repository = get(), telemetryRepository = get()) }
     viewModel { LevelToolViewModel(repository = get(), telemetryRepository = get()) }
     viewModel { BreathingToolViewModel(repository = get(), telemetryRepository = get()) }
     viewModel { SosToolViewModel(repository = get(), telemetryRepository = get()) }
-    viewModel { MorseToolViewModel(repository = get(), telemetryRepository = get()) }
+    viewModel { MorseToolViewModel(repository = get(), telemetryRepository = get(), savedStateHandle = get()) }
     viewModel {
         FlashDimmerToolViewModel(
             torchRepository = get(),

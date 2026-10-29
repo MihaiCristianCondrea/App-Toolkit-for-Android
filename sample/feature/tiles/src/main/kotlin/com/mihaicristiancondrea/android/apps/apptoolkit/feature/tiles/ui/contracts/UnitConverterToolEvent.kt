@@ -24,5 +24,6 @@ sealed interface UnitConverterToolEvent {
     data class CategorySelected(val category: ConversionCategory) : UnitConverterToolEvent
     data class UnitSelected(val unit: ConversionUnit, val left: Boolean) : UnitConverterToolEvent
     data class InputChanged(val input: String, val left: Boolean) : UnitConverterToolEvent
+    data object Swap : UnitConverterToolEvent
     data object Dismiss : UnitConverterToolEvent
 }

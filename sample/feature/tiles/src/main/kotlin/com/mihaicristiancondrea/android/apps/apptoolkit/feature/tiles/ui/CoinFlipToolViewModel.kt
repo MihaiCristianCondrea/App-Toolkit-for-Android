@@ -17,6 +17,8 @@
 
 package com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui
 
+import androidx.lifecycle.SavedStateHandle
+
 import com.mihaicristiancondrea.android.apps.apptoolkit.core.analytics.models.AppScreenTracking
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.utils.constants.ToolkitTileIds
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.analytics.ToolUsageTracker
@@ -30,8 +32,9 @@ import kotlin.random.Random
 /** Flips the Coin Flip tool's coin. Closing the sheet shows heads again. */
 class CoinFlipToolViewModel(
     telemetryRepository: TelemetryRepository,
+    private val savedStateHandle: SavedStateHandle = SavedStateHandle(),
 ) : LoggedScreenViewModel<CoinFlipToolUiState, CoinFlipToolEvent>(
-    initialState = CoinFlipToolUiState(),
+    initialState = CoinFlipToolUiState(side = CoinSide.entries.firstOrNull { it.name == savedStateHandle.get<String>("side") } ?: CoinSide.Heads),
     telemetryRepository = telemetryRepository,
     screenName = AppScreenTracking.Screens.TOOLKIT_TILES.name,
     viewModelName = "CoinFlipToolViewModel",
@@ -49,12 +52,12 @@ class CoinFlipToolViewModel(
         launchReport(action = Actions.FLIP) {
             val side: CoinSide = if (Random.nextBoolean()) CoinSide.Heads else CoinSide.Tails
             setState { copy(side = side, request = request + 1) }
+            savedStateHandle["side"] = side.name
             usage.markUsed()
         }
     }
 
     private fun dismiss() {
-        setState { CoinFlipToolUiState() }
         usage.endSession()
     }
 

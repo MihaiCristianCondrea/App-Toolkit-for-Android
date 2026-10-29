@@ -24,6 +24,16 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material3.Surface
+import androidx.compose.material3.FilledTonalIconButton
+import androidx.compose.material3.Icon
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.SwapVert
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.unit.dp
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.FilterChip
@@ -63,6 +73,9 @@ fun UnitConverterTool(state: UnitConverterToolUiState, onEvent: (UnitConverterTo
         ConversionInput(state.left, state.from, R.string.tool_converter_from, state.invalidInput && state.editingLeft,
             onInput = { onEvent(UnitConverterToolEvent.InputChanged(it, left = true)) },
             onUnit = { onEvent(UnitConverterToolEvent.UnitSelected(it, left = true)) })
+        FilledTonalIconButton(onClick = { onEvent(UnitConverterToolEvent.Swap) }, modifier = Modifier.align(Alignment.CenterHorizontally)) {
+            Icon(Icons.Outlined.SwapVert, stringResource(R.string.swap_units))
+        }
         ConversionInput(state.right, state.to, R.string.tool_converter_to, state.invalidInput && !state.editingLeft,
             onInput = { onEvent(UnitConverterToolEvent.InputChanged(it, left = false)) },
             onUnit = { onEvent(UnitConverterToolEvent.UnitSelected(it, left = false)) })
@@ -81,7 +94,8 @@ private fun ConversionInput(
     onUnit: (ConversionUnit) -> Unit,
 ) {
     var expanded by remember { mutableStateOf(false) }
-    Row(horizontalArrangement = Arrangement.spacedBy(SizeConstants.SmallSize)) {
+    Surface(shape = RoundedCornerShape(24.dp), color = if (label == R.string.tool_converter_to) MaterialTheme.colorScheme.secondaryContainer else MaterialTheme.colorScheme.surfaceContainerHigh) {
+    Row(Modifier.padding(16.dp), horizontalArrangement = Arrangement.spacedBy(SizeConstants.SmallSize)) {
         OutlinedTextField(
             modifier = Modifier.weight(1f),
             value = value,
@@ -90,6 +104,7 @@ private fun ConversionInput(
             isError = invalid,
             singleLine = true,
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
+            textStyle = MaterialTheme.typography.headlineSmall,
         )
         Box {
             GeneralButton(
@@ -106,6 +121,7 @@ private fun ConversionInput(
                 }
             }
         }
+    }
     }
 }
 

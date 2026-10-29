@@ -17,6 +17,8 @@
 
 package com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui
 
+import androidx.lifecycle.SavedStateHandle
+
 import com.mihaicristiancondrea.android.apps.apptoolkit.core.analytics.models.AppScreenTracking
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.repositories.MorseRepository
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.utils.constants.ToolkitTileIds
@@ -36,8 +38,9 @@ import java.util.Locale
 class MorseToolViewModel(
     private val repository: MorseRepository,
     telemetryRepository: TelemetryRepository,
+    private val savedStateHandle: SavedStateHandle = SavedStateHandle(),
 ) : LoggedScreenViewModel<MorseToolUiState, MorseToolEvent>(
-    initialState = MorseToolUiState(playback = repository.state.value),
+    initialState = MorseToolUiState(playback = repository.state.value, input = savedStateHandle["input"] ?: "", previewCode = repository.previewCode(savedStateHandle["input"] ?: "")),
     telemetryRepository = telemetryRepository,
     screenName = AppScreenTracking.Screens.TOOLKIT_TILES.name,
     viewModelName = "MorseToolViewModel",
@@ -50,7 +53,10 @@ class MorseToolViewModel(
 
     override fun handleEvent(event: MorseToolEvent) {
         when (event) {
-            is MorseToolEvent.InputChanged -> setState { copy(input = event.input, inputError = null) }
+            is MorseToolEvent.InputChanged -> {
+                setState { copy(input = event.input.take(200), previewCode = repository.previewCode(event.input.take(200)), inputError = null) }
+                savedStateHandle["input"] = currentState.input
+            }
             MorseToolEvent.Toggle -> toggle()
             MorseToolEvent.Dismiss -> dismiss()
         }

@@ -20,6 +20,10 @@ package com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.tween
+import androidx.compose.foundation.clickable
+import androidx.compose.ui.platform.LocalView
+import androidx.compose.ui.platform.LocalHapticFeedback
+import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -74,8 +78,12 @@ fun DiceRollTool(
     result: Int,
     rollRequest: Int,
     onRoll: () -> Unit,
+    compact: Boolean = false,
 ) {
-    var displayedResult: Int by remember { mutableIntStateOf(1) }
+    val haptic = LocalHapticFeedback.current
+    val view = LocalView.current
+    var displayedResult: Int by remember { mutableIntStateOf(result) }
+    var lastRequest by remember { mutableIntStateOf(rollRequest) }
     var rolling: Boolean by remember { mutableStateOf(false) }
 
     val rotationX = remember { Animatable(targetAnglesFor(displayedResult).first) }
@@ -85,7 +93,8 @@ fun DiceRollTool(
     val translationY = remember { Animatable(0f) }
 
     LaunchedEffect(rollRequest) {
-        if (rollRequest == 0) return@LaunchedEffect
+        if (rollRequest == lastRequest) return@LaunchedEffect
+        lastRequest = rollRequest
 
         rolling = true
 
@@ -188,6 +197,7 @@ fun DiceRollTool(
             }
         }
 
+        if (view.hasWindowFocus()) haptic.performHapticFeedback(HapticFeedbackType.LongPress)
         displayedResult = finalResult
         rolling = false
     }
@@ -202,7 +212,8 @@ fun DiceRollTool(
             rotationY = { rotationY.value },
             rotationZ = { rotationZ.value },
             modifier = Modifier
-                .size(150.dp)
+                .size(if (compact) 112.dp else 150.dp)
+                .clickable(enabled = !rolling, onClickLabel = stringResource(R.string.tool_dice_roll_action), onClick = onRoll)
                 .graphicsLayer {
                     scaleX = scale.value
                     scaleY = scale.value
@@ -210,9 +221,9 @@ fun DiceRollTool(
                 },
         )
 
-        Spacer(modifier = Modifier.height(SizeConstants.ExtraLargeSize))
+        if (!compact) Spacer(modifier = Modifier.height(SizeConstants.ExtraLargeSize))
 
-        GeneralButton(
+        if (!compact) GeneralButton(
             onClick = {
                 if (!rolling) {
                     onRoll()
@@ -324,14 +335,14 @@ private fun DrawScope.drawProceduralDiceCube(
                     rotationX = rotationXRadians,
                     rotationY = rotationYRadians,
                     rotationZ = rotationZRadians,
-                )
+                ).cameraTilt()
             }
 
             val rotatedNormal: Vec3 = faceDefinition.normal.rotate(
                 rotationX = rotationXRadians,
                 rotationY = rotationYRadians,
                 rotationZ = rotationZRadians,
-            )
+            ).cameraTilt()
 
             RenderedDiceFace(
                 face = faceDefinition.face,
@@ -748,3 +759,6 @@ private fun DiceRollToolPreview() {
         }
     }
 }
+
+/** A fixed camera tilt keeps the selected face dominant while revealing the solid side faces. */
+private fun Vec3.cameraTilt(): Vec3 = rotate((-15f).toRadians(), 20f.toRadians(), 0.0)

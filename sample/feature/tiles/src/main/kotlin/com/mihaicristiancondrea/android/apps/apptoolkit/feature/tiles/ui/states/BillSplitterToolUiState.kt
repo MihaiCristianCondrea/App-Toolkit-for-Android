@@ -17,12 +17,15 @@
 
 package com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.states
 
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.models.BillCurrency
 import androidx.compose.runtime.Immutable
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.models.BillSplit
 
 @Immutable
 data class BillSplitterToolUiState(
     val bill: String = "",
+    val currency: BillCurrency = BillCurrency.USD,
+    val tipEnabled: Boolean = true,
     val tipPercent: Int = 15,
     val people: String = "1",
     val result: BillSplit? = null,

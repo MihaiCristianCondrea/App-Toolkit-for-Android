@@ -27,6 +27,9 @@ import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material3.SingleChoiceSegmentedButtonRow
+import androidx.compose.material3.SegmentedButton
+import androidx.compose.material3.SegmentedButtonDefaults
 import androidx.compose.material3.FilterChip
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
@@ -81,22 +84,22 @@ fun RandomNumberTool(state: RandomNumberToolUiState, onEvent: (RandomNumberToolE
                 modifier = Modifier.weight(1f),
             )
         }
-        LazyRow(horizontalArrangement = Arrangement.spacedBy(SizeConstants.SmallSize)) {
-            val maxima = listOf(6L, 10L, 100L, 2L)
-            items(maxima.size) { index ->
+        SingleChoiceSegmentedButtonRow(Modifier.fillMaxWidth()) {
+            val maxima = listOf(2L, 6L, 10L, 100L)
+            maxima.indices.forEach { index ->
                 val maximum = maxima[index]
-                FilterChip(
+                SegmentedButton(
+                    shape = SegmentedButtonDefaults.itemShape(index, maxima.size),
                     selected = state.minimum.toToolLongOrNull() == 1L && state.maximum.toToolLongOrNull() == maximum,
                     onClick = { onEvent(RandomNumberToolEvent.PresetSelected(maximum)) },
-                    label = { Text(stringResource(R.string.tool_random_range, 1, maximum)) },
-                )
+                ) { Text(stringResource(R.string.tool_random_range, 1, maximum)) }
             }
         }
         if (state.invalidInput) Text(stringResource(R.string.tool_random_invalid), color = MaterialTheme.colorScheme.error)
         Surface(
             modifier = Modifier.fillMaxWidth(),
             shape = MaterialTheme.shapes.extraLarge,
-            color = MaterialTheme.colorScheme.surfaceContainerHigh,
+            color = MaterialTheme.colorScheme.primaryContainer,
         ) {
             Box(
                 modifier = Modifier.heightIn(min = 100.dp).padding(SizeConstants.LargeSize),

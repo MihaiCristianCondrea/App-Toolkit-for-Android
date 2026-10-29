@@ -18,6 +18,8 @@
 package com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.utils.constants
 
 object ToolkitTileIds {
+    const val DECISION_WHEEL: String = "decision_wheel"
+    const val WATER_EJECT: String = "water_eject"
     const val COIN_FLIP = "coin_flip"
     const val DICE_ROLL = "dice_roll"
     const val COUNTER = "counter"

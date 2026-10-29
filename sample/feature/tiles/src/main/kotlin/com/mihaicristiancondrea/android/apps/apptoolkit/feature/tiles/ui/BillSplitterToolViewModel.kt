@@ -17,6 +17,8 @@
 
 package com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui
 
+import androidx.lifecycle.SavedStateHandle
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.models.BillCurrency
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.repositories.BillSplitterRepository
 import com.mihaicristiancondrea.android.apps.apptoolkit.core.analytics.models.AppScreenTracking
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.analytics.ToolUsageTracker
@@ -30,16 +32,25 @@ import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.utils.exte
 class BillSplitterToolViewModel(
     private val repository: BillSplitterRepository,
     telemetryRepository: TelemetryRepository,
+    private val savedStateHandle: SavedStateHandle = SavedStateHandle(),
 ) : LoggedScreenViewModel<BillSplitterToolUiState, BillSplitterToolEvent>(
-    initialState = BillSplitterToolUiState(),
+    initialState = BillSplitterToolUiState(
+        bill = savedStateHandle["bill"] ?: "", people = savedStateHandle["people"] ?: "1",
+        currency = BillCurrency.entries.firstOrNull { it.name == savedStateHandle.get<String>("currency") } ?: BillCurrency.USD,
+        tipEnabled = savedStateHandle["tipEnabled"] ?: true, tipPercent = savedStateHandle["tipPercent"] ?: 15,
+    ),
     telemetryRepository = telemetryRepository,
     screenName = AppScreenTracking.Screens.NUMBERS.name,
     viewModelName = "BillSplitterToolViewModel",
 ) {
     private val usage = ToolUsageTracker(telemetryRepository, ToolkitTileIds.BILL_SPLITTER)
 
+    init { recalculate(trackUse = false) }
+
     override fun handleEvent(event: BillSplitterToolEvent) {
         when (event) {
+            is BillSplitterToolEvent.CurrencySelected -> { setState { copy(currency = event.currency) }; recalculate() }
+            is BillSplitterToolEvent.TipEnabled -> { setState { copy(tipEnabled = event.enabled) }; recalculate() }
             is BillSplitterToolEvent.BillChanged -> {
                 if (event.input.length > 64) return
                 setState { copy(bill = event.input) }
@@ -58,7 +69,6 @@ class BillSplitterToolViewModel(
             BillSplitterToolEvent.AddPerson -> changePeople(1)
             BillSplitterToolEvent.RemovePerson -> changePeople(-1)
             BillSplitterToolEvent.Dismiss -> {
-                setState { BillSplitterToolUiState() }
                 usage.endSession()
             }
         }
@@ -71,10 +81,15 @@ class BillSplitterToolViewModel(
         recalculate()
     }
 
-    private fun recalculate() {
+    private fun recalculate(trackUse: Boolean = true) {
         val state = currentState
-        val result = repository.split(state.bill, state.tipPercent, state.people)
+        val result = repository.split(state.bill, if (state.tipEnabled) state.tipPercent else 0, state.people, state.currency.digits)
         setState { copy(result = result, invalidInput = bill.isNotBlank() && result == null) }
-        if (result != null) usage.markUsed()
+        savedStateHandle["bill"] = state.bill
+        savedStateHandle["people"] = state.people
+        savedStateHandle["currency"] = state.currency.name
+        savedStateHandle["tipEnabled"] = state.tipEnabled
+        savedStateHandle["tipPercent"] = state.tipPercent
+        if (trackUse && result != null) usage.markUsed()
     }
 }

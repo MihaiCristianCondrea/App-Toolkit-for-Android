@@ -17,6 +17,8 @@
 
 package com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui
 
+import androidx.lifecycle.SavedStateHandle
+
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.utils.extensions.toToolLongOrNull
 import com.mihaicristiancondrea.android.apps.apptoolkit.core.analytics.models.AppScreenTracking
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.analytics.ToolUsageTracker
@@ -31,13 +33,16 @@ import kotlin.random.nextLong
 class RandomNumberToolViewModel(
     telemetryRepository: TelemetryRepository,
     private val random: Random = Random.Default,
+    private val savedStateHandle: SavedStateHandle = SavedStateHandle(),
 ) : LoggedScreenViewModel<RandomNumberToolUiState, RandomNumberToolEvent>(
-    initialState = RandomNumberToolUiState(),
+    initialState = RandomNumberToolUiState(minimum = savedStateHandle["minimum"] ?: "1", maximum = savedStateHandle["maximum"] ?: "100", result = savedStateHandle["result"]),
     telemetryRepository = telemetryRepository,
     screenName = AppScreenTracking.Screens.NUMBERS.name,
     viewModelName = "RandomNumberToolViewModel",
 ) {
     private val usage = ToolUsageTracker(telemetryRepository, ToolkitTileIds.RANDOM_NUMBER)
+
+    init { validateRange() }
 
     override fun handleEvent(event: RandomNumberToolEvent) {
         when (event) {
@@ -61,10 +66,12 @@ class RandomNumberToolViewModel(
                 usage.markUsed()
             }
             RandomNumberToolEvent.Dismiss -> {
-                setState { RandomNumberToolUiState() }
                 usage.endSession()
             }
         }
+        savedStateHandle["minimum"] = currentState.minimum
+        savedStateHandle["maximum"] = currentState.maximum
+        savedStateHandle["result"] = currentState.result
     }
 
     private fun validateRange(): LongRange? {

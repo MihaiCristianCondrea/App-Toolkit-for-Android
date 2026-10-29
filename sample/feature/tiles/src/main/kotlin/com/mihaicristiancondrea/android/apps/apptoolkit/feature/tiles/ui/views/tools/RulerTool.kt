@@ -259,7 +259,7 @@ fun RulerTool(
                         // Use the ruler's vertical DPI and reserve the full reference length.
                         val referenceHeight = with(density) { (30 * pixelsPerMillimetre).toDp() }
                         Canvas(
-                            Modifier.fillMaxWidth().height(referenceHeight + 8.dp),
+                            Modifier.fillMaxWidth().height(with(density) { (30 * dpi / 25.4f * 2f).toDp() } + 8.dp),
                         ) {
                             val x = size.width / 2f
                             val top = 4.dp.toPx()

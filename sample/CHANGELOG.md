@@ -6,8 +6,10 @@
 
 ### Added
 
-- A dedicated Numbers bottom navigation tab hosting the interactive Tip & Bill Splitter workspace
-  alongside tactile launcher cards for the Unit Converter and Random Number Picker.
+- Three redesigned native workspaces matching the approved marketing UI: Quick Tools, Measure
+  and Play & Decide. App discovery and existing app-only tools move into the drawer.
+- Decision Wheel with directly editable choices and a native animated result, and a finite
+  foreground-only Water Eject speaker cycle.
 - Six new tools across Quick Tools and Numbers: Unit Converter (length, mass, temperature, volume
   and data), Ruler (full-screen calibrated edge measurement in millimetres and inches), Screen Light
   (brightness and warmth controls), Protractor (on-screen angle alignment), Tip & Bill Splitter,
@@ -20,11 +22,9 @@
 - A new app icon: a toolbox with a wrench and screwdriver, in the launcher, the themed icon (the
   tools cut out of the box), the drawer, the splash screen, the widget preview and the Android TV
   banner.
-- Quick Tools filter chips now filter by tool category (All tools, Sensors & Measurement,
-  Utilities & Fun, System & Controls, Wellbeing) instead of Quick Settings sync status, and
-  all categories start collapsed by default until expanded by the user.
-- Quick Tools now displays one native ad between the middle category groups (after the tools
-  for a single category), and app-open ads are no longer shown on launch or resume.
+- Quick Tools uses live grouped widgets without filter chips or collapse controls. Measure
+  adds search, shared calculation readouts, a live counter and a direct Reaction Test Start action.
+- Quick Tools keeps one native ad after Sensors, hidden during search. App-open ads remain disabled.
 - The Counter has a minus button to correct a miscount without resetting the total.
 - Onboarding now has five pages focused on everyday tools, theme choice, Quick Settings,
   telemetry usage and diagnostics consent, and completion. App promotions are removed. Diagnostics

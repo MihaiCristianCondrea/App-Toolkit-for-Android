@@ -29,6 +29,7 @@ import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.model
  */
 @Immutable
 data class MorseToolUiState(
+    val previewCode: String = "",
     val input: String = "",
     val inputError: MorseInputError? = null,
     val playback: MorsePlaybackState = MorsePlaybackState(),

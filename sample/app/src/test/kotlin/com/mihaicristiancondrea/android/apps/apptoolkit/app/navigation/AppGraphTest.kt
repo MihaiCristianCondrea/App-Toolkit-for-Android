@@ -83,7 +83,7 @@ class AppGraphTest {
     fun `the tabs are tiles, numbers, then apps, and a launch opens on tiles`() {
         val graph = graph()
 
-        assertEquals(listOf(ToolkitTilesRoute, NumbersRoute, AppsListRoute), graph.tabs.map { it.key })
+        assertEquals(listOf(ToolkitTilesRoute, NumbersRoute, PlayRoute), graph.tabs.map { it.key })
         assertEquals(ToolkitTilesRoute, graph.start)
     }
 
@@ -95,7 +95,8 @@ class AppGraphTest {
             return dataStore.startupValueFlow(ToolkitTilesRoute.ROUTE_ID, ::startKeyFor).first()
         }
 
-        assertEquals(AppsListRoute, startFor(AppsListRoute.ROUTE_ID))
+        assertEquals(ToolkitTilesRoute, startFor(AppsListRoute.ROUTE_ID))
+        assertEquals(PlayRoute, startFor(PlayRoute.ROUTE_ID))
         assertEquals(NumbersRoute, startFor(NumbersRoute.ROUTE_ID))
         assertEquals(ToolkitTilesRoute, startFor(ToolkitTilesRoute.ROUTE_ID))
         // A blank value, or one a removed page left behind, opens the default tab.
@@ -148,7 +149,8 @@ class AppGraphTest {
         assertEquals(AboutR.string.updates, (footer[2] as DrawerEntry.Action).label)
         assertEquals(AboutR.string.share, (footer[3] as DrawerEntry.Action).label)
         // The app's own entries come first, and developer options are reached from Advanced.
-        assertEquals(ComponentsRoute, (drawer.first() as DrawerEntry.Link).key)
+        assertEquals(AppsListRoute, (drawer.first() as DrawerEntry.Link).key)
+        assertTrue(ExtraToolsRoute in graph().drawerLinks())
         assertFalse(DeveloperOptionsRoute in graph().drawerLinks())
     }
 

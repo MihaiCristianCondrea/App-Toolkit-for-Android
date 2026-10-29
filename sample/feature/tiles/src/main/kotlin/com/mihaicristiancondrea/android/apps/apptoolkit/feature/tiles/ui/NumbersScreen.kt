@@ -17,536 +17,192 @@
 
 package com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui
 
-import androidx.compose.foundation.background
+import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.IntrinsicSize
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.offset
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.Numbers
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
+import androidx.compose.material.icons.outlined.SquareFoot
+import androidx.compose.material.icons.outlined.SwapHoriz
+import androidx.compose.material.icons.outlined.Timer
+import androidx.compose.material3.FilledTonalButton
 import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialShapes
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
-import androidx.compose.material3.toShape
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.ui.tooling.preview.Preview
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.modifiers.animateVisibility
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Shape
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.platform.LocalResources
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.LifecycleResumeEffect
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.mappers.workspaceTools
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.contracts.ToolkitTilesEvent
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.mihaicristiancondrea.android.apps.apptoolkit.core.analytics.models.AppScreenTracking
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.R
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.models.ToolkitTileStatus
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.models.ToolkitToolKind
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.analytics.logQuickSettingsTileRequest
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.mappers.iconColors
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.contracts.CounterToolEvent
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.models.MeasureTools
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.models.ToolkitTile
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.models.ToolkitTileIcon
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.states.CounterToolUiState
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.utils.requestQuickSettingsTile
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.states.BillSplitterToolUiState
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.states.UnitConverterToolUiState
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.states.ReactionTestToolUiState
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.mappers.formatBillAmount
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.ToolkitToolBottomSheet
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.catalog.TileIconBadge
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.catalog.ToolkitToolChips
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.catalog.ToolWorkspace
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.catalog.ToolSection
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.catalog.ToolPair
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.catalog.ToolWidget
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.catalog.toolCorners
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.tools.CounterControls
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.utils.requestQuickSettingsTile
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.utils.constants.ToolkitTileIds
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.analytics.logViewItem
+import com.mihaicristiancondrea.android.apps.apptoolkit.core.analytics.models.AppScreenTracking
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.ScreenHost
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.analytics.LocalTelemetry
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.modifiers.animateVisibility
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.shell.contentPadding
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.spacers.NavigationBarSpacer
-import kotlinx.collections.immutable.ImmutableList
-import kotlinx.collections.immutable.persistentListOf
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.LocalShellSearch
 import org.koin.compose.viewmodel.koinViewModel
 
-private val NumbersTrackedScreen = AppScreenTracking.Screens.NUMBERS
-
-/**
- * Dedicated Numbers workspace for calculation, conversion, counting, and chance.
- *
- * Presents a warm gold hero banner, clickable grouped cards for Tip & Bill Splitter and Unit
- * Converter under "Calculate & convert", and clickable grouped cards for Counter, Random Number
- * Picker, and Dice Roll under "Count & chance". Every tool card opens [ToolkitToolBottomSheet].
- */
 @Composable
 fun NumbersScreen() {
-    val counterViewModel: CounterToolViewModel = koinViewModel()
-    val counterState: CounterToolUiState by counterViewModel.state.collectAsStateWithLifecycle()
-
-    ScreenHost(screen = NumbersTrackedScreen) {
-        NumbersScreenContent(
-            counterState = counterState,
-            contentPadding = contentPadding(),
-        )
+    val catalogViewModel: ToolkitTilesViewModel = koinViewModel()
+    val catalogState by catalogViewModel.state.collectAsStateWithLifecycle()
+    LifecycleResumeEffect(catalogViewModel) {
+        catalogViewModel.onEvent(ToolkitTilesEvent.Refresh)
+        onPauseOrDispose { }
+    }
+    val catalogTools = catalogState.workspaceTools(MeasureTools)
+    val counter: CounterToolViewModel = koinViewModel()
+    val bill: BillSplitterToolViewModel = koinViewModel()
+    val converter: UnitConverterToolViewModel = koinViewModel()
+    val reaction: ReactionTestToolViewModel = koinViewModel()
+    val protractor: ProtractorToolViewModel = koinViewModel()
+    val count by counter.state.collectAsStateWithLifecycle()
+    val split by bill.state.collectAsStateWithLifecycle()
+    val conversion by converter.state.collectAsStateWithLifecycle()
+    val reflex by reaction.state.collectAsStateWithLifecycle()
+    val angle by protractor.state.collectAsStateWithLifecycle()
+    ScreenHost(screen = AppScreenTracking.Screens.NUMBERS) {
+        NumbersScreenContent(count, contentPadding(), split, conversion, reflex,
+            searchQuery = LocalShellSearch.current?.query.orEmpty(), onCounter = counter::onEvent, protractorAngle = angle.angle,
+            catalogTools = catalogTools, onTileAdded = { catalogViewModel.onEvent(ToolkitTilesEvent.TileAdded(it)) })
     }
 }
 
 @Composable
 internal fun NumbersScreenContent(
-    counterState: CounterToolUiState,
-    contentPadding: PaddingValues,
-    calculateTools: ImmutableList<ToolkitTile> = NumbersCalculateTools,
-    chanceTools: ImmutableList<ToolkitTile> = NumbersChanceTools,
+    counterState: CounterToolUiState, contentPadding: PaddingValues,
+    bill: BillSplitterToolUiState = BillSplitterToolUiState(), converter: UnitConverterToolUiState = UnitConverterToolUiState(),
+    reaction: ReactionTestToolUiState = ReactionTestToolUiState(), searchQuery: String = "",
+    onCounter: (CounterToolEvent) -> Unit = {},
+    protractorAngle: Float = 45f,
+    catalogTools: List<ToolkitTile> = MeasureTools,
+    onTileAdded: (String) -> Unit = {},
 ) {
+    var selectedId by rememberSaveable { mutableStateOf<String?>(null) }
+    var startReaction by rememberSaveable { mutableStateOf(false) }
+    val resources = LocalResources.current
+    val locale = LocalConfiguration.current.locales[0]
     val context = LocalContext.current
-    val telemetry = LocalTelemetry.current
-    var selectedTile by remember { mutableStateOf<ToolkitTile?>(null) }
-    val counterTile = remember(chanceTools) {
-        chanceTools.firstOrNull { it.id == ToolkitTileIds.COUNTER }
-    }
-    val secondaryChanceTools = remember(chanceTools) {
-        chanceTools.filterNot { it.id == ToolkitTileIds.COUNTER }
-    }
-
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .verticalScroll(rememberScrollState())
-            .padding(
-                start = SizeConstants.LargeSize,
-                top = contentPadding.calculateTopPadding() + SizeConstants.LargeSize,
-                end = SizeConstants.LargeSize,
-                bottom = contentPadding.calculateBottomPadding() + SizeConstants.LargeSize,
-            ),
-        verticalArrangement = Arrangement.spacedBy(SizeConstants.MediumSize),
-    ) {
-        NumbersHeroBanner(
-            modifier = Modifier.animateVisibility(index = 0),
+    val query = searchQuery.trim()
+    val tools = catalogTools.filter { query.isBlank() || resources.getString(it.titleResId).contains(query, true) || resources.getString(it.summaryResId).contains(query, true) }
+    ToolWorkspace(contentPadding) {
+        if (tools.isEmpty()) Text(stringResource(R.string.tiles_filter_empty))
+        val sections = listOf(
+            Triple(R.string.section_length, Icons.Outlined.SquareFoot, listOf(ToolkitTileIds.RULER, ToolkitTileIds.PROTRACTOR)),
+            Triple(R.string.section_convert, Icons.Outlined.SwapHoriz, listOf(ToolkitTileIds.UNIT_CONVERTER, ToolkitTileIds.BILL_SPLITTER)),
+            Triple(R.string.section_count, Icons.Outlined.Timer, listOf(ToolkitTileIds.COUNTER, ToolkitTileIds.REACTION_TEST)),
         )
-
-        if (calculateTools.isNotEmpty()) {
-            NumbersSectionHeader(
-                title = stringResource(id = R.string.numbers_section_calculate),
-                modifier = Modifier.animateVisibility(index = 1),
-            )
-            NumbersGroupedToolRow(
-                tools = calculateTools,
-                topRow = true,
-                bottomRow = true,
-                modifier = Modifier.animateVisibility(index = 2),
-                onOpenTool = { tile ->
-                    telemetry.logViewItem(
-                        itemId = tile.id,
-                        itemName = tile.id,
-                        itemCategory = "numbers_calculate",
-                    )
-                    selectedTile = tile
-                },
-            )
-        }
-
-        if (chanceTools.isNotEmpty()) {
-            NumbersSectionHeader(
-                title = stringResource(id = R.string.numbers_section_count_chance),
-                modifier = Modifier.animateVisibility(index = 3),
-            )
-
-            Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .animateVisibility(index = 4),
-                verticalArrangement = Arrangement.spacedBy(SizeConstants.ExtraSmallSize),
-            ) {
-                counterTile?.let { tile ->
-                    NumbersCounterFeatureCard(
-                        tile = tile,
-                        count = counterState.count,
-                        hasBottomNeighbors = secondaryChanceTools.isNotEmpty(),
-                        onClick = {
-                            telemetry.logViewItem(
-                                itemId = tile.id,
-                                itemName = tile.id,
-                                itemCategory = "numbers_chance",
-                            )
-                            selectedTile = tile
-                        },
-                    )
-                }
-
-                if (secondaryChanceTools.isNotEmpty()) {
-                    NumbersGroupedToolRow(
-                        tools = secondaryChanceTools,
-                        topRow = counterTile == null,
-                        bottomRow = true,
-                        onOpenTool = { tile ->
-                            telemetry.logViewItem(
-                                itemId = tile.id,
-                                itemName = tile.id,
-                                itemCategory = "numbers_chance",
-                            )
-                            selectedTile = tile
-                        },
-                    )
-                }
-            }
-        }
-
-        NavigationBarSpacer()
-    }
-
-    selectedTile?.let { tile ->
-        ToolkitToolBottomSheet(
-            tile = tile,
-            onClose = { selectedTile = null },
-            onAddTile = {
-                val requestKey = tile.requestKey ?: return@ToolkitToolBottomSheet
-                requestQuickSettingsTile(
-                    context = context,
-                    requestKey = requestKey,
-                    onResult = { outcome ->
-                        telemetry.logQuickSettingsTileRequest(tileId = requestKey, outcome = outcome)
-                    },
-                )
-            },
-            onSetupTile = {},
-        )
-    }
-}
-
-@OptIn(ExperimentalMaterial3ExpressiveApi::class)
-@Composable
-private fun NumbersHeroBanner(
-    modifier: Modifier = Modifier,
-) {
-    val colors = ToolkitTileIcon.RandomNumber.iconColors()
-    Surface(
-        modifier = modifier.fillMaxWidth(),
-        shape = RoundedCornerShape(SizeConstants.ExtraLargeIncreasedSize),
-        color = colors.container.copy(alpha = 0.16f),
-    ) {
-        Box(modifier = Modifier.fillMaxWidth()) {
-            Box(
-                modifier = Modifier
-                    .size(132.dp)
-                    .align(Alignment.CenterEnd)
-                    .offset(x = 28.dp, y = 18.dp)
-                    .clip(MaterialShapes.SoftBurst.toShape())
-                    .background(colors.container.copy(alpha = 0.12f)),
-            )
-
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(SizeConstants.ExtraLargeSize),
-                horizontalArrangement = Arrangement.spacedBy(SizeConstants.LargeSize),
-                verticalAlignment = Alignment.CenterVertically,
-            ) {
-                Column(
-                    modifier = Modifier.weight(1f),
-                    verticalArrangement = Arrangement.spacedBy(SizeConstants.SmallSize),
-                ) {
-                    Surface(
-                        shape = RoundedCornerShape(SizeConstants.LargeSize),
-                        color = colors.container.copy(alpha = 0.24f),
-                    ) {
-                        Text(
-                            text = stringResource(id = R.string.numbers_title).uppercase(),
-                            style = MaterialTheme.typography.labelSmall,
-                            fontWeight = FontWeight.Bold,
-                            color = colors.content,
-                            modifier = Modifier.padding(
-                                horizontal = SizeConstants.MediumSize,
-                                vertical = SizeConstants.ExtraTinySize,
-                            ),
-                        )
+        sections.forEachIndexed { sectionIndex, (title, icon, ids) ->
+            val visible = tools.filter { it.id in ids }
+            if (visible.isNotEmpty()) ToolSection(stringResource(title), icon, Modifier.animateVisibility(sectionIndex)) {
+                if (title == R.string.section_count) Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
+                    visible.forEachIndexed { index, tile ->
+                        ToolWidget(tile, { selectedId = tile.id; startReaction = false }, Modifier.fillMaxWidth(),
+                            toolCorners(0, 1, top = index == 0, bottom = index == visible.lastIndex),
+                            headerAction = if (tile.id == ToolkitTileIds.COUNTER) { { TextButton(onClick = { onCounter(CounterToolEvent.Reset) }, enabled = counterState.count > 0) { Text(stringResource(R.string.tool_counter_reset)) } } } else null) {
+                            if (tile.id == ToolkitTileIds.COUNTER) CounterControls(counterState.count,
+                                onIncrement = { onCounter(CounterToolEvent.Increment) },
+                                onDecrement = { onCounter(CounterToolEvent.Decrement) })
+                            else Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
+                                Text(reaction.bestTimeMs?.let { stringResource(R.string.tool_reaction_test_best, it) }
+                                    ?: stringResource(R.string.tool_reaction_test_idle_prompt), style = MaterialTheme.typography.bodyLarge)
+                                FilledTonalButton(onClick = { startReaction = true; selectedId = tile.id }) { Text(stringResource(R.string.tool_reaction_test_start)) }
+                            }
+                        }
                     }
-                    Text(
-                        text = stringResource(id = R.string.numbers_hero_title),
-                        style = MaterialTheme.typography.headlineSmall,
-                        fontWeight = FontWeight.Bold,
-                        color = MaterialTheme.colorScheme.onSurface,
-                    )
-                    Text(
-                        text = stringResource(id = R.string.numbers_hero_summary),
-                        style = MaterialTheme.typography.bodyMedium,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant,
-                    )
-                }
-                Box(
-                    modifier = Modifier
-                        .size(76.dp)
-                        .clip(MaterialShapes.Cookie12Sided.toShape())
-                        .background(colors.container.copy(alpha = 0.28f)),
-                    contentAlignment = Alignment.Center,
-                ) {
-                    Icon(
-                        imageVector = Icons.Outlined.Numbers,
-                        contentDescription = null,
-                        tint = colors.content,
-                        modifier = Modifier.size(36.dp),
-                    )
+                } else ToolPair(visible) { tile, shape ->
+                    ToolWidget(tile, { selectedId = tile.id }, Modifier.weight(1f).fillMaxHeight(), shape,
+                        when (tile.id) {
+                            ToolkitTileIds.UNIT_CONVERTER -> MaterialTheme.colorScheme.secondaryContainer
+                            ToolkitTileIds.BILL_SPLITTER -> MaterialTheme.colorScheme.tertiaryContainer
+                            else -> MaterialTheme.colorScheme.surfaceContainerHigh
+                        }) {
+                        when (tile.id) {
+                            ToolkitTileIds.RULER -> { MeasureFace(false); Text("mm / in", style = MaterialTheme.typography.headlineSmall) }
+                            ToolkitTileIds.PROTRACTOR -> { MeasureFace(true, protractorAngle); Text(stringResource(R.string.tool_angle_value, protractorAngle), style = MaterialTheme.typography.headlineSmall) }
+                            ToolkitTileIds.UNIT_CONVERTER -> {
+                                Text(converter.left+" "+converter.from.symbol, style = MaterialTheme.typography.headlineSmall)
+                                Icon(Icons.Outlined.SwapHoriz, null)
+                                Text(converter.right+" "+converter.to.symbol, style = MaterialTheme.typography.headlineSmall)
+                            }
+                            ToolkitTileIds.BILL_SPLITTER -> {
+                                Text(bill.result?.let { formatBillAmount(it.perPerson, bill.currency, locale) } ?: "—", style = MaterialTheme.typography.headlineLarge)
+                                Text(stringResource(R.string.tool_bill_per_person), style = MaterialTheme.typography.bodySmall)
+                                Text(if (bill.tipEnabled) stringResource(R.string.tool_tip_percent, bill.tipPercent) else stringResource(R.string.no_tip))
+                            }
+                        }
+                    }
                 }
             }
         }
     }
-}
-
-@Composable
-private fun NumbersSectionHeader(
-    title: String,
-    modifier: Modifier = Modifier,
-) {
-    Text(
-        text = title,
-        style = MaterialTheme.typography.titleMedium,
-        fontWeight = FontWeight.SemiBold,
-        color = MaterialTheme.colorScheme.onSurface,
-        modifier = modifier.padding(
-            start = SizeConstants.ExtraSmallSize,
-            top = SizeConstants.ExtraSmallSize,
-        ),
-    )
-}
-
-@OptIn(ExperimentalMaterial3ExpressiveApi::class)
-@Composable
-private fun NumbersCounterFeatureCard(
-    tile: ToolkitTile,
-    count: Int,
-    hasBottomNeighbors: Boolean,
-    modifier: Modifier = Modifier,
-    onClick: () -> Unit,
-) {
-    val colors = tile.icon.iconColors()
-    val outer = SizeConstants.ExtraLargeIncreasedSize
-    val inner = SizeConstants.SmallSize
-    val cardShape = RoundedCornerShape(
-        topStart = outer,
-        topEnd = outer,
-        bottomStart = if (hasBottomNeighbors) inner else outer,
-        bottomEnd = if (hasBottomNeighbors) inner else outer,
-    )
-
-    Card(
-        onClick = onClick,
-        modifier = modifier.fillMaxWidth(),
-        shape = cardShape,
-        colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.surfaceContainerHigh,
-        ),
-    ) {
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(SizeConstants.LargeSize),
-            verticalArrangement = Arrangement.spacedBy(SizeConstants.MediumSize),
-        ) {
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                verticalAlignment = Alignment.CenterVertically,
-            ) {
-                TileIconBadge(icon = tile.icon, large = true)
-                Spacer(modifier = Modifier.width(SizeConstants.LargeSize))
-                Column(
-                    modifier = Modifier.weight(1f),
-                    verticalArrangement = Arrangement.spacedBy(SizeConstants.ExtraTinySize),
-                ) {
-                    Text(
-                        text = stringResource(id = tile.titleResId),
-                        style = MaterialTheme.typography.titleMedium,
-                        fontWeight = FontWeight.SemiBold,
-                        color = MaterialTheme.colorScheme.onSurface,
-                    )
-                    Text(
-                        text = stringResource(id = tile.summaryResId),
-                        style = MaterialTheme.typography.bodyMedium,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant,
-                    )
-                }
-                Spacer(modifier = Modifier.width(SizeConstants.MediumSize))
-                Box(
-                    modifier = Modifier
-                        .size(52.dp)
-                        .clip(MaterialShapes.Cookie9Sided.toShape())
-                        .background(colors.container.copy(alpha = 0.22f)),
-                    contentAlignment = Alignment.Center,
-                ) {
-                    Text(
-                        text = count.toString(),
-                        style = MaterialTheme.typography.titleMedium,
-                        fontWeight = FontWeight.Bold,
-                        color = colors.content,
-                    )
-                }
-            }
-            ToolkitToolChips(tile = tile)
-        }
+    catalogTools.firstOrNull { it.id == selectedId }?.let { tile ->
+        ToolkitToolBottomSheet(tile = tile, onClose = { selectedId = null; startReaction = false },
+            startReaction = startReaction,
+            onAddTile = { tile.requestKey?.let { requestQuickSettingsTile(context, it, onTileAdded = onTileAdded) } }, onSetupTile = {})
     }
 }
 
 @Composable
-private fun NumbersGroupedToolRow(
-    tools: List<ToolkitTile>,
-    topRow: Boolean,
-    bottomRow: Boolean,
-    modifier: Modifier = Modifier,
-    onOpenTool: (ToolkitTile) -> Unit,
-) {
-    val outer = SizeConstants.ExtraLargeIncreasedSize
-    val inner = SizeConstants.SmallSize
-
-    Row(
-        modifier = modifier
-            .fillMaxWidth()
-            .height(IntrinsicSize.Max),
-        horizontalArrangement = Arrangement.spacedBy(SizeConstants.ExtraSmallSize),
-    ) {
-        tools.forEachIndexed { index, tile ->
-            val isFirst = index == 0
-            val isLast = index == tools.lastIndex
-            val cardShape = RoundedCornerShape(
-                topStart = if (topRow && isFirst) outer else inner,
-                topEnd = if (topRow && isLast) outer else inner,
-                bottomStart = if (bottomRow && isFirst) outer else inner,
-                bottomEnd = if (bottomRow && isLast) outer else inner,
-            )
-            NumbersToolCard(
-                tile = tile,
-                shape = cardShape,
-                modifier = Modifier
-                    .weight(1f)
-                    .fillMaxHeight(),
-                onClick = { onOpenTool(tile) },
-            )
+private fun MeasureFace(protractor: Boolean, angle: Float = 45f) {
+    val color = MaterialTheme.colorScheme.primary
+    Canvas(Modifier.fillMaxWidth().height(104.dp)) {
+        if (protractor) {
+            drawArc(color.copy(alpha = .15f), 180f, 180f, true, Offset(8.dp.toPx(), 8.dp.toPx()),
+                androidx.compose.ui.geometry.Size(size.width - 16.dp.toPx(), (size.height - 8.dp.toPx()) * 2f))
+            val radians = Math.toRadians(angle.toDouble())
+            val radius = minOf(size.width / 2f, size.height - 8.dp.toPx())
+            drawLine(color, Offset(center.x, size.height), Offset(center.x + kotlin.math.cos(radians).toFloat() * radius, size.height - kotlin.math.sin(radians).toFloat() * radius), 3.dp.toPx())
+        } else {
+            drawRoundRect(color.copy(alpha = .15f), topLeft = Offset(0f, 12.dp.toPx()), size = androidx.compose.ui.geometry.Size(size.width, 64.dp.toPx()), cornerRadius = androidx.compose.ui.geometry.CornerRadius(12.dp.toPx()))
+            for (i in 0..20) drawLine(color, Offset(size.width * i / 20f, 12.dp.toPx()), Offset(size.width * i / 20f, (if (i % 5 == 0) 36 else 24).dp.toPx()), 1.dp.toPx())
         }
     }
 }
 
-@Composable
-private fun NumbersToolCard(
-    tile: ToolkitTile,
-    shape: Shape,
-    modifier: Modifier = Modifier,
-    onClick: () -> Unit,
-) {
-    Card(
-        onClick = onClick,
-        modifier = modifier,
-        shape = shape,
-        colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.surfaceContainerHigh,
-        ),
-    ) {
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(SizeConstants.LargeSize),
-            verticalArrangement = Arrangement.SpaceBetween,
-        ) {
-            Column(
-                verticalArrangement = Arrangement.spacedBy(SizeConstants.MediumSize),
-            ) {
-                TileIconBadge(icon = tile.icon, large = true)
-                Column(
-                    verticalArrangement = Arrangement.spacedBy(SizeConstants.ExtraTinySize),
-                ) {
-                    Text(
-                        text = stringResource(id = tile.titleResId),
-                        style = MaterialTheme.typography.titleMedium,
-                        fontWeight = FontWeight.SemiBold,
-                        color = MaterialTheme.colorScheme.onSurface,
-                    )
-                    Text(
-                        text = stringResource(id = tile.summaryResId),
-                        style = MaterialTheme.typography.bodyMedium,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant,
-                    )
-                }
-            }
-            Spacer(modifier = Modifier.height(SizeConstants.MediumSize))
-            ToolkitToolChips(tile = tile)
-        }
-    }
-}
-
-internal val NumbersCalculateTools: ImmutableList<ToolkitTile> = persistentListOf(
-    ToolkitTile(
-        id = ToolkitTileIds.BILL_SPLITTER,
-        titleResId = R.string.tile_bill_splitter_title,
-        summaryResId = R.string.tile_bill_splitter_summary,
-        icon = ToolkitTileIcon.BillSplitter,
-        status = ToolkitTileStatus.Available,
-        kind = ToolkitToolKind.Expanded,
-    ),
-    ToolkitTile(
-        id = ToolkitTileIds.UNIT_CONVERTER,
-        titleResId = R.string.tile_converter_title,
-        summaryResId = R.string.tile_converter_summary,
-        icon = ToolkitTileIcon.Converter,
-        status = ToolkitTileStatus.Available,
-        kind = ToolkitToolKind.Expanded,
-    ),
-)
-
-internal val NumbersChanceTools: ImmutableList<ToolkitTile> = persistentListOf(
-    ToolkitTile(
-        id = ToolkitTileIds.COUNTER,
-        titleResId = R.string.tile_counter_title,
-        summaryResId = R.string.tile_counter_summary,
-        icon = ToolkitTileIcon.Counter,
-        status = ToolkitTileStatus.Available,
-        kind = ToolkitToolKind.Quick,
-        requestKey = ToolkitTileIds.COUNTER,
-    ),
-    ToolkitTile(
-        id = ToolkitTileIds.RANDOM_NUMBER,
-        titleResId = R.string.tile_random_number_title,
-        summaryResId = R.string.tile_random_number_summary,
-        icon = ToolkitTileIcon.RandomNumber,
-        status = ToolkitTileStatus.Available,
-        kind = ToolkitToolKind.Quick,
-    ),
-    ToolkitTile(
-        id = ToolkitTileIds.DICE_ROLL,
-        titleResId = R.string.tile_dice_roll_title,
-        summaryResId = R.string.tile_dice_roll_summary,
-        icon = ToolkitTileIcon.Dice,
-        status = ToolkitTileStatus.Available,
-        kind = ToolkitToolKind.Quick,
-        requestKey = ToolkitTileIds.DICE_ROLL,
-    ),
-)
-
-internal val NumbersSecondaryTools: ImmutableList<ToolkitTile> =
-    persistentListOf(*(NumbersCalculateTools + NumbersChanceTools).toTypedArray())
+internal val NumbersCalculateTools = MeasureTools.filter { it.id == ToolkitTileIds.UNIT_CONVERTER || it.id == ToolkitTileIds.BILL_SPLITTER }
+internal val NumbersChanceTools = MeasureTools.filter { it.id == ToolkitTileIds.COUNTER || it.id == ToolkitTileIds.REACTION_TEST }
+internal val NumbersSecondaryTools = MeasureTools
 
 @Preview(showBackground = true)
 @Composable
-private fun NumbersScreenContentPreview() {
-    MaterialTheme {
-        Surface {
-            NumbersScreenContent(
-                counterState = CounterToolUiState(count = 12),
-                contentPadding = PaddingValues(),
-            )
-        }
-    }
+private fun NumbersScreenPreview() {
+    MaterialTheme { Surface { NumbersScreenContent(CounterToolUiState(count = 42), PaddingValues()) } }
 }

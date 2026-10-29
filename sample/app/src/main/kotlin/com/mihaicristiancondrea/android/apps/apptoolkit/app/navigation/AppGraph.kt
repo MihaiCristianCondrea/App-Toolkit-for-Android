@@ -18,9 +18,11 @@
 package com.mihaicristiancondrea.android.apps.apptoolkit.app.navigation
 
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Calculate
+import androidx.compose.material.icons.filled.Straighten
+import androidx.compose.material.icons.filled.Casino
+import androidx.compose.material.icons.outlined.Casino
 import androidx.compose.material.icons.outlined.Apps
-import androidx.compose.material.icons.outlined.Calculate
+import androidx.compose.material.icons.outlined.Straighten
 import androidx.compose.material.icons.outlined.Widgets
 import androidx.compose.ui.res.stringResource
 import androidx.navigation3.runtime.NavKey
@@ -32,6 +34,7 @@ import com.mihaicristiancondrea.android.apps.apptoolkit.feature.components.ui.Ar
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.components.ui.ComponentsScreen
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.settings.ui.AboutSettingsScreen
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.R as TilesR
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.PlayScreen
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.NumbersScreen
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.ToolkitTilesScreen
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.main.ui.navigation.toolkitFooter
@@ -89,23 +92,24 @@ fun appGraph(
     }
     tab(
         key = NumbersRoute,
-        label = TilesR.string.numbers_title,
-        icon = ToolkitIcon.Vector(Icons.Outlined.Calculate),
-        selectedIcon = ToolkitIcon.Vector(Icons.Filled.Calculate),
+        label = TilesR.string.measure_title,
+        search = TabSearch(hint = TilesR.string.tiles_search_hint),
+        icon = ToolkitIcon.Vector(Icons.Outlined.Straighten),
+        selectedIcon = ToolkitIcon.Vector(Icons.Filled.Straighten),
     ) {
         NumbersScreen()
     }
     tab(
-        key = AppsListRoute,
-        label = AppsR.string.apps_tools_title,
-        icon = ToolkitIcon.Vector(Icons.Outlined.Apps),
-        // Every `Apps` variant bundled with Compose is squares; the selected state uses the dot
-        // grid Material Symbols draws for this glyph.
-        selectedIcon = ToolkitIcon.Resource(R.drawable.ic_apps_dots),
-        search = TabSearch(hint = AppsR.string.apps_search_hint),
+        key = PlayRoute,
+        label = TilesR.string.play_title,
+        icon = ToolkitIcon.Vector(Icons.Outlined.Casino),
+        selectedIcon = ToolkitIcon.Vector(Icons.Filled.Casino),
+        search = TabSearch(hint = TilesR.string.tiles_search_hint),
     ) {
-        AppsListScreen()
+        PlayScreen()
     }
+    page<AppsListRoute>(title = { stringResource(TilesR.string.discover_apps) }) { AppsListScreen() }
+    page<ExtraToolsRoute>(title = { stringResource(TilesR.string.extra_tools) }) { ToolkitTilesScreen(extraTools = true) }
     page<ComponentsRoute>(title = { stringResource(ComponentsR.string.components_title) }) {
         val navigator = com.mihaicristiancondrea.android.libs.apptoolkit.navigation.LocalShellNavigator.current
         ComponentsScreen(onOpenArticleDemo = { navigator.navigate(ArticleDemoRoute(it)) })
@@ -127,6 +131,8 @@ fun appGraph(
     }
 
     drawer {
+        link(key = AppsListRoute, label = TilesR.string.discover_apps, icon = ToolkitIcon.Vector(Icons.Outlined.Apps))
+        link(key = ExtraToolsRoute, label = TilesR.string.extra_tools, icon = ToolkitIcon.Vector(Icons.Outlined.Widgets))
         if (showComponents) {
             link(
                 key = ComponentsRoute,
@@ -145,7 +151,8 @@ fun appGraph(
  * the tab's [AppsListRoute.ROUTE_ID], [NumbersRoute.ROUTE_ID] or [ToolkitTilesRoute.ROUTE_ID].
  */
 fun startKeyFor(route: String): NavKey = when (route) {
+    PlayRoute.ROUTE_ID -> PlayRoute
     NumbersRoute.ROUTE_ID -> NumbersRoute
-    AppsListRoute.ROUTE_ID -> AppsListRoute
+    AppsListRoute.ROUTE_ID -> ToolkitTilesRoute
     else -> ToolkitTilesRoute
 }

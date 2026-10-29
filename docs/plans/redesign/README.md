@@ -99,3 +99,9 @@ Each step ends with `npm run build` and `npm run qa` passing in `marketing/ui`. 
 ### Measure tool translation
 
 The web tools now follow the existing Compose presentations: full-screen Surface Ruler with calibration, graduated Protractor, single-step Counter, Bill Splitter, bidirectional Unit Converter and timed Reaction Test. The Measure overview design remains a separate step. Random Number presets are ordered 1–2, 1–6, 1–10, 1–100. Android code is unchanged; device parity still needs review.
+
+## Native implementation, October 29, 2026
+
+The owner approved moving the marketing design into Compose. Native Quick Tools, Measure and Play & Decide now follow the approved groups and interactive widgets. App discovery moves to the drawer; More tools retains Screen Light and Material Colors. Tool input and overview/sheet state share dedicated ViewModels, with saved input restoration and foreground cleanup. Full-screen Protractor adapts to orientation; the new wheel and speaker cycle use native rendering and platform audio ownership.
+
+The historical web-first steps above describe the sequence that produced the design. Native compile, automated regression coverage and visual/device parity are tracked separately; the marketing browser checks do not verify Android behavior. Final device review remains required before uploading the redesigned store listing.

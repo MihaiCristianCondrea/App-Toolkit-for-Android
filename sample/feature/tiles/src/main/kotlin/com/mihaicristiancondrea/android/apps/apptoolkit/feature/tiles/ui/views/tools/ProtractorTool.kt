@@ -17,23 +17,45 @@
 
 package com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.tools
 
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.gestures.detectDragGestures
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.statusBarsPadding
+import androidx.compose.foundation.layout.navigationBarsPadding
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.Close
+import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.SegmentedButton
+import androidx.compose.material3.SegmentedButtonDefaults
+import androidx.compose.material3.SingleChoiceSegmentedButtonRow
 import androidx.compose.material3.Slider
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberSliderState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberUpdatedState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
+import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.res.stringResource
@@ -42,78 +64,93 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.drawText
 import androidx.compose.ui.text.rememberTextMeasurer
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.window.Dialog
+import androidx.compose.ui.window.DialogProperties
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.R
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.contracts.ProtractorToolEvent
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.states.ProtractorToolUiState
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
-import kotlin.math.atan2
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.models.protractorGeometry
 import kotlin.math.cos
-import kotlin.math.min
 import kotlin.math.sin
 
+/** Full-screen edge alignment, with a side control dock when the window is wide. */
 @Composable
-fun ProtractorTool(state: ProtractorToolUiState, onEvent: (ProtractorToolEvent) -> Unit) {
+fun ProtractorTool(state: ProtractorToolUiState, onEvent: (ProtractorToolEvent) -> Unit, onClose: () -> Unit) {
     val latestEvent by rememberUpdatedState(onEvent)
     val color = MaterialTheme.colorScheme.onSurface
     val accent = MaterialTheme.colorScheme.primary
-    val textStyle = MaterialTheme.typography.labelSmall.copy(color = color)
+    val labelStyle = MaterialTheme.typography.labelSmall.copy(color = color)
     val textMeasurer = rememberTextMeasurer()
-    val angleLabel = stringResource(R.string.tile_protractor_title)
-    Column(verticalArrangement = Arrangement.spacedBy(SizeConstants.MediumSize)) {
-        Text(stringResource(R.string.tool_angle_value, state.angle), style = MaterialTheme.typography.displayMedium)
-        Canvas(
-            Modifier.fillMaxWidth().height(240.dp)
-                .pointerInput(Unit) {
-                    detectTapGestures { point ->
-                        val pivot = Offset(size.width / 2f, size.height - 24.dp.toPx())
-                        latestEvent(ProtractorToolEvent.AngleChanged(angleAt(point, pivot)))
-                    }
-                }
-                .pointerInput(Unit) {
+    val title = stringResource(R.string.tile_protractor_title)
+    Dialog(onDismissRequest = onClose, properties = DialogProperties(usePlatformDefaultWidth = false, decorFitsSystemWindows = false)) {
+        Surface(Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.surface) {
+            BoxWithConstraints(Modifier.fillMaxSize()) {
+                val geometry = protractorGeometry(maxWidth.value, maxHeight.value)
+                Canvas(Modifier.fillMaxSize().pointerInput(geometry) {
+                    detectTapGestures { point -> latestEvent(ProtractorToolEvent.AngleChanged(geometry.angleAt(point.x / density, point.y / density))) }
+                }.pointerInput(geometry) {
                     detectDragGestures { change, _ ->
-                        val pivot = Offset(size.width / 2f, size.height - 24.dp.toPx())
-                        latestEvent(ProtractorToolEvent.AngleChanged(angleAt(change.position, pivot)))
                         change.consume()
+                        latestEvent(ProtractorToolEvent.AngleChanged(geometry.angleAt(change.position.x / density, change.position.y / density)))
                     }
-                },
-        ) {
-            val pivot = Offset(size.width / 2f, size.height - 24.dp.toPx())
-            val radius = min(size.width / 2f - 28.dp.toPx(), size.height - 48.dp.toPx()).coerceAtLeast(1f)
-            val origin = Offset(pivot.x - radius, pivot.y - radius)
-            val diameter = Size(radius * 2f, radius * 2f)
-            drawArc(color, 180f, 180f, false, origin, diameter, style = Stroke(1.dp.toPx()))
-            for (degrees in 0..180 step 5) {
-                val radians = Math.toRadians(degrees.toDouble())
-                fun point(distance: Float) = Offset(
-                    pivot.x + cos(radians).toFloat() * distance,
-                    pivot.y - sin(radians).toFloat() * distance,
-                )
-                val tick = if (degrees % 30 == 0) 12.dp.toPx() else 6.dp.toPx()
-                drawLine(color, point(radius - tick), point(radius), 1.dp.toPx())
-                if (degrees % 30 == 0) {
-                    val label = textMeasurer.measure(degrees.toString(), textStyle)
-                    val position = point(radius + 14.dp.toPx())
-                    drawText(label, topLeft = position - Offset(label.size.width / 2f, label.size.height / 2f))
+                }) {
+                    val pivot = Offset(geometry.x.dp.toPx(), geometry.y.dp.toPx())
+                    val radius = geometry.radius.dp.toPx()
+                    fun point(degrees: Float, distance: Float): Offset {
+                        val angle = Math.toRadians(degrees.toDouble())
+                        return if (geometry.landscape) pivot + Offset(cos(angle).toFloat(), -sin(angle).toFloat()) * distance
+                        else pivot + Offset(sin(angle).toFloat(), -cos(angle).toFloat()) * distance
+                    }
+                    val sector = Path().apply {
+                        moveTo(pivot.x, pivot.y)
+                        for (degree in 0..state.angle.toInt()) { val p = point(degree.toFloat(), radius); lineTo(p.x, p.y) }
+                        close()
+                    }
+                    drawPath(sector, accent.copy(alpha = .14f))
+                    drawArc(color.copy(alpha = .4f), if (geometry.landscape) 180f else -90f, 180f, false,
+                        pivot - Offset(radius, radius), Size(radius * 2, radius * 2), style = Stroke(1.dp.toPx()))
+                    for (degree in 0..180) {
+                        val tick = if (degree % 10 == 0) 16.dp.toPx() else if (degree % 5 == 0) 10.dp.toPx() else 5.dp.toPx()
+                        drawLine(color.copy(alpha = .7f), point(degree.toFloat(), radius - tick), point(degree.toFloat(), radius), 1.dp.toPx())
+                        if (degree % (if (radius < 200.dp.toPx()) 30 else 10) == 0) {
+                            val label = textMeasurer.measure(degree.toString(), labelStyle)
+                            val p = point(degree.toFloat(), radius - 30.dp.toPx())
+                            drawText(label, topLeft = Offset(p.x - label.size.width / 2f, (p.y - label.size.height / 2f).coerceIn(0f, size.height - label.size.height)))
+                        }
+                    }
+                    drawLine(accent, pivot, point(0f, radius), 3.dp.toPx())
+                    drawLine(accent, pivot, point(state.angle, radius), 3.dp.toPx())
+                    drawCircle(accent, 6.dp.toPx(), pivot)
+                }
+                Row(Modifier.fillMaxWidth().statusBarsPadding().padding(16.dp), verticalAlignment = Alignment.CenterVertically) {
+                    Text(title, style = MaterialTheme.typography.headlineSmall, modifier = Modifier.weight(1f))
+                    IconButton(onClick = onClose) { Icon(Icons.Outlined.Close, stringResource(R.string.tool_dialog_close_content_description)) }
+                }
+                val dock = if (geometry.landscape) Modifier.align(Alignment.CenterEnd).width(280.dp).padding(24.dp)
+                    else Modifier.align(Alignment.BottomCenter).fillMaxWidth().navigationBarsPadding().padding(20.dp)
+                Column(dock.verticalScroll(rememberScrollState()), verticalArrangement = Arrangement.spacedBy(12.dp)) {
+                    HorizontalDivider()
+                    Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically) {
+                        Text(stringResource(R.string.tool_angle_value, state.angle), style = MaterialTheme.typography.displayMedium, color = accent)
+                        Text(stringResource(when {
+                            state.angle == 0f -> R.string.angle_zero
+                            state.angle == 90f -> R.string.angle_right
+                            state.angle == 180f -> R.string.angle_straight
+                            state.angle < 90f -> R.string.angle_acute
+                            else -> R.string.angle_obtuse
+                        }), style = MaterialTheme.typography.labelLarge)
+                    }
+                    val sliderState = rememberSliderState(value = state.angle, trackRange = 0f..180f)
+                    sliderState.value = state.angle
+                    Slider(state = sliderState, onValueChange = { onEvent(ProtractorToolEvent.AngleChanged(it)) }, modifier = Modifier.semantics { contentDescription = title })
+                    SingleChoiceSegmentedButtonRow(Modifier.fillMaxWidth()) {
+                        listOf(0f,45f,90f,180f).forEachIndexed { index, angle ->
+                            SegmentedButton(selected = state.angle == angle, onClick = { onEvent(ProtractorToolEvent.AngleChanged(angle)) }, shape = SegmentedButtonDefaults.itemShape(index,4)) { Text(angle.toInt().toString()+"°") }
+                        }
+                    }
+                    Text(stringResource(R.string.tool_protractor_hint), style = MaterialTheme.typography.bodySmall)
                 }
             }
-            val radians = Math.toRadians(state.angle.toDouble())
-            val arm = Offset(pivot.x + cos(radians).toFloat() * radius, pivot.y - sin(radians).toFloat() * radius)
-            drawLine(accent, pivot, Offset(pivot.x + radius, pivot.y), 3.dp.toPx())
-            drawLine(accent, pivot, arm, 3.dp.toPx())
-            drawCircle(accent, 5.dp.toPx(), pivot)
         }
-        Text(stringResource(R.string.tool_protractor_hint), style = MaterialTheme.typography.bodyMedium)
-        val sliderState = rememberSliderState(value = state.angle, trackRange = 0f..180f)
-        sliderState.value = state.angle
-        Slider(
-            state = sliderState,
-            onValueChange = { onEvent(ProtractorToolEvent.AngleChanged(it)) },
-            modifier = Modifier.semantics { contentDescription = angleLabel },
-        )
     }
-}
-
-private fun angleAt(point: Offset, pivot: Offset): Float {
-    val radians = atan2((pivot.y - point.y).coerceAtLeast(0f), point.x - pivot.x)
-    return Math.toDegrees(radians.toDouble()).toFloat()
 }
