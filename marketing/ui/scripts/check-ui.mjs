@@ -142,7 +142,7 @@ try {
   for (const window of ['phone', 'fold', 'desktop']) {
     await page.goto(`${base}/screen.html?id=numbers&window=${window}&panel=none&state=${encodeURIComponent(JSON.stringify({counterValue: 0}))}`);
     const counter = page.locator('[data-tool="counter"]');
-    await counter.locator('md-filled-button').click();
+    await counter.locator('[aria-label="Add"]').click();
     assert.equal((await counter.locator('.mw-count').innerText()).trim(), '1');
     assert.equal(await page.locator('[role="dialog"]').count(), 0);
     await counter.locator('[aria-label="Subtract"]').click();
@@ -150,7 +150,7 @@ try {
     assert.equal(await counter.locator('[aria-label="Subtract"]').evaluate(el => el.disabled), true);
     await counter.locator('.mw-open').focus();
     await page.keyboard.press('Enter');
-    await page.locator('.measure-counter__value').waitFor();
+    await page.locator('.measure-counter .measure-counter__value').waitFor();
     await page.locator('.measure-actions md-filled-button').click();
     await page.locator(SHEET_CONTENT).locator('[aria-label="Close"]').click();
     assert.equal((await counter.locator('.mw-count').innerText()).trim(), '1');
@@ -204,9 +204,9 @@ try {
   await openMeasure('counter',{counterValue:0});
   assert.equal(await page.locator('[aria-label="Decrease"]').evaluate(el=>el.disabled),true);
   await page.locator('.measure-actions md-filled-button').click();
-  await page.waitForFunction(()=>document.querySelector('.measure-counter__value').textContent.trim()==='1');
+  await page.waitForFunction(()=>document.querySelector('.measure-counter .measure-counter__value').textContent.trim()==='1');
   await page.locator('.measure-actions md-outlined-button').click();
-  await page.waitForFunction(()=>document.querySelector('.measure-counter__value').textContent.trim()==='0');checks++;
+  await page.waitForFunction(()=>document.querySelector('.measure-counter .measure-counter__value').textContent.trim()==='0');checks++;
   await openMeasure('ruler');
   await page.locator('md-outlined-segmented-button[label="in"]').click();
   await page.waitForFunction(()=>document.querySelector('.measure-ruler .measure-display').textContent.includes('in'));

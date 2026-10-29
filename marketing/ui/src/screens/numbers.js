@@ -122,8 +122,8 @@ export default {
               </header>
               <div class="mw-counter-panel ${count >= 1000 ? "mw-counter-panel--long" : ""}">
                 <md-outlined-icon-button aria-label="Subtract" ?disabled=${count === 0} @click=${() => s.set?.({counterValue: count - 1})}><md-icon>remove</md-icon></md-outlined-icon-button>
-                <div class="mw-count" aria-live="polite" aria-label="Current count">${count}</div>
-                <md-filled-button ?disabled=${count === 2147483647} @click=${() => s.set?.({counterValue: count + 1})}><md-icon slot="icon">add</md-icon>Add</md-filled-button>
+                <div class="measure-counter__value mw-count" aria-live="polite" aria-label="Current count">${count}</div>
+                <md-filled-icon-button aria-label="Add" ?disabled=${count === 2147483647} @click=${() => s.set?.({counterValue: count + 1})}><md-icon>add</md-icon></md-filled-icon-button>
               </div>
             </article>
             ${widget("reaction_test", "corner-bento-bottom mw-widget--reaction", html`
