@@ -53,7 +53,7 @@ shell, rails, drawers and sheets come with Material Next.
 
 ## Dependencies
 
-It uses Material Next `0.0.9` from npm and needs Node.js 24. The gallery opens
+It uses Material Next `0.1.0` from npm and needs Node.js 24. The gallery opens
 each screen in the same page; `screen.html` remains for captures and direct links.
 Gallery cards start without device frames. Opening screen detail shows a frame automatically,
 while an explicit `frame=none` URL stays frameless.

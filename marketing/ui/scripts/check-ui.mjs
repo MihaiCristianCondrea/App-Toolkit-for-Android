@@ -168,7 +168,7 @@ try {
     checks++;
     for(const scroll of [0,100,200,300,400]) {
       await playPage.goto(`${base}/?id=quick-tools`);
-      await playPage.locator('mnw-android-screen').evaluate((el,y)=>{el.querySelector(':scope > div').scrollTop=y;},scroll);
+      await playPage.locator('mnw-android-screen').evaluate((el,y)=>{el.shadowRoot.querySelector('.content').scrollTop=y;},scroll);
       await playPage.getByRole('button',{name:'Play & Decide',exact:true}).tap();
       await playPage.waitForURL(/id=play/);
       assert.equal(await playPage.locator('.tk-sheet-title').count(),0,'tab tap cannot open SOS');
