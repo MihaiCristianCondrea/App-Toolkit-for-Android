@@ -27,6 +27,7 @@ export default {
   description: "Ruler, protractor, converter, bill splitter, counter, reaction test.",
   defaults: {
     activeSheet: "none",
+    searchQuery: "",
     reactionAutoStart: false,
     rulerUnit: "mm",
     protractorAngle: 45,
@@ -68,6 +69,8 @@ export default {
   ],
   render(s) {
     const open = (id) => s.set?.({ activeSheet: id, reactionAutoStart: false, ...(id === "reaction_test" ? { reactionPhase: "idle" } : {}) });
+    const query = (s.searchQuery || "").trim().toLowerCase();
+    const matches = id => !query || [TOOLS[id].title, TOOLS[id].subtitle, id.replaceAll("_", " ")].some(text => text.toLowerCase().includes(query));
     const count = Math.max(0, Math.min(2147483647, Number(s.counterValue ?? 0)));
     const bill = billSummary(s);
     const conversion = conversionSummary(s);
@@ -76,6 +79,7 @@ export default {
     const armY = 90 - 65 * Math.sin(angle * Math.PI / 180);
     const sectionTitle = (icon, title) => html`<h2 class="qt-section__title"><md-icon class="sc-rounded" aria-hidden="true">${icon}</md-icon>${title}</h2>`;
     const widget = (id, extra, visual, detail, actions = nothing) => {
+      if (!matches(id)) return nothing;
       const tool = TOOLS[id];
       return html`<article class="numbers-card mw-widget ${extra}" data-tool=${id}>
         <h3 class="mw-title"><button class="mw-open" type="button" @click=${() => open(id)}>${tool.title}</button></h3>
@@ -87,6 +91,8 @@ export default {
 
     const content = html`
       <div class="tk-screen-pad measure-overview">
+        ${!Object.keys(TOOLS).some(matches) ? html`<p class="measure-empty" role="status">No tools found. Try another search.</p>` : nothing}
+        ${["ruler","protractor"].some(matches) ? html`
         <section class="qt-section">
           ${sectionTitle("square_foot", "Length & angle")}
           <div class="bento-row-2">
@@ -103,7 +109,8 @@ export default {
                 <path d="M155 90H90L${armX} ${armY}" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"/><circle cx="90" cy="90" r="4" fill="currentColor"/>
               </svg></div>`, html`<strong>${angle}°</strong><span>Find the right angle</span>`)}
           </div>
-        </section>
+        </section>` : nothing}
+        ${["unit_converter","bill_splitter"].some(matches) ? html`
         <section class="qt-section">
           ${sectionTitle("swap_horiz", "Convert & split")}
           <div class="bento-row-2">
@@ -114,11 +121,12 @@ export default {
               <div class="mw-share"><md-icon class="sc-rounded" aria-hidden="true">group</md-icon><strong>${bill.valid ? bill.perPerson : "—"}</strong><span>per person</span></div>
               `, html`<span>${bill.tipEnabled ? `${bill.pct}% tip` : "No tip"} · ${s.splitPeople} ${Number(s.splitPeople) === 1 ? "person" : "people"}</span>`)}
           </div>
-        </section>
+        </section>` : nothing}
+        ${["counter","reaction_test"].some(matches) ? html`
         <section class="qt-section">
           ${sectionTitle("timer", "Count & time")}
           <div class="bento-stack">
-            <article class="numbers-card mw-widget mw-widget--counter corner-bento-top" data-tool="counter">
+            ${matches("counter") ? html`<article class="numbers-card mw-widget mw-widget--counter corner-bento-top" data-tool="counter">
               <header class="mw-counter-header"><h3 class="mw-title"><button class="mw-open" type="button" @click=${() => open("counter")}>Counter</button></h3>
                 <md-text-button class="mw-counter-reset" ?disabled=${count === 0} @click=${() => s.set?.({counterValue: 0})}><md-icon slot="icon">refresh</md-icon>Reset</md-text-button>
               </header>
@@ -127,16 +135,17 @@ export default {
                 <div class="measure-counter__value mw-count" aria-live="polite" aria-label="Current count">${count}</div>
                 <md-filled-icon-button aria-label="Add" ?disabled=${count === 2147483647} @click=${() => s.set?.({counterValue: count + 1})}><md-icon>add</md-icon></md-filled-icon-button>
               </div>
-            </article>
+            </article>` : nothing}
             ${widget("reaction_test", "corner-bento-bottom mw-widget--reaction", html`
               <div class="mw-reaction"><div><strong>${s.reactionBest ? html`${s.reactionBest}<small> ms</small>` : "Ready?"}</strong><span>${s.reactionBest ? "Personal best" : "Test your reflexes"}</span></div></div>
               `, nothing, html`<div class="mw-actions"><md-filled-tonal-button @click=${() => s.set?.({activeSheet: "reaction_test", reactionPhase: "idle", reactionAutoStart: true})}><md-icon slot="icon">play_arrow</md-icon>Start</md-filled-tonal-button></div>`)}
           </div>
-        </section>
+        </section>` : nothing}
       </div>`;
 
     return previewScreen(APP, s, {
       tab: "numbers",
+      search: { placeholder: "Search tools", value: s.searchQuery || "", onInput: value => s.set?.({searchQuery: value}) },
       content,
       overlay: toolOverlay({ tool: TOOLS[s.activeSheet], state: s, onState: s.set, onClose: () => s.set?.({ activeSheet: "none", reactionAutoStart: false }) }),
     });

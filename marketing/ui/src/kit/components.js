@@ -1,4 +1,4 @@
-import { measureBody, rulerDialog } from "./measure.js";
+import { measureBody, rulerDialog, protractorDialog } from "./measure.js";
 import { chanceBody } from "./chance.js";
 import { html, nothing } from "lit";
 import { shapeMaskStyle, shapeUrl } from "./assets.js";
@@ -100,6 +100,9 @@ export function toolMetaChips({
  */
 export function toolOverlay({ tool, state, onState, onClose, showQuickSettingsAction = true }) {
   if (!tool) return null;
+  if (tool.id === "protractor") {
+    return { presentation: "fullscreen", label: tool.title, content: protractorDialog(state, onState, onClose), onDismiss: onClose };
+  }
   if (tool.id === "ruler") {
     return { presentation: "fullscreen", label: tool.title, content: rulerDialog(state, onState, onClose), onDismiss: onClose };
   }

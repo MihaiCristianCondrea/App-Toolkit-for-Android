@@ -235,12 +235,22 @@ try {
     assert.match(await page.locator('[data-tool="bill_splitter"] .mw-detail').innerText(), /No tip/);
     checks++;
   }
+  await page.goto(`${base}/screen.html?id=numbers&panel=none`);
+  const measureSearch = page.getByRole('searchbox', {name:'Search tools'});
+  for (const [query, ids] of [['RULER',['ruler']],['tip',['bill_splitter']],['reflex',['reaction_test']],['zzzz',[]],['',['ruler','protractor','unit_converter','bill_splitter','counter','reaction_test']]]) {
+    await measureSearch.fill(query);
+    assert.deepEqual(await page.locator('.mw-widget').evaluateAll(nodes=>nodes.map(n=>n.dataset.tool)),ids);
+    if(ids.length===1) assert.equal(await page.locator('.qt-section').count(),1);
+    if(!ids.length) assert.equal(await page.locator('.measure-empty').count(),1);
+  }
+  checks++;
   // Compose Measure presentations at every supported window and theme.
   for(const window of ['phone','fold','desktop']) for(const theme of ['light','dark']) {
     for(const activeSheet of ['ruler','protractor','counter','bill_splitter','unit_converter','reaction_test']) {
       await page.goto(`${base}/screen.html?id=numbers&window=${window}&theme=${theme}&panel=none&state=${encodeURIComponent(JSON.stringify({activeSheet}))}`);
       await page.locator('[role="dialog"]').waitFor();
       if(activeSheet==='ruler') {assert.equal(await page.locator(SHEET).count(),0);assert.equal(await page.locator('mnw-android-screen .fullscreen').count(),1);assert.equal(await page.locator('.tk-slider--range').count(),1);}
+      if(activeSheet==='protractor') { assert.equal(await page.locator(SHEET).count(),0); assert.equal(await page.locator('mnw-android-screen .fullscreen').count(),1); }
       if(activeSheet==='counter') assert.equal(await page.locator('[aria-label="Step increment"]').count(),0);
       checks++;
     }
@@ -269,6 +279,14 @@ try {
   await page.locator('.measure-body .tk-slider input').focus();
   await page.keyboard.press('ArrowRight');
   await page.waitForFunction(()=>document.querySelector('.measure-display').textContent.includes('46'));checks++;
+  const dial = page.locator('.measure-protractor');
+  const geometry = await dial.evaluate(el => ({box: el.getBoundingClientRect().toJSON(), width: el.viewBox.baseVal.width, height: el.viewBox.baseVal.height}));
+  const centerY = Math.max(140,(geometry.height-148)/2);
+  await page.mouse.click(geometry.box.x + 100 * geometry.box.width / geometry.width, geometry.box.y + centerY * geometry.box.height / geometry.height);
+  await page.waitForFunction(()=>document.querySelector('.measure-display').textContent.includes('90'));
+  await page.locator('.measure-protractor-dialog [aria-label="Close"]').click();
+  assert.equal(await page.locator('[role="dialog"]').count(),0);
+  checks++;
   await openMeasure('bill_splitter',{billAmount:'10.00',tipPercent:15,splitPeople:'3'});
   assert.equal((await page.locator('.measure-bill > strong').innerText()).replaceAll(',',''),'$3.84');
   await page.locator('md-outlined-text-field').first().locator('input').fill('1.999');
