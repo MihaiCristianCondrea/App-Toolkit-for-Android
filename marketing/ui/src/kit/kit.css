@@ -1854,7 +1854,7 @@ mnw-android-screen,
 .play-wheel-card .wheel-plate text { display:none; }
 .play-wheel-card .wheel-plate path:nth-of-type(3n+1) { fill:var(--md-sys-color-primary); }
 .play-wheel-card .wheel-plate path:nth-of-type(3n+2) { fill:var(--md-sys-color-primary-container); }
-.play-wheel-card .wheel-plate path:nth-of-type(3n) { fill:color-mix(in srgb,var(--md-sys-color-primary) 45%,var(--md-sys-color-surface)); }
+.play-wheel-card .wheel-plate path:nth-of-type(3n) { fill:color-mix(in srgb,var(--md-sys-color-primary) 24%,var(--md-sys-color-surface)); }
 .play-wheel-card .wheel-pointer { top:-2px; left:calc(50% - 8px); border-inline-width:8px; border-top-width:16px; }
 .play-wheel-copy { display:flex; min-width:0; flex-direction:column; gap:10px; }
 .play-wheel-copy > .qt-live__label { font:600 12px/16px var(--md-ref-typeface-plain); letter-spacing:.8px; text-transform:uppercase; }
@@ -1867,3 +1867,16 @@ mnw-android-screen,
 
 /* Keep projected tool hit regions inside the scroll viewport, clear of shell navigation. */
 mnw-android-screen > div:not([slot]):has(.qt-overview) { height:100%; overflow:auto; contain:paint; isolation:isolate; scrollbar-width:none; }
+
+.wheel-body { gap:12px; align-items:stretch; }
+.wheel-body > md-chip-set { padding-block:4px; }
+.wheel-stage { display:flex; flex-direction:column; align-items:center; gap:16px; padding:16px 16px 20px; border-radius:28px 28px 8px 8px; background:var(--md-sys-color-secondary-container); color:var(--md-sys-color-on-secondary-container); }
+.wheel-stage-meta { display:flex; justify-content:space-between; align-items:center; gap:12px; width:100%; font:500 12px/16px var(--md-ref-typeface-plain); }
+.wheel-stage-meta > :first-child { letter-spacing:1px; }
+.wheel-stage .decision-wheel { width:min(280px,100%); border-radius:50%; padding:8px; box-sizing:border-box; background:var(--md-sys-color-surface); }
+.wheel-stage .wheel-pointer { top:-2px; }
+.wheel-stage .wheel-plate { border-radius:50%; }
+.wheel-outcome { margin-top:-8px; padding:16px 20px; border-radius:8px 8px 28px 28px; display:flex; flex-direction:column; gap:6px; align-items:center; background:var(--md-sys-color-secondary-container); color:var(--md-sys-color-on-secondary-container); }
+.wheel-outcome-label { font:600 11px/16px var(--md-ref-typeface-plain); letter-spacing:1px; }
+.wheel-outcome .wheel-result { font:500 28px/36px var(--md-ref-typeface-brand); }
+.wheel-body > md-filled-button { min-height:56px; width:100%; margin-top:4px; --md-filled-button-container-shape:28px; --md-filled-button-label-text-size:16px; }

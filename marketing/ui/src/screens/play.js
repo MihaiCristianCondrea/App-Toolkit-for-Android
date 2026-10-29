@@ -5,7 +5,7 @@ import {toolOverlay,shapeBadge} from '../kit/components.js';
 import {diceVisual,coinVisual,playChance} from '../kit/chance.js';
 import {APP} from '../config/identity.js';
 const TOOLS={
-  decision_wheel:{id:"decision_wheel",title:"Decision Wheel",subtitle:"Spin to choose an option",icon:"rotate_right",shape:"cookie_12sided",palette:"teal",supportsTile:false},
+  decision_wheel:{id:"decision_wheel",title:"Decision Wheel",subtitle:"Spin to choose an option",icon:"rotate_right",shape:"cookie_12sided",palette:"gold",supportsTile:false},
   random_number: { id: "random_number", title: "Random Number", subtitle: "Pick a number within a range", icon: "casino", shape: "gem", palette: "gold", kindLabel: "Quick tool", supportsTile: false },
   coin_flip: { id: "coin_flip", title: "Coin Flip", subtitle: "Flip heads or tails instantly", icon: "monetization_on", shape: "cookie_12sided", palette: "gold", kindLabel: "Quick tool", supportsTile: true },
   dice_roll: { id: "dice_roll", title: "Dice Roll", subtitle: "Roll a six-sided die", icon: "casino", shape: "cookie_12sided", palette: "gold", kindLabel: "Quick tool", supportsTile: true },
