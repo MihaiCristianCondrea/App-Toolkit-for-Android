@@ -7,17 +7,22 @@
 ### Added
 
 - Three redesigned native workspaces matching the approved marketing UI: Quick Tools, Measure
-  and Play & Decide. App discovery and existing app-only tools move into the drawer.
+  and Play & Decide, with live widgets in each tool's colours, shapes and readouts.
+- Material Colors is the last Quick Tools section: a strip of the app's colour scheme that opens
+  the palette page.
 - Decision Wheel with directly editable choices and a native animated result, and a finite
   foreground-only Water Eject speaker cycle.
-- Six new tools across Quick Tools and Numbers: Unit Converter (length, mass, temperature, volume
-  and data), Ruler (full-screen calibrated edge measurement in millimetres and inches), Screen Light
-  (brightness and warmth controls), Protractor (on-screen angle alignment), Tip & Bill Splitter,
-  and Random Number Picker with inclusive minimum and maximum bounds.
+- Five new tools across Quick Tools and Measure: Unit Converter (length, mass, temperature, volume
+  and data), Ruler (full-screen calibrated edge measurement in millimetres and inches), Protractor
+  (on-screen angle alignment), Tip & Bill Splitter, and Random Number Picker with inclusive minimum
+  and maximum bounds.
 - The app changelog has an info button that opens App Toolkit's releases on GitHub, for the
   library's notes behind each version.
 
 ### Changed
+
+- The apps catalog and the Components showcase are debug pages: the drawer shows them only in
+  debug builds, or once the showcase has been unlocked.
 
 - A new app icon: a toolbox with a wrench and screwdriver, in the launcher, the themed icon (the
   tools cut out of the box), the drawer, the splash screen, the widget preview and the Android TV
@@ -56,8 +61,7 @@
 - Quick Tools avoids recycling category groups while their expanded heights animate, addressing
   the reported scroll-and-expand lookahead layout crash.
 - Ruler calibration uses a full-length vertical reference aligned with its measurement axis.
-- Filtered Quick Tools sections hide unavailable collapse controls, and Screen Light controls
-  remain reachable by scrolling on short screens or with large text.
+- Filtered Quick Tools sections hide unavailable collapse controls.
 - Unit Converter accepts localized decimal digits and Arabic decimal marks.
 - Opening an installed app can fall back to its Settings page when Android denies the launcher
   lookup, rather than letting the lookup failure escape.

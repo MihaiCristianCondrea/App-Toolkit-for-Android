@@ -45,6 +45,7 @@
     <string name="tiles_category_sensors">Sensor &amp; Pengukuran</string>
     <string name="tiles_category_system">Sistem &amp; Kontrol</string>
     <string name="tiles_category_utilities">Utilitas &amp; Kesenangan</string>
+    <string name="tiles_category_colors">Warna</string>
     <string name="tiles_category_wellbeing">Kesejahteraan</string>
     <string name="tiles_chip_expanded_tool">Alat yang diperluas</string>
     <string name="tiles_chip_quick_tool">Alat cepat</string>
@@ -138,8 +139,6 @@
     <string name="tile_converter_summary">Konversi panjang, massa, suhu, volume, dan data.</string>
     <string name="tile_ruler_title">Penggaris</string>
     <string name="tile_ruler_summary">Ukur benda kecil di layar.</string>
-    <string name="tile_screen_light_title">Cahaya layar</string>
-    <string name="tile_screen_light_summary">Gunakan layar sebagai cahaya lembut.</string>
     <string name="tool_converter_length">Panjang</string>
     <string name="tool_converter_mass">Massa</string>
     <string name="tool_converter_temperature">Suhu</string>
@@ -148,8 +147,6 @@
     <string name="tool_converter_from">Dari</string>
     <string name="tool_converter_to">Ke</string>
     <string name="tool_converter_invalid">Masukkan nilai yang valid.</string>
-    <string name="tool_light_brightness">Kecerahan</string>
-    <string name="tool_light_warmth">Kehangatan</string>
     <string name="tool_ruler_calibration">Kalibrasi</string>
     <string name="tool_ruler_range">Rentang pengukuran</string>
     <string name="tool_ruler_reference">Cocokkan garis di bawah dengan 3 cm pada penggaris asli sebelum mengukur.</string>
@@ -185,7 +182,6 @@
     <string name="section_convert">Konversi &amp; bagi</string>
     <string name="section_count">Hitung &amp; waktu</string>
     <string name="section_chance">Acak</string>
-    <string name="extra_tools">Alat lainnya</string>
     <string name="wheel_title">Roda keputusan</string>
     <string name="wheel_summary">Putar untuk memilih opsi</string>
     <string name="wheel_choices">Pilihan Anda</string>
@@ -227,4 +223,21 @@
     <string name="tool_compass_northwest">Barat laut</string>
     <string name="tool_compass_magnetic_north">Utara magnetik</string>
     <string name="tool_compass_heading_description">%1$d° · %2$s · Utara magnetik</string>
+    <string name="widget_flashlight">Senter</string>
+    <string name="widget_level_tilted">Miring</string>
+    <string name="widget_flash_level">%1$d dari %2$d</string>
+    <string name="widget_flash_swipe">Geser untuk kecerahan</string>
+    <string name="widget_flash_tap">Ketuk untuk setelan</string>
+    <string name="widget_sos_note">Morse dengan senter</string>
+    <string name="widget_water_note">Nada speaker 30 detik</string>
+    <string name="widget_breathe_step">%1$s %2$d dtk</string>
+    <string name="widget_colors_note">Palet aplikasi dan nada Material You</string>
+    <string name="widget_coin_note">Ketuk koin untuk melempar</string>
+    <string name="widget_dice_value">Lempar dadu</string>
+    <string name="widget_dice_note">Ketuk dadu untuk melempar</string>
+    <string name="widget_ruler_note">Kalibrasi ke layar Anda</string>
+    <string name="widget_protractor_note">Temukan sudut yang tepat</string>
+    <string name="widget_reaction_ready">Siap?</string>
+    <string name="widget_reaction_prompt">Uji refleks Anda</string>
+    <string name="widget_reaction_best">Rekor pribadi</string>
 </resources>

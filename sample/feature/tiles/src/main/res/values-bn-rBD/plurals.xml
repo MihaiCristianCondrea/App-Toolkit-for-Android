@@ -21,4 +21,14 @@
         <item quantity="other">%1$d টুল</item>
     </plurals>
 
+    <plurals name="widget_wheel_choices">
+        <item quantity="one">%dটি বিকল্প · চাকা খুলুন</item>
+        <item quantity="other">%dটি বিকল্প · চাকা খুলুন</item>
+    </plurals>
+
+    <plurals name="widget_people">
+        <item quantity="one">%d জন</item>
+        <item quantity="other">%d জন</item>
+    </plurals>
+
 </resources>

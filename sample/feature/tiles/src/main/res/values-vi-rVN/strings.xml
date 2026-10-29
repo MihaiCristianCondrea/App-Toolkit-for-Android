@@ -45,6 +45,7 @@
     <string name="tiles_category_sensors">Cảm biến &amp; Đo lường</string>
     <string name="tiles_category_system">Hệ thống &amp; Điều khiển</string>
     <string name="tiles_category_utilities">Tiện ích &amp; Giải trí</string>
+    <string name="tiles_category_colors">Màu sắc</string>
     <string name="tiles_category_wellbeing">sức khỏe</string>
     <string name="tiles_chip_expanded_tool">Công cụ mở rộng</string>
     <string name="tiles_chip_quick_tool">Công cụ nhanh</string>
@@ -138,8 +139,6 @@
     <string name="tile_converter_summary">Chuyển đổi độ dài, khối lượng, nhiệt độ, thể tích và dữ liệu.</string>
     <string name="tile_ruler_title">Thước</string>
     <string name="tile_ruler_summary">Đo vật nhỏ trên màn hình.</string>
-    <string name="tile_screen_light_title">Đèn màn hình</string>
-    <string name="tile_screen_light_summary">Dùng màn hình làm nguồn sáng dịu.</string>
     <string name="tool_converter_length">Độ dài</string>
     <string name="tool_converter_mass">Khối lượng</string>
     <string name="tool_converter_temperature">Nhiệt độ</string>
@@ -148,8 +147,6 @@
     <string name="tool_converter_from">Từ</string>
     <string name="tool_converter_to">Sang</string>
     <string name="tool_converter_invalid">Nhập giá trị hợp lệ.</string>
-    <string name="tool_light_brightness">Độ sáng</string>
-    <string name="tool_light_warmth">Độ ấm</string>
     <string name="tool_ruler_calibration">Hiệu chuẩn</string>
     <string name="tool_ruler_range">Phạm vi đo</string>
     <string name="tool_ruler_reference">Trước khi đo, căn đường bên dưới bằng 3 cm trên thước thật.</string>
@@ -185,7 +182,6 @@
     <string name="section_convert">Chuyển đổi và chia</string>
     <string name="section_count">Đếm và thời gian</string>
     <string name="section_chance">Ngẫu nhiên</string>
-    <string name="extra_tools">Công cụ khác</string>
     <string name="wheel_title">Vòng quay quyết định</string>
     <string name="wheel_summary">Quay để chọn một phương án</string>
     <string name="wheel_choices">Các lựa chọn của bạn</string>
@@ -227,4 +223,21 @@
     <string name="tool_compass_northwest">Tây bắc</string>
     <string name="tool_compass_magnetic_north">Bắc từ</string>
     <string name="tool_compass_heading_description">%1$d° · %2$s · Bắc từ</string>
+    <string name="widget_flashlight">Đèn pin</string>
+    <string name="widget_level_tilted">Nghiêng</string>
+    <string name="widget_flash_level">%1$d/%2$d</string>
+    <string name="widget_flash_swipe">Vuốt để chỉnh độ sáng</string>
+    <string name="widget_flash_tap">Nhấn để mở cài đặt</string>
+    <string name="widget_sos_note">Morse bằng đèn pin</string>
+    <string name="widget_water_note">Âm loa 30 giây</string>
+    <string name="widget_breathe_step">%1$s %2$d giây</string>
+    <string name="widget_colors_note">Bảng màu ứng dụng và tông Material You</string>
+    <string name="widget_coin_note">Nhấn đồng xu để tung</string>
+    <string name="widget_dice_value">Gieo xúc xắc</string>
+    <string name="widget_dice_note">Nhấn xúc xắc để gieo</string>
+    <string name="widget_ruler_note">Hiệu chỉnh theo màn hình</string>
+    <string name="widget_protractor_note">Tìm góc phù hợp</string>
+    <string name="widget_reaction_ready">Sẵn sàng?</string>
+    <string name="widget_reaction_prompt">Kiểm tra phản xạ</string>
+    <string name="widget_reaction_best">Kỷ lục cá nhân</string>
 </resources>

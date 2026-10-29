@@ -45,6 +45,7 @@
     <string name="tiles_category_sensors">Mga Sensor at Pagsukat</string>
     <string name="tiles_category_system">System at Mga Kontrol</string>
     <string name="tiles_category_utilities">Mga Utility at Kasayahan</string>
+    <string name="tiles_category_colors">Mga kulay</string>
     <string name="tiles_category_wellbeing">Kagalingan</string>
     <string name="tiles_chip_expanded_tool">Pinalawak na tool</string>
     <string name="tiles_chip_quick_tool">Mabilis na tool</string>
@@ -138,8 +139,6 @@
     <string name="tile_converter_summary">I-convert ang haba, masa, temperatura, volume, at data.</string>
     <string name="tile_ruler_title">Ruler</string>
     <string name="tile_ruler_summary">Sukatin ang maliliit na bagay sa screen.</string>
-    <string name="tile_screen_light_title">Ilaw ng screen</string>
-    <string name="tile_screen_light_summary">Gamitin ang screen bilang malambot na ilaw.</string>
     <string name="tool_converter_length">Haba</string>
     <string name="tool_converter_mass">Masa</string>
     <string name="tool_converter_temperature">Temperatura</string>
@@ -148,8 +147,6 @@
     <string name="tool_converter_from">Mula</string>
     <string name="tool_converter_to">Patungo</string>
     <string name="tool_converter_invalid">Maglagay ng wastong halaga.</string>
-    <string name="tool_light_brightness">Liwanag</string>
-    <string name="tool_light_warmth">Init ng kulay</string>
     <string name="tool_ruler_calibration">Kalibrasyon</string>
     <string name="tool_ruler_range">Saklaw ng sukat</string>
     <string name="tool_ruler_reference">Itugma ang linya sa ibaba sa 3 cm sa totoong ruler bago magsukat.</string>
@@ -185,7 +182,6 @@
     <string name="section_convert">Convert at hati</string>
     <string name="section_count">Bilang at oras</string>
     <string name="section_chance">Tsansa</string>
-    <string name="extra_tools">Iba pang tool</string>
     <string name="wheel_title">Gulong ng pasya</string>
     <string name="wheel_summary">Paikutin para pumili ng opsyon</string>
     <string name="wheel_choices">Mga pagpipilian mo</string>
@@ -227,4 +223,21 @@
     <string name="tool_compass_northwest">Hilagang-kanluran</string>
     <string name="tool_compass_magnetic_north">Magnetikong hilaga</string>
     <string name="tool_compass_heading_description">%1$d° · %2$s · Magnetikong hilaga</string>
+    <string name="widget_flashlight">Flashlight</string>
+    <string name="widget_level_tilted">Nakahilig</string>
+    <string name="widget_flash_level">%1$d sa %2$d</string>
+    <string name="widget_flash_swipe">Mag-swipe para sa liwanag</string>
+    <string name="widget_flash_tap">I-tap para sa settings</string>
+    <string name="widget_sos_note">Morse gamit ang flashlight</string>
+    <string name="widget_water_note">30 segundong tono ng speaker</string>
+    <string name="widget_breathe_step">%1$s %2$d s</string>
+    <string name="widget_colors_note">Palette ng app at mga tono ng Material You</string>
+    <string name="widget_coin_note">I-tap ang barya para ihagis</string>
+    <string name="widget_dice_value">Magpagulong ng dice</string>
+    <string name="widget_dice_note">I-tap ang dice para igulong</string>
+    <string name="widget_ruler_note">I-calibrate sa iyong screen</string>
+    <string name="widget_protractor_note">Hanapin ang tamang anggulo</string>
+    <string name="widget_reaction_ready">Handa na?</string>
+    <string name="widget_reaction_prompt">Subukan ang iyong reflexes</string>
+    <string name="widget_reaction_best">Personal na pinakamahusay</string>
 </resources>

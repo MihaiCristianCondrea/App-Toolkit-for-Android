@@ -18,6 +18,30 @@
 package com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui
 
 import androidx.compose.foundation.Canvas
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material.icons.outlined.Group
+import androidx.compose.material.icons.outlined.PlayArrow
+import androidx.compose.material.icons.outlined.Refresh
+import androidx.compose.material.icons.outlined.SwapVert
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.geometry.CornerRadius
+import androidx.compose.ui.geometry.Size
+import androidx.compose.ui.graphics.Path
+import androidx.compose.ui.graphics.Shape
+import androidx.compose.ui.graphics.StrokeCap
+import androidx.compose.ui.graphics.StrokeJoin
+import androidx.compose.ui.graphics.drawscope.Stroke
+import androidx.compose.ui.res.pluralStringResource
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.drawText
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.rememberTextMeasurer
+import androidx.compose.ui.unit.sp
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.tools.labelResId
+import kotlin.math.cos
+import kotlin.math.roundToInt
+import kotlin.math.sin
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -134,18 +158,25 @@ internal fun NumbersScreenContent(
             if (visible.isNotEmpty()) ToolSection(stringResource(title), icon, Modifier.animateVisibility(sectionIndex)) {
                 if (title == R.string.section_count) Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
                     visible.forEachIndexed { index, tile ->
-                        ToolWidget(tile, { selectedId = tile.id; startReaction = false }, Modifier.fillMaxWidth(),
-                            toolCorners(0, 1, top = index == 0, bottom = index == visible.lastIndex),
-                            headerAction = if (tile.id == ToolkitTileIds.COUNTER) { { TextButton(onClick = { onCounter(CounterToolEvent.Reset) }, enabled = counterState.count > 0) { Text(stringResource(R.string.tool_counter_reset)) } } } else null) {
-                            if (tile.id == ToolkitTileIds.COUNTER) CounterControls(counterState.count,
-                                onIncrement = { onCounter(CounterToolEvent.Increment) },
-                                onDecrement = { onCounter(CounterToolEvent.Decrement) })
-                            else Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
-                                Text(reaction.bestTimeMs?.let { stringResource(R.string.tool_reaction_test_best, it) }
-                                    ?: stringResource(R.string.tool_reaction_test_idle_prompt), style = MaterialTheme.typography.bodyLarge)
-                                FilledTonalButton(onClick = { startReaction = true; selectedId = tile.id }) { Text(stringResource(R.string.tool_reaction_test_start)) }
+                        val shape = toolCorners(0, 1, top = index == 0, bottom = index == visible.lastIndex)
+                        if (tile.id == ToolkitTileIds.COUNTER) {
+                            ToolWidget(tile, { selectedId = tile.id; startReaction = false }, Modifier.fillMaxWidth(), shape,
+                                headerAction = {
+                                    TextButton(onClick = { onCounter(CounterToolEvent.Reset) }, enabled = counterState.count > 0) {
+                                        Icon(Icons.Outlined.Refresh, null, Modifier.size(18.dp))
+                                        Spacer(Modifier.width(8.dp))
+                                        Text(stringResource(R.string.tool_counter_reset))
+                                    }
+                                },
+                                padding = PaddingValues(start = 16.dp, end = 16.dp, top = 12.dp, bottom = 16.dp),
+                                spacing = 8.dp) {
+                                CounterControls(counterState.count,
+                                    onIncrement = { onCounter(CounterToolEvent.Increment) },
+                                    onDecrement = { onCounter(CounterToolEvent.Decrement) })
                             }
-                        }
+                        } else ReactionWidget(tile, reaction.bestTimeMs, shape,
+                            onOpen = { selectedId = tile.id; startReaction = false },
+                            onStart = { startReaction = true; selectedId = tile.id })
                     }
                 } else ToolPair(visible) { tile, shape ->
                     ToolWidget(tile, { selectedId = tile.id }, Modifier.weight(1f).fillMaxHeight(), shape,
@@ -155,17 +186,32 @@ internal fun NumbersScreenContent(
                             else -> MaterialTheme.colorScheme.surfaceContainerHigh
                         }) {
                         when (tile.id) {
-                            ToolkitTileIds.RULER -> { MeasureFace(false); Text("mm / in", style = MaterialTheme.typography.headlineSmall) }
-                            ToolkitTileIds.PROTRACTOR -> { MeasureFace(true, protractorAngle); Text(stringResource(R.string.tool_angle_value, protractorAngle), style = MaterialTheme.typography.headlineSmall) }
+                            ToolkitTileIds.RULER -> {
+                                MeasureFace(protractor = false)
+                                MeasureDetail("mm / in", stringResource(R.string.widget_ruler_note))
+                            }
+                            ToolkitTileIds.PROTRACTOR -> {
+                                MeasureFace(protractor = true, angle = protractorAngle)
+                                MeasureDetail(stringResource(R.string.tile_service_azimuth_format, protractorAngle.roundToInt()), stringResource(R.string.widget_protractor_note))
+                            }
                             ToolkitTileIds.UNIT_CONVERTER -> {
-                                Text(converter.left+" "+converter.from.symbol, style = MaterialTheme.typography.headlineSmall)
-                                Icon(Icons.Outlined.SwapHoriz, null)
-                                Text(converter.right+" "+converter.to.symbol, style = MaterialTheme.typography.headlineSmall)
+                                Column(Modifier.weight(1f, fill = false), verticalArrangement = Arrangement.spacedBy(6.dp)) {
+                                    ConversionLine(converter.left, converter.from.symbol)
+                                    Icon(Icons.Outlined.SwapVert, null, Modifier.size(20.dp))
+                                    ConversionLine(converter.right, converter.to.symbol)
+                                }
+                                Text(stringResource(converter.category.labelResId()), style = WidgetDetailStyle)
                             }
                             ToolkitTileIds.BILL_SPLITTER -> {
-                                Text(bill.result?.let { formatBillAmount(it.perPerson, bill.currency, locale) } ?: "—", style = MaterialTheme.typography.headlineLarge)
-                                Text(stringResource(R.string.tool_bill_per_person), style = MaterialTheme.typography.bodySmall)
-                                Text(if (bill.tipEnabled) stringResource(R.string.tool_tip_percent, bill.tipPercent) else stringResource(R.string.no_tip))
+                                Icon(Icons.Outlined.Group, null, Modifier.padding(bottom = 4.dp).size(40.dp))
+                                Text(bill.result?.let { formatBillAmount(it.perPerson, bill.currency, locale) } ?: "—",
+                                    style = MaterialTheme.typography.headlineLarge.copy(fontSize = 32.sp, lineHeight = 38.sp), fontWeight = FontWeight.Medium, maxLines = 1)
+                                Text(stringResource(R.string.tool_bill_per_person).lowercase(locale), style = WidgetDetailStyle)
+                                Text(
+                                    text = (if (bill.tipEnabled) stringResource(R.string.tool_tip_percent, bill.tipPercent) + " " + stringResource(R.string.tool_bill_tip).lowercase(locale) else stringResource(R.string.no_tip)) +
+                                        " · " + (bill.people.toIntOrNull() ?: 1).let { pluralStringResource(R.plurals.widget_people, it, it) },
+                                    style = WidgetDetailStyle,
+                                )
                             }
                         }
                     }
@@ -180,22 +226,100 @@ internal fun NumbersScreenContent(
     }
 }
 
+/** The reading under a Measure visual: the value in the primary colour, then what to do with it. */
 @Composable
-private fun MeasureFace(protractor: Boolean, angle: Float = 45f) {
-    val color = MaterialTheme.colorScheme.primary
-    Canvas(Modifier.fillMaxWidth().height(104.dp)) {
-        if (protractor) {
-            drawArc(color.copy(alpha = .15f), 180f, 180f, true, Offset(8.dp.toPx(), 8.dp.toPx()),
-                androidx.compose.ui.geometry.Size(size.width - 16.dp.toPx(), (size.height - 8.dp.toPx()) * 2f))
-            val radians = Math.toRadians(angle.toDouble())
-            val radius = minOf(size.width / 2f, size.height - 8.dp.toPx())
-            drawLine(color, Offset(center.x, size.height), Offset(center.x + kotlin.math.cos(radians).toFloat() * radius, size.height - kotlin.math.sin(radians).toFloat() * radius), 3.dp.toPx())
-        } else {
-            drawRoundRect(color.copy(alpha = .15f), topLeft = Offset(0f, 12.dp.toPx()), size = androidx.compose.ui.geometry.Size(size.width, 64.dp.toPx()), cornerRadius = androidx.compose.ui.geometry.CornerRadius(12.dp.toPx()))
-            for (i in 0..20) drawLine(color, Offset(size.width * i / 20f, 12.dp.toPx()), Offset(size.width * i / 20f, (if (i % 5 == 0) 36 else 24).dp.toPx()), 1.dp.toPx())
+private fun MeasureDetail(value: String, note: String) {
+    Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
+        Text(value, style = MaterialTheme.typography.headlineMedium.copy(fontSize = 28.sp, lineHeight = 34.sp), fontWeight = FontWeight.Medium, color = MaterialTheme.colorScheme.primary, maxLines = 1)
+        Text(note, style = WidgetDetailStyle, color = MaterialTheme.colorScheme.onSurfaceVariant)
+    }
+}
+
+@Composable
+private fun ConversionLine(value: String, unit: String) {
+    Row(verticalAlignment = Alignment.Bottom, horizontalArrangement = Arrangement.spacedBy(4.dp)) {
+        Text(value, style = MaterialTheme.typography.headlineSmall.copy(fontSize = 26.sp, lineHeight = 32.sp), fontWeight = FontWeight.Medium, maxLines = 1)
+        Text(unit, style = MaterialTheme.typography.bodyLarge, fontWeight = FontWeight.Medium, modifier = Modifier.padding(bottom = 3.dp))
+    }
+}
+
+/** Reaction Test: the best time or a prompt, and Start, which opens the test already running. */
+@Composable
+private fun ReactionWidget(tile: ToolkitTile, bestMs: Long?, shape: Shape, onOpen: () -> Unit, onStart: () -> Unit) {
+    Surface(onClick = onOpen, modifier = Modifier.fillMaxWidth(), shape = shape, color = MaterialTheme.colorScheme.surfaceContainerHigh) {
+        Row(Modifier.padding(horizontal = 20.dp, vertical = 16.dp), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(16.dp)) {
+            Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(4.dp)) {
+                Text(stringResource(tile.titleResId), style = WidgetTitleStyle)
+                Row(verticalAlignment = Alignment.Bottom, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                    Text(
+                        text = bestMs?.let { stringResource(R.string.tool_reaction_test_time_format, it.toInt()) } ?: stringResource(R.string.widget_reaction_ready),
+                        style = MaterialTheme.typography.headlineSmall.copy(fontSize = 24.sp, lineHeight = 32.sp, fontFeatureSettings = "tnum"),
+                        fontWeight = FontWeight.Medium,
+                    )
+                    Text(
+                        text = stringResource(if (bestMs != null) R.string.widget_reaction_best else R.string.widget_reaction_prompt),
+                        style = WidgetDetailStyle,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        modifier = Modifier.padding(bottom = 5.dp),
+                    )
+                }
+            }
+            FilledTonalButton(onClick = onStart) {
+                Icon(Icons.Outlined.PlayArrow, null, Modifier.size(18.dp))
+                Spacer(Modifier.width(8.dp))
+                Text(stringResource(R.string.tool_reaction_test_start))
+            }
         }
     }
 }
+
+/**
+ * The ruler and protractor previews, drawn on the 180 x 104 grid of the marketing kit's widgets
+ * (marketing/ui/src/screens/numbers.js), in the primary colour.
+ */
+@Composable
+private fun MeasureFace(protractor: Boolean, angle: Float = 45f) {
+    val color = MaterialTheme.colorScheme.primary
+    val textMeasurer = rememberTextMeasurer()
+    val labelStyle = MaterialTheme.typography.labelMedium.copy(color = color, fontWeight = FontWeight.Medium)
+    Canvas(Modifier.fillMaxWidth().height(104.dp)) {
+        // One unit of the 180 x 104 drawing, centred and at most 200 dp wide.
+        val u = minOf(size.width, 200.dp.toPx()) / 180f
+        val left = (size.width - 180f * u) / 2f
+        val top = (size.height - 104f * u) / 2f
+        fun p(x: Float, y: Float) = Offset(left + x * u, top + y * u)
+        if (protractor) {
+            drawArc(color.copy(alpha = .12f), 180f, 180f, true, p(20f, 20f), Size(140f * u, 140f * u))
+            for (i in 0..18) {
+                val r = i * Math.PI / 18
+                val inner = if (i % 3 == 0) 57f else 63f
+                drawLine(color, p(90f + 70f * cos(r).toFloat(), 90f - 70f * sin(r).toFloat()), p(90f + inner * cos(r).toFloat(), 90f - inner * sin(r).toFloat()), (if (i % 3 == 0) 2f else 1f) * u)
+            }
+            val radians = Math.toRadians(angle.coerceIn(0f, 180f).toDouble())
+            val arm = Path().apply {
+                moveTo(p(155f, 90f).x, p(155f, 90f).y)
+                lineTo(p(90f, 90f).x, p(90f, 90f).y)
+                val end = p(90f + 65f * cos(radians).toFloat(), 90f - 65f * sin(radians).toFloat())
+                lineTo(end.x, end.y)
+            }
+            drawPath(arm, color, style = Stroke(3f * u, cap = StrokeCap.Round, join = StrokeJoin.Round))
+            drawCircle(color, 4f * u, p(90f, 90f))
+        } else {
+            drawRoundRect(color.copy(alpha = .12f), topLeft = p(10f, 18f), size = Size(160f * u, 68f * u), cornerRadius = CornerRadius(12f * u))
+            for (i in 0..20) {
+                val x = 20f + i * 7f
+                drawLine(color, p(x, 18f), p(x, if (i % 5 == 0) 42f else 30f), (if (i % 5 == 0) 2f else 1f) * u)
+                if (i % 5 == 0) {
+                    val text = textMeasurer.measure((i / 5).toString(), labelStyle)
+                    drawText(text, topLeft = p(x, 65f) - Offset(text.size.width / 2f, text.size.height / 2f))
+                }
+            }
+        }
+    }
+}
+
+private val WidgetTitleStyle = TextStyle(fontSize = 16.sp, lineHeight = 22.sp, fontWeight = FontWeight.SemiBold)
+private val WidgetDetailStyle = TextStyle(fontSize = 12.sp, lineHeight = 18.sp)
 
 internal val NumbersCalculateTools = MeasureTools.filter { it.id == ToolkitTileIds.UNIT_CONVERTER || it.id == ToolkitTileIds.BILL_SPLITTER }
 internal val NumbersChanceTools = MeasureTools.filter { it.id == ToolkitTileIds.COUNTER || it.id == ToolkitTileIds.REACTION_TEST }

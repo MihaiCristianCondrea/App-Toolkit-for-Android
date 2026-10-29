@@ -21,4 +21,14 @@
         <item quantity="other">Mga tool ng %1$d</item>
     </plurals>
 
+    <plurals name="widget_wheel_choices">
+        <item quantity="one">%d pagpipilian · Buksan ang wheel</item>
+        <item quantity="other">%d na pagpipilian · Buksan ang wheel</item>
+    </plurals>
+
+    <plurals name="widget_people">
+        <item quantity="one">%d tao</item>
+        <item quantity="other">%d na tao</item>
+    </plurals>
+
 </resources>

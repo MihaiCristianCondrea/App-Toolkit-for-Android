@@ -53,7 +53,6 @@ import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.LevelTo
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.MorseToolViewModel
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.ReactionTestToolViewModel
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.RulerToolViewModel
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.ScreenLightToolViewModel
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.SosToolViewModel
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.ToolkitTilesViewModel
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.UnitConverterToolViewModel
@@ -120,7 +119,6 @@ val tilesModule: Module = module {
     single { RulerRepository(preferences = get()) }
     viewModel { UnitConverterToolViewModel(repository = get(), telemetryRepository = get(), savedStateHandle = get()) }
     viewModel { RulerToolViewModel(repository = get(), telemetryRepository = get(), savedStateHandle = get()) }
-    viewModel { ScreenLightToolViewModel(telemetryRepository = get()) }
     single { CounterRepository(preferencesDataSource = get(), dispatchers = get()) }
     single {
         SosRepository(

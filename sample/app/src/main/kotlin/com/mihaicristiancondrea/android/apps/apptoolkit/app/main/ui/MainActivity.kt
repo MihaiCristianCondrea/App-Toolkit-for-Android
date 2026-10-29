@@ -95,10 +95,10 @@ class MainActivity : AppCompatActivity() {
                     var showChangelog by rememberSaveable { mutableStateOf(false) }
                     val isShowcaseUnlocked by componentsShowcaseRepository.isUnlocked
                         .collectAsStateWithLifecycle(initialValue = false)
-                    val showComponents = BuildConfig.DEBUG || isShowcaseUnlocked
-                    val graph = remember(showComponents) {
+                    val showDebugPages = BuildConfig.DEBUG || isShowcaseUnlocked
+                    val graph = remember(showDebugPages) {
                         appGraph(
-                            showComponents = showComponents,
+                            showDebugPages = showDebugPages,
                             onShowChangelog = { showChangelog = true },
                         )
                     }

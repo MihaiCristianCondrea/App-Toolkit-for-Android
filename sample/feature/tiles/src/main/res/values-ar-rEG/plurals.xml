@@ -25,4 +25,22 @@
         <item quantity="other">أدوات %1$d</item>
     </plurals>
 
+    <plurals name="widget_wheel_choices">
+        <item quantity="zero">%d خيار · افتح العجلة</item>
+        <item quantity="one">%d خيار · افتح العجلة</item>
+        <item quantity="two">%d خياران · افتح العجلة</item>
+        <item quantity="few">%d خيارات · افتح العجلة</item>
+        <item quantity="many">%d خيارًا · افتح العجلة</item>
+        <item quantity="other">%d خيار · افتح العجلة</item>
+    </plurals>
+
+    <plurals name="widget_people">
+        <item quantity="zero">%d شخص</item>
+        <item quantity="one">%d شخص</item>
+        <item quantity="two">%d شخصان</item>
+        <item quantity="few">%d أشخاص</item>
+        <item quantity="many">%d شخصًا</item>
+        <item quantity="other">%d شخص</item>
+    </plurals>
+
 </resources>

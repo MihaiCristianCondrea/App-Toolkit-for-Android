@@ -45,6 +45,7 @@
     <string name="tiles_category_sensors">センサーと測定</string>
     <string name="tiles_category_system">システムと制御</string>
     <string name="tiles_category_utilities">ユーティリティと楽しみ</string>
+    <string name="tiles_category_colors">カラー</string>
     <string name="tiles_category_wellbeing">幸福</string>
     <string name="tiles_chip_expanded_tool">拡張ツール</string>
     <string name="tiles_chip_quick_tool">クイックツール</string>
@@ -138,8 +139,6 @@
     <string name="tile_converter_summary">長さ、質量、温度、体積、データ量を変換します。</string>
     <string name="tile_ruler_title">定規</string>
     <string name="tile_ruler_summary">画面上で小さな物を測ります。</string>
-    <string name="tile_screen_light_title">スクリーンライト</string>
-    <string name="tile_screen_light_summary">画面をやわらかな照明として使います。</string>
     <string name="tool_converter_length">長さ</string>
     <string name="tool_converter_mass">質量</string>
     <string name="tool_converter_temperature">温度</string>
@@ -148,8 +147,6 @@
     <string name="tool_converter_from">変換元</string>
     <string name="tool_converter_to">変換先</string>
     <string name="tool_converter_invalid">有効な値を入力してください。</string>
-    <string name="tool_light_brightness">明るさ</string>
-    <string name="tool_light_warmth">暖かみ</string>
     <string name="tool_ruler_calibration">校正</string>
     <string name="tool_ruler_range">測定範囲</string>
     <string name="tool_ruler_reference">測定前に、下の線を実物の定規の3 cmに合わせてください。</string>
@@ -185,7 +182,6 @@
     <string name="section_convert">換算と割り勘</string>
     <string name="section_count">カウントと時間</string>
     <string name="section_chance">ランダム</string>
-    <string name="extra_tools">その他のツール</string>
     <string name="wheel_title">決定ルーレット</string>
     <string name="wheel_summary">回して選択肢を決める</string>
     <string name="wheel_choices">選択肢</string>
@@ -227,4 +223,21 @@
     <string name="tool_compass_northwest">北西</string>
     <string name="tool_compass_magnetic_north">磁北</string>
     <string name="tool_compass_heading_description">%1$d° · %2$s · 磁北</string>
+    <string name="widget_flashlight">ライト</string>
+    <string name="widget_level_tilted">傾き</string>
+    <string name="widget_flash_level">%1$d / %2$d</string>
+    <string name="widget_flash_swipe">スワイプで明るさを調整</string>
+    <string name="widget_flash_tap">タップで設定</string>
+    <string name="widget_sos_note">ライトでモールス</string>
+    <string name="widget_water_note">30 秒のスピーカー音</string>
+    <string name="widget_breathe_step">%1$s %2$d 秒</string>
+    <string name="widget_colors_note">アプリのパレットと Material You のトーン</string>
+    <string name="widget_coin_note">コインをタップしてトス</string>
+    <string name="widget_dice_value">サイコロを振る</string>
+    <string name="widget_dice_note">サイコロをタップして振る</string>
+    <string name="widget_ruler_note">画面に合わせて調整</string>
+    <string name="widget_protractor_note">正しい角度を見つける</string>
+    <string name="widget_reaction_ready">準備はいい？</string>
+    <string name="widget_reaction_prompt">反射神経をテスト</string>
+    <string name="widget_reaction_best">自己ベスト</string>
 </resources>

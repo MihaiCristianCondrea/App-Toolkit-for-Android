@@ -45,6 +45,7 @@
     <string name="tiles_category_sensors">Érzékelők és mérések</string>
     <string name="tiles_category_system">Rendszer és vezérlők</string>
     <string name="tiles_category_utilities">Utilities &amp; Fun</string>
+    <string name="tiles_category_colors">Színek</string>
     <string name="tiles_category_wellbeing">Jó közérzet</string>
     <string name="tiles_chip_expanded_tool">Kibővített eszköz</string>
     <string name="tiles_chip_quick_tool">Gyors eszköz</string>
@@ -138,8 +139,6 @@
     <string name="tile_converter_summary">Hossz, tömeg, hőmérséklet, térfogat és adatok átváltása.</string>
     <string name="tile_ruler_title">Vonalzó</string>
     <string name="tile_ruler_summary">Kis tárgyak mérése a képernyőn.</string>
-    <string name="tile_screen_light_title">Képernyőfény</string>
-    <string name="tile_screen_light_summary">Használd a képernyőt lágy fényként.</string>
     <string name="tool_converter_length">Hossz</string>
     <string name="tool_converter_mass">Tömeg</string>
     <string name="tool_converter_temperature">Hőmérséklet</string>
@@ -148,8 +147,6 @@
     <string name="tool_converter_from">Erről</string>
     <string name="tool_converter_to">Erre</string>
     <string name="tool_converter_invalid">Adj meg érvényes értéket.</string>
-    <string name="tool_light_brightness">Fényerő</string>
-    <string name="tool_light_warmth">Melegség</string>
     <string name="tool_ruler_calibration">Kalibrálás</string>
     <string name="tool_ruler_range">Mérési tartomány</string>
     <string name="tool_ruler_reference">Mérés előtt igazítsd az alábbi vonalat egy valódi vonalzó 3 cm-es szakaszához.</string>
@@ -185,7 +182,6 @@
     <string name="section_convert">Átváltás és megosztás</string>
     <string name="section_count">Számlálás és idő</string>
     <string name="section_chance">Véletlen</string>
-    <string name="extra_tools">További eszközök</string>
     <string name="wheel_title">Döntőkerék</string>
     <string name="wheel_summary">Pörgetéssel válassz lehetőséget</string>
     <string name="wheel_choices">Lehetőségeid</string>
@@ -227,4 +223,21 @@
     <string name="tool_compass_northwest">Északnyugat</string>
     <string name="tool_compass_magnetic_north">Mágneses észak</string>
     <string name="tool_compass_heading_description">%1$d° · %2$s · Mágneses észak</string>
+    <string name="widget_flashlight">Zseblámpa</string>
+    <string name="widget_level_tilted">Megdöntve</string>
+    <string name="widget_flash_level">%1$d / %2$d</string>
+    <string name="widget_flash_swipe">Húzd a fényerőhöz</string>
+    <string name="widget_flash_tap">Koppints a beállításokhoz</string>
+    <string name="widget_sos_note">Morze a zseblámpával</string>
+    <string name="widget_water_note">30 másodperces hangszóróhang</string>
+    <string name="widget_breathe_step">%1$s %2$d mp</string>
+    <string name="widget_colors_note">Az app palettája és a Material You árnyalatai</string>
+    <string name="widget_coin_note">Koppints az érmére a feldobáshoz</string>
+    <string name="widget_dice_value">Dobj egy kockával</string>
+    <string name="widget_dice_note">Koppints a kockára a dobáshoz</string>
+    <string name="widget_ruler_note">Kalibráld a kijelzőhöz</string>
+    <string name="widget_protractor_note">Keresd meg a jó szöget</string>
+    <string name="widget_reaction_ready">Kész vagy?</string>
+    <string name="widget_reaction_prompt">Teszteld a reflexeidet</string>
+    <string name="widget_reaction_best">Egyéni csúcs</string>
 </resources>

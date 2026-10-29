@@ -45,6 +45,7 @@
     <string name="tiles_category_sensors">Датчики та вимірювання</string>
     <string name="tiles_category_system">Система та елементи керування</string>
     <string name="tiles_category_utilities">Утиліти та розваги</string>
+    <string name="tiles_category_colors">Кольори</string>
     <string name="tiles_category_wellbeing">благополуччя</string>
     <string name="tiles_chip_expanded_tool">Розширений інструмент</string>
     <string name="tiles_chip_quick_tool">Швидкий інструмент</string>
@@ -138,8 +139,6 @@
     <string name="tile_converter_summary">Перетворюйте довжину, масу, температуру, об’єм і дані.</string>
     <string name="tile_ruler_title">Лінійка</string>
     <string name="tile_ruler_summary">Вимірюйте невеликі предмети на екрані.</string>
-    <string name="tile_screen_light_title">Світло екрана</string>
-    <string name="tile_screen_light_summary">Використовуйте екран як джерело м’якого світла.</string>
     <string name="tool_converter_length">Довжина</string>
     <string name="tool_converter_mass">Маса</string>
     <string name="tool_converter_temperature">Температура</string>
@@ -148,8 +147,6 @@
     <string name="tool_converter_from">З</string>
     <string name="tool_converter_to">У</string>
     <string name="tool_converter_invalid">Введіть коректне значення.</string>
-    <string name="tool_light_brightness">Яскравість</string>
-    <string name="tool_light_warmth">Теплота</string>
     <string name="tool_ruler_calibration">Калібрування</string>
     <string name="tool_ruler_range">Діапазон вимірювання</string>
     <string name="tool_ruler_reference">Перед вимірюванням сумістіть лінію нижче з 3 см на справжній лінійці.</string>
@@ -185,7 +182,6 @@
     <string name="section_convert">Перетворення й поділ</string>
     <string name="section_count">Лічба й час</string>
     <string name="section_chance">Випадковість</string>
-    <string name="extra_tools">Інші інструменти</string>
     <string name="wheel_title">Колесо рішень</string>
     <string name="wheel_summary">Обертайте, щоб вибрати варіант</string>
     <string name="wheel_choices">Ваші варіанти</string>
@@ -227,4 +223,21 @@
     <string name="tool_compass_northwest">Північний захід</string>
     <string name="tool_compass_magnetic_north">Магнітна північ</string>
     <string name="tool_compass_heading_description">%1$d° · %2$s · Магнітна північ</string>
+    <string name="widget_flashlight">Ліхтарик</string>
+    <string name="widget_level_tilted">Нахил</string>
+    <string name="widget_flash_level">%1$d з %2$d</string>
+    <string name="widget_flash_swipe">Проведіть для яскравості</string>
+    <string name="widget_flash_tap">Торкніться для налаштувань</string>
+    <string name="widget_sos_note">Морзе ліхтариком</string>
+    <string name="widget_water_note">30-секундний тон динаміка</string>
+    <string name="widget_breathe_step">%1$s %2$d с</string>
+    <string name="widget_colors_note">Палітра застосунку і тони Material You</string>
+    <string name="widget_coin_note">Торкніться монети, щоб підкинути</string>
+    <string name="widget_dice_value">Киньте кубик</string>
+    <string name="widget_dice_note">Торкніться кубика, щоб кинути</string>
+    <string name="widget_ruler_note">Калібрування під ваш екран</string>
+    <string name="widget_protractor_note">Знайдіть потрібний кут</string>
+    <string name="widget_reaction_ready">Готові?</string>
+    <string name="widget_reaction_prompt">Перевірте реакцію</string>
+    <string name="widget_reaction_best">Особистий рекорд</string>
 </resources>

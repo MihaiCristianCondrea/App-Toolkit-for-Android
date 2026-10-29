@@ -45,6 +45,7 @@
     <string name="tiles_category_sensors">感測器與測量</string>
     <string name="tiles_category_system">系統與控制</string>
     <string name="tiles_category_utilities">實用與樂趣</string>
+    <string name="tiles_category_colors">顏色</string>
     <string name="tiles_category_wellbeing">福祉</string>
     <string name="tiles_chip_expanded_tool">擴充工具</string>
     <string name="tiles_chip_quick_tool">快速工具</string>
@@ -138,8 +139,6 @@
     <string name="tile_converter_summary">換算長度、質量、溫度、體積與資料量。</string>
     <string name="tile_ruler_title">尺規</string>
     <string name="tile_ruler_summary">在螢幕上測量小物品。</string>
-    <string name="tile_screen_light_title">螢幕燈</string>
-    <string name="tile_screen_light_summary">將螢幕當作柔和光源。</string>
     <string name="tool_converter_length">長度</string>
     <string name="tool_converter_mass">質量</string>
     <string name="tool_converter_temperature">溫度</string>
@@ -148,8 +147,6 @@
     <string name="tool_converter_from">從</string>
     <string name="tool_converter_to">轉為</string>
     <string name="tool_converter_invalid">請輸入有效數值。</string>
-    <string name="tool_light_brightness">亮度</string>
-    <string name="tool_light_warmth">暖色</string>
     <string name="tool_ruler_calibration">校正</string>
     <string name="tool_ruler_range">測量範圍</string>
     <string name="tool_ruler_reference">測量前，請將下方線段調整為實體尺上的 3 公分。</string>
@@ -185,7 +182,6 @@
     <string name="section_convert">換算與分攤</string>
     <string name="section_count">計數與時間</string>
     <string name="section_chance">隨機</string>
-    <string name="extra_tools">更多工具</string>
     <string name="wheel_title">決策轉盤</string>
     <string name="wheel_summary">轉動以選擇選項</string>
     <string name="wheel_choices">你的選項</string>
@@ -227,4 +223,21 @@
     <string name="tool_compass_northwest">西北</string>
     <string name="tool_compass_magnetic_north">磁北</string>
     <string name="tool_compass_heading_description">%1$d° · %2$s · 磁北</string>
+    <string name="widget_flashlight">手電筒</string>
+    <string name="widget_level_tilted">傾斜</string>
+    <string name="widget_flash_level">%1$d / %2$d</string>
+    <string name="widget_flash_swipe">滑動以調整亮度</string>
+    <string name="widget_flash_tap">輕觸以開啟設定</string>
+    <string name="widget_sos_note">用手電筒發送摩斯密碼</string>
+    <string name="widget_water_note">30 秒喇叭音</string>
+    <string name="widget_breathe_step">%1$s %2$d 秒</string>
+    <string name="widget_colors_note">應用程式配色與 Material You 色調</string>
+    <string name="widget_coin_note">輕觸硬幣即可擲出</string>
+    <string name="widget_dice_value">擲骰子</string>
+    <string name="widget_dice_note">輕觸骰子即可擲出</string>
+    <string name="widget_ruler_note">依螢幕校正</string>
+    <string name="widget_protractor_note">找出正確角度</string>
+    <string name="widget_reaction_ready">準備好了嗎？</string>
+    <string name="widget_reaction_prompt">測試你的反應</string>
+    <string name="widget_reaction_best">個人最佳</string>
 </resources>

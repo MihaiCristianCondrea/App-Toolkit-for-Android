@@ -23,9 +23,7 @@ import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.model
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.repositories.RulerRepository
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.repositories.UnitConversionRepository
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.contracts.RulerToolEvent
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.contracts.ScreenLightToolEvent
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.contracts.UnitConverterToolEvent
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.states.ScreenLightToolUiState
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.states.UnitConverterToolUiState
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.FakeTelemetryRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.UnconfinedDispatcherExtension
@@ -107,19 +105,5 @@ class ExpandedToolsViewModelsTest {
         viewModel.onEvent(RulerToolEvent.Dismiss)
         assertEquals(1.8f, viewModel.state.value.scale)
         assertTrue(viewModel.state.value.inches)
-    }
-
-    @Test
-    fun `screen light view model clamps brightness and warmth and resets on dismiss`() {
-        val viewModel = ScreenLightToolViewModel(telemetryRepository = FakeTelemetryRepository())
-
-        viewModel.onEvent(ScreenLightToolEvent.Open)
-        viewModel.onEvent(ScreenLightToolEvent.BrightnessChanged(value = 0f))
-        viewModel.onEvent(ScreenLightToolEvent.WarmthChanged(value = 1.5f))
-        assertEquals(0.01f, viewModel.state.value.brightness)
-        assertEquals(1f, viewModel.state.value.warmth)
-
-        viewModel.onEvent(ScreenLightToolEvent.Dismiss)
-        assertEquals(ScreenLightToolUiState(), viewModel.state.value)
     }
 }

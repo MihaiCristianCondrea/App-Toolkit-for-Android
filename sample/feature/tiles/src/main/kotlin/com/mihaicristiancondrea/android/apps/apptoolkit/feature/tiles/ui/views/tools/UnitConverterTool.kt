@@ -125,7 +125,7 @@ private fun ConversionInput(
     }
 }
 
-private fun ConversionCategory.labelResId(): Int = when (this) {
+internal fun ConversionCategory.labelResId(): Int = when (this) {
     ConversionCategory.Length -> R.string.tool_converter_length
     ConversionCategory.Mass -> R.string.tool_converter_mass
     ConversionCategory.Temperature -> R.string.tool_converter_temperature

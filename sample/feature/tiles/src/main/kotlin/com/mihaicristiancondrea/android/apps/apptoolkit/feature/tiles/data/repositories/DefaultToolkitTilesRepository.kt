@@ -98,6 +98,10 @@ class DefaultToolkitTilesRepository(
         )),
         ToolkitTileCategoryData(id = "sound", tiles = persistentListOf(tile(ToolkitTileIds.WATER_EJECT))),
         ToolkitTileCategoryData(id = "wellbeing", tiles = persistentListOf(tile(ToolkitTileIds.BREATHING))),
+        // The last Quick Tools section: Material Colors opens its full-height palette page.
+        ToolkitTileCategoryData(id = "colors", tiles = persistentListOf(
+            tile(ToolkitTileIds.MATERIAL_COLORS, quickTool = ToolkitQuickTool.MaterialColors),
+        )),
         ToolkitTileCategoryData(id = "chance", tiles = persistentListOf(
             tile(ToolkitTileIds.DECISION_WHEEL), tile(ToolkitTileIds.RANDOM_NUMBER),
             tile(ToolkitTileIds.COIN_FLIP, requestKey = ToolkitTileIds.COIN_FLIP),
@@ -107,10 +111,6 @@ class DefaultToolkitTilesRepository(
             tile(ToolkitTileIds.RULER), tile(ToolkitTileIds.PROTRACTOR), tile(ToolkitTileIds.UNIT_CONVERTER),
             tile(ToolkitTileIds.BILL_SPLITTER), tile(ToolkitTileIds.COUNTER, requestKey = ToolkitTileIds.COUNTER),
             tile(ToolkitTileIds.REACTION_TEST),
-        )),
-        // Existing app-only tools stay available through the drawer without changing the marketing tabs.
-        ToolkitTileCategoryData(id = "utilities", tiles = persistentListOf(
-            tile("material_colors", quickTool = ToolkitQuickTool.MaterialColors), tile(ToolkitTileIds.SCREEN_LIGHT),
         )),
     )
 }

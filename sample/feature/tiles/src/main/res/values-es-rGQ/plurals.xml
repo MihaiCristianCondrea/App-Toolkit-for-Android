@@ -21,4 +21,16 @@
         <item quantity="other">Herramientas %1$d</item>
     </plurals>
 
+    <plurals name="widget_wheel_choices">
+        <item quantity="one">%d opción · Abrir ruleta</item>
+        <item quantity="many">%d opciones · Abrir ruleta</item>
+        <item quantity="other">%d opciones · Abrir ruleta</item>
+    </plurals>
+
+    <plurals name="widget_people">
+        <item quantity="one">%d persona</item>
+        <item quantity="many">%d personas</item>
+        <item quantity="other">%d personas</item>
+    </plurals>
+
 </resources>

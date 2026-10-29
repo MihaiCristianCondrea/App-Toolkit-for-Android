@@ -49,6 +49,7 @@ import androidx.compose.material.icons.rounded.Sensors
 import androidx.compose.material.icons.rounded.FlashlightOn
 import androidx.compose.material.icons.rounded.Speaker
 import androidx.compose.material.icons.rounded.SelfImprovement
+import androidx.compose.material.icons.rounded.Palette
 import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.compose.LifecycleStartEffect
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.states.LiveToolsUiState
@@ -115,7 +116,7 @@ private val TilesScreen = AppScreenTracking.Screens.TOOLKIT_TILES
  * request and the tab's search query, and re-reads tile membership on every resume.
  */
 @Composable
-fun ToolkitTilesScreen(extraTools: Boolean = false) {
+fun ToolkitTilesScreen() {
     val compass: CompassToolViewModel = koinViewModel(key = "overview-compass")
     val level: LevelToolViewModel = koinViewModel(key = "overview-level")
     val flash: FlashDimmerToolViewModel = koinViewModel()
@@ -123,11 +124,9 @@ fun ToolkitTilesScreen(extraTools: Boolean = false) {
     val heading by compass.state.collectAsStateWithLifecycle()
     val tilt by level.state.collectAsStateWithLifecycle()
     val torch by flash.state.collectAsStateWithLifecycle()
-    LifecycleStartEffect(compass, level, extraTools) {
-        if (!extraTools) {
-            compass.onEvent(CompassToolEvent.StartSensor)
-            level.onEvent(LevelToolEvent.StartSensor)
-        }
+    LifecycleStartEffect(compass, level) {
+        compass.onEvent(CompassToolEvent.StartSensor)
+        level.onEvent(LevelToolEvent.StartSensor)
         onStopOrDispose {
             compass.onEvent(CompassToolEvent.StopSensor)
             level.onEvent(LevelToolEvent.StopSensor)
@@ -173,7 +172,6 @@ fun ToolkitTilesScreen(extraTools: Boolean = false) {
             ToolkitTilesScreenContent(
                 state = state,
                 live = LiveToolsUiState(heading.azimuth, tilt.pitch, tilt.roll, torch.torch),
-                extraTools = extraTools,
                 onFlashLevel = { flash.onEvent(FlashDimmerToolEvent.LevelChanged(it)) },
                 contentPadding = contentPadding(),
                 onEvent = viewModel::onEvent,
@@ -196,7 +194,6 @@ internal fun ToolkitTilesScreenContent(
     onEvent: (ToolkitTilesEvent) -> Unit,
     searchQuery: String = "",
     live: LiveToolsUiState = LiveToolsUiState(),
-    extraTools: Boolean = false,
     onFlashLevel: (Int) -> Unit = {},
 ) {
     ScreenStateHandler(
@@ -211,7 +208,7 @@ internal fun ToolkitTilesScreenContent(
             contentPadding = contentPadding,
             onEvent = onEvent,
             searchQuery = searchQuery,
-            live = live, extraTools = extraTools, onFlashLevel = onFlashLevel,
+            live = live, onFlashLevel = onFlashLevel,
         )
     }
 }
@@ -220,13 +217,14 @@ internal fun ToolkitTilesScreenContent(
 private fun ToolkitTilesCatalog(
     categories: ImmutableList<ToolkitTileCategory>, state: ToolkitTilesUiState,
     contentPadding: PaddingValues, onEvent: (ToolkitTilesEvent) -> Unit, searchQuery: String,
-    live: LiveToolsUiState, extraTools: Boolean, onFlashLevel: (Int) -> Unit,
+    live: LiveToolsUiState, onFlashLevel: (Int) -> Unit,
 ) {
     val showAds = rememberAdsEnabled()
     val telemetry = LocalTelemetry.current
     var selectedId by androidx.compose.runtime.saveable.rememberSaveable { mutableStateOf<String?>(null) }
     val resources = LocalResources.current
-    val filtered = categories.filter { if (extraTools) it.id == "utilities" else it.id !in setOf("utilities", "chance", "measure") }
+    // Chance and Measure have tabs of their own; Quick Tools shows the rest, Colors last.
+    val filtered = categories.filter { it.id !in setOf("chance", "measure") }
         .toImmutableList().search(searchQuery, resources::getString)
     val ad = ToolkitTilesListItem.Ad("ad_trailing", AdsConstants.QUICK_TOOLS_NATIVE_AD_UNIT_ID)
     fun open(tile: ToolkitTile) {
@@ -243,12 +241,13 @@ private fun ToolkitTilesCatalog(
                         "system" -> Icons.Rounded.FlashlightOn
                         "sound" -> Icons.Rounded.Speaker
                         "wellbeing" -> Icons.Rounded.SelfImprovement
+                        "colors" -> Icons.Rounded.Palette
                         else -> category.icon.imageVector()
                     }) {
                         QuickToolsWidgets(category.tiles, live, ::open, onFlashLevel)
                     }
                 }
-                if (!extraTools && index == 0 && showAds && searchQuery.isBlank() && ad.id in state.loadedAdIds) {
+                if (index == 0 && showAds && searchQuery.isBlank() && ad.id in state.loadedAdIds) {
                     QuickToolsNativeAdCard(adUnitId = ad.adUnitId,
                         position = com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.GroupedItemPosition.SINGLE,
                         initiallyLoaded = true,
@@ -256,7 +255,7 @@ private fun ToolkitTilesCatalog(
                 }
             }
         }
-        if (!extraTools && showAds && searchQuery.isBlank() && ad.id !in state.loadedAdIds) {
+        if (showAds && searchQuery.isBlank() && ad.id !in state.loadedAdIds) {
             HiddenAdPreloaders(adItems = persistentListOf(ad), onEvent = onEvent)
         }
     }

@@ -21,4 +21,14 @@
         <item quantity="other">%1$d tools</item>
     </plurals>
 
+    <plurals name="widget_wheel_choices">
+        <item quantity="one">%d choice · Open wheel</item>
+        <item quantity="other">%d choices · Open wheel</item>
+    </plurals>
+
+    <plurals name="widget_people">
+        <item quantity="one">%d person</item>
+        <item quantity="other">%d people</item>
+    </plurals>
+
 </resources>

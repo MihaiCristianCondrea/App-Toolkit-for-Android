@@ -61,8 +61,9 @@ class ToolkitTilesScreenTest {
                 }
             }
         }
-        compose.onNodeWithText("Compass").assertIsDisplayed()
-        compose.onAllNodesWithText("Flash Dimmer").assertCountEquals(0)
+        // Widget labels are drawn in capitals, as the marketing kit's are.
+        compose.onNodeWithText("Compass", ignoreCase = true).assertIsDisplayed()
+        compose.onAllNodesWithText("Flashlight", ignoreCase = true).assertCountEquals(0)
         compose.onAllNodesWithText("All tools").assertCountEquals(0)
     }
 }

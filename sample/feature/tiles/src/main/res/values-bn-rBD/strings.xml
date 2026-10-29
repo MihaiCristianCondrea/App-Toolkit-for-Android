@@ -45,6 +45,7 @@
     <string name="tiles_category_sensors">সেন্সর এবং পরিমাপ</string>
     <string name="tiles_category_system">সিস্টেম ও কন্ট্রোল</string>
     <string name="tiles_category_utilities">উপযোগিতা এবং মজা</string>
+    <string name="tiles_category_colors">রং</string>
     <string name="tiles_category_wellbeing">সুস্থতা</string>
     <string name="tiles_chip_expanded_tool">প্রসারিত টুল</string>
     <string name="tiles_chip_quick_tool">দ্রুত টুল</string>
@@ -138,8 +139,6 @@
     <string name="tile_converter_summary">দৈর্ঘ্য, ভর, তাপমাত্রা, আয়তন ও ডেটা রূপান্তর করুন।</string>
     <string name="tile_ruler_title">রুলার</string>
     <string name="tile_ruler_summary">স্ক্রিনে ছোট জিনিস মাপুন।</string>
-    <string name="tile_screen_light_title">স্ক্রিনের আলো</string>
-    <string name="tile_screen_light_summary">স্ক্রিনকে নরম আলো হিসেবে ব্যবহার করুন।</string>
     <string name="tool_converter_length">দৈর্ঘ্য</string>
     <string name="tool_converter_mass">ভর</string>
     <string name="tool_converter_temperature">তাপমাত্রা</string>
@@ -148,8 +147,6 @@
     <string name="tool_converter_from">থেকে</string>
     <string name="tool_converter_to">এ</string>
     <string name="tool_converter_invalid">সঠিক মান লিখুন।</string>
-    <string name="tool_light_brightness">উজ্জ্বলতা</string>
-    <string name="tool_light_warmth">রঙের উষ্ণতা</string>
     <string name="tool_ruler_calibration">ক্যালিব্রেশন</string>
     <string name="tool_ruler_range">পরিমাপের পরিসর</string>
     <string name="tool_ruler_reference">মাপার আগে নিচের রেখাটি আসল রুলারের ৩ সেমির সঙ্গে মেলান।</string>
@@ -185,7 +182,6 @@
     <string name="section_convert">রূপান্তর ও ভাগ</string>
     <string name="section_count">গণনা ও সময়</string>
     <string name="section_chance">দৈবচয়ন</string>
-    <string name="extra_tools">আরও সরঞ্জাম</string>
     <string name="wheel_title">সিদ্ধান্তের চাকা</string>
     <string name="wheel_summary">বিকল্প বেছে নিতে ঘোরান</string>
     <string name="wheel_choices">আপনার বিকল্প</string>
@@ -227,4 +223,21 @@
     <string name="tool_compass_northwest">উত্তর-পশ্চিম</string>
     <string name="tool_compass_magnetic_north">চৌম্বক উত্তর</string>
     <string name="tool_compass_heading_description">%1$d° · %2$s · চৌম্বক উত্তর</string>
+    <string name="widget_flashlight">টর্চ</string>
+    <string name="widget_level_tilted">হেলানো</string>
+    <string name="widget_flash_level">%2$d এর মধ্যে %1$d</string>
+    <string name="widget_flash_swipe">উজ্জ্বলতার জন্য সোয়াইপ করুন</string>
+    <string name="widget_flash_tap">সেটিংসের জন্য ট্যাপ করুন</string>
+    <string name="widget_sos_note">টর্চ দিয়ে মোর্স</string>
+    <string name="widget_water_note">30 সেকেন্ডের স্পিকার টোন</string>
+    <string name="widget_breathe_step">%1$s %2$d সে</string>
+    <string name="widget_colors_note">অ্যাপের প্যালেট ও Material You টোন</string>
+    <string name="widget_coin_note">ছুড়তে কয়েনে ট্যাপ করুন</string>
+    <string name="widget_dice_value">পাশা চালুন</string>
+    <string name="widget_dice_note">চালতে পাশায় ট্যাপ করুন</string>
+    <string name="widget_ruler_note">আপনার স্ক্রিনে ক্যালিব্রেট করুন</string>
+    <string name="widget_protractor_note">সঠিক কোণ খুঁজুন</string>
+    <string name="widget_reaction_ready">প্রস্তুত?</string>
+    <string name="widget_reaction_prompt">আপনার রিফ্লেক্স পরীক্ষা করুন</string>
+    <string name="widget_reaction_best">ব্যক্তিগত সেরা</string>
 </resources>

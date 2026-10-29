@@ -4,6 +4,7 @@ import { toolOverlay, shapeBadge } from "../kit/components.js";
 import { APP } from "../config/identity.js";
 import { asset, shapeMaskStyle, shapeUrl } from "../kit/assets.js";
 import { BREATH_STEPS, compassRose, direction, levelDial } from "../kit/tool-bodies.js";
+import { STRIP } from "../kit/material-colors.js";
 
 /**
  * Quick Tools: tools that run on sensors and the torch, so none needs a special permission. Ruler, protractor,
@@ -17,6 +18,7 @@ const TOOLS = {
   morse_sos: { id: "morse_sos", title: "Morse & SOS", subtitle: "Send a message with the torch", icon: "emergency", shape: "cookie_7sided", palette: "magenta", kindLabel: "Quick tool", supportsTile: true },
   // ToolkitTileVisuals.kt: Breathing is a SoftBurst in the orange role, with the FavoriteBorder icon.
   breathing: { id: "breathing", title: "Breathe", subtitle: "Start a short guided breathing pause", icon: "favorite", shape: "soft_burst", palette: "orange", kindLabel: "Quick tool", supportsTile: false },
+  material_colors: { id: "material_colors", title: "Material Colors", subtitle: "Preview the app palette and Android Material You tonal colors", icon: "palette", shape: "soft_burst", palette: "gold", supportsTile: false },
 };
 
 /** The brand's own MaterialShapes exports in marketing/assets/shapes, used as masks. */
@@ -31,6 +33,8 @@ const SECTIONS = [
   { id: "light", title: "Light & signals", icon: "flashlight_on", tools: ["flash_dimmer", "morse_sos"], live: "light" },
   { id:"sound",title:"Hardware & sound",icon:"speaker",tools:["water_eject"],live:"sound" },
   { id: "wellbeing", title: "Wellbeing", icon: "self_improvement", tools: ["breathing"] },
+  // The last section, as in the app: Material Colors opens the palette sheet.
+  { id: "colors", title: "Colors", icon: "palette", tools: ["material_colors"] },
 ];
 
 /** The native ad sits between Sensors and Light & signals, as the app places one between categories. */
@@ -77,6 +81,7 @@ export default {
         ["Breathe: inhale", { activeToolId: "breathing", breathPhase: "INHALE", breathSeconds: 3, breathProgress: 0.7 }],
         ["Breathe: exhale", { activeToolId: "breathing", breathPhase: "EXHALE", breathSeconds: 2, breathProgress: 0.6 }],
         ["Morse & SOS sheet", { activeToolId: "morse_sos" }],
+        ["Material Colors sheet", { activeToolId: "material_colors" }],
       ],
     },
     { key: "compassHeading", label: "Heading", min: 0, max: 359, step: 1 },
@@ -177,6 +182,14 @@ export default {
         </div>`;
     };
 
+    // Material Colors shows the scheme it previews: the three accents and their containers, in one bento strip.
+    const colors = () => html`
+      <div class="qt-colors" data-tool="material_colors" role="button" tabindex="0" @click=${() => open("material_colors")} @keydown=${activate("material_colors")}>
+        <span class="qt-live__label">Material Colors</span>
+        <div class="qt-colors__strip" aria-hidden="true">${STRIP.map((role) => html`<i style="background:var(--md-sys-color-${role})"></i>`)}</div>
+        <span class="qt-colors__note">App palette and Material You tones</span>
+      </div>`;
+
     const title = (icon, text) => html`<h2 class="qt-section__title"><md-icon class="sc-rounded" aria-hidden="true">${icon}</md-icon>${text}</h2>`;
 
     // The native ad, drawn like a widget: the advertiser's icon in a shape, its headline and line, one action. The
@@ -201,7 +214,7 @@ export default {
       if (!ids.length) return nothing;
       const body = sec.live
         ? html`<div class="qt-live-row qt-live-row--${sec.live}">${ids.map((id) => live[id]())}</div>`
-        : breathe();
+        : sec.id === "colors" ? colors() : breathe();
       return html`<section class="qt-section">${title(sec.icon, sec.title)}${body}</section>
         ${sec.id === AD_AFTER && s.showAds && !query ? ad() : nothing}`;
     });

@@ -45,6 +45,7 @@
     <string name="tiles_category_sensors">Sensoren und Messung</string>
     <string name="tiles_category_system">System &amp; Kontrollen</string>
     <string name="tiles_category_utilities">Dienstprogramme und Spaß</string>
+    <string name="tiles_category_colors">Farben</string>
     <string name="tiles_category_wellbeing">Wohlbefinden</string>
     <string name="tiles_chip_expanded_tool">Erweitertes Tool</string>
     <string name="tiles_chip_quick_tool">Schnelles Werkzeug</string>
@@ -138,8 +139,6 @@
     <string name="tile_converter_summary">Länge, Masse, Temperatur, Volumen und Daten umrechnen.</string>
     <string name="tile_ruler_title">Lineal</string>
     <string name="tile_ruler_summary">Kleine Gegenstände auf dem Bildschirm messen.</string>
-    <string name="tile_screen_light_title">Bildschirmlicht</string>
-    <string name="tile_screen_light_summary">Den Bildschirm als weiches Licht verwenden.</string>
     <string name="tool_converter_length">Länge</string>
     <string name="tool_converter_mass">Masse</string>
     <string name="tool_converter_temperature">Temperatur</string>
@@ -148,8 +147,6 @@
     <string name="tool_converter_from">Von</string>
     <string name="tool_converter_to">Nach</string>
     <string name="tool_converter_invalid">Gib einen gültigen Wert ein.</string>
-    <string name="tool_light_brightness">Helligkeit</string>
-    <string name="tool_light_warmth">Wärme</string>
     <string name="tool_ruler_calibration">Kalibrierung</string>
     <string name="tool_ruler_range">Messbereich</string>
     <string name="tool_ruler_reference">Passe die Linie vor der Messung an 3 cm auf einem echten Lineal an.</string>
@@ -185,7 +182,6 @@
     <string name="section_convert">Umrechnen &amp; Teilen</string>
     <string name="section_count">Zählen &amp; Zeit</string>
     <string name="section_chance">Zufall</string>
-    <string name="extra_tools">Weitere Werkzeuge</string>
     <string name="wheel_title">Entscheidungsrad</string>
     <string name="wheel_summary">Drehen und eine Option wählen</string>
     <string name="wheel_choices">Deine Optionen</string>
@@ -227,4 +223,21 @@
     <string name="tool_compass_northwest">Nordwesten</string>
     <string name="tool_compass_magnetic_north">Magnetischer Norden</string>
     <string name="tool_compass_heading_description">%1$d° · %2$s · Magnetischer Norden</string>
+    <string name="widget_flashlight">Taschenlampe</string>
+    <string name="widget_level_tilted">Geneigt</string>
+    <string name="widget_flash_level">%1$d von %2$d</string>
+    <string name="widget_flash_swipe">Wischen für Helligkeit</string>
+    <string name="widget_flash_tap">Für Einstellungen tippen</string>
+    <string name="widget_sos_note">Morsen mit der Taschenlampe</string>
+    <string name="widget_water_note">30-Sekunden-Lautsprecherton</string>
+    <string name="widget_breathe_step">%1$s %2$d s</string>
+    <string name="widget_colors_note">App-Palette und Material-You-Töne</string>
+    <string name="widget_coin_note">Münze antippen zum Werfen</string>
+    <string name="widget_dice_value">Würfeln</string>
+    <string name="widget_dice_note">Würfel antippen zum Würfeln</string>
+    <string name="widget_ruler_note">Auf deinen Bildschirm kalibrieren</string>
+    <string name="widget_protractor_note">Den richtigen Winkel finden</string>
+    <string name="widget_reaction_ready">Bereit?</string>
+    <string name="widget_reaction_prompt">Teste deine Reflexe</string>
+    <string name="widget_reaction_best">Persönliche Bestzeit</string>
 </resources>

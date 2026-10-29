@@ -45,6 +45,7 @@
     <string name="tiles_category_sensors">Senzori și măsurători</string>
     <string name="tiles_category_system">Sistem și comenzi</string>
     <string name="tiles_category_utilities">Utilități și distracție</string>
+    <string name="tiles_category_colors">Culori</string>
     <string name="tiles_category_wellbeing">bunăstare</string>
     <string name="tiles_chip_expanded_tool">Instrument extins</string>
     <string name="tiles_chip_quick_tool">Instrument rapid</string>
@@ -138,8 +139,6 @@
     <string name="tile_converter_summary">Convertește lungimi, mase, temperaturi, volume și date.</string>
     <string name="tile_ruler_title">Riglă</string>
     <string name="tile_ruler_summary">Măsoară obiecte mici pe ecran.</string>
-    <string name="tile_screen_light_title">Lumină de ecran</string>
-    <string name="tile_screen_light_summary">Folosește ecranul ca sursă de lumină difuză.</string>
     <string name="tool_converter_length">Lungime</string>
     <string name="tool_converter_mass">Masă</string>
     <string name="tool_converter_temperature">Temperatură</string>
@@ -148,8 +147,6 @@
     <string name="tool_converter_from">Din</string>
     <string name="tool_converter_to">În</string>
     <string name="tool_converter_invalid">Introdu o valoare validă.</string>
-    <string name="tool_light_brightness">Luminozitate</string>
-    <string name="tool_light_warmth">Căldură</string>
     <string name="tool_ruler_calibration">Calibrare</string>
     <string name="tool_ruler_range">Interval de măsurare</string>
     <string name="tool_ruler_reference">Potrivește linia de mai jos cu 3 cm de pe o riglă reală înainte de măsurare.</string>
@@ -185,7 +182,6 @@
     <string name="section_convert">Conversie și împărțire</string>
     <string name="section_count">Numărare și timp</string>
     <string name="section_chance">Noroc</string>
-    <string name="extra_tools">Mai multe instrumente</string>
     <string name="wheel_title">Roata deciziilor</string>
     <string name="wheel_summary">Învârte pentru a alege o opțiune</string>
     <string name="wheel_choices">Opțiunile tale</string>
@@ -227,4 +223,21 @@
     <string name="tool_compass_northwest">Nord-vest</string>
     <string name="tool_compass_magnetic_north">Nord magnetic</string>
     <string name="tool_compass_heading_description">%1$d° · %2$s · Nord magnetic</string>
+    <string name="widget_flashlight">Lanternă</string>
+    <string name="widget_level_tilted">Înclinat</string>
+    <string name="widget_flash_level">%1$d din %2$d</string>
+    <string name="widget_flash_swipe">Glisează pentru luminozitate</string>
+    <string name="widget_flash_tap">Atinge pentru setări</string>
+    <string name="widget_sos_note">Morse cu lanterna</string>
+    <string name="widget_water_note">Ton de difuzor de 30 de secunde</string>
+    <string name="widget_breathe_step">%1$s %2$d s</string>
+    <string name="widget_colors_note">Paleta aplicației și tonuri Material You</string>
+    <string name="widget_coin_note">Atinge moneda ca s-o arunci</string>
+    <string name="widget_dice_value">Aruncă un zar</string>
+    <string name="widget_dice_note">Atinge zarul ca să-l arunci</string>
+    <string name="widget_ruler_note">Calibrează pentru ecranul tău</string>
+    <string name="widget_protractor_note">Găsește unghiul potrivit</string>
+    <string name="widget_reaction_ready">Gata?</string>
+    <string name="widget_reaction_prompt">Testează-ți reflexele</string>
+    <string name="widget_reaction_best">Record personal</string>
 </resources>

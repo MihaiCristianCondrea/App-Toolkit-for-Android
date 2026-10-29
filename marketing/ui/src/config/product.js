@@ -19,22 +19,22 @@ export const PRODUCT_CONFIG = {
       "Screen sequences, transitions, and marketing motion scenes for Play Store reels and social demos.",
     stories: [
       {
-        id: "tools-to-numbers",
-        title: "From Hardware Tiles to Everyday Numbers",
-        subtitle: "Quick Tools -> Numbers Bento",
+        id: "tools-to-measure",
+        title: "From Live Sensors to Everyday Measuring",
+        subtitle: "Quick Tools -> Measure",
         description:
-          "User browses categorized Quick Settings tiles, then switches to Numbers to split a restaurant bill or increment a live tally counter.",
+          "The compass and level read live in Quick Tools, then Measure splits a restaurant bill and counts up on the tally counter.",
         screens: ["quick-tools", "numbers"],
         accent: "#FFCA28",
       },
       {
-        id: "numbers-to-apps",
-        title: "Companion App Ecosystem",
-        subtitle: "Numbers -> Apps Catalog",
+        id: "measure-to-play",
+        title: "Measure, then Decide",
+        subtitle: "Measure -> Play & Decide",
         description:
-          "From daily numerical utilities to specialized Android apps by Mihai-Cristian Condrea.",
-        screens: ["numbers", "apps"],
-        accent: "#4285F4",
+          "From the protractor and unit converter to the Decision Wheel, a coin flip and a dice roll.",
+        screens: ["numbers", "play"],
+        accent: "#F6A800",
       },
     ],
   },

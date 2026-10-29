@@ -30,7 +30,6 @@ import androidx.compose.material.icons.outlined.Explore
 import androidx.compose.material.icons.outlined.FavoriteBorder
 import androidx.compose.material.icons.outlined.FlashlightOn
 import androidx.compose.material.icons.outlined.Info
-import androidx.compose.material.icons.outlined.LightMode
 import androidx.compose.material.icons.outlined.MonetizationOn
 import androidx.compose.material.icons.outlined.MoreHoriz
 import androidx.compose.material.icons.outlined.Numbers
@@ -82,7 +81,6 @@ internal fun ToolkitTileIcon.imageVector(): ImageVector = when (this) {
     ToolkitTileIcon.Timer -> Icons.Outlined.Timer
     ToolkitTileIcon.Converter -> Icons.Outlined.SwapHoriz
     ToolkitTileIcon.Ruler -> Icons.Outlined.Straighten
-    ToolkitTileIcon.ScreenLight -> Icons.Outlined.LightMode
 }
 
 /**
@@ -97,7 +95,7 @@ internal fun ToolkitTileIcon.backgroundShape(): Shape = when (this) {
     ToolkitTileIcon.FlashDimmer -> MaterialShapes.Burst.toShape()
     ToolkitTileIcon.Water, ToolkitTileIcon.Protractor, ToolkitTileIcon.Converter, ToolkitTileIcon.Timer -> MaterialShapes.Cookie9Sided.toShape()
     ToolkitTileIcon.Breathing, ToolkitTileIcon.BillSplitter, ToolkitTileIcon.Palette -> MaterialShapes.SoftBurst.toShape()
-    ToolkitTileIcon.ScreenLight, ToolkitTileIcon.Counter -> MaterialShapes.Flower.toShape()
+    ToolkitTileIcon.Counter -> MaterialShapes.Flower.toShape()
     ToolkitTileIcon.Coin, ToolkitTileIcon.Dice, ToolkitTileIcon.Ruler, ToolkitTileIcon.Wheel -> MaterialShapes.Cookie12Sided.toShape()
     ToolkitTileIcon.RandomNumber -> MaterialShapes.Gem.toShape()
 }
@@ -116,19 +114,20 @@ internal fun ToolkitTileStatus.icon(): ImageVector = when (this) {
     ToolkitTileStatus.Unsupported -> Icons.Outlined.Close
 }
 
+/** The tool accents of marketing/ui/src/kit/kit.css (--tk-teal, --tk-orange, --tk-magenta, --tk-gold), light and dark. */
 @Composable
 internal fun ToolkitTileIcon.iconColors(): StatusColors {
     val dark = MaterialTheme.colorScheme.surface.luminance() < .5f
     return when (this) {
         ToolkitTileIcon.Level, ToolkitTileIcon.Compass, ToolkitTileIcon.Water -> StatusColors(
             container = if (dark) Color(0xFF006A60) else Color(0xFF00A091),
-            content = if (dark) Color(0xFF74DED1) else Color(0xFF006A60))
+            content = if (dark) Color(0xFF5CE6D6) else Color(0xFF006A60))
         ToolkitTileIcon.Breathing -> StatusColors(
             container = if (dark) Color(0xFF8B4100) else Color(0xFFFF8B26),
-            content = if (dark) Color(0xFFFFB88E) else Color(0xFF8B4100))
-        ToolkitTileIcon.Sos, ToolkitTileIcon.Morse, ToolkitTileIcon.ScreenLight -> StatusColors(
+            content = if (dark) Color(0xFFFFB784) else Color(0xFF8B4100))
+        ToolkitTileIcon.Sos, ToolkitTileIcon.Morse -> StatusColors(
             container = if (dark) Color(0xFF91005A) else Color(0xFFE2008E),
-            content = if (dark) Color(0xFFFFB0D3) else Color(0xFF91005A))
+            content = if (dark) Color(0xFFFF85C4) else Color(0xFF91005A))
         else -> StatusColors(
             container = if (dark) Color(0xFF6B5E00) else Color(0xFFE2C900),
             content = if (dark) Color(0xFFFBE44D) else Color(0xFF6B5E00))

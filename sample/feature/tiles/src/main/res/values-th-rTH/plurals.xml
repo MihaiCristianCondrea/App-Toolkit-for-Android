@@ -20,4 +20,12 @@
         <item quantity="other">เครื่องมือ %1$d</item>
     </plurals>
 
+    <plurals name="widget_wheel_choices">
+        <item quantity="other">%d ตัวเลือก · เปิดวงล้อ</item>
+    </plurals>
+
+    <plurals name="widget_people">
+        <item quantity="other">%d คน</item>
+    </plurals>
+
 </resources>

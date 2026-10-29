@@ -66,7 +66,6 @@ import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.navigat
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.navigation.RandomNumberToolRoute
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.navigation.ReactionTestToolRoute
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.navigation.RulerToolRoute
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.navigation.ScreenLightToolRoute
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.navigation.SosToolRoute
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.navigation.UnitConverterToolRoute
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.catalog.TileIconBadge
@@ -94,10 +93,6 @@ fun ToolkitToolBottomSheet(
     startReaction: Boolean = false,
 ) {
     when (tile.id) {
-        ToolkitTileIds.SCREEN_LIGHT -> {
-            ScreenLightToolRoute(onClose = onClose)
-            return
-        }
         ToolkitTileIds.PROTRACTOR -> {
             ProtractorToolRoute(onClose = onClose)
             return

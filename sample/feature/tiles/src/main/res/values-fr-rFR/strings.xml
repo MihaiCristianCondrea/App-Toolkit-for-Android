@@ -45,6 +45,7 @@
     <string name="tiles_category_sensors">Capteurs et mesures</string>
     <string name="tiles_category_system">Système et contrôles</string>
     <string name="tiles_category_utilities">Utilitaires et divertissement</string>
+    <string name="tiles_category_colors">Couleurs</string>
     <string name="tiles_category_wellbeing">Bien-être</string>
     <string name="tiles_chip_expanded_tool">Outil étendu</string>
     <string name="tiles_chip_quick_tool">Outil rapide</string>
@@ -138,8 +139,6 @@
     <string name="tile_converter_summary">Convertissez longueurs, masses, températures, volumes et données.</string>
     <string name="tile_ruler_title">Règle</string>
     <string name="tile_ruler_summary">Mesurez de petits objets sur votre écran.</string>
-    <string name="tile_screen_light_title">Éclairage d’écran</string>
-    <string name="tile_screen_light_summary">Utilisez votre écran comme lumière douce.</string>
     <string name="tool_converter_length">Longueur</string>
     <string name="tool_converter_mass">Masse</string>
     <string name="tool_converter_temperature">Température</string>
@@ -148,8 +147,6 @@
     <string name="tool_converter_from">De</string>
     <string name="tool_converter_to">Vers</string>
     <string name="tool_converter_invalid">Saisissez une valeur valide.</string>
-    <string name="tool_light_brightness">Luminosité</string>
-    <string name="tool_light_warmth">Chaleur</string>
     <string name="tool_ruler_calibration">Étalonnage</string>
     <string name="tool_ruler_range">Plage de mesure</string>
     <string name="tool_ruler_reference">Avant de mesurer, ajustez la ligne ci-dessous à 3 cm sur une vraie règle.</string>
@@ -185,7 +182,6 @@
     <string name="section_convert">Convertir et partager</string>
     <string name="section_count">Comptage et temps</string>
     <string name="section_chance">Hasard</string>
-    <string name="extra_tools">Autres outils</string>
     <string name="wheel_title">Roue de décision</string>
     <string name="wheel_summary">Tournez pour choisir une option</string>
     <string name="wheel_choices">Vos choix</string>
@@ -227,4 +223,21 @@
     <string name="tool_compass_northwest">Nord-ouest</string>
     <string name="tool_compass_magnetic_north">Nord magnétique</string>
     <string name="tool_compass_heading_description">%1$d° · %2$s · Nord magnétique</string>
+    <string name="widget_flashlight">Lampe torche</string>
+    <string name="widget_level_tilted">Incliné</string>
+    <string name="widget_flash_level">%1$d sur %2$d</string>
+    <string name="widget_flash_swipe">Balayez pour la luminosité</string>
+    <string name="widget_flash_tap">Appuyez pour les réglages</string>
+    <string name="widget_sos_note">Morse avec la lampe</string>
+    <string name="widget_water_note">Son de haut-parleur de 30 secondes</string>
+    <string name="widget_breathe_step">%1$s %2$d s</string>
+    <string name="widget_colors_note">Palette de l\'app et tons Material You</string>
+    <string name="widget_coin_note">Touchez la pièce pour la lancer</string>
+    <string name="widget_dice_value">Lancer un dé</string>
+    <string name="widget_dice_note">Touchez le dé pour le lancer</string>
+    <string name="widget_ruler_note">Calibrez selon votre écran</string>
+    <string name="widget_protractor_note">Trouvez le bon angle</string>
+    <string name="widget_reaction_ready">Prêt ?</string>
+    <string name="widget_reaction_prompt">Testez vos réflexes</string>
+    <string name="widget_reaction_best">Record personnel</string>
 </resources>

@@ -21,4 +21,14 @@
         <item quantity="other">%1$d-verktyg</item>
     </plurals>
 
+    <plurals name="widget_wheel_choices">
+        <item quantity="one">%d val · Öppna hjulet</item>
+        <item quantity="other">%d val · Öppna hjulet</item>
+    </plurals>
+
+    <plurals name="widget_people">
+        <item quantity="one">%d person</item>
+        <item quantity="other">%d personer</item>
+    </plurals>
+
 </resources>

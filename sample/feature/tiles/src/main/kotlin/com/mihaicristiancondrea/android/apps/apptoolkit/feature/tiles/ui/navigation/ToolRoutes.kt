@@ -40,7 +40,6 @@ import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.Protrac
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.RandomNumberToolViewModel
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.ReactionTestToolViewModel
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.RulerToolViewModel
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.ScreenLightToolViewModel
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.SosToolViewModel
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.UnitConverterToolViewModel
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.contracts.BillSplitterToolEvent
@@ -56,7 +55,6 @@ import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.contrac
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.contracts.RandomNumberToolEvent
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.contracts.ReactionTestToolEvent
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.contracts.RulerToolEvent
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.contracts.ScreenLightToolEvent
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.contracts.SosToolEvent
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.contracts.UnitConverterToolEvent
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.tools.BillSplitterTool
@@ -72,7 +70,6 @@ import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.t
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.tools.RandomNumberTool
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.tools.ReactionTestTool
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.tools.RulerTool
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.tools.ScreenLightTool
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.tools.SosTool
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.tools.UnitConverterTool
 import org.koin.compose.viewmodel.koinViewModel
@@ -253,16 +250,6 @@ internal fun RulerToolRoute(onClose: () -> Unit, viewModel: RulerToolViewModel =
     val state by viewModel.state.collectAsStateWithLifecycle()
     DisposeTool { viewModel.onEvent(RulerToolEvent.Dismiss) }
     RulerTool(state = state, onEvent = viewModel::onEvent, onClose = onClose)
-}
-
-@Composable
-internal fun ScreenLightToolRoute(onClose: () -> Unit, viewModel: ScreenLightToolViewModel = koinViewModel()) {
-    val state by viewModel.state.collectAsStateWithLifecycle()
-    StartStopTool(
-        start = { viewModel.onEvent(ScreenLightToolEvent.Open) },
-        stop = { viewModel.onEvent(ScreenLightToolEvent.Dismiss) },
-    )
-    ScreenLightTool(state = state, onEvent = viewModel::onEvent, onClose = onClose)
 }
 
 @Composable

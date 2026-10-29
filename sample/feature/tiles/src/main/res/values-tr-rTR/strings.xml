@@ -45,6 +45,7 @@
     <string name="tiles_category_sensors">Sensörler ve Ölçüm</string>
     <string name="tiles_category_system">Sistem ve Kontroller</string>
     <string name="tiles_category_utilities">Yardımcı Programlar ve Eğlence</string>
+    <string name="tiles_category_colors">Renkler</string>
     <string name="tiles_category_wellbeing">Refah</string>
     <string name="tiles_chip_expanded_tool">Genişletilmiş araç</string>
     <string name="tiles_chip_quick_tool">Hızlı araç</string>
@@ -138,8 +139,6 @@
     <string name="tile_converter_summary">Uzunluk, kütle, sıcaklık, hacim ve verileri dönüştürün.</string>
     <string name="tile_ruler_title">Cetvel</string>
     <string name="tile_ruler_summary">Ekranda küçük nesneleri ölçün.</string>
-    <string name="tile_screen_light_title">Ekran ışığı</string>
-    <string name="tile_screen_light_summary">Ekranınızı yumuşak bir ışık olarak kullanın.</string>
     <string name="tool_converter_length">Uzunluk</string>
     <string name="tool_converter_mass">Kütle</string>
     <string name="tool_converter_temperature">Sıcaklık</string>
@@ -148,8 +147,6 @@
     <string name="tool_converter_from">Kaynak</string>
     <string name="tool_converter_to">Hedef</string>
     <string name="tool_converter_invalid">Geçerli bir değer girin.</string>
-    <string name="tool_light_brightness">Parlaklık</string>
-    <string name="tool_light_warmth">Sıcaklık tonu</string>
     <string name="tool_ruler_calibration">Kalibrasyon</string>
     <string name="tool_ruler_range">Ölçüm aralığı</string>
     <string name="tool_ruler_reference">Ölçmeden önce aşağıdaki çizgiyi gerçek bir cetveldeki 3 cm ile eşleştirin.</string>
@@ -185,7 +182,6 @@
     <string name="section_convert">Dönüştür ve bölüştür</string>
     <string name="section_count">Sayım ve zaman</string>
     <string name="section_chance">Şans</string>
-    <string name="extra_tools">Diğer araçlar</string>
     <string name="wheel_title">Karar Çarkı</string>
     <string name="wheel_summary">Bir seçenek belirlemek için çevir</string>
     <string name="wheel_choices">Seçeneklerin</string>
@@ -227,4 +223,21 @@
     <string name="tool_compass_northwest">Kuzeybatı</string>
     <string name="tool_compass_magnetic_north">Manyetik kuzey</string>
     <string name="tool_compass_heading_description">%1$d° · %2$s · Manyetik kuzey</string>
+    <string name="widget_flashlight">El feneri</string>
+    <string name="widget_level_tilted">Eğik</string>
+    <string name="widget_flash_level">%1$d / %2$d</string>
+    <string name="widget_flash_swipe">Parlaklık için kaydırın</string>
+    <string name="widget_flash_tap">Ayarlar için dokunun</string>
+    <string name="widget_sos_note">Fenerle Mors</string>
+    <string name="widget_water_note">30 saniyelik hoparlör sesi</string>
+    <string name="widget_breathe_step">%1$s %2$d sn</string>
+    <string name="widget_colors_note">Uygulama paleti ve Material You tonları</string>
+    <string name="widget_coin_note">Atmak için paraya dokunun</string>
+    <string name="widget_dice_value">Zar at</string>
+    <string name="widget_dice_note">Atmak için zara dokunun</string>
+    <string name="widget_ruler_note">Ekranınıza göre kalibre edin</string>
+    <string name="widget_protractor_note">Doğru açıyı bulun</string>
+    <string name="widget_reaction_ready">Hazır mısınız?</string>
+    <string name="widget_reaction_prompt">Reflekslerinizi test edin</string>
+    <string name="widget_reaction_best">Kişisel rekor</string>
 </resources>

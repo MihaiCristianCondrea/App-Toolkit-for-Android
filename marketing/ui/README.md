@@ -82,16 +82,16 @@ The drawer, rail and overflow menu are screen state like any other (`drawerOpen`
 and frame. `mode=compare&compare=theme|nav|palette|frame` opens a comparison. Palette and theme,
 window size, frame, system navigation and screen-specific controls are available in the inspector.
 
-The browser check exercises all four screens in light and dark at phone, fold and desktop sizes,
+The browser check exercises all three screens in light and dark at phone, fold and desktop sizes,
 closed desktop navigation, interactive sheets, comparison and the public embed entry point, and mounts every
 screen, preset, sheet and navigation surface the way videos do (without `set()`) to catch anything that needs it. It
 checks the web migration; Android screenshot parity remains a separate campaign check.
 
 ## Translated Screens (`src/screens/`)
 
-* `quick-tools.js` - `ToolkitTilesScreen.kt` (collapsible Quick Settings tile categories and pocket tools, including Water Eject under Hardware & sound).
+* `quick-tools.js` - `ToolkitTilesScreen.kt` (live sensor and torch widgets, Water Eject under Hardware & sound, Breathe, and Material Colors as the last section).
+* `play.js` - `PlayScreen.kt` (the Decision Wheel, Random Number, Coin Flip and Dice Roll).
 * `numbers.js` - Measure: icon-led sections, ruler and protractor previews, live conversion and per-person bill readouts, Counter controls and Reaction Test. Grouped cards keep 28dp outer and 8dp inner corners; each opens its existing Compose-style tool surface.
-* `apps.js` - `AppsListScreen.kt` (developer app catalog with category filter chips and favorites).
 
 ## Opening the hub
 
@@ -130,7 +130,7 @@ Unit Converter pairs two editable value cards with full unit names, category ico
 
 Protractor docks its controls beside the dial in landscape and below it in portrait. Converter unit selectors use Material Web select popovers; the swap action uses a momentary button with keyboard focus indication.
 
-Navigation now has Quick Tools, Measure and Play & Decide. The existing Chance tools live under Play & Decide; Discover our apps opens the catalog from the drawer. Water Eject is an explicit-start 165 Hz sine tone with a 30-second limit; Stop, sheet dismissal, leaving the screen or hiding the page stop audio and release its context. The feature is a marketing web prototype, with no water-damage-repair guarantee. Finger chooser and team maker are not implemented.
+Navigation now has Quick Tools, Measure and Play & Decide. The existing Chance tools live under Play & Decide. The apps catalog and the components page are debug pages in the app, so the kit does not draw them. Water Eject is an explicit-start 165 Hz sine tone with a 30-second limit; Stop, sheet dismissal, leaving the screen or hiding the page stop audio and release its context. The feature is a marketing web prototype, with no water-damage-repair guarantee. Finger chooser and team maker are not implemented.
 
 Decision Wheel accepts 2–12 directly editable choices, one per line. Spinning locks edits until the chosen segment settles; reduced motion shows the result without a prolonged spin. Water Eject uses expanding rings with a reduced-motion fallback and fills its section row.
 

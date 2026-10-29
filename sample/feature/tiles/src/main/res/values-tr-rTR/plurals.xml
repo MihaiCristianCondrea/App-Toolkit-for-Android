@@ -21,4 +21,14 @@
         <item quantity="other">%1$d araçları</item>
     </plurals>
 
+    <plurals name="widget_wheel_choices">
+        <item quantity="one">%d seçenek · Çarkı aç</item>
+        <item quantity="other">%d seçenek · Çarkı aç</item>
+    </plurals>
+
+    <plurals name="widget_people">
+        <item quantity="one">%d kişi</item>
+        <item quantity="other">%d kişi</item>
+    </plurals>
+
 </resources>

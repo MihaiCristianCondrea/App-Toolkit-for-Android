@@ -35,5 +35,5 @@ object ToolkitTileIds {
     const val PROTRACTOR = "protractor"
     const val BILL_SPLITTER = "bill_splitter"
     const val RANDOM_NUMBER = "random_number"
-    const val SCREEN_LIGHT = "screen_light"
+    const val MATERIAL_COLORS = "material_colors"
 }

@@ -57,8 +57,9 @@ import org.koin.core.qualifier.named
 const val ACTION_OPEN_SETTINGS: String = "com.d4rk.android.apps.apptoolkit.action.OPEN_SETTINGS"
 
 /**
- * The sample's whole navigation: three tabs, the drawer, the overflow menu, the components page and
- * its article bar demo, the optional bottom banner and the intents it answers. The demo registers a
+ * The sample's whole navigation: three tabs, the drawer, the overflow menu, the debug pages (the apps
+ * catalog, the components page and its article bar demo), the optional bottom banner and the intents
+ * it answers. The demo registers a
  * small bar, the one an article draws anyway, so it does not open large for its first frame.
  * `toolkitGraph` adds the Toolkit's own pages (settings, help, support, the first-launch start
  * screens and the rest).
@@ -66,12 +67,12 @@ const val ACTION_OPEN_SETTINGS: String = "com.d4rk.android.apps.apptoolkit.actio
  * Routes and the graph belong to `:sample:app` under app/navigation. Features expose callbacks
  * rather than importing app route keys.
  *
- * @param showComponents Whether the drawer offers the components showcase: in debug builds, or once
- * it has been unlocked.
+ * @param showDebugPages Whether the drawer offers the debug pages, the apps catalog and the components
+ * showcase: in debug builds, or once the showcase has been unlocked.
  * @param onShowChangelog Shows the changelog dialog, which the drawer's Updates entry opens.
  */
 fun appGraph(
-    showComponents: Boolean,
+    showDebugPages: Boolean,
     onShowChangelog: () -> Unit,
 ): ShellGraph = toolkitGraph(
     appTitle = R.string.app_name,
@@ -108,17 +109,18 @@ fun appGraph(
     ) {
         PlayScreen()
     }
-    page<AppsListRoute>(title = { stringResource(TilesR.string.discover_apps) }) { AppsListScreen() }
-    page<ExtraToolsRoute>(title = { stringResource(TilesR.string.extra_tools) }) { ToolkitTilesScreen(extraTools = true) }
-    page<ComponentsRoute>(title = { stringResource(ComponentsR.string.components_title) }) {
-        val navigator = com.mihaicristiancondrea.android.libs.apptoolkit.navigation.LocalShellNavigator.current
-        ComponentsScreen(onOpenArticleDemo = { navigator.navigate(ArticleDemoRoute(it)) })
-    }
-    page<ArticleDemoRoute>(
-        topBar = TopBarStyle.Small,
-        title = { stringResource(ComponentsR.string.components_section_article_bar) },
-    ) { key ->
-        ArticleDemoScreen(branded = key.branded)
+    if (showDebugPages) {
+        page<AppsListRoute>(title = { stringResource(TilesR.string.discover_apps) }) { AppsListScreen() }
+        page<ComponentsRoute>(title = { stringResource(ComponentsR.string.components_title) }) {
+            val navigator = com.mihaicristiancondrea.android.libs.apptoolkit.navigation.LocalShellNavigator.current
+            ComponentsScreen(onOpenArticleDemo = { navigator.navigate(ArticleDemoRoute(it)) })
+        }
+        page<ArticleDemoRoute>(
+            topBar = TopBarStyle.Small,
+            title = { stringResource(ComponentsR.string.components_section_article_bar) },
+        ) { key ->
+            ArticleDemoScreen(branded = key.branded)
+        }
     }
     aboutPages { AboutSettingsScreen() }
     banner {
@@ -131,9 +133,8 @@ fun appGraph(
     }
 
     drawer {
-        link(key = AppsListRoute, label = TilesR.string.discover_apps, icon = ToolkitIcon.Vector(Icons.Outlined.Apps))
-        link(key = ExtraToolsRoute, label = TilesR.string.extra_tools, icon = ToolkitIcon.Vector(Icons.Outlined.Widgets))
-        if (showComponents) {
+        if (showDebugPages) {
+            link(key = AppsListRoute, label = TilesR.string.discover_apps, icon = ToolkitIcon.Vector(Icons.Outlined.Apps))
             link(
                 key = ComponentsRoute,
                 label = ComponentsR.string.components_title,

@@ -80,6 +80,7 @@
     <string name="tiles_category_sensors">Sensors &amp; Measurement</string>
     <string name="tiles_category_system">System &amp; Controls</string>
     <string name="tiles_category_utilities">Utilities &amp; Fun</string>
+    <string name="tiles_category_colors">Colors</string>
     <string name="tiles_category_wellbeing">Wellbeing</string>
     <string name="tiles_chip_expanded_tool">Expanded tool</string>
     <string name="tiles_chip_quick_tool">Quick tool</string>
@@ -151,8 +152,6 @@
     <string name="tile_converter_summary">Convert length, mass, temperature, volume and data.</string>
     <string name="tile_ruler_title">Ruler</string>
     <string name="tile_ruler_summary">Measure small objects on your screen.</string>
-    <string name="tile_screen_light_title">Screen light</string>
-    <string name="tile_screen_light_summary">Use your screen as a soft light.</string>
     <string name="tool_converter_length">Length</string>
     <string name="tool_converter_mass">Mass</string>
     <string name="tool_converter_temperature">Temperature</string>
@@ -161,8 +160,6 @@
     <string name="tool_converter_from">From</string>
     <string name="tool_converter_to">To</string>
     <string name="tool_converter_invalid">Enter a valid value.</string>
-    <string name="tool_light_brightness">Brightness</string>
-    <string name="tool_light_warmth">Warmth</string>
     <string name="tool_ruler_calibration">Calibration</string>
     <string name="tool_ruler_range">Measurement range</string>
     <string name="tool_ruler_reference">Match the line below to 3 cm on a real ruler before measuring.</string>
@@ -198,7 +195,6 @@
     <string name="section_convert">Convert &amp; split</string>
     <string name="section_count">Count &amp; time</string>
     <string name="section_chance">Chance</string>
-    <string name="extra_tools">More tools</string>
     <string name="wheel_title">Decision Wheel</string>
     <string name="wheel_summary">Spin to choose an option</string>
     <string name="wheel_choices">Your choices</string>
@@ -230,4 +226,21 @@
     <string name="breathe_inhale">Inhale</string>
     <string name="breathe_hold">Hold</string>
     <string name="breathe_exhale">Exhale</string>
+    <string name="widget_flashlight">Flashlight</string>
+    <string name="widget_level_tilted">Tilted</string>
+    <string name="widget_flash_level">%1$d of %2$d</string>
+    <string name="widget_flash_swipe">Swipe for brightness</string>
+    <string name="widget_flash_tap">Tap for settings</string>
+    <string name="widget_sos_note">Morse with the torch</string>
+    <string name="widget_water_note">30-second speaker tone</string>
+    <string name="widget_breathe_step">%1$s %2$ds</string>
+    <string name="widget_colors_note">App palette and Material You tones</string>
+    <string name="widget_coin_note">Tap coin to flip</string>
+    <string name="widget_dice_value">Roll a die</string>
+    <string name="widget_dice_note">Tap die to roll</string>
+    <string name="widget_ruler_note">Calibrate to your screen</string>
+    <string name="widget_protractor_note">Find the right angle</string>
+    <string name="widget_reaction_ready">Ready?</string>
+    <string name="widget_reaction_prompt">Test your reflexes</string>
+    <string name="widget_reaction_best">Personal best</string>
 </resources>

@@ -18,6 +18,26 @@
 package com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui
 
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.ColumnScope
+import androidx.compose.foundation.layout.IntrinsicSize
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.shape.CornerSize
+import androidx.compose.material3.Icon
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.lerp
+import androidx.compose.ui.res.pluralStringResource
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.sp
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.mappers.backgroundShape
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.mappers.iconColors
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.mappers.imageVector
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.models.CoinSide
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.models.ToolkitTileIcon
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.catalog.WidgetLabel
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.catalog.WidgetNote
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.catalog.WidgetValue
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.PaddingValues
@@ -60,9 +80,6 @@ import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.states.
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.ToolkitToolBottomSheet
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.catalog.ToolWorkspace
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.catalog.ToolSection
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.catalog.ToolPair
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.catalog.ToolWidget
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.catalog.TileIconBadge
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.tools.DecisionWheelVisual
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.tools.CoinFlipTool
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.tools.DiceRollTool
@@ -112,37 +129,70 @@ internal fun PlayScreenContent(coin: CoinFlipToolUiState, dice: DiceRollToolUiSt
     ToolWorkspace(padding) {
         if (tools.isEmpty()) Text(stringResource(R.string.tiles_filter_empty))
         else ToolSection(stringResource(R.string.section_chance), Icons.Outlined.Casino, Modifier.animateVisibility(0)) {
+            // The kit's Chance group (marketing/ui/src/screens/play.js): every card on the secondary container,
+            // 28 dp on the group's outer corners and 8 dp between cards.
             Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
-                tools.firstOrNull { it.id == ToolkitTileIds.DECISION_WHEEL }?.let { tile ->
-                    Surface(onClick = { selectedId = tile.id }, shape = RoundedCornerShape(28.dp,28.dp,if (tools.size == 1) 28.dp else 8.dp,if (tools.size == 1) 28.dp else 8.dp), color = MaterialTheme.colorScheme.secondaryContainer) {
-                        Row(Modifier.fillMaxWidth().padding(20.dp), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-                            Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                                Text(stringResource(tile.titleResId), style = MaterialTheme.typography.labelLarge)
-                                Text(wheel.winner ?: stringResource(R.string.wheel_ready), style = MaterialTheme.typography.headlineSmall)
+                val wheelTile = tools.firstOrNull { it.id == ToolkitTileIds.DECISION_WHEEL }
+                val randomTile = tools.firstOrNull { it.id == ToolkitTileIds.RANDOM_NUMBER }
+                val pair = tools.filter { it.id == ToolkitTileIds.COIN_FLIP || it.id == ToolkitTileIds.DICE_ROLL }
+                val rows = listOfNotNull(wheelTile, randomTile).size + if (pair.isEmpty()) 0 else 1
+                var row = 0
+                fun corners(): RoundedCornerShape {
+                    val first = row == 0
+                    val last = row == rows - 1
+                    row++
+                    return RoundedCornerShape(if (first) 28.dp else 8.dp, if (first) 28.dp else 8.dp, if (last) 28.dp else 8.dp, if (last) 28.dp else 8.dp)
+                }
+                wheelTile?.let { tile ->
+                    ChanceCard(onClick = { selectedId = tile.id }, shape = corners()) {
+                        Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(16.dp)) {
+                            Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(4.dp)) {
+                                WidgetLabel(stringResource(tile.titleResId), letterSpacing = 0.8f)
+                                Text(wheel.winner ?: stringResource(R.string.wheel_ready),
+                                    style = MaterialTheme.typography.headlineSmall.copy(fontSize = 26.sp, lineHeight = 32.sp), fontWeight = FontWeight.Medium)
+                                val count = wheel.choices.size.takeIf { it >= 2 } ?: 2
+                                Text(pluralStringResource(R.plurals.widget_wheel_choices, count, count), style = MaterialTheme.typography.bodySmall.copy(fontSize = 12.sp, lineHeight = 18.sp))
                             }
                             DecisionWheelVisual(wheel, compact = true)
                         }
                     }
                 }
-                val chance = tools.filterNot { it.id == ToolkitTileIds.DECISION_WHEEL }
-                chance.firstOrNull { it.id == ToolkitTileIds.RANDOM_NUMBER }?.let { tile ->
-                    ToolWidget(tile, { selectedId = tile.id }, Modifier.fillMaxWidth(), shape = RoundedCornerShape(8.dp)) {
-                        Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(16.dp), verticalAlignment = Alignment.CenterVertically) {
-                            TileIconBadge(tile.icon, large = true)
-                            Text(random.result?.toString() ?: "?", style = MaterialTheme.typography.displaySmall)
-                            Text(stringResource(R.string.tool_random_range, random.minimum.toLongOrNull() ?: 1L, random.maximum.toLongOrNull() ?: 100L), style = MaterialTheme.typography.bodySmall)
+                randomTile?.let { tile ->
+                    val gold = tile.icon.iconColors()
+                    ChanceCard(onClick = { selectedId = tile.id }, shape = corners()) {
+                        Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(16.dp)) {
+                            Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(4.dp)) {
+                                WidgetLabel(stringResource(tile.titleResId))
+                                WidgetValue(random.result?.toString() ?: "?", size = 48)
+                                WidgetNote(stringResource(R.string.tool_random_range, random.minimum.toLongOrNull() ?: 1L, random.maximum.toLongOrNull() ?: 100L), ToolkitTileIcon.Compass.iconColors().content)
+                            }
+                            Box(Modifier.size(88.dp).clip(tile.icon.backgroundShape()).background(lerp(MaterialTheme.colorScheme.surfaceContainerLowest, gold.container, .35f)), contentAlignment = Alignment.Center) {
+                                Icon(tile.icon.imageVector(), null, Modifier.size(40.dp), tint = gold.content)
+                            }
                         }
                     }
                 }
-                val pair = chance.filterNot { it.id == ToolkitTileIds.RANDOM_NUMBER }
-                if (pair.isNotEmpty()) ToolPair(pair, top = tools.size == pair.size) { tile, shape ->
-                    ToolWidget(tile, { selectedId = tile.id }, Modifier.weight(1f).fillMaxHeight(), shape) {
-                        if (tile.id == ToolkitTileIds.COIN_FLIP) {
-                            CoinFlipTool(coin.side, coin.request, onFlip, compact = true)
-                            Text(stringResource(if (coin.side == com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.models.CoinSide.Heads) R.string.tile_service_heads else R.string.tile_service_tails))
-                        } else {
-                            DiceRollTool(result = dice.result, rollRequest = dice.request, onRoll = onRoll, compact = true)
-                            Text(stringResource(R.string.tool_dice_roll_action))
+                if (pair.isNotEmpty()) {
+                    val shape = corners()
+                    Row(Modifier.fillMaxWidth().height(IntrinsicSize.Min), horizontalArrangement = Arrangement.spacedBy(4.dp)) {
+                        pair.forEachIndexed { index, tile ->
+                            val cell = RoundedCornerShape(
+                                topStart = if (index == 0) shape.topStart else CornerSize(8.dp), topEnd = if (index == pair.lastIndex) shape.topEnd else CornerSize(8.dp),
+                                bottomEnd = if (index == pair.lastIndex) shape.bottomEnd else CornerSize(8.dp), bottomStart = if (index == 0) shape.bottomStart else CornerSize(8.dp),
+                            )
+                            ChanceCard(onClick = { selectedId = tile.id }, shape = cell, modifier = Modifier.weight(1f).fillMaxHeight(), centered = true) {
+                                WidgetLabel(stringResource(tile.titleResId), Modifier.align(Alignment.Start))
+                                if (tile.id == ToolkitTileIds.COIN_FLIP) {
+                                    // Both visuals sit in the same 128 dp stage, so the two cards' values line up.
+                                    Box(Modifier.size(128.dp), contentAlignment = Alignment.Center) { CoinFlipTool(coin.side, coin.request, onFlip, compact = true) }
+                                    WidgetValue(stringResource(if (coin.side == CoinSide.Heads) R.string.tile_service_heads else R.string.tile_service_tails), size = 24)
+                                    WidgetNote(stringResource(R.string.widget_coin_note), ToolkitTileIcon.Compass.iconColors().content)
+                                } else {
+                                    Box(Modifier.size(128.dp), contentAlignment = Alignment.Center) { DiceRollTool(result = dice.result, rollRequest = dice.request, onRoll = onRoll, compact = true) }
+                                    WidgetValue(stringResource(R.string.widget_dice_value), size = 24)
+                                    WidgetNote(stringResource(R.string.widget_dice_note), ToolkitTileIcon.Compass.iconColors().content)
+                                }
+                            }
                         }
                     }
                 }
@@ -151,6 +201,15 @@ internal fun PlayScreenContent(coin: CoinFlipToolUiState, dice: DiceRollToolUiSt
     }
     catalogTools.firstOrNull { it.id == selectedId }?.let { tile ->
         ToolkitToolBottomSheet(tile, onClose = { selectedId = null }, onAddTile = { tile.requestKey?.let { requestQuickSettingsTile(context,it, onTileAdded = onTileAdded) } }, onSetupTile = {})
+    }
+}
+
+/** One card of the Chance group, on the secondary container. */
+@Composable
+private fun ChanceCard(onClick: () -> Unit, shape: RoundedCornerShape, modifier: Modifier = Modifier, centered: Boolean = false, content: @Composable ColumnScope.() -> Unit) {
+    Surface(onClick = onClick, modifier = modifier.fillMaxWidth(), shape = shape, color = MaterialTheme.colorScheme.secondaryContainer) {
+        Column(Modifier.padding(24.dp), verticalArrangement = Arrangement.spacedBy(4.dp),
+            horizontalAlignment = if (centered) Alignment.CenterHorizontally else Alignment.Start, content = content)
     }
 }
 

@@ -45,6 +45,7 @@
     <string name="tiles_category_sensors">سینسر اور پیمائش</string>
     <string name="tiles_category_system">سسٹم اور کنٹرولز</string>
     <string name="tiles_category_utilities">افادیت اور تفریح</string>
+    <string name="tiles_category_colors">رنگ</string>
     <string name="tiles_category_wellbeing">خیریت</string>
     <string name="tiles_chip_expanded_tool">توسیع شدہ ٹول</string>
     <string name="tiles_chip_quick_tool">تیز ٹول</string>
@@ -138,8 +139,6 @@
     <string name="tile_converter_summary">لمبائی، کمیت، درجہ حرارت، حجم اور ڈیٹا تبدیل کریں۔</string>
     <string name="tile_ruler_title">پیمانہ</string>
     <string name="tile_ruler_summary">اسکرین پر چھوٹی چیزیں ناپیں۔</string>
-    <string name="tile_screen_light_title">اسکرین کی روشنی</string>
-    <string name="tile_screen_light_summary">اسکرین کو نرم روشنی کے طور پر استعمال کریں۔</string>
     <string name="tool_converter_length">لمبائی</string>
     <string name="tool_converter_mass">کمیت</string>
     <string name="tool_converter_temperature">درجہ حرارت</string>
@@ -148,8 +147,6 @@
     <string name="tool_converter_from">سے</string>
     <string name="tool_converter_to">میں</string>
     <string name="tool_converter_invalid">درست قدر درج کریں۔</string>
-    <string name="tool_light_brightness">چمک</string>
-    <string name="tool_light_warmth">رنگ کی گرمائش</string>
     <string name="tool_ruler_calibration">کیلیبریشن</string>
     <string name="tool_ruler_range">پیمائش کی حد</string>
     <string name="tool_ruler_reference">پیمائش سے پہلے نیچے کی لکیر کو اصل پیمانے کے 3 سینٹی میٹر سے ملائیں۔</string>
@@ -185,7 +182,6 @@
     <string name="section_convert">تبدیل اور تقسیم</string>
     <string name="section_count">گنتی اور وقت</string>
     <string name="section_chance">اتفاق</string>
-    <string name="extra_tools">مزید ٹولز</string>
     <string name="wheel_title">فیصلے کا پہیہ</string>
     <string name="wheel_summary">انتخاب کے لیے گھمائیں</string>
     <string name="wheel_choices">آپ کے اختیارات</string>
@@ -227,4 +223,21 @@
     <string name="tool_compass_northwest">شمال مغرب</string>
     <string name="tool_compass_magnetic_north">مقناطیسی شمال</string>
     <string name="tool_compass_heading_description">%1$d° · %2$s · مقناطیسی شمال</string>
+    <string name="widget_flashlight">ٹارچ</string>
+    <string name="widget_level_tilted">جھکا ہوا</string>
+    <string name="widget_flash_level">%2$d میں سے %1$d</string>
+    <string name="widget_flash_swipe">چمک کے لیے سوائپ کریں</string>
+    <string name="widget_flash_tap">ترتیبات کے لیے تھپتھپائیں</string>
+    <string name="widget_sos_note">ٹارچ سے مورس</string>
+    <string name="widget_water_note">30 سیکنڈ کی اسپیکر ٹون</string>
+    <string name="widget_breathe_step">%1$s %2$d سیکنڈ</string>
+    <string name="widget_colors_note">ایپ پیلیٹ اور Material You ٹونز</string>
+    <string name="widget_coin_note">اچھالنے کے لیے سکے کو تھپتھپائیں</string>
+    <string name="widget_dice_value">پانسا پھینکیں</string>
+    <string name="widget_dice_note">پھینکنے کے لیے پانسے کو تھپتھپائیں</string>
+    <string name="widget_ruler_note">اپنی اسکرین کے مطابق کیلیبریٹ کریں</string>
+    <string name="widget_protractor_note">صحیح زاویہ تلاش کریں</string>
+    <string name="widget_reaction_ready">تیار ہیں؟</string>
+    <string name="widget_reaction_prompt">اپنے ردعمل کو آزمائیں</string>
+    <string name="widget_reaction_best">ذاتی بہترین</string>
 </resources>

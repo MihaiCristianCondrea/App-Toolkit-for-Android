@@ -90,19 +90,33 @@ class RedesignVisualTest {
         output.parentFile?.mkdirs()
         output.outputStream().use { compose.onNode(isDialog()).captureToImage().asAndroidBitmap().compress(Bitmap.CompressFormat.PNG,100,it) }
     }
-    @Test fun quickTools() {
+    @Test
+    @Config(sdk = [36], qualifiers = "w430dp-h957dp")
+    fun playDark() {
+        compose.setContent { MaterialTheme(colorScheme = darkColorScheme()) { Surface { PlayScreenContent(CoinFlipToolUiState(), DiceRollToolUiState(result = 5), RandomNumberToolUiState(), WheelToolUiState(), PaddingValues()) } } }
+        compose.waitForIdle()
+        capture("play-phone-dark")
+    }
+    @Test
+    @Config(sdk = [36], qualifiers = "w430dp-h1500dp")
+    fun quickToolsDark() = quickTools(dark = true)
+    @Test
+    @Config(sdk = [36], qualifiers = "w430dp-h1500dp")
+    fun quickToolsLight() = quickTools(dark = false)
+    private fun quickTools(dark: Boolean) {
         val categories = listOf(
             ToolkitTileCategoryData("sensors", tiles = persistentListOf(ToolkitTileData("compass", status = com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.models.ToolkitTileStatus.Available), ToolkitTileData("bubble_level", status = com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.models.ToolkitTileStatus.Available))),
             ToolkitTileCategoryData("system", tiles = persistentListOf(ToolkitTileData("flash_dimmer", status = com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.models.ToolkitTileStatus.Available), ToolkitTileData("sos", status = com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.models.ToolkitTileStatus.Available))),
             ToolkitTileCategoryData("sound", tiles = persistentListOf(ToolkitTileData("water_eject", status = com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.models.ToolkitTileStatus.Available))),
             ToolkitTileCategoryData("wellbeing", tiles = persistentListOf(ToolkitTileData("breathing", status = com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.models.ToolkitTileStatus.Available))),
+            ToolkitTileCategoryData("colors", tiles = persistentListOf(ToolkitTileData("material_colors", status = com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.models.ToolkitTileStatus.Available, quickTool = com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.models.ToolkitQuickTool.MaterialColors))),
         ).toUiModels()
-        compose.setContent { MaterialTheme { Surface {
+        compose.setContent { MaterialTheme(colorScheme = if (dark) darkColorScheme() else androidx.compose.material3.lightColorScheme()) { Surface {
             CompositionLocalProvider(LocalAdsEnabled provides false, LocalTelemetry provides FakeTelemetryRepository()) {
                 ToolkitTilesScreenContent(ToolkitTilesUiState(categories = Loadable.Ready(categories)), PaddingValues(), {})
             }
         } } }
         compose.waitForIdle()
-        capture("quick-tools-phone")
+        capture(if (dark) "quick-tools-phone-dark" else "quick-tools-phone")
     }
 }

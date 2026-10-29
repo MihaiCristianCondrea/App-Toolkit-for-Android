@@ -34,7 +34,8 @@ export const IDENTITY = defineProductIdentity({
       { id: "numbers", label: "Measure", icon: "straighten" },
       { id: "play", label: "Play & Decide", icon: "casino" },
     ],
-    drawer: { entries: [{id:"apps",label:"Discover our apps",icon:"apps",screen:"apps"}], footer: toolkitFooter() },
+    // The apps catalog and the components page are debug pages in the app, so the drawer has only the footer.
+    drawer: { footer: toolkitFooter() },
     overflow: [supportUs()],
   },
   links: {

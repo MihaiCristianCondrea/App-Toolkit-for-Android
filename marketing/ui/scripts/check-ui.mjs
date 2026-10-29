@@ -22,11 +22,11 @@ try {
     page.on('pageerror', e => errors.push(e.message));
     await page.goto(base);
     await page.locator('mnw-screen-card').first().waitFor();
-    assert.equal(await page.locator('mnw-screen-card').count(), 4);
-    assert.deepEqual(await page.locator('[data-screen]').evaluateAll(nodes => nodes.map(node => node.dataset.screen)), ['quick-tools', 'numbers', 'play', 'apps']);
+    assert.equal(await page.locator('mnw-screen-card').count(), 3);
+    assert.deepEqual(await page.locator('[data-screen]').evaluateAll(nodes => nodes.map(node => node.dataset.screen)), ['quick-tools', 'numbers', 'play']);
     assert.equal(await page.locator('mnw-marketing-shell .catalog-header, mnw-marketing-shell [aria-label="Filter screens"]').count(), 0);
     assert.equal(await page.locator('mnw-device-frame').count(), 0);
-    assert.equal(await page.locator('mnw-android-screen').count(), 4);
+    assert.equal(await page.locator('mnw-android-screen').count(), 3);
     // A marketing page: no footer, no drawer, no menu button.
     assert.equal(await page.locator('mnw-site-footer, .g-footer').count(), 0);
     const shell = page.locator('mnw-marketing-shell mnw-app-shell');
@@ -62,7 +62,7 @@ try {
   const page = await browser.newPage({viewport: {width: 1280, height: 1000}});
   const errors = [];
   page.on('pageerror', e => errors.push(e.message));
-  for (const id of ['quick-tools', 'numbers', 'play', 'apps']) {
+  for (const id of ['quick-tools', 'numbers', 'play']) {
     for (const window of ['phone', 'fold', 'desktop']) {
       for (const theme of ['light', 'dark']) {
         await page.goto(`${base}/screen.html?id=${id}&window=${window}&theme=${theme}&frame=device&panel=none`);
@@ -189,6 +189,13 @@ try {
     await page.locator(SHEET_CONTENT).locator('[aria-label="Close"]').click();
     checks++;
   }
+  // Material Colors is the last Quick Tools section, and its sheet names every role with the hex the palette gives it.
+  await page.goto(`${base}/screen.html?id=quick-tools&panel=none`);
+  await page.locator('.qt-colors').waitFor();
+  assert.equal(await page.locator('.qt-section').last().locator('.qt-colors').count(), 1);
+  await page.locator('.qt-colors').click();
+  await page.waitForFunction(() => document.querySelectorAll('.mc-swatch__hex').length === 12 && [...document.querySelectorAll('.mc-swatch__hex')].every((el) => /^#[0-9A-F]{6}$/.test(el.textContent)));
+  checks++;
   await page.goto(`${base}/screen.html?id=numbers&panel=none`);
   await page.locator('.numbers-card').first().waitFor();
   assert.equal(await page.locator('h2').filter({hasText:'Chance'}).count(), 0);
@@ -511,50 +518,6 @@ try {
     assert.ok(Math.abs(sizes.protractor.drawn[0] - sizes.protractor.shown[0]) < 1, `${window}: protractor drawn ${sizes.protractor.drawn[0]}px wide, shown ${sizes.protractor.shown[0]}px`);
     checks++;
   }
-  // Deterministic catalog data makes FAB geometry independent of the live API.
-  for (const window of ['phone', 'fold', 'desktop']) {
-    for (const navType of ['gesture', 'buttons']) {
-      for (const direction of ['ltr', 'rtl']) {
-        const geometry = await page.evaluate(async ({window, navType, direction}) => {
-          const api = await import('/src/embed.js');
-          document.documentElement.dir = direction;
-          const target = document.createElement('div');
-          document.body.replaceChildren(target);
-          await api.mount(target, 'apps', {
-            navType,
-            apps: Array.from({length: 24}, (_, i) => ({id: `example.app${i}`, name: `Example ${i}`, summary: 'Fixture', icon: '', category: ''})),
-          }, {frame: false, window});
-          await target.querySelector('md-fab').updateComplete;
-          const measure = () => {
-            const screen = target.querySelector('mnw-android-screen');
-            const root = screen.shadowRoot;
-            const pane = root.querySelector('.frame__card') ?? screen;
-            const fab = screen.querySelector('[slot="fab"] md-fab').getBoundingClientRect();
-            const bounds = pane.getBoundingClientRect();
-            const nav = root.querySelector('.navbar');
-            const system = root.querySelector('.sysnav');
-            return {
-              end: direction === 'rtl' ? fab.left - bounds.left : bounds.right - fab.right,
-              bottom: (nav?.getBoundingClientRect().top ?? system?.getBoundingClientRect().top ?? bounds.bottom) - fab.bottom,
-              inside: fab.left >= bounds.left && fab.right <= bounds.right && fab.top >= bounds.top,
-            };
-          };
-          const before = measure();
-          const scroller = target.querySelector('mnw-android-screen').shadowRoot.querySelector('.content');
-          scroller.scrollTop = 100;
-          return {before, after: measure(), scrollTop: scroller.scrollTop};
-        }, {window, navType, direction});
-        assert.ok(geometry.scrollTop > 0, `${window}/${navType}/${direction}: fixture actually scrolls`);
-        for (const bounds of [geometry.before, geometry.after]) {
-          assert.ok(bounds.inside, `${window}/${navType}/${direction}: FAB inside pane`);
-          assert.ok(Math.abs(bounds.end - 16) < 1, `${window}/${navType}/${direction}: end gap ${bounds.end}`);
-          assert.ok(Math.abs(bounds.bottom - 16) < 1, `${window}/${navType}/${direction}: bottom gap ${bounds.bottom}`);
-        }
-        checks++;
-      }
-    }
-  }
-  await page.evaluate(() => { document.documentElement.dir = 'ltr'; });
   assert.deepEqual(errors, []);
   await page.close();
   console.log(`${checks} marketing UI checks passed`);

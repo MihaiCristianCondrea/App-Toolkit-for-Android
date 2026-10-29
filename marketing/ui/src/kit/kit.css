@@ -1896,3 +1896,23 @@ mnw-android-screen,
 .sos-guidance { display:flex; align-items:center; gap:8px; margin:0; font:400 12px/18px var(--md-ref-typeface-plain); color:var(--md-sys-color-on-surface-variant); }
 .sos-guidance md-icon { --md-icon-size:18px; }
 @media(prefers-reduced-motion:reduce) { .sos-signal[data-active="true"] .sos-signal-mark { animation:none; } }
+
+/* Material Colors: the last Quick Tools section, and its full-height sheet (MaterialColorsToolDialog.kt). */
+.qt-colors { display: flex; flex-direction: column; gap: 12px; padding: 16px 16px 20px; border-radius: 28px; background: var(--md-sys-color-surface-container-high); color: var(--md-sys-color-on-surface); cursor: pointer; transition: background-color .15s ease; }
+.qt-colors:hover { background: var(--md-sys-color-surface-container-highest); }
+.qt-colors:focus-visible { outline: 2px solid var(--md-sys-color-primary); outline-offset: 2px; }
+.qt-colors__strip { display: grid; grid-template-columns: repeat(6, 1fr); gap: 4px; height: 56px; }
+.qt-colors__strip i { border-radius: 8px; }
+.qt-colors__strip i:first-child { border-radius: 28px 8px 8px 28px; }
+.qt-colors__strip i:last-child { border-radius: 8px 28px 28px 8px; }
+.qt-colors__note { padding-left: 4px; font: 500 14px/20px var(--md-ref-typeface-plain); color: var(--md-sys-color-on-surface-variant); }
+.mc-sheet { display: flex; flex-direction: column; gap: 16px; padding: 0 24px 24px; min-height: 0; overflow-y: auto; }
+.mc-sheet__head { display: flex; align-items: center; }
+.mc-sheet__head h3 { flex: 1; margin: 0; font: 400 24px/32px var(--md-ref-typeface-brand); }
+.mc-sheet__text { margin: 0; font: 400 14px/20px var(--md-ref-typeface-plain); color: var(--md-sys-color-on-surface-variant); }
+.mc-table { display: flex; flex-direction: column; gap: 8px; padding: 16px; border-radius: 24px; background: var(--md-sys-color-surface-container-low); box-shadow: 0 1px 2px rgb(0 0 0 / .3), 0 1px 3px 1px rgb(0 0 0 / .15); }
+.mc-table h4 { margin: 0; padding-bottom: 8px; border-bottom: 1px solid var(--md-sys-color-outline-variant); font: 500 16px/24px var(--md-ref-typeface-plain); }
+.mc-table__grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 2px; }
+.mc-swatch { height: 72px; padding: 8px; border-radius: 8px; display: flex; flex-direction: column; gap: 2px; overflow: hidden; }
+.mc-swatch__name { font: 500 12px/16px var(--md-ref-typeface-plain); letter-spacing: .5px; }
+.mc-swatch__hex { font: 500 11px/16px var(--md-ref-typeface-plain); letter-spacing: .5px; }

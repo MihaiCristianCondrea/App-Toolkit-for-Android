@@ -62,6 +62,7 @@ private fun String.categoryVisuals(): CategoryVisuals = when (this) {
     "sound" -> CategoryVisuals(R.string.section_sound, ToolkitTileIcon.Water)
     "system" -> CategoryVisuals(R.string.section_light, ToolkitTileIcon.FlashDimmer)
     "wellbeing" -> CategoryVisuals(R.string.tiles_category_wellbeing, ToolkitTileIcon.Breathing)
+    "colors" -> CategoryVisuals(R.string.tiles_category_colors, ToolkitTileIcon.Palette)
     else -> error("Unknown Toolkit Tiles category: $this")
 }
 
@@ -104,7 +105,7 @@ private fun String.tileVisuals(): TileVisuals = when (this) {
         ToolkitTileIcon.Counter
     )
 
-    "material_colors" -> TileVisuals(
+    ToolkitTileIds.MATERIAL_COLORS -> TileVisuals(
         R.string.tool_material_colors_title,
         R.string.tool_material_colors_summary,
         ToolkitTileIcon.Palette
@@ -136,7 +137,6 @@ private fun String.tileVisuals(): TileVisuals = when (this) {
 
     ToolkitTileIds.UNIT_CONVERTER -> TileVisuals(R.string.tile_converter_title, R.string.tile_converter_summary, ToolkitTileIcon.Converter)
     ToolkitTileIds.RULER -> TileVisuals(R.string.tile_ruler_title, R.string.tile_ruler_summary, ToolkitTileIcon.Ruler)
-    ToolkitTileIds.SCREEN_LIGHT -> TileVisuals(R.string.tile_screen_light_title, R.string.tile_screen_light_summary, ToolkitTileIcon.ScreenLight)
     ToolkitTileIds.PROTRACTOR -> TileVisuals(R.string.tile_protractor_title, R.string.tile_protractor_summary, ToolkitTileIcon.Protractor)
     ToolkitTileIds.BILL_SPLITTER -> TileVisuals(R.string.tile_bill_splitter_title, R.string.tile_bill_splitter_summary, ToolkitTileIcon.BillSplitter)
     ToolkitTileIds.RANDOM_NUMBER -> TileVisuals(R.string.tile_random_number_title, R.string.tile_random_number_summary, ToolkitTileIcon.RandomNumber)

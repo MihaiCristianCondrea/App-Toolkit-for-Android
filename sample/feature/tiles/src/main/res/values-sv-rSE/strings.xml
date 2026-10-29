@@ -45,6 +45,7 @@
     <string name="tiles_category_sensors">Sensorer &amp; Mätning</string>
     <string name="tiles_category_system">System &amp; kontroller</string>
     <string name="tiles_category_utilities">Verktyg &amp; kul</string>
+    <string name="tiles_category_colors">Färger</string>
     <string name="tiles_category_wellbeing">Välbefinnande</string>
     <string name="tiles_chip_expanded_tool">Utökat verktyg</string>
     <string name="tiles_chip_quick_tool">Snabbt verktyg</string>
@@ -138,8 +139,6 @@
     <string name="tile_converter_summary">Omvandla längd, massa, temperatur, volym och data.</string>
     <string name="tile_ruler_title">Linjal</string>
     <string name="tile_ruler_summary">Mät små föremål på skärmen.</string>
-    <string name="tile_screen_light_title">Skärmljus</string>
-    <string name="tile_screen_light_summary">Använd skärmen som ett mjukt ljus.</string>
     <string name="tool_converter_length">Längd</string>
     <string name="tool_converter_mass">Massa</string>
     <string name="tool_converter_temperature">Temperatur</string>
@@ -148,8 +147,6 @@
     <string name="tool_converter_from">Från</string>
     <string name="tool_converter_to">Till</string>
     <string name="tool_converter_invalid">Ange ett giltigt värde.</string>
-    <string name="tool_light_brightness">Ljusstyrka</string>
-    <string name="tool_light_warmth">Värme</string>
     <string name="tool_ruler_calibration">Kalibrering</string>
     <string name="tool_ruler_range">Mätområde</string>
     <string name="tool_ruler_reference">Anpassa linjen nedan till 3 cm på en riktig linjal innan du mäter.</string>
@@ -185,7 +182,6 @@
     <string name="section_convert">Omvandla och dela</string>
     <string name="section_count">Räkning och tid</string>
     <string name="section_chance">Slump</string>
-    <string name="extra_tools">Fler verktyg</string>
     <string name="wheel_title">Beslutshjul</string>
     <string name="wheel_summary">Snurra för att välja ett alternativ</string>
     <string name="wheel_choices">Dina alternativ</string>
@@ -227,4 +223,21 @@
     <string name="tool_compass_northwest">Nordväst</string>
     <string name="tool_compass_magnetic_north">Magnetisk nord</string>
     <string name="tool_compass_heading_description">%1$d° · %2$s · Magnetisk nord</string>
+    <string name="widget_flashlight">Ficklampa</string>
+    <string name="widget_level_tilted">Lutande</string>
+    <string name="widget_flash_level">%1$d av %2$d</string>
+    <string name="widget_flash_swipe">Svep för ljusstyrka</string>
+    <string name="widget_flash_tap">Tryck för inställningar</string>
+    <string name="widget_sos_note">Morse med ficklampan</string>
+    <string name="widget_water_note">30 sekunders högtalarton</string>
+    <string name="widget_breathe_step">%1$s %2$d s</string>
+    <string name="widget_colors_note">Appens palett och Material You-toner</string>
+    <string name="widget_coin_note">Tryck på myntet för att singla</string>
+    <string name="widget_dice_value">Slå en tärning</string>
+    <string name="widget_dice_note">Tryck på tärningen för att slå</string>
+    <string name="widget_ruler_note">Kalibrera efter din skärm</string>
+    <string name="widget_protractor_note">Hitta rätt vinkel</string>
+    <string name="widget_reaction_ready">Redo?</string>
+    <string name="widget_reaction_prompt">Testa dina reflexer</string>
+    <string name="widget_reaction_best">Personbästa</string>
 </resources>

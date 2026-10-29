@@ -2,7 +2,6 @@
 import numbers from "./numbers.js";
 import quickTools from "./quick-tools.js";
 import play from "./play.js";
-import apps from "./apps.js";
 
-export const SCREENS = [quickTools, numbers, play, apps];
+export const SCREENS = [quickTools, numbers, play];
 export const byId = (id) => SCREENS.find((s) => s.id === id);

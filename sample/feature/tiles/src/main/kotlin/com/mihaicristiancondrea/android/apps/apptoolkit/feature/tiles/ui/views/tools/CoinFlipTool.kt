@@ -62,6 +62,7 @@ import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.R
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.models.CoinSide
@@ -116,6 +117,7 @@ fun CoinFlipTool(side: CoinSide, flipRequest: Int, onFlip: () -> Unit, compact: 
     ) {
         Coin(
             rotationY = rotation,
+            diameter = if (compact) 88.dp else 120.dp,
             modifier = Modifier
                 .graphicsLayer {
                     this.scaleX = scale
@@ -158,12 +160,13 @@ fun CoinFlipTool(side: CoinSide, flipRequest: Int, onFlip: () -> Unit, compact: 
 @Composable
 private fun Coin(
     rotationY: Float,
+    diameter: Dp,
     modifier: Modifier = Modifier
 ) {
     val normalizedRotation = (rotationY % 360f + 360f) % 360f
     val isBackVisible = normalizedRotation in 90f..270f
 
-    Box(modifier = modifier.size(120.dp), contentAlignment = Alignment.Center) {
+    Box(modifier = modifier.size(diameter), contentAlignment = Alignment.Center) {
         val rim = MaterialTheme.colorScheme.primary
         Canvas(Modifier.fillMaxSize()) {
             val width = (size.width * abs(cos(Math.toRadians(rotationY.toDouble())).toFloat())).coerceAtLeast(8.dp.toPx())
@@ -176,14 +179,16 @@ private fun Coin(
                 CoinFace(
                     iconRes = R.drawable.ic_coin_tails,
                     color = MaterialTheme.colorScheme.secondaryContainer,
-                    tint = MaterialTheme.colorScheme.onSecondaryContainer
+                    tint = MaterialTheme.colorScheme.onSecondaryContainer,
+                    iconSize = if (diameter < 120.dp) 48.dp else 64.dp,
                 )
             }
         } else {
             CoinFace(
                 iconRes = R.drawable.ic_coin_heads,
                 color = MaterialTheme.colorScheme.primaryContainer,
-                tint = MaterialTheme.colorScheme.onPrimaryContainer
+                tint = MaterialTheme.colorScheme.onPrimaryContainer,
+                iconSize = if (diameter < 120.dp) 48.dp else 64.dp,
             )
         }
     }
@@ -195,18 +200,20 @@ private fun CoinFace(
     @DrawableRes iconRes: Int,
     color: Color,
     tint: Color,
+    iconSize: Dp,
 ) {
     Box(
         modifier = Modifier
             .fillMaxSize()
             .background(color, CircleShape)
-            .border(SizeConstants.ExtraSmallSize, color.copy(alpha = 0.5f), CircleShape),
+            // The kit's rim: 4 dp of the primary colour at 25%.
+            .border(4.dp, MaterialTheme.colorScheme.primary.copy(alpha = 0.25f), CircleShape),
         contentAlignment = Alignment.Center
     ) {
         Icon(
             painter = painterResource(id = iconRes),
             contentDescription = null,
-            modifier = Modifier.size(64.dp),
+            modifier = Modifier.size(iconSize),
             tint = tint
         )
     }

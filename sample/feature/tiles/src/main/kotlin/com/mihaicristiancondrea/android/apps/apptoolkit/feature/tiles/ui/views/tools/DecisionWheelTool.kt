@@ -98,11 +98,12 @@ internal fun DecisionWheelVisual(state: WheelToolUiState, compact: Boolean = fal
         } else rotation.snapTo(state.rotation)
     }
     val colors = MaterialTheme.colorScheme
-    val fills = listOf(colors.primary, colors.primaryContainer, colors.primary.copy(alpha = .24f))
+    // The kit's third fill is color-mix(primary 24%, surface): opaque, so it reads the same on any card.
+    val fills = listOf(colors.primary, colors.primaryContainer, androidx.compose.ui.graphics.lerp(colors.surface, colors.primary, .24f))
     val inks = listOf(colors.onPrimary, colors.onPrimaryContainer, colors.onSurface)
     val measurer = rememberTextMeasurer()
     val textStyle = MaterialTheme.typography.labelSmall
-    Canvas(Modifier.size(if (compact) 128.dp else 248.dp)) {
+    Canvas(Modifier.size(if (compact) 136.dp else 248.dp)) {
         val radius = size.minDimension / 2f - 8.dp.toPx()
         drawCircle(colors.surface, radius + 6.dp.toPx())
         val items = state.choices.take(12)

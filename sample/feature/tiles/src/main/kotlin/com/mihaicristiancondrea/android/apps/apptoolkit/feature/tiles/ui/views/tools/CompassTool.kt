@@ -75,44 +75,15 @@ import kotlin.math.roundToInt
 @Composable
 fun CompassTool(azimuth: Float, compact: Boolean = false) {
     val heading = azimuth.roundToInt().mod(FULL_TURN)
-    val direction = stringResource(DIRECTIONS[((heading + 22) / 45) % DIRECTIONS.size])
-    // The rose turns the short way round: 359° to 1° is a 2° turn, not 358°.
-    var turn by remember { mutableFloatStateOf(azimuth) }
-    LaunchedEffect(azimuth) {
-        turn += ((azimuth - turn) % FULL_TURN + 540f) % FULL_TURN - 180f
-    }
-    val rotation by animateFloatAsState(
-        targetValue = turn,
-        animationSpec = spring(stiffness = Spring.StiffnessLow),
-        label = "compass-rose",
-    )
-
+    val direction = compassDirection(azimuth)
     val accent = ToolkitTileIcon.Compass.iconColors()
-    val north = if (isSystemInDarkTheme()) Color(0xFFFFB88E) else Color(0xFFFF8B26)
-    val colors = RoseColors(
-        face = accent.container.copy(alpha = 0.1f).compositeOver(MaterialTheme.colorScheme.surfaceContainerLowest),
-        tick = MaterialTheme.colorScheme.onSurfaceVariant,
-        majorTick = MaterialTheme.colorScheme.onSurface,
-        north = north,
-        pointerOutline = MaterialTheme.colorScheme.surfaceContainerLowest,
-    )
-    val names = CARDINALS.map { stringResource(it) }
-    val textMeasurer = rememberTextMeasurer()
-    val description = stringResource(R.string.tool_compass_heading_description, heading, direction)
 
     Column(
         modifier = Modifier.fillMaxWidth(),
         verticalArrangement = Arrangement.spacedBy(SizeConstants.MediumSize),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
-        Canvas(
-            modifier = Modifier
-                .size(if (compact) 112.dp else 272.dp)
-                .clip(Cookie8Shape)
-                .semantics { contentDescription = description },
-        ) {
-            drawRose(rotation, names, colors, textMeasurer)
-        }
+        CompassRose(azimuth, Modifier.size(if (compact) 112.dp else 272.dp).clip(Cookie8Shape))
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
             Text(
                 text = stringResource(R.string.tile_service_azimuth_format, heading),
@@ -133,6 +104,50 @@ fun CompassTool(azimuth: Float, compact: Boolean = false) {
     }
 }
 
+/** The compass point the heading is closest to, such as "Northwest". */
+@Composable
+internal fun compassDirection(azimuth: Float): String {
+    val heading = azimuth.roundToInt().mod(FULL_TURN)
+    return stringResource(DIRECTIONS[((heading + 22) / 45) % DIRECTIONS.size])
+}
+
+/**
+ * The turning rose on its own. [face] draws its disc and [degreeLabels] its numbers; the Quick Tools
+ * widget leaves both out, as the marketing kit's `compassRose(..., { labels: false, face: false })` does,
+ * and lets the widget's shape show behind it.
+ */
+@Composable
+internal fun CompassRose(azimuth: Float, modifier: Modifier = Modifier, face: Boolean = true, degreeLabels: Boolean = true) {
+    val heading = azimuth.roundToInt().mod(FULL_TURN)
+    val direction = stringResource(DIRECTIONS[((heading + 22) / 45) % DIRECTIONS.size])
+    // The rose turns the short way round: 359° to 1° is a 2° turn, not 358°.
+    var turn by remember { mutableFloatStateOf(azimuth) }
+    LaunchedEffect(azimuth) {
+        turn += ((azimuth - turn) % FULL_TURN + 540f) % FULL_TURN - 180f
+    }
+    val rotation by animateFloatAsState(
+        targetValue = turn,
+        animationSpec = spring(stiffness = Spring.StiffnessLow),
+        label = "compass-rose",
+    )
+    val accent = ToolkitTileIcon.Compass.iconColors()
+    val north = if (isSystemInDarkTheme()) Color(0xFFFFB88E) else Color(0xFFFF8B26)
+    val colors = RoseColors(
+        face = if (face) accent.container.copy(alpha = 0.1f).compositeOver(MaterialTheme.colorScheme.surfaceContainerLowest) else Color.Transparent,
+        tick = MaterialTheme.colorScheme.onSurfaceVariant,
+        majorTick = MaterialTheme.colorScheme.onSurface,
+        north = north,
+        pointerOutline = MaterialTheme.colorScheme.surfaceContainerLowest,
+    )
+    // Without the degree numbers the rose is small: the cardinals shrink to their initials, as the kit's do.
+    val names = CARDINALS.map { stringResource(it) }.map { if (degreeLabels) it else it.take(1).uppercase() }
+    val textMeasurer = rememberTextMeasurer()
+    val description = stringResource(R.string.tool_compass_heading_description, heading, direction)
+    Canvas(modifier = modifier.semantics { contentDescription = description }) {
+        drawRose(rotation, names, colors, textMeasurer, degreeLabels)
+    }
+}
+
 private class RoseColors(
     val face: Color,
     val tick: Color,
@@ -141,11 +156,11 @@ private class RoseColors(
     val pointerOutline: Color,
 )
 
-private fun DrawScope.drawRose(rotation: Float, names: List<String>, colors: RoseColors, textMeasurer: TextMeasurer) {
+private fun DrawScope.drawRose(rotation: Float, names: List<String>, colors: RoseColors, textMeasurer: TextMeasurer, degreeLabels: Boolean = true) {
     // One unit of the 200-unit square the rose is designed on.
     val u = size.minDimension / 200f
     val top = center.y - 100f * u
-    drawCircle(colors.face, radius = 98f * u)
+    if (colors.face != Color.Transparent) drawCircle(colors.face, radius = 98f * u)
 
     rotate(-rotation) {
         for (step in 0 until FULL_TURN / 5) {
@@ -167,7 +182,7 @@ private fun DrawScope.drawRose(rotation: Float, names: List<String>, colors: Ros
             }
         }
         val numberStyle = TextStyle(color = colors.tick, fontSize = (9f * u).toSp(), fontWeight = FontWeight.Medium)
-        for (degrees in DEGREE_LABELS) {
+        if (degreeLabels) for (degrees in DEGREE_LABELS) {
             rotate(degrees.toFloat()) { drawCentered(textMeasurer, degrees.toString(), numberStyle, top + 19f * u) }
         }
         names.forEachIndexed { index, name ->

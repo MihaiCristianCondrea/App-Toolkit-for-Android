@@ -212,7 +212,7 @@ fun DiceRollTool(
             rotationY = { rotationY.value },
             rotationZ = { rotationZ.value },
             modifier = Modifier
-                .size(if (compact) 112.dp else 150.dp)
+                .size(if (compact) 118.dp else 150.dp)
                 .clickable(enabled = !rolling, onClickLabel = stringResource(R.string.tool_dice_roll_action), onClick = onRoll)
                 .graphicsLayer {
                     scaleX = scale.value
@@ -335,14 +335,14 @@ private fun DrawScope.drawProceduralDiceCube(
                     rotationX = rotationXRadians,
                     rotationY = rotationYRadians,
                     rotationZ = rotationZRadians,
-                ).cameraTilt()
+                )
             }
 
             val rotatedNormal: Vec3 = faceDefinition.normal.rotate(
                 rotationX = rotationXRadians,
                 rotationY = rotationYRadians,
                 rotationZ = rotationZRadians,
-            ).cameraTilt()
+            )
 
             RenderedDiceFace(
                 face = faceDefinition.face,
@@ -366,7 +366,7 @@ private fun DrawScope.drawProceduralDiceCube(
             face.depth
         }
 
-    val edgeWidth: Float = cubeHalfSize * 0.08f
+    val edgeWidth: Float = cubeHalfSize * 0.1f
 
     fillPaint.pathEffect = cornerEffect
     strokePaint.pathEffect = cornerEffect
@@ -465,13 +465,14 @@ private fun DrawScope.drawProjectedPip(
 }
 
 private fun pipCentersFor(value: Int): List<Offset> {
-    val topLeft = Offset(x = 0.29f, y = 0.29f)
-    val topRight = Offset(x = 0.71f, y = 0.29f)
+    // The centres of the kit's 3 x 3 pip grid: 16 px of padding and 5 px gaps on an 86 px face.
+    val topLeft = Offset(x = 0.271f, y = 0.271f)
+    val topRight = Offset(x = 0.729f, y = 0.271f)
     val center = Offset(x = 0.5f, y = 0.5f)
-    val middleLeft = Offset(x = 0.29f, y = 0.5f)
-    val middleRight = Offset(x = 0.71f, y = 0.5f)
-    val bottomLeft = Offset(x = 0.29f, y = 0.71f)
-    val bottomRight = Offset(x = 0.71f, y = 0.71f)
+    val middleLeft = Offset(x = 0.271f, y = 0.5f)
+    val middleRight = Offset(x = 0.729f, y = 0.5f)
+    val bottomLeft = Offset(x = 0.271f, y = 0.729f)
+    val bottomRight = Offset(x = 0.729f, y = 0.729f)
 
     return when (value) {
         1 -> listOf(center)
@@ -739,9 +740,10 @@ private const val RollDurationMillis = 960
 private const val FullRotationDegrees = 360f
 
 private const val CameraDistance = 3.2f
-private const val CubeHalfSizeFraction = 0.34f
-private const val CornerRadiusFraction = 0.18f
-private const val PipRadius = 0.064f
+// The die faces the viewer at rest, its face about 58% of its box: the marketing kit's 86 px die in a 150 px stage.
+private const val CubeHalfSizeFraction = 0.2f
+private const val CornerRadiusFraction = 0.4f
+private const val PipRadius = 0.085f
 private const val PipSegmentCount = 18
 
 private const val FullCircleRadians = PI * 2.0
@@ -760,5 +762,3 @@ private fun DiceRollToolPreview() {
     }
 }
 
-/** A fixed camera tilt keeps the selected face dominant while revealing the solid side faces. */
-private fun Vec3.cameraTilt(): Vec3 = rotate((-15f).toRadians(), 20f.toRadians(), 0.0)

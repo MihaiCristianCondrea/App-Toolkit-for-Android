@@ -44,7 +44,9 @@ import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.models.ToolkitTile
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.mappers.imageVector
 
@@ -63,7 +65,7 @@ internal fun ToolSection(title: String, icon: ImageVector, modifier: Modifier = 
         Row(Modifier.padding(start = 4.dp), verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.spacedBy(8.dp)) {
             Icon(icon, null, tint = MaterialTheme.colorScheme.primary, modifier = Modifier.size(20.dp))
-            Text(title, style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.SemiBold)
+            Text(title, style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold)
         }
         content()
     }
@@ -76,16 +78,27 @@ internal fun toolCorners(index: Int, size: Int, top: Boolean = true, bottom: Boo
     bottomEnd = if (bottom && index == size - 1) 28.dp else 8.dp,
 )
 
+/**
+ * A Measure card (the marketing kit's `.mw-widget`): the tool's name, then its own [content].
+ * [headerAction] sits at the end of the name's row, as the counter's Reset does.
+ */
 @Composable
 internal fun ToolWidget(tile: ToolkitTile, onOpen: () -> Unit, modifier: Modifier = Modifier,
     shape: Shape = RoundedCornerShape(28.dp), color: Color = MaterialTheme.colorScheme.surfaceContainerHigh,
     headerAction: @Composable (() -> Unit)? = null,
+    padding: PaddingValues = PaddingValues(horizontal = 16.dp, vertical = 20.dp),
+    spacing: Dp = 12.dp,
     content: @Composable ColumnScope.() -> Unit,
 ) {
     Surface(onClick = onOpen, modifier = modifier, shape = shape, color = color) {
-        Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
+        Column(Modifier.padding(padding), verticalArrangement = Arrangement.spacedBy(spacing)) {
             Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
-                Text(stringResource(tile.titleResId), modifier = Modifier.weight(1f), style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.SemiBold)
+                Text(
+                    text = stringResource(tile.titleResId),
+                    modifier = Modifier.weight(1f).padding(start = if (headerAction != null) 4.dp else 0.dp),
+                    style = MaterialTheme.typography.titleMedium.copy(lineHeight = 22.sp),
+                    fontWeight = FontWeight.SemiBold,
+                )
                 headerAction?.invoke()
             }
             content()

@@ -22,4 +22,16 @@
         <item quantity="other">instrumente %1$d</item>
     </plurals>
 
+    <plurals name="widget_wheel_choices">
+        <item quantity="one">%d opțiune · Deschide roata</item>
+        <item quantity="few">%d opțiuni · Deschide roata</item>
+        <item quantity="other">%d de opțiuni · Deschide roata</item>
+    </plurals>
+
+    <plurals name="widget_people">
+        <item quantity="one">%d persoană</item>
+        <item quantity="few">%d persoane</item>
+        <item quantity="other">%d de persoane</item>
+    </plurals>
+
 </resources>

@@ -20,4 +20,12 @@
         <item quantity="other">Công cụ %1$d</item>
     </plurals>
 
+    <plurals name="widget_wheel_choices">
+        <item quantity="other">%d lựa chọn · Mở vòng quay</item>
+    </plurals>
+
+    <plurals name="widget_people">
+        <item quantity="other">%d người</item>
+    </plurals>
+
 </resources>

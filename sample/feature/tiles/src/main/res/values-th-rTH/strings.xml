@@ -45,6 +45,7 @@
     <string name="tiles_category_sensors">เซ็นเซอร์และการวัด</string>
     <string name="tiles_category_system">ระบบและการควบคุม</string>
     <string name="tiles_category_utilities">ยูทิลิตี้และความสนุกสนาน</string>
+    <string name="tiles_category_colors">สี</string>
     <string name="tiles_category_wellbeing">ความเป็นอยู่ที่ดี</string>
     <string name="tiles_chip_expanded_tool">เครื่องมือขยาย</string>
     <string name="tiles_chip_quick_tool">เครื่องมือด่วน</string>
@@ -138,8 +139,6 @@
     <string name="tile_converter_summary">แปลงความยาว มวล อุณหภูมิ ปริมาตร และข้อมูล</string>
     <string name="tile_ruler_title">ไม้บรรทัด</string>
     <string name="tile_ruler_summary">วัดวัตถุขนาดเล็กบนหน้าจอ</string>
-    <string name="tile_screen_light_title">ไฟจากหน้าจอ</string>
-    <string name="tile_screen_light_summary">ใช้หน้าจอเป็นแสงไฟนุ่มนวล</string>
     <string name="tool_converter_length">ความยาว</string>
     <string name="tool_converter_mass">มวล</string>
     <string name="tool_converter_temperature">อุณหภูมิ</string>
@@ -148,8 +147,6 @@
     <string name="tool_converter_from">จาก</string>
     <string name="tool_converter_to">เป็น</string>
     <string name="tool_converter_invalid">ป้อนค่าที่ถูกต้อง</string>
-    <string name="tool_light_brightness">ความสว่าง</string>
-    <string name="tool_light_warmth">โทนสีอุ่น</string>
     <string name="tool_ruler_calibration">การปรับเทียบ</string>
     <string name="tool_ruler_range">ช่วงการวัด</string>
     <string name="tool_ruler_reference">ก่อนวัด ให้ปรับเส้นด้านล่างให้เท่ากับ 3 ซม. บนไม้บรรทัดจริง</string>
@@ -185,7 +182,6 @@
     <string name="section_convert">แปลงและแบ่ง</string>
     <string name="section_count">นับและเวลา</string>
     <string name="section_chance">สุ่ม</string>
-    <string name="extra_tools">เครื่องมือเพิ่มเติม</string>
     <string name="wheel_title">วงล้อตัดสินใจ</string>
     <string name="wheel_summary">หมุนเพื่อเลือกตัวเลือก</string>
     <string name="wheel_choices">ตัวเลือกของคุณ</string>
@@ -227,4 +223,21 @@
     <string name="tool_compass_northwest">ตะวันตกเฉียงเหนือ</string>
     <string name="tool_compass_magnetic_north">ทิศเหนือแม่เหล็ก</string>
     <string name="tool_compass_heading_description">%1$d° · %2$s · ทิศเหนือแม่เหล็ก</string>
+    <string name="widget_flashlight">ไฟฉาย</string>
+    <string name="widget_level_tilted">เอียง</string>
+    <string name="widget_flash_level">%1$d จาก %2$d</string>
+    <string name="widget_flash_swipe">ปัดเพื่อปรับความสว่าง</string>
+    <string name="widget_flash_tap">แตะเพื่อตั้งค่า</string>
+    <string name="widget_sos_note">มอร์สด้วยไฟฉาย</string>
+    <string name="widget_water_note">เสียงลำโพง 30 วินาที</string>
+    <string name="widget_breathe_step">%1$s %2$d วิ</string>
+    <string name="widget_colors_note">พาเลตต์แอปและโทนสี Material You</string>
+    <string name="widget_coin_note">แตะเหรียญเพื่อโยน</string>
+    <string name="widget_dice_value">ทอยลูกเต๋า</string>
+    <string name="widget_dice_note">แตะลูกเต๋าเพื่อทอย</string>
+    <string name="widget_ruler_note">ปรับเทียบกับหน้าจอของคุณ</string>
+    <string name="widget_protractor_note">หามุมที่ถูกต้อง</string>
+    <string name="widget_reaction_ready">พร้อมไหม</string>
+    <string name="widget_reaction_prompt">ทดสอบปฏิกิริยาของคุณ</string>
+    <string name="widget_reaction_best">สถิติส่วนตัว</string>
 </resources>

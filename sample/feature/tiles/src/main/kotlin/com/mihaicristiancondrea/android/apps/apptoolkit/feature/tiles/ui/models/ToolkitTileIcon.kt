@@ -18,5 +18,5 @@
 package com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.models
 
 enum class ToolkitTileIcon {
-    Wheel, Water, Protractor, BillSplitter, RandomNumber, Level, Compass, Coin, Dice, Counter, Breathing, Sos, Morse, FlashDimmer, Palette, Timer, Converter, Ruler, ScreenLight,
+    Wheel, Water, Protractor, BillSplitter, RandomNumber, Level, Compass, Coin, Dice, Counter, Breathing, Sos, Morse, FlashDimmer, Palette, Timer, Converter, Ruler,
 }

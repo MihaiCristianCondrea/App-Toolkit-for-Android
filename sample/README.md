@@ -25,6 +25,7 @@ Live previews you can read at a glance, grouped by what they do.
 - **Water Eject**: a short low tone through the speaker after it gets wet. It can help shake droplets out; it does
   not repair water damage.
 - **Breathe**: a short guided breathing pause.
+- **Material Colors**: your app palette and the Material You tones, each colour with its hex code to copy.
 
 ## Measure
 

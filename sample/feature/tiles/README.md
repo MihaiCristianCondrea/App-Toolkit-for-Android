@@ -16,10 +16,11 @@ The native Quick Tools, Measure and Play & Decide workspaces, their tool sheets,
 
 | Destination | Sections and tools |
 | --- | --- |
-| Quick Tools | Sensors: Compass, Bubble Level. Light & signals: Flash Dimmer, combined Morse & SOS. Hardware & sound: Water Eject. Wellbeing: Breathe. |
+| Quick Tools | Sensors: Compass, Bubble Level. Light & signals: Flash Dimmer, combined Morse & SOS. Hardware & sound: Water Eject. Wellbeing: Breathe. Colors, last: Material Colors. |
 | Measure | Length & angle: Surface Ruler, Protractor. Convert & split: Unit Converter, Tip & Bill Splitter. Count & time: Counter, Reaction Test. |
 | Play & Decide | Decision Wheel, Random Number, Coin Flip, Dice Roll. |
-| More tools, in the drawer | Existing Material Colors and Screen Light tools. These remain app-only. |
+
+The widgets follow the marketing kit's (`marketing/ui`): `views/catalog/LiveWidget.kt` draws its live widget (a small uppercase label, the tool's face in its shape on a tint of its accent, a bold value and a note), and the tool accents in `iconColors()` are the kit's `--tk-*` tokens. `RedesignVisualTest` renders the three tabs, light and dark, to `build/outputs/redesign/` for side-by-side review with the kit.
 
 All three primary tabs read their localized search query from `LocalShellSearch`. Empty sections disappear when searching. Quick Tools no longer shows category chips or collapse controls; the old expansion preference is retained for compatibility and is not applied to the new overview.
 

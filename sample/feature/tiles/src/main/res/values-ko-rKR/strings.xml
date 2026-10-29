@@ -45,6 +45,7 @@
     <string name="tiles_category_sensors">센서 및 측정</string>
     <string name="tiles_category_system">시스템 및 제어</string>
     <string name="tiles_category_utilities">유틸리티 및 재미</string>
+    <string name="tiles_category_colors">색상</string>
     <string name="tiles_category_wellbeing">웰빙</string>
     <string name="tiles_chip_expanded_tool">확장된 도구</string>
     <string name="tiles_chip_quick_tool">빠른 도구</string>
@@ -138,8 +139,6 @@
     <string name="tile_converter_summary">길이, 질량, 온도, 부피 및 데이터를 변환하세요.</string>
     <string name="tile_ruler_title">자</string>
     <string name="tile_ruler_summary">화면에서 작은 물체를 측정하세요.</string>
-    <string name="tile_screen_light_title">화면 조명</string>
-    <string name="tile_screen_light_summary">화면을 부드러운 조명으로 사용하세요.</string>
     <string name="tool_converter_length">길이</string>
     <string name="tool_converter_mass">질량</string>
     <string name="tool_converter_temperature">온도</string>
@@ -148,8 +147,6 @@
     <string name="tool_converter_from">변환 전</string>
     <string name="tool_converter_to">변환 후</string>
     <string name="tool_converter_invalid">올바른 값을 입력하세요.</string>
-    <string name="tool_light_brightness">밝기</string>
-    <string name="tool_light_warmth">따뜻함</string>
     <string name="tool_ruler_calibration">보정</string>
     <string name="tool_ruler_range">측정 범위</string>
     <string name="tool_ruler_reference">측정 전에 아래 선을 실제 자의 3 cm에 맞추세요.</string>
@@ -185,7 +182,6 @@
     <string name="section_convert">변환과 나누기</string>
     <string name="section_count">계수와 시간</string>
     <string name="section_chance">무작위</string>
-    <string name="extra_tools">다른 도구</string>
     <string name="wheel_title">결정 룰렛</string>
     <string name="wheel_summary">돌려서 선택하세요</string>
     <string name="wheel_choices">선택 항목</string>
@@ -227,4 +223,21 @@
     <string name="tool_compass_northwest">북서쪽</string>
     <string name="tool_compass_magnetic_north">자북</string>
     <string name="tool_compass_heading_description">%1$d° · %2$s · 자북</string>
+    <string name="widget_flashlight">손전등</string>
+    <string name="widget_level_tilted">기울어짐</string>
+    <string name="widget_flash_level">%1$d/%2$d</string>
+    <string name="widget_flash_swipe">밝기를 바꾸려면 스와이프</string>
+    <string name="widget_flash_tap">설정하려면 탭</string>
+    <string name="widget_sos_note">손전등으로 모스 부호</string>
+    <string name="widget_water_note">30초 스피커 톤</string>
+    <string name="widget_breathe_step">%1$s %2$d초</string>
+    <string name="widget_colors_note">앱 팔레트와 Material You 색조</string>
+    <string name="widget_coin_note">동전을 탭해 던지기</string>
+    <string name="widget_dice_value">주사위 굴리기</string>
+    <string name="widget_dice_note">주사위를 탭해 굴리기</string>
+    <string name="widget_ruler_note">화면에 맞게 보정</string>
+    <string name="widget_protractor_note">정확한 각도 찾기</string>
+    <string name="widget_reaction_ready">준비됐나요?</string>
+    <string name="widget_reaction_prompt">반응 속도 테스트</string>
+    <string name="widget_reaction_best">개인 최고 기록</string>
 </resources>

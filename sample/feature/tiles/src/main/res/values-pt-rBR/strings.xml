@@ -45,6 +45,7 @@
     <string name="tiles_category_sensors">Sensores e Medição</string>
     <string name="tiles_category_system">Sistema e controles</string>
     <string name="tiles_category_utilities">Utilitários e diversão</string>
+    <string name="tiles_category_colors">Cores</string>
     <string name="tiles_category_wellbeing">Bem-estar</string>
     <string name="tiles_chip_expanded_tool">Ferramenta expandida</string>
     <string name="tiles_chip_quick_tool">Ferramenta rápida</string>
@@ -138,8 +139,6 @@
     <string name="tile_converter_summary">Converta comprimentos, massas, temperaturas, volumes e dados.</string>
     <string name="tile_ruler_title">Régua</string>
     <string name="tile_ruler_summary">Meça objetos pequenos na tela.</string>
-    <string name="tile_screen_light_title">Luz da tela</string>
-    <string name="tile_screen_light_summary">Use a tela como uma luz suave.</string>
     <string name="tool_converter_length">Comprimento</string>
     <string name="tool_converter_mass">Massa</string>
     <string name="tool_converter_temperature">Temperatura</string>
@@ -148,8 +147,6 @@
     <string name="tool_converter_from">De</string>
     <string name="tool_converter_to">Para</string>
     <string name="tool_converter_invalid">Insira um valor válido.</string>
-    <string name="tool_light_brightness">Brilho</string>
-    <string name="tool_light_warmth">Calor</string>
     <string name="tool_ruler_calibration">Calibração</string>
     <string name="tool_ruler_range">Intervalo de medição</string>
     <string name="tool_ruler_reference">Antes de medir, ajuste a linha abaixo a 3 cm em uma régua real.</string>
@@ -185,7 +182,6 @@
     <string name="section_convert">Converter e dividir</string>
     <string name="section_count">Contagem e tempo</string>
     <string name="section_chance">Sorte</string>
-    <string name="extra_tools">Mais ferramentas</string>
     <string name="wheel_title">Roleta de decisões</string>
     <string name="wheel_summary">Gire para escolher uma opção</string>
     <string name="wheel_choices">Suas opções</string>
@@ -227,4 +223,21 @@
     <string name="tool_compass_northwest">Noroeste</string>
     <string name="tool_compass_magnetic_north">Norte magnético</string>
     <string name="tool_compass_heading_description">%1$d° · %2$s · Norte magnético</string>
+    <string name="widget_flashlight">Lanterna</string>
+    <string name="widget_level_tilted">Inclinado</string>
+    <string name="widget_flash_level">%1$d de %2$d</string>
+    <string name="widget_flash_swipe">Deslize para o brilho</string>
+    <string name="widget_flash_tap">Toque para configurações</string>
+    <string name="widget_sos_note">Morse com a lanterna</string>
+    <string name="widget_water_note">Tom de alto-falante de 30 segundos</string>
+    <string name="widget_breathe_step">%1$s %2$d s</string>
+    <string name="widget_colors_note">Paleta do app e tons do Material You</string>
+    <string name="widget_coin_note">Toque na moeda para jogar</string>
+    <string name="widget_dice_value">Role um dado</string>
+    <string name="widget_dice_note">Toque no dado para rolar</string>
+    <string name="widget_ruler_note">Calibre para sua tela</string>
+    <string name="widget_protractor_note">Encontre o ângulo certo</string>
+    <string name="widget_reaction_ready">Pronto?</string>
+    <string name="widget_reaction_prompt">Teste seus reflexos</string>
+    <string name="widget_reaction_best">Recorde pessoal</string>
 </resources>

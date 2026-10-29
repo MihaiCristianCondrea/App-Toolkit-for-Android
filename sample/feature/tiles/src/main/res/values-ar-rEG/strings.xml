@@ -45,6 +45,7 @@
     <string name="tiles_category_sensors">أجهزة الاستشعار والقياس</string>
     <string name="tiles_category_system">النظام والضوابط</string>
     <string name="tiles_category_utilities">المرافق والمرح</string>
+    <string name="tiles_category_colors">الألوان</string>
     <string name="tiles_category_wellbeing">الرفاهية</string>
     <string name="tiles_chip_expanded_tool">أداة موسعة</string>
     <string name="tiles_chip_quick_tool">أداة سريعة</string>
@@ -138,8 +139,6 @@
     <string name="tile_converter_summary">حوّل الطول والكتلة والحرارة والحجم والبيانات.</string>
     <string name="tile_ruler_title">مسطرة</string>
     <string name="tile_ruler_summary">قس الأشياء الصغيرة على الشاشة.</string>
-    <string name="tile_screen_light_title">إضاءة الشاشة</string>
-    <string name="tile_screen_light_summary">استخدم الشاشة كضوء ناعم.</string>
     <string name="tool_converter_length">الطول</string>
     <string name="tool_converter_mass">الكتلة</string>
     <string name="tool_converter_temperature">الحرارة</string>
@@ -148,8 +147,6 @@
     <string name="tool_converter_from">من</string>
     <string name="tool_converter_to">إلى</string>
     <string name="tool_converter_invalid">أدخل قيمة صالحة.</string>
-    <string name="tool_light_brightness">السطوع</string>
-    <string name="tool_light_warmth">دفء اللون</string>
     <string name="tool_ruler_calibration">المعايرة</string>
     <string name="tool_ruler_range">نطاق القياس</string>
     <string name="tool_ruler_reference">طابق الخط أدناه مع 3 سم على مسطرة حقيقية قبل القياس.</string>
@@ -185,7 +182,6 @@
     <string name="section_convert">التحويل والتقسيم</string>
     <string name="section_count">العد والوقت</string>
     <string name="section_chance">العشوائية</string>
-    <string name="extra_tools">أدوات أخرى</string>
     <string name="wheel_title">عجلة القرارات</string>
     <string name="wheel_summary">أدر العجلة لاختيار أحد الخيارات</string>
     <string name="wheel_choices">خياراتك</string>
@@ -227,4 +223,21 @@
     <string name="tool_compass_northwest">شمال غرب</string>
     <string name="tool_compass_magnetic_north">الشمال المغناطيسي</string>
     <string name="tool_compass_heading_description">%1$d° · %2$s · الشمال المغناطيسي</string>
+    <string name="widget_flashlight">مصباح يدوي</string>
+    <string name="widget_level_tilted">مائل</string>
+    <string name="widget_flash_level">%1$d من %2$d</string>
+    <string name="widget_flash_swipe">مرّر لضبط السطوع</string>
+    <string name="widget_flash_tap">انقر للإعدادات</string>
+    <string name="widget_sos_note">مورس بالمصباح</string>
+    <string name="widget_water_note">نغمة مكبّر صوت لمدة 30 ثانية</string>
+    <string name="widget_breathe_step">%1$s %2$d ث</string>
+    <string name="widget_colors_note">لوحة ألوان التطبيق ودرجات Material You</string>
+    <string name="widget_coin_note">انقر على العملة لرميها</string>
+    <string name="widget_dice_value">ارمِ النرد</string>
+    <string name="widget_dice_note">انقر على النرد لرميه</string>
+    <string name="widget_ruler_note">عايِر حسب شاشتك</string>
+    <string name="widget_protractor_note">اعثر على الزاوية الصحيحة</string>
+    <string name="widget_reaction_ready">جاهز؟</string>
+    <string name="widget_reaction_prompt">اختبر ردود أفعالك</string>
+    <string name="widget_reaction_best">أفضل نتيجة شخصية</string>
 </resources>

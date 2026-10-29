@@ -8,6 +8,7 @@ The first tab shows live previews you can read at a glance, grouped by what they
 • Morse & SOS: flash the SOS pattern, or type a message and send it in Morse code with the torch.
 • Water Eject: play a short low tone through the speaker after it gets wet. It can help shake droplets out; it does not repair water damage.
 • Breathe: a short guided breathing pause.
+• Material Colors: your app palette and the Material You tones, each colour with its hex code to copy.
 
 Measure
 Count, measure, convert and split, with each tool's latest result on the overview.

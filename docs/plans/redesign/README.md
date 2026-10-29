@@ -102,6 +102,20 @@ The web tools now follow the existing Compose presentations: full-screen Surface
 
 ## Native implementation, October 29, 2026
 
-The owner approved moving the marketing design into Compose. Native Quick Tools, Measure and Play & Decide now follow the approved groups and interactive widgets. App discovery moves to the drawer; More tools retains Screen Light and Material Colors. Tool input and overview/sheet state share dedicated ViewModels, with saved input restoration and foreground cleanup. Full-screen Protractor adapts to orientation; the new wheel and speaker cycle use native rendering and platform audio ownership.
+The owner approved moving the marketing design into Compose. Native Quick Tools, Measure and Play & Decide now follow the approved groups and interactive widgets. Tool input and overview/sheet state share dedicated ViewModels, with saved input restoration and foreground cleanup. Full-screen Protractor adapts to orientation; the new wheel and speaker cycle use native rendering and platform audio ownership.
 
 The historical web-first steps above describe the sequence that produced the design. Native compile, automated regression coverage and visual/device parity are tracked separately; the marketing browser checks do not verify Android behavior. Final device review remains required before uploading the redesigned store listing.
+
+## Owner decisions and widget parity, October 29, 2026
+
+- The apps catalog and the Components showcase are debug pages: the drawer offers them in debug builds, or once the
+  showcase is unlocked from About. The marketing UI no longer draws the apps catalog.
+- Screen Light is removed from the app (the system's brightness and the Flash Dimmer cover it), and with it the
+  More tools drawer page.
+- Material Colors is the last Quick Tools section, in the app and in the marketing UI: a strip of the scheme's
+  accents and containers that opens the palette sheet.
+- The Compose widgets were rebuilt from the kit's computed styles: uppercase labels, faces in each tool's shape on a
+  tint of its accent, bold values and accent notes; the Measure cards' visuals and readouts; the Chance group on the
+  secondary container. The die faces the viewer at rest (the earlier fixed camera tilt skewed it) and the coin uses
+  the kit's sizes and rim.
+

@@ -95,7 +95,8 @@ class BreathingRepository(
         }
     }
 
-    private companion object {
+    // Internal: the Quick Tools Breathe card shows the same rhythm the exercise runs.
+    internal companion object {
         const val DURATION_PREPARING = 1000L
         const val DURATION_INHALE = 4000L
         const val DURATION_HOLD_FULL = 2000L

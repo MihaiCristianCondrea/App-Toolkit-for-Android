@@ -5,6 +5,7 @@ import { chanceBody } from "./chance.js";
 import { html, nothing } from "lit";
 import { shapeMaskStyle, shapeUrl } from "./assets.js";
 import { extraToolBody } from "./tool-bodies.js";
+import { materialColorsSheet } from "./material-colors.js";
 
 /**
  * MaterialShapes polygon badge matching `TileIconBadge` in `TileBadges.kt` and
@@ -104,6 +105,9 @@ export function toolOverlay({ tool, state, onState, onClose, showQuickSettingsAc
   if (!tool) return null;
   if (tool.id === "protractor") {
     return { presentation: "fullscreen", label: tool.title, content: protractorDialog(state, onState, onClose), onDismiss: onClose };
+  }
+  if (tool.id === "material_colors") {
+    return { presentation: "sheet", label: tool.title, handle: true, flush: true, content: materialColorsSheet(onClose), onDismiss: onClose };
   }
   if (tool.id === "ruler") {
     return { presentation: "fullscreen", label: tool.title, content: rulerDialog(state, onState, onClose), onDismiss: onClose };

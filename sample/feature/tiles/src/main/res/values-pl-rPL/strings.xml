@@ -45,6 +45,7 @@
     <string name="tiles_category_sensors">Czujniki i pomiary</string>
     <string name="tiles_category_system">System i sterowanie</string>
     <string name="tiles_category_utilities">Narzędzia i zabawa</string>
+    <string name="tiles_category_colors">Kolory</string>
     <string name="tiles_category_wellbeing">Dobre samopoczucie</string>
     <string name="tiles_chip_expanded_tool">Rozbudowane narzędzie</string>
     <string name="tiles_chip_quick_tool">Szybkie narzędzie</string>
@@ -138,8 +139,6 @@
     <string name="tile_converter_summary">Przeliczaj długość, masę, temperaturę, objętość i dane.</string>
     <string name="tile_ruler_title">Linijka</string>
     <string name="tile_ruler_summary">Mierz małe przedmioty na ekranie.</string>
-    <string name="tile_screen_light_title">Światło ekranu</string>
-    <string name="tile_screen_light_summary">Użyj ekranu jako miękkiego światła.</string>
     <string name="tool_converter_length">Długość</string>
     <string name="tool_converter_mass">Masa</string>
     <string name="tool_converter_temperature">Temperatura</string>
@@ -148,8 +147,6 @@
     <string name="tool_converter_from">Z</string>
     <string name="tool_converter_to">Na</string>
     <string name="tool_converter_invalid">Wpisz prawidłową wartość.</string>
-    <string name="tool_light_brightness">Jasność</string>
-    <string name="tool_light_warmth">Ciepło</string>
     <string name="tool_ruler_calibration">Kalibracja</string>
     <string name="tool_ruler_range">Zakres pomiaru</string>
     <string name="tool_ruler_reference">Przed pomiarem dopasuj linię poniżej do 3 cm na prawdziwej linijce.</string>
@@ -185,7 +182,6 @@
     <string name="section_convert">Przeliczanie i podział</string>
     <string name="section_count">Liczenie i czas</string>
     <string name="section_chance">Losowanie</string>
-    <string name="extra_tools">Więcej narzędzi</string>
     <string name="wheel_title">Koło decyzji</string>
     <string name="wheel_summary">Zakręć, aby wybrać opcję</string>
     <string name="wheel_choices">Twoje opcje</string>
@@ -227,4 +223,21 @@
     <string name="tool_compass_northwest">Północny zachód</string>
     <string name="tool_compass_magnetic_north">Północ magnetyczna</string>
     <string name="tool_compass_heading_description">%1$d° · %2$s · Północ magnetyczna</string>
+    <string name="widget_flashlight">Latarka</string>
+    <string name="widget_level_tilted">Pochylony</string>
+    <string name="widget_flash_level">%1$d z %2$d</string>
+    <string name="widget_flash_swipe">Przesuń, by zmienić jasność</string>
+    <string name="widget_flash_tap">Kliknij, by otworzyć ustawienia</string>
+    <string name="widget_sos_note">Morse latarką</string>
+    <string name="widget_water_note">30-sekundowy ton głośnika</string>
+    <string name="widget_breathe_step">%1$s %2$d s</string>
+    <string name="widget_colors_note">Paleta aplikacji i odcienie Material You</string>
+    <string name="widget_coin_note">Kliknij monetę, by rzucić</string>
+    <string name="widget_dice_value">Rzuć kostką</string>
+    <string name="widget_dice_note">Kliknij kostkę, by rzucić</string>
+    <string name="widget_ruler_note">Skalibruj do ekranu</string>
+    <string name="widget_protractor_note">Znajdź właściwy kąt</string>
+    <string name="widget_reaction_ready">Gotowy?</string>
+    <string name="widget_reaction_prompt">Sprawdź swój refleks</string>
+    <string name="widget_reaction_best">Rekord osobisty</string>
 </resources>
