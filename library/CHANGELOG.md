@@ -13,8 +13,18 @@
   overloads, sliding-window support for large page counts, RTL layout support and custom
   accessibility state descriptions.
 
+- Native ads can be laid out further by the host: `NativeAdSlot(label = ...)` replaces the
+  disclosure text for a placement whose label reads as a section title (it must still say the
+  content is an ad), `NativeAdViewHolder(decorate = ...)` lets a custom `NativeAdViewFactory` paint
+  views the holder does not know about on every repaint, and `NativeAdPalette` carries
+  `surfaceContainerHigh`, `tertiary`, `tertiaryContainer` and `onTertiaryContainer`, with defaults
+  so existing constructors still compile.
+
 ### Changed
 
+- Native ad text uses the app's typeface (Google Sans Flex) at the weight each view needs, through
+  the new `TextView.useAppFont(weight)`, instead of the system font. `headlineBold` now switches
+  between weights 700 and 400 of that typeface.
 - Breaking API replacement: `DotsIndicator` and `IndicatorDot` in `:library:core:ui`
   (`views.carousel`) and `PageIndicatorDots` in `:library:feature:onboarding`
   (`ui.views.controls`) are removed and replaced by `AospPageIndicator` in `:library:core:ui`

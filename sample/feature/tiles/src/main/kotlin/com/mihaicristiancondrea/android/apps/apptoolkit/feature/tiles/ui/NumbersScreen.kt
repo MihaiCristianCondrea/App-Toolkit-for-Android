@@ -318,8 +318,11 @@ private fun MeasureFace(protractor: Boolean, angle: Float = 45f) {
     }
 }
 
-private val WidgetTitleStyle = TextStyle(fontSize = 16.sp, lineHeight = 22.sp, fontWeight = FontWeight.SemiBold)
-private val WidgetDetailStyle = TextStyle(fontSize = 12.sp, lineHeight = 18.sp)
+// Copied from the theme's styles so the widget type stays in the app font.
+private val WidgetTitleStyle: TextStyle
+    @Composable get() = MaterialTheme.typography.titleMedium.copy(fontSize = 16.sp, lineHeight = 22.sp, fontWeight = FontWeight.SemiBold)
+private val WidgetDetailStyle: TextStyle
+    @Composable get() = MaterialTheme.typography.bodySmall.copy(fontSize = 12.sp, lineHeight = 18.sp)
 
 internal val NumbersCalculateTools = MeasureTools.filter { it.id == ToolkitTileIds.UNIT_CONVERTER || it.id == ToolkitTileIds.BILL_SPLITTER }
 internal val NumbersChanceTools = MeasureTools.filter { it.id == ToolkitTileIds.COUNTER || it.id == ToolkitTileIds.REACTION_TEST }

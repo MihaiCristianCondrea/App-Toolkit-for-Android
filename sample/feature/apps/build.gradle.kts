@@ -49,6 +49,6 @@ dependencies {
     debugImplementation(libs.androidx.compose.ui.test.manifest)
     implementation(project(":sample:core:analytics"))
     api(project(":sample:integration:ads"))
-    api(project(":sample:core:datastore"))
+    api(project(":library:core:datastore"))
     api(project(":library:apptoolkit"))
 }

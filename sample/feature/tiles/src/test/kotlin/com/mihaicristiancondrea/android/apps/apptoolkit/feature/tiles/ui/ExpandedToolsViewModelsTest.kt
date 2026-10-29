@@ -20,6 +20,9 @@ package com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.local.preferences.FakeToolkitTilesPreferencesDataSource
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.models.ConversionCategory
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.models.ConversionUnit
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.models.RulerEdge
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.models.RulerSettings
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.models.RulerUnits
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.repositories.RulerRepository
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.repositories.UnitConversionRepository
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.contracts.RulerToolEvent
@@ -82,13 +85,16 @@ class ExpandedToolsViewModelsTest {
     }
 
     @Test
-    fun `ruler view model clamps range and scale, persists calibration, and keeps its draft and units on dismiss`() {
+    fun `ruler view model clamps its reading, range and scale, and saves calibration and set-up`() {
         val preferences = FakeToolkitTilesPreferencesDataSource()
         val repository = RulerRepository(preferences = preferences)
         val viewModel = RulerToolViewModel(
             repository = repository,
             telemetryRepository = FakeTelemetryRepository(),
         )
+
+        viewModel.onEvent(RulerToolEvent.MarkerMoved(position = 1.4f))
+        assertEquals(1f, viewModel.state.value.marker)
 
         viewModel.onEvent(RulerToolEvent.RangeChanged(start = -0.2f, end = 1.5f))
         assertEquals(0f, viewModel.state.value.start)
@@ -98,12 +104,22 @@ class ExpandedToolsViewModelsTest {
         viewModel.onEvent(RulerToolEvent.SaveScale)
         assertEquals(1.25f, preferences.rulerScale.value)
 
-        viewModel.onEvent(RulerToolEvent.ScaleChanged(scale = 1.8f))
-        viewModel.onEvent(RulerToolEvent.ToggleUnits)
-        assertTrue(viewModel.state.value.inches)
+        viewModel.onEvent(RulerToolEvent.AdvancedChanged(advanced = true))
+        viewModel.onEvent(RulerToolEvent.UnitsSelected(RulerUnits.Imperial))
+        viewModel.onEvent(RulerToolEvent.EdgeSelected(RulerEdge.End))
+        viewModel.onEvent(RulerToolEvent.CountFromEndChanged(countFromEnd = true))
+        viewModel.onEvent(RulerToolEvent.InchDivisionsSelected(divisions = 32))
+        viewModel.onEvent(RulerToolEvent.InchDivisionsSelected(divisions = 12))
+        val expected = RulerSettings(RulerUnits.Imperial, RulerEdge.End, countFromEnd = true, inchDivisions = 32, advanced = true)
+        assertEquals(expected, viewModel.state.value.settings)
+        assertEquals(expected, preferences.rulerSettings.value)
 
+        viewModel.onEvent(RulerToolEvent.ScaleChanged(scale = 1.8f))
         viewModel.onEvent(RulerToolEvent.Dismiss)
         assertEquals(1.8f, viewModel.state.value.scale)
-        assertTrue(viewModel.state.value.inches)
+
+        viewModel.onEvent(RulerToolEvent.ResetScale)
+        assertEquals(1f, viewModel.state.value.scale)
+        assertEquals(1f, preferences.rulerScale.value)
     }
 }

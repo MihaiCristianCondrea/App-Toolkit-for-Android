@@ -17,24 +17,12 @@
 
 package com.mihaicristiancondrea.android.apps.apptoolkit.feature.settings.di
 
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.settings.data.repositories.ShowcaseUnlockRepository
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.settings.ui.AboutSettingsViewModel
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.settings.ui.providers.AppSettingsProvider
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.settings.ui.providers.SettingsProvider
 import org.koin.core.module.Module
-import org.koin.core.module.dsl.viewModel
 import org.koin.dsl.module
 
-/**
- * Binds the sample's root settings provider and the About gesture's showcase unlock.
- */
+/** Binds the sample's root settings provider. */
 val settingsModule: Module = module {
-    viewModel { AboutSettingsViewModel(repository = get(), telemetryRepository = get()) }
     single<SettingsProvider> { AppSettingsProvider(context = get()) }
-    single {
-        ShowcaseUnlockRepository(
-            dataStore = get(),
-            diagnostics = get(),
-        )
-    }
 }

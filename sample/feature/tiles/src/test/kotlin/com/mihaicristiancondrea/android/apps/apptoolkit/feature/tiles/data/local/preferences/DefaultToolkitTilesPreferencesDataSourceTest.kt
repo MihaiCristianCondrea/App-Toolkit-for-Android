@@ -18,6 +18,9 @@
 package com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.local.preferences
 
 import androidx.datastore.preferences.core.PreferenceDataStoreFactory
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.models.RulerEdge
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.models.RulerSettings
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.models.RulerUnits
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Test
@@ -27,6 +30,28 @@ import kotlin.test.assertEquals
 import kotlin.test.assertNull
 
 class DefaultToolkitTilesPreferencesDataSourceTest {
+
+    @Test
+    fun `ruler settings start at the defaults and keep every choice`(@TempDir directory: Path) = runTest {
+        val dataStore = PreferenceDataStoreFactory.create(
+            scope = backgroundScope,
+            produceFile = { directory.resolve("ruler.preferences_pb").toFile() },
+        )
+        val source = DefaultToolkitTilesPreferencesDataSource(dataStore)
+
+        assertEquals(RulerSettings(), source.rulerSettings.first())
+
+        val chosen = RulerSettings(
+            units = RulerUnits.Imperial,
+            edge = RulerEdge.End,
+            countFromEnd = true,
+            inchDivisions = 32,
+            advanced = true,
+        )
+        source.saveRulerSettings(chosen)
+
+        assertEquals(chosen, source.rulerSettings.first())
+    }
 
     @Test
     fun `stored expansion distinguishes no preference from all collapsed`(

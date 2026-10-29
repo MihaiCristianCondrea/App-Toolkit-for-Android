@@ -24,6 +24,7 @@ import android.graphics.drawable.shapes.PathShape
 import android.graphics.Outline
 import android.graphics.Path
 import android.graphics.Typeface
+import android.os.Build
 import android.text.TextUtils
 import android.util.TypedValue
 import android.view.Gravity
@@ -33,7 +34,9 @@ import android.view.ViewOutlineProvider
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.core.content.res.ResourcesCompat
 import com.google.android.libraries.ads.mobile.sdk.nativead.NativeAdView
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.R as DesignSystemR
 
 const val ICON_CORNER_RADIUS_DP: Int = 12
 
@@ -115,6 +118,7 @@ fun verticalContent(context: Context, padding: Int): LinearLayout = LinearLayout
     }
 
 fun sponsoredLabelView(context: Context): TextView = TextView(context).apply {
+    useAppFont(weight = FONT_WEIGHT_MEDIUM)
     setTextSize(TypedValue.COMPLEX_UNIT_SP, LABEL_TEXT_SIZE_SP)
     isAllCaps = true
     setPadding(
@@ -137,7 +141,7 @@ fun sponsoredLabelView(context: Context): TextView = TextView(context).apply {
  */
 fun headlineView(context: Context, maxLines: Int): TextView = TextView(context).apply {
     setTextSize(TypedValue.COMPLEX_UNIT_SP, HEADLINE_TEXT_SIZE_SP)
-    setTypeface(typeface, Typeface.BOLD)
+    useAppFont(weight = FONT_WEIGHT_BOLD)
     this.maxLines = maxLines
     ellipsize = TextUtils.TruncateAt.END
     layoutParams = LinearLayout.LayoutParams(
@@ -147,6 +151,7 @@ fun headlineView(context: Context, maxLines: Int): TextView = TextView(context).
 }
 
 fun bodyView(context: Context, maxLines: Int): TextView = TextView(context).apply {
+    useAppFont()
     setTextSize(TypedValue.COMPLEX_UNIT_SP, BODY_TEXT_SIZE_SP)
     this.maxLines = maxLines
     ellipsize = TextUtils.TruncateAt.END
@@ -157,6 +162,7 @@ fun bodyView(context: Context, maxLines: Int): TextView = TextView(context).appl
 }
 
 fun advertiserView(context: Context): TextView = TextView(context).apply {
+    useAppFont()
     setTextSize(TypedValue.COMPLEX_UNIT_SP, ADVERTISER_TEXT_SIZE_SP)
     maxLines = 1
     ellipsize = TextUtils.TruncateAt.END
@@ -174,6 +180,7 @@ fun advertiserView(context: Context): TextView = TextView(context).apply {
  * presentation that puts it on a row with an icon or an advertiser line.
  */
 fun callToActionView(context: Context): TextView = TextView(context).apply {
+    useAppFont(weight = FONT_WEIGHT_MEDIUM)
     setTextSize(TypedValue.COMPLEX_UNIT_SP, CTA_TEXT_SIZE_SP)
     maxLines = 1
     gravity = Gravity.CENTER
@@ -217,6 +224,32 @@ fun iconFrameView(
         }
     )
 }
+
+const val FONT_WEIGHT_REGULAR: Int = 400
+
+const val FONT_WEIGHT_MEDIUM: Int = 500
+
+const val FONT_WEIGHT_SEMI_BOLD: Int = 600
+
+const val FONT_WEIGHT_BOLD: Int = 700
+
+/**
+ * Sets the app's typeface (Google Sans Flex) at [weight], so an ad's text matches the Compose text
+ * around it instead of falling back to the system font.
+ *
+ * Before API 28 a variable font cannot be asked for a weight, so 600 and above fall back to bold.
+ */
+fun TextView.useAppFont(weight: Int = FONT_WEIGHT_REGULAR) {
+    val base: Typeface = context.appTypeface() ?: Typeface.DEFAULT
+    typeface = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+        Typeface.create(base, weight, false)
+    } else {
+        Typeface.create(base, if (weight >= FONT_WEIGHT_SEMI_BOLD) Typeface.BOLD else Typeface.NORMAL)
+    }
+}
+
+private fun Context.appTypeface(): Typeface? =
+    runCatching { ResourcesCompat.getFont(this, DesignSystemR.font.google_sans_flex_variable) }.getOrNull()
 
 fun <T : View> T.withTopMargin(margin: Int): T = apply {
     (layoutParams as? LinearLayout.LayoutParams)?.topMargin = margin

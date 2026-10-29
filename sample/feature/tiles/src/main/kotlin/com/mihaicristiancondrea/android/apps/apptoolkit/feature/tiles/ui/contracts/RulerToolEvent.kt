@@ -14,13 +14,21 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
-
 package com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.contracts
 
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.models.RulerEdge
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.models.RulerUnits
+
 sealed interface RulerToolEvent {
+    data class MarkerMoved(val position: Float) : RulerToolEvent
     data class RangeChanged(val start: Float, val end: Float) : RulerToolEvent
     data class ScaleChanged(val scale: Float) : RulerToolEvent
     data object SaveScale : RulerToolEvent
-    data object ToggleUnits : RulerToolEvent
+    data object ResetScale : RulerToolEvent
+    data class AdvancedChanged(val advanced: Boolean) : RulerToolEvent
+    data class UnitsSelected(val units: RulerUnits) : RulerToolEvent
+    data class EdgeSelected(val edge: RulerEdge) : RulerToolEvent
+    data class CountFromEndChanged(val countFromEnd: Boolean) : RulerToolEvent
+    data class InchDivisionsSelected(val divisions: Int) : RulerToolEvent
     data object Dismiss : RulerToolEvent
 }

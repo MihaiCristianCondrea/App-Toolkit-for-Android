@@ -18,12 +18,21 @@
 package com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.repositories
 
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.local.preferences.ToolkitTilesPreferencesDataSource
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.models.RulerSettings
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.local.storageCall
+import kotlinx.coroutines.flow.Flow
 
+/** The ruler's calibration and set-up, kept across launches. */
 class RulerRepository(private val preferences: ToolkitTilesPreferencesDataSource) {
-    val scale = preferences.rulerScale
+    val scale: Flow<Float> = preferences.rulerScale
+
+    val settings: Flow<RulerSettings> = preferences.rulerSettings
 
     suspend fun saveScale(scale: Float) {
         storageCall { preferences.saveRulerScale(scale) }
+    }
+
+    suspend fun saveSettings(settings: RulerSettings) {
+        storageCall { preferences.saveRulerSettings(settings) }
     }
 }

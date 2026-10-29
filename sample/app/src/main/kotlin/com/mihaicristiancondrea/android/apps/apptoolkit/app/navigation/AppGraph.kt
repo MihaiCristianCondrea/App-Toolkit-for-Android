@@ -32,7 +32,6 @@ import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.ui.AppsList
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.components.R as ComponentsR
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.components.ui.ArticleDemoScreen
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.components.ui.ComponentsScreen
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.settings.ui.AboutSettingsScreen
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.R as TilesR
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.PlayScreen
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.NumbersScreen
@@ -45,6 +44,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.ico
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.icons.ToolkitIconReplayMode
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.ads.AdsConfig
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.ads.BottomAppBarNativeAdBanner
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.ui.AboutScreen
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.ui.navigation.aboutPages
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.ShellGraph
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.TabSearch
@@ -122,7 +122,7 @@ fun appGraph(
             ArticleDemoScreen(branded = key.branded)
         }
     }
-    aboutPages { AboutSettingsScreen() }
+    aboutPages { AboutScreen() }
     banner {
         val config: AdsConfig = koinInject(qualifier = named(AdsQualifiers.BOTTOM_NAV_BAR_NATIVE_AD))
         BottomAppBarNativeAdBanner(

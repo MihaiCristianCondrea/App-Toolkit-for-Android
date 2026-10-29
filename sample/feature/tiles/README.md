@@ -29,7 +29,7 @@ The overview and sheet use the same entry-owned tool ViewModels. Currency, tip s
 ## State and lifecycle
 
 - Counter remains DataStore-backed and shared with its Quick Settings service. Accepted writes survive the caller disappearing; storage failures are reported.
-- Bill, converter, random-range, ruler draft/units/range, protractor, Morse input, dice/coin outcomes and wheel choices use `SavedStateHandle`. Dismissing a sheet retains inputs and results. A new process never resumes audio or flashing automatically.
+- Bill, converter, random-range, ruler draft calibration/reading/range, protractor, Morse input, dice/coin outcomes and wheel choices use `SavedStateHandle`. Dismissing a sheet retains inputs and results. A new process never resumes audio or flashing automatically.
 - Compass and level overview instances have distinct keys from sheet instances. Each starts sampling only while its lifecycle is started and stops on stop or disposal. The sheet retains its existing foreground sensor handling.
 - Torch strength writes cancel superseded UI requests. Leaving the foreground or disposing the tool stops its in-app torch work. Morse and SOS share the existing serialized playback owner, so replacement waits for the previous final torch-off command.
 - Water Eject starts only from an explicit action. It requests transient audio focus and plays a finite 30-second 165 Hz cycle at a conservative track gain. Stop, focus loss, dismissal, backgrounding and ViewModel cancellation release playback and audio focus. It never changes system volume or requests a foreground service, microphone access or a wake lock. The UI does not promise waterproofing or repair.
@@ -42,11 +42,11 @@ Bill splitting uses decimal arithmetic and rounds each share up to cover the tot
 
 Unit Converter retains bidirectional conversion and physical validation. Swap exchanges units and values while keeping the active quantity. Native menus and focus behavior replace the web controls.
 
-Surface Ruler and Protractor use full-screen native dialogs. Ruler uses the device vertical DPI and persisted calibration, with room reserved for the reference line at maximum scale so calibration controls do not move. Protractor places its baseline on the left in portrait and on the bottom with a right control dock in wide windows. Its touch mapping shares geometry with drawing and retains an accessible slider and angle presets.
+Surface Ruler and Protractor use full-screen native dialogs. The ruler covers the whole display, cutout included, with the system bars hidden, so its scales start at the physical edge. Its scales run down the long side: in portrait with the vertical DPI, in landscape with the horizontal DPI, times the persisted calibration. Simple shows the scales and a reading dragged from zero; advanced adds the measurement range and the settings in `RulerSettings` (units, edge, zero end, inch steps), which `RulerRepository` saves as they change. Calibration keeps room for its reference line at maximum scale so its controls do not move. Protractor places its baseline on the left in portrait and on the bottom with a right control dock in wide windows. Its touch mapping shares geometry with drawing and retains an accessible slider and angle presets.
 
 ## Ads and Quick Settings
 
-The existing Quick Tools native placement follows Sensors and is suppressed during search. Tool sheets and the other redesigned overviews do not add ad placements. Native ad rendering and ownership remain in core UI.
+The existing Quick Tools native placement follows Sensors and is suppressed during search. `QuickToolsNativeAdViewFactory` lays it out as the marketing kit's `.qt-ad`: the disclosure label drawn as a "Sponsored content" section title inside the `NativeAdView`, then a card with the icon in a nine-sided cookie and a full-width tonal action. Tool sheets and the other redesigned overviews do not add ad placements. Native ad rendering and ownership remain in core UI.
 
 Quick Settings service names, request keys and the released application ID remain unchanged. Android 13+ uses the existing system add-tile request. Older releases retain manual setup instructions. The catalogue still hides torch tools on devices without a torch. No new manifest permission is introduced by this redesign.
 

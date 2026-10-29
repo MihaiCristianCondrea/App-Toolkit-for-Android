@@ -81,7 +81,6 @@ internal fun HiddenAdPreloaders(
         adItems.forEach { item ->
             QuickToolsNativeAdCard(
                 adUnitId = item.adUnitId,
-                position = GroupedItemPosition.MIDDLE,
                 onStatusChanged = { isLoaded ->
                     onEvent(ToolkitTilesEvent.AdStatusChanged(item.id, isLoaded))
                 },

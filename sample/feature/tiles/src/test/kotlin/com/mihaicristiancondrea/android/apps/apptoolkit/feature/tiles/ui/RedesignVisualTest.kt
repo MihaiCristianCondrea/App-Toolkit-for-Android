@@ -23,6 +23,9 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
+import androidx.compose.material3.toShape
+import androidx.compose.foundation.layout.padding
+import androidx.compose.ui.unit.dp
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.graphics.asAndroidBitmap
 import androidx.compose.ui.test.captureToImage
@@ -119,4 +122,57 @@ class RedesignVisualTest {
         compose.waitForIdle()
         capture(if (dark) "quick-tools-phone-dark" else "quick-tools-phone")
     }
+    @Test
+    @Config(sdk = [36], qualifiers = "w430dp-h500dp")
+    @OptIn(androidx.compose.material3.ExperimentalMaterial3ExpressiveApi::class)
+    fun quickToolsAd() {
+        compose.setContent { MaterialTheme(typography = com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.style.typography.AppTypography) { Surface {
+            val palette = com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.ads.nativeAdPalette()
+            val style = com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.ads.NativeAdStyle(
+                badgeShape = com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.ads.rememberNativeAdBadgeShape(androidx.compose.material3.MaterialShapes.Cookie9Sided.toShape(), 88.dp),
+                badgeColor = MaterialTheme.colorScheme.tertiaryContainer,
+                iconInsetDp = 16,
+            )
+            androidx.compose.foundation.layout.Column(androidx.compose.ui.Modifier.padding(16.dp)) {
+                androidx.compose.ui.viewinterop.AndroidView(factory = { context ->
+                    com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.ads.QuickToolsNativeAdViewFactory()
+                        .createViewHolder(context, com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.ads.NativeAdPresentation.Compact).apply {
+                            label.text = "Sponsored content"; headline.text = "Advertiser app name"
+                            body?.text = "One short line from the advertiser about what the app does."
+                            advertiser.text = "Advertiser"; callToAction?.text = "Install"
+                            icon?.setImageDrawable(android.graphics.drawable.ColorDrawable(0xFF3366CC.toInt()))
+                        }.root
+                }, update = { view -> (view.tag as com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.ads.NativeAdViewHolder).applyPalette(palette, style) })
+            }
+        } } }
+        compose.waitForIdle()
+        capture("quick-tools-ad")
+    }
+    @Test
+    @Config(sdk = [36], qualifiers = "w430dp-h400dp")
+    fun coinTurns() {
+        compose.setContent { MaterialTheme { Surface {
+            androidx.compose.foundation.layout.FlowRow(androidx.compose.ui.Modifier.padding(16.dp), horizontalArrangement = androidx.compose.foundation.layout.Arrangement.spacedBy(12.dp), verticalArrangement = androidx.compose.foundation.layout.Arrangement.spacedBy(12.dp)) {
+                for (angle in listOf(0f, 35f, 65f, 88f, 120f, 180f)) com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.tools.Coin(angle, 120.dp)
+            }
+        } } }
+        compose.waitForIdle()
+        capture("coin-turns")
+    }
+    private fun ruler(name: String, state: com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.states.RulerToolUiState) {
+        compose.setContent { MaterialTheme(typography = com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.style.typography.AppTypography) {
+            com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.tools.RulerTool(state, {})
+        } }
+        compose.waitForIdle()
+        val output = File("build/outputs/redesign/"+name+".png")
+        output.parentFile?.mkdirs()
+        output.outputStream().use { compose.onNode(isDialog()).captureToImage().asAndroidBitmap().compress(Bitmap.CompressFormat.PNG,100,it) }
+    }
+    @Test fun rulerSimple() = ruler("ruler-simple", com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.states.RulerToolUiState(marker = .3f))
+    @Test fun rulerAdvanced() = ruler("ruler-advanced", com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.states.RulerToolUiState(
+        settings = com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.models.RulerSettings(advanced = true, inchDivisions = 8), start = .1f, end = .4f))
+    @Test
+    @Config(sdk = [36], qualifiers = "w957dp-h430dp")
+    fun rulerLandscape() = ruler("ruler-landscape", com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.states.RulerToolUiState(
+        settings = com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.models.RulerSettings(countFromEnd = true), marker = .4f))
 }

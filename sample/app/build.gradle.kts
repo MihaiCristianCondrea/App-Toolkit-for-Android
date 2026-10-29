@@ -209,7 +209,6 @@ dependencies {
     baselineProfile(project(":sample:baselineprofile"))
     testImplementation(project(":library:core:testing"))
     implementation(project(":sample:core:analytics"))
-    implementation(project(":sample:core:datastore"))
     implementation(project(":sample:integration:ads"))
     implementation(project(":sample:feature:apps"))
     implementation(project(":sample:feature:components"))

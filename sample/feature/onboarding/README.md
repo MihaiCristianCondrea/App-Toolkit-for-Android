@@ -18,7 +18,7 @@ completion logic to the App Toolkit's onboarding infrastructure.
 
 ## Depends on
 
-- `:sample:core:datastore`.
+- `:library:core:datastore`.
 - [`:library:apptoolkit`](../../../library/apptoolkit/README.md) for the core onboarding UI and
   logic.
 

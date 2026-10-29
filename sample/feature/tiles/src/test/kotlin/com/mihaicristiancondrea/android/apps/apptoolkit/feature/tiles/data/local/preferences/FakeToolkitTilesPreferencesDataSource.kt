@@ -17,6 +17,7 @@
 
 package com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.local.preferences
 
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.models.RulerSettings
 import kotlinx.coroutines.flow.MutableStateFlow
 
 internal class FakeToolkitTilesPreferencesDataSource(
@@ -43,6 +44,12 @@ internal class FakeToolkitTilesPreferencesDataSource(
 
     override suspend fun saveRulerScale(scale: Float) {
         rulerScale.value = scale
+    }
+
+    override val rulerSettings = MutableStateFlow(RulerSettings())
+
+    override suspend fun saveRulerSettings(settings: RulerSettings) {
+        rulerSettings.value = settings
     }
 
     override suspend fun resetCounter() {

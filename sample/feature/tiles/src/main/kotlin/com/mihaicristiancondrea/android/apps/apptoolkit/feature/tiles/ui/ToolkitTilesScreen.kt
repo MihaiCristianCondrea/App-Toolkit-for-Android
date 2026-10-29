@@ -81,7 +81,7 @@ import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.utils.s
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.MaterialColorsToolDialog
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.ToolkitToolBottomSheet
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.ads.QuickToolsNativeAdCard
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.ads.ToolkitTilesNativeAdViewFactory
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.ads.QuickToolsNativeAdViewFactory
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.catalog.EmptyFilterCard
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.catalog.HiddenAdPreloaders
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.catalog.HowToAddTilesCard
@@ -167,7 +167,7 @@ fun ToolkitTilesScreen() {
 
     ScreenHost(screen = TilesScreen, status = state.categories) {
         CompositionLocalProvider(
-            LocalNativeAdViewFactory provides remember { ToolkitTilesNativeAdViewFactory() }
+            LocalNativeAdViewFactory provides remember { QuickToolsNativeAdViewFactory() }
         ) {
             ToolkitTilesScreenContent(
                 state = state,
@@ -249,7 +249,6 @@ private fun ToolkitTilesCatalog(
                 }
                 if (index == 0 && showAds && searchQuery.isBlank() && ad.id in state.loadedAdIds) {
                     QuickToolsNativeAdCard(adUnitId = ad.adUnitId,
-                        position = com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.GroupedItemPosition.SINGLE,
                         initiallyLoaded = true,
                         onStatusChanged = { onEvent(ToolkitTilesEvent.AdStatusChanged(ad.id, it)) })
                 }

@@ -150,9 +150,10 @@ internal fun LiveWidget(
     }
 }
 
-private val WidgetLabelStyle = TextStyle(
-    fontSize = 12.sp,
-    lineHeight = 16.sp,
-    fontWeight = FontWeight.SemiBold,
-    letterSpacing = 0.5.sp,
-)
+private val WidgetLabelStyle: TextStyle
+    @Composable get() = MaterialTheme.typography.labelMedium.copy(
+        fontSize = 12.sp,
+        lineHeight = 16.sp,
+        fontWeight = FontWeight.SemiBold,
+        letterSpacing = 0.5.sp,
+    )

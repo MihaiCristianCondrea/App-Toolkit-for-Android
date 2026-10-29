@@ -142,9 +142,10 @@ internal fun CompassRose(azimuth: Float, modifier: Modifier = Modifier, face: Bo
     // Without the degree numbers the rose is small: the cardinals shrink to their initials, as the kit's do.
     val names = CARDINALS.map { stringResource(it) }.map { if (degreeLabels) it else it.take(1).uppercase() }
     val textMeasurer = rememberTextMeasurer()
+    val appFont = MaterialTheme.typography.labelSmall
     val description = stringResource(R.string.tool_compass_heading_description, heading, direction)
     Canvas(modifier = modifier.semantics { contentDescription = description }) {
-        drawRose(rotation, names, colors, textMeasurer, degreeLabels)
+        drawRose(rotation, names, colors, textMeasurer, appFont, degreeLabels)
     }
 }
 
@@ -156,7 +157,7 @@ private class RoseColors(
     val pointerOutline: Color,
 )
 
-private fun DrawScope.drawRose(rotation: Float, names: List<String>, colors: RoseColors, textMeasurer: TextMeasurer, degreeLabels: Boolean = true) {
+private fun DrawScope.drawRose(rotation: Float, names: List<String>, colors: RoseColors, textMeasurer: TextMeasurer, appFont: TextStyle, degreeLabels: Boolean = true) {
     // One unit of the 200-unit square the rose is designed on.
     val u = size.minDimension / 200f
     val top = center.y - 100f * u
@@ -181,12 +182,12 @@ private fun DrawScope.drawRose(rotation: Float, names: List<String>, colors: Ros
                 )
             }
         }
-        val numberStyle = TextStyle(color = colors.tick, fontSize = (9f * u).toSp(), fontWeight = FontWeight.Medium)
+        val numberStyle = appFont.copy(color = colors.tick, fontSize = (9f * u).toSp(), fontWeight = FontWeight.Medium)
         if (degreeLabels) for (degrees in DEGREE_LABELS) {
             rotate(degrees.toFloat()) { drawCentered(textMeasurer, degrees.toString(), numberStyle, top + 19f * u) }
         }
         names.forEachIndexed { index, name ->
-            val style = TextStyle(
+            val style = appFont.copy(
                 color = if (index == 0) colors.north else colors.majorTick,
                 fontSize = (11f * u).toSp(),
                 fontWeight = FontWeight.Bold,

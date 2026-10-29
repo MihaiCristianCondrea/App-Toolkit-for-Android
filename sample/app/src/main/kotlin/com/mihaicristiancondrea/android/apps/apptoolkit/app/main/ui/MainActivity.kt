@@ -38,7 +38,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.mihaicristiancondrea.android.apps.apptoolkit.BuildConfig
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.main.ui.contracts.MainEvent
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.navigation.appGraph
@@ -46,7 +45,6 @@ import com.mihaicristiancondrea.android.apps.apptoolkit.app.navigation.startKeyF
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.OnboardingRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.repositories.DisplayPreferencesRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.utils.extensions.startupValueFlow
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.components.data.repositories.ComponentsShowcaseRepository
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.navigation.AppDefaults
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.navigation.ToolkitTilesRoute
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.style.AppTheme
@@ -68,7 +66,6 @@ class MainActivity : AppCompatActivity() {
 
     private val onboardingRepository: OnboardingRepository by inject()
     private val displayPreferences: DisplayPreferencesRepository by inject()
-    private val componentsShowcaseRepository: ComponentsShowcaseRepository by inject()
     private val viewModel: MainViewModel by viewModel()
     private var updateResultLauncher: ActivityResultLauncher<IntentSenderRequest> =
         registerForActivityResult(contract = ActivityResultContracts.StartIntentSenderForResult()) {}
@@ -93,12 +90,9 @@ class MainActivity : AppCompatActivity() {
             ProvideTelemetry {
                 AppTheme {
                     var showChangelog by rememberSaveable { mutableStateOf(false) }
-                    val isShowcaseUnlocked by componentsShowcaseRepository.isUnlocked
-                        .collectAsStateWithLifecycle(initialValue = false)
-                    val showDebugPages = BuildConfig.DEBUG || isShowcaseUnlocked
-                    val graph = remember(showDebugPages) {
+                    val graph = remember {
                         appGraph(
-                            showDebugPages = showDebugPages,
+                            showDebugPages = BuildConfig.DEBUG,
                             onShowChangelog = { showChangelog = true },
                         )
                     }

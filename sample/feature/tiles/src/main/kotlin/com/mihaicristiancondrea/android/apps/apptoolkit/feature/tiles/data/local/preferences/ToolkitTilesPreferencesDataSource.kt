@@ -17,6 +17,7 @@
 
 package com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.local.preferences
 
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.models.RulerSettings
 import kotlinx.coroutines.flow.Flow
 
 /** Local source for the user's Toolkit Tiles catalogue presentation preferences. */
@@ -40,6 +41,10 @@ interface ToolkitTilesPreferencesDataSource {
     /** Physical ruler correction, applied to the display-reported pixels per millimetre. */
     val rulerScale: Flow<Float>
     suspend fun saveRulerScale(scale: Float)
+
+    /** How the ruler is set up; the defaults until the user changes something. */
+    val rulerSettings: Flow<RulerSettings>
+    suspend fun saveRulerSettings(settings: RulerSettings)
 
     suspend fun resetCounter()
 }

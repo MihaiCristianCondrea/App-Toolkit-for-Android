@@ -22,7 +22,18 @@
 ### Changed
 
 - The apps catalog and the Components showcase are debug pages: the drawer shows them only in
-  debug builds, or once the showcase has been unlocked.
+  debug builds. The About version-tap unlock that showed them in release builds is removed, with
+  `:sample:core:datastore`, the module that stored its flag.
+- The Ruler opens as a simple full-screen ruler at the screen's real scale: centimetres down one
+  edge and inches down the other, along the long side in portrait and landscape, with a reading
+  you drag to measure from zero. Advanced adds a measurement range and settings for the units, the
+  scale's edge, where zero is, the inch steps (1/8, 1/16 or 1/32) and calibration, all saved.
+- The coin turns as a 10 dp thick disc, rising as it spins, as the marketing UI draws it.
+- The Quick Tools ad matches the marketing UI: a "Sponsored content" title like the sections', then
+  a widget card with the advertiser's icon in a nine-sided cookie and one full-width action. The
+  title is the ad's disclosure label, so there is no chip inside the card.
+- Text the screens draw themselves (widget labels, the compass rose, Measure titles) and the ad's
+  text use Google Sans like the rest of the app.
 
 - A new app icon: a toolbox with a wrench and screwdriver, in the launcher, the themed icon (the
   tools cut out of the box), the drawer, the splash screen, the widget preview and the Android TV

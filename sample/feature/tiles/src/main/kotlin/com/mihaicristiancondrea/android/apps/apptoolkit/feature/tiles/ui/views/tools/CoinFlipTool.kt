@@ -18,30 +18,32 @@
 package com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.tools
 
 import androidx.compose.ui.semantics.Role
-import androidx.annotation.DrawableRes
 import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.background
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.platform.LocalView
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import kotlin.math.abs
 import kotlin.math.cos
-import androidx.compose.foundation.border
+import kotlin.math.sin
+import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.graphics.drawscope.Stroke
+import androidx.compose.ui.graphics.drawscope.translate
+import androidx.compose.ui.graphics.drawscope.withTransform
+import androidx.compose.ui.graphics.lerp
+import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.PlayArrow
 import androidx.compose.material3.Icon
@@ -80,11 +82,13 @@ fun CoinFlipTool(side: CoinSide, flipRequest: Int, onFlip: () -> Unit, compact: 
     var lastRequest by remember { mutableIntStateOf(flipRequest) }
     var flipping by remember { mutableStateOf(false) }
     var rotationTarget by remember { mutableFloatStateOf(if (side == CoinSide.Heads) 0f else 180f) }
+    var rotationStart by remember { mutableFloatStateOf(rotationTarget) }
 
     LaunchedEffect(flipRequest) {
         if (flipRequest != lastRequest) {
             lastRequest = flipRequest
             flipping = true
+            rotationStart = rotationTarget
             rotationTarget += 1800f + (((if (side == CoinSide.Heads) 0f else 180f) - rotationTarget % 360f + 360f) % 360f)
         }
     }
@@ -99,17 +103,12 @@ fun CoinFlipTool(side: CoinSide, flipRequest: Int, onFlip: () -> Unit, compact: 
         finishedListener = { flipping = false; if (flipRequest > 0) if (view.hasWindowFocus()) haptic.performHapticFeedback(HapticFeedbackType.LongPress) }
     )
 
-    val scale by animateFloatAsState(
-        targetValue = if (flipping) 1.2f else 1f,
-        animationSpec = tween(durationMillis = 500),
-        label = "coin-scale"
-    )
-
-    val translationY by animateFloatAsState(
-        targetValue = if (flipping) -40f else 0f,
-        animationSpec = tween(durationMillis = 500),
-        label = "coin-translation"
-    )
+    // The kit's toss: the coin rises 24 dp and grows to 1.12 by 35% of the spin, then settles.
+    val progress = if (rotationTarget == rotationStart) 1f else ((rotation - rotationStart) / (rotationTarget - rotationStart)).coerceIn(0f, 1f)
+    val lift = if (progress < 0.35f) progress / 0.35f else (1f - progress) / 0.65f
+    val density = LocalDensity.current
+    val scale = 1f + 0.12f * lift
+    val translationY = with(density) { -24.dp.toPx() } * lift
 
     Column(
         verticalArrangement = Arrangement.spacedBy(SizeConstants.SmallSize),
@@ -166,67 +165,65 @@ fun CoinFlipTool(side: CoinSide, flipRequest: Int, onFlip: () -> Unit, compact: 
     }
 }
 
+/**
+ * The kit's coin (`.chance-coin` in marketing/ui/src/kit/kit.css): a 10 dp thick disc, heads on the
+ * primary container and tails on the secondary container, each ringed with 4 dp of primary at 25%,
+ * between them a rim of primary mixed 45% into the primary container.
+ *
+ * It is drawn as the kit's 3D transform projects it rather than flipped as a flat layer: each face is
+ * the circle squeezed by the cosine of the turn and pushed sideways by half the thickness times the
+ * sine, and the rim is the hull between the two, so the coin keeps its edge when it turns side-on.
+ */
 @Composable
-private fun Coin(
+internal fun Coin(
     rotationY: Float,
     diameter: Dp,
     modifier: Modifier = Modifier
 ) {
-    val normalizedRotation = (rotationY % 360f + 360f) % 360f
-    val isBackVisible = normalizedRotation in 90f..270f
+    val scheme = MaterialTheme.colorScheme
+    val rimColor = lerp(scheme.primaryContainer, scheme.primary, 0.45f)
+    val ringColor = scheme.primary.copy(alpha = 0.25f)
+    val heads = CoinPaint(scheme.primaryContainer, scheme.onPrimaryContainer, painterResource(R.drawable.ic_coin_heads))
+    val tails = CoinPaint(scheme.secondaryContainer, scheme.onSecondaryContainer, painterResource(R.drawable.ic_coin_tails))
+    val iconSize = if (diameter < 120.dp) 48.dp else 64.dp
 
-    Box(modifier = modifier.size(diameter), contentAlignment = Alignment.Center) {
-        val rim = MaterialTheme.colorScheme.primary
-        Canvas(Modifier.fillMaxSize()) {
-            val width = (size.width * abs(cos(Math.toRadians(rotationY.toDouble())).toFloat())).coerceAtLeast(8.dp.toPx())
-            drawOval(rim, topLeft = Offset(center.x - width / 2f,0f), size = Size(width,size.height))
+    Canvas(modifier.size(diameter)) {
+        val radians = Math.toRadians(rotationY.toDouble())
+        val cos = cos(radians).toFloat()
+        val sin = sin(radians).toFloat()
+        val radius = size.minDimension / 2f
+        val halfThickness = CoinThickness.toPx() / 2f
+        // The face nearer the viewer sits at +half the thickness along the coin's axis.
+        val frontOffset = halfThickness * sin
+        val squeeze = abs(cos)
+
+        // The rim: both faces' outlines and the band between them.
+        val left = center.x - abs(frontOffset)
+        val right = center.x + abs(frontOffset)
+        drawRect(rimColor, topLeft = Offset(left, center.y - radius), size = Size(right - left, radius * 2f))
+        for (x in floatArrayOf(left, right)) {
+            drawOval(rimColor, topLeft = Offset(x - radius * squeeze, center.y - radius), size = Size(radius * squeeze * 2f, radius * 2f))
         }
-        Box(Modifier.fillMaxSize().graphicsLayer { this.rotationY = rotationY; cameraDistance = 12f * density }, contentAlignment = Alignment.Center) {
 
-        if (isBackVisible) {
-            Box(Modifier.graphicsLayer { this.rotationY = 180f }) {
-                CoinFace(
-                    iconRes = R.drawable.ic_coin_tails,
-                    color = MaterialTheme.colorScheme.secondaryContainer,
-                    tint = MaterialTheme.colorScheme.onSecondaryContainer,
-                    iconSize = if (diameter < 120.dp) 48.dp else 64.dp,
-                )
+        // The face turned towards the viewer, squeezed as the turn projects it. Edge-on there is only rim.
+        if (squeeze < 0.06f) return@Canvas
+        val face = if (cos >= 0f) heads else tails
+        val faceCenter = Offset(center.x + if (cos >= 0f) frontOffset else -frontOffset, center.y)
+        withTransform({ scale(squeeze, 1f, pivot = faceCenter) }) {
+            drawCircle(face.container, radius, faceCenter)
+            val ring = 4.dp.toPx()
+            drawCircle(ringColor, radius - ring / 2f, faceCenter, style = Stroke(ring))
+            val icon = iconSize.toPx()
+            translate(faceCenter.x - icon / 2f, faceCenter.y - icon / 2f) {
+                with(face.icon) { draw(Size(icon, icon), colorFilter = ColorFilter.tint(face.content)) }
             }
-        } else {
-            CoinFace(
-                iconRes = R.drawable.ic_coin_heads,
-                color = MaterialTheme.colorScheme.primaryContainer,
-                tint = MaterialTheme.colorScheme.onPrimaryContainer,
-                iconSize = if (diameter < 120.dp) 48.dp else 64.dp,
-            )
         }
-    }
     }
 }
 
-@Composable
-private fun CoinFace(
-    @DrawableRes iconRes: Int,
-    color: Color,
-    tint: Color,
-    iconSize: Dp,
-) {
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(color, CircleShape)
-            // The kit's rim: 4 dp of the primary colour at 25%.
-            .border(4.dp, MaterialTheme.colorScheme.primary.copy(alpha = 0.25f), CircleShape),
-        contentAlignment = Alignment.Center
-    ) {
-        Icon(
-            painter = painterResource(id = iconRes),
-            contentDescription = null,
-            modifier = Modifier.size(iconSize),
-            tint = tint
-        )
-    }
-}
+private class CoinPaint(val container: Color, val content: Color, val icon: Painter)
+
+private val CoinThickness = 10.dp
 
 @Preview(showBackground = true)
 @Composable

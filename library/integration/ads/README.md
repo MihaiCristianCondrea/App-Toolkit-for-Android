@@ -279,10 +279,16 @@ The view builders are public for exactly this: `nativeAdRoot`, `iconFrameView`, 
 out of those and your row keeps the shared colours, disclosure chip, and binding while looking like
 your screen.
 
-The sample's Quick Tools screen is the worked example. Its rows are 44dp circular badges, its
-headline is not bold because the screen's own titles are not bold, and its body is capped at two
-lines so an ad with a long description does not grow taller than the rows around it. See
-`ToolkitTilesNativeAdViewFactory` in `sample/feature/tiles`.
+When your layout has views the holder does not know about (a card behind part of the ad, an icon
+beside the label), pass `decorate` to `NativeAdViewHolder`: it runs after the palette is applied,
+on every repaint, so those views follow theme changes too. `useAppFont(weight)` gives any
+`TextView` you add the app's typeface.
+
+The sample's Quick Tools screen is the worked example. `QuickToolsNativeAdViewFactory` in
+`sample/feature/tiles` draws the disclosure label as a "Sponsored content" section title (passed as
+`NativeAdSlot(label = ...)`), keeps it inside the `NativeAdView` as AdMob requires, and puts the
+rest in a widget card painted by `decorate`: the advertiser's icon in a nine-sided cookie, the
+headline and line, and one full-width tonal action.
 
 This is the level most host apps want. It is the one to reach for when "the built-in ad does not
 look like my app".

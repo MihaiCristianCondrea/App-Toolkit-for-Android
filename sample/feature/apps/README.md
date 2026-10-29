@@ -37,7 +37,7 @@ The developer's app catalogue: listing, details, favorites, and install state.
 
 ## Depends on
 
-- `:sample:core:analytics`, `:sample:core:datastore` and `:sample:integration:ads`.
+- `:sample:core:analytics`, `:library:core:datastore` and `:sample:integration:ads`.
 - [`:library:apptoolkit`](../../../library/apptoolkit/README.md) for ad slots, `core.ui.screen`,
   `networkCall`, `storageCall` and Ktor.
 

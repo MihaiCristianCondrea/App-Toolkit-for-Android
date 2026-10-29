@@ -6,7 +6,7 @@ import { windowOf } from "./layout.js";
 // ruler is as tall as it, and the protractor as wide as a sheet in it.
 
 // Translated from the six Compose tools in sample/feature/tiles/ui/views/tools.
-const choice = (label, values, selected, change) => html`<md-outlined-segmented-button-set aria-label=${label} @segmented-button-set-selection=${e=>e.detail.selected&&change(values[e.detail.index][0])}>${values.map(([id,text])=>html`<md-outlined-segmented-button label=${text} .selected=${id===selected}></md-outlined-segmented-button>`)}</md-outlined-segmented-button-set>`;
+const choice = (label, values, selected, change, noCheckmark = false) => html`<md-outlined-segmented-button-set aria-label=${label} @segmented-button-set-selection=${e=>e.detail.selected&&change(values[e.detail.index][0])}>${values.map(([id,text])=>html`<md-outlined-segmented-button label=${text} .selected=${id===selected} ?no-checkmark=${noCheckmark}></md-outlined-segmented-button>`)}</md-outlined-segmented-button-set>`;
 const field=(label,value,change,error=false)=>html`<md-outlined-text-field label=${label} .value=${String(value)} inputmode="decimal" ?error=${error} @input=${e=>e.target.value.length<=64&&change(e.target.value)}></md-outlined-text-field>`;
 const decimal = value => {
   const text=String(value).trim().replace(/[٠-٩]/g,d=>String(d.charCodeAt(0)-1632)).replace(/[۰-۹]/g,d=>String(d.charCodeAt(0)-1776)).replace(/[０-９]/g,d=>String(d.charCodeAt(0)-65296)).replace(/[,٫]/g,'.');
@@ -45,11 +45,87 @@ export function measureBody(tool,s,set) {
   return null;
 }
 
+// RulerTool.kt: a ruler at the screen's real scale (160 px to the inch here, times the calibration), flush with the
+// edges and down the long side. Centimetres on one edge and inches on the other by default. Simple is the ruler and a
+// reading (drag anywhere to measure from zero); advanced adds a measurement range and the settings that change it.
+const RULER_STRIP = 64;
+const rulerScales = (units, edge) => {
+  const other = edge === 'start' ? 'end' : 'start';
+  return units === 'metric' ? [['metric', edge]] : units === 'imperial' ? [['imperial', edge]] : [['metric', edge], ['imperial', other]];
+};
+function rulerReading(units, mm) {
+  const metric = `${mm.toFixed(1)} mm`, imperial = `${(mm / 25.4).toFixed(2)} in`;
+  return html`<div class="measure-display" aria-live="polite">${units === 'imperial' ? imperial : metric}</div>${units === 'both' ? html`<div class="measure-ruler__secondary">${imperial}</div>` : nothing}`;
+}
 export function rulerDialog(s,set,close) {
-  const height=s.rulerHeight??windowOf(s.window).height,scale=Number(s.rulerScale??1),start=Number(s.rulerStart??0),end=Number(s.rulerEnd??.5),ppm=160/25.4*scale,inch=s.rulerUnit==='in',mm=(end-start)*height/ppm;
-  const step=inch?ppm*25.4/16:ppm,major=inch?16:10,count=Math.min(4000,Math.floor(height/step));
-  const pointer=e=>{if(e.type==='pointermove'&&!e.buttons)return;const rect=e.currentTarget.getBoundingClientRect(),fraction=Math.max(0,Math.min(1,(e.clientY-rect.top)/rect.height));const first=e.type==='pointerdown'?Math.abs(fraction-start)<Math.abs(fraction-end):e.currentTarget.dataset.handle==='start';if(e.type==='pointerdown'){e.currentTarget.dataset.handle=first?'start':'end';e.currentTarget.setPointerCapture(e.pointerId);}set?.(first?{rulerStart:Math.min(fraction,end)}:{rulerEnd:Math.max(fraction,start)});};
-  return html`<div class="measure-ruler"><svg class="measure-ruler__scale" ${ref(el=>{if(el)requestAnimationFrame(()=>{if(el.isConnected&&Math.abs(el.clientHeight-height)>1)set?.({rulerHeight:el.clientHeight});});})} viewBox="0 0 96 ${height}" preserveAspectRatio="none" aria-label="Ruler measurement handles" @pointerdown=${pointer} @pointermove=${pointer}><rect x="0" y=${start*height} width="96" height=${(end-start)*height} fill="var(--md-sys-color-primary)" opacity=".14"/>${Array.from({length:count+1},(_,i)=>svg`<line x1="0" y1=${i*step} x2=${i%major===0?32:i%(major/2)===0?22:12} y2=${i*step} stroke="currentColor"/>${i%major?nothing:svg`<text x="36" y=${Math.max(12,i*step+4)} fill="currentColor">${i/major}</text>`}`)}${[start,end].map(f=>svg`<line x1="0" x2="96" y1=${f*height} y2=${f*height} stroke="var(--md-sys-color-primary)" stroke-width="3"/>`)}</svg><div class="measure-ruler__controls"><header><h3>Surface Ruler</h3><md-icon-button aria-label="Close" @click=${close}><md-icon>close</md-icon></md-icon-button></header><div class="measure-display" aria-live="polite">${(inch?mm/25.4:mm).toFixed(inch?2:1)} ${inch?'in':'mm'}</div>${choice('Ruler units',[['mm','mm'],['in','in']],s.rulerUnit??'mm',v=>set?.({rulerUnit:v}))}<h4>Measurement range</h4>${rangeSlider({start,end,min:0,max:1,step:0.001,labelStart:'Range start',labelEnd:'Range end',onInput:set&&(([a,b])=>set?.({rulerStart:a,rulerEnd:b}))})}<section class="measure-calibration"><h4>Calibration</h4><p>Match the line below to 3 cm on a real ruler before measuring.</p><div class="measure-ruler__reference-box" style="height:${30*160/25.4*2+8}px"><div class="measure-ruler__reference" style="height:${30*ppm}px" role="img" aria-label="30 millimetre reference"></div></div>${slider({value:scale,min:0.5,max:2,step:0.01,label:'Calibration',onInput:set&&(v=>set?.({rulerScale:v}))})}${s.rulerSaveFailed?html`<p class="chance-error">Could not save calibration.</p>`:nothing}</section></div></div>`;
+  const win = windowOf(s.window);
+  const width = s.rulerWidth ?? win.width, height = s.rulerHeight ?? win.height, landscape = width > height;
+  const length = landscape ? width : height, cross = landscape ? height : width;
+  const scale = Number(s.rulerScale ?? 1), ppm = 160 / 25.4 * scale;
+  const units = s.rulerUnits ?? 'both', edge = s.rulerEdge ?? 'start', fromEnd = !!s.rulerFromEnd, steps = Number(s.rulerInchSteps ?? 16), advanced = !!s.rulerAdvanced;
+  const marker = Number(s.rulerMarker ?? .5), start = Number(s.rulerStart ?? 0), end = Number(s.rulerEnd ?? .5);
+  const scales = rulerScales(units, edge), edges = new Set(scales.map(([, e]) => e));
+  const along = f => fromEnd ? length * (1 - f) : length * f;
+  const at = (a, c, e) => { const x = e === 'start' ? c : cross - c; return landscape ? [a, x] : [x, a]; };
+  const mm = (advanced ? end - start : marker) * length / ppm;
+  const pointer = e => {
+    if (e.type === 'pointermove' && !e.buttons) return;
+    const rect = e.currentTarget.getBoundingClientRect();
+    const raw = Math.max(0, Math.min(1, landscape ? (e.clientX - rect.left) / rect.width : (e.clientY - rect.top) / rect.height));
+    const f = fromEnd ? 1 - raw : raw;
+    if (e.type === 'pointerdown') { e.currentTarget.dataset.handle = Math.abs(f - start) < Math.abs(f - end) ? 'start' : 'end'; e.currentTarget.setPointerCapture(e.pointerId); }
+    if (!advanced) set?.({ rulerMarker: f });
+    else set?.(e.currentTarget.dataset.handle === 'start' ? { rulerStart: Math.min(f, end) } : { rulerEnd: Math.max(f, start) });
+  };
+  const strip = ([, e]) => { const [x, y] = at(0, e === 'start' ? 0 : RULER_STRIP, e); return landscape ? svg`<rect class="measure-ruler__strip" x="0" y=${y} width=${width} height=${RULER_STRIP}/>` : svg`<rect class="measure-ruler__strip" x=${x} y="0" width=${RULER_STRIP} height=${height}/>`; };
+  const band = (from, to, opacity) => { const [a, b] = [Math.min(from, to), Math.max(from, to)]; return landscape ? svg`<rect x=${a} y="0" width=${b - a} height=${height} fill="var(--md-sys-color-primary)" opacity=${opacity}/>` : svg`<rect x="0" y=${a} width=${width} height=${b - a} fill="var(--md-sys-color-primary)" opacity=${opacity}/>`; };
+  const line = (p, w) => landscape ? svg`<line x1=${p} x2=${p} y1="0" y2=${height} stroke="var(--md-sys-color-primary)" stroke-width=${w}/>` : svg`<line y1=${p} y2=${p} x1="0" x2=${width} stroke="var(--md-sys-color-primary)" stroke-width=${w}/>`;
+  const scaleMarks = ([unit, e]) => {
+    const metric = unit === 'metric', major = metric ? 10 : steps, step = metric ? ppm : ppm * 25.4 / steps;
+    const count = Math.min(4000, Math.floor(length / step));
+    return Array.from({ length: count + 1 }, (_, i) => {
+      const a = along(i * step / length);
+      const len = i % major === 0 ? 28 : i % (major / 2) === 0 ? (metric ? 20 : 22) : !metric && major >= 4 && i % (major / 4) === 0 ? 17 : !metric && major >= 8 && i % (major / 8) === 0 ? 13 : metric ? 12 : 9;
+      const [x1, y1] = at(a, 0, e), [x2, y2] = at(a, len, e);
+      const label = i % major ? nothing : (() => {
+        const [tx, ty] = at(a, len + 12, e);
+        const cx = Math.max(10, Math.min(width - 10, tx)), cy = Math.max(8, Math.min(height - 8, ty));
+        return svg`<text x=${cx} y=${cy} text-anchor="middle" dominant-baseline="central">${i ? i / major : (metric ? 'cm' : 'in')}</text>`;
+      })();
+      return svg`<line x1=${x1} y1=${y1} x2=${x2} y2=${y2} stroke="currentColor" stroke-width=${i % major ? 1 : 1.5}/>${label}`;
+    });
+  };
+  const inset = landscape
+    ? `top:${edges.has('start') ? RULER_STRIP : 0}px;bottom:${edges.has('end') ? RULER_STRIP : 0}px;left:0;right:0`
+    : `left:${edges.has('start') ? RULER_STRIP : 0}px;right:${edges.has('end') ? RULER_STRIP : 0}px;top:0;bottom:0`;
+  const [first, second] = landscape ? ['Top', 'Bottom'] : ['Left', 'Right'];
+  const [zeroFirst, zeroSecond] = landscape ? ['Left', 'Right'] : ['Top', 'Bottom'];
+  const closeButton = html`<md-icon-button aria-label="Close" @click=${close}><md-icon>close</md-icon></md-icon-button>`;
+  const panel = advanced ? html`
+    <div class="measure-ruler__controls" style=${inset}>
+      <header><h3>Surface Ruler</h3>${closeButton}</header>
+      <div>${rulerReading(units, mm)}</div>
+      ${choice('Ruler mode', [['simple', 'Simple'], ['advanced', 'Advanced']], 'advanced', v => set?.({ rulerAdvanced: v === 'advanced' }), true)}
+      <h4>Units</h4>${choice('Ruler units', [['metric', 'Metric'], ['imperial', 'Imperial'], ['both', 'Both']], units, v => set?.({ rulerUnits: v }), true)}
+      <h4>Scale edge</h4>${choice('Scale edge', [['start', first], ['end', second]], edge, v => set?.({ rulerEdge: v }), true)}
+      <h4>Zero at</h4>${choice('Zero at', [['start', zeroFirst], ['end', zeroSecond]], fromEnd ? 'end' : 'start', v => set?.({ rulerFromEnd: v === 'end' }), true)}
+      ${units === 'metric' ? nothing : html`<h4>Inch steps</h4>${choice('Inch steps', [8, 16, 32].map(n => [n, `1/${n}`]), steps, v => set?.({ rulerInchSteps: v }), true)}`}
+      <h4>Measurement range</h4>${rangeSlider({ start, end, min: 0, max: 1, step: 0.001, labelStart: 'Range start', labelEnd: 'Range end', onInput: set && (([a, b]) => set?.({ rulerStart: a, rulerEnd: b })) })}
+      <section class="measure-calibration"><header><h4>Calibration</h4><md-text-button ?disabled=${scale === 1} @click=${() => set?.({ rulerScale: 1 })}>Reset</md-text-button></header><p>Match the line below to 3 cm on a real ruler before measuring.</p><div class="measure-ruler__reference-box" style="height:${30 * 160 / 25.4 * 2 + 8}px"><div class="measure-ruler__reference" style="height:${30 * ppm}px" role="img" aria-label="30 millimetre reference"></div></div>${slider({ value: scale, min: 0.5, max: 2, step: 0.01, label: 'Calibration', onInput: set && (v => set?.({ rulerScale: v })) })}${s.rulerSaveFailed ? html`<p class="chance-error">Could not save calibration.</p>` : nothing}</section>
+    </div>` : html`
+    <div class="measure-ruler__simple" style=${inset}>
+      <div class="measure-ruler__bar"><md-filled-tonal-button @click=${() => set?.({ rulerAdvanced: true })}><md-icon slot="icon">tune</md-icon>Advanced</md-filled-tonal-button>${closeButton}</div>
+      <div class="measure-ruler__card">${rulerReading(units, mm)}<p>Drag anywhere to measure from zero</p></div>
+    </div>`;
+  return html`<div class="measure-ruler" ?data-landscape=${landscape} ?data-advanced=${advanced}>
+    <svg class="measure-ruler__scale" ${ref(el => { if (el) requestAnimationFrame(() => { if (el.isConnected && (Math.abs(el.clientHeight - height) > 1 || Math.abs(el.clientWidth - width) > 1)) set?.({ rulerWidth: el.clientWidth, rulerHeight: el.clientHeight }); }); })}
+      viewBox="0 0 ${width} ${height}" preserveAspectRatio="none" aria-label=${advanced ? 'Ruler measurement handles' : 'Ruler, drag to measure'} @pointerdown=${pointer} @pointermove=${pointer}>
+      ${scales.map(strip)}
+      ${advanced ? [band(along(start), along(end), .14), line(along(start), 3), line(along(end), 3)] : [band(along(0), along(marker), .08), line(along(marker), 2)]}
+      ${scales.map(scaleMarks)}
+    </svg>
+    ${panel}
+  </div>`;
 }
 
 const UNITS=[{"id":"Millimetre","category":"Length","symbol":"mm","factor":"0.001","offset":"0"},{"id":"Centimetre","category":"Length","symbol":"cm","factor":"0.01","offset":"0"},{"id":"Metre","category":"Length","symbol":"m","factor":"1","offset":"0"},{"id":"Kilometre","category":"Length","symbol":"km","factor":"1000","offset":"0"},{"id":"Inch","category":"Length","symbol":"in","factor":"0.0254","offset":"0"},{"id":"Foot","category":"Length","symbol":"ft","factor":"0.3048","offset":"0"},{"id":"Yard","category":"Length","symbol":"yd","factor":"0.9144","offset":"0"},{"id":"Mile","category":"Length","symbol":"mi","factor":"1609.344","offset":"0"},{"id":"Gram","category":"Mass","symbol":"g","factor":"0.001","offset":"0"},{"id":"Kilogram","category":"Mass","symbol":"kg","factor":"1","offset":"0"},{"id":"Ounce","category":"Mass","symbol":"oz","factor":"0.028349523125","offset":"0"},{"id":"Pound","category":"Mass","symbol":"lb","factor":"0.45359237","offset":"0"},{"id":"Stone","category":"Mass","symbol":"st","factor":"6.35029318","offset":"0"},{"id":"Celsius","category":"Temperature","symbol":"°C","factor":"1","offset":"273.15"},{"id":"Fahrenheit","category":"Temperature","symbol":"°F","factor":"1","offset":"0"},{"id":"Kelvin","category":"Temperature","symbol":"K","factor":"1","offset":"0"},{"id":"Millilitre","category":"Volume","symbol":"mL","factor":"0.001","offset":"0"},{"id":"Litre","category":"Volume","symbol":"L","factor":"1","offset":"0"},{"id":"CubicMetre","category":"Volume","symbol":"m³","factor":"1000","offset":"0"},{"id":"UsGallon","category":"Volume","symbol":"US gal","factor":"3.785411784","offset":"0"},{"id":"Byte","category":"Data","symbol":"B","factor":"1","offset":"0"},{"id":"Kilobyte","category":"Data","symbol":"kB","factor":"1000","offset":"0"},{"id":"Megabyte","category":"Data","symbol":"MB","factor":"1000000","offset":"0"},{"id":"Gigabyte","category":"Data","symbol":"GB","factor":"1000000000","offset":"0"},{"id":"Terabyte","category":"Data","symbol":"TB","factor":"1000000000000","offset":"0"}];

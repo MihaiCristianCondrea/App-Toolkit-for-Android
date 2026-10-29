@@ -62,18 +62,18 @@ class RedesignStateTest {
         assertFalse(restored.state.value.invalidInput)
         assertEquals(BigDecimal("33.50"), restored.state.value.result?.perPerson)
     }
-    @Test fun rulerDraftRangeAndUnitsRestore() {
+    @Test fun rulerDraftReadingAndRangeRestore() {
         val preferences = com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.local.preferences.FakeToolkitTilesPreferencesDataSource()
         val repository = com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.repositories.RulerRepository(preferences)
         val saved = SavedStateHandle()
         val first = RulerToolViewModel(repository, FakeTelemetryRepository(), saved)
         first.onEvent(com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.contracts.RulerToolEvent.RangeChanged(.2f,.8f))
-        first.onEvent(com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.contracts.RulerToolEvent.ToggleUnits)
+        first.onEvent(com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.contracts.RulerToolEvent.MarkerMoved(.3f))
         first.onEvent(com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.contracts.RulerToolEvent.ScaleChanged(1.4f))
         first.onEvent(com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.contracts.RulerToolEvent.Dismiss)
         val restored = RulerToolViewModel(repository, FakeTelemetryRepository(), saved)
         assertEquals(first.state.value, restored.state.value)
-        assertTrue(restored.state.value.inches)
+        assertEquals(.3f, restored.state.value.marker)
         assertEquals(.2f, restored.state.value.start)
         assertEquals(.8f, restored.state.value.end)
         restored.onEvent(com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.contracts.RulerToolEvent.SaveScale)

@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="tool_converter_decimal_note" translatable="false">1 kB = 1000 B</string>
-    <string name="tool_ruler_mm" translatable="false">mm</string>
-    <string name="tool_ruler_inches" translatable="false">in</string>
+    <string name="tool_ruler_inch_step" translatable="false">1/%1$d</string>
     <string name="tool_ruler_mm_value" translatable="false">%1$.1f mm</string>
     <string name="tool_ruler_inches_value" translatable="false">%1$.2f in</string>
     <string name="tool_angle_value" translatable="false">%1$.1f°</string>
