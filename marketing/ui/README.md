@@ -137,3 +137,7 @@ Decision Wheel accepts 2–12 directly editable choices, one per line. Spinning 
 Quick Tools bounds its projected content to an explicit scroll viewport so tool hit regions cannot extend over the shell navigation. Touch regression checks switch tabs at five scroll offsets.
 
 Decision Wheel no longer has preset chips. SOS uses separate SOS and Morse-message modes with a signal preview, code panel and a prominent stop control. This marketing preview does not control the camera torch.
+
+## Native ad previews
+
+The prototype's Show ads switch reveals one shared sponsored-content layout on each overview: Quick Tools after Sensors, Measure between Convert & split and Count & time, and Play & Decide below Chance. Search hides these previews. They are static layout samples, not live ad requests, and are absent when Show ads is off.

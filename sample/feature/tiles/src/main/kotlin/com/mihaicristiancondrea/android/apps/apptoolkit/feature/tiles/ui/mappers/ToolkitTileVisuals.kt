@@ -112,17 +112,17 @@ internal fun ToolkitTileIcon.iconColors(): StatusColors {
     val dark = MaterialTheme.colorScheme.surface.luminance() < .5f
     return when (this) {
         ToolkitTileIcon.Level, ToolkitTileIcon.Compass, ToolkitTileIcon.Water -> StatusColors(
-            container = if (dark) Color(0xFF006A60) else Color(0xFF00A091),
-            content = if (dark) Color(0xFF5CE6D6) else Color(0xFF006A60))
+            container = if (dark) Color(0xFF225B53) else Color(0xFF00A091),
+            content = if (dark) Color(0xFF8FD3C7) else Color(0xFF006A60))
         ToolkitTileIcon.Breathing -> StatusColors(
-            container = if (dark) Color(0xFF8B4100) else Color(0xFFFF8B26),
-            content = if (dark) Color(0xFFFFB784) else Color(0xFF8B4100))
+            container = if (dark) Color(0xFF79471D) else Color(0xFFFF8B26),
+            content = if (dark) Color(0xFFE7BC98) else Color(0xFF8B4100))
         ToolkitTileIcon.Sos, ToolkitTileIcon.Morse -> StatusColors(
-            container = if (dark) Color(0xFF91005A) else Color(0xFFE2008E),
-            content = if (dark) Color(0xFFFF85C4) else Color(0xFF91005A))
+            container = if (dark) Color(0xFF753354) else Color(0xFFE2008E),
+            content = if (dark) Color(0xFFE4B1CA) else Color(0xFF91005A))
         else -> StatusColors(
-            container = if (dark) Color(0xFF6B5E00) else Color(0xFFE2C900),
-            content = if (dark) Color(0xFFFBE44D) else Color(0xFF6B5E00))
+            container = if (dark) Color(0xFF746528) else Color(0xFFE2C900),
+            content = if (dark) Color(0xFFDCCB7A) else Color(0xFF6B5E00))
     }
 }
 

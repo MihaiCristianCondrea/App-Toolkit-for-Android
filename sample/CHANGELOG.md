@@ -11,6 +11,7 @@
 
 ### Improved
 
+- Dark tool colours use coordinated muted containers and softer gold, teal, pink and orange accents. Light colours and the app background are unchanged.
 - Tool headings and cards enter individually using the shared motion settings.
 - Tool screens use fixed gold, cream, pink and neutral colours in light and dark mode, independent of wallpaper.
 - Align the converter swap button with the preview and keep the marketing ruler title below the camera cutout.

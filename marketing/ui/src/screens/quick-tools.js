@@ -1,3 +1,4 @@
+import {nativeAdPreview} from '../kit/native-ad.js';
 import { html, nothing } from "lit";
 import { previewScreen } from "material-next-web-components/marketing.js";
 import { toolOverlay, shapeBadge } from "../kit/components.js";
@@ -192,23 +193,6 @@ export default {
 
     const title = (icon, text) => html`<h2 class="qt-section__title"><md-icon class="sc-rounded" aria-hidden="true">${icon}</md-icon>${text}</h2>`;
 
-    // The native ad, drawn like a widget: the advertiser's icon in a shape, its headline and line, one action. The
-    // "Sponsored content" title marks it, so it carries no badge of its own.
-    // Marketing media never shows it; the prototype's Show ads switch turns it on to check the layout.
-    const ad = () => html`
-      <section class="qt-section" aria-label="Sponsored content">
-        ${title("campaign", "Sponsored content")}
-        <div class="qt-ad">
-          <div class="qt-ad__face" style=${shapeMaskStyle(shapeUrl("cookie_9sided"))}><md-icon>apps</md-icon></div>
-          <div class="qt-ad__text">
-            <h3 class="qt-ad__headline">Advertiser app name</h3>
-            <p class="qt-ad__body">One short line from the advertiser about what the app does.</p>
-            <div class="qt-ad__meta"><md-icon>star</md-icon>4.6 · Free</div>
-          </div>
-          <md-filled-tonal-button class="qt-ad__cta">Install</md-filled-tonal-button>
-        </div>
-      </section>`;
-
     const sections = SECTIONS.map((sec) => {
       const ids = sec.tools.filter(matches);
       if (!ids.length) return nothing;
@@ -216,7 +200,7 @@ export default {
         ? html`<div class="qt-live-row qt-live-row--${sec.live}">${ids.map((id) => live[id]())}</div>`
         : sec.id === "colors" ? colors() : breathe();
       return html`<section class="qt-section">${title(sec.icon, sec.title)}${body}</section>
-        ${sec.id === AD_AFTER && s.showAds && !query ? ad() : nothing}`;
+        ${sec.id === AD_AFTER && s.showAds && !query ? nativeAdPreview() : nothing}`;
     });
 
     const content = html`

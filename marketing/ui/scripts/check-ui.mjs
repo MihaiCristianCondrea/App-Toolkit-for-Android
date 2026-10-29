@@ -528,6 +528,35 @@ try {
   }
   assert.deepEqual(errors, []);
   await page.close();
+  // Every overview uses the same ad preview and suppresses it during search and clean captures.
+  {
+    const adPage = await browser.newPage({viewport: {width: 430, height: 1000}});
+    const adErrors = [];
+    adPage.on('pageerror', error => adErrors.push(error.message));
+    for (const theme of ['light', 'dark']) {
+      for (const id of ['quick-tools', 'numbers', 'play']) {
+        for (const mode of ['on', 'off', 'search']) {
+          const params = new URLSearchParams({id, theme, window: 'phone', frame: 'none', panel: 'none'});
+          if (mode !== 'off') params.set('ads', 'on');
+          if (mode === 'search') params.set('state', JSON.stringify({searchQuery: id === 'numbers' ? 'unit' : id === 'play' ? 'dice' : 'compass'}));
+          await adPage.goto(base + '/screen.html?' + params);
+          await adPage.locator('mnw-android-screen').waitFor();
+          assert.equal(await adPage.locator('[data-native-ad]').count(), mode === 'on' ? 1 : 0, id + ' ' + theme + ' ' + mode);
+          if (mode === 'on') {
+            const order = await adPage.locator('[data-native-ad]').evaluate(el => ({
+              before: el.previousElementSibling?.querySelector('h2')?.textContent ?? '',
+              after: el.nextElementSibling?.querySelector('h2')?.textContent ?? '',
+            }));
+            assert.match(order.before, id === 'numbers' ? /Convert & split/ : id === 'play' ? /Chance/ : /Sensors/);
+            if (id === 'numbers') assert.match(order.after, /Count & time/);
+          }
+          checks++;
+        }
+      }
+    }
+    assert.deepEqual(adErrors, []);
+    await adPage.close();
+  }
   console.log(`${checks} marketing UI checks passed`);
 } finally {
   await browser.close();

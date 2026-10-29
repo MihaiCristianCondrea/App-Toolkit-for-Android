@@ -1,3 +1,4 @@
+import {nativeAdPreview} from '../kit/native-ad.js';
 import { html, svg, nothing } from "lit";
 import { previewScreen } from "material-next-web-components/marketing.js";
 import { toolOverlay } from "../kit/components.js";
@@ -123,6 +124,7 @@ export default {
               `, html`<span>${bill.tipEnabled ? `${bill.pct}% tip` : "No tip"} · ${s.splitPeople} ${Number(s.splitPeople) === 1 ? "person" : "people"}</span>`)}
           </div>
         </section>` : nothing}
+        ${s.showAds && !query && ["unit_converter","bill_splitter"].some(matches) ? nativeAdPreview() : nothing}
         ${["counter","reaction_test"].some(matches) ? html`
         <section class="qt-section">
           ${sectionTitle("timer", "Count & time")}

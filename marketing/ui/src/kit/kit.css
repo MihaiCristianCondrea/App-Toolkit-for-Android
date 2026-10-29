@@ -809,14 +809,14 @@ mnw-android-screen,
 
 [data-theme="dark"] mnw-android-screen,
 [data-theme="dark"] .sc-part {
-  --tk-gold-container: #6b5e00;
-  --tk-gold-content: #fbe44d;
-  --tk-teal-container: #006a60;
-  --tk-teal-content: #5ce6d6;
-  --tk-orange-container: #8b4100;
-  --tk-orange-content: #ffb784;
-  --tk-magenta-container: #91005a;
-  --tk-magenta-content: #ff85c4;
+  --tk-gold-container: #746528;
+  --tk-gold-content: #dccb7a;
+  --tk-teal-container: #225b53;
+  --tk-teal-content: #8fd3c7;
+  --tk-orange-container: #79471d;
+  --tk-orange-content: #e7bc98;
+  --tk-magenta-container: #753354;
+  --tk-magenta-content: #e4b1ca;
   --tk-amber-container: #7a4e00;
   --tk-amber-content: #ffd599;
   --tk-red-container: #b10000;

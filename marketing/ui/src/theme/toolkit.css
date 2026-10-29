@@ -15,17 +15,17 @@ mnw-android-screen {
   --md-sys-color-inverse-primary: #E2C900;
 }
 [data-theme="dark"] mnw-android-screen {
-  --md-sys-color-primary: #E2C900;
-  --md-sys-color-on-primary: #383000;
-  --md-sys-color-primary-container: #514700;
-  --md-sys-color-on-primary-container: #FFF0B3;
-  --md-sys-color-secondary: #D5CBAE;
-  --md-sys-color-on-secondary: #363018;
-  --md-sys-color-secondary-container: #4D462D;
-  --md-sys-color-on-secondary-container: #F2E8C9;
-  --md-sys-color-tertiary: #E9B8CC;
-  --md-sys-color-on-tertiary: #472534;
-  --md-sys-color-tertiary-container: #603C49;
-  --md-sys-color-on-tertiary-container: #FFD9E5;
+  --md-sys-color-primary: #DCCB7A;
+  --md-sys-color-on-primary: #332C0D;
+  --md-sys-color-primary-container: #3F3820;
+  --md-sys-color-on-primary-container: #F3E7B5;
+  --md-sys-color-secondary: #D5CCAC;
+  --md-sys-color-on-secondary: #302D20;
+  --md-sys-color-secondary-container: #363226;
+  --md-sys-color-on-secondary-container: #E8DDBE;
+  --md-sys-color-tertiary: #E5B6CB;
+  --md-sys-color-on-tertiary: #3A2530;
+  --md-sys-color-tertiary-container: #422F39;
+  --md-sys-color-on-tertiary-container: #F4D6E1;
   --md-sys-color-inverse-primary: #6B5E00;
 }

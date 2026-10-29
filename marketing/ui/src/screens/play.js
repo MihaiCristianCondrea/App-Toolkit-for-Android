@@ -1,3 +1,4 @@
+import {nativeAdPreview} from '../kit/native-ad.js';
 import {wheelVisual,wheelItems} from '../kit/decision-wheel.js';
 import {html,nothing} from 'lit';
 import {previewScreen} from 'material-next-web-components/marketing.js';
@@ -27,6 +28,6 @@ export default {
 
  };
  const ids=Object.keys(TOOLS).filter(id=>!query||(TOOLS[id].title+' '+TOOLS[id].subtitle).toLowerCase().includes(query));
- return previewScreen(APP,s,{tab:'play',search:{placeholder:'Search tools',value:s.searchQuery||'',onInput:v=>s.set?.({searchQuery:v})},content:html`<div class="tk-screen-pad"><section class="qt-section"><h2 class="qt-section__title"><md-icon class="sc-rounded">casino</md-icon>Chance</h2><div class="play-chance-group">${ids.includes("decision_wheel")?live.decision_wheel():nothing}<div class="qt-live-row qt-live-row--chance">${ids.filter(id=>id!=="decision_wheel").map(id=>live[id]())}</div></div>${!ids.length?html`<p role="status">No tools found.</p>`:nothing}</section></div>`,overlay:toolOverlay({tool:TOOLS[s.activeToolId],state:s,onState:s.set,onClose:()=>s.set?.({activeToolId:'none',wheelSpinning:false})})});
+ return previewScreen(APP,s,{tab:'play',search:{placeholder:'Search tools',value:s.searchQuery||'',onInput:v=>s.set?.({searchQuery:v})},content:html`<div class="tk-screen-pad"><section class="qt-section"><h2 class="qt-section__title"><md-icon class="sc-rounded">casino</md-icon>Chance</h2><div class="play-chance-group">${ids.includes("decision_wheel")?live.decision_wheel():nothing}<div class="qt-live-row qt-live-row--chance">${ids.filter(id=>id!=="decision_wheel").map(id=>live[id]())}</div></div>${!ids.length?html`<p role="status">No tools found.</p>`:nothing}</section>${s.showAds && !query && ids.length ? nativeAdPreview() : nothing}</div>`,overlay:toolOverlay({tool:TOOLS[s.activeToolId],state:s,onState:s.set,onClose:()=>s.set?.({activeToolId:'none',wheelSpinning:false})})});
  }
 };
