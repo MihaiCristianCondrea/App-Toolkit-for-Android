@@ -1804,6 +1804,14 @@ mnw-android-screen,
 .converter-unit-name { min-width:0; font:500 16px/24px var(--md-ref-typeface-plain); }
 .converter-card md-outlined-text-field { grid-column:1/-1; width:100%; min-width:0; --md-outlined-text-field-outline-width:0; --md-outlined-text-field-hover-outline-width:0; --md-outlined-text-field-input-text-size:32px; --md-outlined-text-field-input-text-line-height:40px; }
 .converter-card--result md-outlined-text-field { --md-outlined-text-field-input-text-color:var(--md-sys-color-on-secondary-container); --md-outlined-text-field-label-text-color:var(--md-sys-color-on-secondary-container); }
-.converter-swap { border-radius:50%; position:absolute; inset-inline-end:24px; top:calc(50% - 20px); z-index:2; --md-filled-tonal-icon-button-container-color:var(--md-sys-color-primary); --md-filled-tonal-icon-button-icon-color:var(--md-sys-color-on-primary); box-shadow:0 0 0 4px var(--md-sys-color-surface); }
+.converter-swap { border:0; border-radius:50%; position:absolute; inset-inline-end:24px; top:calc(50% - 20px); z-index:2; width:40px; height:40px; display:grid; place-items:center; cursor:pointer; background:var(--md-sys-color-primary-container); color:var(--md-sys-color-on-primary-container); box-shadow:0 0 0 4px var(--md-sys-color-surface); }
 .converter-hint { display:flex; align-items:center; gap:8px; color:var(--md-sys-color-on-surface-variant); }
 .converter-hint md-icon { --md-icon-size:18px; }
+
+@media (hover:hover) { .converter-swap:hover { background:var(--md-sys-color-tertiary-container); color:var(--md-sys-color-on-tertiary-container); } }
+.converter-swap:active { transform:rotate(180deg); }
+.converter-swap:focus-visible { outline:2px solid var(--md-sys-color-primary); outline-offset:4px; }
+.converter-card .measure-unit-picker md-outlined-select { width:140px; --md-outlined-select-text-field-container-shape:28px; }
+.measure-protractor-controls { background:transparent; border-radius:0; border-top:1px solid var(--md-sys-color-outline-variant); inset-inline:16px; width:auto; padding:16px 4px 0; }
+.measure-protractor-dialog[data-landscape] .measure-protractor-controls { inset-inline-start:auto; inset-inline-end:24px; top:96px; bottom:24px; width:280px; overflow-y:auto; border-top:0; border-inline-start:1px solid var(--md-sys-color-outline-variant); padding:12px 0 12px 24px; justify-content:center; }
+.measure-protractor-dialog[data-landscape] .protractor-readout { flex-wrap:wrap; }

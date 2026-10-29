@@ -92,10 +92,10 @@ function converter(s,set) {
   return html`<div class="measure-body converter-body">
     <div class="measure-categories"><md-chip-set aria-label="Unit category">${Object.keys(icons).map(c=>html`<md-filter-chip label=${c} ?selected=${category===c} @click=${()=>{const us=UNITS.filter(u=>u.category===c);set?.({converterCategory:c,converterFrom:us[0].id,converterTo:us[1].id,converterInput:'1',converterEditingLeft:true});}}><md-icon slot="icon" class="sc-rounded">${icons[c]}</md-icon></md-filter-chip>`)}</md-chip-set></div>
     <div class="converter-pair">${[[true,'From',from],[false,'To',to]].map(([left,label,unit],index)=>html`
-      ${index?html`<md-filled-tonal-icon-button class="converter-swap" aria-label="Swap units" @click=${()=>set?.({converterFrom:to.id,converterTo:from.id,converterEditingLeft:!editingLeft})}><md-icon>swap_vert</md-icon></md-filled-tonal-icon-button>`:nothing}
+      ${index?html`<button type="button" class="converter-swap" aria-label="Swap units" @click=${()=>set?.({converterFrom:to.id,converterTo:from.id,converterEditingLeft:!editingLeft})}><md-icon>swap_vert</md-icon></button>`:nothing}
       <div class="measure-conversion-row converter-card ${left?'':'converter-card--result'}">
         <span class="converter-unit-name">${name(unit)}</span>
-        <div class="measure-unit-picker"><md-filled-tonal-button aria-label="${label} unit" @click=${e=>{const menu=e.currentTarget.nextElementSibling;menu.anchorElement=e.currentTarget;menu.show();}}>${unit.symbol}<md-icon slot="icon">expand_more</md-icon></md-filled-tonal-button><md-menu positioning="absolute">${units.map(u=>html`<md-menu-item @click=${()=>set?.({[left?'converterFrom':'converterTo']:u.id})}><div slot="headline">${u.symbol}</div><div slot="supporting-text">${name(u)}</div></md-menu-item>`)}</md-menu></div>
+        <div class="measure-unit-picker"><md-outlined-select aria-label="${label} unit" label="Unit" .value=${unit.id} menu-positioning="popover" @change=${e=>set?.({[left?'converterFrom':'converterTo']:e.target.value})}>${units.map(u=>html`<md-select-option .value=${u.id} ?selected=${u.id===unit.id}><div slot="headline">${u.symbol}</div><div slot="supporting-text">${name(u)}</div></md-select-option>`)}</md-outlined-select></div>
         ${field(label,left===editingLeft?input:output??'',v=>set?.({converterInput:v,converterEditingLeft:left}),invalid&&left===editingLeft)}
       </div>`)}</div>
     ${invalid?html`<p class="chance-error" role="alert">Enter a valid value.</p>`:html`<p class="converter-hint"><md-icon aria-hidden="true">edit</md-icon>Edit either value to convert back.</p>`}
@@ -123,18 +123,19 @@ function reaction(s,set) {
 
 export function protractorDialog(s,set,close) {
   const win=windowOf(s.window),width=s.protractorWidth??win.width,height=s.protractorHeight??win.height;
-  const angle=Math.max(0,Math.min(180,Number(s.protractorAngle??45))),cy=Math.max(140,(height-204)/2),r=Math.max(60,Math.min(width-24,cy-96));
-  const point=(d,dist)=>[Math.sin(d*Math.PI/180)*dist,cy-Math.cos(d*Math.PI/180)*dist];
+  const landscape=width>=650 || width>height;
+  const angle=Math.max(0,Math.min(180,Number(s.protractorAngle??45))),cy=landscape?height:Math.max(140,(height-204)/2),cx=landscape?(width-320)/2:0,r=Math.max(60,landscape?Math.min((width-368)/2,height-96):Math.min(width-24,cy-96));
+  const point=(d,dist)=>landscape?[cx+Math.cos(d*Math.PI/180)*dist,cy-Math.sin(d*Math.PI/180)*dist]:[Math.sin(d*Math.PI/180)*dist,cy-Math.cos(d*Math.PI/180)*dist];
   const [x,y]=point(angle,r);
-  const move=e=>{if(e.type==='pointermove'&&!e.buttons)return;const rect=e.currentTarget.getBoundingClientRect(),px=Math.max(0,(e.clientX-rect.left)*width/rect.width),py=(e.clientY-rect.top)*height/rect.height;set?.({protractorAngle:Math.round(Math.atan2(px,cy-py)*180/Math.PI)});};
-  return html`<div class="measure-protractor-dialog">
+  const move=e=>{if(e.type==='pointermove'&&!e.buttons)return;const rect=e.currentTarget.getBoundingClientRect(),px=Math.max(0,(e.clientX-rect.left)*width/rect.width),py=(e.clientY-rect.top)*height/rect.height;set?.({protractorAngle:Math.round((landscape?Math.atan2(Math.max(0,cy-py),px-cx):Math.atan2(px,cy-py))*180/Math.PI)});};
+  return html`<div class="measure-protractor-dialog" ?data-landscape=${landscape}>
     <svg class="measure-protractor" ${ref(el=>{if(el&&set)requestAnimationFrame(()=>{if(el.isConnected&&(Math.abs(el.clientWidth-width)>1||Math.abs(el.clientHeight-height)>1))set({protractorWidth:el.clientWidth,protractorHeight:el.clientHeight});});})} viewBox="0 0 ${width} ${height}" aria-label="Protractor, ${angle} degrees" @pointerdown=${e=>{e.currentTarget.setPointerCapture(e.pointerId);move(e);}} @pointermove=${move}>
-      <path d="M0 ${cy-r} A${r} ${r} 0 0 1 0 ${cy+r} Z" fill="var(--md-sys-color-surface-container-low)" stroke="var(--md-sys-color-outline-variant)"/>
-      <path d="M0 ${cy}V${cy-r} A${r} ${r} 0 0 1 ${x} ${y} Z" fill="var(--md-sys-color-primary-container)"/>
-      ${Array.from({length:181},(_,d)=>{const [x1,y1]=point(d,r),[x2,y2]=point(d,r-(d%10===0?20:d%5===0?12:6)),[tx,ty]=point(d,r-38);return svg`<line x1=${x1} y1=${y1} x2=${x2} y2=${y2} stroke="currentColor" opacity=${d%5?'.4':'1'}/>${d%10?nothing:svg`<text x=${Math.max(12,tx)} y=${ty} dominant-baseline="middle" text-anchor="middle" fill="currentColor">${d}</text>`}`;})}
-      <path d="M0 ${cy-r}V${cy}L${x} ${y}" fill="none" stroke="var(--md-sys-color-primary)" stroke-width="4"/><circle cx="0" cy=${cy} r="9" fill="var(--md-sys-color-primary)"/><circle cx=${x} cy=${y} r="8" fill="var(--md-sys-color-primary)" stroke="var(--md-sys-color-surface)" stroke-width="3"/>
+      <path d=${landscape?`M${cx-r} ${cy} A${r} ${r} 0 0 1 ${cx+r} ${cy} Z`:`M0 ${cy-r} A${r} ${r} 0 0 1 0 ${cy+r} Z`} fill="var(--md-sys-color-surface-container-low)" stroke="var(--md-sys-color-outline-variant)"/>
+      <path d=${landscape?`M${cx} ${cy}H${cx+r} A${r} ${r} 0 0 0 ${x} ${y} Z`:`M0 ${cy}V${cy-r} A${r} ${r} 0 0 1 ${x} ${y} Z`} fill="var(--md-sys-color-primary-container)"/>
+      ${Array.from({length:181},(_,d)=>{const [x1,y1]=point(d,r),[x2,y2]=point(d,r-(d%10===0?20:d%5===0?12:6)),[tx,ty]=point(d,r-38);return svg`<line x1=${x1} y1=${y1} x2=${x2} y2=${y2} stroke="currentColor" opacity=${d%5?'.4':'1'}/>${d%(r<200?30:10)?nothing:svg`<text x=${Math.max(12,tx)} y=${landscape?Math.min(height-12,ty):ty} dominant-baseline="middle" text-anchor="middle" fill="currentColor">${d}</text>`}`;})}
+      <path d=${landscape?`M${cx+r} ${cy}H${cx}L${x} ${y}`:`M0 ${cy-r}V${cy}L${x} ${y}`} fill="none" stroke="var(--md-sys-color-primary)" stroke-width="4"/><circle cx=${cx} cy=${cy} r="9" fill="var(--md-sys-color-primary)"/><circle cx=${x} cy=${y} r="8" fill="var(--md-sys-color-primary)" stroke="var(--md-sys-color-surface)" stroke-width="3"/>
     </svg>
-    <header><md-icon class="sc-rounded" aria-hidden="true">architecture</md-icon><h3>Protractor</h3><md-icon-button aria-label="Close" @click=${close}><md-icon>close</md-icon></md-icon-button></header>
+    <header><h3>Protractor</h3><md-icon-button aria-label="Close" @click=${close}><md-icon>close</md-icon></md-icon-button></header>
     <div class="measure-protractor-controls measure-body"><div class="protractor-readout"><div><span class="protractor-eyebrow">ANGLE</span><div class="measure-display" aria-live="polite">${angle}°</div></div><span class="protractor-kind">${angle===0?"Zero":angle<90?"Acute":angle===90?"Right angle":angle<180?"Obtuse":"Straight"}</span></div><p>Align the edge, then drag the arm.</p>${slider({value:angle,min:0,max:180,step:1,label:'Protractor angle',onInput:set&&(v=>set({protractorAngle:v}))})}<div class="protractor-presets">${[0,45,90,180].map(value=>html`<md-text-button aria-label="Set angle to ${value} degrees" @click=${()=>set?.({protractorAngle:value})}>${value}°</md-text-button>`)}</div></div>
   </div>`;
 }

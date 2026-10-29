@@ -303,6 +303,15 @@ try {
   await page.locator('.measure-conversion-row md-outlined-text-field').first().locator('input').fill('32');
   await page.waitForFunction(()=>document.querySelectorAll('.measure-conversion-row md-outlined-text-field')[1].value==='0');
   checks++;
+  const unitSelect = page.locator('.measure-unit-picker md-outlined-select').first();
+  await unitSelect.click();
+  await unitSelect.locator('md-select-option').filter({hasText:'Kelvin'}).click();
+  assert.equal(await unitSelect.evaluate(el=>el.value),'Kelvin');
+  await page.locator('.converter-swap').hover();
+  await page.locator('.converter-swap').click();
+  await page.mouse.move(0,0);
+  assert.equal(await page.locator('.converter-swap').evaluate(el=>el.matches(':active')),false);
+  checks++;
   await openMeasure('reaction_test',{reactionBest:0,reactionAverage:0});
   await page.locator('.measure-actions md-filled-button').click();
   await page.locator('.measure-reaction__pad--waiting').click();
@@ -416,6 +425,16 @@ try {
     });
     assert.deepEqual(failures, []);
     checks++;
+  }
+  {
+    const landscape = await page.evaluate(async()=>{
+      const api=await import('/src/embed.js');await api.setup();const target=document.createElement('div');document.body.append(target);
+      try {await api.mount(target,'numbers',{activeSheet:'protractor'},{window:{width:957,height:430,system:'android'},frame:false});
+        const dialog=target.querySelector('.measure-protractor-dialog'),controls=dialog.querySelector('.measure-protractor-controls'),bounds=dialog.getBoundingClientRect(),box=controls.getBoundingClientRect();
+        return {landscape:dialog.hasAttribute('data-landscape'),titleIcons:dialog.querySelectorAll('header > md-icon').length,inside:box.right<=bounds.right&&box.bottom<=bounds.bottom&&box.top>=bounds.top};
+      }finally{target.remove();}
+    });
+    assert.deepEqual(landscape,{landscape:true,titleIcons:0,inside:true});checks++;
   }
   // Without set() nothing measures the page: the ruler's scale and the protractor still have to be drawn
   // at their real size, or a capture shows the wrong millimetres.
