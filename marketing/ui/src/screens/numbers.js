@@ -34,6 +34,8 @@ export default {
     rulerScale: 1, rulerStart: 0, rulerEnd: 0.5,
     reactionHistory: [], reactionRound: 0,
     billAmount: 100,
+    billCurrency: "USD",
+    billTipEnabled: true,
     tipPercent: 15,
     splitPeople: 4,
     billRound: "exact",
@@ -110,7 +112,7 @@ export default {
               `, html`<span>${conversion.category}</span>`)}
             ${widget("bill_splitter", "corner-bento-right mw-widget--bill", html`
               <div class="mw-share"><md-icon class="sc-rounded" aria-hidden="true">group</md-icon><strong>${bill.valid ? bill.perPerson : "—"}</strong><span>per person</span></div>
-              `, html`<span>${s.tipPercent}% tip · ${s.splitPeople} ${Number(s.splitPeople) === 1 ? "person" : "people"}</span>`)}
+              `, html`<span>${bill.tipEnabled ? `${bill.pct}% tip` : "No tip"} · ${s.splitPeople} ${Number(s.splitPeople) === 1 ? "person" : "people"}</span>`)}
           </div>
         </section>
         <section class="qt-section">

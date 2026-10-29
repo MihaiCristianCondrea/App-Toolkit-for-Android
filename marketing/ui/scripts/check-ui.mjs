@@ -161,7 +161,7 @@ try {
     await page.locator('[data-tool="bill_splitter"] .mw-open').click();
     await page.locator('md-outlined-text-field[label="Bill amount"]').locator('input').fill('200');
     await page.locator(SHEET_CONTENT).locator('[aria-label="Close"]').click();
-    assert.equal((await page.locator('.mw-share strong').innerText()).trim(), '57.50');
+    assert.equal((await page.locator('.mw-share strong').innerText()).trim(), '$57.50');
     checks++;
   }
   // The reaction card only opens; its Start action opens and begins a timed round.
@@ -217,6 +217,24 @@ try {
     assert.ok(sizes[3].font <= sizes[0].font, 'larger counts never grow the font');
     checks++;
   }
+  // Currency and optional tip are shared by the sheet and overview.
+  await page.goto(`${base}/screen.html?id=numbers&panel=none`);
+  for (const [currency, withTip, withoutTip] of [['USD','$28.75','$25.00'],['EUR','€28.75','€25.00'],['GBP','£28.75','£25.00'],['RON','28.75 lei','25.00 lei'],['JPY','¥29','¥25'],['INR','₹28.75','₹25.00']]) {
+    await page.locator('[data-tool="bill_splitter"] .mw-open').click();
+    const picker = page.locator('.bill-currency');
+    await picker.click();
+    await picker.locator('md-select-option').filter({hasText: currency}).click();
+    const checkbox = page.locator('.bill-tip-toggle md-checkbox');
+    if (!await checkbox.evaluate(el => el.checked)) await checkbox.click();
+    assert.equal((await page.locator('.measure-bill > strong').innerText()).trim(), withTip);
+    await checkbox.click();
+    assert.equal((await page.locator('.measure-bill > strong').innerText()).trim(), withoutTip);
+    assert.equal(await page.locator('.bill-tip-expansion').evaluate(el => el.inert), true);
+    await page.locator(SHEET_CONTENT).locator('[aria-label="Close"]').click();
+    assert.equal((await page.locator('.mw-share strong').innerText()).trim(), withoutTip);
+    assert.match(await page.locator('[data-tool="bill_splitter"] .mw-detail').innerText(), /No tip/);
+    checks++;
+  }
   // Compose Measure presentations at every supported window and theme.
   for(const window of ['phone','fold','desktop']) for(const theme of ['light','dark']) {
     for(const activeSheet of ['ruler','protractor','counter','bill_splitter','unit_converter','reaction_test']) {
@@ -252,7 +270,7 @@ try {
   await page.keyboard.press('ArrowRight');
   await page.waitForFunction(()=>document.querySelector('.measure-display').textContent.includes('46'));checks++;
   await openMeasure('bill_splitter',{billAmount:'10.00',tipPercent:15,splitPeople:'3'});
-  assert.equal((await page.locator('.measure-bill > strong').innerText()).replaceAll(',',''),'3.84');
+  assert.equal((await page.locator('.measure-bill > strong').innerText()).replaceAll(',',''),'$3.84');
   await page.locator('md-outlined-text-field').first().locator('input').fill('1.999');
   await page.locator('.chance-error').waitFor();
   assert.equal(await page.locator('.measure-bill').count(),0);checks++;

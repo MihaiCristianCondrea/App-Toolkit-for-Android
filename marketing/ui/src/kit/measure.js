@@ -12,13 +12,23 @@ const decimal = value => {
   const text=String(value).trim().replace(/[٠-٩]/g,d=>String(d.charCodeAt(0)-1632)).replace(/[۰-۹]/g,d=>String(d.charCodeAt(0)-1776)).replace(/[０-９]/g,d=>String(d.charCodeAt(0)-65296)).replace(/[,٫]/g,'.');
   return /^[+-]?(?:\d+(?:\.\d*)?|\.\d+)$/.test(text)?text:null;
 };
-const money=n=>(n/100n).toLocaleString()+'.'+String(n%100n).padStart(2,'0');
+const CURRENCIES = [
+  {id:'USD',symbol:'$',digits:2}, {id:'EUR',symbol:'€',digits:2}, {id:'GBP',symbol:'£',digits:2},
+  {id:'RON',symbol:'lei',digits:2}, {id:'JPY',symbol:'¥',digits:0}, {id:'INR',symbol:'₹',digits:2},
+];
+const currencyOf=s=>CURRENCIES.find(c=>c.id===s.billCurrency)??CURRENCIES[0];
+function billMoney(value,currency) {
+  const factor=10n**BigInt(currency.digits);
+  const amount=(value/factor).toLocaleString('en-US')+(currency.digits?'.'+String(value%factor).padStart(currency.digits,'0'):'');
+  return currency.id==='RON'?amount+' lei':currency.symbol+amount;
+}
 export function billSummary(s) {
-    const bill=String(s.billAmount??''),people=decimal(s.splitPeople??1)??String(s.splitPeople??1),pct=Number(s.tipPercent??15),parsed=decimal(bill);
-    const valid=parsed!==null&&/^\+?(?:\d+(?:\.\d{0,2})?|\.\d{1,2})$/.test(parsed)&&/^\+?\d+$/.test(people)&&BigInt(people)>0n&&BigInt(people)<(1n<<63n);
-    let total,tip,share;
-    if(valid){const parts=parsed.replace('+','').split('.');const cents=BigInt(parts[0]||0)*100n+BigInt((parts[1]??'').padEnd(2,'0'));tip=(cents*BigInt(pct)+50n)/100n;total=cents+tip;share=(total+BigInt(people)-1n)/BigInt(people);}
-    return { bill, people, pct, valid, total, tip, share, perPerson: valid ? money(share) : null };
+  const bill=String(s.billAmount??''),people=decimal(s.splitPeople??1)??String(s.splitPeople??1),currency=currencyOf(s),tipEnabled=s.billTipEnabled!==false,pct=tipEnabled?Number(s.tipPercent??15):0,parsed=decimal(bill);
+  const validAmount=parsed!==null&&/^\+?(?:\d+(?:\.\d*)?|\.\d+)$/.test(parsed)&&((parsed.split('.')[1]??'').length<=currency.digits);
+  const valid=validAmount&&/^\+?\d+$/.test(people)&&BigInt(people)>0n&&BigInt(people)<(1n<<63n)&&Number.isInteger(pct)&&pct>=0&&pct<=100;
+  let total,tip,share;
+  if(valid){const parts=parsed.replace('+','').split('.'),factor=10n**BigInt(currency.digits);const minor=BigInt(parts[0]||0)*factor+BigInt((parts[1]??'').padEnd(currency.digits,'0')||0);tip=(minor*BigInt(pct)+50n)/100n;total=minor+tip;share=(total+BigInt(people)-1n)/BigInt(people);}
+  return {bill,people,pct,valid,total,tip,share,currency,tipEnabled,perPerson:valid?billMoney(share,currency):null};
 }
 
 export function measureBody(tool,s,set) {
@@ -27,8 +37,8 @@ export function measureBody(tool,s,set) {
     return html`<div class="measure-body measure-counter"><div class="measure-counter__value" aria-live="polite">${count}</div><div class="measure-actions"><md-outlined-icon-button aria-label="Decrease" ?disabled=${count===0} @click=${()=>set?.({counterValue:count-1})}><md-icon>remove</md-icon></md-outlined-icon-button><md-filled-button @click=${()=>set?.({counterValue:Math.min(2147483647,count+1)})}><md-icon slot="icon">add</md-icon>Add</md-filled-button>${count?html`<md-outlined-button @click=${()=>set?.({counterValue:0})}><md-icon slot="icon">refresh</md-icon>Reset</md-outlined-button>`:nothing}</div></div>`;
   }
   if(tool.id==='bill_splitter') {
-    const { bill, people, pct, valid, total, tip, share } = billSummary(s);
-    return html`<div class="measure-body">${field('Bill amount',bill,v=>set?.({billAmount:v}),!valid&&bill!=='')}<h4>Tip</h4>${choice('Tip percentage',[10,15,20].map(v=>[v,v+'%']),pct,v=>set?.({tipPercent:v}))}<div class="measure-people"><md-icon-button aria-label="Remove person" ?disabled=${!/^\d+$/.test(people)||BigInt(people)<=1n} @click=${()=>set?.({splitPeople:String(BigInt(people)-1n)})}><md-icon>remove</md-icon></md-icon-button>${field('People',people,v=>set?.({splitPeople:v}),!valid)}<md-icon-button aria-label="Add person" ?disabled=${!/^\d+$/.test(people)||BigInt(people)<1n||BigInt(people)>=(1n<<63n)-1n} @click=${()=>set?.({splitPeople:String(BigInt(people)+1n)})}><md-icon>add</md-icon></md-icon-button></div>${!valid&&bill?html`<p class="chance-error" role="alert">Enter a non-negative bill with up to 2 decimal places and at least one person.</p>`:nothing}${valid?html`<div class="measure-bill" aria-live="polite"><span>Per person</span><strong>${money(share)}</strong><div class="measure-summary"><span>Total<b>${money(total)}</b></span><span>Tip<b>${money(tip)}</b></span></div><p><md-icon>info</md-icon>Shares round up to 2 decimal places.</p></div>`:nothing}</div>`;
+    const { bill, people, pct, valid, total, tip, share, currency, tipEnabled } = billSummary(s);
+    return html`<div class="measure-body"><div class="bill-input-row">${field('Bill amount',bill,v=>set?.({billAmount:v}),!valid&&bill!=='')}<md-outlined-select class="bill-currency" label="Currency" .value=${currency.id} @change=${e=>set?.({billCurrency:e.target.value})}>${CURRENCIES.map(c=>html`<md-select-option .value=${c.id} ?selected=${c.id===currency.id}><div slot="headline">${c.symbol} · ${c.id}</div></md-select-option>`)}</md-outlined-select></div><label class="bill-tip-toggle"><md-checkbox aria-label="Include tip" ?checked=${tipEnabled} @change=${e=>set?.({billTipEnabled:e.target.checked})}></md-checkbox>Include tip</label><div class="bill-tip-expansion" ?data-expanded=${tipEnabled} ?inert=${!tipEnabled} aria-hidden=${!tipEnabled}><div><div class="bill-tip-options">${choice('Tip percentage',[10,15,20].map(v=>[v,v+'%']),Number(s.tipPercent??15),v=>set?.({tipPercent:v}))}</div></div></div><div class="measure-people"><md-icon-button aria-label="Remove person" ?disabled=${!/^\d+$/.test(people)||BigInt(people)<=1n} @click=${()=>set?.({splitPeople:String(BigInt(people)-1n)})}><md-icon>remove</md-icon></md-icon-button>${field('People',people,v=>set?.({splitPeople:v}),!valid)}<md-icon-button aria-label="Add person" ?disabled=${!/^\d+$/.test(people)||BigInt(people)<1n||BigInt(people)>=(1n<<63n)-1n} @click=${()=>set?.({splitPeople:String(BigInt(people)+1n)})}><md-icon>add</md-icon></md-icon-button></div>${!valid&&bill?html`<p class="chance-error" role="alert">Enter a non-negative bill with up to ${currency.digits} decimal places and at least one person.</p>`:nothing}${valid?html`<div class="measure-bill" aria-live="polite"><span>Per person</span><strong>${billMoney(share,currency)}</strong><div class="measure-summary"><span>Total<b>${billMoney(total,currency)}</b></span><span>Tip<b>${billMoney(tip,currency)}</b></span></div><p><md-icon>info</md-icon>Shares round up to ${currency.digits ? "2 decimal places" : "whole yen"}.</p></div>`:nothing}</div>`;
   }
   if(tool.id==='unit_converter')return converter(s,set);
   if(tool.id==='protractor') {

@@ -1769,3 +1769,12 @@ mnw-android-screen,
 .mw-reaction small { font: 500 16px/24px var(--md-ref-typeface-plain); }
 .mw-reaction span { font: 400 12px/18px var(--md-ref-typeface-plain); color: var(--md-sys-color-on-surface-variant); }
 @media (prefers-reduced-motion: reduce) { .mw-widget { transition: none; } }
+
+.bill-input-row { display: grid; grid-template-columns: minmax(0,1fr) 140px; gap: 12px; }
+.bill-input-row > * { min-width: 0; width: 100%; }
+.bill-tip-toggle { display: flex; align-items: center; gap: 12px; min-height: 48px; cursor: pointer; font: 500 16px/24px var(--md-ref-typeface-plain); }
+.bill-tip-expansion { display: grid; grid-template-rows: 0fr; opacity: 0; transition: grid-template-rows 250ms ease, opacity 200ms ease; margin-top: -12px; }
+.bill-tip-expansion[data-expanded] { grid-template-rows: 1fr; opacity: 1; }
+.bill-tip-expansion > div { min-height: 0; overflow: hidden; }
+.bill-tip-options { padding-top: 12px; }
+@media (prefers-reduced-motion: reduce) { .bill-tip-expansion { transition: none; } }
