@@ -125,3 +125,5 @@ The web ruler uses a simulated 160 dpi baseline adjusted by calibration, not a m
 Bill Splitter supports USD, EUR, GBP, RON (lei), JPY and INR. Currency selects the denomination, without exchange conversion, and updates the sheet and overview together. JPY uses whole-yen inputs and rounding; other currencies use two decimal places. Include tip toggles the animated percentage controls and preserves the chosen percentage when disabled.
 
 Measure uses the shared shell search bar to filter tool names and descriptions. Protractor now opens full-screen like Surface Ruler, with the straight edge on the left, a draggable angle arm and a keyboard-accessible slider. This is an approved web redesign rather than the current Compose sheet arrangement.
+
+Unit Converter pairs two editable value cards with full unit names, category icons and a swap action that preserves the quantity. Protractor adds angle classification, a highlighted sector and 0/45/90/180-degree presets.

@@ -1787,3 +1787,23 @@ mnw-android-screen,
 .measure-protractor-dialog > header { position: absolute; top: 32px; inset-inline: 16px; display: flex; align-items: center; gap: 12px; }
 .measure-protractor-dialog h3 { flex: 1; margin: 0; font: 400 24px/32px var(--md-ref-typeface-plain); }
 .measure-protractor-controls { position: absolute; inset-inline-end: 16px; bottom: 32px; width: min(320px, calc(100% - 32px)); box-sizing: border-box; padding: 16px; border-radius: 24px; background: var(--md-sys-color-surface-container); }
+
+.protractor-readout { display:flex; justify-content:space-between; align-items:center; gap:12px; }
+.protractor-eyebrow { font:600 11px/16px var(--md-ref-typeface-plain); letter-spacing:1.5px; color:var(--md-sys-color-on-surface-variant); }
+.protractor-readout .measure-display { font:400 56px/64px var(--md-ref-typeface-brand); letter-spacing:-2px; color:var(--md-sys-color-primary); }
+.protractor-kind { border-radius:16px; padding:8px 12px; background:var(--md-sys-color-secondary-container); color:var(--md-sys-color-on-secondary-container); font:500 12px/16px var(--md-ref-typeface-plain); }
+.protractor-presets { display:flex; gap:4px; }
+.protractor-presets > * { flex:1; min-width:0; }
+.measure-protractor-controls { gap:8px; padding:20px; }
+.measure-protractor-dialog > header > md-icon { color:var(--md-sys-color-primary); }
+.converter-body { gap:16px; }
+.converter-body .measure-categories md-chip-set { gap:8px; padding-bottom:4px; }
+.converter-pair { position:relative; display:flex; flex-direction:column; gap:8px; }
+.converter-card.measure-conversion-row { display:grid; grid-template-columns:minmax(0,1fr) auto; align-items:center; gap:16px 8px; padding:20px; background:var(--md-sys-color-surface-container-high); border-radius:24px 24px 8px 8px; }
+.converter-card--result.measure-conversion-row { border-radius:8px 8px 24px 24px; background:var(--md-sys-color-secondary-container); }
+.converter-unit-name { min-width:0; font:500 16px/24px var(--md-ref-typeface-plain); }
+.converter-card md-outlined-text-field { grid-column:1/-1; width:100%; min-width:0; --md-outlined-text-field-outline-width:0; --md-outlined-text-field-hover-outline-width:0; --md-outlined-text-field-input-text-size:32px; --md-outlined-text-field-input-text-line-height:40px; }
+.converter-card--result md-outlined-text-field { --md-outlined-text-field-input-text-color:var(--md-sys-color-on-secondary-container); --md-outlined-text-field-label-text-color:var(--md-sys-color-on-secondary-container); }
+.converter-swap { border-radius:50%; position:absolute; inset-inline-end:24px; top:calc(50% - 20px); z-index:2; --md-filled-tonal-icon-button-container-color:var(--md-sys-color-primary); --md-filled-tonal-icon-button-icon-color:var(--md-sys-color-on-primary); box-shadow:0 0 0 4px var(--md-sys-color-surface); }
+.converter-hint { display:flex; align-items:center; gap:8px; color:var(--md-sys-color-on-surface-variant); }
+.converter-hint md-icon { --md-icon-size:18px; }

@@ -281,9 +281,11 @@ try {
   await page.waitForFunction(()=>document.querySelector('.measure-display').textContent.includes('46'));checks++;
   const dial = page.locator('.measure-protractor');
   const geometry = await dial.evaluate(el => ({box: el.getBoundingClientRect().toJSON(), width: el.viewBox.baseVal.width, height: el.viewBox.baseVal.height}));
-  const centerY = Math.max(140,(geometry.height-148)/2);
+  const centerY = Math.max(140,(geometry.height-204)/2);
   await page.mouse.click(geometry.box.x + 100 * geometry.box.width / geometry.width, geometry.box.y + centerY * geometry.box.height / geometry.height);
   await page.waitForFunction(()=>document.querySelector('.measure-display').textContent.includes('90'));
+  await page.locator('[aria-label="Set angle to 180 degrees"]').click();
+  assert.equal((await page.locator('.protractor-kind').innerText()).trim(),'Straight');
   await page.locator('.measure-protractor-dialog [aria-label="Close"]').click();
   assert.equal(await page.locator('[role="dialog"]').count(),0);
   checks++;
@@ -296,6 +298,11 @@ try {
   assert.equal(await page.locator('.measure-conversion-row md-outlined-text-field').nth(1).evaluate(el=>el.value),'32');
   await page.locator('.measure-conversion-row md-outlined-text-field').nth(1).locator('input').fill('212');
   await page.waitForFunction(()=>document.querySelector('.measure-conversion-row md-outlined-text-field').value==='100');checks++;
+  await page.locator('[aria-label="Swap units"]').click();
+  assert.deepEqual(await page.locator('.measure-conversion-row md-outlined-text-field').evaluateAll(nodes=>nodes.map(n=>n.value)),['212','100']);
+  await page.locator('.measure-conversion-row md-outlined-text-field').first().locator('input').fill('32');
+  await page.waitForFunction(()=>document.querySelectorAll('.measure-conversion-row md-outlined-text-field')[1].value==='0');
+  checks++;
   await openMeasure('reaction_test',{reactionBest:0,reactionAverage:0});
   await page.locator('.measure-actions md-filled-button').click();
   await page.locator('.measure-reaction__pad--waiting').click();
