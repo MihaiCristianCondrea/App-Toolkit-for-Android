@@ -1,0 +1,25 @@
+{
+  "name": "app-toolkit-app-trailer",
+  "version": "1.0.0",
+  "description": "The toolbox becomes the real App Toolkit UI, timed to the complete supplied soundtrack.",
+  "private": true,
+  "scripts": {
+    "assets": "node scripts/prepare.mjs",
+    "dev": "npm run assets && remotion studio src/index.ts",
+    "lint": "tsc --noEmit",
+    "check": "node scripts/check.mjs",
+    "preview": "node scripts/render.mjs preview",
+    "render": "node scripts/render.mjs master",
+    "frames": "node scripts/render.mjs frames"
+  },
+  "dependencies": {
+    "@remotion/cli": "4.0.529",
+    "react": "19.2.3",
+    "react-dom": "19.2.3",
+    "remotion": "4.0.529"
+  },
+  "devDependencies": {
+    "@types/react": "19.2.7",
+    "typescript": "5.9.3"
+  }
+}

@@ -1,0 +1,87 @@
+{
+  "schemaVersion": "3.0",
+  "campaign": {
+    "slug": "app-trailer",
+    "title": "App Toolkit: Your toolkit",
+    "status": "draft"
+  },
+  "software": "Android Studio",
+  "copy": {
+    "title": "App Toolkit: Your toolkit",
+    "headline": "App Toolkit. Your toolkit.",
+    "description": "App Toolkit for Android opens into live tools for direction, measuring, counting and everyday choices. Watch the toolbox become your toolkit in one app.",
+    "longDescription": "The App Toolkit toolbox opens and its live widgets spring out. They settle into the app's bento layout as a Pixel phone and the rest of the interface appear. Quick Tools, Measure and Play & Decide finish the tour, accompanied by the complete supplied soundtrack.",
+    "altText": "A toolbox opens into live widgets that assemble into App Toolkit's three screens on Pixel phones.",
+    "keywords": [
+      "App Toolkit",
+      "Android",
+      "toolbox",
+      "compass",
+      "bubble level",
+      "flashlight",
+      "ruler",
+      "protractor",
+      "unit converter",
+      "bill splitter",
+      "counter",
+      "decision wheel",
+      "random number",
+      "dice"
+    ],
+    "hashtags": [
+      "#AppToolkit",
+      "#Android",
+      "#AndroidApps"
+    ]
+  },
+  "files": {
+    "output/video/app-toolkit-preview.mp4": {
+      "title": "App Toolkit: trailer preview"
+    },
+    "output/video/app-toolkit-master.mp4": {
+      "title": "App Toolkit: Your toolkit"
+    },
+    "output/images/contact-sheet.png": {
+      "title": "App Toolkit: trailer review",
+      "altText": "Eight scenes show the toolbox opening, widgets gathering, three app destinations and the final brand shot."
+    },
+    "output/images/scene-01.png": {
+      "title": "App Toolkit: scene 1",
+      "altText": "The original App Toolkit toolbox mark sits among four pastel Material shapes."
+    },
+    "output/images/scene-02.png": {
+      "title": "App Toolkit: scene 2",
+      "altText": "The toolbox lid and handle hinge open, ready for the tools to emerge."
+    },
+    "output/images/scene-03.png": {
+      "title": "App Toolkit: scene 3",
+      "altText": "Six real Quick Tools widgets spring out of the toolbox with fully rounded corners."
+    },
+    "output/images/scene-04.png": {
+      "title": "App Toolkit: scene 4",
+      "altText": "Compass, level, flashlight and SOS settle into the app bento beside the words One place."
+    },
+    "output/images/scene-05.png": {
+      "title": "App Toolkit: scene 5",
+      "altText": "The real Quick Tools screen appears in the Pixel frame beside Quick tools."
+    },
+    "output/images/scene-06.png": {
+      "title": "App Toolkit: scene 6",
+      "altText": "Measure appears on a Pixel phone beside the real counter widget."
+    },
+    "output/images/scene-07.png": {
+      "title": "App Toolkit: scene 7",
+      "altText": "The decision wheel lands on Sushi beside the real Play and Decide screen."
+    },
+    "output/images/scene-08.png": {
+      "title": "App Toolkit: scene 8",
+      "altText": "Three App Toolkit screens fan out beside the mark, tagline and Google Play badge."
+    }
+  },
+  "soundtrack": {
+    "source": "soundtrack.mp3",
+    "suppliedBy": "Mihai-Cristian Condrea",
+    "durationSeconds": 29.88,
+    "treatment": "Full source file, unchanged playback speed and volume; no cut, loop or fade."
+  }
+}

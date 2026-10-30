@@ -1,0 +1,65 @@
+name: App trailer preview
+
+on:
+  push:
+    branches: [develop]
+    paths:
+      - marketing/creative/social-campaigns/app-trailer/**
+      - .github/workflows/app-trailer.yml
+  workflow_dispatch:
+    inputs:
+      master:
+        description: Render the approved 2560x1440 master
+        type: boolean
+        default: false
+
+permissions:
+  contents: read
+
+concurrency:
+  group: app-trailer-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  preview:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: |
+            marketing/ui/package-lock.json
+            marketing/creative/social-campaigns/app-trailer/source/package-lock.json
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pip install pillow mutagen
+      - name: Media inspection tools
+        run: sudo apt-get update && sudo apt-get install -y ffmpeg libimage-exiftool-perl
+      - name: Prepare the existing UI kit
+        working-directory: marketing/ui
+        run: npm ci --no-fund && npm run assets
+      - name: Install trailer tools
+        working-directory: marketing/creative/social-campaigns/app-trailer/source
+        run: npm ci --no-fund
+      - name: Check and render the complete preview
+        working-directory: marketing/creative/social-campaigns/app-trailer/source
+        run: |
+          npm run assets
+          npm run lint
+          npm run check
+          npm run frames
+          npm run preview
+      - name: Render master when requested
+        if: github.event_name == 'workflow_dispatch' && inputs.master
+        working-directory: marketing/creative/social-campaigns/app-trailer/source
+        run: npm run render
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: app-toolkit-trailer-review
+          path: marketing/creative/social-campaigns/app-trailer/output/
+          retention-days: 14

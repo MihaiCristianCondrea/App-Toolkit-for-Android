@@ -11,7 +11,7 @@ export function animatedNumber(value) {
     if (!el) return;
     const previous = values.get(el);
     values.set(el, text);
-    if (previous == null || previous === text) return;
+    if (previous == null || previous === text || document.documentElement.dataset.motion === 'frame') return;
     requestAnimationFrame(() => {
       if (!el.isConnected || values.get(el) !== text) return;
       const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
