@@ -36,7 +36,7 @@ const heroTransform=(t:number,start:number,end:number,x:number,y:number,scale:nu
 export const FeatureJourney:React.FC<{seconds:number;geometry:Geometry|null}>=({seconds:t,geometry})=>{
   const measure=timeline.events.measure,play=timeline.events.play;
   const isPlay=t>=play;
-  const move=ease(t,17.92,18.62);
+  const move=ease(t,17.7,18.1);
   const count=42+[20.84,21.12,21.46].filter(hit=>t>=hit).length;
   const angle=Math.round(lerp(20,135,ease(t,18.38,18.92)));
   const converter=Math.round(lerp(10,25,ease(t,19.42,19.88)));
@@ -59,7 +59,7 @@ export const FeatureJourney:React.FC<{seconds:number;geometry:Geometry|null}>=({
       state={isPlay?playState:measureState} x={lerp(1320,540,move)} y={540} scale={.92} angle={lerp(-4,4,move)}
       reveal={chapterReveal} revealFrom={origin(geometry,isPlay?'Play & Decide':'Measure')}/>
     {!isPlay?<>
-      <Headline text="Measure." x={990} y={180} width={800} size={142} progress={ease(t,17.8,18.1)*(1-ease(t,21.46,21.98))}/>
+      <Headline text="Measure." x={990} y={180} width={800} size={142} progress={ease(t,18.1,18.38)*(1-ease(t,21.46,21.98))}/>
       {MEASURE_HEROES.map(hero=>t>=hero.in&&t<hero.out+.22?<div key={hero.tool} data-hero-part={hero.tool} style={{position:'absolute',left:0,top:0,opacity:1-ease(t,hero.out,hero.out+.22),transform:heroTransform(t,hero.in,hero.out,1360,610,1.35)}}>
         <LiveCrop screen="numbers" selector={`[data-tool="${hero.tool}"]`} state={{...measureState,searchQuery:''}} style={{borderRadius:28}}/>
       </div>:null)}
