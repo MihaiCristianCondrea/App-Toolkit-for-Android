@@ -7,7 +7,8 @@ const e=timeline.events;
 const launch=[{x:400,y:260,angle:-9},{x:930,y:235,angle:5},{x:1460,y:270,angle:9},{x:1500,y:710,angle:-6},{x:420,y:720,angle:-5},{x:950,y:720,angle:4},{x:960,y:1000,angle:0}];
 const symbols=[['explore','sunny'],['straighten','pill'],['flashlight_on','burst'],['emergency','cookie_7sided'],['water_drop','cookie_9sided'],['favorite','soft_burst']];
 const names=['Compass','Bubble level','Flash Dimmer','Morse & SOS','Water Eject','Breathe'];
-const bento=[{x:460,y:440},{x:750,y:440},{x:1130,y:440},{x:1420,y:440},{x:525,y:850},{x:1240,y:775},{x:1240,y:945}];
+// Four tools leave the box: the frame holds four cards at a readable size, not the whole screen.
+const bento=[{x:1100,y:330},{x:1420,y:330},{x:1100,y:750},{x:1420,y:750}];
 
 /** The same seven measured cards travel from launcher to full bento to phone. */
 export const OpeningJourney:React.FC<{seconds:number;onGeometry?:(g:Geometry)=>void}>=({seconds:t,onGeometry})=>{
@@ -20,6 +21,8 @@ export const OpeningJourney:React.FC<{seconds:number;onGeometry?:(g:Geometry)=>v
   const heading=Math.round(lerp(312,405,sensor))%360;
   return <>
     <GeometryProbe onGeometry={measured}/>
+    {/* One stage per subject: it grows behind the gathered cards and carries them into the phone. */}
+    {t>=e.gather?<Shape name="cookie_9sided" color="#D0E9E3" size={1000} x={lerp(1260,phoneX,pull)} y={540} scale={pop(t,e.gather,.6)*lerp(1,.95,pull)} angle={lerp(-30,0,ease(t,e.gather,e.gatherEnd))}/>:null}
     {t<e.launch?symbols.map(([icon,shape],i)=>{
       const at=e.iconNotes[i],p=pop(t,at,.35),exit=easeIn(t,e.logo,e.lidOpen);
       const spread=ease(t,e.iconNotes[1],e.iconNotes[4]);
@@ -34,10 +37,10 @@ export const OpeningJourney:React.FC<{seconds:number;onGeometry?:(g:Geometry)=>v
       const arrive=pop(t,e.logo,.48),split=easeIn(t,e.lidOpen,e.bodyLand),land=pop(t,e.lidOpen,.58);
       const recoil=beat(t)*(t>=e.launch?.5:0),away=easeIn(t,e.gather,e.gatherEnd);
       const anticipate=ease(t,e.logo,e.logo+.08),overshoot=pop(t,e.logo+.08,.36);
-      return <Toolbox x={960} y={lerp(540,965,land)+600*away} size={510} open={split} scale={lerp(1.7,.65,anticipate)+.52*overshoot} squash={recoil} angle={lerp(-8,0,arrive)}/>;
+      return <Toolbox x={960} y={lerp(540,800,land)+600*away} size={510} open={split} scale={lerp(1.7,.65,anticipate)+.52*overshoot} squash={recoil} angle={lerp(-8,0,arrive)}/>;
     })():null}
-    {t>=e.pullBack?<Phone id="quick-tools" state={{compassHeading:heading,levelRoll:lerp(4,0,sensor),levelPitch:lerp(2,0,sensor)}} x={phoneX} y={lerp(1500,540,ease(t,e.pullBack,e.pullBackEnd))} scale={phoneScale} angle={-4*move} shell={1} ui={1} hideWidgets={t<e.pullBackEnd}/>:null}
-    {g&&t<e.pullBackEnd?WIDGETS.map((widget,i)=>{
+    {t>=e.pullBack?<Phone id="quick-tools" state={{compassHeading:heading,levelRoll:lerp(4,0,sensor),levelPitch:lerp(2,0,sensor)}} x={phoneX} y={540} scale={phoneScale*lerp(1.12,1,pull)} angle={-4*move} shell={pull} ui={1} reveal={pull} revealFrom={{x:215,y:480}} hideWidgets={t<e.pullBackEnd}/>:null}
+    {g&&t<e.pullBackEnd?WIDGETS.slice(0,4).map((widget,i)=>{
       const at=i===6?e.colors:e.launches[i],rect=g[widget.id],pose=launch[i];
       const flight=ease(t,at,at+.42),p=pop(t,at,.52);
       const spread=ease(t,e.launches[Math.min(i+1,5)],e.launches[Math.min(i+1,5)]+.4);
@@ -46,13 +49,13 @@ export const OpeningJourney:React.FC<{seconds:number;onGeometry?:(g:Geometry)=>v
       const px=phoneX-SKIN_WIDTH*phoneScale/2+DISPLAY.x*phoneScale+(rect.x+rect.width/2)*phoneScale;
       const py=540-SKIN_HEIGHT*phoneScale/2+DISPLAY.y*phoneScale+(rect.y+rect.height/2)*phoneScale;
       const x=lerp(lerp(x0,gx,gather),px,pull),y=lerp(lerp(y0,gy,gather),py,pull);
-      const scale=lerp(lerp(lerp(2.2,i===4?1.05:1.38,spread),1.38,gather),phoneScale,pull);
+      const scale=lerp(lerp(lerp(1.6,i===4?1.05:1.38,spread),1.5,gather),phoneScale,pull);
       const radius=(rect.radii??[28,28,28,28]).map(r=>`${lerp(28,r,gather)}px`).join(' ');
       return t>=at?<div key={widget.id} data-flying-widget={widget.id} style={{position:'absolute',width:rect.width,height:rect.height,transformOrigin:'50% 50%',transform:`translate(${x-rect.width/2}px,${y-rect.height/2}px) rotate(${pose.angle*(1-gather)}deg) scale(${scale})`,zIndex:10+i}}>
         <LiveCrop screen="quick-tools" selector={widget.selector} state={{searchQuery:widget.query,compassHeading:312,levelRoll:4,levelPitch:2}} style={{borderRadius:radius}}/>
       </div>:null;
     }):null}
-    {t>=e.gather&&t<e.pullBackEnd?<div style={{transform:`translateY(${-500*pull}px)`}}><Headline seconds={t} text="One place." x={290} y={35} width={1400} size={170} progress={ease(t,e.gather,e.gather+.4)}/></div>:null}
+    {t>=e.gather&&t<e.pullBackEnd?<div style={{transform:`translateX(${-1100*pull}px)`}}><Headline seconds={t} text="One place." x={130} y={330} width={700} size={170} progress={ease(t,e.gather,e.gather+.4)}/></div>:null}
     {t>=e.featureMove?<QuickCaption seconds={t}/>:null}
   </>;
 };

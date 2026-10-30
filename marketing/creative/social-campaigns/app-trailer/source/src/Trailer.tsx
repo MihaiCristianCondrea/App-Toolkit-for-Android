@@ -7,7 +7,6 @@ import {ClosingScene} from './ClosingScene';
 import {GROUND,camera} from './visuals';
 import timeline from './timeline.json';
 import {CameraMotionBlur} from '@remotion/motion-blur';
-import {Backdrop} from './visuals';
 
 const Picture:React.FC=()=>{
   const frame=useCurrentFrame(),{fps}=useVideoConfig();
@@ -16,7 +15,6 @@ const Picture:React.FC=()=>{
   const measured=useCallback((g:Geometry)=>setGeometry(old=>old??g),[]);
   return <AbsoluteFill style={{background:GROUND,fontFamily:'Google Sans Flex',color:'#3B2D14',overflow:'hidden'}}>
     <style>{`*,*::before,*::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}html,body{margin:0} [data-phone] mnw-android-screen{overflow:hidden}`}</style>
-    <Backdrop/>
     <AbsoluteFill style={{transformOrigin:'50% 50%',transform:camera(seconds)}}>
     <Sequence name="Toolbox to Quick Tools" durationInFrames={Math.round(timeline.events.measure*fps)}>
       <OpeningJourney seconds={seconds} onGeometry={measured}/>

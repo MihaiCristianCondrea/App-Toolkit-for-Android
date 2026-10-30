@@ -52,11 +52,11 @@ export const Chip:React.FC<{text:string;color:string;ink:string;progress:number;
 export const Shape:React.FC<{name:string;color:string;size:number;x:number;y:number;angle?:number;scale?:number}>=({name,color,size,x,y,angle=0,scale=1})=><div aria-hidden="true" style={{position:'absolute',width:size,height:size,left:0,top:0,background:color,maskImage:`url("${shapeUrl(name)}")`,WebkitMaskImage:`url("${shapeUrl(name)}")`,maskSize:'contain',WebkitMaskSize:'contain',maskRepeat:'no-repeat',transform:`translate(${x-size/2}px,${y-size/2}px) rotate(${angle}deg) scale(${scale})`}}/>;
 
 /** Both layers are generated from the existing SVG paths, with no replacement logo artwork. */
-/** The lid pops straight up with a slight tilt (a front-view mark has no visible hinge), and the body squashes and stretches from its base. */
+/** The lid flips over its hinge like a chest lid and ends behind the body, shaded as its inside; the body drops to make room. */
 export const Toolbox:React.FC<{x:number;y:number;size:number;open:number;scale?:number;angle?:number;squash?:number}>=({x,y,size,open,scale=1,angle=0,squash=0})=><div style={{position:'absolute',left:0,top:0,width:size,height:size,transform:`translate(${x-size/2}px,${y-size/2}px) rotate(${angle}deg) scale(${scale})`}}>
   <div style={{position:'absolute',inset:0,transformOrigin:'50% 92%',transform:`scale(${1+squash*.07},${1-squash*.09})`}}>
-    <Img src={staticFile('toolbox-base.svg')} style={{position:'absolute',inset:0,width:'100%',height:'100%',zIndex:2}}/>
-    <Img src={staticFile('toolbox-lid.svg')} style={{position:'absolute',inset:0,width:'100%',height:'100%',transformOrigin:'50% 30%',transform:`translateY(${-open*1800}px) rotate(${-open*34}deg)`,zIndex:3}}/>
+    <Img src={staticFile('toolbox-base.svg')} style={{position:'absolute',inset:0,width:'100%',height:'100%',zIndex:2,transform:`translateY(${open*size*.22}px)`}}/>
+    <Img src={staticFile('toolbox-lid.svg')} style={{position:'absolute',inset:0,width:'100%',height:'100%',transformOrigin:'50% 44.24%',transform:`translateY(${-open*size*.14}px) scaleY(${Math.cos(Math.PI*open)})`,zIndex:open>.5?1:3,filter:open>.5?'brightness(.8)':undefined}}/>
   </div>
 </div>;
 
