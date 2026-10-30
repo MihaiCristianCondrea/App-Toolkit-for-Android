@@ -1,7 +1,7 @@
 import React from 'react';
 import {Easing, Img, spring, staticFile,useCurrentFrame,useVideoConfig} from 'remotion';
 import {shapeUrl} from '../../../../../ui/src/kit/assets.js';
-import {DISPLAY,LiveScreen,SKIN_HEIGHT,SKIN_WIDTH} from './Kit';
+import {DISPLAY,LiveScreen,SKIN_HEIGHT,SKIN_WIDTH,localRect,Geometry} from './Kit';
 import timeline from './timeline.json';
 
 export const INK='#3B2D14';
@@ -64,16 +64,33 @@ export const Toolbox:React.FC<{x:number;y:number;size:number;open:number;scale?:
   </div>;
 };
 
-export const Phone:React.FC<{id:string;state?:Record<string,unknown>;x:number;y:number;scale:number;angle?:number;shell?:number;ui?:number;hideWidgets?:boolean;revealFrom?:{x:number;y:number};reveal?:number;underId?:string;underState?:Record<string,unknown>}>=({id,state={},x,y,scale,angle=0,shell=1,ui=1,hideWidgets=false,reveal=1,revealFrom={x:215,y:900},underId,underState})=><div data-phone={id} style={{position:'absolute',left:0,top:0,width:SKIN_WIDTH,height:SKIN_HEIGHT,transformOrigin:'50% 50%',transform:`translate(${x-SKIN_WIDTH/2}px,${y-SKIN_HEIGHT/2}px) rotate(${angle}deg) scale(${scale})`}}>
-  <Img src={staticFile('device/back.webp')} style={{position:'absolute',inset:0,width:'100%',height:'100%',opacity:shell}}/>
-  <div style={{position:'absolute',left:DISPLAY.x,top:DISPLAY.y,width:DISPLAY.width,height:DISPLAY.height,borderRadius:DISPLAY.radius,overflow:'hidden'}}>
-    {underId&&reveal<1?<LiveScreen id={underId} state={underState} style={{position:'absolute',inset:0}}/>:null}
-    <div style={{position:'absolute',inset:0,opacity:ui,clipPath:reveal<1?`circle(${reveal*1200}px at ${revealFrom.x}px ${revealFrom.y}px)`:undefined}}><LiveScreen id={id} state={{...state,_filmHideWidgets:hideWidgets}} onReady={root=>{
-      if(hideWidgets)for(const node of root.querySelectorAll<HTMLElement>('.qt-live,.qt-breathe,.qt-colors'))node.style.visibility='hidden';
-    }}/></div>
-    <Img src={staticFile('device/mask.webp')} style={{position:'absolute',inset:0,width:'100%',height:'100%',opacity:shell,pointerEvents:'none'}}/>
-  </div>
-</div>;
+export const Phone:React.FC<{id:string;state?:Record<string,unknown>;x:number;y:number;scale:number;angle?:number;shell?:number;ui?:number;hideWidgets?:boolean;revealFrom?:{x:number;y:number};reveal?:number;underId?:string;underState?:Record<string,unknown>;transition?:number;focusSelector?:string;underFocusSelector?:string;hiddenParts?:string[];onParts?:(g:Geometry)=>void}>=({id,state={},x,y,scale,angle=0,shell=1,ui=1,hideWidgets=false,reveal=1,revealFrom={x:215,y:900},underId,underState,transition=1,focusSelector,underFocusSelector,hiddenParts=[],onParts})=>{
+  const direction=revealFrom.x<215?-1:1;
+  const focusPart=(root:HTMLElement,selector?:string)=>{
+    const focus=selector?root.querySelector<HTMLElement>(selector):null;
+    const viewport=root.querySelector('mnw-android-screen')?.shadowRoot?.querySelector<HTMLElement>('.content');
+    if(focus&&viewport){const r=localRect(focus,root),v=localRect(viewport,root);if(r.y<v.y||r.y+r.height>v.y+v.height)viewport.scrollTop+=r.y-v.y-(v.height-r.height)/2;}
+  };
+  return <div data-phone={id} style={{position:'absolute',width:SKIN_WIDTH,height:SKIN_HEIGHT,transformOrigin:'50% 50%',transform:`translate(${x-SKIN_WIDTH/2}px,${y-SKIN_HEIGHT/2}px) rotate(${angle}deg) scale(${scale})`}}>
+    <Img src={staticFile('device/back.webp')} style={{position:'absolute',inset:0,width:'100%',height:'100%',opacity:shell}}/>
+    <div style={{position:'absolute',left:DISPLAY.x,top:DISPLAY.y,width:DISPLAY.width,height:DISPLAY.height,borderRadius:DISPLAY.radius,overflow:'hidden'}}>
+      {underId&&transition<1?<LiveScreen id={underId} state={underState} onReady={root=>focusPart(root,underFocusSelector)} style={{position:'absolute',inset:0,opacity:1-ease(transition,0,.35),transform:`translateX(${-30*direction*transition}px)`}}/>:null}
+      <div style={{position:'absolute',inset:0,opacity:ui*(underId?ease(transition,.35,1):1),transform:`translateX(${underId?30*direction*(1-transition):0}px)`,clipPath:reveal<1?`inset(${(1-reveal)*50}%)`:undefined}}>
+        <LiveScreen id={id} state={{...state,_filmHideWidgets:hideWidgets}} onReady={root=>{
+          focusPart(root,focusSelector);
+          if(onParts){
+            const parts:Geometry={};
+            for(const node of root.querySelectorAll<HTMLElement>('[data-tool]'))if(node.dataset.tool)parts[node.dataset.tool]=localRect(node,root);
+            onParts(parts);
+          }
+          if(hideWidgets)for(const node of root.querySelectorAll<HTMLElement>('.qt-live,.qt-breathe,.qt-colors'))node.style.visibility='hidden';
+          for(const key of hiddenParts){const node=root.querySelector<HTMLElement>(`[data-tool="${key}"]`);if(node)node.style.visibility='hidden';}
+        }}/>
+      </div>
+      <Img src={staticFile('device/mask.webp')} style={{position:'absolute',inset:0,width:'100%',height:'100%',opacity:shell,pointerEvents:'none'}}/>
+    </div>
+  </div>;
+};
 
 export const Headline:React.FC<{text:string;x:number;y:number;width?:number;size?:number;progress?:number;seconds?:number;align?:'left'|'center'}>=({text,x,y,width=760,size=126,progress=1,seconds,align='left'})=><div data-headline style={{position:'absolute',left:x,top:y,width,color:INK,fontFamily:'Google Sans Flex',fontSize:size,lineHeight:1.04,fontWeight:650,letterSpacing:-size*.045,textAlign:align,paddingBottom:size*.25}}>{text.split(' ').map((word,i)=>{
   const notes=(timeline.events.type as Record<string,number[]>)[text];

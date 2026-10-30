@@ -33,7 +33,7 @@ const boot=()=>ready??=(async()=>{
 const frame=()=>new Promise<void>(resolve=>requestAnimationFrame(()=>resolve()));
 
 /** Invert the rendered axes, so Studio zoom and the film's card rotations never distort measurements. */
-const localRect=(node:HTMLElement,root:HTMLElement):Rect=>{
+export const localRect=(node:HTMLElement,root:HTMLElement):Rect=>{
   const rootPosition=root.style.position,nodePosition=node.style.position;
   if(getComputedStyle(root).position==='static')root.style.position='relative';
   if(getComputedStyle(node).position==='static')node.style.position='relative';

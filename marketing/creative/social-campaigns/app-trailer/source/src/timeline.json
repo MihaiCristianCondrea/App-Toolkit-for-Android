@@ -267,6 +267,9 @@
       "Let chance decide.": [22.56, 22.86, 23.14],
       "App Toolkit.": [27.04, 27.26],
       "Your toolkit.": [27.26, 27.68]
-    }
+    },
+    "heroReturns": [18.84, 19.7, 20.56, 21.72],
+    "chanceReturn": 26,
+    "wheelEntry": 22.56
   }
 }
