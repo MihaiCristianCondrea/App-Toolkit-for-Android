@@ -1,16 +1,25 @@
 import React from 'react';
 import {Img,staticFile} from 'remotion';
-import {Headline,Phone,Shape,Toolbox,ease,lerp,pop} from './visuals';
+import {Headline,Phone,Shape,Toolbox,beat,ease,lerp,pop} from './visuals';
+
+/** The three destinations fan out one onset apart, each named under its phone. */
+const PHONES=[
+  {id:'quick-tools',label:'Quick Tools',x:1070,scale:.62,angle:-6,at:26.26,state:{compassHeading:45,levelRoll:0,levelPitch:0}},
+  {id:'play',label:'Play & Decide',x:1610,scale:.62,angle:6,at:26.5,state:{wheelText:'Pizza\nSushi\nPasta',wheelRotation:1260,wheelWinner:'Sushi',randomResult:73,diceResult:5,coinSide:'Heads'}},
+  {id:'numbers',label:'Measure',x:1340,scale:.64,angle:0,at:26.82,state:{counterValue:45}},
+] as const;
 
 export const ClosingScene:React.FC<{seconds:number}>=({seconds:t})=>{
-  const fan=ease(t,26.26,27.26);
+  const fan=ease(t,26.26,27.26),pulse=1+.05*beat(t);
   return <>
-    <Shape name="cookie_9sided" color="#FDE7A2" size={580} x={1840} y={120} angle={lerp(-20,8,fan)}/>
-    <Shape name="clover_4leaf" color="#D0E9E3" size={450} x={10} y={1070} angle={lerp(20,0,fan)}/>
-    <Phone id="quick-tools" state={{compassHeading:45,levelRoll:0,levelPitch:0}} x={lerp(540,1070,fan)} y={lerp(540,540,fan)} scale={lerp(.92,.62,fan)} angle={lerp(4,-6,fan)}/>
-    <Phone id="numbers" state={{counterValue:45}} x={lerp(540,1340,fan)} y={540} scale={lerp(.92,.64,fan)} angle={lerp(4,0,fan)}/>
-    <Phone id="play" state={{wheelText:'Pizza\nSushi\nPasta',wheelRotation:1260,wheelWinner:'Sushi',randomResult:73,diceResult:5,coinSide:'Heads'}} x={lerp(540,1610,fan)} y={540} scale={lerp(.92,.62,fan)} angle={lerp(4,6,fan)}/>
-    <Toolbox x={230} y={300} size={250} open={0} scale={pop(t,26.82,.6)}/>
+    <Shape name="cookie_9sided" color="#FDE7A2" size={580} x={1840} y={120} angle={lerp(-20,8,fan)+t*3} scale={pulse}/>
+    <Shape name="clover_4leaf" color="#D0E9E3" size={450} x={10} y={1070} angle={lerp(20,0,fan)-t*3} scale={pulse}/>
+    {PHONES.map((phone,i)=>{
+      const p=pop(t,phone.at,.9),float=Math.sin((t-26.26)*1.6+i*1.3)*8*ease(t,27.3,27.9);
+      return <Phone key={phone.id} id={phone.id} state={phone.state} x={lerp(540,phone.x,p)} y={540+float} scale={lerp(.92,phone.scale,p)} angle={lerp(4,phone.angle,p)}/>;
+    })}
+    {PHONES.map(phone=><div key={phone.label} style={{position:'absolute',left:phone.x-150,top:880,width:300,textAlign:'center',fontSize:32,fontWeight:600,color:'#3B2D14',opacity:ease(t,phone.at+.5,phone.at+.8),transform:`translateY(${lerp(24,0,ease(t,phone.at+.5,phone.at+.8))}px)`}}>{phone.label}</div>)}
+    <Toolbox x={230} y={300} size={250} open={ease(t,28.88,29.3)*.35} scale={pop(t,26.82,.6)*(1+.04*beat(t))}/>
     <Headline text="App Toolkit." x={110} y={480} width={780} size={124} progress={ease(t,27.04,27.68)}/>
     <Headline text="Your toolkit." x={116} y={645} width={700} size={72} progress={ease(t,27.26,27.96)}/>
     <Img src={staticFile('google-play.png')} style={{position:'absolute',left:95,top:810,width:330,height:'auto',transform:`translateY(${lerp(80,0,ease(t,27.68,28.26))}px)`,opacity:ease(t,27.68,28.26)}}/>

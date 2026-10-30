@@ -4,7 +4,7 @@ A 16:9 product trailer based on the owner's toolbox sketches. The existing mark 
 
 | | |
 | --- | --- |
-| Status | Draft cut for visual review |
+| Status | Second draft (more motion and tool detail) for visual review |
 | Sound | The complete supplied `soundtrack.mp3`, 29.88 seconds, unchanged speed and volume |
 | Design size | 1920 x 1080 |
 | Preview | 960 x 540 at 90 fps |
@@ -39,10 +39,10 @@ The **App trailer preview** Actions workflow also builds the preview and publish
 | 1.76 to 3.32 | The original lid and handle open. |
 | 3.32 to 6.76 | Six real Quick Tools widgets jump out. "Many tools." |
 | 6.76 to 10.08 | The box leaves. Widgets gather into the real screen geometry. "One place." |
-| 10.08 to 17.14 | Pull back to the Pixel; the shell appears around the same cards. Compass turns, level settles. |
-| 17.14 to 21.98 | Measure opens from its actual tab. Ruler and protractor are visible; the counter advances. |
-| 21.98 to 26.26 | Play & Decide opens. The decision wheel chooses Sushi; random number, coin and dice remain real UI. |
-| 26.26 to 29.88 | Three destinations fan out. "App Toolkit. Your toolkit." Original Google Play badge. |
+| 10.08 to 17.14 | Pull back to the Pixel; the shell appears around the same cards. Compass turns, level settles, six tool-name chips land on the beat. |
+| 17.14 to 21.98 | Measure opens from its actual tab. Protractor, Unit Converter, Bill Splitter and Counter each take the stage on an onset with live values. |
+| 21.98 to 26.26 | Play & Decide opens. The decision wheel chooses Sushi; random number, dice and coin land and resolve. |
+| 26.26 to 29.88 | Three labelled destinations fan out one onset apart. "App Toolkit. Your toolkit." Original Google Play badge. |
 
 Major gestures follow detected bass onsets in `source/src/music-analysis.json`. Its BPM is an estimate, not a claim about the song. The timeline follows the supplied track rather than forcing the music onto an invented grid.
 

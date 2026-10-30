@@ -6,10 +6,10 @@
     {"id": "open", "start": 1.76, "end": 3.32, "title": "Open the toolbox", "action": "The real lid and handle hinge back, exposing the box."},
     {"id": "many-tools", "start": 3.32, "end": 6.76, "title": "Many tools.", "action": "Six real Quick Tools widgets spring out with fully rounded corners."},
     {"id": "one-place", "start": 6.76, "end": 10.08, "title": "One place.", "action": "The box leaves; the widgets settle into the measured app bento geometry."},
-    {"id": "quick-tools", "start": 10.08, "end": 17.14, "title": "Quick tools.", "action": "The camera pulls back; the official Pixel skin and real shell form around the same tiles. The compass turns and the level settles."},
-    {"id": "measure", "start": 17.14, "end": 21.98, "title": "Measure.", "action": "The Measure tab opens from its real navigation target. The counter advances beside the live screen."},
-    {"id": "play", "start": 21.98, "end": 26.26, "title": "Let chance decide.", "action": "Play & Decide opens; the real wheel spins to Sushi, with random number, coin and dice visible on the screen."},
-    {"id": "close", "start": 26.26, "end": 29.88, "title": "App Toolkit. Your toolkit.", "action": "Three real destinations fan out beside the mark and the original Google Play badge. Music finishes naturally."}
+    {"id": "quick-tools", "start": 10.08, "end": 17.14, "title": "Quick tools.", "action": "The camera pulls back; the official Pixel skin and real shell form around the same tiles. The compass turns and keeps swaying, the level settles, and the six tool names land as chips on consecutive onsets."},
+    {"id": "measure", "start": 17.14, "end": 21.98, "title": "Measure.", "action": "The Measure tab opens from its real navigation target. Protractor, Unit Converter, Tip & Bill Splitter and Counter take the stage one onset at a time with changing values, mirrored on the live screen."},
+    {"id": "play", "start": 21.98, "end": 26.26, "title": "Let chance decide.", "action": "Play & Decide opens; the real wheel spins to Sushi and settles, then random number, dice and coin land and resolve to 73, 5 and Heads."},
+    {"id": "close", "start": 26.26, "end": 29.88, "title": "App Toolkit. Your toolkit.", "action": "Three real destinations fan out one onset apart, labelled, beside the mark and the original Google Play badge. Music finishes naturally."}
   ],
   "events": {
     "lidOpen": 1.76,

@@ -2,6 +2,7 @@ import React from 'react';
 import {Img, staticFile} from 'remotion';
 import {shapeUrl} from '../../../../../ui/src/kit/assets.js';
 import {DISPLAY,LiveScreen,SKIN_HEIGHT,SKIN_WIDTH} from './Kit';
+import music from './music-analysis.json';
 
 export const INK='#3B2D14';
 export const GROUND='#FFF4D9';
@@ -9,6 +10,12 @@ export const lerp=(a:number,b:number,p:number)=>a+(b-a)*p;
 export const clamp=(n:number)=>Math.max(0,Math.min(1,n));
 export const ease=(t:number,start:number,end:number)=>{const p=clamp((t-start)/(end-start));return p*p*p*(p*(p*6-15)+10);};
 export const pop=(t:number,start:number,duration=.7)=>{const p=clamp((t-start)/duration);return p===1?1:1-Math.exp(-7*p)*Math.cos(8*p);};
+
+/** A decaying accent on the soundtrack's detected onsets: 1 on the hit, near 0 a few frames later. */
+export const beat=(t:number)=>{let last=-1;for(const onset of music.onsetsSeconds){if(onset>t)break;last=onset;}return last<0?0:Math.exp(-(t-last)*9);};
+
+/** A tool name that lands on a beat, so a chapter names what the screen holds. */
+export const Chip:React.FC<{text:string;color:string;ink:string;progress:number;active?:number}>=({text,color,ink,progress,active=0})=><span style={{display:'inline-block',padding:'12px 26px',borderRadius:999,background:color,color:ink,fontSize:34,fontWeight:600,lineHeight:1.1,whiteSpace:'nowrap',opacity:clamp(progress*3),transform:`translateY(${(1-progress)*60}px) scale(${lerp(.6,1,progress)*(1+.08*active)})`}}>{text}</span>;
 
 export const Shape:React.FC<{name:string;color:string;size:number;x:number;y:number;angle?:number;scale?:number}>=({name,color,size,x,y,angle=0,scale=1})=><div aria-hidden="true" style={{position:'absolute',width:size,height:size,left:0,top:0,background:color,maskImage:`url("${shapeUrl(name)}")`,WebkitMaskImage:`url("${shapeUrl(name)}")`,maskSize:'contain',WebkitMaskSize:'contain',maskRepeat:'no-repeat',transform:`translate(${x-size/2}px,${y-size/2}px) rotate(${angle}deg) scale(${scale})`}}/>;
 
