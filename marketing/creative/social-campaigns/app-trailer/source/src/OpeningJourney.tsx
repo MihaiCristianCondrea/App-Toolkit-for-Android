@@ -4,12 +4,12 @@ import {Chip,Headline,Phone,Shape,Toolbox,beat,ease,easeIn,lerp,pop} from './vis
 import timeline from './timeline.json';
 
 const launch=[
-  {x:480,y:300,scale:1.08,angle:-12},
-  {x:920,y:255,scale:1.08,angle:8},
-  {x:1395,y:325,scale:1.08,angle:12},
-  {x:1450,y:770,scale:1.08,angle:-8},
-  {x:470,y:785,scale:.9,angle:-7},
-  {x:1010,y:770,scale:1.12,angle:7},
+  {x:450,y:310,scale:1.2,angle:-12},
+  {x:960,y:190,scale:1.2,angle:6},
+  {x:1470,y:320,scale:1.2,angle:12},
+  {x:1510,y:700,scale:1.2,angle:-8},
+  {x:410,y:720,scale:1.05,angle:-7},
+  {x:1480,y:990,scale:1,angle:5},
 ];
 const e=timeline.events;
 const clampUnit=(n:number)=>Math.max(0,Math.min(1,n));
@@ -31,7 +31,7 @@ export const OpeningJourney:React.FC<{seconds:number;onGeometry?:(g:Geometry)=>v
   const gather=ease(t,e.gather,e.gatherEnd);
   const pull=ease(t,e.pullBack,e.pullBackEnd);
   const move=ease(t,e.featureMove,14.6);
-  const phoneScale=lerp(lerp(1.25,.86,pull),.92,move);
+  const phoneScale=lerp(lerp(1.25,1,pull),.92,move);
   const phoneX=lerp(960,1320,move);
   const nativeTop=g?.compass.y??0;
   const initialPhoneY=70-nativeTop*1.25-DISPLAY.y*1.25+SKIN_HEIGHT*1.25/2;
@@ -55,7 +55,7 @@ export const OpeningJourney:React.FC<{seconds:number;onGeometry?:(g:Geometry)=>v
       const recoil=WIDGETS.reduce((sum,_,i)=>{const d=t-(e.launch+i*e.launchStagger);return sum+(d>=0?Math.exp(-d*10)*Math.cos(d*22):0);},0);
       const squash=.9*Math.sin(Math.PI*clampUnit((t-1.36)/.4))*(t<e.lidOpen?1:0)-.6*Math.exp(-Math.max(0,t-e.lidOpen)*9)*(t>=e.lidOpen?1:0)+.5*recoil;
       const lid=pop(t,e.lidOpen,.8)*(1-ease(t,5.9,6.2));
-      return <Toolbox x={960} y={lerp(980,lerp(480,640,ease(t,e.launch-.3,e.launch+.5)),enter)+760*exit} size={400} open={lid} squash={squash} scale={lerp(.7,1,enter)} angle={lerp(-10,0,enter)+9*exit}/>;
+      return <Toolbox x={960} y={lerp(1040,lerp(540,640,ease(t,e.launch-.3,e.launch+.5)),enter)+760*exit} size={400} open={lid} squash={squash} scale={lerp(.7,1,enter)*lerp(1.45,1,ease(t,e.launch-.5,e.launch+.2))} angle={lerp(-10,0,enter)+9*exit}/>;
     })():null}
     {t>=e.pullBack?<Phone id="quick-tools" state={{compassHeading:heading,levelRoll:lerp(4,0,sensor),levelPitch:lerp(2,0,sensor)}} x={phoneX} y={phoneY} scale={phoneScale} angle={-4*move} shell={pull} ui={ease(t,e.pullBackEnd,e.shellBuildEnd)} hideWidgets={t<e.shellBuildEnd}/>:null}
     {g&&t<e.shellBuildEnd?WIDGETS.map((widget,i)=>{

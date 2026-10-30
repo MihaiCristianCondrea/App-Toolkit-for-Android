@@ -20,9 +20,9 @@ const MEASURE_HEROES=[
 /** The chance tools join the settled wheel on the following onsets. */
 const CHANCE=[
   // The random number card spans the kit's full row (about 398 px); dice and coin are half width.
-  {tool:'random_number',at:24.54,x:1180},
-  {tool:'dice_roll',at:25.12,x:1480},
-  {tool:'coin_flip',at:25.4,x:1680},
+  {tool:'random_number',at:24.54,x:1170},
+  {tool:'dice_roll',at:25.12,x:1505},
+  {tool:'coin_flip',at:25.4,x:1740},
 ] as const;
 
 /** A hero enters from below with an overshoot, holds, then is thrown towards the phone. */
@@ -60,7 +60,7 @@ export const FeatureJourney:React.FC<{seconds:number;geometry:Geometry|null}>=({
       reveal={chapterReveal} revealFrom={origin(geometry,isPlay?'Play & Decide':'Measure')}/>
     {!isPlay?<>
       <Headline text="Measure." x={990} y={180} width={800} size={142} progress={ease(t,18.1,18.38)*(1-ease(t,21.46,21.98))}/>
-      {MEASURE_HEROES.map(hero=>t>=hero.in&&t<hero.out+.22?<div key={hero.tool} data-hero-part={hero.tool} style={{position:'absolute',left:0,top:0,opacity:1-ease(t,hero.out,hero.out+.22),transform:heroTransform(t,hero.in,hero.out,1360,610,1.35)}}>
+      {MEASURE_HEROES.map(hero=>t>=hero.in&&t<hero.out+.22?<div key={hero.tool} data-hero-part={hero.tool} style={{position:'absolute',left:0,top:0,opacity:1-ease(t,hero.out,hero.out+.22),transform:heroTransform(t,hero.in,hero.out,1360,600,2.1)}}>
         <LiveCrop screen="numbers" selector={`[data-tool="${hero.tool}"]`} state={{...measureState,searchQuery:''}} style={{borderRadius:28}}/>
       </div>:null)}
       <div style={{position:'absolute',left:1000,top:890,display:'flex',gap:22,fontSize:40,fontWeight:600,opacity:ease(t,18.1,18.38)*(1-ease(t,21.46,21.98))}}>
@@ -68,10 +68,10 @@ export const FeatureJourney:React.FC<{seconds:number;geometry:Geometry|null}>=({
       </div>
     </>:<>
       <Headline text="Let chance decide." x={1000} y={140} width={780} size={112} progress={ease(t,22.56,22.86)*(1-ease(t,25.98,26.26))}/>
-      <div data-hero-part="wheel" style={{position:'absolute',left:0,top:0,transform:`translate(1360px,${lerp(lerp(1180,660,pop(t,22.56,.8)),470,settle)}px) translate(-50%,-50%) rotate(${lerp(-5,0,ease(t,22.56,23.4))}deg) scale(${lerp(1.7,1.3,settle)*(1+.04*(t>=24&&t<24.54?beat(t):0))})`}}>
+      <div data-hero-part="wheel" style={{position:'absolute',left:0,top:0,transform:`translate(1360px,${lerp(lerp(1180,660,pop(t,22.56,.8)),530,settle)}px) translate(-50%,-50%) rotate(${lerp(-5,0,ease(t,22.56,23.4))}deg) scale(${lerp(1.7,1.3,settle)*(1+.04*(t>=24&&t<24.54?beat(t):0))})`}}>
         <LiveCrop screen="play" selector=".play-wheel-card" state={{...playState,searchQuery:'Decision Wheel'}} style={{borderRadius:28}}/>
       </div>
-      {CHANCE.map(card=>t>=card.at?<div key={card.tool} data-hero-part={card.tool} style={{position:'absolute',left:0,top:0,transform:`translate(${card.x}px,${lerp(1260,850,pop(t,card.at,.5))}px) translate(-50%,-50%) rotate(${lerp(8,0,ease(t,card.at,card.at+.5))}deg) scale(${.9*(1+.06*beat(t))})`}}>
+      {CHANCE.map(card=>t>=card.at?<div key={card.tool} data-hero-part={card.tool} style={{position:'absolute',left:0,top:0,transform:`translate(${card.x}px,${lerp(1260,870,pop(t,card.at,.5))}px) translate(-50%,-50%) rotate(${lerp(8,0,ease(t,card.at,card.at+.5))}deg) scale(${1.1*(1+.06*beat(t))})`}}>
         <LiveCrop screen="play" selector={`[data-tool="${card.tool}"]`} state={{...playState,searchQuery:''}} style={{borderRadius:28}}/>
       </div>:null)}
     </>}
