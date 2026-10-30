@@ -4,16 +4,37 @@ import {Chip,Headline,Phone,Shape,Toolbox,beat,ease,easeIn,lerp,pop} from './vis
 import timeline from './timeline.json';
 
 const e=timeline.events;
-const launch=[{x:400,y:260,angle:-9},{x:930,y:235,angle:5},{x:1460,y:270,angle:9},{x:1500,y:710,angle:-6},{x:420,y:720,angle:-5},{x:950,y:720,angle:4},{x:960,y:1000,angle:0}];
+const launch=[{x:350,y:290,angle:0},{x:1530,y:290,angle:0},{x:350,y:740,angle:0},{x:1530,y:740,angle:0},{x:420,y:720,angle:0},{x:950,y:720,angle:0}];
 const symbols=[['explore','sunny'],['straighten','pill'],['flashlight_on','burst'],['emergency','cookie_7sided'],['water_drop','cookie_9sided'],['favorite','soft_burst']];
 const names=['Compass','Bubble level','Flash Dimmer','Morse & SOS','Water Eject','Breathe'];
 // Four tools leave the box: the frame holds four cards at a readable size, not the whole screen.
 const bento=[{x:1100,y:330},{x:1420,y:330},{x:1100,y:750},{x:1420,y:750}];
 
-/** The same seven measured cards travel from launcher to full bento to phone. */
+/** Four cards use separate flight lanes and restore the measured screen geometry. */
+const cardPose=(t:number,g:Geometry,i:number)=>{
+  const rect=g[WIDGETS[i].id],at=e.launches[i],u=ease(t,at,at+.46);
+  const gather=ease(t,e.gather,e.gatherEnd),pull=ease(t,e.pullBack,e.pullBackEnd);
+  const x0=lerp(960,launch[i].x,u),y0=lerp(698+rect.height*.15,launch[i].y,u)-Math.sin(u*Math.PI)*60;
+  const px=960-SKIN_WIDTH/2+DISPLAY.x+rect.x+rect.width/2;
+  const py=540-SKIN_HEIGHT/2+DISPLAY.y+rect.y+rect.height/2;
+  return {x:lerp(lerp(x0,bento[i].x,gather),px,pull),y:lerp(lerp(y0,bento[i].y,gather),py,pull),scale:lerp(lerp(lerp(.3,1.25,u),1.3,gather),1,pull),flight:u};
+};
+/** Check every frame using the same measured boxes and paths used for drawing. */
+const checkFlights=(g:Geometry)=>{
+  for(let frame=Math.ceil(e.launch*90);frame<=Math.floor(e.pullBackEnd*90);frame++){
+    const t=frame/90,boxes=WIDGETS.slice(0,4).flatMap((w,i)=>{
+      if(t<e.launches[i])return [];
+      const p=cardPose(t,g,i),r=g[w.id];return [{...p,width:r.width*p.scale,height:r.height*p.scale,id:w.id}];
+    });
+    for(let i=0;i<boxes.length;i++)for(let j=i+1;j<boxes.length;j++){
+      const a=boxes[i],b=boxes[j];
+      if(Math.abs(a.x-b.x)<(a.width+b.width)/2-.5&&Math.abs(a.y-b.y)<(a.height+b.height)/2-.5)throw new Error(`Cards overlap at ${t}: ${a.id}, ${b.id}`);
+    }
+  }
+};
 export const OpeningJourney:React.FC<{seconds:number;onGeometry?:(g:Geometry)=>void}>=({seconds:t,onGeometry})=>{
   const [g,setGeometry]=useState<Geometry|null>(null);
-  const measured=useCallback((next:Geometry)=>{setGeometry(old=>old??next);onGeometry?.(next);},[onGeometry]);
+  const measured=useCallback((next:Geometry)=>{checkFlights(next);setGeometry(old=>old??next);onGeometry?.(next);},[onGeometry]);
   const gather=ease(t,e.gather,e.gatherEnd),pull=ease(t,e.pullBack,e.pullBackEnd);
   const move=ease(t,e.featureMove,e.shellBuildEnd);
   const phoneScale=lerp(1,.92,move),phoneX=lerp(960,1320,move);
@@ -37,21 +58,14 @@ export const OpeningJourney:React.FC<{seconds:number;onGeometry?:(g:Geometry)=>v
       const arrive=pop(t,e.logo,.48),split=Math.min(1,pop(t,e.logo,.35)),land=pop(t,e.logo,.58);
       const recoil=beat(t)*(t>=e.launch?.5:0),away=easeIn(t,e.gather,e.gatherEnd);
       const anticipate=ease(t,e.logo,e.logo+.08),overshoot=pop(t,e.logo+.08,.36);
-      return <Toolbox x={960} y={lerp(540,620,land)+600*away} size={410} open={split} scale={lerp(1.7,.65,anticipate)+.52*overshoot} squash={recoil} angle={lerp(-8,0,arrive)}/>;
+      return <div style={{position:'absolute',inset:0,zIndex:30}}><Toolbox x={960} y={lerp(540,620,land)+600*away} size={410} open={split} scale={lerp(1.7,.65,anticipate)+.52*overshoot} squash={recoil} angle={lerp(-8,0,arrive)}/></div>;
     })():null}
     {t>=e.pullBack?<Phone id="quick-tools" state={{compassHeading:heading,levelRoll:lerp(4,0,sensor),levelPitch:lerp(2,0,sensor)}} x={phoneX} y={540} scale={phoneScale*lerp(1.12,1,pull)} angle={-4*move} shell={pull} ui={1} reveal={pull} revealFrom={{x:215,y:480}} hideWidgets={t<e.pullBackEnd}/>:null}
     {g&&t<e.pullBackEnd?WIDGETS.slice(0,4).map((widget,i)=>{
-      const at=i===6?e.colors:e.launches[i],rect=g[widget.id],pose=launch[i];
-      const flight=ease(t,at,at+.42),p=pop(t,at,.52);
-      const spread=ease(t,e.launches[Math.min(i+1,5)],e.launches[Math.min(i+1,5)]+.4);
-      const x0=lerp(960,lerp(960,pose.x,spread),p),y0=lerp(960,lerp(480,pose.y,spread),flight)-Math.sin(flight*Math.PI)*210;
-      const gx=bento[i].x,gy=bento[i].y;
-      const px=phoneX-SKIN_WIDTH*phoneScale/2+DISPLAY.x*phoneScale+(rect.x+rect.width/2)*phoneScale;
-      const py=540-SKIN_HEIGHT*phoneScale/2+DISPLAY.y*phoneScale+(rect.y+rect.height/2)*phoneScale;
-      const x=lerp(lerp(x0,gx,gather),px,pull),y=lerp(lerp(y0,gy,gather),py,pull);
-      const scale=lerp(lerp(lerp(1.6,i===4?1.05:1.38,spread),1.5,gather),phoneScale,pull);
+      const at=e.launches[i],rect=g[widget.id];
+      const {x,y,scale,flight}=cardPose(t,g,i);
       const radius=(rect.radii??[28,28,28,28]).map(r=>`${lerp(28,r,gather)}px`).join(' ');
-      return t>=at?<div key={widget.id} data-flying-widget={widget.id} style={{position:'absolute',width:rect.width,height:rect.height,transformOrigin:'50% 50%',transform:`translate(${x-rect.width/2}px,${y-rect.height/2}px) rotate(${pose.angle*(1-gather)}deg) scale(${scale})`,zIndex:10+i}}>
+      return t>=at?<div key={widget.id} data-flying-widget={widget.id} style={{position:'absolute',width:rect.width,height:rect.height,transformOrigin:'50% 50%',transform:`translate(${x-rect.width/2}px,${y-rect.height/2}px) scale(${scale})`,zIndex:10+i,boxShadow:`0 ${lerp(2,18,flight)}px ${lerp(5,32,flight)}px rgba(59,45,20,.14)`}}>
         <LiveCrop screen="quick-tools" selector={widget.selector} state={{searchQuery:widget.query,compassHeading:312,levelRoll:4,levelPitch:2}} style={{borderRadius:radius}}/>
       </div>:null;
     }):null}
