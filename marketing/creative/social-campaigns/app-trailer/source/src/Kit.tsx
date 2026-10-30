@@ -108,6 +108,12 @@ export const LiveCrop:React.FC<{screen:string;selector:string;state?:Record<stri
     <LiveScreen id={screen} state={state} style={{position:'absolute',left:0,top:0,transform:`translate(${-Number(box?.x??0)}px,${-Number(box?.y??0)}px)`}} onReady={root=>{
       const node=root.querySelector<HTMLElement>(selector);
       if(!node)throw new Error(`No ${selector} in real ${screen} screen`);
+      // Bring below-fold parts above the shell's fixed navigation before cropping.
+      const content=root.querySelector('mnw-android-screen')?.shadowRoot?.querySelector<HTMLElement>('.content');
+      if(content){
+        const part=localRect(node,root),viewport=localRect(content,root);
+        content.scrollTop+=part.y-viewport.y-(viewport.height-part.height)/2;
+      }
       const next=localRect(node,root);
       setBox(old=>old&&JSON.stringify(old)===JSON.stringify(next)?old:next);
     }}/>

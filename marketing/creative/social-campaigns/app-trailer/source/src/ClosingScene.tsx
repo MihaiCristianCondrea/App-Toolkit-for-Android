@@ -16,7 +16,7 @@ export const ClosingScene:React.FC<{seconds:number}>=({seconds:t})=>{
     <Shape name="cookie_9sided" color="#FDE7A2" size={580} x={1840} y={120} angle={lerp(-20,8,fan)+t*3} scale={pulse}/>
     <Shape name="clover_4leaf" color="#D0E9E3" size={450} x={10} y={1070} angle={lerp(20,0,fan)-t*3} scale={pulse}/>
     {PHONES.map((phone,i)=>{
-      const p=pop(t,phone.at,.9),float=Math.sin((t-26.26)*1.6+i*1.3)*8*ease(t,27.3,27.9);
+      const p=pop(phone.at+.9*ease(t,phone.at,phone.at+.9),phone.at,.9),float=Math.sin((t-26.26)*1.6+i*1.3)*8*ease(t,27.3,27.9);
       return <Phone key={phone.id} id={phone.id} state={phone.state} x={lerp(540,phone.x,p)} y={540+float} scale={lerp(.92,phone.scale,p)} angle={lerp(4,phone.angle,p)}/>;
     })}
     {PHONES.map(phone=><div key={phone.label} style={{position:'absolute',left:phone.x-150,top:880,width:300,textAlign:'center',fontSize:32,fontWeight:600,color:'#3B2D14',opacity:ease(t,phone.at+.5,phone.at+.8),transform:`translateY(${lerp(24,0,ease(t,phone.at+.5,phone.at+.8))}px)`}}>{phone.label}</div>)}
