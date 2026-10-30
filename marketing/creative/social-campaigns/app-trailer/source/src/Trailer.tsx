@@ -4,7 +4,7 @@ import type {Geometry} from './Kit';
 import {OpeningJourney} from './OpeningJourney';
 import {FeatureJourney} from './FeatureJourney';
 import {ClosingScene} from './ClosingScene';
-import {GROUND} from './visuals';
+import {GROUND,camera} from './visuals';
 import timeline from './timeline.json';
 
 export const Trailer:React.FC=()=>{
@@ -15,6 +15,7 @@ export const Trailer:React.FC=()=>{
   return <AbsoluteFill style={{background:GROUND,fontFamily:'Google Sans Flex',color:'#3B2D14',overflow:'hidden'}}>
     <style>{`*,*::before,*::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}html,body{margin:0} [data-phone] mnw-android-screen{overflow:hidden}`}</style>
     <Audio src={staticFile('audio/soundtrack.mp3')} volume={1}/>
+    <AbsoluteFill style={{transformOrigin:'50% 50%',transform:camera(seconds)}}>
     <Sequence name="Toolbox to Quick Tools" durationInFrames={Math.round(timeline.events.measure*fps)}>
       <OpeningJourney seconds={seconds} onGeometry={measured}/>
     </Sequence>
@@ -24,5 +25,6 @@ export const Trailer:React.FC=()=>{
     <Sequence name="Your toolkit" from={Math.round(timeline.events.close*fps)}>
       <ClosingScene seconds={seconds}/>
     </Sequence>
+    </AbsoluteFill>
   </AbsoluteFill>;
 };

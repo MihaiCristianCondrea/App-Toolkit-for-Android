@@ -68,10 +68,10 @@ export const FeatureJourney:React.FC<{seconds:number;geometry:Geometry|null}>=({
       </div>
     </>:<>
       <Headline text="Let chance decide." x={1000} y={140} width={780} size={112} progress={ease(t,22.56,22.86)*(1-ease(t,25.98,26.26))}/>
-      <div data-hero-part="wheel" style={{position:'absolute',left:1360,top:lerp(lerp(1180,660,pop(t,22.56,.8)),470,settle),transform:`translate(-50%,-50%) rotate(${lerp(-5,0,ease(t,22.56,23.4))}deg) scale(${lerp(1.7,1.3,settle)*(1+.04*(t>=24&&t<24.54?beat(t):0))})`}}>
+      <div data-hero-part="wheel" style={{position:'absolute',left:0,top:0,transform:`translate(1360px,${lerp(lerp(1180,660,pop(t,22.56,.8)),470,settle)}px) translate(-50%,-50%) rotate(${lerp(-5,0,ease(t,22.56,23.4))}deg) scale(${lerp(1.7,1.3,settle)*(1+.04*(t>=24&&t<24.54?beat(t):0))})`}}>
         <LiveCrop screen="play" selector=".play-wheel-card" state={{...playState,searchQuery:'Decision Wheel'}} style={{borderRadius:28}}/>
       </div>
-      {CHANCE.map(card=>t>=card.at?<div key={card.tool} data-hero-part={card.tool} style={{position:'absolute',left:card.x,top:lerp(1260,850,pop(t,card.at,.34)),transform:`translate(-50%,-50%) rotate(${lerp(8,0,ease(t,card.at,card.at+.5))}deg) scale(${.9*(1+.06*beat(t))})`}}>
+      {CHANCE.map(card=>t>=card.at?<div key={card.tool} data-hero-part={card.tool} style={{position:'absolute',left:0,top:0,transform:`translate(${card.x}px,${lerp(1260,850,pop(t,card.at,.5))}px) translate(-50%,-50%) rotate(${lerp(8,0,ease(t,card.at,card.at+.5))}deg) scale(${.9*(1+.06*beat(t))})`}}>
         <LiveCrop screen="play" selector={`[data-tool="${card.tool}"]`} state={{...playState,searchQuery:''}} style={{borderRadius:28}}/>
       </div>:null)}
     </>}

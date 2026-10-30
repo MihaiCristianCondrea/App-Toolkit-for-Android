@@ -63,7 +63,9 @@ Ads and the More apps footer are disabled in the film. Product backgrounds, acce
 1. Objects cause transitions: lid to widgets, widgets to bento, bento to device, tabs to destination.
 2. One continuous coordinate system handles the toolbox-to-phone sequence. Landing targets come from live DOM measurements.
 3. Floating widgets have full 28dp corners; their actual bento corners return as they land.
-4. Gestures settle before the next move. Springs land on exact poses; there is no camera noise.
+4. Gestures settle before the next move. Moves use Material's emphasized curve; entries use a lightly damped spring whose tail blends to exact rest. Exits accelerate away.
+4a. One deterministic camera (`camera()` in `visuals.tsx`) pushes in on each chapter, recoils on the widget burst and pulls back for the closing fan. It never carries noise.
+4b. The toolbox enters as a gesture (spring, rotation, scale), crouches before the lid hinges open in the picture plane, recoils as each widget leaves and drops out of frame. Animated pieces move by transform only.
 5. The actual UI state is a function of the current frame. Wall-clock UI animations are disabled during capture.
 6. Motion is motivated (taste skill): only an element that changes reacts to an onset (a landing card, the newest chip). Decorative shapes drift slowly and never pulse; the end card holds still rather than floating.
 7. One accent per moment: the newest tool chip takes the teal container, earlier chips settle to neutral, and caption emphasis uses Google Sans Flex weight, not a second colour.

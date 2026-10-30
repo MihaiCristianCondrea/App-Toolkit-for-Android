@@ -1,6 +1,6 @@
 import React,{useCallback,useState} from 'react';
 import {Geometry,GeometryProbe,LiveCrop,WIDGETS,DISPLAY,PHONE_WIDTH,SKIN_WIDTH,SKIN_HEIGHT} from './Kit';
-import {Chip,Headline,Phone,Shape,Toolbox,beat,ease,lerp,pop} from './visuals';
+import {Chip,Headline,Phone,Shape,Toolbox,beat,ease,easeIn,lerp,pop} from './visuals';
 import timeline from './timeline.json';
 
 const launch=[
@@ -12,6 +12,7 @@ const launch=[
   {x:1010,y:770,scale:1.12,angle:7},
 ];
 const e=timeline.events;
+const clampUnit=(n:number)=>Math.max(0,Math.min(1,n));
 /** Each Quick Tools widget is named on its own onset. One accent marks the newest name; earlier ones settle to neutral. */
 const CHIPS=[
   {text:'Compass',at:14.88},
@@ -48,7 +49,14 @@ export const OpeningJourney:React.FC<{seconds:number;onGeometry?:(g:Geometry)=>v
       <Shape name="clover_4leaf" color="#D0E9E3" size={450} x={80-200*gather} y={1050} angle={12+t*3} scale={pop(t,.3)}/>
       <Shape name="soft_burst" color="#FFE5C6" size={400} x={1840+200*gather} y={1010} angle={-12-t*3} scale={pop(t,.4)}/>
     </>:null}
-    {t<e.gather?<Toolbox x={960} y={lerp(480,640,ease(t,e.launch-.3,e.launch+.7))} size={400} open={open} scale={pop(t,.05,.9)*(1-ease(t,6.08,e.gather))} angle={-4*Math.sin(t*2)*ease(t,1.7,2.1)*(1-gather)}/>:null}
+    {t<e.gather?(()=>{
+      // Enter as a gesture, crouch before the lid opens, recoil as each widget leaves, then drop out of frame.
+      const enter=pop(t,.05,.9),exit=easeIn(t,6.2,e.gather);
+      const recoil=WIDGETS.reduce((sum,_,i)=>{const d=t-(e.launch+i*e.launchStagger);return sum+(d>=0?Math.exp(-d*10)*Math.cos(d*22):0);},0);
+      const squash=.9*Math.sin(Math.PI*clampUnit((t-1.36)/.4))*(t<e.lidOpen?1:0)-.6*Math.exp(-Math.max(0,t-e.lidOpen)*9)*(t>=e.lidOpen?1:0)+.5*recoil;
+      const lid=pop(t,e.lidOpen,.8)*(1-ease(t,5.9,6.2));
+      return <Toolbox x={960} y={lerp(980,lerp(480,640,ease(t,e.launch-.3,e.launch+.5)),enter)+760*exit} size={400} open={lid} squash={squash} scale={lerp(.7,1,enter)} angle={lerp(-10,0,enter)+9*exit}/>;
+    })():null}
     {t>=e.pullBack?<Phone id="quick-tools" state={{compassHeading:heading,levelRoll:lerp(4,0,sensor),levelPitch:lerp(2,0,sensor)}} x={phoneX} y={phoneY} scale={phoneScale} angle={-4*move} shell={pull} ui={ease(t,e.pullBackEnd,e.shellBuildEnd)} hideWidgets={t<e.shellBuildEnd}/>:null}
     {g&&t<e.shellBuildEnd?WIDGETS.map((widget,i)=>{
       const rect=g[widget.id],pose=launch[i];
