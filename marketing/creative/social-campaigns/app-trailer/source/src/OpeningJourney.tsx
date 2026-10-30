@@ -14,7 +14,7 @@ const bento=[{x:1100,y:330},{x:1420,y:330},{x:1100,y:750},{x:1420,y:750}];
 const cardPose=(t:number,g:Geometry,i:number)=>{
   const rect=g[WIDGETS[i].id],at=e.launches[i],u=ease(t,at,at+.46);
   const gather=ease(t,e.gather,e.gatherEnd),pull=ease(t,e.pullBack,e.pullBackEnd);
-  const x0=lerp(960,launch[i].x,u),y0=lerp(698+rect.height*.15,launch[i].y,u)-Math.sin(u*Math.PI)*60;
+  const x0=lerp(960,launch[i].x,u),y0=lerp(698+rect.height*.15,launch[i].y,u)-Math.sin(u*Math.PI)*60-8*beat(t,`opening-${i}`);
   const px=960+(-SKIN_WIDTH/2+DISPLAY.x+rect.x+rect.width/2)*.82;
   const py=540+(-SKIN_HEIGHT/2+DISPLAY.y+rect.y+rect.height/2)*.82;
   return {x:lerp(lerp(x0,bento[i].x,gather),px,pull),y:lerp(lerp(y0,bento[i].y,gather),py,pull),scale:lerp(lerp(lerp(.3,1.25,u),1.3,gather),.82,pull),flight:u};
@@ -43,7 +43,7 @@ export const OpeningJourney:React.FC<{seconds:number;onGeometry?:(g:Geometry)=>v
   return <>
     <GeometryProbe onGeometry={measured}/>
     {/* One stage per subject: it grows behind the gathered cards and carries them into the phone. */}
-    {t>=e.gather?<Shape name="cookie_9sided" color="#D0E9E3" size={1000} x={lerp(1260,phoneX,pull)} y={540} scale={pop(t,e.gather,.6)*lerp(1,.95,pull)} angle={lerp(-30,0,ease(t,e.gather,e.gatherEnd))}/>:null}
+    {t>=e.gather?<Shape name="cookie_9sided" color="#D0E9E3" size={1000} x={lerp(1260,phoneX,pull)} y={540} scale={pop(t,e.gather,.6)*lerp(1,.95,pull)*(1+.035*beat(t,'stage'))} angle={lerp(-30,0,ease(t,e.gather,e.gatherEnd))}/>:null}
     {t<e.launch?symbols.map(([icon,shape],i)=>{
       const at=e.iconNotes[i],p=pop(t,at,.35),exit=easeIn(t,e.logo,e.lidOpen);
       const spread=ease(t,e.iconNotes[1],e.iconNotes[4]);
@@ -56,11 +56,11 @@ export const OpeningJourney:React.FC<{seconds:number;onGeometry?:(g:Geometry)=>v
     }):null}
     {t>=e.logo&&t<e.pullBackEnd?(()=>{
       const arrive=pop(t,e.logo,.48),split=Math.min(1,pop(t,e.logo,.35)),land=pop(t,e.logo,.58);
-      const recoil=beat(t)*(t>=e.launch?.5:0),away=easeIn(t,e.gather,e.gatherEnd);
+      const recoil=beat(t,'toolbox')*.5,away=easeIn(t,e.gather,e.gatherEnd);
       const anticipate=ease(t,e.logo,e.logo+.08),overshoot=pop(t,e.logo+.08,.36);
       return <div style={{position:'absolute',inset:0,zIndex:30}}><Toolbox x={960} y={lerp(540,620,land)+600*away} size={410} open={split} scale={lerp(1.7,.65,anticipate)+.52*overshoot} squash={recoil} angle={lerp(-8,0,arrive)}/></div>;
     })():null}
-    {t>=e.pullBack?<Phone id="quick-tools" state={{compassHeading:heading,levelRoll:lerp(4,0,sensor),levelPitch:lerp(2,0,sensor)}} x={phoneX} y={540} scale={phoneScale*lerp(1.12,1,pull)} angle={0} shell={pull} ui={1} reveal={pull} revealFrom={{x:215,y:480}} hideWidgets={t<e.pullBackEnd}/>:null}
+    {t>=e.pullBack?<Phone seconds={t} id="quick-tools" state={{compassHeading:heading,levelRoll:lerp(4,0,sensor),levelPitch:lerp(2,0,sensor)}} x={phoneX} y={540} scale={phoneScale*lerp(1.12,1,pull)} angle={0} shell={pull} ui={1} reveal={pull} revealFrom={{x:215,y:480}} hideWidgets={t<e.pullBackEnd}/>:null}
     {g&&t<e.pullBackEnd?WIDGETS.slice(0,4).map((widget,i)=>{
       const at=e.launches[i],rect=g[widget.id];
       const {x,y,scale,flight}=cardPose(t,g,i);

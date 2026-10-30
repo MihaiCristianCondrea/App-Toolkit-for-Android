@@ -23,7 +23,10 @@ export const pop=(t:number,start:number,duration=.7)=>{
 };
 
 /** Phrase camera keyframes are shared by the foreground and the slower background. */
-const CAMERA=timeline.events.camera;
+const CAMERA=[[0,1,0,0,0],...timeline.events.cameraMoves.flatMap((move,i)=>{
+  const previous=i?timeline.events.cameraMoves[i-1].to:[1,0,0,0];
+  return [[move.at,...previous],[move.at+move.duration,...move.to]];
+})];
 export const camera=(t:number,depth=1)=>{
   let i=0;while(i<CAMERA.length-2&&t>=CAMERA[i+1][0])i++;
   const [t0,s0,x0,y0,r0]=CAMERA[i],[t1,s1,x1,y1,r1]=CAMERA[i+1];
@@ -32,19 +35,11 @@ export const camera=(t:number,depth=1)=>{
 };
 
 /** A short accent weighted by the beat sheet, with no activity between notes. */
-export const beat=(t:number)=>{const hit=[...timeline.events.beats].reverse().find(b=>b.at<=t);return hit?hit.strength*Math.exp(-(t-hit.at)*14):0;};
-
-/** A ratchet and a short spring punch per hit, with exact rest between notes. */
-export const Backdrop:React.FC=()=>{
-  const t=useCurrentFrame()/useVideoConfig().fps;
-  const shapes=['cookie_9sided','flower','clover_4leaf','soft_burst'];
-  return <div style={{position:'absolute',inset:0,transform:camera(t,.22)}}>{shapes.map((name,i)=>{
-    const hits=timeline.events.beats.filter(b=>b.at<=t&&b.target===i);
-    const last=hits.at(-1),p=last?pop(t,last.at,.24):1;
-    const kick=last?Math.sin(Math.PI*clamp((t-last.at)/.24))*last.strength:0;
-    return <div key={name} style={{transform:`scaleY(${1-.055*kick})`}}><Shape name={name} color={['#FDE7A2','#E8D3DC','#D0E9E3','#FFE5C6'][i]} size={i%2?650:780} x={i%2?1820:40} y={i<2?95:1030} angle={(hits.length-1)*32+32*p} scale={1+.15*kick}/></div>;
-  })}</div>;
+export const beat=(t:number,target?:string)=>{
+  const hit=[...timeline.events.beats].reverse().find(b=>b.at<=t&&(!target||b.responses.some(r=>'target' in r&&r.target===target)));
+  return hit?hit.strength*Math.exp(-(t-hit.at)*18):0;
 };
+export const phoneScaleAt=(t:number,scale:number)=>scale*(1+.008*beat(t,'phone'));
 
 /** A tool name that lands on a beat, so a chapter names what the screen holds. */
 export const Chip:React.FC<{text:string;color:string;ink:string;progress:number;active?:number}>=({text,color,ink,progress,active=0})=><span style={{display:'inline-block',padding:'12px 26px',borderRadius:999,background:color,color:ink,fontSize:34,fontWeight:600,lineHeight:1.1,whiteSpace:'nowrap',transform:`translateY(${(1-progress)*400}px) scale(${lerp(.6,1,progress)*(1+.08*active)})`}}>{text}</span>;
@@ -64,14 +59,14 @@ export const Toolbox:React.FC<{x:number;y:number;size:number;open:number;scale?:
   </div>;
 };
 
-export const Phone:React.FC<{id:string;state?:Record<string,unknown>;x:number;y:number;scale:number;angle?:number;shell?:number;ui?:number;hideWidgets?:boolean;revealFrom?:{x:number;y:number};reveal?:number;underId?:string;underState?:Record<string,unknown>;transition?:number;focusSelector?:string;underFocusSelector?:string;hiddenParts?:string[];onParts?:(g:Geometry)=>void}>=({id,state={},x,y,scale,angle=0,shell=1,ui=1,hideWidgets=false,reveal=1,revealFrom={x:215,y:900},underId,underState,transition=1,focusSelector,underFocusSelector,hiddenParts=[],onParts})=>{
+export const Phone:React.FC<{id:string;state?:Record<string,unknown>;x:number;y:number;scale:number;angle?:number;shell?:number;ui?:number;hideWidgets?:boolean;revealFrom?:{x:number;y:number};reveal?:number;underId?:string;underState?:Record<string,unknown>;transition?:number;focusSelector?:string;underFocusSelector?:string;hiddenParts?:string[];onParts?:(g:Geometry)=>void;seconds?:number}>=({id,state={},x,y,scale,angle=0,shell=1,ui=1,hideWidgets=false,reveal=1,revealFrom={x:215,y:900},underId,underState,transition=1,focusSelector,underFocusSelector,hiddenParts=[],onParts,seconds=0})=>{
   const direction=revealFrom.x<215?-1:1;
   const focusPart=(root:HTMLElement,selector?:string)=>{
     const focus=selector?root.querySelector<HTMLElement>(selector):null;
     const viewport=root.querySelector('mnw-android-screen')?.shadowRoot?.querySelector<HTMLElement>('.content');
     if(focus&&viewport){const r=localRect(focus,root),v=localRect(viewport,root);if(r.y<v.y||r.y+r.height>v.y+v.height)viewport.scrollTop+=r.y-v.y-(v.height-r.height)/2;}
   };
-  return <div data-phone={id} style={{position:'absolute',width:SKIN_WIDTH,height:SKIN_HEIGHT,transformOrigin:'50% 50%',transform:`translate(${x-SKIN_WIDTH/2}px,${y-SKIN_HEIGHT/2}px) rotate(${angle}deg) scale(${scale})`}}>
+  return <div data-phone={id} style={{position:'absolute',width:SKIN_WIDTH,height:SKIN_HEIGHT,transformOrigin:'50% 50%',transform:`translate(${x-SKIN_WIDTH/2}px,${y-SKIN_HEIGHT/2}px) rotate(${angle}deg) scale(${phoneScaleAt(seconds,scale)})`}}>
     <Img src={staticFile('device/back.webp')} style={{position:'absolute',inset:0,width:'100%',height:'100%',opacity:shell}}/>
     <div style={{position:'absolute',left:DISPLAY.x,top:DISPLAY.y,width:DISPLAY.width,height:DISPLAY.height,borderRadius:DISPLAY.radius,overflow:'hidden'}}>
       {underId&&transition<1?<LiveScreen id={underId} state={underState} onReady={root=>focusPart(root,underFocusSelector)} style={{position:'absolute',inset:0,opacity:1-ease(transition,0,.35),transform:`translateX(${-30*direction*transition}px)`}}/>:null}

@@ -11,7 +11,8 @@
     "preview": "node scripts/render.mjs preview",
     "render": "node scripts/render.mjs master",
     "frames": "node scripts/render.mjs frames",
-    "sheet": "node scripts/sheet.mjs"
+    "sheet": "node scripts/sheet.mjs",
+    "beats": "node scripts/beat-audit.mjs"
   },
   "dependencies": {
     "@remotion/cli": "4.0.529",
