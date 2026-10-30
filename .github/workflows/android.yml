@@ -54,3 +54,34 @@ jobs:
             **/build/test-results/
             **/build/reports/lint-results*
           if-no-files-found: ignore
+  marketing-ui:
+    name: Marketing UI and store validation
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    defaults:
+      run:
+        working-directory: marketing/ui
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version: '24'
+          cache: npm
+          cache-dependency-path: marketing/ui/package-lock.json
+      - name: Install web dependencies
+        run: npm ci
+      - name: Prepare assets and build the UI kit
+        run: npm run build
+      - name: Run browser checks
+        env:
+          CHROMIUM_PATH: /usr/bin/google-chrome
+        run: npm run qa
+      - name: Validate the store listings
+        run: node ../creative/store/google-play/scripts/validate.mjs
+      - name: Upload browser captures
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: marketing-ui-captures
+          path: marketing/ui/captures/
+          if-no-files-found: ignore
