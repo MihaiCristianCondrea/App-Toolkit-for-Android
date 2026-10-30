@@ -77,7 +77,8 @@ The Android Insider `develop` trailer's font and UI mounting gate and Smart Clea
 
 See `source/FIDELITY.md`. Preparation and structural checks can pass independently of visual review. A successful render does not establish parity, readable choreography or correct timing.
 
-- [ ] Review all eight stills and the full preview against the owner's sketch.
+- [x] Inspect all eight corrected stills against the owner's sketch.
+- [ ] Review the full preview at playback speed.
 - [ ] Check the widget-to-screen handoff and phone aperture at transition boundaries.
 - [ ] Check text, clip edges, typeface, symbols and image loading in the encoded preview.
 - [ ] Listen to the full preview and verify the music's natural ending.

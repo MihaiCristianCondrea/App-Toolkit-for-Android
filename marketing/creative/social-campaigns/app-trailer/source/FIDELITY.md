@@ -14,6 +14,10 @@
 
 ## Status
 
-The first preview passed TypeScript, eight-scene rendering, audio/duration checks and metadata verification. Visual review found the missing phone system bars, a below-fold fragment peeking into the bento shot and a level-state mismatch at the handoff. The revised source corrects all three; its new render is checked before approval.\n\nSource preparation, soundtrack integrity and timeline checks are automated. TypeScript compilation and actual render results are recorded by the preview workflow. Static Compose-to-web parity, encoded visual review and music playback review must be recorded after inspecting the resulting files; they are not implied by these source checks.
+The corrected preview at `b98bba9b` passed TypeScript, the full 2690-frame render, source soundtrack integrity, encoded audio/duration checks and metadata verification. All eight rendered stills were inspected. The phone status bar clears the camera and search field, the bento shot contains four complete cards, and the level starts tilted consistently before settling in the phone.
+
+Review output: [preview MP4, eight frames and contact sheet](https://github.com/MihaiCristianCondrea/App-Toolkit-for-Android/actions/runs/41085515647/artifacts/12991771756).
+
+Full-speed creative approval, listening to the encoded music, and exact handoff boundary review remain before the master render. Static Compose-to-web parity was not rerun in this campaign; screens and fragments use the current UI kit directly. These limits are not implied to pass by the source checks.
 
 The output is a creative preview until the owner approves the cut. The motion-video skill's master-render gate remains in place.
