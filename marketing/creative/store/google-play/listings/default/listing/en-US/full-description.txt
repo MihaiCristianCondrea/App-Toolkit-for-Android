@@ -1,31 +1,55 @@
-App Toolkit puts the small tools you reach for every day in one app: a compass and a bubble level, a ruler and a protractor on the screen, a unit converter, a tip and bill splitter, a counter, a flashlight you can dim, Morse and SOS signals, a decision wheel, coins and dice. Ruler and Protractor open full screen; the other tools open in sheets. The tools Android supports can sit in Quick Settings as tiles.
+App Toolkit brings practical Android tools together in one simple, easy-to-use app. Whether you need to measure an angle, split a bill, check your direction, or make a quick decision, you'll find the tools you need in one place.
 
-Quick Tools
-The first tab shows live previews you can read at a glance, grouped by what they do.
-• Compass: your heading from the phone's magnetic sensor, with the direction spelled out.
-• Bubble Level: roll and pitch from the gravity sensor, to hang a frame or set a shelf straight.
-• Flash Dimmer: turn the flashlight on and set its brightness, on phones whose torch can dim.
-• Morse & SOS: flash the SOS pattern, or type a message and send it in Morse code with the torch.
-• Water Eject: play a short low tone through the speaker after it gets wet. It can help shake droplets out; it does not repair water damage.
-• Breathe: a short guided breathing pause.
-• Material Colors: your app palette and the Material You tones, each colour with its hex code to copy.
+Explore three main sections: Quick Tools for everyday utilities and live sensors, Measure for calculations and measurements, and Play & Decide for random choices and interactive tools.
 
-Measure
-Count, measure, convert and split, with each tool's latest result on the overview.
-• Surface Ruler: measure small objects on the screen, in millimetres or inches.
-• Protractor: lay the phone's edge along a line and drag the arm to read the angle, full screen.
-• Unit Converter: length, weight, temperature, volume and data, both ways.
-• Tip & Bill Splitter: the bill, the tip and each person's share, in the currency you choose.
-• Counter: tap to add to a running count, with a minus button for a miscount.
-• Reaction Test: wait for the signal, tap, and see your time against your best and your average.
+From a compass and bubble level to a flashlight, ruler, unit converter, counter, reaction test, and decision wheel, App Toolkit makes everyday tasks easier. Many tools can be used directly from their interactive widgets, while others offer additional controls when opened.
 
-Play & Decide
-For the choices that don't need a meeting.
-• Decision Wheel: type up to 12 choices, one per line, and spin.
-• Random Number: a number between any two you set.
-• Coin Flip and Dice Roll: tap the coin or the die right on the overview.
+Features
 
-Made for every screen
-App Toolkit follows Material 3 Expressive: its tools use custom colours, it works in light and dark themes, and it lays itself out for phones, foldables, tablets and Chromebooks, with a navigation rail or drawer on wide screens.
+🛠️ Essential Quick-Access Utilities
+• Compass: Check your heading and direction using your phone's sensors.
+• Bubble Level: Measure your phone's tilt and check whether a surface is level.
+• Flash Dimmer: Turn on the flashlight and adjust its brightness on supported devices.
+• Morse Flashlight: Enter a message and transmit it using your phone's flashlight.
+• SOS Flash: Send an SOS light pattern with a simple tap.
+• Water Eject: Play a timed speaker tone that may help dislodge water droplets. It does not repair water damage.
 
-App Toolkit is free and open source. If something doesn't work as you expect, or you'd like a tool added, write a review with the details, or use Help & feedback in the app.
+📐 Measurement & Calculation Tools
+• Ruler: Measure objects directly on your screen with calibration, millimetres, inches, and advanced measurement options.
+• Protractor: Measure angles with an interactive, full-screen protractor.
+• Unit Converter: Convert between units of length, mass, temperature, volume, and data.
+• Tip & Bill Splitter: Calculate tips, divide bills between people, and choose your preferred currency.
+• Reaction Test: Test your reaction speed and compare your results over time.
+
+🎲 Play & Decide
+• Decision Wheel: Add your own choices, spin the wheel, and let it pick for you.
+• Random Number Picker: Generate random numbers within a custom range or choose from quick presets.
+• Coin Flip: Flip an animated coin whenever you need a quick decision.
+• Dice Roll: Roll a 3D animated die directly from the app.
+
+📱 Colors & Quick Access
+• Material Colors Explorer: Explore the app's color palette and supported Android system colors, with options to copy color values.
+• Quick Settings Tiles: Add supported tools to Android's Quick Settings panel for easier access.
+
+🧘 Wellness & Focus
+• Guided Breathing: Follow a simple breathing exercise with gentle animations to help you slow down and relax.
+
+Benefits
+
+🛠️ All-in-One Convenience
+• Less App Clutter: Keep useful everyday tools together instead of switching between multiple apps.
+• Quick Access: Open tools in seconds, interact with live widgets, or use supported Quick Settings tiles.
+• Simple Controls: Clear layouts, useful information, and easy-to-use controls make each tool accessible.
+• Adaptive Design: Enjoy a modern Material 3 Expressive interface with colorful cards, smooth motion, and layouts for different screen sizes.
+
+How it works
+Each section groups related tools together, with interactive widgets that show useful information or let you perform quick actions.
+Tap a tool to access its additional controls, adjust its settings, or view detailed results. Supported tools can also be added to Android's Quick Settings panel for convenient access outside the app.
+
+Get started today
+Download App Toolkit and explore a collection of useful tools for measuring, calculating, deciding, and everyday convenience.
+
+Feedback
+App Toolkit is continually being improved with new tools, refinements, and bug fixes.
+If you have a feature suggestion or encounter a problem, you can leave a Google Play review or use Help & feedback inside the app. When reporting an issue, please describe what happened so it can be investigated and fixed.
+Thank you for using App Toolkit!
