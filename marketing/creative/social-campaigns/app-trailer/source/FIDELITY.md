@@ -28,6 +28,21 @@ Verification: TypeScript and structural checks pass. The complete 2690-frame pre
 
 An encoded regression check sampled 76 frames across the compass animation: every sample retained the coloured widgets (minimum 14,469 coloured pixels in the fixed phone region). Source/prepared soundtrack hashes match. The full decoded source fits within the encoded audio after its 42.625ms codec delay; waveform correlation is 0.9942. Metadata tagging verifies that the media stream packets remain unchanged.
 
+## Third cut
+
+The original mark now follows the opening symbol motif, anticipates and overshoots, splits, and leaves its body at the bottom as the launcher. Its original lid exits above frame. All six real widgets plus Material Colors stay in the gather. The tall bento unfolds into landscape rows for readability, then restores the measured phone coordinates. This is a campaign arrangement of real crops, not a change to the UI kit.
+
+`timeline.json` records all 94 detected onsets, their phrase, visual action, editorial accent strength and background target. The structural check compares the ordered onset times with the read-only analysis. Assigned shapes ratchet, punch and squash on these notes with no idle rotation; the backdrop follows 22% of camera travel. Variable-font words reveal through individual masks on named detected notes in `events.type`; a check rejects word cues outside the analysis. The full Quick Tools caption travels out as Measure enters, Counter crosses into Play, and the Play device carries into the closing fan. Outgoing Play cards lift away during the fan. Fast windows use three CameraMotionBlur samples; other frames bypass that wrapper because its zero-shutter path fails at frame zero in 4.0.529.
+
+The closing foreground settles by 28.26 seconds and holds for 1.62 seconds. Only the background answers the final notes. The full soundtrack and original artwork remain unchanged. No Android code, UI-kit screens or assets were edited.
+
+Verification for this cut:
+
+- `npm ci` and asset preparation in both the UI kit and trailer source.
+- TypeScript, eight contiguous scenes, unchanged soundtrack hashes, original device aperture, ordered onset coverage and minimum closing hold checks.
+- Quarter-scale stills at 0.3, 0.9, 1.8, 2.4, 3.6, 5.2, 8.0, 9.5, 12.0, 15.8, 18.9, 23.5, 25.9 and 28.8 seconds, plus the frame before, at and after every scene boundary, combined into `output/images/third-cut/contact-sheet.png`.
+- A complete 2690-frame preview at 960 x 540 and 90 fps. Encoded review strips sample the full film at six frames per second. Full video/audio decoding and metadata stream-preservation checks are separate from creative approval.
+
 ## Remaining approval and limits
 
-Full-speed creative playback and listening approval remain with the owner before the 2K master. The review used encoded pacing strips, boundary stills and numerical audio checks; it does not claim an auditory review. Static Compose-to-web parity was not rerun; the film mounts the current UI kit directly. The output remains a creative preview under the motion-video skill's master-render gate.
+Full-speed playback and listening approval remain open. The browser automation host was unavailable; the native Chrome window remained minimized and the available computer-use API could not obtain its state. No auditory review is claimed. Encoded frame strips, stills and numerical audio checks provide the current review evidence. The encoded audio covers the full decoded source after a 341-sample delay at 8 kHz, with waveform correlation 0.9942. Static Compose-to-web parity was not rerun, and the existing kit deviations remain. The owner renders the 2K master after approving this preview. No master render or push was performed.

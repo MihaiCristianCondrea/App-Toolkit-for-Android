@@ -10,7 +10,7 @@
     "title": "App Toolkit: Your toolkit",
     "headline": "App Toolkit. Your toolkit.",
     "description": "App Toolkit for Android opens into live tools for direction, measuring, counting and everyday choices. Watch the toolbox become your toolkit in one app.",
-    "longDescription": "The App Toolkit toolbox opens and its live widgets spring out. They settle into the app's bento layout as a Pixel phone and the rest of the interface appear. Quick Tools, Measure and Play & Decide finish the tour, accompanied by the complete supplied soundtrack.",
+    "longDescription": "Tool symbols answer the opening notes before the original App Toolkit mark pops and splits. Seven live cards unfold across the frame, then fold into the real phone screen. Quick Tools, Measure and Play & Decide follow the complete supplied soundtrack, ending on the three destinations and Google Play badge.",
     "altText": "A toolbox opens into live widgets that assemble into App Toolkit's three screens on Pixel phones.",
     "keywords": [
       "App Toolkit",
@@ -47,11 +47,11 @@
     },
     "output/images/scene-01.png": {
       "title": "App Toolkit: scene 1",
-      "altText": "The original App Toolkit toolbox mark sits among four pastel Material shapes."
+      "altText": "Tool symbols land inside the existing Material shapes on the opening music notes."
     },
     "output/images/scene-02.png": {
       "title": "App Toolkit: scene 2",
-      "altText": "The toolbox lid and handle hinge open, ready for the tools to emerge."
+      "altText": "The original toolbox lid exits above frame while the tool-bearing body lands below."
     },
     "output/images/scene-03.png": {
       "title": "App Toolkit: scene 3",
@@ -59,7 +59,7 @@
     },
     "output/images/scene-04.png": {
       "title": "App Toolkit: scene 4",
-      "altText": "Compass, level, flashlight and SOS settle into the app bento beside the words One place."
+      "altText": "All six Quick Tools widgets and Material Colors gather into landscape bento rows under One place."
     },
     "output/images/scene-05.png": {
       "title": "App Toolkit: scene 5",

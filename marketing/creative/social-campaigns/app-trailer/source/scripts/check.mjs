@@ -7,6 +7,13 @@ import {execFileSync} from 'node:child_process';
 
 const source=fileURLToPath(new URL('../',import.meta.url));
 const timeline=JSON.parse(fs.readFileSync(path.join(source,'src/timeline.json')));
+const music=JSON.parse(fs.readFileSync(path.join(source,'src/music-analysis.json')));
+assert.deepEqual(timeline.events.beats.map(hit=>hit.at),music.onsetsSeconds,'Every detected onset needs an ordered visual response');
+assert.ok(timeline.events.beats.every(hit=>hit.action&&hit.strength>0&&hit.target>=0&&hit.target<4));
+assert.ok(Object.values(timeline.events.type).flat().every(at=>music.onsetsSeconds.includes(at)),'Headline words must start on detected notes');
+assert.ok(timeline.durationSeconds-timeline.events.hold>=1.5,'Closing identity must hold at least 1.5 seconds');
+assert.equal(timeline.events.launches.length,6);
+assert.equal(timeline.events.iconNotes.length,6);
 const media=JSON.parse(fs.readFileSync(path.join(source,'src/generated/media.json')));
 assert.equal(timeline.scenes.length,8);
 assert.equal(timeline.scenes[0].start,0);

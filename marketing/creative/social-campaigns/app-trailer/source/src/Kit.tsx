@@ -18,6 +18,7 @@ export const WIDGETS=[
   {id:'sos',selector:'.qt-live[data-accent="magenta"]',query:''},
   {id:'water',selector:'.qt-live[data-tool="water_eject"]',query:'Water Eject'},
   {id:'breathe',selector:'.qt-breathe',query:'Breathe'},
+  {id:'colors',selector:'.qt-colors',query:''},
 ] as const;
 
 type Embed={setup:(options:Record<string,unknown>)=>Promise<void>;mount:(el:HTMLElement,id:string,state:Record<string,unknown>,options:{frame:boolean;palette:string;window:{width:number;height:number;system:'phone'|'desktop'}})=>Promise<void>};

@@ -4,7 +4,7 @@ A 16:9 product trailer based on the owner's toolbox sketches. The existing mark 
 
 | | |
 | --- | --- |
-| Status | Reviewed second draft with capture and choreography fixes |
+| Status | Third cut, music-led choreography preview |
 | Sound | The complete supplied `soundtrack.mp3`, 29.88 seconds, unchanged speed and volume |
 | Design size | 1920 x 1080 |
 | Preview | 960 x 540 at 90 fps |
@@ -35,14 +35,14 @@ The **App trailer preview** Actions workflow also builds the preview and publish
 
 | Time | Picture |
 | --- | --- |
-| 0.00 to 1.76 | The existing toolbox mark arrives among Material shapes. |
-| 1.76 to 3.32 | The original lid and handle open. |
-| 3.32 to 6.76 | Six real Quick Tools widgets jump out. "Many tools." |
-| 6.76 to 10.08 | The box leaves. Widgets gather into the real screen geometry. "One place." |
-| 10.08 to 17.14 | Pull back to the Pixel; the shell appears around the same cards. Compass turns, level settles, six tool-name chips land on the beat. |
-| 17.14 to 21.98 | Measure opens from its actual tab. Protractor, Unit Converter, Bill Splitter and Counter each take the stage on an onset with live values. |
-| 21.98 to 26.26 | Play & Decide opens. The decision wheel chooses Sushi; random number, dice and coin land and resolve. |
-| 26.26 to 29.88 | Three labelled destinations fan out one onset apart. "App Toolkit. Your toolkit." Original Google Play badge. |
+| 0.00 to 1.76 | Oversized Material Symbols land in the kit shapes and make room for each other on the opening motif. Water and Breathe share the fifth note. |
+| 1.76 to 3.32 | The original mark anticipates, overshoots and splits. The lid exits above frame; the body with the tools lands at the bottom. |
+| 3.32 to 6.76 | Six real widgets burst from the body on notes. Material Colors follows. No burst headline. |
+| 6.76 to 10.08 | All seven live cards gather into unfolded bento rows filling the frame under "One place." |
+| 10.08 to 17.14 | The phone rises into the folding cards. They land at the screen's measured coordinates; "Quick tools." pushes the device right. Sensor values and chips follow notes. |
+| 17.14 to 21.98 | Measure reveals from its tab. Protractor, Unit Converter, Bill Splitter and Counter relay across the frame. Values change with the music. |
+| 21.98 to 26.26 | Counter exits across the boundary as Play opens. The wheel chooses Sushi, then number, die and coin resolve. |
+| 26.26 to 29.88 | Play continues into the destination fan while the outgoing cards lift away. Mark, headline and badge settle by 28.26 and hold for 1.62 seconds. |
 
 Major gestures follow detected bass onsets in `source/src/music-analysis.json`. Its BPM is an estimate, not a claim about the song. The timeline follows the supplied track rather than forcing the music onto an invented grid.
 
@@ -60,16 +60,15 @@ Ads and the More apps footer are disabled in the film. Product backgrounds, acce
 
 ## Motion rules
 
-1. Objects cause transitions: lid to widgets, widgets to bento, bento to device, tabs to destination.
-2. One continuous coordinate system handles the toolbox-to-phone sequence. Landing targets come from live DOM measurements.
-3. Floating widgets have full 28dp corners; their actual bento corners return as they land.
-4. Gestures settle before the next move. Moves use Material's emphasized curve; entries use a lightly damped spring whose tail blends to exact rest. Exits accelerate away.
-4a. One deterministic camera (`camera()` in `visuals.tsx`) pushes in on each chapter, recoils on the widget burst and pulls back for the closing fan. It never carries noise.
-4b. The toolbox enters as a gesture (spring, rotation, scale), crouches before the lid hinges open in the picture plane, recoils as each widget leaves and drops out of frame. Animated pieces move by transform only.
-5. The actual UI state is a function of the current frame. Wall-clock UI animations are disabled during capture.
-6. Motion is motivated (taste skill): only an element that changes reacts to an onset (a landing card, the newest chip). Decorative shapes drift slowly and never pulse; the end card holds still rather than floating.
-7. One accent per moment: the newest tool chip takes the teal container, earlier chips settle to neutral, and caption emphasis uses Google Sans Flex weight, not a second colour.
-8. Type is sparse and holds in clear space. The soundtrack plays at unity gain with no trim, loop or added fade.
+1. The detected notes live in read-only `music-analysis.json`. `timeline.json` maps each to a visible action and background target. Strength is an editorial accent weight, not a measured loudness value.
+2. The motif introduces six Material Symbols in the existing kit masks before the mark. The final note introduces Water and Breathe together because there are five opening onsets.
+3. The mark uses only the prepared original SVG layers. Its lid leaves above frame and the body stays at the bottom as the launcher until the gather.
+4. Seven real crops retain their screen order and row seams while unfolding across the landscape canvas. Their final landing coordinates come from live DOM measurements. The phone's viewport clips the below-fold cards as the group folds back into the actual scroll layout.
+5. Background shapes ratchet their rotation on assigned notes, punch scale and squash briefly on landing. They move at 22% of the foreground camera travel, with exact rest between hits. No idle spin.
+6. Camera phrases, gesture triggers, hero relays and chip notes come from timeline events. `CameraMotionBlur` samples only the marked fast windows; settled frames bypass the blur wrapper.
+7. Type reveals word by word through masks, changing Google Sans Flex width and weight. It pushes the phone or card group aside. Card exits travel beyond the frame instead of fading in place; Counter and the Play device carry across chapter boundaries.
+8. The UI remains frame-derived, with ads and More apps disabled. Animated placement uses transforms. The ending's foreground holds still from 28.26 through 29.88 while the last notes animate only the shapes behind it.
+9. The soundtrack plays in full at unity gain, without a trim, loop or fade. The preview remains 960 x 540 at 90 fps; the owner renders the 2K master after approval.
 
 ## Guidance and references
 
@@ -81,9 +80,8 @@ The Android Insider `develop` trailer's font and UI mounting gate and Smart Clea
 
 See `source/FIDELITY.md`. Preparation and structural checks can pass independently of visual review. A successful render does not establish parity, readable choreography or correct timing.
 
-- [x] Inspect the encoded pacing strips at six frames per second and representative scene stills.
-- [x] Check the widget handoff, phone aperture and destination boundaries.
-- [x] Check title clearance, chip spacing, full Counter crop and closing labels.
-- [x] Verify the full supplied audio numerically and validate output metadata.
-- [ ] Review the full preview at playback speed and listen to its natural ending.
-- [ ] Approve the cut before the 2K master and platform captions.
+- [x] TypeScript, scene continuity, unchanged audio hash, device aperture and onset coverage checks.
+- [x] Quarter-scale stills at the requested sample times and immediately around all seven scene boundaries.
+- [ ] Full-speed preview and sound approval by the owner before the 2K master.
+
+The gather deliberately unfolds the tall phone bento into landscape rows so all six widgets and Material Colors are readable together. It restores the exact measured positions during the phone handoff. The UI kit and Android screens were not changed. See `source/FIDELITY.md` for the review scope.
