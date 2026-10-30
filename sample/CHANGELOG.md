@@ -2,240 +2,43 @@
 
 ---
 
-# Unreleased
+# October 30, 2026
 
-### Changed
-
-- Counter and Random Number overview widgets now roll their changing digits, matching the existing tool sheets. The marketing widgets mirror the motion and honour reduced motion.
-
-- Material Colors now uses connected bento swatches with a large primary tile, adaptive columns, readable contrast and horizontal Android tone strips. The marketing sheet matches the app-role layout and copies the same ARGB format. Palette values and the screen background are unchanged.
-
-- More apps actions use the shared tonal button. The recommendation details sheet is ad-free; the three overview placements remain unchanged. Android CI now verifies develop pushes and pull requests.
-
-- The Apps page, its drawer link and its list ads are replaced by a "More apps" carousel at the end of Quick Tools. Tapping an installed app opens it; otherwise its details sheet offers Google Play. "View all" opens the developer page on Google Play. A stored Apps start page now opens Quick Tools.
-
-### Fixed
-
-- More apps refreshes installed state and installed versions on foreground return without reloading its catalogue. Empty or unavailable catalogues leave no promotional widget.
-- Carousel impressions require visible foreground exposure instead of a successful catalogue load.
-
-- Keep the Quick Tools, Measure and Play & Decide scroll viewports above the shell and system navigation bars.
-- Preserve the app screen background and neutral surfaces while keeping custom tool accent colours.
-
-### Improved
-
-- More apps uses filled 28dp cards like the tool widgets, with full-width descriptions and tonal actions. Quick Tools places its native ad after Light & signals, before Hardware & sound.
-
-- Sample analytics now distinguish tool openings and meaningful use across all three workspaces, with bounded Water Eject completion, cancellation and failure outcomes. Tool inputs and results are not collected.
-
-- Dark tool colours use coordinated muted containers and softer gold, teal, pink and orange accents. Light colours and the app background are unchanged.
-- Tool headings and cards enter individually using the shared motion settings.
-- Tool screens use fixed gold, cream, pink and neutral colours in light and dark mode, independent of wallpaper.
-- Align the converter swap button with the preview and keep the marketing ruler title below the camera cutout.
-
-### Fixed
-
-- Align the Protractor endpoint, dial details and angle badge with the preview, remove its instructions and keep the title clear of the dial.
-- Match Unit Converter cards and Random Number result-first controls to the marketing layouts.
-- Use the same Simple and Advanced ruler selector in both modes.
+**Version:** `26.09.38`
 
 ### Added
 
-- One native ad between the conversion and counting sections in Measure, and one below Chance in Play & Decide. Search hides the placements; unavailable ads leave no empty space.
-- Three redesigned native workspaces matching the approved marketing UI: Quick Tools, Measure
-  and Play & Decide, with live widgets in each tool's colours, shapes and readouts.
-- Material Colors is the last Quick Tools section: a strip of the app's colour scheme that opens
-  the palette page.
-- Decision Wheel with directly editable choices and a native animated result, and a finite
-  foreground-only Water Eject speaker cycle.
-- Five new tools across Quick Tools and Measure: Unit Converter (length, mass, temperature, volume
-  and data), Ruler (full-screen calibrated edge measurement in millimetres and inches), Protractor
-  (on-screen angle alignment), Tip & Bill Splitter, and Random Number Picker with inclusive minimum
-  and maximum bounds.
-- The app changelog has an info button that opens App Toolkit's releases on GitHub, for the
-  library's notes behind each version.
+- Unit Converter for length, mass, temperature and volume.
+- Tip & Bill Splitter.
+- Random Number Picker with custom ranges.
+- Ruler with calibration and advanced measurement options.
+- Protractor.
+- Decision Wheel to add your choices and spin to pick one at random.
+- Water Eject that play a timed speaker tone with a clear Start and Stop control.
+- Live tool widgets with interactive controls.
 
 ### Changed
 
-- The apps catalog and the Components showcase are debug pages: the drawer shows them only in
-  debug builds. The About version-tap unlock that showed them in release builds is removed, with
-  `:sample:core:datastore`, the module that stored its flag.
-- The Ruler opens as a simple full-screen ruler at the screen's real scale: centimetres down one
-  edge and inches down the other, along the long side in portrait and landscape, with a reading
-  you drag to measure from zero. Advanced adds a measurement range and settings for the units, the
-  scale's edge, where zero is, the inch steps (1/8, 1/16 or 1/32) and calibration, all saved.
-- The coin turns as a 10 dp thick disc, rising as it spins, as the marketing UI draws it.
-- Tool faces and badges use the marketing UI's own shapes (`KitShape`, the same curves as its
-  `shapeUrl`) instead of `MaterialShapes`, so the flashlight's burst, SOS's cookie and the rest
-  match it exactly.
-- Quick Tools, Measure and Play & Decide keep their cards clear of the system navigation bar while
-  the bottom bar is hidden by scrolling.
-- The tools draw the same icons as the marketing UI: Material Symbols (outlined, and rounded for
-  section titles and the converter's categories) instead of the older Material Icons, including
-  symbols those lacked, such as `weight`. The converter's selected category shows a check mark,
-  and its hint to edit either value is back.
-- Tool sheet badges take the kit's colours and shapes: the compass badge is `MaterialShapes.Sunny`
-  and the level's `MaterialShapes.Pill`, while their live faces keep the brand cookies.
-- The ruler's Simple and Advanced modes share one panel: the title, the switch and the reading
-  stay put and the settings unfold under them. Calibration rescales the ruler itself, so there is
-  no reference line making the card grow.
-- The protractor keeps its 0 and 180 labels on screen and reads whole degrees; the Play overview's
-  wheel shows its two starting choices; the random number badge shows `#` again.
-- The Quick Tools ad matches the marketing UI: a "Sponsored content" title like the sections', then
-  a widget card with the advertiser's icon in a nine-sided cookie and one full-width action. The
-  title is the ad's disclosure label, so there is no chip inside the card.
-- Text the screens draw themselves (widget labels, the compass rose, Measure titles) and the ad's
-  text use Google Sans like the rest of the app.
-
-- A new app icon: a toolbox with a wrench and screwdriver, in the launcher, the themed icon (the
-  tools cut out of the box), the drawer, the splash screen, the widget preview and the Android TV
-  banner.
-- Quick Tools uses live grouped widgets without filter chips or collapse controls. Measure
-  adds search, shared calculation readouts, a live counter and a direct Reaction Test Start action.
-- Quick Tools keeps one native ad after Sensors, hidden during search. App-open ads remain disabled.
-- The Counter has a minus button to correct a miscount without resetting the total.
-- Onboarding now has five pages focused on everyday tools, theme choice, Quick Settings,
-  telemetry usage and diagnostics consent, and completion. App promotions are removed. Diagnostics
-  preferences also remain available in Settings under Security and Privacy.
-- Existing app-icons widgets may need to be added again because their receiver component name
-  changed during the sample architecture cleanup.
-- Existing Quick Settings tiles may need to be removed and added again after this update because
-  their service component names changed.
+- Redesigned Quick Tools, Measure and Play & Decide screens.
+- Replaced the Apps screen with a More apps carousel.
+- Updated the app icon.
+- Redesigned onboarding.
 
 ### Improved
 
-- Tip & Bill Splitter has a highlighted per-person result, segmented tip choices and people controls.
-  Random Number Picker has compact range inputs, quick presets and a highlighted result with animated digits.
-- Carousel and onboarding page indicators now follow swipe progress continuously with a smooth
-  capsule stretch.
-
-- Screens move at a calmer pace and bring their content in as they open, including Apps and
-  Quick Tools when picked from the navigation. Going back to a screen keeps it as it was. The
-  developer options can play it on every visit or only the first time. See App Toolkit's releases
-  for the details.
-- Opening a screen no longer shows a blank page first: its content starts arriving while the page
-  slides in, and the Apps list keeps its loading cards until its apps take their place.
-- The Apps list brings in its filter chips, then its cards.
-- The Components, Quick Tools and article demo screens enter the way the Toolkit's screens do,
-  each section or card in turn.
+- Added decrement controls to Counter.
+- Improved tool animations and screen transitions.
+- Updated colors, shapes and layouts.
+- Improved support for tablets and foldables.
 
 ### Fixed
 
-- The Flash Dimmer tile steps through its levels again instead of restarting at the first one on
-  every tap, and the Flash Dimmer slider no longer flickers the torch: stopping Morse with nothing
-  playing leaves the torch alone.
-- Tool sheets, the Material Colors page and the Protractor's landscape controls keep clear of the
-  system navigation (gesture bar or buttons).
-- The coin flips when tapped on its widget, as the die rolls, and the die no longer shows a square
-  ripple.
-- A Morse message the torch cannot send is not counted as a use; a double tap on the Reaction Test
-  signal records one result; restarting Breathe cannot be reset by the session it replaced; the
-  torch state keeps following the hardware after a callback error.
-
-- Quick Tools avoids recycling category groups while their expanded heights animate, addressing
-  the reported scroll-and-expand lookahead layout crash.
-- Ruler calibration uses a full-length vertical reference aligned with its measurement axis.
-- Filtered Quick Tools sections hide unavailable collapse controls.
-- Unit Converter accepts localized decimal digits and Arabic decimal marks.
-- Opening an installed app can fall back to its Settings page when Android denies the launcher
-  lookup, rather than letting the lookup failure escape.
-- Stopping or replacing Morse and SOS playback waits for in-flight torch commands, keeping the
-  flashlight off after stopping.
-- Counter storage failures are handled instead of escaping the action, while accepted writes
-  still finish if the Quick Settings service disappears.
-- Unlocking the components showcase reports the achievement only once the unlock is saved, and
-  never again on later taps.
-
----
-
-# October 17, 2026
-
-**Version:** `26.10.32`
-
-### Fixed
-
-- Automatic consent requests interrupted by an unavailable activity retry on a later resume without
-  showing an error message or reporting a nonfatal exception. Consumer apps with their own main
-  ViewModel should adopt the handling documented in `sample/app/README.md`.
-
-### Changed
-
-- Existing Quick Settings tiles may need to be removed and added again after this update because
-  their service component names changed.
-
-### Improved
-
-- Quick Settings catalogue reads own their IO dispatching, so callers no longer need to move
-  repository work off the main thread.
-- Opening an app from the Apps list no longer checks installed packages on the main thread.
-- Release builds use startup and scrolling profiles generated from the sample app's catalog journeys.
-- Breathing and SOS animations update their graphics layers without recomposing on every frame.
-  The Quick Tools catalog distinguishes category and ad rows when reusing lazy items.
-
----
-
-# October 03, 2026
-
-**Version:** `26.10.31`
-
-### Added
-
-- Search the quick tools and the apps from the app bar.
-- Pick the weather from a new button in the theme settings' top bar, once you find the easter egg on the About screen: snow with the Christmas colours, snow or rain over any colours all year, or nothing at all. The rain gusts, comes and goes in showers, and splashes where it lands.
-- Pressing a button in Components shows a snackbar: plain, with an Undo action, as an error with Retry, with an icon and its own colours, or drawn by the screen itself, depending on the group.
-
-### Changed
-
-- The ad above bottom navigation is now gone.
-- Settings, Help, Support and the components showcase now open as pages of the main screen, with the same back swipe animation as before, and the Settings shortcut opens Settings directly.
-- Every settings page, About, the licenses, permissions and ads settings now open inside the app too. On tablets and wide windows the settings categories open beside the list.
-- The first-launch screens now run inside the app, so finishing onboarding takes you straight to your start page.
-- The information icon beside the app in Android's permission manager and privacy dashboard opens the app's privacy settings again, and back returns you to the system's settings.
-- On tablets, foldables and wide windows the navigation becomes a side rail or a permanent drawer, and long pages keep a comfortable width.
-- On tablets and wide windows, Settings, Help and the other pages open beside the side navigation, which stays in place and shows where you are, so you can switch straight to another page or tab.
-- Settings, Help & feedback, Updates and Share are always at the bottom of the navigation drawer.
-- Layout options such as the app bar and bottom bar style, the navigation colour and the back swipe now live in Display settings. Developer options move to Advanced settings, and appear once you find the easter egg on the About screen.
-
-### Changed
-
-- Existing Quick Settings tiles may need to be removed and added again after this update because
-  their service component names changed.
-
-### Improved
-
-- Every quick tool reports its actions and any failure in them, so problems with the compass, level, breathing, SOS, Morse, flash dimmer, counter and reaction test can be traced.
-- The menu button turns into a back arrow when you open a screen, instead of popping in and out, and the navigation icons animate when you tap them.
-- The welcome and onboarding pages keep a comfortable width on tablets.
-- On tablets and wide windows, a page opened from the side navigation looks like a tab, without a back button.
-- The labelled floating action buttons shrink to their icon while you scroll down and grow back when you scroll up.
-- Settings on a tablet shows its illustration and a Get help button beside the list until you open a category.
-- On tablets and in landscape, Help and the other pages from the side navigation fade in place instead of sliding in, the side rail starts collapsed after a rotation, and the app bar next to the rail has square corners.
-- Switching between Quick tools and Apps no longer makes the search bar flicker, and a back swipe from the right edge on a tablet's settings detail follows your finger.
-- What's new now separates releases with a wavy line.
-- Search the settings from the top of the settings list, down to single options such as dark theme or the app bar.
-- The app bar can hide as you scroll too, in Display settings, so the whole screen makes room for the content.
-- Rolling the dice does less work on each frame of the animation.
-- The apps widget loads its icons at the same time instead of one after another, and reuses the icons the app has already downloaded.
-- The apps widget shows the apps it loaded last time straight away and refreshes them once the network answers, instead of waiting on the network.
-- Starring an app no longer redraws every app card.
-- Opening the Quick Settings panel no longer saves the quick tools' tile state each time.
-
-### Fixed
-
-- The native ad on Help shows its icon inside the shaped badge.
-- If the quick tools cannot load, the tab says why and offers Retry.
-- Offline, the apps list shows the apps it saved last time, with a message and a Try again button.
-- A favorite that cannot be saved now shows a message instead of hiding the apps list.
-- Tapping favorites on two apps quickly now saves both.
-- Copying an app's package name no longer shows a duplicate toast on Android 13 and newer. Older versions keep the copy confirmation.
-- The favourite star in an app's details now fills and empties as you tap it, as it does on the app's card.
-- Tapping the tab you are already on no longer plays its icon backwards or shows it unselected.
-- The compass tile no longer crashes on phones whose sensors report an invalid reading.
-- Without a connection, the Apps tab now shows the apps it loaded last time, with a message saying they could not be refreshed, instead of an error screen.
-- Retry on the Apps tab works again after a failed load.
-- Removing your last favourite no longer leaves the Apps tab on an empty Favourites filter with no chip to leave it: it goes back to All.
-- The Apps tab shows freshly loaded apps even when saving them for offline use fails.
-- The compass and the level stop using their sensors while the app is in the background, even with the tool open.
+- Flash Dimmer brightness and torch flickering.
+- Morse and SOS playback conflicts.
+- Reaction Test double-tap handling.
+- Breathing session restart issues.
+- App installation status not refreshing after returning from Google Play.
+- Counter saving and app-launch error handling.
 
 ---
 
