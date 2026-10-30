@@ -204,8 +204,48 @@ try {
     await page.goto(base + '/screen.html?id=quick-tools&panel=none');
     await page.locator('.qt-colors').waitFor();
   await page.locator('.qt-colors').click();
-  await page.waitForFunction(() => document.querySelectorAll('.mc-swatch__hex').length === 12 && [...document.querySelectorAll('.mc-swatch__hex')].every((el) => /^#[0-9A-F]{6}$/.test(el.textContent)));
+  await page.waitForFunction(() => document.querySelectorAll('.mc-swatch__hex').length === 12 && [...document.querySelectorAll('.mc-swatch__hex')].every((el) => /^#[0-9A-F]{8}$/.test(el.textContent)));
   checks++;
+    assert.equal(await page.locator('button.mc-swatch').count(), 12);
+    await page.context().grantPermissions(['clipboard-read', 'clipboard-write']);
+    const primaryHex = await page.locator('.mc-swatch__hex').first().textContent();
+    await page.locator('.mc-swatch').first().press('Enter');
+    await page.waitForFunction(hex => document.querySelector('.mc-sheet__feedback').textContent === `Copied ${hex}`, primaryHex);
+    assert.equal(await page.evaluate(() => navigator.clipboard.readText()), primaryHex);
+    // The component must reflow inside a narrow sheet, independent of the preview's fixed phone frame.
+    for (const width of [320, 430, 560]) {
+      await page.locator('.mc-sheet').evaluate((el, width) => { el.style.width = `${width}px`; }, width);
+      assert.equal(await page.locator('.mc-sheet__body').evaluate(el => el.scrollWidth <= el.clientWidth + 1), true);
+      assert.equal(await page.locator('.mc-swatch').evaluateAll(nodes => nodes.every(el => el.scrollWidth <= el.clientWidth + 1)), true);
+      checks++;
+    }
+    await page.locator('.mc-sheet').evaluate(el => { el.style.width = ''; });
+    const headerY = (await page.locator('.mc-sheet__head').boundingBox()).y;
+    await page.locator('.mc-swatch').last().scrollIntoViewIfNeeded();
+    assert.equal((await page.locator('.mc-sheet__head').boundingBox()).y, headerY);
+    checks++;
+    for (const theme of ['light', 'dark']) {
+      const state = encodeURIComponent(JSON.stringify({activeToolId: 'material_colors'}));
+      await page.goto(`${base}/screen.html?id=quick-tools&panel=none&theme=${theme}&state=${state}`);
+      await page.waitForFunction(() => [...document.querySelectorAll('.mc-swatch__hex')].length === 12 && [...document.querySelectorAll('.mc-swatch__hex')].every(el => /^#[0-9A-F]{8}$/.test(el.textContent)));
+      // Both black and white labels must meet normal-text contrast on the real scheme colours.
+      const contrast = await page.locator('.mc-swatch').evaluateAll(nodes => {
+        const luminance = css => {
+          const ctx = document.createElement('canvas').getContext('2d');
+          ctx.fillStyle = css; ctx.fillRect(0, 0, 1, 1);
+          const rgb = [...ctx.getImageData(0, 0, 1, 1).data].slice(0, 3).map(v => {
+            const c = v / 255; return c <= .04045 ? c / 12.92 : ((c + .055) / 1.055) ** 2.4;
+          });
+          return .2126 * rgb[0] + .7152 * rgb[1] + .0722 * rgb[2];
+        };
+        return nodes.every(el => {
+          const style = getComputedStyle(el), bg = luminance(style.backgroundColor), ink = luminance(style.color);
+          return (Math.max(bg, ink) + .05) / (Math.min(bg, ink) + .05) >= 4.5;
+        });
+      });
+      assert.equal(contrast, true, `${theme} swatch text contrast`);
+      checks++;
+    }
   await page.goto(`${base}/screen.html?id=numbers&panel=none`);
   await page.locator('.numbers-card').first().waitFor();
   assert.equal(await page.locator('h2').filter({hasText:'Chance'}).count(), 0);

@@ -17,64 +17,63 @@
 
 package com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views
 
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.icons.ToolSymbols
-import androidx.compose.foundation.layout.navigationBars
-import androidx.compose.foundation.layout.asPaddingValues
-import androidx.compose.foundation.layout.WindowInsets
 import android.os.Build
 import android.widget.Toast
 import androidx.annotation.ColorRes
 import androidx.annotation.RequiresApi
-import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.ExperimentalLayoutApi
-import androidx.compose.foundation.layout.FlowRow
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
+import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.SheetValue
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberBottomSheetState
-import androidx.compose.runtime.LaunchedEffect
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.analytics.toolOpenedEvent
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.utils.constants.ToolkitTileIds
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.analytics.LocalTelemetry
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.compositeOver
 import androidx.compose.ui.graphics.luminance
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.R
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.analytics.toolOpenedEvent
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.mappers.toAppColorTable
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.mappers.toHexString
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.models.AndroidColorData
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.models.AndroidColorTable
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.models.ColorSwatchData
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.models.ColorTable
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.icons.ToolSymbols
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.utils.constants.ToolkitTileIds
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.context.copyTextToClipboard
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.icons.ToolkitIcon
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.analytics.LocalTelemetry
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.GeneralButton
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.GeneralButtonStyle
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.modifiers.animateVisibility
 import java.util.Locale
 
 /** Full-height expanded tool that previews the current app and Android Material You palettes. */
@@ -105,11 +104,13 @@ fun MaterialColorsToolDialog(
         modifier = Modifier.fillMaxHeight(),
         sheetState = sheetState,
         onDismissRequest = onClose,
+        dragHandle = null,
     ) {
         Column(
             modifier = Modifier
                 .fillMaxHeight()
-                .padding(horizontal = SizeConstants.LargeSize),
+                .padding(horizontal = SizeConstants.LargeSize)
+                .padding(top = 16.dp),
             verticalArrangement = Arrangement.spacedBy(SizeConstants.MediumSize),
         ) {
             Row(
@@ -130,8 +131,9 @@ fun MaterialColorsToolDialog(
             }
             LazyColumn(
                 modifier = Modifier.weight(1f),
-                // The palettes scroll behind the system navigation and end above it.
-                contentPadding = WindowInsets.navigationBars.asPaddingValues(),
+                contentPadding = PaddingValues(
+                    bottom = WindowInsets.navigationBars.asPaddingValues().calculateBottomPadding() + 24.dp,
+                ),
                 verticalArrangement = Arrangement.spacedBy(SizeConstants.MediumSize),
             ) {
                 item {
@@ -139,17 +141,17 @@ fun MaterialColorsToolDialog(
                         text = stringResource(id = R.string.tool_material_colors_description),
                         style = MaterialTheme.typography.bodyMedium,
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
-                )
+                    )
                 }
                 item {
-                    ColorTableCard(table = appColorTable)
+                    AppColorBento(table = appColorTable)
                 }
                 if (androidColorTables.isNotEmpty()) {
                     items(
                         items = androidColorTables,
                         key = AndroidColorTable::title,
                     ) { table ->
-                        AndroidColorTableCard(table = table)
+                        AndroidToneStrip(table = table)
                     }
                 } else {
                     item {
@@ -165,37 +167,47 @@ fun MaterialColorsToolDialog(
     }
 }
 
-@OptIn(ExperimentalLayoutApi::class)
+/** Real scheme roles arranged as one connected bento, rather than nested cards. */
 @Composable
-private fun ColorTableCard(table: ColorTable) {
-    ElevatedCard(
-        modifier = Modifier.fillMaxWidth(),
-        shape = RoundedCornerShape(SizeConstants.LargeSize),
-        colors = CardDefaults.elevatedCardColors(
-            containerColor = MaterialTheme.colorScheme.surfaceContainerLow,
-        ),
-    ) {
-        Column(
-            modifier = Modifier.padding(SizeConstants.MediumSize),
-            verticalArrangement = Arrangement.spacedBy(SizeConstants.SmallSize),
-        ) {
-            Text(
-                text = table.title,
-                style = MaterialTheme.typography.titleMedium,
-            )
-            HorizontalDivider()
-            FlowRow(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(SizeConstants.ExtraTinySize),
-                verticalArrangement = Arrangement.spacedBy(SizeConstants.ExtraTinySize),
-                maxItemsInEachRow = 3,
-            ) {
-                table.colors.forEach { color ->
+private fun AppColorBento(table: ColorTable) {
+    Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
+        Text(table.title, style = MaterialTheme.typography.titleMedium)
+        BoxWithConstraints {
+            // Wider fonts use fewer columns instead of clipping role names or ARGB values.
+            val fontScale = LocalDensity.current.fontScale
+            val columns = when {
+                fontScale > 1.6f -> 1
+                maxWidth < 360.dp || fontScale > 1.2f -> 2
+                else -> 3
+            }
+            Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
+                table.colors.firstOrNull()?.let { color ->
                     ColorSwatch(
                         name = color.name,
                         color = color.color,
-                        modifier = Modifier.weight(1f),
+                        hero = true,
+                        shape = RoundedCornerShape(28.dp, 28.dp, 8.dp, 8.dp),
+                        modifier = Modifier.fillMaxWidth().animateVisibility(index = 0),
                     )
+                }
+                val rows = table.colors.drop(1).chunked(columns)
+                rows.forEachIndexed { rowIndex, row ->
+                    Row(horizontalArrangement = Arrangement.spacedBy(4.dp)) {
+                        row.forEachIndexed { columnIndex, color ->
+                            val lastRow = rowIndex == rows.lastIndex
+                            ColorSwatch(
+                                name = color.name,
+                                color = color.color,
+                                shape = RoundedCornerShape(
+                                    topStart = 8.dp, topEnd = 8.dp,
+                                    bottomEnd = if (lastRow && columnIndex == row.lastIndex) 28.dp else 8.dp,
+                                    bottomStart = if (lastRow && columnIndex == 0) 28.dp else 8.dp,
+                                ),
+                                modifier = Modifier.weight(1f)
+                                    .animateVisibility(index = 1 + rowIndex * columns + columnIndex),
+                            )
+                        }
+                    }
                 }
             }
         }
@@ -203,14 +215,26 @@ private fun ColorTableCard(table: ColorTable) {
 }
 
 @Composable
-private fun AndroidColorTableCard(table: AndroidColorTable) {
-    val colors = table.colors.map { androidColor ->
-        ColorSwatchData(
-            name = androidColor.name,
-            color = colorResource(id = androidColor.colorResId),
-        )
+private fun AndroidToneStrip(table: AndroidColorTable) {
+    Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
+        Text(table.title, style = MaterialTheme.typography.titleMedium)
+        val tileWidth = 116.dp * LocalDensity.current.fontScale.coerceAtLeast(1f)
+        LazyRow(horizontalArrangement = Arrangement.spacedBy(4.dp)) {
+            items(table.colors, key = AndroidColorData::name) { color ->
+                ColorSwatch(
+                    name = color.name,
+                    color = colorResource(color.colorResId),
+                    shape = RoundedCornerShape(
+                        topStart = if (color == table.colors.first()) 28.dp else 8.dp,
+                        bottomStart = if (color == table.colors.first()) 28.dp else 8.dp,
+                        topEnd = if (color == table.colors.last()) 28.dp else 8.dp,
+                        bottomEnd = if (color == table.colors.last()) 28.dp else 8.dp,
+                    ),
+                    modifier = Modifier.width(tileWidth).animateVisibility(),
+                )
+            }
+        }
     }
-    ColorTableCard(table = ColorTable(title = table.title, colors = colors))
 }
 
 @Composable
@@ -218,41 +242,34 @@ private fun ColorSwatch(
     name: String,
     color: Color,
     modifier: Modifier = Modifier,
+    hero: Boolean = false,
+    shape: RoundedCornerShape = RoundedCornerShape(8.dp),
 ) {
     val context = LocalContext.current
     val hexString = color.toHexString()
-    val copiedMessage = stringResource(id = R.string.tool_material_colors_copied, hexString)
-    val contentColor = if (color.luminance() > 0.5f) Color.Black else Color.White
-    Box(
-        modifier = modifier
-            .height(ColorSwatchHeight)
-            .clip(RoundedCornerShape(SizeConstants.SmallSize))
-            .background(color = color)
-            .clickable {
-                context.copyTextToClipboard(
-                    label = name,
-                    text = hexString,
-                ) {
-                    Toast.makeText(
-                        context,
-                        copiedMessage,
-                        Toast.LENGTH_SHORT,
-                    ).show()
-                }
+    val copiedMessage = stringResource(R.string.tool_material_colors_copied, hexString)
+    val visibleColor = color.compositeOver(MaterialTheme.colorScheme.surface)
+    // Pick the higher-contrast ink, including for mid-tones and translucent roles.
+    val contentColor = if (visibleColor.luminance() > 0.179f) Color.Black else Color.White
+    Surface(
+        onClick = {
+            context.copyTextToClipboard(label = name, text = hexString) {
+                Toast.makeText(context, copiedMessage, Toast.LENGTH_SHORT).show()
             }
-            .padding(SizeConstants.SmallSize),
-        contentAlignment = Alignment.TopStart,
+        },
+        modifier = modifier,
+        shape = shape,
+        color = color,
+        contentColor = contentColor,
     ) {
-        Column(verticalArrangement = Arrangement.spacedBy(SizeConstants.ExtraTinySize)) {
+        Column(
+            modifier = Modifier.heightIn(min = if (hero) 140.dp else 104.dp).padding(16.dp),
+            verticalArrangement = Arrangement.SpaceBetween,
+        ) {
+            Text(name.uppercase(Locale.ENGLISH), style = MaterialTheme.typography.labelMedium)
             Text(
-                text = name.uppercase(Locale.ENGLISH),
-                style = MaterialTheme.typography.labelMedium,
-                color = contentColor,
-            )
-            Text(
-                text = hexString,
-                style = MaterialTheme.typography.labelSmall,
-                color = contentColor,
+                hexString,
+                style = if (hero) MaterialTheme.typography.headlineMedium else MaterialTheme.typography.labelSmall,
             )
         }
     }
@@ -393,4 +410,3 @@ private fun androidColorRamp(
     AndroidColorData("1000", color1000),
 )
 
-private val ColorSwatchHeight = SizeConstants.SeventyTwoSize

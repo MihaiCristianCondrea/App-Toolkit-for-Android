@@ -14,6 +14,8 @@ The native Quick Tools, Measure and Play & Decide workspaces, their tool sheets,
 
 ## Workspaces
 
+Material Colors uses a connected bento palette: one large primary swatch followed by the remaining scheme roles, with fewer columns on narrow screens and at larger font sizes. Each tile copies its ARGB value. Android 12+ system accent and neutral palettes remain real platform resources, arranged as horizontally scrollable tone strips. The header stays above the scrolling content, and the app's background and custom accent scheme are unchanged. The marketing sheet mirrors the app-role bento and copying; browser previews do not invent Android system palettes.
+
 | Destination | Sections and tools |
 | --- | --- |
 | Quick Tools | Sensors: Compass, Bubble Level. Light & signals: Flash Dimmer, combined Morse & SOS. Hardware & sound: Water Eject. Wellbeing: Breathe. Colors, last: Material Colors. |

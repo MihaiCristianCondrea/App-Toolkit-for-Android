@@ -6,6 +6,8 @@
 
 ### Changed
 
+- Material Colors now uses connected bento swatches with a large primary tile, adaptive columns, readable contrast and horizontal Android tone strips. The marketing sheet matches the app-role layout and copies the same ARGB format. Palette values and the screen background are unchanged.
+
 - More apps actions use the shared tonal button. The recommendation details sheet is ad-free; the three overview placements remain unchanged. Android CI now verifies develop pushes and pull requests.
 
 - The Apps page, its drawer link and its list ads are replaced by a "More apps" carousel at the end of Quick Tools. Tapping an installed app opens it; otherwise its details sheet offers Google Play. "View all" opens the developer page on Google Play. A stored Apps start page now opens Quick Tools.
