@@ -21,8 +21,8 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.models.
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.InstalledAppsRepository
 
 class FakeInstalledAppsRepository(
-    private val installedPackages: Set<String> = emptySet(),
-    private val installInfoMap: Map<String, AppInstallInfo> = emptyMap(),
+    var installedPackages: Set<String> = emptySet(),
+    var installInfoMap: Map<String, AppInstallInfo> = emptyMap(),
 ) : InstalledAppsRepository {
     override suspend fun isInstalled(packageName: String): Boolean = packageName in installedPackages
     override suspend fun getLaunchIntent(packageName: String): android.content.Intent? = null

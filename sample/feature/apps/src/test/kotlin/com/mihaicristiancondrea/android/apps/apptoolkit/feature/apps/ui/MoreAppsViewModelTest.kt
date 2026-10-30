@@ -24,6 +24,8 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.FakeTelemet
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.UnconfinedDispatcherExtension
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.Loadable
 import kotlinx.coroutines.test.runTest
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.models.AppInstallInfo
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.models.AppVersionMetadata
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.RegisterExtension
 import kotlin.test.assertEquals
@@ -67,7 +69,7 @@ class MoreAppsViewModelTest {
         val apps = assertIs<Loadable.Ready<List<AppSummary>>>(viewModel.state.value.apps)
         assertEquals(listOf(FIRST_APP, SECOND_APP), apps.value)
         assertEquals(setOf("pkg"), viewModel.state.value.installedPackages)
-        assertTrue(telemetryRepository.loggedEvents.any { it.name == "view_item_list" })
+        assertFalse(telemetryRepository.loggedEvents.any { it.name == "view_item_list" })
     }
 
     @Test
@@ -142,5 +144,54 @@ class MoreAppsViewModelTest {
         advance()
 
         assertEquals(setOf("pkg"), viewModel.state.value.favorites)
+    }
+
+    @Test
+    fun installUpdateAndUninstallRefreshBothTheCardAndOpenDetailsWithoutDownloading() = runTest(dispatcherExtension.testDispatcher) {
+        val catalogue = FakeDeveloperAppsRepository(apps = listOf(FIRST_APP))
+        val packages = FakeInstalledAppsRepository()
+        val model = createViewModel(catalogue, packages)
+        advance()
+        model.onEvent(MoreAppsEvent.AppSelected(FIRST_APP.packageName))
+        advance()
+        assertFalse(model.state.value.selectedAppInstallInfo!!.isInstalled)
+
+        for ((installed, version) in listOf(true to 1L, true to 2L, false to 0L)) {
+            packages.installedPackages = if (installed) setOf(FIRST_APP.packageName) else emptySet()
+            val info = AppInstallInfo(installed, if (installed) AppVersionMetadata("v$version", version) else null)
+            packages.installInfoMap = mapOf(FIRST_APP.packageName to info)
+            model.onEvent(MoreAppsEvent.RefreshInstalled)
+            advance()
+            assertEquals(installed, FIRST_APP.packageName in model.state.value.installedPackages)
+            assertEquals(info, model.state.value.selectedAppInstallInfo)
+            assertEquals(FIRST_APP, model.state.value.selectedApp)
+            assertEquals(1, catalogue.fetchCount)
+        }
+        assertFalse(telemetryRepository.loggedEvents.any { it.name == "view_item_list" })
+    }
+
+    @Test
+    fun catalogueRefreshAndRecompositionDoNotManufactureImpressions() = runTest(dispatcherExtension.testDispatcher) {
+        val model = createViewModel()
+        advance()
+        assertFalse(telemetryRepository.loggedEvents.any { it.name == "view_item_list" })
+        repeat(3) { model.onEvent(MoreAppsEvent.CarouselExposed) }
+        model.onEvent(MoreAppsEvent.RefreshInstalled)
+        model.onEvent(MoreAppsEvent.Load)
+        advance()
+        model.onEvent(MoreAppsEvent.CarouselExposed)
+        assertEquals(1, telemetryRepository.loggedEvents.count { it.name == "view_item_list" })
+        model.onEvent(MoreAppsEvent.CarouselHidden)
+        model.onEvent(MoreAppsEvent.CarouselExposed)
+        assertEquals(2, telemetryRepository.loggedEvents.count { it.name == "view_item_list" })
+    }
+
+    @Test
+    fun anEmptyOrUnavailableCatalogueHasNoImpression() = runTest(dispatcherExtension.testDispatcher) {
+        val model = createViewModel(FakeDeveloperAppsRepository(apps = emptyList()))
+        advance()
+        model.onEvent(MoreAppsEvent.CarouselExposed)
+        model.onEvent(MoreAppsEvent.RefreshInstalled)
+        assertTrue(telemetryRepository.loggedEvents.none { it.name == "view_item_list" })
     }
 }

@@ -196,6 +196,13 @@ try {
   assert.equal(await page.locator('.qt-section:not(.qt-more-apps)').last().locator('.qt-colors').count(), 1);
   assert.equal(await page.locator('.qt-section').last().evaluate(el => el.classList.contains('qt-more-apps')), true);
   assert.equal(await page.locator('.qt-app-card').count(), 2);
+    await page.goto(base + '/screen.html?' + new URLSearchParams({id: 'quick-tools', panel: 'none', state: JSON.stringify({moreApps: []})}));
+    await page.locator('.qt-colors').waitFor();
+    assert.equal(await page.locator('.qt-more-apps').count(), 0);
+    assert.equal(await page.locator('.qt-section').last().locator('.qt-colors').count(), 1);
+    checks++;
+    await page.goto(base + '/screen.html?id=quick-tools&panel=none');
+    await page.locator('.qt-colors').waitFor();
   await page.locator('.qt-colors').click();
   await page.waitForFunction(() => document.querySelectorAll('.mc-swatch__hex').length === 12 && [...document.querySelectorAll('.mc-swatch__hex')].every((el) => /^#[0-9A-F]{6}$/.test(el.textContent)));
   checks++;

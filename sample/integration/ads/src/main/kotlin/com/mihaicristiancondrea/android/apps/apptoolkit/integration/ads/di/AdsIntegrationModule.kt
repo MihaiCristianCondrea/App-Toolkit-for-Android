@@ -18,7 +18,6 @@
 package com.mihaicristiancondrea.android.apps.apptoolkit.integration.ads.di
 
 import com.mihaicristiancondrea.android.apps.apptoolkit.integration.ads.constants.AdsConstants
-import com.mihaicristiancondrea.android.apps.apptoolkit.integration.ads.constants.AppAdsQualifiers
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ads.AdsQualifiers
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.ads.AdsConfig
 import org.koin.core.module.Module
@@ -28,10 +27,6 @@ import org.koin.dsl.module
 val adsIntegrationModule: Module = module {
     single<AdsConfig>(named(name = AdsQualifiers.NATIVE_AD)) {
         AdsConfig(bannerAdUnitId = AdsConstants.NATIVE_AD_UNIT_ID)
-    }
-
-    single<AdsConfig>(named(name = AppAdsQualifiers.APP_DETAILS_NATIVE_AD)) {
-        AdsConfig(bannerAdUnitId = AdsConstants.APP_DETAILS_NATIVE_AD_UNIT_ID)
     }
 
     single<AdsConfig>(named(name = AdsQualifiers.NO_DATA_NATIVE_AD)) {

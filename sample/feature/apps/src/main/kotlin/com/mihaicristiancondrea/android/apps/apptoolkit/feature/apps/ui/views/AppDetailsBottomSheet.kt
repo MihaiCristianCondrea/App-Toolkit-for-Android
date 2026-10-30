@@ -73,7 +73,6 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.consta
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.icons.ToolkitIcon
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.style.bounceClick
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.R as CoreUiR
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.ads.AdsConfig
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.GeneralButton
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.GeneralButtonStyle
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.spacers.ExtraSmallVerticalSpacer
@@ -93,7 +92,6 @@ fun AppDetailsBottomSheet(
     actionLauncher: AppActionLauncher,
     onFavoriteClick: () -> Unit,
     onRetryDetails: () -> Unit,
-    adsConfig: AdsConfig,
     modifier: Modifier = Modifier,
 ) {
     Column(
@@ -126,7 +124,6 @@ fun AppDetailsBottomSheet(
             isFavorite = isFavorite,
             isAppInstalled = isAppInstalled,
             actionLauncher = actionLauncher,
-            adsConfig = adsConfig,
             onFavoriteClick = onFavoriteClick,
         )
 

@@ -6,9 +6,14 @@
 
 ### Changed
 
+- More apps actions use the shared tonal button. The recommendation details sheet is ad-free; the three overview placements remain unchanged. Android CI now verifies develop pushes and pull requests.
+
 - The Apps page, its drawer link and its list ads are replaced by a "More apps" carousel at the end of Quick Tools. Tapping an installed app opens it; otherwise its details sheet offers Google Play. "View all" opens the developer page on Google Play. A stored Apps start page now opens Quick Tools.
 
 ### Fixed
+
+- More apps refreshes installed state and installed versions on foreground return without reloading its catalogue. Empty or unavailable catalogues leave no promotional widget.
+- Carousel impressions require visible foreground exposure instead of a successful catalogue load.
 
 - Keep the Quick Tools, Measure and Play & Decide scroll viewports above the shell and system navigation bars.
 - Preserve the app screen background and neutral surfaces while keeping custom tool accent colours.

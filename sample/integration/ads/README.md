@@ -8,10 +8,9 @@ logic and the toolkit's advertising components.
 
 ## Owns
 
-- `adsIntegrationModule`, which defines the `AdsConfig` instances for different surfaces (App Details,
-  Bottom Nav, etc.).
-- `AdsConstants` (the sample's ad unit IDs, debug/release selection and ad frequency) and
-  `AppAdsQualifiers` (the placements this app adds beyond the toolkit's own).
+- `adsIntegrationModule`, which defines the `AdsConfig` instances for library surfaces (Bottom Nav,
+  Help, Support and no-data states).
+- `AdsConstants` (the sample's ad unit IDs and debug/release selection).
 - The sample app's AdMob application ID and the manifest meta-data that publishes it to the merged
   application manifest.
 
@@ -23,7 +22,7 @@ logic and the toolkit's advertising components.
 ## Used by
 
 - `:sample:app` to compose the DI graph and to read `AdsConstants.APP_OPEN_UNIT_ID`.
-- `:sample:feature:apps` and `:sample:feature:tiles`, for their placement qualifiers and unit IDs.
+- `:sample:feature:tiles`, for its three overview placements. More apps and its details are ad-free.
 - Various features in the sample app via the library's Ad components (which inject the `AdsConfig`
   provided here).
 
@@ -33,7 +32,6 @@ logic and the toolkit's advertising components.
 flowchart TD
     App[":sample:app"] -->|initializes Koin| Module[adsIntegrationModule]
     Module --> Configs[AdsConfig instances]
-    Config1[App Details AdsConfig] -.->|injected into| FeatureApps[":sample:feature:apps"]
     Config2[Bottom Nav AdsConfig] -.->|reserved for| Banner["the graph's banner slot"]
     Configs --> ToolkitAds[":library:integration:ads"]
 ```

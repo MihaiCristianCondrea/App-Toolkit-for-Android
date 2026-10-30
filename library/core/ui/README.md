@@ -121,7 +121,9 @@ flowchart TD
   app cards with a "View all" action, snapping horizontally. It takes `ShowcaseApp` items, an
   `AppShowcaseState` (`Loading`, `Ready`, `Empty`, `Failed`) and `AppShowcaseLabels` built with
   `appShowcaseLabels(...)`; the host fetches the apps and handles `onAppClick`, `onAppAction`
-  (open when `installed`, store otherwise), `onViewAll` and `onRetry`. Cards are `min(86%, 360dp)`
+  (open when `installed`, store otherwise), `onViewAll` and `onRetry`. Its GeneralButton actions
+  use Tonal style without colour overrides. Optional `onCardsVisibilityChanged` reports whether
+  at least half the cards row is visible; hosts own lifecycle, dwell time and telemetry. Cards are `min(86%, 360dp)`
   wide on compact widths and fill whole columns of at least 260dp above 600dp.
 - `MainTopAppBar` and `SearchTopAppBar` are the two host app bars; see
   [Top app bars](#top-app-bars). Pages of the shell get `ShellTopAppBar` from the page frame

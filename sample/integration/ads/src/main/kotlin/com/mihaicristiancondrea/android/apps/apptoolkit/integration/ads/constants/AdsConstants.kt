@@ -40,9 +40,6 @@ object AdsConstants {
     val NATIVE_AD_UNIT_ID: String
         get() = nativeAdUnitId("ca-app-pub-5294151573817700/5578142927")
 
-    val APP_DETAILS_NATIVE_AD_UNIT_ID: String
-        get() = nativeAdUnitId("ca-app-pub-5294151573817700/8490774272")
-
     val NO_DATA_NATIVE_AD_UNIT_ID: String
         get() = nativeAdUnitId("ca-app-pub-5294151573817700/3430019286")
 

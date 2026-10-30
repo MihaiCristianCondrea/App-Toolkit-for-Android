@@ -2,13 +2,23 @@ name: Android CI
 
 on:
   push:
-    branches: [ "master" ]
+    branches: [ "master", "develop" ]
   pull_request:
-    branches: [ "master" ]
+    branches: [ "master", "develop" ]
+
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: android-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
   build:
     runs-on: ubuntu-latest
+    timeout-minutes: 60
 
     steps:
       - uses: actions/checkout@v5
@@ -20,8 +30,27 @@ jobs:
           distribution: 'temurin'
           cache: gradle
 
+      - name: Install the declared Android platform
+        shell: bash
+        run: |
+          sdk_version=$(sed -n 's/^COMPILE_SDK=//p' release.properties | tr -d '\r')
+          sdk_minor=$(sed -n 's/^COMPILE_SDK_MINOR=//p' release.properties | tr -d '\r')
+          if [ "$sdk_minor" != "0" ]; then sdk_version="$sdk_version.$sdk_minor"; fi
+          "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" "platforms;android-$sdk_version"
+
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
 
-      - name: Build & run all tests
-        run: ./gradlew build
+      - name: Build Android and run unit tests, boundaries and lint
+        run: ./gradlew --no-daemon --stacktrace :sample:app:assembleDebug testDebugUnitTest checkModuleBoundaries lintDebug
+
+      - name: Upload verification reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: android-verification
+          path: |
+            **/build/reports/tests/
+            **/build/test-results/
+            **/build/reports/lint-results*
+          if-no-files-found: ignore

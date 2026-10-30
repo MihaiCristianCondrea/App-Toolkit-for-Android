@@ -43,7 +43,6 @@ import androidx.compose.material3.CircularWavyProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.FilledTonalButton
 import androidx.compose.material3.Card
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -57,12 +56,10 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.heading
 import androidx.compose.ui.semantics.liveRegion
 import androidx.compose.ui.semantics.LiveRegionMode
-import androidx.compose.ui.semantics.role
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
@@ -71,6 +68,10 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.min
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.modifiers.animatedItems
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.modifiers.animateVisibility
+import androidx.compose.ui.layout.onVisibilityChanged
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.icons.ToolkitIcon
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.GeneralButton
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.GeneralButtonStyle
 import coil3.compose.AsyncImage
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.R
 import kotlinx.collections.immutable.ImmutableList
@@ -168,6 +169,8 @@ fun appShowcaseLabels(
  * @param onAppAction A card's action button was tapped.
  * @param onViewAll The heading's "View all" action was tapped.
  * @param onRetry The failed state's retry action was tapped.
+ * @param onCardsVisibilityChanged Whether at least half the cards row is inside its viewport.
+ * Hosts apply lifecycle and exposure-duration policy; the showcase sends no telemetry itself.
  * @param contentPadding Horizontal padding of the row, so cards can scroll to the screen's edges
  * while resting aligned with the content.
  */
@@ -182,6 +185,7 @@ fun AppShowcase(
     onRetry: () -> Unit,
     modifier: Modifier = Modifier,
     contentPadding: PaddingValues = PaddingValues(0.dp),
+    onCardsVisibilityChanged: (Boolean) -> Unit = {},
 ) {
     Column(modifier, verticalArrangement = Arrangement.spacedBy(12.dp)) {
         AppShowcaseHeading(labels, icon, onViewAll, Modifier.padding(contentPadding))
@@ -202,7 +206,7 @@ fun AppShowcase(
                 )
                 TextButton(onClick = onRetry) { Text(labels.retry) }
             }
-            is AppShowcaseState.Ready -> ShowcaseRow(state.apps, labels, onAppClick, onAppAction, contentPadding)
+            is AppShowcaseState.Ready -> ShowcaseRow(state.apps, labels, onAppClick, onAppAction, contentPadding, onCardsVisibilityChanged)
         }
     }
 }
@@ -258,12 +262,14 @@ private fun ShowcaseRow(
     onAppClick: (ShowcaseApp) -> Unit,
     onAppAction: (ShowcaseApp) -> Unit,
     contentPadding: PaddingValues,
+    onCardsVisibilityChanged: (Boolean) -> Unit,
 ) {
     BoxWithConstraints(Modifier.fillMaxWidth()) {
         val gap = 12.dp
         val cardWidth = showcaseCardWidth(maxWidth, gap)
         val listState = rememberLazyListState()
         LazyRow(
+            modifier = Modifier.onVisibilityChanged(minFractionVisible = 0.5f, callback = onCardsVisibilityChanged),
             state = listState,
             contentPadding = contentPadding,
             horizontalArrangement = Arrangement.spacedBy(gap),
@@ -361,22 +367,14 @@ fun ShowcaseAppCard(
                 overflow = TextOverflow.Ellipsis,
             )
             val actionDescription = if (app.installed) labels.openActionDescription(app.name) else labels.storeActionDescription(app.name)
-            FilledTonalButton(
+            GeneralButton(
                 onClick = onAction,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .semantics {
-                        contentDescription = actionDescription
-                        role = Role.Button
-                    },
-            ) {
-                Icon(
-                    if (app.installed) Icons.AutoMirrored.Outlined.OpenInNew else Icons.Outlined.Store,
-                    contentDescription = null,
-                    modifier = Modifier.size(18.dp),
-                )
-                Text(if (app.installed) labels.open else labels.store, modifier = Modifier.padding(start = 8.dp))
-            }
+                modifier = Modifier.fillMaxWidth(),
+                style = GeneralButtonStyle.Tonal,
+                label = if (app.installed) labels.open else labels.store,
+                icon = ToolkitIcon.Vector(if (app.installed) Icons.AutoMirrored.Outlined.OpenInNew else Icons.Outlined.Store),
+                contentDescription = actionDescription,
+            )
         }
     }
 }

@@ -63,6 +63,8 @@ class MoreAppsViewModel(
     screenName = AppScreenTracking.Screens.TOOLKIT_TILES.name,
     viewModelName = "MoreAppsViewModel",
 ) {
+    private var installRefreshJob: Job? = null
+    private var carouselExposed = false
     private var loadJob: Job? = null
     private var savedAppsJob: Job? = null
     private var appDetailsJob: Job? = null
@@ -76,6 +78,9 @@ class MoreAppsViewModel(
     override fun handleEvent(event: MoreAppsEvent) {
         when (event) {
             MoreAppsEvent.Load -> load()
+            MoreAppsEvent.RefreshInstalled -> refreshInstalled()
+            MoreAppsEvent.CarouselExposed -> reportCarouselExposure()
+            MoreAppsEvent.CarouselHidden -> carouselExposed = false
             is MoreAppsEvent.AppSelected -> selectApp(event.packageName)
             is MoreAppsEvent.FavoriteToggled -> toggleFavorite(event.packageName)
             MoreAppsEvent.RetryAppDetails -> currentState.selectedApp?.packageName?.let(::loadSelectedAppDetails)
@@ -126,9 +131,31 @@ class MoreAppsViewModel(
                 installedPackages = installed,
             )
         }
-        if (list.isNotEmpty()) {
-            telemetryRepository.logViewItemList(itemListId = ITEM_LIST_ID, itemListName = ITEM_LIST_NAME)
+
+    }
+
+    /** Install/update/uninstall checks never touch the network catalogue. */
+    private fun refreshInstalled() {
+        currentState.selectedApp?.packageName?.let(::loadSelectedAppInstallInfo)
+        val packages = (currentState.apps as? Loadable.Ready)?.value?.map { it.packageName }.orEmpty()
+        if (packages.isEmpty()) return
+        installRefreshJob = installRefreshJob.restart {
+            launchReport(action = Actions.REFRESH_INSTALLED) {
+                val installed = installedAppsRepository.getInstalledPackages(packages).toImmutableSet()
+                setState {
+                    // A catalogue reload can replace the list while PackageManager is queried.
+                    if ((apps as? Loadable.Ready)?.value?.map { it.packageName } == packages) {
+                        copy(installedPackages = installed)
+                    } else this
+                }
+            }
         }
+    }
+
+    private fun reportCarouselExposure() {
+        if (carouselExposed || (currentState.apps as? Loadable.Ready)?.value.isNullOrEmpty()) return
+        carouselExposed = true
+        telemetryRepository.logViewItemList(itemListId = ITEM_LIST_ID, itemListName = ITEM_LIST_NAME)
     }
 
     private fun observeFavorites() {
@@ -225,6 +252,7 @@ class MoreAppsViewModel(
     }
 
     private object Actions {
+        const val REFRESH_INSTALLED: String = "refreshInstalledApps"
         const val FETCH_APPS: String = "fetchMoreApps"
         const val LOAD_SAVED_APPS: String = "loadSavedApps"
         const val OBSERVE_FAVORITES: String = "observeFavorites"

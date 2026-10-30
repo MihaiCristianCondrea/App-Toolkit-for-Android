@@ -18,6 +18,10 @@
 package com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.ui
 
 import androidx.activity.ComponentActivity
+import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.unit.Density
+import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.onNodeWithContentDescription
@@ -55,19 +59,22 @@ class MoreAppsSectionTest {
     private val stores = mutableListOf<String>()
     private var viewAll = 0
 
-    private fun show(state: MoreAppsUiState) {
+    private fun show(state: MoreAppsUiState, fontScale: Float = 1f) {
         compose.setContent {
+            CompositionLocalProvider(LocalDensity provides Density(LocalDensity.current.density, fontScale)) {
             MaterialTheme {
                 MoreAppsSectionContent(
                     state = state,
-                    onEvent = { events += it },
-                    onOpenApp = { opened += it.packageName },
-                    onOpenStore = { stores += it.packageName },
+                    onEvent = { event: MoreAppsEvent -> events += event },
+                    onOpenApp = { app: AppSummary -> opened += app.packageName },
+                    onOpenStore = { app: AppSummary -> stores += app.packageName },
                     onViewAll = { viewAll++ },
+                    onCardsVisibilityChanged = {},
                     onDetailsClosed = {},
                     onFavoriteToggle = {},
                     detailsActionLauncher = mockk<AppActionLauncher>(relaxed = true),
                 )
+            }
             }
         }
     }
@@ -110,19 +117,27 @@ class MoreAppsSectionTest {
     }
 
     @Test
-    fun `a failed catalogue offers a retry that loads it again`() {
+    fun `a failed catalogue without cached apps contributes no widget`() {
         show(MoreAppsUiState(apps = Loadable.Failed(com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.UiText.DynamicString("Failed to load apps"))))
 
-        compose.onNodeWithText("Failed to load apps").assertExists()
-        compose.onNodeWithText("Try again").performClick()
-
-        assertEquals(listOf<MoreAppsEvent>(MoreAppsEvent.Load), events)
+        compose.onNodeWithText("More apps").assertDoesNotExist()
+        compose.onNodeWithText("Failed to load apps").assertDoesNotExist()
+        assertEquals(emptyList<MoreAppsEvent>(), events)
     }
 
     @Test
-    fun `an empty catalogue says so`() {
+    fun `an empty catalogue contributes no widget`() {
         show(MoreAppsUiState(apps = Loadable.Empty()))
 
-        compose.onNodeWithText("No apps are available right now.").assertExists()
+        compose.onNodeWithText("More apps").assertDoesNotExist()
+        compose.onNodeWithText("No apps are available right now.").assertDoesNotExist()
+    }
+
+    @Test
+    @Config(qualifiers = "w320dp-h640dp")
+    fun tonalActionRemainsReachableWithLargeFontsOnASmallPhone() {
+        show(ready, fontScale = 2f)
+        compose.onNodeWithContentDescription("Open Smart Cleaner").performScrollTo().assertIsDisplayed().performClick()
+        assertEquals(listOf(installed.packageName), opened)
     }
 }

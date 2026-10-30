@@ -1,6 +1,6 @@
 # Default listing: source
 
-App Toolkit's default listing visuals from October 29, 2026: 8 phone, 4 tablet and 4 desktop screenshots, the feature
+App Toolkit's default listing visuals refreshed October 30, 2026: 8 phone, 4 tablet and 4 desktop screenshots, the feature
 graphic and the icon, all rendered with Remotion from the UI kit's real screens (`marketing/ui`). They replace the
 sourceless visuals now kept in [`../../default-legacy/`](../../default-legacy/README.md).
 
@@ -61,3 +61,8 @@ downloads its own.
 - Tablet and desktop screenshots carry no captions: Play wants large-screen screenshots to show only the app.
 - The icon has no background of its own: Play keeps the alpha. On a white page the cream lid has little edge; that
   comes from the artwork and the launcher's white background, not from this render.
+
+
+The October 30 audit removes the outdated wallpaper-colour claim from the description. The
+Protractor artwork is refreshed from the current kit without the removed Angle label or instructions.
+The More apps footer and its details are ad-free and optional; the three primary tabs stay intact.

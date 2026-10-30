@@ -12,7 +12,8 @@
   filled 28dp app cards (icon, name, category, full-width description and a tonal Open or Google Play action) with a
   "View all" action, loading, empty and failed-with-retry states, live-region announcements and
   adaptive card widths and individual shared entrance animations. Hosts own fetching and actions through `ShowcaseApp`, `AppShowcaseState`
-  and `AppShowcaseLabels`.
+  and `AppShowcaseLabels`. Actions use GeneralButton in Tonal style;
+  `onCardsVisibilityChanged` optionally reports 50% row visibility for host-owned exposure policy.
 
 - `AospPageIndicator` in `:library:core:ui` (`views.carousel`) provides an Android 10-inspired
   capsule page indicator with both continuous `PagerState` tracking and animated integer-index

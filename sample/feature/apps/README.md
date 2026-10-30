@@ -26,7 +26,7 @@ details, favorites and install state.
 - Localized strings, and `ui/mappers/MoreAppsErrorMappers.kt`, which gives each failure the shared
   `toUiText` text or the feature's fallback.
 - `MoreAppsIcon`, the Material Symbols Rounded "apps" icon of the section's title.
-- The Get it on Google Play badge the detail sheet shows, and the sheet's own native ad.
+- The Get it on Google Play badge the detail sheet shows. The promotional journey has no ads.
 
 ## Does not own
 
@@ -82,8 +82,7 @@ flowchart TD
   are independent sources with different lifetimes.
 - Action and chip models are presentation transformations and remain outside the source-neutral
   repositories.
-- The section shows no ads of its own and triggers no app-open ad; the details sheet keeps the one
-  it had.
+- Neither the section nor its details sheet requests an ad or triggers an app-open ad.
 - Package-name copying uses the Toolkit's `ClipboardRepository`, as About does. The Apps toast is
   shown only when the system does not confirm copies itself, on Android 12L and earlier. Android
   13 and later use only the system confirmation.
@@ -148,3 +147,22 @@ class itself. The ViewModel no longer takes a `DispatcherProvider`.
 
 Navigation keys and the complete graph live in `:sample:app` under `app/navigation`.
 Features expose callbacks rather than importing app-owned route keys.
+
+
+## Foreground state and exposure
+
+ON_RESUME sends RefreshInstalled. Only PackageManager is queried; the catalogue and its
+remote details are not downloaded again. Batch installation results update the cards, and a
+separate guarded lookup refreshes the selected app's installed version and available actions.
+Repeated refreshes cancel the preceding lookup; results cannot replace a newer details selection.
+
+The optional footer renders only a non-empty Ready catalogue, including stale cached data.
+Loading, Empty, Failed without cached data and Ready(emptyList) contribute no layout node or
+message of their own. The ViewModel retains the failure for diagnostics; the next explicit Load
+or a new instance can retry. Quick Tools loading and tool state are independent.
+
+The library reports geometric visibility of the cards row. The stateful section requires at
+least 50% visibility and one continuous foreground second before CarouselExposed. The ViewModel
+deduplicates a continuous exposure; data refresh does not create an impression. Hidden, background
+and an open details sheet end it. Another qualifying exposure can report again. No app values,
+package inventory outside the catalogue or search queries are added to the impression payload.

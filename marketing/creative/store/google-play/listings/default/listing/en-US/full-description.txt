@@ -1,4 +1,4 @@
-App Toolkit puts the small tools you reach for every day in one app: a compass and a bubble level, a ruler and a protractor on the screen, a unit converter, a tip and bill splitter, a counter, a flashlight you can dim, Morse and SOS signals, a decision wheel, coins and dice. Each tool opens in a sheet, and the ones Android supports can sit in your Quick Settings as tiles.
+App Toolkit puts the small tools you reach for every day in one app: a compass and a bubble level, a ruler and a protractor on the screen, a unit converter, a tip and bill splitter, a counter, a flashlight you can dim, Morse and SOS signals, a decision wheel, coins and dice. Ruler and Protractor open full screen; the other tools open in sheets. The tools Android supports can sit in Quick Settings as tiles.
 
 Quick Tools
 The first tab shows live previews you can read at a glance, grouped by what they do.
@@ -26,6 +26,6 @@ For the choices that don't need a meeting.
 • Coin Flip and Dice Roll: tap the coin or the die right on the overview.
 
 Made for every screen
-App Toolkit follows Material 3 Expressive: it takes your wallpaper's colours, works in light and dark themes, and lays itself out for phones, foldables, tablets and Chromebooks, with a navigation rail or drawer on wide screens.
+App Toolkit follows Material 3 Expressive: its tools use custom colours, it works in light and dark themes, and it lays itself out for phones, foldables, tablets and Chromebooks, with a navigation rail or drawer on wide screens.
 
 App Toolkit is free and open source. If something doesn't work as you expect, or you'd like a tool added, write a review with the details, or use Help & feedback in the app.

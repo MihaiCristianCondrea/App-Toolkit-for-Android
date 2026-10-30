@@ -22,6 +22,13 @@ sealed interface MoreAppsEvent {
     /** Loads the catalogue, on start and from the failed state's retry. */
     data object Load : MoreAppsEvent
 
+    /** Rechecks local package state without fetching the catalogue. */
+    data object RefreshInstalled : MoreAppsEvent
+
+    /** UI confirmed a foreground exposure; loading data alone is not an impression. */
+    data object CarouselExposed : MoreAppsEvent
+    data object CarouselHidden : MoreAppsEvent
+
     /** Opens the details sheet of an app that is not installed. */
     data class AppSelected(val packageName: String) : MoreAppsEvent
 

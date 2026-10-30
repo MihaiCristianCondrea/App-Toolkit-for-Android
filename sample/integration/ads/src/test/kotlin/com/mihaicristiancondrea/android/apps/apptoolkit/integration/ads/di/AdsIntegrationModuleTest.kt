@@ -17,7 +17,6 @@
 
 package com.mihaicristiancondrea.android.apps.apptoolkit.integration.ads.di
 
-import com.mihaicristiancondrea.android.apps.apptoolkit.integration.ads.constants.AppAdsQualifiers
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ads.AdsQualifiers
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.ads.AdsConfig
 import org.junit.jupiter.api.Test
@@ -36,7 +35,6 @@ class AdsIntegrationModuleTest {
             AdsQualifiers.BOTTOM_NAV_BAR_NATIVE_AD,
             AdsQualifiers.HELP_NATIVE_AD,
             AdsQualifiers.SUPPORT_NATIVE_AD,
-            AppAdsQualifiers.APP_DETAILS_NATIVE_AD,
         )
 
         qualifiers.forEach { qualifier ->

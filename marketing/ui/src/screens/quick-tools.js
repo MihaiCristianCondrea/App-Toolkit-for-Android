@@ -56,6 +56,7 @@ export default {
   palette: "google",
   description: "Live sensors and Quick Settings tiles that need no special permission.",
   defaults: {
+    moreApps: MORE_APPS,
     searchQuery: "",
     activeToolId: "none",
     waterSeconds:30, waterRunning:false,
@@ -219,7 +220,7 @@ export default {
           <md-text-button trailing-icon aria-label="View all apps on Google Play">View all<md-icon slot="icon">open_in_new</md-icon></md-text-button>
         </div>
         <div class="qt-more-apps__row" role="list">
-          ${MORE_APPS.map((app) => html`
+          ${(s.moreApps ?? MORE_APPS).map((app) => html`
             <md-filled-card class="qt-app-card" role="listitem">
               <div class="qt-app-card__top">
                 <div class="qt-app-card__icon"><md-icon>apps</md-icon></div>
@@ -239,7 +240,7 @@ export default {
     const content = html`
       <div class="tk-screen-pad qt-overview" style="padding-top:8px">
         ${sections}
-        ${query ? nothing : moreApps()}
+        ${query || !(s.moreApps ?? MORE_APPS).length ? nothing : moreApps()}
       </div>`;
 
     return previewScreen(APP, s, {

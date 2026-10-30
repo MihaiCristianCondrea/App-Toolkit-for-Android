@@ -24,6 +24,14 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.SheetValue
 import androidx.compose.material3.rememberBottomSheetState
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.compose.LifecycleResumeEffect
+import androidx.lifecycle.compose.LocalLifecycleOwner
+import androidx.lifecycle.compose.currentStateAsState
+import kotlinx.coroutines.delay
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
@@ -45,14 +53,12 @@ import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.ui.utils.An
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.ui.utils.rememberOpenAppAction
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.ui.views.AppDetailsBottomSheet
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.ui.views.MoreAppsIcon
-import com.mihaicristiancondrea.android.apps.apptoolkit.integration.ads.constants.AppAdsQualifiers
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.coroutines.dispatchers.DispatcherProvider
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.ClipboardRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.InstalledAppsRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.links.AppLinks
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.analytics.logSelectContent
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.context.openUrl
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.ads.AdsConfig
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.Loadable
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.MessageToastHost
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.utils.AppLauncher
@@ -66,7 +72,6 @@ import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.launch
 import org.koin.compose.koinInject
 import org.koin.compose.viewmodel.koinViewModel
-import org.koin.core.qualifier.named
 
 /** Where the details sheet's own actions are reported from, as the former apps page reported them. */
 private const val APP_DETAILS_INTERACTION_SOURCE: String = "app_details"
@@ -80,20 +85,35 @@ internal val DeveloperPageUrl: String = AppLinks.PLAY_STORE_DEVELOPER + AppLinks
  *
  * A tap on an installed app opens it; on one that is not, it opens the app's details sheet, whose
  * Play Store action installs it. A card's own button opens the app or its store page directly, and
- * "View all" opens the developer's page on Google Play. It shows no ads of its own; the details
- * sheet keeps its existing one.
+ * "View all" opens the developer's page on Google Play. The section and its details
+ * sheet are ad-free.
  */
 @Composable
 fun MoreAppsSection(modifier: Modifier = Modifier) {
     val viewModel: MoreAppsViewModel = koinViewModel()
     val state: MoreAppsUiState by viewModel.state.collectAsStateWithLifecycle()
     val messages by viewModel.messages.collectAsStateWithLifecycle()
+    val lifecycleOwner = LocalLifecycleOwner.current
+    val lifecycleState by lifecycleOwner.lifecycle.currentStateAsState()
+    var cardsVisible by remember { mutableStateOf(false) }
+    val hasApps = !(state.apps as? Loadable.Ready)?.value.isNullOrEmpty()
+    LifecycleResumeEffect(viewModel) {
+        viewModel.onEvent(MoreAppsEvent.RefreshInstalled)
+        onPauseOrDispose { }
+    }
+    LaunchedEffect(cardsVisible, lifecycleState, hasApps, state.selectedApp != null) {
+        if (cardsVisible && lifecycleState.isAtLeast(Lifecycle.State.RESUMED) && hasApps && state.selectedApp == null) {
+            delay(1_000)
+            viewModel.onEvent(MoreAppsEvent.CarouselExposed)
+        } else {
+            viewModel.onEvent(MoreAppsEvent.CarouselHidden)
+        }
+    }
     val telemetry = LocalTelemetry.current
     val context = LocalContext.current
     val installedApps: InstalledAppsRepository = koinInject()
     val dispatchers: DispatcherProvider = koinInject()
     val clipboard: ClipboardRepository = koinInject()
-    val detailsAdsConfig: AdsConfig = koinInject(qualifier = named(AppAdsQualifiers.APP_DETAILS_NATIVE_AD))
     val launcher = remember(installedApps, dispatchers) { AppLauncher(installedApps, dispatchers) }
     // Opens an installed app, and falls back to its store page when it cannot be launched.
     val openApp: (AppSummary) -> Unit = rememberOpenAppAction(launcher, installedApps::isInstalled)
@@ -139,7 +159,7 @@ fun MoreAppsSection(modifier: Modifier = Modifier) {
             viewModel.onEvent(MoreAppsEvent.FavoriteToggled(app.packageName))
         },
         detailsActionLauncher = detailsActionLauncher,
-        detailsAdsConfig = detailsAdsConfig,
+        onCardsVisibilityChanged = { cardsVisible = it },
         modifier = modifier,
     )
 }
@@ -163,36 +183,34 @@ internal fun MoreAppsSectionContent(
     onFavoriteToggle: (AppSummary) -> Unit,
     detailsActionLauncher: AppActionLauncher,
     modifier: Modifier = Modifier,
-    detailsAdsConfig: AdsConfig = AdsConfig(),
+    onCardsVisibilityChanged: (Boolean) -> Unit = {},
     contentPadding: PaddingValues = PaddingValues(0.dp),
 ) {
     val apps = (state.apps as? Loadable.Ready)?.value.orEmpty()
     val summaries = remember(apps) { apps.associateBy { it.packageName } }
-    val showcase: AppShowcaseState = when (val loadable = state.apps) {
-        is Loadable.Ready -> AppShowcaseState.Ready(
-            loadable.value.map { it.toShowcaseApp(installed = it.packageName in state.installedPackages) }.toImmutableList(),
+    // This optional footer contributes no layout node until a catalogue is available.
+    if (apps.isNotEmpty()) {
+        AppShowcase(
+            state = AppShowcaseState.Ready(
+                apps.map { it.toShowcaseApp(installed = it.packageName in state.installedPackages) }.toImmutableList(),
+            ),
+            labels = moreAppsLabels(),
+            icon = MoreAppsIcon,
+            onAppClick = { app ->
+                val summary = summaries[app.key] ?: return@AppShowcase
+                if (app.installed) onOpenApp(summary) else onEvent(MoreAppsEvent.AppSelected(app.key))
+            },
+            onAppAction = { app ->
+                val summary = summaries[app.key] ?: return@AppShowcase
+                if (app.installed) onOpenApp(summary) else onOpenStore(summary)
+            },
+            onViewAll = onViewAll,
+            onRetry = { onEvent(MoreAppsEvent.Load) },
+            modifier = modifier,
+            contentPadding = contentPadding,
+            onCardsVisibilityChanged = onCardsVisibilityChanged,
         )
-        is Loadable.Empty -> AppShowcaseState.Empty
-        is Loadable.Failed -> AppShowcaseState.Failed
-        else -> AppShowcaseState.Loading
     }
-    AppShowcase(
-        state = showcase,
-        labels = moreAppsLabels(),
-        icon = MoreAppsIcon,
-        onAppClick = { app ->
-            val summary = summaries[app.key] ?: return@AppShowcase
-            if (app.installed) onOpenApp(summary) else onEvent(MoreAppsEvent.AppSelected(app.key))
-        },
-        onAppAction = { app ->
-            val summary = summaries[app.key] ?: return@AppShowcase
-            if (app.installed) onOpenApp(summary) else onOpenStore(summary)
-        },
-        onViewAll = onViewAll,
-        onRetry = { onEvent(MoreAppsEvent.Load) },
-        modifier = modifier,
-        contentPadding = contentPadding,
-    )
 
     state.selectedApp?.let { app ->
         val sheetState = rememberBottomSheetState(initialValue = SheetValue.Hidden)
@@ -220,7 +238,6 @@ internal fun MoreAppsSectionContent(
                 actionLauncher = detailsActionLauncher,
                 onFavoriteClick = { onFavoriteToggle(app) },
                 onRetryDetails = { onEvent(MoreAppsEvent.RetryAppDetails) },
-                adsConfig = detailsAdsConfig,
             )
         }
     }
