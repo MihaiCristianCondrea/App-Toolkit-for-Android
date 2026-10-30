@@ -9,61 +9,61 @@
       "id": "motif",
       "start": 0,
       "end": 1.76,
-      "title": "Open on the motif",
-      "action": "Material Symbols in the six kit shapes land on the opening notes; water and breathe answer together on the fifth note."
+      "title": "Motif",
+      "action": "Six kit symbols answer the five opening notes; Water and Breathe share the last note."
     },
     {
       "id": "split",
       "start": 1.76,
       "end": 3.32,
-      "title": "Pop. Split. Launch.",
-      "action": "The original mark anticipates, overshoots and splits. Its lid exits above frame; the tool-bearing body lands at the bottom."
+      "title": "Open the chest",
+      "action": "The original lid folds behind the body at their seam and shares its drop; the mirrored inside hides the handle."
     },
     {
       "id": "burst",
       "start": 3.32,
       "end": 6.76,
-      "title": "The kit in motion",
-      "action": "Six real widgets burst from the bottom launcher on detected notes, without a headline."
+      "title": "Four tools from the mouth",
+      "action": "Four real cards start at scale 0.3 behind the body and fan through separate, shadowed lanes."
     },
     {
       "id": "one-place",
       "start": 6.76,
       "end": 10.08,
       "title": "One place.",
-      "action": "All six widgets and Material Colors unfold into landscape bento rows under masked type, then fold into measured phone coordinates."
+      "action": "Four real widgets form a right-column 2x2 bento beside the masked left headline and a single stage shape."
     },
     {
       "id": "quick-tools",
       "start": 10.08,
       "end": 17.14,
       "title": "Quick tools.",
-      "action": "The same bento pulls into the Pixel aperture. The headline pushes the device right; sensor values and tool chips answer the notes."
+      "action": "The screen grows from its centre around measured card targets, then copy pushes the device right."
     },
     {
       "id": "measure",
       "start": 17.14,
       "end": 21.98,
       "title": "Measure.",
-      "action": "The tab grows a backdrop from its measured control. Live cards relay across the frame with value changes on notes."
+      "action": "Shared-axis X opens Measure; featured cards grow from measured phone rectangles and return to them."
     },
     {
       "id": "play",
       "start": 21.98,
       "end": 26.26,
       "title": "Let chance decide.",
-      "action": "The outgoing Counter flies across the chapter boundary; the real wheel spins, followed by number, die and coin."
+      "action": "Play uses shared-axis X, a measured wheel container transform, live results and a reverse return."
     },
     {
       "id": "close",
       "start": 26.26,
       "end": 29.88,
       "title": "App Toolkit. Your toolkit.",
-      "action": "Play carries into the three-destination fan. Mark, masked headline and original badge settle by 28.26; final notes move only background shapes."
+      "action": "Three labelled destinations hold beside the original badge for 1.5 seconds; the mark anticipates at 29.4, kit gold explodes at 29.54 and the centred mark lands at 29.8."
     }
   ],
   "events": {
-    "lidOpen": 2.32,
+    "lidOpen": 1.76,
     "launch": 3.32,
     "gather": 6.76,
     "gatherEnd": 8.02,
@@ -77,12 +77,9 @@
     "close": 26.26,
     "iconNotes": [0.02, 0.32, 0.62, 1.04, 1.46, 1.46],
     "logo": 1.76,
-    "bodyLand": 2.9,
     "launches": [3.32, 3.76, 4.04, 4.34],
-    "colors": 6.08,
     "chips": [14.88, 15.18, 15.44, 15.66, 15.98, 16.44],
     "measureHeroes": [18.14, 19.14, 19.98, 20.84],
-    "measureValues": [18.38, 18.84, 19.42, 19.7, 20.56, 21.12, 21.46],
     "chance": [24.54, 25.12, 25.4],
     "wheelStart": 22.86,
     "wheelEnd": 24,
@@ -90,14 +87,15 @@
     "brand": 27.04,
     "tagline": 27.26,
     "badge": 27.68,
-    "hold": 28.26,
+    "hold": 27.9,
     "blurWindows": [
       [2.32, 2.64],
       [6.76, 7.06],
       [10.08, 10.62],
       [17.7, 18.14],
       [21.72, 22.26],
-      [26.26, 26.82]
+      [26.26, 26.82],
+      [29.54, 29.79]
     ],
     "beats": [
       {
@@ -767,19 +765,9 @@
       }
     ],
     "cues": {
-      "at18_14": 18.14,
-      "at19_08": 19.08,
-      "at19_14": 19.14,
-      "at19_92": 19.92,
-      "at19_98": 19.98,
-      "at20_78": 20.78,
       "at20_84": 20.84,
       "at21_72": 21.72,
-      "at24_54": 24.54,
-      "at25_12": 25.12,
-      "at25_4": 25.4,
       "at17_7": 17.7,
-      "at18_1": 18.1,
       "at21_12": 21.12,
       "at21_46": 21.46,
       "at18_38": 18.38,
@@ -789,20 +777,12 @@
       "at20_56": 20.56,
       "at22_86": 22.86,
       "at25_68": 25.68,
-      "at22_56": 22.56,
-      "at21_98": 21.98,
-      "at25_98": 25.98,
       "at26_26": 26.26,
-      "at23_4": 23.4,
-      "at26_5": 26.5,
       "at26_82": 26.82,
       "at27_26": 27.26,
-      "at28_88": 28.88,
-      "at29_3": 29.3,
       "at27_04": 27.04,
       "at27_68": 27.68,
-      "at27_96": 27.96,
-      "at28_26": 28.26
+      "at27_96": 27.96
     },
     "type": {
       "One place.": [6.76, 7.06],
@@ -841,7 +821,7 @@
       },
       {
         "at": 17.7,
-        "duration": 0.24,
+        "duration": 0.2,
         "to": [1, 0, 0, 0]
       },
       {
@@ -850,6 +830,9 @@
         "to": [1.02, 0, 0, 0]
       }
     ],
-    "phrases": [0, 1.76, 2.64, 3.32, 6.76, 8.98, 10.08, 11.44, 12.92, 17.14, 17.7, 17.92, 21.98, 22.26, 26.26, 27.96, 29.54]
+    "phrases": [0, 1.76, 2.64, 3.32, 6.76, 8.98, 10.08, 11.44, 12.92, 17.14, 17.7, 17.92, 21.98, 22.26, 26.26, 27.96, 29.54],
+    "finalCover": 29.7,
+    "finalRest": 29.877777777777776,
+    "iconsExitEnd": 2.32
   }
 }

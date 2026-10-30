@@ -37,14 +37,14 @@ The **App trailer preview** Actions workflow also builds the preview and publish
 
 | Time | Picture |
 | --- | --- |
-| 0.00 to 1.76 | Oversized Material Symbols land in the kit shapes and make room for each other on the opening motif. Water and Breathe share the fifth note. |
-| 1.76 to 3.32 | The original mark anticipates, overshoots and splits. The lid exits above frame; the body with the tools lands at the bottom. |
-| 3.32 to 6.76 | Six real widgets burst from the body on notes. Material Colors follows. No burst headline. |
-| 6.76 to 10.08 | All seven live cards gather into unfolded bento rows filling the frame under "One place." |
-| 10.08 to 17.14 | The phone rises into the folding cards. They land at the screen's measured coordinates; "Quick tools." pushes the device right. Sensor values and chips follow notes. |
-| 17.14 to 21.98 | Measure reveals from its tab. Protractor, Unit Converter, Bill Splitter and Counter relay across the frame. Values change with the music. |
-| 21.98 to 26.26 | Counter exits across the boundary as Play opens. The wheel chooses Sushi, then number, die and coin resolve. |
-| 26.26 to 29.88 | Play continues into the destination fan while the outgoing cards lift away. Mark, headline and badge settle by 28.26 and hold for 1.62 seconds. |
+| 0.00 to 1.76 | Six Material Symbols answer five motif notes, Water and Breathe sharing the last note. |
+| 1.76 to 3.32 | The original mark pops and opens as a chest. The lid folds over its seam, mirrors behind the body and shares the body's drop. |
+| 3.32 to 6.76 | Compass, Bubble Level, Flash Dimmer and SOS leave the mouth at scale 0.3 and fan through four separate lanes. |
+| 6.76 to 10.08 | The four crops gather into a large right-column 2x2 bento beside the two-line "One place." A single kit shape grows behind them. |
+| 10.08 to 17.14 | The real screen grows from its centre and the Pixel frame forms around the cards. The measured landing restores the real layout; Quick Tools copy pushes the device right. |
+| 17.14 to 21.98 | A shared-axis X tab change opens Measure. Protractor, Unit Converter, Bill Splitter and Counter grow from measured phone rectangles and return to them. |
+| 21.98 to 26.26 | Play opens with the same tab motion. The wheel grows out, chooses Sushi, and the chance cards resolve to 73, 5 and Heads before returning. |
+| 26.26 to 29.88 | Three labelled destinations fan into the right column. The mark, headline and original Play badge hold from 27.90 to 29.40. The mark squashes, a gold burst fills the frame on 29.54, and the centred mark lands on 29.80. |
 
 Major gestures follow detected bass onsets in `source/src/music-analysis.json`. Its BPM is an estimate, not a claim about the song. The timeline follows the supplied track rather than forcing the music onto an invented grid.
 
@@ -62,15 +62,15 @@ Ads and the More apps footer are disabled in the film. Product backgrounds, acce
 
 ## Motion rules
 
-1. The detected notes live in read-only `music-analysis.json`. `timeline.json` maps each to a visible action and background target. Strength is an editorial accent weight, not a measured loudness value.
-2. The motif introduces six Material Symbols in the existing kit masks before the mark. The final note introduces Water and Breathe together because there are five opening onsets.
-3. The mark uses only the prepared original SVG layers. Its lid leaves above frame and the body stays at the bottom as the launcher until the gather.
-4. Seven real crops retain their screen order and row seams while unfolding across the landscape canvas. Their final landing coordinates come from live DOM measurements. The phone's viewport clips the below-fold cards as the group folds back into the actual scroll layout.
-5. Background shapes ratchet their rotation on assigned notes, punch scale and squash briefly on landing. They move at 22% of the foreground camera travel, with exact rest between hits. No idle spin.
-6. Camera phrases, gesture triggers, hero relays and chip notes come from timeline events. `CameraMotionBlur` samples only the marked fast windows; settled frames bypass the blur wrapper.
-7. Type reveals word by word through masks, changing Google Sans Flex width and weight. It pushes the phone or card group aside. Card exits travel beyond the frame instead of fading in place; Counter and the Play device carry across chapter boundaries.
-8. The UI remains frame-derived, with ads and More apps disabled. Animated placement uses transforms. The ending's foreground holds still from 28.26 through 29.88 while the last notes animate only the shapes behind it.
-9. The soundtrack plays in full at unity gain, without a trim, loop or fade. The preview remains 960 x 540 at 90 fps; the owner renders the 2K master after approval.
+1. `music-analysis.json` stays read-only. Each of its 94 onsets has a concrete cue reference or visible accent in `timeline.json`. `npm run beats` rejects missing responses, unresolved cues, absent accent targets, large gestures starting within 0.15 seconds, and camera changes away from phrase boundaries.
+2. The original SVG paths remain the only logo artwork. The lid's face folds through scaleY 1, 0 and -1, is shaded as its inside and stays on the body's drop. The handle is clipped from the mirrored inside so it cannot hang between lid and body.
+3. Only four cards leave the box. Their paths alternate sides, begin small behind the body and carry their own soft shadows. A geometry guard checks every frame from launch through assembly using the measured card rectangles.
+4. Copy uses the left or right column, with the subject in the other. Resting content stays within the 96 px safe margin. A single shape stages each subject; there is no ambient rotation.
+5. The screen builds outward from its centre. Tab changes use a 30 px shared-axis X move with a 0.3-second fade-through. That fade always travels with the screen.
+6. Featured cards replace hidden counterparts in the phone, grow from live measured bounds and return with the reverse container transform. The phone brings below-fold tools into its viewport before measuring. The outgoing tab retains its scroll position.
+7. Headline words reveal through masks on named notes, modulating Google Sans Flex width and weight. Chips and captions hold clear of the device and cards. Camera pushes are separate from card and chapter starts.
+8. The closing foreground holds for 1.5 seconds before the mark anticipates at 29.40. The explosion uses the UI kit's `--tk-gold-container` role at 29.54, with motion blur only through 29.79 for that move. An opaque gold cover prevents text showing through from 29.70; the final mark is at exact rest on the last frame.
+9. All animation comes from frame state and transforms. Audio plays in full at unity gain without a trim, loop or fade. Ads and More apps stay disabled. Master size remains 2560 x 1440 at 90 fps, rendered by the owner after preview approval.
 
 ## Guidance and references
 
@@ -83,7 +83,7 @@ The Android Insider `develop` trailer's font and UI mounting gate and Smart Clea
 See `source/FIDELITY.md`. Preparation and structural checks can pass independently of visual review. A successful render does not establish parity, readable choreography or correct timing.
 
 - [x] TypeScript, scene continuity, unchanged audio hash, device aperture and onset coverage checks.
-- [x] Quarter-scale stills at the requested sample times and immediately around all seven scene boundaries.
+- [x] 20% contact sheets for the lid, each launch, column layouts, chapter transitions, beat accents and the final burst.
 - [ ] Full-speed preview and sound approval by the owner before the 2K master.
 
-The gather deliberately unfolds the tall phone bento into landscape rows so all six widgets and Material Colors are readable together. It restores the exact measured positions during the phone handoff. The UI kit and Android screens were not changed. See `source/FIDELITY.md` for the review scope.
+The gather shows four real widgets in a 2x2 arrangement and restores their exact measured positions during the phone handoff. Other tools stay inside the phone. The UI kit and Android screens were not changed. See `source/FIDELITY.md` for the review scope.

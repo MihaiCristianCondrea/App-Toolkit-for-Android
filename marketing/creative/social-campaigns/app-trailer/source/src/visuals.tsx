@@ -1,5 +1,5 @@
 import React from 'react';
-import {Easing, Img, spring, staticFile,useCurrentFrame,useVideoConfig} from 'remotion';
+import {Easing, Img, spring, staticFile} from 'remotion';
 import {shapeUrl} from '../../../../../ui/src/kit/assets.js';
 import {DISPLAY,LiveScreen,SKIN_HEIGHT,SKIN_WIDTH,localRect,Geometry} from './Kit';
 import timeline from './timeline.json';
@@ -50,7 +50,9 @@ export const Shape:React.FC<{name:string;color:string;size:number;x:number;y:num
 export const Toolbox:React.FC<{x:number;y:number;size:number;open:number;scale?:number;angle?:number;squash?:number}>=({x,y,size,open,scale=1,angle=0,squash=0})=>{
   const fold=Math.cos(Math.PI*clamp(open)),drop=clamp(open)*size*.22;
   // Compensate around the lid face's centre so its mirrored inside remains above the seam.
-  const compensation=-size*(.4424-.23494)/2*(1-Math.abs(fold));
+  const compensation=size*(.4424-.23494)/2*(1-Math.abs(fold));
+  const visibleSeam=size*.33867+size*(.4424-.23494)/2*Math.abs(fold)+compensation;
+  if(Math.abs(visibleSeam-size*.4424)>1e-6)throw new Error('Toolbox lid detached from its seam');
   return <div data-toolbox style={{position:'absolute',width:size,height:size,transform:`translate(${x-size/2}px,${y-size/2}px) rotate(${angle}deg) scale(${scale})`}}>
     <div style={{position:'absolute',inset:0,transformOrigin:'50% 92%',transform:`scale(${1+squash*.07},${1-squash*.09})`}}>
       <Img src={staticFile('toolbox-lid.svg')} style={{position:'absolute',inset:0,width:'100%',height:'100%',transformOrigin:'50% 33.867%',transform:`translateY(${drop+compensation}px) scaleY(${fold})`,zIndex:fold<0?1:3,clipPath:fold<0?'inset(23.494% 0 55.76% 0)':undefined,filter:`brightness(${lerp(1,.8,clamp(open))})`}}/>
@@ -89,6 +91,6 @@ export const Phone:React.FC<{id:string;state?:Record<string,unknown>;x:number;y:
 
 export const Headline:React.FC<{text:string;x:number;y:number;width?:number;size?:number;progress?:number;seconds?:number;align?:'left'|'center'}>=({text,x,y,width=760,size=126,progress=1,seconds,align='left'})=><div data-headline style={{position:'absolute',left:x,top:y,width,color:INK,fontFamily:'Google Sans Flex',fontSize:size,lineHeight:1.04,fontWeight:650,letterSpacing:-size*.045,textAlign:align,paddingBottom:size*.25}}>{text.split(' ').map((word,i)=>{
   const notes=(timeline.events.type as Record<string,number[]>)[text];
-  const p=seconds!==undefined&&notes?ease(seconds,notes[i],notes[i]+.24):clamp(progress*1.5-i*.22);
+  const p=seconds!==undefined&&notes?ease(seconds,notes[i],notes[i]+(text==='Your toolkit.'?.2:.24)):clamp(progress*1.5-i*.22);
   return <span key={i} style={{display:'inline-block',overflow:'hidden',verticalAlign:'top',paddingBottom:'.15em',marginBottom:'-.15em',marginRight:'.19em'}}><span style={{display:'inline-block',transform:`translateY(${(1-p)*140}%)`,fontVariationSettings:`'wght' ${lerp(450,650,p)}, 'wdth' ${lerp(75,100,p)}`}}>{word}</span></span>;
 })}</div>;

@@ -10,7 +10,7 @@
     "title": "App Toolkit: Your toolkit",
     "headline": "App Toolkit. Your toolkit.",
     "description": "App Toolkit for Android opens into live tools for direction, measuring, counting and everyday choices. Watch the toolbox become your toolkit in one app.",
-    "longDescription": "Tool symbols answer the opening notes before the original App Toolkit mark pops and splits. Seven live cards unfold across the frame, then fold into the real phone screen. Quick Tools, Measure and Play & Decide follow the complete supplied soundtrack, ending on the three destinations and Google Play badge.",
+    "longDescription": "The original App Toolkit mark opens as a chest. Four live widgets leave its mouth and gather into a bento before the real phone screen forms around them. Quick Tools, Measure and Play & Decide follow the full soundtrack, with measured card transitions and a final gold burst.",
     "altText": "A toolbox opens into live widgets that assemble into App Toolkit's three screens on Pixel phones.",
     "keywords": [
       "App Toolkit",
@@ -51,15 +51,15 @@
     },
     "output/images/scene-02.png": {
       "title": "App Toolkit: scene 2",
-      "altText": "The original toolbox lid exits above frame while the tool-bearing body lands below."
+      "altText": "The mirrored toolbox lid rests behind the body on its hinge seam."
     },
     "output/images/scene-03.png": {
       "title": "App Toolkit: scene 3",
-      "altText": "Six real Quick Tools widgets spring out of the toolbox with fully rounded corners."
+      "altText": "Compass, level, flashlight and SOS leave the chest through four separate lanes."
     },
     "output/images/scene-04.png": {
       "title": "App Toolkit: scene 4",
-      "altText": "All six Quick Tools widgets and Material Colors gather into landscape bento rows under One place."
+      "altText": "Four real widgets form a large 2x2 grid beside One place."
     },
     "output/images/scene-05.png": {
       "title": "App Toolkit: scene 5",

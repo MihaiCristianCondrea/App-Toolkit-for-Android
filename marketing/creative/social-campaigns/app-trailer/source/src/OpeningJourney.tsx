@@ -8,7 +8,7 @@ const launch=[{x:350,y:290,angle:0},{x:1530,y:290,angle:0},{x:350,y:740,angle:0}
 const symbols=[['explore','sunny'],['straighten','pill'],['flashlight_on','burst'],['emergency','cookie_7sided'],['water_drop','cookie_9sided'],['favorite','soft_burst']];
 const names=['Compass','Bubble level','Flash Dimmer','Morse & SOS','Water Eject','Breathe'];
 // Four tools leave the box: the frame holds four cards at a readable size, not the whole screen.
-const bento=[{x:1100,y:330},{x:1420,y:330},{x:1100,y:750},{x:1420,y:750}];
+const bento=[{x:1220,y:330},{x:1590,y:330},{x:1220,y:750},{x:1590,y:750}];
 
 /** Four cards use separate flight lanes and restore the measured screen geometry. */
 const cardPose=(t:number,g:Geometry,i:number)=>{
@@ -43,13 +43,13 @@ export const OpeningJourney:React.FC<{seconds:number;onGeometry?:(g:Geometry)=>v
   return <>
     <GeometryProbe onGeometry={measured}/>
     {/* One stage per subject: it grows behind the gathered cards and carries them into the phone. */}
-    {t>=e.gather?<Shape name="cookie_9sided" color="#D0E9E3" size={1000} x={lerp(1260,phoneX,pull)} y={540} scale={pop(t,e.gather,.6)*lerp(1,.95,pull)*(1+.035*beat(t,'stage'))} angle={lerp(-30,0,ease(t,e.gather,e.gatherEnd))}/>:null}
+    {t>=e.gather?<Shape name="cookie_9sided" color="#D0E9E3" size={1000} x={lerp(1405,phoneX,pull)} y={540} scale={pop(t,e.gather,.6)*lerp(1,.95,pull)*(1+.035*beat(t,'stage'))} angle={lerp(-30,0,ease(t,e.gather,e.gatherEnd))}/>:null}
     {t<e.launch?symbols.map(([icon,shape],i)=>{
-      const at=e.iconNotes[i],p=pop(t,at,.35),exit=easeIn(t,e.logo,e.lidOpen);
+      const at=e.iconNotes[i],p=pop(t,at,.35),exit=easeIn(t,e.logo,e.iconsExitEnd);
       const spread=ease(t,e.iconNotes[1],e.iconNotes[4]);
       const x=lerp(960,launch[i].x,spread),y=lerp(540,launch[i].y,spread);
       const size=lerp(680,300,spread),glyph=size*.46;
-      return t>=at?<div key={icon} style={{position:'absolute',inset:0,transform:`translate(${(960-x)*exit}px,${(1000-y)*exit+(1-p)*900}px) scale(${1-.94*exit})`,transformOrigin:`${x}px ${y}px`}}>
+      return t>=at?<div key={icon} style={{position:'absolute',inset:0,transform:`translate(${(960-x)*exit}px,${(698-y)*exit+(1-p)*900}px) scale(${1-exit})`,transformOrigin:`${x}px ${y}px`}}>
         <Shape name={shape} color="#FDE7A2" size={size} x={x} y={y} angle={lerp(-25,0,p)}/>
         <span className="material-symbols-outlined" style={{position:'absolute',left:x-glyph/2,top:y-glyph/2,fontSize:glyph,lineHeight:1,color:'#3B2D14'}}>{icon}</span>
       </div>:null;
