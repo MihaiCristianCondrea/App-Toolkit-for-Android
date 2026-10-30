@@ -18,10 +18,7 @@
 package com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.ads
 
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
-import androidx.compose.material3.MaterialShapes
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.toShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -31,6 +28,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.R
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.catalog.KitShape
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.ads.NativeAdCallToActionStyle
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.ads.NativeAdPresentation
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.ads.NativeAdCache
@@ -49,7 +47,6 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.ads.rememb
  * @param cache Shares an overview's already loaded ad with the renderer.
  * @param cacheKey Identifies this placement within that screen-owned cache.
  */
-@OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
 fun QuickToolsNativeAdCard(
     modifier: Modifier = Modifier,
@@ -62,7 +59,7 @@ fun QuickToolsNativeAdCard(
     var isFirstReport: Boolean by remember(adUnitId) { mutableStateOf(value = true) }
 
     val style = NativeAdStyle(
-        badgeShape = rememberNativeAdBadgeShape(MaterialShapes.Cookie9Sided.toShape(), 88.dp),
+        badgeShape = rememberNativeAdBadgeShape(KitShape.Cookie9, 88.dp),
         badgeColor = MaterialTheme.colorScheme.tertiaryContainer,
         iconInsetDp = 16,
         bodyMaxLines = 2,

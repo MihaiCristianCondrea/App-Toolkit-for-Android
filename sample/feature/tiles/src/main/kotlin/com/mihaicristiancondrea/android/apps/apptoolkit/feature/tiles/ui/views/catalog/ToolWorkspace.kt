@@ -17,6 +17,7 @@
 
 package com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.catalog
 
+import androidx.compose.foundation.layout.navigationBarsPadding
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.modifiers.animateVisibility
 
 import androidx.compose.ui.draw.clipToBounds
@@ -52,13 +53,22 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.models.ToolkitTile
 
-/** The shell supplies bar insets; reserve them outside the clipped scrolling viewport. */
+/**
+ * A tab's scrolling body. The shell's [padding] covers the bottom bar, banner and player; it is
+ * reserved outside the clipped viewport so cards never sit under them.
+ *
+ * The bottom bar hides on scroll and takes the system navigation bar's inset with it, so while it
+ * is hidden [padding] no longer covers the gesture or button bar. The shell consumes what its
+ * padding covers, so `navigationBarsPadding` adds only the part of the system bar left uncovered:
+ * nothing while the bottom bar shows, the whole bar once it has gone.
+ */
 @Composable
 internal fun ToolWorkspace(padding: PaddingValues, content: @Composable ColumnScope.() -> Unit) {
     Column(
         modifier = Modifier
             .fillMaxSize()
             .padding(padding)
+            .navigationBarsPadding()
             .clipToBounds()
             .verticalScroll(rememberScrollState())
             .padding(start = 16.dp, end = 16.dp, top = 8.dp, bottom = 16.dp),

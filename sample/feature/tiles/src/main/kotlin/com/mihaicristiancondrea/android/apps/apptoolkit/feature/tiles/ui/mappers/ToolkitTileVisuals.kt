@@ -18,10 +18,7 @@
 package com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.mappers
 
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.icons.ToolSymbols
-import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
-import androidx.compose.material3.MaterialShapes
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.toShape
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
@@ -32,6 +29,9 @@ import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.model
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.models.StatusColors
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.models.ToolkitTile
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.models.ToolkitTileIcon
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.catalog.Cookie16Shape
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.catalog.Cookie8Shape
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.catalog.KitShape
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.utils.constants.ToolkitTileIds
 
 internal fun ToolkitTile.previewTextResId(): Int = when (id) {
@@ -62,33 +62,29 @@ internal fun ToolkitTileIcon.imageVector(): ImageVector = when (this) {
     ToolkitTileIcon.Ruler -> ToolSymbols.SquareFoot
 }
 
-/**
- * Material shape behind a tile icon, resolved for the active theme and shape choice.
- */
-@OptIn(ExperimentalMaterial3ExpressiveApi::class)
+/** The kit's shape behind a tool's live face (see [KitShape]). */
 @Composable
 internal fun ToolkitTileIcon.backgroundShape(): Shape = when (this) {
-    ToolkitTileIcon.Compass -> com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.catalog.Cookie8Shape
-    ToolkitTileIcon.Level -> com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.catalog.Cookie16Shape
-    ToolkitTileIcon.Sos, ToolkitTileIcon.Morse -> MaterialShapes.Cookie7Sided.toShape()
-    ToolkitTileIcon.FlashDimmer -> MaterialShapes.Burst.toShape()
-    ToolkitTileIcon.Water, ToolkitTileIcon.Protractor, ToolkitTileIcon.Converter, ToolkitTileIcon.Timer -> MaterialShapes.Cookie9Sided.toShape()
-    ToolkitTileIcon.Breathing, ToolkitTileIcon.BillSplitter, ToolkitTileIcon.Palette -> MaterialShapes.SoftBurst.toShape()
-    ToolkitTileIcon.Counter -> MaterialShapes.Flower.toShape()
-    ToolkitTileIcon.Coin, ToolkitTileIcon.Dice, ToolkitTileIcon.Ruler, ToolkitTileIcon.Wheel -> MaterialShapes.Cookie12Sided.toShape()
-    ToolkitTileIcon.RandomNumber -> MaterialShapes.Gem.toShape()
+    ToolkitTileIcon.Compass -> Cookie8Shape
+    ToolkitTileIcon.Level -> Cookie16Shape
+    ToolkitTileIcon.Sos, ToolkitTileIcon.Morse -> KitShape.Cookie7
+    ToolkitTileIcon.FlashDimmer -> KitShape.Burst
+    ToolkitTileIcon.Water, ToolkitTileIcon.Protractor, ToolkitTileIcon.Converter, ToolkitTileIcon.Timer -> KitShape.Cookie9
+    ToolkitTileIcon.Breathing, ToolkitTileIcon.BillSplitter, ToolkitTileIcon.Palette -> KitShape.SoftBurst
+    ToolkitTileIcon.Counter -> KitShape.Flower
+    ToolkitTileIcon.Coin, ToolkitTileIcon.Dice, ToolkitTileIcon.Ruler, ToolkitTileIcon.Wheel -> KitShape.Cookie12
+    ToolkitTileIcon.RandomNumber -> KitShape.Gem
 }
 
 /**
  * The shape of a tool's badge in its sheet header, the kit's `TOOLS[id].shape`. It is the live face's
  * shape for every tool but two: the compass and the level draw their faces in the brand cookies and
- * their badges in the Material shapes the kit names, `sunny` and `pill`.
+ * their badges in the kit's `sunny` and `pill`.
  */
-@OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
 internal fun ToolkitTileIcon.badgeShape(): Shape = when (this) {
-    ToolkitTileIcon.Compass -> MaterialShapes.Sunny.toShape()
-    ToolkitTileIcon.Level -> MaterialShapes.Pill.toShape()
+    ToolkitTileIcon.Compass -> KitShape.Sunny
+    ToolkitTileIcon.Level -> KitShape.Pill
     else -> backgroundShape()
 }
 

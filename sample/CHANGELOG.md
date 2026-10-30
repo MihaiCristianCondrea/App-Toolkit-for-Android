@@ -50,6 +50,11 @@
   you drag to measure from zero. Advanced adds a measurement range and settings for the units, the
   scale's edge, where zero is, the inch steps (1/8, 1/16 or 1/32) and calibration, all saved.
 - The coin turns as a 10 dp thick disc, rising as it spins, as the marketing UI draws it.
+- Tool faces and badges use the marketing UI's own shapes (`KitShape`, the same curves as its
+  `shapeUrl`) instead of `MaterialShapes`, so the flashlight's burst, SOS's cookie and the rest
+  match it exactly.
+- Quick Tools, Measure and Play & Decide keep their cards clear of the system navigation bar while
+  the bottom bar is hidden by scrolling.
 - The tools draw the same icons as the marketing UI: Material Symbols (outlined, and rounded for
   section titles and the converter's categories) instead of the older Material Icons, including
   symbols those lacked, such as `weight`. The converter's selected category shows a check mark,
