@@ -12,14 +12,14 @@ const launch=[
   {x:1010,y:770,scale:1.12,angle:7},
 ];
 const e=timeline.events;
-/** Each Quick Tools widget is named on its own onset while the live screen keeps moving. */
+/** Each Quick Tools widget is named on its own onset. One accent marks the newest name; earlier ones settle to neutral. */
 const CHIPS=[
-  {text:'Compass',at:14.88,color:'#D0E9E3',ink:'#00504A'},
-  {text:'Bubble level',at:15.18,color:'#D0E9E3',ink:'#00504A'},
-  {text:'Flash Dimmer',at:15.44,color:'#FDE7A2',ink:'#584400'},
-  {text:'Morse & SOS',at:15.66,color:'#E8D3DC',ink:'#6B2A4C'},
-  {text:'Water Eject',at:15.98,color:'#D6E3FF',ink:'#1F3F73'},
-  {text:'Breathe',at:16.44,color:'#FFE5C6',ink:'#6B3A00'},
+  {text:'Compass',at:14.88},
+  {text:'Bubble level',at:15.18},
+  {text:'Flash Dimmer',at:15.44},
+  {text:'Morse & SOS',at:15.66},
+  {text:'Water Eject',at:15.98},
+  {text:'Breathe',at:16.44},
 ];
 
 /** One continuous shot carries the same card coordinates from the toolbox into the real screen. */
@@ -39,14 +39,14 @@ export const OpeningJourney:React.FC<{seconds:number;onGeometry?:(g:Geometry)=>v
   const screenY=phoneY-SKIN_HEIGHT*phoneScale/2+DISPLAY.y*phoneScale;
   const sensor=ease(t,e.sensorMove,15.66);
   const heading=Math.round(lerp(312,405,sensor)+28*Math.sin(Math.max(0,t-15.66)*2.4)*ease(t,15.66,16.1)*(1-ease(t,16.6,17.14))+360)%360;
-  const pulse=1+.05*beat(t);
+  const newest=[...CHIPS].reverse().find(chip=>t>=chip.at)?.text;
   return <>
     <GeometryProbe onGeometry={measured}/>
     {t<e.pullBack?<>
-      <Shape name="cookie_9sided" color="#FDE7A2" size={480} x={80-100*gather} y={70} angle={t*4} scale={pop(t,.1)*pulse}/>
-      <Shape name="flower" color="#E8D3DC" size={320} x={1790+200*gather} y={220} angle={-t*5} scale={pop(t,.2)*pulse}/>
-      <Shape name="clover_4leaf" color="#D0E9E3" size={450} x={80-200*gather} y={1050} angle={12+t*3} scale={pop(t,.3)*pulse}/>
-      <Shape name="soft_burst" color="#FFE5C6" size={400} x={1840+200*gather} y={1010} angle={-12-t*3} scale={pop(t,.4)*pulse}/>
+      <Shape name="cookie_9sided" color="#FDE7A2" size={480} x={80-100*gather} y={70} angle={t*4} scale={pop(t,.1)}/>
+      <Shape name="flower" color="#E8D3DC" size={320} x={1790+200*gather} y={220} angle={-t*5} scale={pop(t,.2)}/>
+      <Shape name="clover_4leaf" color="#D0E9E3" size={450} x={80-200*gather} y={1050} angle={12+t*3} scale={pop(t,.3)}/>
+      <Shape name="soft_burst" color="#FFE5C6" size={400} x={1840+200*gather} y={1010} angle={-12-t*3} scale={pop(t,.4)}/>
     </>:null}
     {t<e.gather?<Toolbox x={960} y={lerp(480,640,ease(t,e.launch-.3,e.launch+.7))} size={400} open={open} scale={pop(t,.05,.9)*(1-ease(t,6.08,e.gather))} angle={-4*Math.sin(t*2)*ease(t,1.7,2.1)*(1-gather)}/>:null}
     {t>=e.pullBack?<Phone id="quick-tools" state={{compassHeading:heading,levelRoll:lerp(4,0,sensor),levelPitch:lerp(2,0,sensor)}} x={phoneX} y={phoneY} scale={phoneScale} angle={-4*move} shell={pull} ui={ease(t,e.pullBackEnd,e.shellBuildEnd)} hideWidgets={t<e.shellBuildEnd}/>:null}
@@ -69,11 +69,11 @@ export const OpeningJourney:React.FC<{seconds:number;onGeometry?:(g:Geometry)=>v
     {t>=e.launch&&t<e.gather?<Headline text="Many tools." x={610} y={925} width={700} size={100} align="center" progress={ease(t,4.92,5.16)}/>:null}
     {t>=e.gather&&t<e.pullBack?<Headline text="One place." x={80} y={440} width={540} size={132} progress={ease(t,7.46,7.7)}/>:null}
     {t>=e.featureMove?<>
-      <Shape name="cookie_9sided" color="#D0E9E3" size={560} x={280} y={650} angle={lerp(-20,0,ease(t,13.72,14.6))+t*3} scale={pulse}/>
+      <Shape name="cookie_9sided" color="#D0E9E3" size={560} x={280} y={650} angle={lerp(-20,0,ease(t,13.72,14.6))+t*3}/>
       <Headline text="Quick tools." x={130} y={240} width={720} size={152} progress={ease(t,13.72,14.28)}/>
       <div style={{position:'absolute',left:140,top:670,fontSize:44,lineHeight:1.25,color:'#006A60',fontWeight:500,opacity:ease(t,14.28,14.6)}}>Find your way.<br/>Find your level.</div>
       <div data-tool-chips style={{position:'absolute',left:130,top:820,width:780,display:'flex',flexWrap:'wrap',gap:14}}>
-        {CHIPS.map(chip=>t>=chip.at?<Chip key={chip.text} text={chip.text} color={chip.color} ink={chip.ink} progress={pop(t,chip.at,.5)} active={t<chip.at+.3?beat(t):0}/>:null)}
+        {CHIPS.map(chip=>t>=chip.at?<Chip key={chip.text} text={chip.text} color={chip.text===newest?'#D0E9E3':'rgba(59,45,20,.07)'} ink={chip.text===newest?'#00504A':'#3B2D14'} progress={pop(t,chip.at,.5)} active={t<chip.at+.3?beat(t):0}/>:null)}
       </div>
     </>:null}
   </>;

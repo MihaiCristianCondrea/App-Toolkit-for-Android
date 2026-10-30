@@ -65,7 +65,9 @@ Ads and the More apps footer are disabled in the film. Product backgrounds, acce
 3. Floating widgets have full 28dp corners; their actual bento corners return as they land.
 4. Gestures settle before the next move. Springs land on exact poses; there is no camera noise.
 5. The actual UI state is a function of the current frame. Wall-clock UI animations are disabled during capture.
-6. Type is sparse and holds in clear space. The soundtrack plays at unity gain with no trim, loop or added fade.
+6. Motion is motivated (taste skill): only an element that changes reacts to an onset (a landing card, the newest chip). Decorative shapes drift slowly and never pulse; the end card holds still rather than floating.
+7. One accent per moment: the newest tool chip takes the teal container, earlier chips settle to neutral, and caption emphasis uses Google Sans Flex weight, not a second colour.
+8. Type is sparse and holds in clear space. The soundtrack plays at unity gain with no trim, loop or added fade.
 
 ## Guidance and references
 

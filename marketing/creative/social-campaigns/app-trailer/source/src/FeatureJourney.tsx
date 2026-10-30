@@ -54,7 +54,7 @@ export const FeatureJourney:React.FC<{seconds:number;geometry:Geometry|null}>=({
   const active=[...MEASURE_HEROES].reverse().find(hero=>t>=hero.in)?.word;
   const settle=ease(t,24,24.54);
   return <>
-    {!isPlay?<Shape name="flower" color="#FDE7A2" size={580} x={1450} y={690} angle={t*4} scale={1+.06*beat(t)}/>:<Shape name="soft_burst" color="#E8D3DC" size={600} x={1460} y={690} angle={-18+t*4} scale={1+.06*beat(t)}/>}
+    {!isPlay?<Shape name="flower" color="#FDE7A2" size={580} x={1450} y={690} angle={t*4}/>:<Shape name="soft_burst" color="#E8D3DC" size={600} x={1460} y={690} angle={-18+t*4}/>}
     <Phone id={isPlay?'play':'numbers'} underId={isPlay?'numbers':'quick-tools'} underState={isPlay?{...measureState,counterValue:45}:{compassHeading:45,levelRoll:0,levelPitch:0}}
       state={isPlay?playState:measureState} x={lerp(1320,540,move)} y={540} scale={.92} angle={lerp(-4,4,move)}
       reveal={chapterReveal} revealFrom={origin(geometry,isPlay?'Play & Decide':'Measure')}/>
@@ -64,7 +64,7 @@ export const FeatureJourney:React.FC<{seconds:number;geometry:Geometry|null}>=({
         <LiveCrop screen="numbers" selector={`[data-tool="${hero.tool}"]`} state={{...measureState,searchQuery:''}} style={{borderRadius:28}}/>
       </div>:null)}
       <div style={{position:'absolute',left:1000,top:890,display:'flex',gap:22,fontSize:40,fontWeight:600,opacity:ease(t,18.1,18.38)*(1-ease(t,21.46,21.98))}}>
-        {MEASURE_HEROES.map(hero=><span key={hero.word} style={{color:hero.word===active?'#6B5E00':'rgba(59,45,20,.32)',transform:`translateY(${hero.word===active?-6*beat(t):0}px)`}}>{hero.word}</span>)}
+        {MEASURE_HEROES.map(hero=><span key={hero.word} style={{color:hero.word===active?'#3B2D14':'rgba(59,45,20,.45)',fontWeight:hero.word===active?700:450}}>{hero.word}</span>)}
       </div>
     </>:<>
       <Headline text="Let chance decide." x={1000} y={140} width={780} size={112} progress={ease(t,22.56,22.86)*(1-ease(t,25.98,26.26))}/>
