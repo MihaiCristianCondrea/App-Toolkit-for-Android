@@ -117,6 +117,12 @@ flowchart TD
 - `GeneralButton` is the action-button entry point for all five styles and labelled/icon-only content.
   See the [3.0 button contract and migration](../designsystem/README.md#generalbutton-30).
 - `GeneralTextField` is the text-input entry point; see [GeneralTextField](#generaltextfield).
+- `AppShowcase` (`views.showcase`) is a stateless "more apps" carousel: a titled row of outlined
+  app cards with a "View all" action, snapping horizontally. It takes `ShowcaseApp` items, an
+  `AppShowcaseState` (`Loading`, `Ready`, `Empty`, `Failed`) and `AppShowcaseLabels` built with
+  `appShowcaseLabels(...)`; the host fetches the apps and handles `onAppClick`, `onAppAction`
+  (open when `installed`, store otherwise), `onViewAll` and `onRetry`. Cards are `min(86%, 360dp)`
+  wide on compact widths and fill whole columns of at least 260dp above 600dp.
 - `MainTopAppBar` and `SearchTopAppBar` are the two host app bars; see
   [Top app bars](#top-app-bars). Pages of the shell get `ShellTopAppBar` from the page frame
   instead.

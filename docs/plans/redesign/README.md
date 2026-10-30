@@ -110,6 +110,8 @@ The historical web-first steps above describe the sequence that produced the des
 
 - The apps catalog and the Components showcase are debug pages: the drawer offers them in debug builds, or once the
   showcase is unlocked from About. The marketing UI no longer draws the apps catalog.
+  - Superseded October 30, 2026: the apps catalog page, its drawer link and its list ads are removed. Quick Tools ends
+    with a "More apps" carousel (the library's `AppShowcase`), and the Components page is a debug-build page only.
 - Screen Light is removed from the app (the system's brightness and the Flash Dimmer cover it), and with it the
   More tools drawer page.
 - Material Colors is the last Quick Tools section, in the app and in the marketing UI: a strip of the scheme's

@@ -11,11 +11,11 @@ libraries with the host's own feature modules.
 - `MainViewModel`, which runs the consent, in-app review and in-app update requests `MainActivity`
   sends from `onResume`.
 - `sampleAppModules`, the single source of truth used by runtime startup and DI graph tests.
-- App-only bridges that intentionally connect otherwise independent features, such as the About
-  version-tap callback to the Components unlock repository.
+- App-only bridges that intentionally connect otherwise independent features, such as the apps
+  feature's "More apps" carousel placed in the Quick Tools footer.
 - Serializable route keys, each in its own file under `app/navigation/` with explicit serialized identities.
 - `appGraph`, the one declaration that names every host feature: the Quick Tools, Measure and Play & Decide tabs, the
-  Apps and app-only tools pages, the components page, the drawer, the overflow menu and the settings shortcut's deep link, on top of
+  app-only tools pages, the components page, the drawer, the overflow menu and the settings shortcut's deep link, on top of
   the Toolkit's pages from `toolkitGraph { }`. `startKeyFor` maps the stored start page to its tab.
 - The drawer header's `app_logo`.
 - The sample onboarding provider, owned by
@@ -41,8 +41,7 @@ libraries with the host's own feature modules.
 - Feature strings and layouts, owned by their respective `:sample:feature:*`, core, or widget
   module. Default themes, colors and backup policies come from
   [`:library:apptoolkit`](../../library/apptoolkit/README.md). Artwork lives with the module
-  that draws it; this module keeps only its own: the launcher foreground, the TV banner and the
-  Apps tab's selected icon.
+  that draws it; this module keeps only its own: the launcher foreground and the TV banner.
 - Advertising configuration, including the sample's AdMob application ID and merged-manifest
   declaration, owned by [`:sample:integration:ads`](../integration/ads/README.md).
 - The chrome and navigation, owned by [`:library:shell`](../../library/shell/README.md) and
@@ -124,12 +123,10 @@ The target SDK remains 37 and the minimum SDK remains 26.
   shell at the bottom of the window while a start screen or a page covers the tabs.
 - The launcher shortcut's `OPEN_SETTINGS` action is a deep link in `appGraph`, so the shell opens
   the settings page for it at launch and while running, with no activity of its own.
-- The Tiles and Apps tabs declare a `TabSearch`, so the app bar holds a search field that filters
-  the quick tools and the apps, while the Numbers tab presents a direct workspace without a search
-  bar. The Apps tab's random-app button is declared by the list itself with
-  `ScaffoldFabs`, so the graph holds no button of its own.
-- The drawer's Components entry depends on the showcase being unlocked, so the graph is rebuilt
-  when that changes; the back stacks are kept, since they are saved by position, not by graph. The
+- Each tab declares a `TabSearch`, so the app bar holds a search field that filters that tab's
+  tools. Quick Tools ends with the apps feature's "More apps" carousel, passed as
+  `ToolkitTilesScreen(footer = { MoreAppsSection() })` and hidden while a search is active.
+- The drawer's Components entry is offered in debug builds only. The
   drawer ends with `toolkitFooter`, so Settings, Help, Updates and Share stay last; the developer
   options are reached from Advanced settings, not the drawer.
 - Process-lifetime Mobile Ads SDK initialization, billing recovery, and installing the seasonal
@@ -180,9 +177,9 @@ feature modules leaves rather than a chain:
 - The old `MainScreen` imported the app's entry builders, which would have made the shell depend on
   every feature it renders. In 3.0.0 the shell became `:library:shell` and the graph moved here as
   `appGraph`; `:sample:core:shell` and `:sample:core:navigation` were removed.
-- `APPS_LIST_AD_FREQUENCY` was a `buildConfigField` here, which no library module can read. It is a
-  fixed tuning value, so it became `AdsConstants.APPS_LIST_AD_FREQUENCY` in
-  [`:sample:integration:ads`](../integration/ads/README.md).
+- `APPS_LIST_AD_FREQUENCY` was a `buildConfigField` here, which no library module can read. It
+  became `AdsConstants.APPS_LIST_AD_FREQUENCY`, and was removed with the Apps page's grid ads when
+  that page became "More apps" at the end of Quick Tools.
 
 Quick-tool repositories in `:sample:feature:tiles` intentionally stay concrete classes: each wraps
 one

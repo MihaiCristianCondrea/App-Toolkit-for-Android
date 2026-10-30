@@ -35,12 +35,15 @@
     <string name="app_details_storage">Storage</string>
     <string name="app_details_version">Version %1$s</string>
     <string name="app_details_view_on_play_store">Google Play’de görüntüle</string>
-    <string name="apps_filter_all">Hepsi</string>
     <string name="error_failed_to_load_apps">Uygulamalar yüklenemedi</string>
     <string name="error_failed_to_update_favorite">Favori güncellenemedi</string>
     <string name="favorite_apps">Favoriler</string>
-    <string name="summary_share_message">Bu harika uygulamaya bir göz atın. Kullanmakta olduğum ve ilginizi çekebilecek bazı harika özelliklere sahip. Play Store\'dan indirilebilir: %1$s</string>
-    <string name="apps_tools_title">Uygulamalar</string>
-    <string name="open_random_app">Rastgele uygulama aç</string>
-    <string name="apps_search_hint">Uygulama ara</string>
+    <string name="more_apps_title">Diğer uygulamalar</string>
+    <string name="more_apps_view_all">Tümünü gör</string>
+    <string name="more_apps_view_all_description">Tüm uygulamaları Google Play\'de gör</string>
+    <string name="more_apps_google_play">Google Play</string>
+    <string name="more_apps_open">Aç</string>
+    <string name="more_apps_empty">Şu anda kullanılabilir uygulama yok.</string>
+    <string name="more_apps_store_action_description">%1$s uygulamasını Google Play\'de aç</string>
+    <string name="more_apps_open_action_description">%1$s uygulamasını aç</string>
 </resources>

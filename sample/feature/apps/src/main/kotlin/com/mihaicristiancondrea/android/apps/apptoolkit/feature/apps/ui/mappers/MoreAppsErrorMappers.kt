@@ -19,7 +19,6 @@ package com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.ui.mappers
 
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.R
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.UiText
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.R as CoreUiR
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.Loadable
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.UiMessage
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.toErrorMessage
@@ -28,25 +27,14 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.toUiText
 
 private val LoadAppsFailedText = UiText.StringResource(R.string.error_failed_to_load_apps)
 private val UpdateFavoriteFailedText = UiText.StringResource(R.string.error_failed_to_update_favorite)
-private val TryAgainText = UiText.StringResource(CoreUiR.string.try_again)
 
 /**
  * This failure as the catalogue's [Loadable.Failed], for a load with no saved catalogue to show.
  *
- * The apps list throws no failures of its own, so every one gets the shared text from `toUiText`,
+ * The catalogue throws no failures of its own, so every one gets the shared text from `toUiText`,
  * or "Failed to load apps" when there is none.
  */
 internal fun Throwable.toCatalogueFailed(): Loadable.Failed = toFailed(fallback = LoadAppsFailedText)
-
-/**
- * This failure as the message shown over the saved catalogue, with a Try again action that loads
- * the catalogue again.
- */
-internal fun Throwable.toStaleCatalogueMessage(): UiMessage = UiMessage(
-    text = toUiText(fallback = LoadAppsFailedText),
-    isError = true,
-    actionLabel = TryAgainText,
-)
 
 /** This failure as the details sheet's [Loadable.Failed]. */
 internal fun Throwable.toAppDetailsFailed(): Loadable.Failed = toFailed(fallback = LoadAppsFailedText)

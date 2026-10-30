@@ -30,10 +30,6 @@ val adsIntegrationModule: Module = module {
         AdsConfig(bannerAdUnitId = AdsConstants.NATIVE_AD_UNIT_ID)
     }
 
-    single<AdsConfig>(named(name = AppAdsQualifiers.APPS_LIST_NATIVE_AD)) {
-        AdsConfig(bannerAdUnitId = AdsConstants.APPS_LIST_NATIVE_AD_UNIT_ID)
-    }
-
     single<AdsConfig>(named(name = AppAdsQualifiers.APP_DETAILS_NATIVE_AD)) {
         AdsConfig(bannerAdUnitId = AdsConstants.APP_DETAILS_NATIVE_AD_UNIT_ID)
     }

@@ -41,7 +41,7 @@ android {
 
 dependencies {
     testImplementation(project(":library:core:testing"))
-    // AppsListScreenTest composes the real screen, the reference ScreenHost migration, under
+    // MoreAppsSectionTest composes the real section and its details sheet under
     // Robolectric, which runs on JUnit 4 beside JUnit 5.
     testImplementation(libs.androidx.compose.ui.test.junit4)
     testImplementation(libs.androidx.test.ext.junit)

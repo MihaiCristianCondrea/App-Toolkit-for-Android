@@ -95,7 +95,7 @@ class AppGraphTest {
             return dataStore.startupValueFlow(ToolkitTilesRoute.ROUTE_ID, ::startKeyFor).first()
         }
 
-        assertEquals(ToolkitTilesRoute, startFor(AppsListRoute.ROUTE_ID))
+        assertEquals(ToolkitTilesRoute, startFor(LEGACY_APPS_ROUTE_ID))
         assertEquals(PlayRoute, startFor(PlayRoute.ROUTE_ID))
         assertEquals(NumbersRoute, startFor(NumbersRoute.ROUTE_ID))
         assertEquals(ToolkitTilesRoute, startFor(ToolkitTilesRoute.ROUTE_ID))
@@ -133,14 +133,12 @@ class AppGraphTest {
     }
 
     @Test
-    fun `the apps catalog and the components showcase are debug pages`() {
+    fun `the components showcase is a debug page`() {
         val release = graph(showDebugPages = false)
-        listOf(AppsListRoute, ComponentsRoute, ArticleDemoRoute(branded = false)).forEach { key ->
+        listOf(ComponentsRoute, ArticleDemoRoute(branded = false)).forEach { key ->
             assertFalse(release.contains(key), "$key is registered outside debug")
         }
-        assertFalse(AppsListRoute in release.drawerLinks())
         assertFalse(ComponentsRoute in release.drawerLinks())
-        assertTrue(AppsListRoute in graph(showDebugPages = true).drawerLinks())
         assertTrue(ComponentsRoute in graph(showDebugPages = true).drawerLinks())
     }
 
@@ -154,8 +152,8 @@ class AppGraphTest {
         assertEquals(HelpRoute, (footer[1] as DrawerEntry.Link).key)
         assertEquals(AboutR.string.updates, (footer[2] as DrawerEntry.Action).label)
         assertEquals(AboutR.string.share, (footer[3] as DrawerEntry.Action).label)
-        // The debug pages come first, and developer options are reached from Advanced.
-        assertEquals(AppsListRoute, (drawer.first() as DrawerEntry.Link).key)
+        // The debug page comes first, and developer options are reached from Advanced.
+        assertEquals(ComponentsRoute, (drawer.first() as DrawerEntry.Link).key)
         assertFalse(DeveloperOptionsRoute in graph().drawerLinks())
     }
 

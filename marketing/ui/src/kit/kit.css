@@ -1928,3 +1928,17 @@ mnw-android-screen,
 
 /* Full-screen ruler controls keep clear of the preview camera cutout. */
 .measure-ruler:not([data-landscape]) .measure-ruler__panel { padding-top: calc(16px + max(48px, var(--_status-bar, 0px))); }
+
+/* More apps (MoreAppsSection.kt / AppShowcase.kt): Material Next's app showcase cards in a snapping row. */
+.qt-more-apps__heading { display:flex; align-items:center; gap:8px; }
+.qt-more-apps__heading .qt-section__title { flex:1; margin:0; }
+.qt-more-apps__row { display:flex; gap:12px; overflow-x:auto; scroll-snap-type:x mandatory; scrollbar-width:none; margin-inline:-16px; padding-inline:16px; scroll-padding-inline:16px; }
+.qt-more-apps__row::-webkit-scrollbar { display:none; }
+.qt-app-card { flex:none; width:min(86%, 360px); scroll-snap-align:start; display:flex; flex-direction:column; gap:10px; padding:16px; --md-outlined-card-container-shape:18px; --md-outlined-card-container-color:var(--md-sys-color-surface-container-low); }
+.qt-app-card__top { display:flex; gap:16px; }
+.qt-app-card__icon { flex:none; width:64px; height:64px; display:grid; place-items:center; border-radius:18px; background:var(--md-sys-color-surface-container-highest); color:var(--md-sys-color-primary); --md-icon-size:32px; }
+.qt-app-card__text { min-width:0; }
+.qt-app-card h3 { margin:0; font:700 16px/24px var(--md-ref-typeface-plain); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.qt-app-card__category { margin:4px 0 8px; font:700 14px/20px var(--md-ref-typeface-plain); color:var(--md-sys-color-on-surface-variant); }
+.qt-app-card__description { margin:0; min-height:60px; font:400 14px/20px var(--md-ref-typeface-plain); color:var(--md-sys-color-on-surface-variant); display:-webkit-box; -webkit-line-clamp:3; -webkit-box-orient:vertical; overflow:hidden; }
+.qt-app-card__action { align-self:flex-end; }

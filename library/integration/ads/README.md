@@ -129,7 +129,7 @@ unbound costs nothing: `NATIVE_AD`, `BOTTOM_NAV_BAR_NATIVE_AD`, and the size-nam
 `LARGE_BANNER_AD`, `MEDIUM_RECTANGLE_AD`, `FULL_BANNER_AD`, `LEADERBOARD_AD`, `FLUID_AD`.
 
 Hosts add their own qualifiers for their own screens rather than extending `AdsQualifiers`; the
-sample keeps `AppAdsQualifiers` for its apps list and app details placements.
+sample keeps `AppAdsQualifiers` for its app details placement.
 
 ### Choosing the format
 
@@ -357,7 +357,7 @@ The toolkit owns *primitives*; a feature owns its *placements*. The rule:
 | Loading, lifecycle, view tree, palette, disclosure       | `:library:core:ui`, `views/ads`         | `NativeAdSlot`, `NativeAdRenderer` |
 | A shape an ad can take                                   | `NativeAdPresentation`                   | `Featured`, `Compact`, `GridRow`  |
 | A card only one screen draws                             | that feature's own `ui/views/ads`        | `HelpNativeAdCard`                |
-| A card only the sample draws                             | the sample feature's `ui/views/ads`      | `AppsListNativeAdCard`            |
+| A card only the sample draws                             | the sample feature's `ui/views/ads`      | `QuickToolsNativeAdCard`          |
 
 A one-screen wrapper in shared UI looks harmless and is not: it makes the toolkit carry a layout
 decision that belongs to a screen, and it teaches hosts to look for their placement in the library

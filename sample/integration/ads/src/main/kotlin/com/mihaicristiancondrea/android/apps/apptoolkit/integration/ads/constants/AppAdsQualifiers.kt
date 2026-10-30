@@ -19,6 +19,5 @@ package com.mihaicristiancondrea.android.apps.apptoolkit.integration.ads.constan
 
 /** App-module Koin qualifier names for app-specific native ad placements. */
 object AppAdsQualifiers {
-    const val APPS_LIST_NATIVE_AD: String = "apps_list_native_ad"
     const val APP_DETAILS_NATIVE_AD: String = "app_details_native_ad"
 }

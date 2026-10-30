@@ -2,7 +2,8 @@
 
 ## Purpose
 
-The developer's app catalogue: listing, details, favorites, and install state.
+The developer's app catalogue as "More apps", the last section of Quick Tools: the apps, their
+details, favorites and install state.
 
 ## Owns
 
@@ -17,21 +18,22 @@ The developer's app catalogue: listing, details, favorites, and install state.
   `NetworkException` for an error status.
 - `DeveloperAppsLocalDataSource`, which persists the last successfully downloaded compact
   catalogue as an atomic JSON file. PackageManager access belongs to the Toolkit repository.
-- `AppsListViewModel`, `AppListUiState`, `HomeEvent`, `AppsListScreen` with its stateless
-  `AppsListScreenContent`, the detail sheet, and the native-ad placement in the list.
-- Localized app-catalogue strings, and `ui/mappers/AppsListErrorMappers.kt`, which gives each
-  failure the shared `toUiText` text or the feature's fallback.
-- `AppsListRoute` is supplied by `:sample:app`, which owns the navigation graph.
-- The Get it on Google Play badge the detail sheet shows.
-- The random-app button, declared by `AppsListScreen` through `ScreenHost(fabs)`; it scales out
-  while there is no app to open.
-- Filtering the grid through `LocalShellSearch` when hosted as a tab, or a saved native search field
-  in the grid header when hosted as a drawer page: an app matches by name,
-  package or description, after the filter chips.
+- `MoreAppsViewModel`, `MoreAppsUiState`, `MoreAppsEvent`, and `MoreAppsSection` with its
+  stateless `MoreAppsSectionContent`, which draws the library's `AppShowcase` and the details sheet.
+- What a tap does: an installed app opens; one that is not opens its details sheet, whose Play
+  Store action installs it. A card's button opens the app or its store page, and "View all" opens
+  the developer's page on Google Play.
+- Localized strings, and `ui/mappers/MoreAppsErrorMappers.kt`, which gives each failure the shared
+  `toUiText` text or the feature's fallback.
+- `MoreAppsIcon`, the Material Symbols Rounded "apps" icon of the section's title.
+- The Get it on Google Play badge the detail sheet shows, and the sheet's own native ad.
 
 ## Does not own
 
-- Its registration as a drawer page, done by `:sample:app`'s `appGraph`.
+- Where the section sits: `:sample:app` passes `MoreAppsSection` as Quick Tools' `footer`, since
+  `:sample:feature:tiles` may not depend on this module.
+- The carousel and cards, `AppShowcase` in [`:library:core:ui`](../../../library/core/ui/README.md),
+  which owns no data and opens nothing.
 - Widget rendering, owned by [`:sample:widget`](../../widget/README.md), which reads this module's
   repository.
 
@@ -43,28 +45,31 @@ The developer's app catalogue: listing, details, favorites, and install state.
 
 ## Used by
 
-- `:sample:widget` for the catalogue, and `:sample:app` for DI and the navigation graph.
+- `:sample:widget` for the catalogue and favorites, and `:sample:app`, which registers the module
+  and places `MoreAppsSection` at the end of Quick Tools.
 
 ## Flow chart
 
 ```mermaid
 flowchart TD
-    Screen[AppsListScreen] -->|HomeEvent| VM[AppsListViewModel]
+    QuickTools[Quick Tools footer] --> Section[MoreAppsSection]
+    Section -->|MoreAppsEvent| VM[MoreAppsViewModel]
     VM -->|fetchDeveloperApps| Developer[DeveloperAppsRepository]
     Developer --> Remote[DeveloperAppsRemoteDataSource]
     Remote --> Api[Apps metadata API]
     Api -->|successful compact catalog| Cache[Atomic JSON snapshot]
     Api -->|NetworkException| Fallback{savedDeveloperApps}
     Cache --> Fallback
-    Fallback -->|saved apps| Stale["Loadable.Ready(stale) and a Try again message"]
+    Fallback -->|saved apps| Stale["Loadable.Ready(stale), silently"]
     Fallback -->|nothing saved| Failed[Loadable.Failed with Retry]
     VM --> Installed[InstalledAppsRepository]
     Installed --> Packages[PackageManager local source]
     VM --> Favorites[FavoritesRepository]
     Favorites --> Store[FavoritesPreferencesDataSource]
-    VM -->|AppListUiState| Screen
-    Screen --> Content[AppsListScreenContent: grid, ads, sheet]
-    Content --> Actions[Launch app / store / share]
+    VM -->|MoreAppsUiState| Section
+    Section --> Showcase[AppShowcase: heading, cards, states]
+    Section --> Sheet[AppDetailsBottomSheet]
+    Showcase --> Actions[Open installed app / details sheet / Google Play / developer page]
 ```
 
 ## Architectural decisions
@@ -75,20 +80,23 @@ flowchart TD
   permanent failure loop.
 - Installed state and favorites have separate repositories because PackageManager and preferences
   are independent sources with different lifetimes.
-- Ad interleaving and action/chip models are presentation transformations and remain outside the
-  source-neutral repositories.
+- Action and chip models are presentation transformations and remain outside the source-neutral
+  repositories.
+- The section shows no ads of its own and triggers no app-open ad; the details sheet keeps the one
+  it had.
 - Package-name copying uses the Toolkit's `ClipboardRepository`, as About does. The Apps toast is
   shown only when the system does not confirm copies itself, on Android 12L and earlier. Android
   13 and later use only the system confirmation.
 - The repositories return data or throw: `NetworkException` through `networkCall`, and
   `StorageException` through `storageCall` for the saved catalogue and the favorites. The feature
   throws no exceptions of its own.
-- The ViewModel, not the repository, falls back to the saved catalogue, because only it knows to
-  mark the copy stale and say why. A failed favorite update keeps the grid and shows a message.
-- Opening an app needs a `Context`, so the screen does it. The random-app button sets
-  `AppListUiState.randomAppToOpen`, and the screen clears it with `HomeEvent.RandomAppOpened`.
-- The favorite callback reads the state at tap time, so it keeps one identity and a favorite
-  change does not recompose every card.
+- The ViewModel, not the repository, falls back to the saved catalogue. The section is a footer,
+  so it shows the saved copy without a message of its own. A failed favorite update keeps the
+  section and shows a message.
+- Opening an app needs a `Context`, so the section does it, through `rememberOpenAppAction`, which
+  falls back to the store page when the app cannot be launched.
+- It reports as part of Quick Tools: `app_card_interaction` from the `more_apps` source, the
+  sheet's actions from `app_details`, and `select_content` for the developer page.
 
 ## Installed-package metadata
 
@@ -99,30 +107,35 @@ opens Android activities on the UI coroutine. A missing or denied lookup keeps t
 
 ## Public contracts
 
-- The three repositories, `AppsListViewModel`, `AppsListScreen`, `AppsListRoute`,
-  `AppSummary`/`AppDetails`.
+- The three repositories, `MoreAppsViewModel`, `MoreAppsSection`, `AppSummary`/`AppDetails`.
 
 ## Internal implementations
 
-- Remote DTO mapping, local cache-model mapping and serialization, ad interleaving, and
-  PackageManager inspection.
+- Remote DTO mapping, local cache-model mapping and serialization, and PackageManager inspection.
 
 ## Source of truth and failure behavior
 
 The remote endpoint remains authoritative. Each successful compact-catalogue response atomically
 replaces the local JSON snapshot; a failed write is reported to Crashlytics and does not fail the
 fetch. `fetchDeveloperApps` throws when the download fails, and `savedDeveloperApps` reads the
-snapshot without the network, so the screen and the widget both stay useful offline. Corrupt
+snapshot without the network, so the section and the widget both stay useful offline. Corrupt
 snapshots are deleted and treated as cache misses.
 
 ## Current risks
 
-The module applies the Kotlin serialization plugin because its DTOs and its route are
-`@Serializable`. Compiling
+The module applies the Kotlin serialization plugin because its DTOs are `@Serializable`. Compiling
 without it succeeds and fails only at decode time, so the plugin has to stay even though nothing
 about the source makes the dependency visible.
 
 ## Migration notes
+
+The Apps page and its drawer link are gone: the catalogue is "More apps" at the end of Quick
+Tools. `AppsListScreen`, `AppsListViewModel`, `AppListUiState`, `HomeEvent`, `AppsListFilter`,
+`AppsListRoute`, the grid with its filter chips, search and random-app button, the list's native
+ads (`AppAdsQualifiers.APPS_LIST_NATIVE_AD`, `AdsConstants.APPS_LIST_NATIVE_AD_UNIT_ID` and
+`APPS_LIST_AD_FREQUENCY`) and sharing from a card were removed. The repositories, the cache,
+favorites and the widget's dependencies are unchanged. An install whose startup page was the Apps
+page (`apps_list`) opens Quick Tools.
 
 `AppsListViewModel` used to take six pass-through use cases wrapping these three repositories. It
 now

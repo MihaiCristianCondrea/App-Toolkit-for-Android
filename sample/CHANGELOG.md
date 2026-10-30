@@ -4,6 +4,10 @@
 
 # Unreleased
 
+### Changed
+
+- The Apps page, its drawer link and its list ads are replaced by a "More apps" carousel at the end of Quick Tools. Tapping an installed app opens it; otherwise its details sheet offers Google Play. "View all" opens the developer page on Google Play. A stored Apps start page now opens Quick Tools.
+
 ### Fixed
 
 - Keep the Quick Tools, Measure and Play & Decide scroll viewports above the shell and system navigation bars.

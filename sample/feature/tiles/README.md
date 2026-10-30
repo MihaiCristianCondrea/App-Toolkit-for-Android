@@ -24,6 +24,8 @@ The widgets follow the marketing kit's (`marketing/ui`): `views/catalog/LiveWidg
 
 Tool headings and individual overview cards join the shared screen entrance cascade. Sections do not animate as a second enclosing layer. Motion settings and reduced motion remain owned by the library. `ToolDesignTheme` supplies fixed light and dark product accent colours to the workspaces and their tool sheets. The app theme retains ownership of the screen background and neutral surfaces. ToolWorkspace reserves the shell padding outside its clipped scrolling viewport, so cards and their animations cannot draw under the navigation bars. The marketing preview uses the same roles in `src/theme/toolkit.css`.
 
+`ToolkitTilesScreen(footer = ...)` takes a host slot drawn after the Quick Tools sections and hidden while searching. The app passes the apps feature's "More apps" carousel there, since sibling features may not depend on each other.
+
 All three primary tabs read their localized search query from `LocalShellSearch`. Empty sections disappear when searching. Quick Tools no longer shows category chips or collapse controls; the old expansion preference is retained for compatibility and is not applied to the new overview.
 
 The overview and sheet use the same entry-owned tool ViewModels. Currency, tip selection, converter values, counter updates and chance results therefore stay in sync. Dice and coin visuals are directly interactive; the surrounding card opens their sheet. Reaction Test Start both opens the sheet and starts a round.

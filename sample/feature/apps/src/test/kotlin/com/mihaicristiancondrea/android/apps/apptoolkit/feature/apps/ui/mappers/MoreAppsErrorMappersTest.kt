@@ -28,7 +28,7 @@ import kotlin.test.assertFalse
 import kotlin.test.assertNull
 import kotlin.test.assertTrue
 
-class AppsListErrorMappersTest {
+class MoreAppsErrorMappersTest {
 
     private val UiText.resourceId: Int
         get() = (this as UiText.StringResource).resourceId
@@ -55,15 +55,6 @@ class AppsListErrorMappersTest {
 
         assertEquals(R.string.error_failed_to_load_apps, failed.message.resourceId)
         assertFalse(failed.retryable)
-    }
-
-    @Test
-    fun `the stale catalogue message is an error with a Try again action`() {
-        val message = NetworkException(reason = NetworkException.Reason.NO_INTERNET).toStaleCatalogueMessage()
-
-        assertTrue(message.isError)
-        assertEquals(CoreUiR.string.screen_error_no_internet, message.text.resourceId)
-        assertEquals(CoreUiR.string.try_again, message.actionLabel?.resourceId)
     }
 
     @Test

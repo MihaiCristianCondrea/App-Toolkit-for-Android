@@ -35,12 +35,15 @@
     <string name="app_details_storage">Storage</string>
     <string name="app_details_version">Version %1$s</string>
     <string name="app_details_view_on_play_store">Google Play এ দেখুন</string>
-    <string name="apps_filter_all">সব</string>
     <string name="error_failed_to_load_apps">অ্যাপ লোড করা যায়নি</string>
     <string name="error_failed_to_update_favorite">প্রিয় আপডেট করা যায়নি</string>
     <string name="favorite_apps">প্রিয়</string>
-    <string name="summary_share_message">আমার ব্যবহার করা এই অসাধারণ অ্যাপটি দেখুন. এর কিছু দারুণ ফিচার আছে যা আপনার আকর্ষণীয় লাগতে পারে। আপনি এটি প্লে স্টোর থেকে ডাউনলোড করতে পারেন: %1$s</string>
-    <string name="apps_tools_title">অ্যাপস</string>
-    <string name="open_random_app">এলোমেলো অ্যাপ খুলুন</string>
-    <string name="apps_search_hint">অ্যাপ খুঁজুন</string>
+    <string name="more_apps_title">আরও অ্যাপ</string>
+    <string name="more_apps_view_all">সব দেখুন</string>
+    <string name="more_apps_view_all_description">Google Play-তে সব অ্যাপ দেখুন</string>
+    <string name="more_apps_google_play">Google Play</string>
+    <string name="more_apps_open">খুলুন</string>
+    <string name="more_apps_empty">এই মুহূর্তে কোনো অ্যাপ নেই।</string>
+    <string name="more_apps_store_action_description">Google Play-তে %1$s খুলুন</string>
+    <string name="more_apps_open_action_description">%1$s খুলুন</string>
 </resources>

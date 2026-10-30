@@ -189,10 +189,13 @@ try {
     await page.locator(SHEET_CONTENT).locator('[aria-label="Close"]').click();
     checks++;
   }
-  // Material Colors is the last Quick Tools section, and its sheet names every role with the hex the palette gives it.
+  // Material Colors is the last tools section, then More apps ends the page; the colours sheet names every role with
+  // the hex the palette gives it.
   await page.goto(`${base}/screen.html?id=quick-tools&panel=none`);
   await page.locator('.qt-colors').waitFor();
-  assert.equal(await page.locator('.qt-section').last().locator('.qt-colors').count(), 1);
+  assert.equal(await page.locator('.qt-section:not(.qt-more-apps)').last().locator('.qt-colors').count(), 1);
+  assert.equal(await page.locator('.qt-section').last().evaluate(el => el.classList.contains('qt-more-apps')), true);
+  assert.equal(await page.locator('.qt-app-card').count(), 2);
   await page.locator('.qt-colors').click();
   await page.waitForFunction(() => document.querySelectorAll('.mc-swatch__hex').length === 12 && [...document.querySelectorAll('.mc-swatch__hex')].every((el) => /^#[0-9A-F]{6}$/.test(el.textContent)));
   checks++;

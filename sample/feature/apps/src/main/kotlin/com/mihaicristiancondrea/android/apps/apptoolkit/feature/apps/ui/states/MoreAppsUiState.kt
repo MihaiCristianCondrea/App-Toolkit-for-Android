@@ -24,42 +24,27 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.models.
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.Loadable
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.ImmutableSet
-import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.persistentSetOf
 
 /**
- * Everything the Apps List screen renders.
+ * Everything the "More apps" section renders.
  *
- * @property apps The catalogue. A saved copy shown because the download failed is
+ * @property apps The developer's other apps. A saved copy shown because the download failed is
  * `Loadable.Ready(stale = true)`.
- * @property installedPackages The catalogue's packages installed on this device.
- * @property favorites The packages the user marked as favorites.
- * @property selectedFilter The chip in use. Always one that matches something, see
- * [AppsListFilter.isAvailable].
+ * @property installedPackages Which of [apps] are installed on this device.
+ * @property favorites The packages marked as favorites, shown in the details sheet.
  * @property selectedApp The app whose details sheet is open, or null when it is closed.
- * @property selectedAppDetails The full metadata of [selectedApp]. `Loadable.Empty` while no app is
+ * @property selectedAppDetails The full metadata of [selectedApp]; `Loadable.Empty` while none is
  * selected.
  * @property selectedAppInstallInfo Whether [selectedApp] is installed and at which version, or null
  * while unknown.
- * @property randomAppToOpen An app the random-app button picked. The screen opens it and sends
- * `HomeEvent.RandomAppOpened`, so the flag survives a configuration change but fires once.
  */
 @Immutable
-data class AppListUiState(
+data class MoreAppsUiState(
     val apps: Loadable<ImmutableList<AppSummary>> = Loadable.Loading,
     val installedPackages: ImmutableSet<String> = persistentSetOf(),
     val favorites: ImmutableSet<String> = persistentSetOf(),
-    val selectedFilter: AppsListFilter = AppsListFilter.All,
     val selectedApp: AppSummary? = null,
     val selectedAppDetails: Loadable<AppDetails> = Loadable.Empty(),
     val selectedAppInstallInfo: AppInstallInfo? = null,
-    val randomAppToOpen: AppSummary? = null,
-) {
-    /** The catalogue being shown, fresh or saved, or an empty list while there is none. */
-    val loadedApps: ImmutableList<AppSummary>
-        get() = (apps as? Loadable.Ready)?.value ?: persistentListOf()
-
-    /** Whether the random-app button has an app to pick. */
-    val canOpenRandomApp: Boolean
-        get() = loadedApps.isNotEmpty()
-}
+)

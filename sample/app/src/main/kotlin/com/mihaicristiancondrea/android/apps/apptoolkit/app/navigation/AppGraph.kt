@@ -21,14 +21,12 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Straighten
 import androidx.compose.material.icons.filled.Casino
 import androidx.compose.material.icons.outlined.Casino
-import androidx.compose.material.icons.outlined.Apps
 import androidx.compose.material.icons.outlined.Straighten
 import androidx.compose.material.icons.outlined.Widgets
 import androidx.compose.ui.res.stringResource
 import androidx.navigation3.runtime.NavKey
 import com.mihaicristiancondrea.android.apps.apptoolkit.R
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.R as AppsR
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.ui.AppsListScreen
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.ui.MoreAppsSection
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.components.R as ComponentsR
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.components.ui.ArticleDemoScreen
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.components.ui.ComponentsScreen
@@ -57,9 +55,9 @@ import org.koin.core.qualifier.named
 const val ACTION_OPEN_SETTINGS: String = "com.d4rk.android.apps.apptoolkit.action.OPEN_SETTINGS"
 
 /**
- * The sample's whole navigation: three tabs, the drawer, the overflow menu, the debug pages (the apps
- * catalog, the components page and its article bar demo), the optional bottom banner and the intents
- * it answers. The demo registers a
+ * The sample's whole navigation: three tabs, the drawer, the overflow menu, the debug pages (the
+ * components page and its article bar demo), the optional bottom banner and the intents it answers.
+ * The demo registers a
  * small bar, the one an article draws anyway, so it does not open large for its first frame.
  * `toolkitGraph` adds the Toolkit's own pages (settings, help, support, the first-launch start
  * screens and the rest).
@@ -67,8 +65,8 @@ const val ACTION_OPEN_SETTINGS: String = "com.d4rk.android.apps.apptoolkit.actio
  * Routes and the graph belong to `:sample:app` under app/navigation. Features expose callbacks
  * rather than importing app route keys.
  *
- * @param showDebugPages Whether the drawer offers the debug pages, the apps catalog and the components
- * showcase: in debug builds, or once the showcase has been unlocked.
+ * @param showDebugPages Whether the drawer offers the debug pages, the components showcase: in debug
+ * builds.
  * @param onShowChangelog Shows the changelog dialog, which the drawer's Updates entry opens.
  */
 fun appGraph(
@@ -89,7 +87,9 @@ fun appGraph(
         // The app bar holds a search field for the tools; the screen filters by its query.
         search = TabSearch(hint = TilesR.string.tiles_search_hint),
     ) {
-        ToolkitTilesScreen()
+        // "More apps" ends Quick Tools: the apps feature's carousel, placed by the app since the two
+        // features may not depend on each other.
+        ToolkitTilesScreen(footer = { MoreAppsSection() })
     }
     tab(
         key = NumbersRoute,
@@ -110,7 +110,6 @@ fun appGraph(
         PlayScreen()
     }
     if (showDebugPages) {
-        page<AppsListRoute>(title = { stringResource(TilesR.string.discover_apps) }) { AppsListScreen() }
         page<ComponentsRoute>(title = { stringResource(ComponentsR.string.components_title) }) {
             val navigator = com.mihaicristiancondrea.android.libs.apptoolkit.navigation.LocalShellNavigator.current
             ComponentsScreen(onOpenArticleDemo = { navigator.navigate(ArticleDemoRoute(it)) })
@@ -134,7 +133,6 @@ fun appGraph(
 
     drawer {
         if (showDebugPages) {
-            link(key = AppsListRoute, label = TilesR.string.discover_apps, icon = ToolkitIcon.Vector(Icons.Outlined.Apps))
             link(
                 key = ComponentsRoute,
                 label = ComponentsR.string.components_title,
@@ -149,11 +147,15 @@ fun appGraph(
 
 /**
  * The tab a launch opens on, from the startup page chosen in the display settings, which stores
- * the tab's [AppsListRoute.ROUTE_ID], [NumbersRoute.ROUTE_ID] or [ToolkitTilesRoute.ROUTE_ID].
+ * the tab's [NumbersRoute.ROUTE_ID], [PlayRoute.ROUTE_ID] or [ToolkitTilesRoute.ROUTE_ID]. An install
+ * that stored the removed Apps page, [LEGACY_APPS_ROUTE_ID], opens Quick Tools, where its apps now are.
  */
 fun startKeyFor(route: String): NavKey = when (route) {
     PlayRoute.ROUTE_ID -> PlayRoute
     NumbersRoute.ROUTE_ID -> NumbersRoute
-    AppsListRoute.ROUTE_ID -> ToolkitTilesRoute
+    LEGACY_APPS_ROUTE_ID -> ToolkitTilesRoute
     else -> ToolkitTilesRoute
 }
+
+/** The startup-page value of the Apps page that "More apps" in Quick Tools replaced. */
+internal const val LEGACY_APPS_ROUTE_ID: String = "apps_list"

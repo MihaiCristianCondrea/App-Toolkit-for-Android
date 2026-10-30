@@ -43,9 +43,6 @@ object AdsConstants {
     val APP_DETAILS_NATIVE_AD_UNIT_ID: String
         get() = nativeAdUnitId("ca-app-pub-5294151573817700/8490774272")
 
-    val APPS_LIST_NATIVE_AD_UNIT_ID: String
-        get() = nativeAdUnitId("ca-app-pub-5294151573817700/4743100951")
-
     val NO_DATA_NATIVE_AD_UNIT_ID: String
         get() = nativeAdUnitId("ca-app-pub-5294151573817700/3430019286")
 
@@ -60,9 +57,4 @@ object AdsConstants {
 
     val SUPPORT_NATIVE_AD_UNIT_ID: String
         get() = nativeAdUnitId("ca-app-pub-5294151573817700/9755754484")
-
-    /**
-     * Fixed spacing between apps-list native ads, shared by the feature and its tests.
-     */
-    const val APPS_LIST_AD_FREQUENCY: Int = 4
 }

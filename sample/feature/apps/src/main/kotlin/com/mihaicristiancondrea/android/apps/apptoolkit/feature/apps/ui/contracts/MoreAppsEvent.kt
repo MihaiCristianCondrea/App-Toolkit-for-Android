@@ -15,16 +15,20 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.mihaicristiancondrea.android.apps.apptoolkit.app.navigation
+package com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.ui.contracts
 
-import androidx.navigation3.runtime.NavKey
-import kotlinx.serialization.SerialName
-import kotlinx.serialization.Serializable
+/** What the "More apps" section can ask its ViewModel to do. */
+sealed interface MoreAppsEvent {
+    /** Loads the catalogue, on start and from the failed state's retry. */
+    data object Load : MoreAppsEvent
 
-/** The Apps tab. */
-@Serializable
-@SerialName("com.mihaicristiancondrea.android.apps.apptoolkit.app.navigation.AppsListRoute")
-data object AppsListRoute : NavKey {
-    /** Persisted identifier for this destination, shared by DI qualifiers and the startup-page setting. */
-    const val ROUTE_ID: String = "apps_list"
+    /** Opens the details sheet of an app that is not installed. */
+    data class AppSelected(val packageName: String) : MoreAppsEvent
+
+    /** Adds the app to the favorites from its details sheet, or removes it. */
+    data class FavoriteToggled(val packageName: String) : MoreAppsEvent
+
+    data object RetryAppDetails : MoreAppsEvent
+
+    data object AppDetailsDismissed : MoreAppsEvent
 }

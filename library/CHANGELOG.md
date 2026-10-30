@@ -8,6 +8,12 @@
 
 ### Added
 
+- `AppShowcase` in `:library:core:ui` (`views.showcase`) draws a stateless "more apps" carousel of
+  outlined app cards (icon, name, category, description and an Open or Google Play button) with a
+  "View all" action, loading, empty and failed-with-retry states, live-region announcements and
+  adaptive card widths. Hosts own fetching and actions through `ShowcaseApp`, `AppShowcaseState`
+  and `AppShowcaseLabels`.
+
 - `AospPageIndicator` in `:library:core:ui` (`views.carousel`) provides an Android 10-inspired
   capsule page indicator with both continuous `PagerState` tracking and animated integer-index
   overloads, sliding-window support for large page counts, RTL layout support and custom

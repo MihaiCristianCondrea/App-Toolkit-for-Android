@@ -8,8 +8,8 @@ logic and the toolkit's advertising components.
 
 ## Owns
 
-- `adsIntegrationModule`, which defines the `AdsConfig` instances for different surfaces (Apps List,
-  App Details, Bottom Nav, etc.).
+- `adsIntegrationModule`, which defines the `AdsConfig` instances for different surfaces (App Details,
+  Bottom Nav, etc.).
 - `AdsConstants` (the sample's ad unit IDs, debug/release selection and ad frequency) and
   `AppAdsQualifiers` (the placements this app adds beyond the toolkit's own).
 - The sample app's AdMob application ID and the manifest meta-data that publishes it to the merged
@@ -33,7 +33,7 @@ logic and the toolkit's advertising components.
 flowchart TD
     App[":sample:app"] -->|initializes Koin| Module[adsIntegrationModule]
     Module --> Configs[AdsConfig instances]
-    Config1[Apps List AdsConfig] -.->|injected into| FeatureApps[":sample:feature:apps"]
+    Config1[App Details AdsConfig] -.->|injected into| FeatureApps[":sample:feature:apps"]
     Config2[Bottom Nav AdsConfig] -.->|reserved for| Banner["the graph's banner slot"]
     Configs --> ToolkitAds[":library:integration:ads"]
 ```

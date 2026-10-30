@@ -23,18 +23,14 @@ import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.data.reposi
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.data.repositories.FavoritesRepository
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.ui.analytics.AppInteractionType
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.ui.analytics.logAppInteraction
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.ui.contracts.HomeEvent
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.ui.contracts.MoreAppsEvent
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.ui.mappers.toAppDetailsFailed
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.ui.mappers.toCatalogueFailed
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.ui.mappers.toFavoriteErrorMessage
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.ui.mappers.toStaleCatalogueMessage
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.ui.states.AppListUiState
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.ui.states.AppsListFilter
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.ui.states.isAvailable
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.ui.states.MoreAppsUiState
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.models.AppInstallInfo
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.InstalledAppsRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.telemetry.TelemetryRepository
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.analytics.logSelectContent
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.analytics.logViewItem
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.analytics.logViewItemList
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.Loadable
@@ -45,24 +41,27 @@ import kotlinx.collections.immutable.toImmutableSet
 import kotlinx.coroutines.Job
 
 /**
- * Owns catalogue loading, favorites and installed state, and the selected app's details.
+ * Owns the "More apps" section at the end of Quick Tools: the developer's catalogue, which of its
+ * apps are installed, and the details sheet of the app that was tapped.
  *
- * A failed download falls back to the catalogue saved by the last successful one, shown as stale
- * with a message, and fails the screen only when nothing was saved. Results for an app that is no
- * longer selected never replace the newer selection.
+ * A failed download falls back to the catalogue saved by the last successful one, shown as is,
+ * and fails the section only when nothing was saved; the section is a footer, so it never raises
+ * a message of its own. Results for an app that is no longer selected never replace the newer
+ * selection.
  *
- * Every repository is main-safe and the filtering runs in the content, so it needs no dispatcher.
+ * It reports as part of Quick Tools, the screen it sits on. Every repository is main-safe, so it
+ * needs no dispatcher.
  */
-class AppsListViewModel(
+class MoreAppsViewModel(
     private val developerAppsRepository: DeveloperAppsRepository,
     private val installedAppsRepository: InstalledAppsRepository,
     private val favoritesRepository: FavoritesRepository,
     telemetryRepository: TelemetryRepository,
-) : LoggedScreenViewModel<AppListUiState, HomeEvent>(
-    initialState = AppListUiState(),
+) : LoggedScreenViewModel<MoreAppsUiState, MoreAppsEvent>(
+    initialState = MoreAppsUiState(),
     telemetryRepository = telemetryRepository,
-    screenName = AppScreenTracking.Screens.APPS_LIST.name,
-    viewModelName = "AppsListViewModel",
+    screenName = AppScreenTracking.Screens.TOOLKIT_TILES.name,
+    viewModelName = "MoreAppsViewModel",
 ) {
     private var loadJob: Job? = null
     private var savedAppsJob: Job? = null
@@ -71,44 +70,26 @@ class AppsListViewModel(
 
     init {
         observeFavorites()
-        onEvent(HomeEvent.Load)
+        onEvent(MoreAppsEvent.Load)
     }
 
-    override fun handleEvent(event: HomeEvent) {
+    override fun handleEvent(event: MoreAppsEvent) {
         when (event) {
-            HomeEvent.Load -> load()
-            HomeEvent.OpenRandomApp -> openRandomApp()
-            HomeEvent.RandomAppOpened -> setState { copy(randomAppToOpen = null) }
-            is HomeEvent.FilterSelected -> {
-                telemetryRepository.logViewItemList(
-                    itemListId = event.filter.name.lowercase(),
-                    itemListName = "developer_apps_${event.filter.name.lowercase()}",
-                )
-                setState { copy(selectedFilter = event.filter).withAvailableFilter() }
-            }
-
-            is HomeEvent.FavoriteToggled -> toggleFavorite(event.packageName)
-            is HomeEvent.AppSelected -> selectApp(event.packageName)
-            HomeEvent.RetryAppDetails -> currentState.selectedApp?.packageName?.let(::loadSelectedAppDetails)
-            HomeEvent.AppDetailsDismissed -> clearSelectedApp()
+            MoreAppsEvent.Load -> load()
+            is MoreAppsEvent.AppSelected -> selectApp(event.packageName)
+            is MoreAppsEvent.FavoriteToggled -> toggleFavorite(event.packageName)
+            MoreAppsEvent.RetryAppDetails -> currentState.selectedApp?.packageName?.let(::loadSelectedAppDetails)
+            MoreAppsEvent.AppDetailsDismissed -> clearSelectedApp()
         }
     }
 
-    /**
-     * Downloads the catalogue. Content already shown stays while the download runs, marked as
-     * refreshing, so a retry from the stale catalogue does not blank the grid.
-     */
     private fun load() {
         savedAppsJob?.cancel()
         loadJob = loadJob.restart {
             launchReport(
-                action = Actions.OBSERVE_FETCH,
+                action = Actions.FETCH_APPS,
                 onError = { error -> showSavedApps(fetchError = error) },
             ) {
-                breadcrumb(
-                    message = "Fetch developer apps collecting",
-                    attributes = mapOf("source" to "AppsListViewModel"),
-                )
                 setState {
                     val shown = apps
                     copy(apps = if (shown is Loadable.Ready) shown.copy(refreshing = true) else Loadable.Loading)
@@ -118,10 +99,6 @@ class AppsListViewModel(
         }
     }
 
-    /**
-     * Shows the saved catalogue after [fetchError], with a message saying why it may be old. The
-     * screen fails with [fetchError] only when nothing was saved or the saved copy cannot be read.
-     */
     private fun showSavedApps(fetchError: Throwable) {
         savedAppsJob = savedAppsJob.restart {
             launchReport(
@@ -133,7 +110,6 @@ class AppsListViewModel(
                     setState { copy(apps = fetchError.toCatalogueFailed()) }
                 } else {
                     showApps(apps = savedApps, stale = true)
-                    showMessage(fetchError.toStaleCatalogueMessage())
                 }
             }
         }
@@ -148,30 +124,19 @@ class AppsListViewModel(
             copy(
                 apps = if (list.isEmpty()) Loadable.Empty() else Loadable.Ready(value = list, stale = stale),
                 installedPackages = installed,
-            ).withAvailableFilter()
-        }
-        if (list.isNotEmpty()) {
-            telemetryRepository.logViewItemList(
-                itemListId = "all",
-                itemListName = "developer_apps_all",
             )
         }
-    }
-
-    /**
-     * Keeps the favorites in the state. A change also re-checks the selected filter, so removing
-     * the last favorite does not leave an empty Favorites filter selected with its chip gone.
-     */
-    private fun observeFavorites() {
-        favoritesRepository.observeFavorites().collectReport(action = Actions.OBSERVE_FAVORITES) { favorites ->
-            setState { copy(favorites = favorites.toImmutableSet()).withAvailableFilter() }
+        if (list.isNotEmpty()) {
+            telemetryRepository.logViewItemList(itemListId = ITEM_LIST_ID, itemListName = ITEM_LIST_NAME)
         }
     }
 
-    /**
-     * Each call completes on its own, so two quick taps on different cards both apply. A failure
-     * keeps the grid and shows a message.
-     */
+    private fun observeFavorites() {
+        favoritesRepository.observeFavorites().collectReport(action = Actions.OBSERVE_FAVORITES) { favorites ->
+            setState { copy(favorites = favorites.toImmutableSet()) }
+        }
+    }
+
     private fun toggleFavorite(packageName: String) {
         launchReport(
             action = Actions.TOGGLE_FAVORITE,
@@ -182,33 +147,16 @@ class AppsListViewModel(
         }
     }
 
-    /**
-     * Picks the app and closes the details sheet. The screen opens the app, since that needs a
-     * `Context`, and reports back with [HomeEvent.RandomAppOpened].
-     */
-    private fun openRandomApp() {
-        val randomApp = currentState.loadedApps.randomOrNull() ?: return
-        telemetryRepository.logSelectContent(
-            contentType = "random_app",
-            itemId = randomApp.packageName,
-        )
-        startOperation(
-            action = Actions.OPEN_RANDOM_APP,
-            extra = mapOf(ExtraKeys.PACKAGE_NAME to randomApp.packageName),
-        )
-        clearSelectedApp()
-        setState { copy(randomAppToOpen = randomApp) }
-    }
-
     private fun selectApp(packageName: String) {
-        val selectedApp = currentState.loadedApps.firstOrNull { it.packageName == packageName } ?: return
+        val loaded = (currentState.apps as? Loadable.Ready)?.value ?: return
+        val selectedApp = loaded.firstOrNull { it.packageName == packageName } ?: return
         telemetryRepository.logViewItem(
             itemId = selectedApp.packageName,
             itemName = selectedApp.name,
             itemCategory = selectedApp.category?.label,
         )
         telemetryRepository.logAppInteraction(
-            source = "apps_list",
+            source = INTERACTION_SOURCE,
             appInfo = selectedApp,
             interaction = AppInteractionType.OpenDetailsBottomSheet,
         )
@@ -222,7 +170,6 @@ class AppsListViewModel(
         loadSelectedAppDetails(packageName)
         loadSelectedAppInstallInfo(packageName)
     }
-
     private fun loadSelectedAppDetails(packageName: String) {
         appDetailsJob = appDetailsJob.restart {
             launchReport(
@@ -273,34 +220,27 @@ class AppsListViewModel(
      * Applies [reduce] only while [packageName] is still the selected app. A cancelled request can
      * still finish at the transport boundary, and its result must not reach a newer selection.
      */
-    private fun updateSelectedApp(packageName: String, reduce: AppListUiState.() -> AppListUiState) {
+    private fun updateSelectedApp(packageName: String, reduce: MoreAppsUiState.() -> MoreAppsUiState) {
         setState { if (selectedApp?.packageName == packageName) reduce() else this }
     }
 
-    /**
-     * Falls back to [AppsListFilter.All] when the selected filter matches nothing. It is not
-     * reported: nobody tapped it, and the tap itself is reported where the event arrives.
-     */
-    private fun AppListUiState.withAvailableFilter(): AppListUiState {
-        val isAvailable = selectedFilter.isAvailable(
-            appCount = loadedApps.size,
-            installedCount = installedPackages.size,
-            favoritesCount = favorites.size,
-        )
-        return if (isAvailable) this else copy(selectedFilter = AppsListFilter.All)
-    }
-
     private object Actions {
-        const val OBSERVE_FETCH: String = "observeFetch"
+        const val FETCH_APPS: String = "fetchMoreApps"
         const val LOAD_SAVED_APPS: String = "loadSavedApps"
         const val OBSERVE_FAVORITES: String = "observeFavorites"
         const val TOGGLE_FAVORITE: String = "toggleFavorite"
-        const val OPEN_RANDOM_APP: String = "openRandomApp"
         const val LOAD_APP_INSTALL_INFO: String = "loadAppInstallInfo"
         const val LOAD_APP_DETAILS: String = "loadAppDetails"
     }
 
     private object ExtraKeys {
         const val PACKAGE_NAME: String = "packageName"
+    }
+
+    internal companion object {
+        /** The `app_card_interaction` source of the section's cards. */
+        const val INTERACTION_SOURCE: String = "more_apps"
+        const val ITEM_LIST_ID: String = "more_apps"
+        const val ITEM_LIST_NAME: String = "developer_more_apps"
     }
 }

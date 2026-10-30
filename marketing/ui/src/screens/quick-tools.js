@@ -29,6 +29,12 @@ const brandShape = (name) => asset(`shapes/${encodeURIComponent(name)}.svg`);
 const SWIPE_SLOP = 6;
 let torchPress = null;
 
+// The developer's other apps, as the sample's catalogue lists them; Smart Cleaner shows as installed.
+const MORE_APPS = [
+  { name: "Smart Cleaner", category: "Tools", description: "Free up storage, clear junk and keep your phone fast.", installed: true },
+  { name: "Android Insider", category: "News & Magazines", description: "News, guides and tips about Android, every day.", installed: false },
+];
+
 const SECTIONS = [
   { id: "sensors", title: "Sensors", icon: "sensors", tools: ["compass", "bubble_level"], live: "sensors" },
   { id: "light", title: "Light & signals", icon: "flashlight_on", tools: ["flash_dimmer", "morse_sos"], live: "light" },
@@ -203,9 +209,37 @@ export default {
         ${sec.id === AD_AFTER && s.showAds && !query ? nativeAdPreview() : nothing}`;
     });
 
+    // MoreAppsSection.kt over the library's AppShowcase, as Material Next's mnw-app-showcase draws it: the section's
+    // title with "View all", then the developer's apps as outlined cards in a row that snaps. An installed app opens;
+    // one that is not opens its details sheet, and its button opens Google Play.
+    const moreApps = () => html`
+      <section class="qt-section qt-more-apps" aria-labelledby="qt-more-apps-title">
+        <div class="qt-more-apps__heading">
+          <h2 class="qt-section__title" id="qt-more-apps-title"><md-icon class="sc-rounded" aria-hidden="true">apps</md-icon>More apps</h2>
+          <md-text-button trailing-icon aria-label="View all apps on Google Play">View all<md-icon slot="icon">open_in_new</md-icon></md-text-button>
+        </div>
+        <div class="qt-more-apps__row" role="list">
+          ${MORE_APPS.map((app) => html`
+            <md-outlined-card class="qt-app-card" role="listitem">
+              <div class="qt-app-card__top">
+                <div class="qt-app-card__icon"><md-icon>apps</md-icon></div>
+                <div class="qt-app-card__text">
+                  <h3>${app.name}</h3>
+                  <p class="qt-app-card__category">${app.category}</p>
+                  <p class="qt-app-card__description">${app.description}</p>
+                </div>
+              </div>
+              <md-outlined-button class="qt-app-card__action" aria-label=${app.installed ? `Open ${app.name}` : `Open ${app.name} on Google Play`}>
+                <md-icon slot="icon">${app.installed ? "open_in_new" : "store"}</md-icon>${app.installed ? "Open" : "Google Play"}
+              </md-outlined-button>
+            </md-outlined-card>`)}
+        </div>
+      </section>`;
+
     const content = html`
       <div class="tk-screen-pad qt-overview" style="padding-top:8px">
         ${sections}
+        ${query ? nothing : moreApps()}
       </div>`;
 
     return previewScreen(APP, s, {

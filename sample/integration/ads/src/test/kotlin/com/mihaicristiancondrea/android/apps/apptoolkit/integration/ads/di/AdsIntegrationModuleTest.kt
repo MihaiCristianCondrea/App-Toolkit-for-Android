@@ -36,7 +36,6 @@ class AdsIntegrationModuleTest {
             AdsQualifiers.BOTTOM_NAV_BAR_NATIVE_AD,
             AdsQualifiers.HELP_NATIVE_AD,
             AdsQualifiers.SUPPORT_NATIVE_AD,
-            AppAdsQualifiers.APPS_LIST_NATIVE_AD,
             AppAdsQualifiers.APP_DETAILS_NATIVE_AD,
         )
 

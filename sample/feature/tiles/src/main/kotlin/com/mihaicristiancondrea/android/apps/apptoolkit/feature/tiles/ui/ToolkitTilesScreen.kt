@@ -92,7 +92,7 @@ private val TilesScreen = AppScreenTracking.Screens.TOOLKIT_TILES
  * request and the tab's search query, and re-reads tile membership on every resume.
  */
 @Composable
-fun ToolkitTilesScreen() {
+fun ToolkitTilesScreen(footer: @Composable () -> Unit = {}) {
     val compass: CompassToolViewModel = koinViewModel(key = "overview-compass")
     val level: LevelToolViewModel = koinViewModel(key = "overview-level")
     val flash: FlashDimmerToolViewModel = koinViewModel()
@@ -152,6 +152,7 @@ fun ToolkitTilesScreen() {
                 contentPadding = contentPadding(),
                 onEvent = viewModel::onEvent,
                 searchQuery = LocalShellSearch.current?.query.orEmpty(),
+                footer = footer,
             )
         }
     }
@@ -162,6 +163,8 @@ fun ToolkitTilesScreen() {
  * cards between them, and the tool a tapped tile opens.
  *
  * @param searchQuery What the tab's search field holds; matches show expanded.
+ * @param footer Drawn after the last section while nothing is searched. The app puts its "More
+ * apps" carousel here, since that comes from a feature this one may not depend on.
  */
 @Composable
 internal fun ToolkitTilesScreenContent(
@@ -171,6 +174,7 @@ internal fun ToolkitTilesScreenContent(
     searchQuery: String = "",
     live: LiveToolsUiState = LiveToolsUiState(),
     onFlashLevel: (Int) -> Unit = {},
+    footer: @Composable () -> Unit = {},
 ) {
     ToolDesignTheme {
 
@@ -187,6 +191,7 @@ internal fun ToolkitTilesScreenContent(
                 onEvent = onEvent,
                 searchQuery = searchQuery,
                 live = live, onFlashLevel = onFlashLevel,
+                footer = footer,
             )
         }
     }
@@ -197,6 +202,7 @@ private fun ToolkitTilesCatalog(
     categories: ImmutableList<ToolkitTileCategory>, state: ToolkitTilesUiState,
     contentPadding: PaddingValues, onEvent: (ToolkitTilesEvent) -> Unit, searchQuery: String,
     live: LiveToolsUiState, onFlashLevel: (Int) -> Unit,
+    footer: @Composable () -> Unit,
 ) {
     val showAds = rememberAdsEnabled()
     var selectedId by androidx.compose.runtime.saveable.rememberSaveable { mutableStateOf<String?>(null) }
@@ -230,6 +236,7 @@ private fun ToolkitTilesCatalog(
                         onStatusChanged = { onEvent(ToolkitTilesEvent.AdStatusChanged(ad.id, it)) })
                 }
             }
+            if (searchQuery.isBlank()) footer()
         }
         if (showAds && searchQuery.isBlank() && ad.id !in state.loadedAdIds) {
             HiddenAdPreloaders(adItems = persistentListOf(ad), onEvent = onEvent)
