@@ -20,3 +20,13 @@ meta.add_itxt('Author','Mihai-Cristian Condrea')
 meta.add_itxt('Description','Eight scenes: the toolbox opens, live widgets form a bento screen, and Quick Tools, Measure and Play appear.')
 sheet.save(output/'images/contact-sheet.png',pnginfo=meta)
 print('Saved eight-scene contact sheet.')
+
+# CI thumbnails allow visual review when the local render workspace is unavailable.
+import os, base64, io
+if os.environ.get('TRAILER_REVIEW_LOG') == '1':
+    for i in range(1,9):
+        thumb=Image.open(output/f'images/scene-{i:02}.png').convert('RGB')
+        buffer=io.BytesIO();thumb.save(buffer,format='JPEG',quality=85)
+        encoded=base64.b64encode(buffer.getvalue()).decode('ascii')
+        for part,start in enumerate(range(0,len(encoded),12000)):
+            print(f'TRAILER_REVIEW_FRAME:{i}:{part}:'+encoded[start:start+12000])

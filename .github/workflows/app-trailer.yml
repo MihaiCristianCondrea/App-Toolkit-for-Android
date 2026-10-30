@@ -46,6 +46,8 @@ jobs:
         working-directory: marketing/creative/social-campaigns/app-trailer/source
         run: npm ci --no-fund
       - name: Check and render the complete preview
+        env:
+          TRAILER_REVIEW_LOG: '1'
         working-directory: marketing/creative/social-campaigns/app-trailer/source
         run: |
           npm run assets

@@ -38,14 +38,14 @@ export const OpeningJourney:React.FC<{seconds:number;onGeometry?:(g:Geometry)=>v
       <Shape name="clover_4leaf" color="#D0E9E3" size={450} x={80-200*gather} y={1050} angle={12+t*3} scale={pop(t,.3)}/>
       <Shape name="soft_burst" color="#FFE5C6" size={400} x={1840+200*gather} y={1010} angle={-12-t*3} scale={pop(t,.4)}/>
     </>:null}
-    {t<e.gatherEnd?<Toolbox x={960} y={lerp(480,760,ease(t,e.launch-.3,e.launch+.7))+ease(t,e.gather,e.gatherEnd)*500} size={400} open={open} scale={pop(t,.05,.9)*(1-.85*ease(t,e.gather,e.gatherEnd))} angle={-4*Math.sin(t*2)*ease(t,1.7,2.1)*(1-gather)}/>:null}
+    {t<e.gather?<Toolbox x={960} y={lerp(480,640,ease(t,e.launch-.3,e.launch+.7))} size={400} open={open} scale={pop(t,.05,.9)*(1-ease(t,6.08,e.gather))} angle={-4*Math.sin(t*2)*ease(t,1.7,2.1)*(1-gather)}/>:null}
     {t>=e.pullBack?<Phone id="quick-tools" state={{compassHeading:heading,levelRoll:lerp(4,0,sensor),levelPitch:lerp(2,0,sensor)}} x={phoneX} y={phoneY} scale={phoneScale} angle={-4*move} shell={pull} ui={ease(t,e.pullBackEnd,e.shellBuildEnd)} hideWidgets={t<e.shellBuildEnd}/>:null}
     {g&&t<e.shellBuildEnd?WIDGETS.map((widget,i)=>{
       const rect=g[widget.id],pose=launch[i];
       const p=pop(t,e.launch+i*e.launchStagger,.8);
       const flight=ease(t,e.launch+i*e.launchStagger,e.launch+i*e.launchStagger+.8);
       const x0=lerp(960,pose.x,p);
-      const y0=lerp(710,pose.y,flight)-Math.sin(flight*Math.PI)*200;
+      const y0=lerp(600,pose.y,flight)-Math.sin(flight*Math.PI)*200;
       const targetX=screenX+(rect.x+rect.width/2)*phoneScale;
       const targetY=screenY+(rect.y+rect.height/2)*phoneScale;
       const x=lerp(x0,targetX,gather),y=lerp(y0,targetY,gather);
