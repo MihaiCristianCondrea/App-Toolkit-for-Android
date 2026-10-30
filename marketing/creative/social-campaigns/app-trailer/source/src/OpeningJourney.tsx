@@ -34,10 +34,10 @@ export const OpeningJourney:React.FC<{seconds:number;onGeometry?:(g:Geometry)=>v
       </div>:null;
     }):null}
     {t>=e.logo&&t<e.pullBackEnd?(()=>{
-      const arrive=pop(t,e.logo,.48),split=easeIn(t,e.lidOpen,e.bodyLand),land=pop(t,e.lidOpen,.58);
+      const arrive=pop(t,e.logo,.48),split=Math.min(1,pop(t,e.logo,.35)),land=pop(t,e.logo,.58);
       const recoil=beat(t)*(t>=e.launch?.5:0),away=easeIn(t,e.gather,e.gatherEnd);
       const anticipate=ease(t,e.logo,e.logo+.08),overshoot=pop(t,e.logo+.08,.36);
-      return <Toolbox x={960} y={lerp(540,800,land)+600*away} size={510} open={split} scale={lerp(1.7,.65,anticipate)+.52*overshoot} squash={recoil} angle={lerp(-8,0,arrive)}/>;
+      return <Toolbox x={960} y={lerp(540,620,land)+600*away} size={410} open={split} scale={lerp(1.7,.65,anticipate)+.52*overshoot} squash={recoil} angle={lerp(-8,0,arrive)}/>;
     })():null}
     {t>=e.pullBack?<Phone id="quick-tools" state={{compassHeading:heading,levelRoll:lerp(4,0,sensor),levelPitch:lerp(2,0,sensor)}} x={phoneX} y={540} scale={phoneScale*lerp(1.12,1,pull)} angle={-4*move} shell={pull} ui={1} reveal={pull} revealFrom={{x:215,y:480}} hideWidgets={t<e.pullBackEnd}/>:null}
     {g&&t<e.pullBackEnd?WIDGETS.slice(0,4).map((widget,i)=>{
