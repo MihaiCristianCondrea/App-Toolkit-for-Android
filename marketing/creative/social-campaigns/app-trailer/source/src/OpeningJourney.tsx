@@ -49,11 +49,11 @@ export const OpeningJourney:React.FC<{seconds:number;onGeometry?:(g:Geometry)=>v
       const targetX=screenX+(rect.x+rect.width/2)*phoneScale;
       const targetY=screenY+(rect.y+rect.height/2)*phoneScale;
       const x=lerp(x0,targetX,gather),y=lerp(y0,targetY,gather);
-      const scale=lerp(pose.scale*Math.max(.01,p),phoneScale,gather);
+      const scale=lerp(pose.scale*Math.max(.01,p),phoneScale,gather)*(i>=4?1-ease(t,7.46,e.gatherEnd):1);
       const angle=pose.angle*flight*(1-gather);
       const radius=(rect.radii??[28,28,28,28]).map(r=>`${lerp(28,r,gather)}px`).join(' ');
       return t>=e.launch+i*e.launchStagger?<div key={widget.id} data-flying-widget={widget.id} style={{position:'absolute',left:0,top:0,width:rect.width,height:rect.height,transformOrigin:'50% 50%',transform:`translate(${x-rect.width/2}px,${y-rect.height/2}px) rotate(${angle}deg) scale(${scale})`,zIndex:10+i}}>
-        <LiveCrop screen="quick-tools" selector={widget.selector} state={{searchQuery:widget.query,compassHeading:312,levelRoll:0,levelPitch:0}} style={{borderRadius:radius}}/>
+        <LiveCrop screen="quick-tools" selector={widget.selector} state={{searchQuery:widget.query,compassHeading:312,levelRoll:4,levelPitch:2}} style={{borderRadius:radius}}/>
       </div>:null;
     }):null}
     {t>=e.launch&&t<e.gather?<Headline text="Many tools." x={610} y={925} width={700} size={100} align="center" progress={ease(t,4.92,5.16)}/>:null}

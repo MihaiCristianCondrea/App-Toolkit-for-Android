@@ -20,7 +20,7 @@ export const WIDGETS=[
   {id:'breathe',selector:'.qt-breathe',query:'Breathe'},
 ] as const;
 
-type Embed={setup:(options:Record<string,unknown>)=>Promise<void>;mount:(el:HTMLElement,id:string,state:Record<string,unknown>,options:Record<string,unknown>)=>Promise<void>};
+type Embed={setup:(options:Record<string,unknown>)=>Promise<void>;mount:(el:HTMLElement,id:string,state:Record<string,unknown>,options:{frame:boolean;palette:string;window:{width:number;height:number;system:'phone'|'desktop'}})=>Promise<void>};
 const embed=kit as unknown as Embed;
 let ready:Promise<void>|undefined;
 const boot=()=>ready??=(async()=>{
@@ -64,7 +64,7 @@ export const LiveScreen:React.FC<{id:string;state?:Record<string,unknown>;onRead
     (async()=>{
       await boot();
       if(!live)return;
-      await embed.mount(element,id,{...JSON.parse(key),showAds:false,moreApps:[]},{frame:false,palette:'blue',window:{width:PHONE_WIDTH,height:PHONE_HEIGHT,system:'android'}});
+      await embed.mount(element,id,{...JSON.parse(key),showAds:false,moreApps:[]},{frame:false,palette:'blue',window:{width:PHONE_WIDTH,height:PHONE_HEIGHT,system:'phone'}});
       await Promise.all([...element.querySelectorAll('img')].map(img=>img.decode()));
       await frame();
       // Interactive digit motion has no wall clock in a film. The supplied frame owns the value.
@@ -78,7 +78,7 @@ export const LiveScreen:React.FC<{id:string;state?:Record<string,unknown>;onRead
 };
 
 /** Geometry comes from the same screen the viewer will see after the assembly. */
-export const GeometryProbe:React.FC<{onGeometry:(g:Geometry)=>void}>=({onGeometry})=><LiveScreen id="quick-tools" state={{compassHeading:312,levelRoll:0,levelPitch:0}} style={{position:'absolute',left:-10000,top:0,opacity:0}} onReady={root=>{
+export const GeometryProbe:React.FC<{onGeometry:(g:Geometry)=>void}>=({onGeometry})=><LiveScreen id="quick-tools" state={{compassHeading:312,levelRoll:4,levelPitch:2}} style={{position:'absolute',left:-10000,top:0,opacity:0}} onReady={root=>{
   const geometry:Geometry={};
   for(const widget of WIDGETS){
     const node=root.querySelector<HTMLElement>(widget.selector);
