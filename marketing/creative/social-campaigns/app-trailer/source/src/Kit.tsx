@@ -59,17 +59,22 @@ export const LiveScreen:React.FC<{id:string;state?:Record<string,unknown>;onRead
   const callback=useRef(onReady);callback.current=onReady;
   useLayoutEffect(()=>{
     const element=root.current!;
+    // A prior asynchronous Lit mount must never overwrite the next frame's UI.
+    // A fresh host also clears capture-only inline styles when the shell reuses nodes.
+    const host=document.createElement('div');
+    host.style.cssText=`width:${PHONE_WIDTH}px;height:${PHONE_HEIGHT}px`;
+    element.replaceChildren(host);
     const handle=delayRender(`App Toolkit ${id}`,{timeoutInMilliseconds:60000});
     let live=true;
     (async()=>{
       await boot();
       if(!live)return;
-      await embed.mount(element,id,{...JSON.parse(key),showAds:false,moreApps:[]},{frame:false,palette:'blue',window:{width:PHONE_WIDTH,height:PHONE_HEIGHT,system:'phone'}});
-      await Promise.all([...element.querySelectorAll('img')].map(img=>img.decode()));
+      await embed.mount(host,id,{...JSON.parse(key),showAds:false,moreApps:[]},{frame:false,palette:'blue',window:{width:PHONE_WIDTH,height:PHONE_HEIGHT,system:'phone'}});
+      await Promise.all([...host.querySelectorAll('img')].map(img=>img.decode()));
       await frame();
       // Interactive digit motion has no wall clock in a film. The supplied frame owns the value.
-      for(const animation of element.getAnimations({subtree:true}))animation.finish();
-      if(live)callback.current?.(element);
+      for(const animation of host.getAnimations({subtree:true}))animation.finish();
+      if(live)callback.current?.(host);
       await frame();
     })().catch(cancelRender).finally(()=>continueRender(handle));
     return()=>{live=false;continueRender(handle);};

@@ -4,9 +4,10 @@ import {Headline,Phone,Shape,Toolbox,beat,ease,lerp,pop} from './visuals';
 
 /** The three destinations fan out one onset apart, each named under its phone. */
 const PHONES=[
-  {id:'quick-tools',label:'Quick Tools',x:1070,scale:.62,angle:-6,at:26.26,state:{compassHeading:45,levelRoll:0,levelPitch:0}},
-  {id:'play',label:'Play & Decide',x:1610,scale:.62,angle:6,at:26.5,state:{wheelText:'Pizza\nSushi\nPasta',wheelRotation:1260,wheelWinner:'Sushi',randomResult:73,diceResult:5,coinSide:'Heads'}},
-  {id:'numbers',label:'Measure',x:1340,scale:.64,angle:0,at:26.82,state:{counterValue:45}},
+  {id:'quick-tools',label:'Quick Tools',x:1070,scale:.62,angle:-6,at:26.5,state:{compassHeading:45,levelRoll:0,levelPitch:0}},
+  {id:'numbers',label:'Measure',x:1340,scale:.64,angle:0,at:26.82,state:{counterValue:45,protractorAngle:135,converterInput:25,splitTotal:'120',splitPeople:'4'}},
+  // Keep the outgoing Play phone foremost while the other destinations fan from behind it.
+  {id:'play',label:'Play & Decide',x:1610,scale:.62,angle:6,at:26.26,state:{wheelText:'Pizza\nSushi\nPasta',wheelRotation:1260,wheelWinner:'Sushi',randomResult:73,diceResult:5,coinSide:'Heads'}},
 ] as const;
 
 export const ClosingScene:React.FC<{seconds:number}>=({seconds:t})=>{

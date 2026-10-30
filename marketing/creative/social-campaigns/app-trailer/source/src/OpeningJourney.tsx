@@ -38,7 +38,7 @@ export const OpeningJourney:React.FC<{seconds:number;onGeometry?:(g:Geometry)=>v
   const screenX=phoneX-SKIN_WIDTH*phoneScale/2+DISPLAY.x*phoneScale;
   const screenY=phoneY-SKIN_HEIGHT*phoneScale/2+DISPLAY.y*phoneScale;
   const sensor=ease(t,e.sensorMove,15.66);
-  const heading=Math.round(lerp(312,405,sensor)+28*Math.sin(Math.max(0,t-15.66)*2.4)*ease(t,15.66,16.1)+360)%360;
+  const heading=Math.round(lerp(312,405,sensor)+28*Math.sin(Math.max(0,t-15.66)*2.4)*ease(t,15.66,16.1)*(1-ease(t,16.6,17.14))+360)%360;
   const pulse=1+.05*beat(t);
   return <>
     <GeometryProbe onGeometry={measured}/>
