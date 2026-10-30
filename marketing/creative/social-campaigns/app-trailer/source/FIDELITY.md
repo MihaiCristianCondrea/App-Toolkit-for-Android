@@ -12,12 +12,22 @@
 | No ads | Embed mounts with `showAds:false` | Source check and encoded frame inspection |
 | Deterministic capture | Frame state, settled components, no CSS animation or interactive digit clock | Render repeatability and out-of-order still review |
 
-## Status
+## Review of the second draft
 
-The corrected preview at `b98bba9b` passed TypeScript, the full 2690-frame render, source soundtrack integrity, encoded audio/duration checks and metadata verification. All eight rendered stills were inspected. The phone status bar clears the camera and search field, the bento shot contains four complete cards, and the level starts tilted consistently before settling in the phone.
+Reviewed the changes in `c54621ac` and `fd2d44cb`, then rendered the corrected source at `d7e58fe9` at 960 x 540, 90 fps. The full soundtrack remains unchanged.
 
-Review output: [preview MP4, eight frames and contact sheet](https://github.com/MihaiCristianCondrea/App-Toolkit-for-Android/actions/runs/41085515647/artifacts/12991771756).
+The review found and fixed:
 
-Full-speed creative approval, listening to the encoded music, and exact handoff boundary review remain before the master render. Static Compose-to-web parity was not rerun in this campaign; screens and fragments use the current UI kit directly. These limits are not implied to pass by the source checks.
+- Reused Lit nodes retained hidden-widget styles, and older asynchronous mounts could overwrite newer frame state. Each frame state now owns a fresh mount host.
+- The Counter fragment included the shell navigation because it was below the fold. Crops now scroll their actual content viewport before measuring the widget.
+- Measure heroes could cross the heading, and the moving phone crossed the entering title. The phone now clears first; the smaller heroes have faster entrances, clear holds and fading departures.
+- The chance cards arrived too late to hold their results. Their entrances now begin earlier on detected onsets, preserving the existing measured-width spacing.
+- The closing stack showed Measure in front of the outgoing Play screen. Play now stays foremost at the handoff, final values carry through, and the fan starts with zero velocity.
 
-The output is a creative preview until the owner approves the cut. The motion-video skill's master-render gate remains in place.
+Verification: TypeScript and structural checks pass. The complete 2690-frame preview rendered successfully. All three six-frames-per-second pacing strips (180 frames) were inspected, with additional stills around the bento handoff, both tab changes and the closing handoff. The chip row and final labels remain separated. Counter is fully visible without the shell navigation in its crop.
+
+An encoded regression check sampled 76 frames across the compass animation: every sample retained the coloured widgets (minimum 14,469 coloured pixels in the fixed phone region). Source/prepared soundtrack hashes match. The full decoded source fits within the encoded audio after its 42.625ms codec delay; waveform correlation is 0.9942. Metadata tagging verifies that the media stream packets remain unchanged.
+
+## Remaining approval and limits
+
+Full-speed creative playback and listening approval remain with the owner before the 2K master. The review used encoded pacing strips, boundary stills and numerical audio checks; it does not claim an auditory review. Static Compose-to-web parity was not rerun; the film mounts the current UI kit directly. The output remains a creative preview under the motion-video skill's master-render gate.

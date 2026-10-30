@@ -4,7 +4,7 @@ A 16:9 product trailer based on the owner's toolbox sketches. The existing mark 
 
 | | |
 | --- | --- |
-| Status | Second draft (more motion and tool detail) for visual review |
+| Status | Reviewed second draft with capture and choreography fixes |
 | Sound | The complete supplied `soundtrack.mp3`, 29.88 seconds, unchanged speed and volume |
 | Design size | 1920 x 1080 |
 | Preview | 960 x 540 at 90 fps |
@@ -77,9 +77,9 @@ The Android Insider `develop` trailer's font and UI mounting gate and Smart Clea
 
 See `source/FIDELITY.md`. Preparation and structural checks can pass independently of visual review. A successful render does not establish parity, readable choreography or correct timing.
 
-- [x] Inspect all eight corrected stills against the owner's sketch.
-- [ ] Review the full preview at playback speed.
-- [ ] Check the widget-to-screen handoff and phone aperture at transition boundaries.
-- [ ] Check text, clip edges, typeface, symbols and image loading in the encoded preview.
-- [ ] Listen to the full preview and verify the music's natural ending.
+- [x] Inspect the encoded pacing strips at six frames per second and representative scene stills.
+- [x] Check the widget handoff, phone aperture and destination boundaries.
+- [x] Check title clearance, chip spacing, full Counter crop and closing labels.
+- [x] Verify the full supplied audio numerically and validate output metadata.
+- [ ] Review the full preview at playback speed and listen to its natural ending.
 - [ ] Approve the cut before the 2K master and platform captions.
