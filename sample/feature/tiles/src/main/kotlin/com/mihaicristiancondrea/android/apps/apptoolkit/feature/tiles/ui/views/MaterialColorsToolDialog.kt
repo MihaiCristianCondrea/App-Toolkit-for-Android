@@ -26,6 +26,7 @@ import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.fillMaxHeight
@@ -65,6 +66,8 @@ import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.mappers
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.models.AndroidColorData
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.models.AndroidColorTable
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.models.ColorTable
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.models.ToolkitTileIcon
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.catalog.TileIconBadge
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.icons.ToolSymbols
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.utils.constants.ToolkitTileIds
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
@@ -117,6 +120,8 @@ fun MaterialColorsToolDialog(
                 modifier = Modifier.fillMaxWidth(),
                 verticalAlignment = Alignment.CenterVertically,
             ) {
+                TileIconBadge(icon = ToolkitTileIcon.Palette, large = true)
+                Spacer(modifier = Modifier.width(16.dp))
                 Text(
                     text = stringResource(id = R.string.tool_material_colors_title),
                     style = MaterialTheme.typography.headlineSmall,

@@ -34,7 +34,7 @@ const label = (el) => {
 };
 
 /** MaterialColorsToolDialog.kt: the full-height sheet with the app colour scheme, each swatch named with its hex. */
-export function materialColorsSheet(onClose) {
+export function materialColorsSheet(onClose, badge) {
   const copy = async (event) => {
     const button = event.currentTarget;
     const hex = button.querySelector('.mc-swatch__hex').textContent;
@@ -48,7 +48,7 @@ export function materialColorsSheet(onClose) {
     }
   };
   return html`<div class="mc-sheet">
-    <div class="mc-sheet__head"><h3>Material Colors</h3><md-icon-button aria-label="Close" @click=${() => onClose?.()}><md-icon>close</md-icon></md-icon-button></div>
+    <div class="mc-sheet__head"><div class="mc-sheet__badge" aria-hidden="true">${badge}</div><h3>Material Colors</h3><md-icon-button aria-label="Close" @click=${() => onClose?.()}><md-icon>close</md-icon></md-icon-button></div>
     <div class="mc-sheet__body">
     <p class="mc-sheet__text">Compare the current application color scheme with Android system accent and neutral palettes.</p>
     <section class="mc-table"><h4>App color scheme</h4>

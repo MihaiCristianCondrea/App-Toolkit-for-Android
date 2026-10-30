@@ -107,7 +107,8 @@ export function toolOverlay({ tool, state, onState, onClose, showQuickSettingsAc
     return { presentation: "fullscreen", label: tool.title, content: protractorDialog(state, onState, onClose), onDismiss: onClose };
   }
   if (tool.id === "material_colors") {
-    return { presentation: "sheet", label: tool.title, handle: false, flush: true, content: materialColorsSheet(onClose), onDismiss: onClose };
+    const badge = shapeBadge({ shape: tool.shape, icon: tool.icon, palette: tool.palette || "gold", size: 64, iconSize: 32 });
+    return { presentation: "sheet", label: tool.title, handle: false, flush: true, content: materialColorsSheet(onClose, badge), onDismiss: onClose };
   }
   if (tool.id === "ruler") {
     return { presentation: "fullscreen", label: tool.title, content: rulerDialog(state, onState, onClose), onDismiss: onClose };
