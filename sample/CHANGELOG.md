@@ -6,6 +6,8 @@
 
 ### Changed
 
+- Counter and Random Number overview widgets now roll their changing digits, matching the existing tool sheets. The marketing widgets mirror the motion and honour reduced motion.
+
 - Material Colors now uses connected bento swatches with a large primary tile, adaptive columns, readable contrast and horizontal Android tone strips. The marketing sheet matches the app-role layout and copies the same ARGB format. Palette values and the screen background are unchanged.
 
 - More apps actions use the shared tonal button. The recommendation details sheet is ad-free; the three overview placements remain unchanged. Android CI now verifies develop pushes and pull requests.

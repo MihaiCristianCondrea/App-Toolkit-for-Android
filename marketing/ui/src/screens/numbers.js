@@ -1,4 +1,5 @@
 import {nativeAdPreview} from '../kit/native-ad.js';
+import {animatedNumber} from '../kit/animated-number.js';
 import { html, svg, nothing } from "lit";
 import { previewScreen } from "material-next-web-components/marketing.js";
 import { toolOverlay } from "../kit/components.js";
@@ -135,7 +136,7 @@ export default {
               </header>
               <div class="mw-counter-panel" style=${`--count-digits:${String(count).length}`}>
                 <md-outlined-icon-button aria-label="Subtract" ?disabled=${count === 0} @click=${() => s.set?.({counterValue: count - 1})}><md-icon>remove</md-icon></md-outlined-icon-button>
-                <div class="measure-counter__value mw-count" aria-live="polite" aria-label="Current count">${count}</div>
+                <div class="measure-counter__value mw-count" aria-live="polite" aria-atomic="true" aria-label="Current count">${animatedNumber(count)}</div>
                 <md-filled-icon-button aria-label="Add" ?disabled=${count === 2147483647} @click=${() => s.set?.({counterValue: count + 1})}><md-icon>add</md-icon></md-filled-icon-button>
               </div>
             </article>` : nothing}

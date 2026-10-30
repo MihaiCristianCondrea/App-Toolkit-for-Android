@@ -38,6 +38,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.catalog.AnimatedToolNumber
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.key
 import androidx.compose.ui.Alignment
@@ -150,7 +151,13 @@ internal fun CounterControls(count: Int, onIncrement: () -> Unit, onDecrement: (
                 BoxWithConstraints(Modifier.padding(horizontal = 12.dp, vertical = 16.dp), contentAlignment = Alignment.Center) {
                     val density = LocalDensity.current
                     val fit = with(density) { (maxWidth.toPx() / (count.toString().length * .75f)).toSp() }
-                    Text(count.toString(), fontSize = if (fit.value < 45f) fit else 45.sp, maxLines = 1, style = MaterialTheme.typography.displayMedium)
+                    AnimatedToolNumber(
+                        value = count.toString(),
+                        textStyle = MaterialTheme.typography.displayMedium.copy(
+                            fontSize = if (fit.value < 45f) fit else 45.sp,
+                            fontFeatureSettings = "tnum",
+                        ),
+                    )
                 }
             }
             FilledIconButton(onClick = { haptic.performHapticFeedback(HapticFeedbackType.TextHandleMove); onIncrement() }, enabled = count < Int.MAX_VALUE, modifier = Modifier.size(64.dp)) {

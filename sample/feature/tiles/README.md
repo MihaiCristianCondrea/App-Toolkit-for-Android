@@ -32,6 +32,8 @@ All three primary tabs read their localized search query from `LocalShellSearch`
 
 The overview and sheet use the same entry-owned tool ViewModels. Currency, tip selection, converter values, counter updates and chance results therefore stay in sync. Dice and coin visuals are directly interactive; the surrounding card opens their sheet. Reaction Test Start both opens the sheet and starts a round.
 
+Counter in Measure and Random Number in Play use the shared `AnimatedDigit` for their overview values. Place values stay keyed from the right across carries, signed results keep their reading order, and accessibility receives the complete value once. Random Number retains its `?` placeholder and rolls that slot into the first result. The marketing widgets mirror changed-digit motion and respect reduced motion; initial rendering remains still.
+
 ## State and lifecycle
 
 - Counter remains DataStore-backed and shared with its Quick Settings service. Accepted writes survive the caller disappearing; storage failures are reported.

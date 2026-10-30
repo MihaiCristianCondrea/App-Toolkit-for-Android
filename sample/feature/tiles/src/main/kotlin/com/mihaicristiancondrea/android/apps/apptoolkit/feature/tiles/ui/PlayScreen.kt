@@ -54,6 +54,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.catalog.AnimatedWidgetValue
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -175,7 +176,7 @@ internal fun PlayScreenContent(coin: CoinFlipToolUiState, dice: DiceRollToolUiSt
                             Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(16.dp)) {
                                 Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(4.dp)) {
                                     WidgetLabel(stringResource(tile.titleResId))
-                                    WidgetValue(random.result?.toString() ?: "?", size = 48)
+                                    AnimatedWidgetValue(random.result?.toString() ?: "?", size = 48)
                                     WidgetNote(stringResource(R.string.tool_random_range, random.minimum.toLongOrNull() ?: 1L, random.maximum.toLongOrNull() ?: 100L), ToolkitTileIcon.Compass.iconColors().content)
                                 }
                                 Box(Modifier.size(88.dp).clip(tile.icon.backgroundShape()).background(lerp(MaterialTheme.colorScheme.surfaceContainerLowest, gold.container, .35f)), contentAlignment = Alignment.Center) {

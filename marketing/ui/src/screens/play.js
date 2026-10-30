@@ -1,4 +1,5 @@
 import {nativeAdPreview} from '../kit/native-ad.js';
+import {animatedNumber} from '../kit/animated-number.js';
 import {wheelVisual,wheelItems} from '../kit/decision-wheel.js';
 import {html,nothing} from 'lit';
 import {previewScreen} from 'material-next-web-components/marketing.js';
@@ -22,7 +23,7 @@ export default {
 
  const live={
  decision_wheel:()=>html`<button type="button" class="play-wheel-card" data-tool="decision_wheel" @click=${()=>open("decision_wheel")}><span class="play-wheel-copy"><span class="qt-live__label">Decision Wheel</span><strong>${s.wheelWinner||'Let chance choose'}</strong><span class="play-wheel-options">${wheelItems(s).length} choices · Open wheel</span></span>${wheelVisual(wheelItems(s),s.wheelRotation??0)}</button>`,
-      random_number: () => chance("random_number", s.randomResult ?? "?", `${s.randomMin}–${s.randomMax}`, shapeBadge({shape:"gem",icon:"numbers",palette:"gold",size:88,iconSize:40})),
+      random_number: () => chance("random_number", animatedNumber(s.randomResult ?? "?"), `${s.randomMin}-${s.randomMax}`, shapeBadge({shape:"gem",icon:"numbers",palette:"gold",size:88,iconSize:40})),
       dice_roll: () => chance("dice_roll", "Roll a die", "Tap die to roll", diceVisual(s.diceResult, true)),
       coin_flip: () => chance("coin_flip", s.coinSide, "Tap coin to flip", coinVisual(s.coinSide, true)),
 
