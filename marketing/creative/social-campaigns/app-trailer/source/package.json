@@ -10,7 +10,8 @@
     "check": "node scripts/check.mjs",
     "preview": "node scripts/render.mjs preview",
     "render": "node scripts/render.mjs master",
-    "frames": "node scripts/render.mjs frames"
+    "frames": "node scripts/render.mjs frames",
+    "sheet": "node scripts/sheet.mjs"
   },
   "dependencies": {
     "@remotion/cli": "4.0.529",
