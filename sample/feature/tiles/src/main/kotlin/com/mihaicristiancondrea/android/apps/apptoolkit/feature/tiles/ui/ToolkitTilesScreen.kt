@@ -210,6 +210,8 @@ private fun ToolkitTilesCatalog(
     // Chance and Measure have tabs of their own; Quick Tools shows the rest, Colors last.
     val filtered = categories.filter { it.id !in setOf("chance", "measure") }
         .toImmutableList().search(searchQuery, resources::getString)
+    // On torchless devices Light & signals is absent, so keep the ad after Sensors.
+    val adAfterCategoryId = filtered.lastOrNull { it.id == "sensors" || it.id == "system" }?.id
     val ad = ToolkitTilesListItem.Ad("ad_trailing", AdsConstants.QUICK_TOOLS_NATIVE_AD_UNIT_ID)
     fun open(tile: ToolkitTile) {
         selectedId = tile.id
@@ -217,7 +219,7 @@ private fun ToolkitTilesCatalog(
     Box(Modifier.fillMaxSize()) {
         ToolWorkspace(contentPadding) {
             if (filtered.isEmpty()) EmptyFilterCard()
-            filtered.forEachIndexed { index, category ->
+            filtered.forEach { category ->
                 Box {
                     ToolSection(stringResource(category.titleResId), when (category.id) {
                         "sensors" -> ToolSymbols.Rounded.Sensors
@@ -230,7 +232,7 @@ private fun ToolkitTilesCatalog(
                         QuickToolsWidgets(category.tiles, live, ::open, onFlashLevel)
                     }
                 }
-                if (index == 0 && showAds && searchQuery.isBlank() && ad.id in state.loadedAdIds) {
+                if (category.id == adAfterCategoryId && showAds && searchQuery.isBlank() && ad.id in state.loadedAdIds) {
                     QuickToolsNativeAdCard(adUnitId = ad.adUnitId,
                         initiallyLoaded = true,
                         onStatusChanged = { onEvent(ToolkitTilesEvent.AdStatusChanged(ad.id, it)) })
@@ -238,7 +240,7 @@ private fun ToolkitTilesCatalog(
             }
             if (searchQuery.isBlank()) footer()
         }
-        if (showAds && searchQuery.isBlank() && ad.id !in state.loadedAdIds) {
+        if (adAfterCategoryId != null && showAds && searchQuery.isBlank() && ad.id !in state.loadedAdIds) {
             HiddenAdPreloaders(adItems = persistentListOf(ad), onEvent = onEvent)
         }
     }

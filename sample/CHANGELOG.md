@@ -15,6 +15,8 @@
 
 ### Improved
 
+- More apps uses filled 28dp cards like the tool widgets, with full-width descriptions and tonal actions. Quick Tools places its native ad after Light & signals, before Hardware & sound.
+
 - Sample analytics now distinguish tool openings and meaningful use across all three workspaces, with bounded Water Eject completion, cancellation and failure outcomes. Tool inputs and results are not collected.
 
 - Dark tool colours use coordinated muted containers and softer gold, teal, pink and orange accents. Light colours and the app background are unchanged.

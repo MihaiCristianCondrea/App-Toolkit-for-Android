@@ -32,7 +32,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -44,8 +43,8 @@ import androidx.compose.material3.CircularWavyProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedButton
-import androidx.compose.material3.OutlinedCard
+import androidx.compose.material3.FilledTonalButton
+import androidx.compose.material3.Card
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -70,6 +69,8 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.min
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.modifiers.animatedItems
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.modifiers.animateVisibility
 import coil3.compose.AsyncImage
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.R
 import kotlinx.collections.immutable.ImmutableList
@@ -152,8 +153,8 @@ fun appShowcaseLabels(
 
 /**
  * A "more apps" section, the Compose counterpart of Material Next's `mnw-app-showcase`: a heading
- * with the section's icon and a "View all" action, then the apps as outlined cards with their icon,
- * name, category, a three-line description and a store (or open) action.
+ * with the section's icon and a "View all" action, then the apps as filled cards with their icon,
+ * name, category, a full-width description and a tonal store (or open) action.
  *
  * It owns no data and opens nothing. The host loads [state] and decides what a tap does; the
  * sample opens an installed app and shows the details sheet of one that is not.
@@ -209,7 +210,7 @@ fun AppShowcase(
 @Composable
 private fun AppShowcaseHeading(labels: AppShowcaseLabels, icon: ImageVector, onViewAll: () -> Unit, modifier: Modifier) {
     Row(
-        modifier = modifier.fillMaxWidth().padding(start = 4.dp),
+        modifier = modifier.animateVisibility().fillMaxWidth().padding(start = 4.dp),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(8.dp),
     ) {
@@ -268,7 +269,7 @@ private fun ShowcaseRow(
             horizontalArrangement = Arrangement.spacedBy(gap),
             flingBehavior = rememberSnapFlingBehavior(listState, SnapPosition.Start),
         ) {
-            items(apps, key = { it.key }) { app ->
+            animatedItems(apps, key = { it.key }) { app ->
                 ShowcaseAppCard(app, labels, { onAppClick(app) }, { onAppAction(app) }, Modifier.width(cardWidth))
             }
         }
@@ -288,9 +289,9 @@ internal fun showcaseCardWidth(available: Dp, gap: Dp): Dp {
 private val MinCardWidth = 260.dp
 
 /**
- * One app, as Material Next's `.app-card` draws it: an outlined card on the low surface container
- * with 18 dp corners, the icon in an 18 dp rounded tile, the name, the category, three lines of
- * description, and the action at the bottom end.
+ * One app on a filled surface with 28 dp corners, like the surrounding tool widgets.
+ * The header keeps the icon beside the name; description and action use the whole card width.
+ * Reserved text lines keep every card the same height without clipping large-font content.
  */
 @Composable
 fun ShowcaseAppCard(
@@ -300,14 +301,20 @@ fun ShowcaseAppCard(
     onAction: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    OutlinedCard(
+    Card(
         onClick = onClick,
         modifier = modifier,
-        shape = RoundedCornerShape(18.dp),
-        colors = CardDefaults.outlinedCardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
+        shape = RoundedCornerShape(28.dp),
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerHigh),
     ) {
-        Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
-            Row(horizontalArrangement = Arrangement.spacedBy(16.dp)) {
+        Column(
+            Modifier.padding(horizontal = 16.dp, vertical = 20.dp),
+            verticalArrangement = Arrangement.spacedBy(12.dp),
+        ) {
+            Row(
+                horizontalArrangement = Arrangement.spacedBy(16.dp),
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
                 Surface(
                     shape = RoundedCornerShape(18.dp),
                     color = MaterialTheme.colorScheme.surfaceContainerHighest,
@@ -327,39 +334,37 @@ fun ShowcaseAppCard(
                         }
                     }
                 }
-                Column(Modifier.weight(1f)) {
+                Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(4.dp)) {
                     Text(
                         text = app.name,
                         style = MaterialTheme.typography.titleMedium,
-                        fontWeight = FontWeight.Bold,
-                        maxLines = 1,
+                        fontWeight = FontWeight.SemiBold,
+                        minLines = 2,
+                        maxLines = 2,
                         overflow = TextOverflow.Ellipsis,
                     )
                     Text(
                         text = app.category,
                         style = MaterialTheme.typography.labelLarge,
-                        fontWeight = FontWeight.Bold,
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
                         maxLines = 1,
-                        overflow = TextOverflow.Ellipsis,
-                        modifier = Modifier.padding(top = 4.dp, bottom = 8.dp),
-                    )
-                    // Always three lines tall, so every card in the row is the same height.
-                    Text(
-                        text = app.description,
-                        style = MaterialTheme.typography.bodyMedium,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant,
-                        minLines = 3,
-                        maxLines = 3,
                         overflow = TextOverflow.Ellipsis,
                     )
                 }
             }
+            Text(
+                text = app.description,
+                style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                minLines = 2,
+                maxLines = 2,
+                overflow = TextOverflow.Ellipsis,
+            )
             val actionDescription = if (app.installed) labels.openActionDescription(app.name) else labels.storeActionDescription(app.name)
-            OutlinedButton(
+            FilledTonalButton(
                 onClick = onAction,
                 modifier = Modifier
-                    .align(Alignment.End)
+                    .fillMaxWidth()
                     .semantics {
                         contentDescription = actionDescription
                         role = Role.Button

@@ -44,8 +44,8 @@ const SECTIONS = [
   { id: "colors", title: "Colors", icon: "palette", tools: ["material_colors"] },
 ];
 
-/** The native ad sits between Sensors and Light & signals, as the app places one between categories. */
-const AD_AFTER = "sensors";
+/** The native ad separates Light & signals from Hardware & sound. */
+const AD_AFTER = "light";
 
 export default {
   id: "quick-tools",
@@ -210,7 +210,7 @@ export default {
     });
 
     // MoreAppsSection.kt over the library's AppShowcase, as Material Next's mnw-app-showcase draws it: the section's
-    // title with "View all", then the developer's apps as outlined cards in a row that snaps. An installed app opens;
+    // title with "View all", then the developer's apps as filled cards in a row that snaps. An installed app opens;
     // one that is not opens its details sheet, and its button opens Google Play.
     const moreApps = () => html`
       <section class="qt-section qt-more-apps" aria-labelledby="qt-more-apps-title">
@@ -220,19 +220,19 @@ export default {
         </div>
         <div class="qt-more-apps__row" role="list">
           ${MORE_APPS.map((app) => html`
-            <md-outlined-card class="qt-app-card" role="listitem">
+            <md-filled-card class="qt-app-card" role="listitem">
               <div class="qt-app-card__top">
                 <div class="qt-app-card__icon"><md-icon>apps</md-icon></div>
                 <div class="qt-app-card__text">
                   <h3>${app.name}</h3>
                   <p class="qt-app-card__category">${app.category}</p>
-                  <p class="qt-app-card__description">${app.description}</p>
                 </div>
               </div>
-              <md-outlined-button class="qt-app-card__action" aria-label=${app.installed ? `Open ${app.name}` : `Open ${app.name} on Google Play`}>
+              <p class="qt-app-card__description">${app.description}</p>
+              <md-filled-tonal-button class="qt-app-card__action" aria-label=${app.installed ? `Open ${app.name}` : `Open ${app.name} on Google Play`}>
                 <md-icon slot="icon">${app.installed ? "open_in_new" : "store"}</md-icon>${app.installed ? "Open" : "Google Play"}
-              </md-outlined-button>
-            </md-outlined-card>`)}
+              </md-filled-tonal-button>
+            </md-filled-card>`)}
         </div>
       </section>`;
 

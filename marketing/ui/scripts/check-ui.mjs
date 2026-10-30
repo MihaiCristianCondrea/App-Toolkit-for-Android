@@ -550,8 +550,9 @@ try {
               before: el.previousElementSibling?.querySelector('h2')?.textContent ?? '',
               after: el.nextElementSibling?.querySelector('h2')?.textContent ?? '',
             }));
-            assert.match(order.before, id === 'numbers' ? /Convert & split/ : id === 'play' ? /Chance/ : /Sensors/);
+            assert.match(order.before, id === 'numbers' ? /Convert & split/ : id === 'play' ? /Chance/ : /Light & signals/);
             if (id === 'numbers') assert.match(order.after, /Count & time/);
+              if (id === 'quick-tools') assert.match(order.after, /Hardware & sound/);
           }
           checks++;
         }
