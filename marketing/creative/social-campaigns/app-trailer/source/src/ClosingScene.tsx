@@ -13,7 +13,7 @@ export const ClosingScene:React.FC<{seconds:number}>=({seconds:t})=><div classNa
   <div style={{position:'absolute',inset:0,perspective:1800,perspectiveOrigin:'70% 50%'}}>
     {PHONES.map(p=>{
       const land=pop(t,p.at,.64);
-      return <div key={p.id} style={{position:'absolute',inset:0,transformOrigin:`${p.x}px ${p.y}px`,transform:`translateZ(${p.z}px) rotateY(${p.ry*land}deg)`}}><Phone seconds={t} id={p.id} state={p.state} x={p.x+320*(1-land)} y={p.y+1450*(1-land)} scale={.86*lerp(.78,1,land)} angle={p.angle+12*(1-land)}/></div>;
+      return <div key={p.id} style={{position:'absolute',inset:0,transformOrigin:`${p.x}px ${p.y}px`,transform:`translateZ(${p.z}px) rotateY(${p.ry*land}deg)`}}><Phone seconds={t} id={p.id} state={p.state} x={p.x+200*(1-land)} y={p.y+600*(1-land)} scale={.86*lerp(.78,1,land)} angle={p.angle+12*(1-land)}/></div>;
     })}
   </div>
   {PHONES.map(p=><div key={p.label} style={{position:'absolute',left:p.x-150,top:950,width:300,textAlign:'center',fontSize:32,fontWeight:600,color:'#3B2D14',transform:`translateY(${300*(1-ease(t,p.at+.4,p.at+.64))}px)`}}>{p.label}</div>)}

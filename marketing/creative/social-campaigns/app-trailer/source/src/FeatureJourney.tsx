@@ -49,9 +49,9 @@ export const FeatureJourney:React.FC<{seconds:number;geometry:Geometry}>=({secon
       {!isPlay?e.measureShots.map((s,i)=>{
         const r=parts[s.tool],next=e.measureShots[i+1]?.at??e.play;
         if(!r||t<(i?s.at-.14:e.measure)||t>=next+.24)return null;
-        const enter=ease(t,i?s.at-.14:e.measure,s.at+.28),out=ease(t,next-.14,next+.24);
+        const enter=ease(t,i?s.at-.14:e.measure,s.at+.28),out=ease(t,next-.14,next+.28);// The same curve as the next card's entry: one continuous push, never an empty frame.
         const source=projectPhone(r,origin,t),scale=Math.min(s.height/r.height,1720/r.width);
-        const p={x:lerp(i?s.x+1900:source.x,s.x,enter)-2400*out,y:lerp(i?s.y:source.y,s.y,enter),scale:lerp(i?scale*.85:source.scale,scale,enter),angle:lerp(i?s.angle+8:origin.angle,s.angle,enter)};
+        const p={x:lerp(i?s.x+1900:source.x,s.x,enter)-1900*out,y:lerp(i?s.y:source.y,s.y,enter),scale:lerp(i?scale*.85:source.scale,scale,enter),angle:lerp(i?s.angle+8:origin.angle,s.angle,enter)};
         return <React.Fragment key={s.tool}>
           <Shape name={i%2?'soft_burst':'flower'} color={i%2?'#BBDCD3':'#F6A800'} size={1000} x={p.x} y={p.y} scale={enter*(1+.04*beat(t,'hero'))} angle={s.angle+8*beat(t,'hero')} seconds={t}/>
           <Hero seconds={t} tool={s.tool} screen="numbers" rect={r} state={measureState} pose={p} radii={isolatedRadii(r,enter)}/>
