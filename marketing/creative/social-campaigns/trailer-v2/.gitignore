@@ -1,0 +1,12 @@
+node_modules/
+.remotion/
+.vite/
+.cache/
+dist/
+build/
+output/
+source/public/
+source/src/generated/
+*.log
+.DS_Store
+Thumbs.db

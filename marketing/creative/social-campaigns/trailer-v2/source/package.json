@@ -1,0 +1,27 @@
+{
+  "name": "app-toolkit-trailer-v2",
+  "version": "1.0.0",
+  "description": "App Toolkit trailer v3: the v2 choreography retimed to the onsets of a new soundtrack.",
+  "private": true,
+  "scripts": {
+    "assets": "node scripts/prepare.mjs",
+    "analyze": "python3 scripts/analyze.py ../soundtrack.mp3 src/generated/music-analysis.json",
+    "dev": "npm run assets && remotion studio src/index.ts",
+    "lint": "tsc --noEmit",
+    "preview": "node scripts/render.mjs preview",
+    "render": "node scripts/render.mjs master",
+    "frames": "node scripts/render.mjs frames",
+    "sheet": "node scripts/sheet.mjs"
+  },
+  "dependencies": {
+    "@remotion/cli": "4.0.529",
+    "@remotion/motion-blur": "4.0.529",
+    "react": "19.2.3",
+    "react-dom": "19.2.3",
+    "remotion": "4.0.529"
+  },
+  "devDependencies": {
+    "@types/react": "19.2.7",
+    "typescript": "5.9.3"
+  }
+}
