@@ -1,8 +1,8 @@
 {
   "schemaVersion": "3.0",
   "campaign": {
-    "slug": "app-trailer",
-    "title": "App Toolkit: Your toolkit",
+    "slug": "trailer-v2",
+    "title": "App Toolkit: Trailer V2",
     "status": "draft"
   },
   "software": "Android Studio",
@@ -160,6 +160,12 @@
     "output/images/polish-measure-final.png": {
       "title": "App Toolkit: Measure transition polish",
       "altText": "Whole native Measure cards carry their words through wipes that follow the moving card centres."
+    },
+    "output/video/app-toolkit-v2-preview.mp4": {
+      "title": "App Toolkit: trailer preview"
+    },
+    "output/video/app-toolkit-v2-master.mp4": {
+      "title": "App Toolkit: Your toolkit"
     }
   },
   "soundtrack": {

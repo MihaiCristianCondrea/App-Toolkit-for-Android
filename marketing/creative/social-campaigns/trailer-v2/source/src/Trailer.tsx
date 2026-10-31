@@ -3,10 +3,10 @@ import {AbsoluteFill,Audio,Img,staticFile,useCurrentFrame,useVideoConfig} from '
 import {shapeUrl} from '../../../../../ui/src/kit/assets.js';
 import {DISPLAY,Geometry,GeometryProbe,LiveCrop,LiveScreen,Rect,SKIN_HEIGHT,SKIN_WIDTH,WIDGETS} from './Kit';
 import {clamp,ease,easeIn,lerp,pop} from './motion';
-import music from './generated/music-analysis.json';
+import music from './music-analysis.json';
 
 /**
- * Trailer v3: the v2 choreography retimed to whatever soundtrack sits beside it. One file owns the whole choreography so every shot can be read top to bottom.
+ * Trailer v2: Standalone production cut.
  * Story: motif shapes, the mark pops and opens like a chest, four live tools rise out of it and
  * lock into a bento, the bento becomes the phone, then Measure and Play open from their tabs,
  * the three destinations fan out and a gold burst ends the film.
@@ -17,16 +17,11 @@ const ONSETS=music.onsetsSeconds as number[];
 const hit=(t:number)=>{let last=-1;for(const o of ONSETS){if(o>t)break;last=o;}return last<0?0:Math.exp(-(t-last)*12);};
 const steps=(t:number,times:number[])=>times.filter(at=>t>=at).length;
 
-// Shots: the v2 cut's beats on its 29.88 s track, scaled to this soundtrack's length and moved to its
-// nearest detected onset. A list stays in order; a note already taken keeps the scaled time instead.
-const REF=29.88,DURATION=music.durationSeconds as number,K=DURATION/REF;
-const near=(x:number)=>ONSETS.reduce((best,o)=>Math.abs(o-x*K)<Math.abs(best-x*K)?o:best,x*K);
-const seq=(xs:number[])=>xs.reduce<number[]>((out,x)=>{const v=near(x);out.push(out.length&&v<=out[out.length-1]+.1?Math.max(x*K,out[out.length-1]+.12):v);return out;},[]);
-const boom=Math.min(near(29.4),DURATION-.5);
-const T={motif:seq([.02,.32,.62,1.04]),mark:near(1.76),lid:near(2.32),toBottom:near(2.64),launches:seq([3.32,4.04,4.58,5.16]),lock:near(5.74),
-  place:near(6.76),placeWords:seq([7.06,7.46]),phone:near(10.08),phoneEnd:near(10.9),quick:seq([10.9,11.44]),lifts:seq([12,12.92,13.72,14.6,15.44,16.44]),
-  measure:near(17.14),measureWords:seq([17.36]),measureHeroes:seq([17.92,18.84,19.7,20.56]),play:near(21.98),playWords:seq([22.26,22.56]),spin:seq([22.86,24.54]),
-  chance:seq([24.54,25.12,25.4,25.68]),close:near(26.26),fan:seq([26.26,26.5,26.82]),closeWords:seq([27.04,27.26]),badge:near(27.68),boom,boomCover:boom+.34,end:DURATION};
+// Shots (seconds, all on detected onsets).
+const T={motif:[.02,.32,.62,1.04],mark:1.76,lid:2.32,toBottom:2.64,launches:[3.32,4.04,4.58,5.16],lock:5.74,
+  place:6.76,placeWords:[7.06,7.46],phone:10.08,phoneEnd:10.9,quick:[10.9,11.44],lifts:[12,12.92,13.72,14.6,15.44,16.44],
+  measure:17.14,measureWords:[17.36],measureHeroes:[17.92,18.84,19.7,20.56],play:21.98,playWords:[22.26,22.56],spin:[22.86,24.54],
+  chance:[24.54,25.12,25.4,25.68],close:26.26,fan:[26.26,26.5,26.82],closeWords:[27.04,27.26],badge:27.68,boom:29.4,boomCover:29.74,end:29.88};
 
 const Shape:React.FC<{name:string;color:string;size:number;x:number;y:number;angle?:number;scale?:number}>=({name,color,size,x,y,angle=0,scale=1})=>
   <div aria-hidden="true" style={{position:'absolute',left:0,top:0,width:size,height:size,background:color,maskImage:`url("${shapeUrl(name)}")`,WebkitMaskImage:`url("${shapeUrl(name)}")`,maskSize:'contain',WebkitMaskSize:'contain',maskRepeat:'no-repeat',transform:`translate(${x-size/2}px,${y-size/2}px) rotate(${angle}deg) scale(${scale})`}}/>;
@@ -91,7 +86,7 @@ const LIFTS=[['compass','Compass'],['level','Bubble level'],['flash','Flash Dimm
 // Scales fit each measured card into the left column (half-width cards are about 194 x 242, the counter 403 x 145).
 const MEASURE=[['protractor','Angles.',2.3],['unit_converter','Units.',2.3],['bill_splitter','Split.',2.3],['counter','Counts.',1.9]] as const;
 
-export const TrailerV3:React.FC=()=>{
+export const TrailerV2:React.FC=()=>{
   const t=useCurrentFrame()/useVideoConfig().fps;
   const [g,setG]=useState<Geometry|null>(null);
   const measured=useCallback((next:Geometry)=>setG(old=>old??next),[]);
@@ -99,7 +94,7 @@ export const TrailerV3:React.FC=()=>{
 
   // Live tool state, driven by the music rather than a clock.
   const quick={compassHeading:Math.round(312+steps(t,ONSETS)*17)%360,levelRoll:t<T.lock?4:lerp(4,0,ease(t,T.lock,T.place)),levelPitch:2,flashOn:true,flashLevel:1+steps(t,ONSETS)%5,flashMaxLevel:5,sosActive:Math.floor(t*4)%2===0};
-  const measureState={protractorAngle:Math.round(lerp(20,135,ease(t,T.measureHeroes[0],T.measureHeroes[1]))),converterInput:Math.round(lerp(10,25,ease(t,T.measureHeroes[1],T.measureHeroes[2]))),splitTotal:'120',splitPeople:t>=T.measureHeroes[2]+.42?'4':'2',counterValue:40+steps(t,ONSETS.filter(o=>o>=T.measureHeroes[3]))};
+  const measureState={protractorAngle:Math.round(lerp(20,135,ease(t,T.measureHeroes[0],T.measureHeroes[1]))),converterInput:Math.round(lerp(10,25,ease(t,T.measureHeroes[1],T.measureHeroes[2]))),splitTotal:'120',splitPeople:t>=20.12?'4':'2',counterValue:40+steps(t,ONSETS.filter(o=>o>=T.measureHeroes[3]))};
   const shuffle=Math.floor(t*30);
   const playState={wheelText:'Pizza\nSushi\nPasta',wheelRotation:1260*ease(t,T.spin[0],T.spin[1]),wheelWinner:t>=T.spin[1]?'Sushi':'',randomResult:t<T.chance[1]?1+(shuffle*37)%100:73,diceResult:t<T.chance[2]?1+(shuffle*5)%6:5,coinSide:t>=T.chance[3]&&t<T.chance[3]+.2?'Tails':'Heads'};
 
@@ -143,7 +138,7 @@ export const TrailerV3:React.FC=()=>{
       ].map((s,i)=>{
         const p=pop(t,T.motif[i],.6),part=ease(t,T.mark,T.mark+.5)*50+easeIn(t,T.place,T.place+.5)*700;
         const dx=Math.sign(s.x-960),dy=Math.sign(s.y-540);
-        return <Shape key={s.name} name={s.name} color={s.color} size={s.size} x={s.x+s.from[0]*(1-p)+dx*part} y={s.y+s.from[1]*(1-p)+dy*part} angle={lerp(40,0,p)+6*hit(t)} scale={lerp(.4,1,p)*(1-.06*ease(t,T.mark-.3,T.mark)+.06*ease(t,T.mark,T.mark+.2))}/>;
+        return <Shape key={s.name} name={s.name} color={s.color} size={s.size} x={s.x+s.from[0]*(1-p)+dx*part} y={s.y+s.from[1]*(1-p)+dy*part} angle={lerp(40,0,p)+6*hit(t)} scale={lerp(.4,1,p)*(1-.06*ease(t,1.46,T.mark)+.06*ease(t,T.mark,T.mark+.2))}/>;
       }):null}
 
       {t>=T.mark&&t<T.place+.45?<Toolbox x={960} y={lerp(540,870,low)+700*gone} size={460} open={lid} scale={lerp(.2,1,markIn)*lerp(1,.78,low)} squash={.5*recoil}/>:null}
@@ -237,3 +232,6 @@ export const TrailerV3:React.FC=()=>{
     </AbsoluteFill>
   </AbsoluteFill>;
 };
+
+export const Trailer = TrailerV2;
+export default TrailerV2;

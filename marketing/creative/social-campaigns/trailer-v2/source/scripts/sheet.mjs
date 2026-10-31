@@ -13,7 +13,8 @@ const output=path.resolve('../output/images');
 const frames=path.join(output,'review-frames');
 fs.mkdirSync(frames,{recursive:true});
 for(const [i,t] of seconds.entries()){
-  const args=[path.resolve('node_modules/@remotion/cli/remotion-cli.js'),'still','src/index.ts','AppTrailerV3',path.join(frames,`${i+1}.png`),'--frame',String(Math.round(t*90)),'--scale','.2','--log','error'];
+  const composition = process.env.COMPOSITION || 'AppTrailerV2';
+  const args=[path.resolve('node_modules/@remotion/cli/remotion-cli.js'),'still','src/index.ts',composition,path.join(frames,`${i+1}.png`),'--frame',String(Math.round(t*90)),'--scale','.2','--log','error'];
   if(process.env.BROWSER_EXECUTABLE)args.push('--browser-executable',process.env.BROWSER_EXECUTABLE);
   execFileSync(process.execPath,args,{stdio:'inherit'});
   console.log(`${i+1}/${seconds.length}: ${t}s`);

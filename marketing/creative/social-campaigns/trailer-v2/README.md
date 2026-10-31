@@ -1,55 +1,42 @@
-# App Toolkit: trailer v2 (film v3)
+# App Toolkit: Trailer V2
 
-A new trailer on a new beat. The film (`AppTrailerV3`) reuses the trailer v2 choreography from
-`social-campaigns/app-trailer`, but every shot is timed from the onsets of the soundtrack in this
-folder, so a different track changes the cut without editing the scenes.
+A 16:9 product trailer for App Toolkit based on the owner's toolbox sketches and the 29.88-second soundtrack.
+The mark opens, four live widgets leave its mouth into a connected 2x2 bento, the screen forms into a Pixel 9 Pro phone, then Measure and Play & Decide open from their tabs before a 3D fan of three devices ends in a golden burst.
 
 | | |
 | --- | --- |
-| Status | Waiting for the soundtrack |
-| Sound | `soundtrack.mp3` in this folder (owner-supplied, used whole and unchanged) |
+| Status | Polished preview, ready for owner playback |
+| Sound | The complete supplied `soundtrack.mp3`, 29.88 seconds, unchanged speed and volume |
 | Design size | 1920 x 1080, 90 fps |
 | Preview | 960 x 540 |
 | Master | 2560 x 1440, rendered after creative review |
-| Reference | `reference/app-trailer-v1-v2.zip`: the complete `app-trailer` campaign (v1 and v2) at the time this one started |
+| Output | `output/video/` and `output/images/`, generated and ignored by Git |
+
+## Scenes & Choreography
+
+| Time | Picture |
+| --- | --- |
+| 0.00 to 1.76 | Corner shapes arrive one per motif note around an open focal centre. |
+| 1.76 to 3.32 | The mark pops, its lid swings about the right hinge like a chest lid (handle attached) and the box settles low as the launcher. |
+| 3.32 to 6.76 | Compass, Bubble level, Flash Dimmer and SOS rise out of the box, one per note, and lock into a bento whose inner corners tighten to 8 px. Starts smaller to fit above the box. |
+| 6.76 to 10.08 | A teal ground grows from the bento; it moves right and grows beside "One place.". |
+| 10.08 to 17.14 | The bento becomes the phone. Each Quick Tools widget lifts out of the screen on its note while its name lands. |
+| 17.14 to 21.98 | A gold ground and the Measure screen grow from the Measure tab; Protractor, Unit Converter, Bill Splitter and Counter push through the left column with live values. |
+| 21.98 to 26.26 | A pink ground and Play & Decide grow from their tab. The phone springs to the left half with a short swing, and "Let chance decide.", the spinning wheel and the result cards take the right side at a larger scale. |
+| 26.26 to 29.88 | The three destinations fan in beside the mark, title and Google Play badge; a gold burst from the mark takes the frame. |
 
 ## Build
 
-1. Put the new beat in this folder as `soundtrack.mp3`.
-2. Requires Node 22+, Python 3 with NumPy and Pillow, and FFmpeg/ffprobe on PATH:
+Requires Node 22+, Python 3 with Pillow and FFmpeg/ffprobe on PATH.
 
 ```sh
-cd marketing/ui && npm ci && npm run assets
-cd ../creative/social-campaigns/trailer-v2/source && npm ci
-npm run assets    # copies assets, measures the track and detects its onsets
-npm run lint
-npm run preview   # 960 x 540 with the full soundtrack
-npm run sheet     # quarter-scale review stills (BROWSER_EXECUTABLE for a local Chrome)
+cd marketing/ui
+npm ci && npm run assets
+cd ../creative/social-campaigns/trailer-v2/source
+npm ci
+npm run assets      # copies assets, extracts SVG layers, builds device and media metadata
+npm run lint        # type-check
+npm run preview     # renders 960 x 540 preview video with full soundtrack
+npm run sketchbook  # renders all 6 act sketchbook sheets and master storyboards
+npm run render      # renders 2K master once approved
 ```
-
-`npm run render` makes the 2K master once the preview is approved.
-
-## How the timing follows the beat
-
-`scripts/analyze.py` decodes the track to 8 kHz mono and peak-picks a bass-weighted spectral flux (at least 0.2 s
-between onsets). It writes `src/generated/music-analysis.json` on every `npm run assets`. The BPM it prints is an
-estimate.
-
-`src/Trailer.tsx` keeps the v2 shot list as times on its 29.88 s track. Each time is scaled to the new track's
-length and moved to the nearest detected onset; lists stay in order, and the gold burst always lands at least
-0.5 s before the end. The live tools also change on every onset.
-
-## Shots
-
-Same story as trailer v2:
-1. Corner shapes arrive on the motif notes.
-2. The mark pops and opens like a chest.
-3. Four live tools rise out of it into a bento.
-4. A teal ground and "One place." follow.
-5. The bento becomes the phone, and each Quick Tools widget lifts out on its note.
-6. Measure grows from its tab.
-7. Play & Decide grows from its tab, with the phone springing to the left half.
-8. Three destinations fan in.
-9. A gold burst from the mark ends the film.
-
-Once the new beat is in, retime or restage shots in `src/Trailer.tsx` to suit its phrases.
