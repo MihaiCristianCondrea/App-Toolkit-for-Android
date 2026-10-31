@@ -1,7 +1,7 @@
 import React,{useCallback,useState} from 'react';
 import {staticFile} from 'remotion';
-import {Geometry,GeometryProbe,LiveCrop,WIDGETS,DISPLAY,SKIN_WIDTH,SKIN_HEIGHT,isolatedRadii,radiusCss} from './Kit';
-import {Phone,Shape,Toolbox,PhonePose,projectPhone,projectPart,CameraRig,View,mixView,KineticLine,beat,ease,easeIn,lerp,pop} from './visuals';
+import {Geometry,GeometryProbe,WIDGETS,DISPLAY,SKIN_WIDTH,SKIN_HEIGHT,isolatedRadii} from './Kit';
+import {Phone,Shape,Toolbox,Hero,TYPE,ToolLabel,closeupView,PhonePose,projectPhone,projectPart,CameraRig,View,mixView,KineticLine,beat,ease,easeIn,lerp,pop} from './visuals';
 import timeline from './timeline.json';
 
 const e=timeline.events;
@@ -39,7 +39,7 @@ export const cardPose=(t:number,g:Geometry,i:number)=>{
 const launchView=(t:number,g:Geometry,i:number):View=>{
   const rect=g[WIDGETS[i].id],face=e.launchFraming[i].kind==='face'?g[WIDGETS[i].id+'-face']:rect;
   const pose=cardPose(t,g,i),point=projectPart(face,rect,pose),s=e.launchFraming[i].height/(face.height*1.35);
-  return {x:point.x-(e.launchFraming[i].screenX-960)/s,y:point.y,scale:s,angle:e.launchFraming[i].angle};
+  return closeupView(rect,pose,{x:point.x,y:point.y,scale:s,angle:e.launchFraming[i].angle});
 };
 export const openingView=(t:number,g:Geometry|null):View=>{
   const icon={x:960,y:500,scale:.84,angle:0},box={x:1280,y:680,scale:1.45,angle:-3},wide={x:960,y:540,scale:1.05,angle:0};
@@ -102,7 +102,7 @@ const macroPose=(t:number,g:Geometry,i:number):PhonePose=>{
 const macroView=(t:number,g:Geometry,i:number):View=>{
   const shot=e.quickShots[i],rect=g[WIDGETS[i].id],face=shot.kind==='face'?g[WIDGETS[i].id+'-face']:rect;
   const pose=macroPose(t,g,i),point=projectPart(face,rect,pose),s=shot.height/(face.height*e.macroScale);
-  return {x:point.x-(shot.screenX-960)/s,y:point.y,scale:s,angle:shot.angle};
+  return closeupView(rect,pose,{x:point.x,y:point.y,scale:s,angle:shot.angle});
 };
 export const quickView=(t:number,g:Geometry):View=>{
   if(t<e.quickReturn){
@@ -110,7 +110,7 @@ export const quickView=(t:number,g:Geometry):View=>{
     const prior=i?macroView(shot.at,g,i-1):openingView(e.quickStart,g);
     const settle=e.shots.find(s=>s.at===shot.at)!.settle;
     const view=mixView(prior,macroView(t,g,i),ease(t,shot.at,shot.at+settle));
-    return {...view,scale:view.scale*lerp(1,1.035,ease(t,shot.at+settle,shot.end))};
+    return view;
   }
   const wide={x:960,y:540,scale:1,angle:0};
   if(t<e.tabPush)return mixView(macroView(e.quickReturn,g,3),wide,ease(t,e.quickReturn,e.quickReturn+.65));
@@ -122,40 +122,37 @@ export const OpeningJourney:React.FC<{seconds:number;onGeometry?:(g:Geometry)=>v
   const measured=useCallback((next:Geometry)=>{checkFlights(next);setGeometry(old=>old??next);onGeometry?.(next);},[onGeometry]);
   const pull=ease(t,e.pullBack,e.pullBackEnd),pose=quickPhonePose(t),state=quickState(t);
   const macros=t>=e.quickStart&&t<e.quickReturnEnd;
+  const launchIndex=Math.max(0,e.launches.filter(at=>t>=at).length-1),launchAt=e.launches[launchIndex],nextLaunch=e.launches[launchIndex+1];
+  const chestVisible=t<e.launches[0]||t>=e.launchWide||t<launchAt+e.shots.find(s=>s.at===launchAt)!.settle||nextLaunch&&t>=nextLaunch-e.polish.blur.duration;
   const view=t<e.quickStart?openingView(t,g):g?quickView(t,g):{x:960,y:540,scale:1,angle:0};
   return <>
     <GeometryProbe onGeometry={measured}/>
     <CameraRig view={view}>
     {t>=e.gather&&t<e.quickStart?<Shape name="cookie_9sided" color="#D0E9E3" size={1150} x={1300} y={540} scale={pop(t,e.gather,.6)*(1+.065*beat(t,'stage'))} angle={-30+10*beat(t,'stage')} seconds={t}/>:null}
     {t<e.gatherEnd?<IntroBackdrop seconds={t}/>:null}
-    {t>=e.logo&&t<e.pullBackEnd?(()=>{
+    {chestVisible&&t>=e.logo&&t<e.pullBackEnd?(()=>{
       const arrive=pop(t,e.logo,.42)*(1-.13*ease(t,e.logo+.18,e.logo+.25)*(1-ease(t,e.logo+.25,e.logo+.42))),open=pop(t,e.lidOpen,e.lidSettled-e.lidOpen),land=ease(t,e.lidOpen,e.chestLanding),away=easeIn(t,e.gather,e.gatherEnd);
-      const props={x:lerp(960,e.launchOrigin.x,land),y:lerp(500,620,land)+1000*away,size:lerp(840,410,land),open,scale:arrive*lerp(1,1.17,land),squash:beat(t,'toolbox')*.5+e.launches.reduce((sum,at)=>sum+.55*pop(t,at,.1)*(1-ease(t,at+.08,at+.2)),0),angle:lerp(-6,0,arrive)};
+      const props={level:t<e.chestLanding?3:2,x:lerp(960,e.launchOrigin.x,land),y:lerp(500,620,land)+1000*away,size:lerp(840,410,land),open,scale:arrive*lerp(1,1.17,land),squash:beat(t,'toolbox')*.5+e.launches.reduce((sum,at)=>sum+.55*pop(t,at,.1)*(1-ease(t,at+.08,at+.2)),0),angle:lerp(-6,0,arrive)};
       return <><div style={{position:'absolute',inset:0,zIndex:5}}><Toolbox {...props} layer="lid"/></div><div style={{position:'absolute',inset:0,zIndex:30}}><Toolbox {...props} layer="body"/></div></>;
     })():null}
-    {t>=e.pullBack?<Phone seconds={t} id="quick-tools" state={state} {...pose} shell={1} reveal={pull} hideWidgets={t<e.pullBackEnd} hiddenSelectors={macros?WIDGETS.slice(0,4).map(w=>w.selector):[]}/>:null}
+    {t>=e.pullBack?<Phone seconds={t} id="quick-tools" state={state} {...pose} shell={1} level={t<e.pullBackEnd||t>=e.quickPhoneIn&&t<e.quickPhoneLanded?3:2} reveal={pull} hideWidgets={t<e.pullBackEnd} hiddenSelectors={macros?WIDGETS.slice(0,4).map(w=>w.selector):[]}/>:null}
     {g&&t<e.pullBackEnd?WIDGETS.slice(0,4).map((widget,i)=>{
-      const at=e.launches[i],rect=g[widget.id],{x,y,scale,flight}=cardPose(t,g,i),radii=flightRadii(t,g,i);
-      return t>=at?<div key={widget.id} data-flying-widget={widget.id} style={{position:'absolute',width:rect.width,height:rect.height,borderRadius:radiusCss(radii),transformOrigin:'50% 50%',transform:`translate(${x-rect.width/2}px,${y-rect.height/2}px) scale(${scale})`,zIndex:10+i,boxShadow:`0 ${lerp(2,18,flight)}px ${lerp(5,32,flight)}px rgba(59,45,20,.14)`}}><LiveCrop screen="quick-tools" selector={widget.selector} state={state} radii={radii}/></div>:null;
+      const at=e.launches[i],rect=g[widget.id],p=cardPose(t,g,i),radii=flightRadii(t,g,i),active=e.launches.filter(at=>t>=at).length-1;
+      const passed=t<e.launchWide&&i<active&&t>=e.launches[active]+e.shots.find(s=>s.at===e.launches[active])!.settle;
+      if(t<at||passed)return null;
+      return <Hero key={widget.id} tool={widget.id} screen="quick-tools" selector={widget.selector} rect={rect} pose={p} state={state} radii={radii} seconds={t} zIndex={10+i} level={3-ease(t,at+e.polish.outgoing.duration,at+e.polish.outgoing.duration*2)}/>;
     }):null}
     {g&&macros?WIDGETS.slice(0,4).map((w,i)=>{
+      const active=e.quickShots.filter(s=>t>=s.at).length-1,next=e.quickShots[i+1];
+      if(t<e.quickReturn&&(i>active||next&&t>=next.at+e.shots.find(s=>s.at===next.at)!.settle))return null;
       const r=g[w.id],p=macroPose(t,g,i),join=ease(t,e.quickStart,e.macroEntryEnd)*(1-ease(t,e.quickReturn,e.quickReturnEnd)),radii=isolatedRadii(r,join);
-      const punch=1+.025*beat(t,'hero');
-      const nextShot=e.quickShots[i+1];
-      const hidePassed=nextShot&&t>=nextShot.at&&t<e.quickReturn;
-      const opacity=hidePassed?1-ease(t,nextShot.at,nextShot.at+.16):1;
-      return <div key={w.id} data-macro-widget={w.id} style={{position:'absolute',width:r.width,height:r.height,borderRadius:radiusCss(radii),transformOrigin:'50% 50%',transform:`translate(${p.x-r.width/2}px,${p.y-r.height/2}px) rotate(${p.angle}deg) scale(${p.scale*punch})`,opacity,boxShadow:'0 16px 32px rgba(59,45,20,.14)'}}><LiveCrop screen="quick-tools" selector={w.selector} state={state} radii={radii}/></div>;
+      return <Hero key={w.id} tool={w.id} screen="quick-tools" selector={w.selector} rect={r} pose={p} state={state} radii={radii} seconds={t} level={2+join}/>;
     }):null}
     </CameraRig>
-    {t>=e.gather&&t<e.bentoPush+.3?<KineticLine seconds={t} text="One place." notes={e.type['One place.']} x={110} y={230} width={950} size={280} exit={ease(t,e.bentoPush,e.bentoPush+.3)}/>:null}
-    {t>=e.launches[0]&&t<e.launchWide?(()=>{const i=e.launches.filter(at=>t>=at).length-1;return <KineticLine seconds={t} text={names[i]} notes={names[i].split(' ').map(()=>e.launches[i])} x={100} y={925} size={78} width={1700}/>;})():null}
-    {t>=e.quickStart&&t<e.quickReturn?(()=>{
-      const shot=[...e.quickShots].reverse().find(s=>t>=s.at)!;
-      const onRight=shot.widget===3;
-      const exit=ease(t,shot.end-.12,shot.end);
-      return <KineticLine key={shot.widget} seconds={t} text={names[shot.widget]} notes={names[shot.widget].split(' ').map(()=>shot.at)} x={onRight?1180:80} y={925} size={shot.widget===1?68:78} width={onRight?640:700} exit={exit}/>;
-    })():null}
+    {t>=e.gather&&t<e.bentoPush+.3?<KineticLine seconds={t} text="One place." notes={e.type['One place.']} x={110} y={230} width={950} size={TYPE.chapter.size} exit={ease(t,e.bentoPush,e.bentoPush+.3)}/>:null}
+    {t>=e.launches[0]&&t<e.launchWide?(()=>{const i=e.launches.filter(at=>t>=at).length-1;return <ToolLabel seconds={t} text={names[i]} at={e.launches[i]}/>;})():null}
+    {t>=e.quickStart&&t<e.quickReturn?(()=>{const shot=[...e.quickShots].reverse().find(s=>t>=s.at)!;return <ToolLabel seconds={t} text={names[shot.widget]} at={shot.at} exit={ease(t,shot.end-e.polish.outgoing.duration,shot.end)}/>;})():null}
     {t>=e.quickReturn?<QuickCaption seconds={t}/>:null}
   </>;
 };
-export const QuickCaption:React.FC<{seconds:number;exit?:number}>=({seconds:t,exit=0})=><KineticLine seconds={t} text="Quick tools." notes={e.type['Quick tools.']} x={100} y={180} width={1000} size={260} exit={Math.max(exit,ease(t,e.tabPush,e.measure))}/>;
+export const QuickCaption:React.FC<{seconds:number;exit?:number}>=({seconds:t,exit=0})=><KineticLine seconds={t} text="Quick tools." notes={e.type['Quick tools.']} x={100} y={180} width={1000} size={TYPE.chapter.size} exit={Math.max(exit,ease(t,e.tabPush,e.measure))}/>;

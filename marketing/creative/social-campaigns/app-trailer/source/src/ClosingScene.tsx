@@ -1,6 +1,6 @@
 import React from 'react';
 import {Img,staticFile} from 'remotion';
-import {Headline,Phone,Shape,Toolbox,beat,ease,lerp,pop} from './visuals';
+import {Headline,TYPE,Phone,Shape,Toolbox,beat,ease,lerp,pop} from './visuals';
 import timeline from './timeline.json';
 const e=timeline.events;
 const PHONES=[
@@ -13,13 +13,13 @@ export const ClosingScene:React.FC<{seconds:number}>=({seconds:t})=><div classNa
   <div style={{position:'absolute',inset:0,perspective:1800,perspectiveOrigin:'70% 50%'}}>
     {PHONES.map(p=>{
       const land=pop(t,p.at,.64);
-      return <div key={p.id} style={{position:'absolute',inset:0,transformOrigin:`${p.x}px ${p.y}px`,transform:`translateZ(${p.z}px) rotateY(${p.ry*land}deg)`}}><Phone seconds={t} id={p.id} state={p.state} x={p.x+200*(1-land)} y={p.y+600*(1-land)} scale={.86*lerp(.78,1,land)} angle={p.angle+12*(1-land)}/></div>;
+      return <div key={p.id} style={{position:'absolute',inset:0,transformOrigin:`${p.x}px ${p.y}px`,transform:`translateZ(${p.z}px) rotateY(${p.ry*land}deg)`}}><Phone seconds={t} id={p.id} state={p.state} level={3-land} x={p.x+200*(1-land)} y={p.y+600*(1-land)} scale={.86*lerp(.78,1,land)} angle={p.angle+12*(1-land)}/></div>;
     })}
   </div>
-  {PHONES.map(p=><div key={p.label} style={{position:'absolute',left:p.x-150,top:950,width:300,textAlign:'center',fontSize:32,fontWeight:600,color:'#3B2D14',transform:`translateY(${300*(1-ease(t,p.at+.4,p.at+.64))}px)`}}>{p.label}</div>)}
+  {PHONES.map(p=><div key={p.label} style={{position:'absolute',left:p.x-150,top:950,width:300,textAlign:'center',fontSize:TYPE.phoneLabel.size,fontWeight:TYPE.phoneLabel.weight,color:'#3B2D14',transform:`translateY(${300*(1-ease(t,p.at+.4,p.at+.64))}px)`}}>{p.label}</div>)}
   <Toolbox x={210} y={180} size={220} open={0} scale={pop(t,e.fan[1],.6)*lerp(1,.9,ease(t,e.finalAnticipation,e.finalExplosion))}/>
-  <Headline seconds={t} text="App Toolkit." x={96} y={355} width={700} size={108}/>
-  <Headline seconds={t} text="Your toolkit." x={96} y={510} width={650} size={76}/>
+  <Headline seconds={t} text="App Toolkit." x={96} y={355} width={700} size={TYPE.closingTitle.size}/>
+  <Headline seconds={t} text="Your toolkit." x={96} y={510} width={650} size={TYPE.closingSubtitle.size}/>
   <Img src={staticFile('google-play.png')} style={{position:'absolute',left:96,top:675,width:350,height:'auto',transform:`translateY(${600*(1-ease(t,e.badge,e.hold))}px)`}}/>
   {t>=e.finalExplosion?<>
     <Shape name="soft_burst" color="var(--tk-gold-container)" size={300} x={lerp(210,960,ease(t,e.finalExplosion,e.finalCover))} y={lerp(180,540,ease(t,e.finalExplosion,e.finalCover))} angle={120*ease(t,e.finalExplosion,e.finalLogo)} scale={lerp(.7,24,ease(t,e.finalExplosion,e.finalCover))}/>

@@ -91,3 +91,15 @@ See `source/FIDELITY.md`. Preparation and structural checks can pass independent
 - [ ] Owner playback with sound before the 2K master.
 
 The film uses the existing UI kit without changes to its screens. See `source/FIDELITY.md` for the exact validation scope and remaining review limits.
+
+## Polish systems
+
+Cards, phones and the toolbox use one two-layer Material elevation helper. Resting pieces use level 2; lifted and travelling pieces use level 3. A parent draws the shadow outside each crop, using that frame's actor transform.
+
+Ground colours come from cumulative `GroundWipe` shapes behind the product. Each grows from its subject over 0.36 seconds and remains as the new ground. The chapter root no longer switches its background per shot.
+
+Campaign type uses one scale: chapters 240/750, tool labels 56/650, closing title 128, closing subtitle 72 and phone labels 36. Close-up labels share the bottom-left anchor at 96,980. Product UI retains its native type.
+
+Close-up framing fits the projected whole card within a 48 px frame margin and reserves a separate label line. Passed cards unmount by the next shot's settle, with no opacity fade. Fast camera trails use six samples at 180 degrees, with at most 18% trail opacity over a sharp current frame, for 0.12 seconds per whip.
+
+The Part 1 still verification is recorded in `source/FIDELITY.md`. Scene polish and the final moving-preview review follow separately.

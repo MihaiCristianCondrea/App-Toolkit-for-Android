@@ -25,3 +25,18 @@
 The opening was reviewed before the rest of the shot-list cut. Subsequent sheets caught and corrected crossing gather paths, a mismatched phone handoff, Protractor and Counter copy contact, and the undersized spinning wheel. The whole-film review uses 24 equally spaced midpoint samples. The empty centre before the mark arrives at 1.76 is required by the owner's sketch; the closing foreground holds 27.90 to 29.40. These are deliberate exceptions to continuous product occupancy and camera movement. Chapter type follows the owner's requested fast phrase gestures; the final identity keeps the longer reading hold.
 
 The current 960 x 540 preview is rendered with the full soundtrack. Review covered 72 encoded samples, including 24 evenly spaced midpoint frames, all scene boundaries, standard feature samples and the ending. Five FFmpeg tile strips sample the film at 6 fps. The decoded video, opaque gold cover and audio integrity checks pass. Additional launch samples corrected the camera crossing empty space; swing samples corrected the handle leaving the top edge. The camera now returns to the mouth before each launch, and pulls wide before the lid opens. Audible playback cannot be independently judged through the available capture tools. Owner playback with sound remains necessary before approving a master. Static Compose-to-web parity was not rerun; the film uses the existing kit and retains its documented deviations. No Android code, UI-kit screen, original asset or soundtrack was changed. No master is rendered in this task.
+
+## Polish Part 1, rendered verification
+
+Each row was checked from `npm run sheet` output, not only from source.
+
+| Item | Rendered times (seconds) | Observed result |
+| --- | --- | --- |
+| S1 elevation | 1.9, 2.8, 3.6, 4.3, 5.0, 10.9, 14.6, 28.8 | Body, cards and phones have attached two-layer shadows outside their clips. |
+| S2 ground wipes | 10.9, 13.0, 13.1, 13.3, 14.5, 17.2, 19.4, 20.8, 22.0 | The ground grows behind the subjects; product remains visible during the colour change. |
+| S3 bounded blur | 5.78, 5.79, 5.8, 5.81; 19.34, 19.351, 19.362, 19.373, 19.384, 19.395, 19.406, 19.417, 19.428 | SOS and native converter values remain readable in the sampled fast moves; trails have a sharp foreground. The outgoing Measure card now holds until the next one arrives. |
+| S4 type | 3.6, 4.3, 5.0, 10.9, 12.2, 13.4, 14.6, 28.8 | Campaign labels share one size and lower-left anchor; closing uses the shared scale. Measure word motion remains for Part 2. |
+| S5 card crop | 3.6, 4.3, 5.0, 11.0, 12.2, 13.4, 14.6 | Whole cards, including their labels and values, are inside the frame with separate campaign labels. |
+| S6 leftovers | 4.3, 5.0, 12.2, 13.3, 14.6 | Passed card edges and the clipped launcher fragment are absent after the close-up settles. |
+
+Part 1 passes lint, check and the 94-onset beat audit. The full moving preview will be regenerated after Part 2. The earlier encoded review above describes the preceding shot-list cut.

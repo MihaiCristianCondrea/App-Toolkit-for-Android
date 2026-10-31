@@ -1,6 +1,6 @@
 import React,{useCallback,useState} from 'react';
-import {Geometry,Rect,LiveCrop,isolatedRadii,radiusCss} from './Kit';
-import {Phone,PhonePose,Shape,CameraRig,View,KineticLine,projectPhone,projectPart,mixView,beat,ease,lerp,pop} from './visuals';
+import {Geometry,isolatedRadii} from './Kit';
+import {Phone,Shape,Hero,TYPE,CameraRig,View,KineticLine,projectPhone,projectPart,mixView,beat,ease,lerp,pop} from './visuals';
 import {quickPhonePose,quickState,quickView} from './OpeningJourney';
 import timeline from './timeline.json';
 const e=timeline.events;
@@ -12,12 +12,6 @@ const stateAt=(t:number)=>({
   billAmount:120,splitPeople:t>=e.measureActions.split[0]?'4':'2',
 });
 const playAt=(t:number)=>({wheelText:'Pizza\nSushi\nPasta',wheelRotation:1260*ease(t,e.wheelStart,e.wheelEnd),wheelWinner:t>=e.wheelEnd?'Sushi':'',randomResult:t<e.chance[0]?null:73,diceResult:t>=e.chance[1]?5:null,coinSide:t>=e.chance[2]?'Heads':null});
-
-/** A real crop keeps its measured native rectangle while the camera changes the framing. */
-const Hero:React.FC<{tool:string;screen:string;rect:Rect;state:Record<string,unknown>;pose:PhonePose;radii:number[];seconds:number;clip?:string}>=({tool,screen,rect,state,pose,radii,seconds:t,clip})=>{
-  const punch=(tool==='decision_wheel'&&t>=e.wheelWideEnd)?1:(1+.022*beat(t,'hero'));
-  return <div data-hero-part={tool} style={{position:'absolute',width:rect.width,height:rect.height,borderRadius:radiusCss(radii),clipPath:clip,transformOrigin:'50% 50%',transform:`translate(${pose.x-rect.width/2}px,${pose.y-rect.height/2}px) rotate(${pose.angle}deg) scale(${pose.scale*punch})`,boxShadow:'0 16px 32px rgba(59,45,20,.14)'}}><LiveCrop screen={screen} selector={`[data-tool="${tool}"]`} state={state} radii={radii}/></div>;
-};
 
 export const FeatureJourney:React.FC<{seconds:number;geometry:Geometry}>=({seconds:t,geometry})=>{
   const [parts,setParts]=useState<Geometry>({});
@@ -43,7 +37,7 @@ export const FeatureJourney:React.FC<{seconds:number;geometry:Geometry}>=({secon
     isPlay?{x:lerp(960,980,wide),y:lerp(540,520,wide),scale:lerp(1,1.03,wide),angle:lerp(-2,0,push)*(1-wide)}:
     mixView(active.view,active.to,ease(t,active.at+shot.settle,active.end));
   return <>
-    {t<e.measureShots[0].at+.2?<KineticLine seconds={t} text="Measure." notes={e.type['Measure.']} x={96} y={260} size={300} exit={ease(t,e.measureShots[0].at-.12,e.measureShots[0].at+.2)}/>:null}
+    {t<e.measureShots[0].at+.2?<KineticLine seconds={t} text="Measure." notes={e.type['Measure.']} x={96} y={260} size={TYPE.chapter.size} exit={ease(t,e.measureShots[0].at-.12,e.measureShots[0].at+.2)}/>:null}
     <CameraRig view={view}>
       <Phone seconds={t} id={isPlay?'play':'numbers'} state={isPlay?playState:measureState} {...phone}
         underId={isPlay?'numbers':'quick-tools'} underState={isPlay?stateAt(e.play):quickState(e.measure)} transition={transition}
@@ -52,7 +46,7 @@ export const FeatureJourney:React.FC<{seconds:number;geometry:Geometry}>=({secon
       {!isPlay?e.measureShots.map((s,i)=>{
         const r=parts[s.tool],next=e.measureShots[i+1]?.at??e.play;
         if(!r||t<(i?s.at-.14:e.measure)||t>=next+.24)return null;
-        const enter=ease(t,i?s.at-.14:e.measure,s.at+.28),out=ease(t,next-.14,next+.28);// The same curve as the next card's entry: one continuous push, never an empty frame.
+        const enter=ease(t,i?s.at-.14:e.measure,s.at+.28),out=ease(t,next,next+.28);// The same curve as the next card's entry: one continuous push, never an empty frame.
         const source=projectPhone(r,origin,t),scale=Math.min(s.height/r.height,1720/r.width);
         const p={x:lerp(i?s.x+1900:source.x,s.x,enter)-1900*out,y:lerp(i?s.y:source.y,s.y,enter),scale:lerp(i?scale*.85:source.scale,scale,enter),angle:lerp(i?s.angle+8:origin.angle,s.angle,enter)};
         return <React.Fragment key={s.tool}>
@@ -71,7 +65,7 @@ export const FeatureJourney:React.FC<{seconds:number;geometry:Geometry}>=({secon
       }):null}
     </CameraRig>
 
-    {!isPlay&&t>=active.at?<KineticLine seconds={t} text={active.word} notes={[active.at]} x={active.textX} y={active.textY} size={active.textSize} width={800} exit={ease(t,active.end-.14,active.end+.1)}/>:null}
-    {isPlay&&t<e.wheelStart+.28?<KineticLine seconds={t} text="Let chance decide." notes={e.type['Let chance decide.']} x={96} y={120} width={1050} size={220} exit={ease(t,e.wheelStart,e.wheelStart+.28)}/>:null}
+    {!isPlay&&t>=active.at?<KineticLine seconds={t} text={active.word} notes={[active.at]} x={active.textX} y={active.textY} size={TYPE.chapter.size} width={800} exit={ease(t,active.end-.14,active.end+.1)}/>:null}
+    {isPlay&&t<e.wheelStart+.28?<KineticLine seconds={t} text="Let chance decide." notes={e.type['Let chance decide.']} x={96} y={120} width={1050} size={TYPE.chapter.size} exit={ease(t,e.wheelStart,e.wheelStart+.28)}/>:null}
   </>;
 };
