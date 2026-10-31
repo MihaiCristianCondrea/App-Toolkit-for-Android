@@ -1,4 +1,4 @@
-import React from 'react';
+import React,{createContext,useContext} from 'react';
 import {Easing, Img, spring, staticFile} from 'remotion';
 import {shapeUrl} from '../../../../../ui/src/kit/assets.js';
 import {DISPLAY,LiveScreen,SKIN_HEIGHT,SKIN_WIDTH,localRect,measuredRect,Geometry,Rect} from './Kit';
@@ -8,7 +8,7 @@ export const INK='#3B2D14';
 export const GROUND='#FFF4D9';
 export const lerp=(a:number,b:number,p:number)=>a+(b-a)*p;
 export const clamp=(n:number)=>Math.max(0,Math.min(1,n));
-const emphasized=Easing.bezier(.2,0,0,1),accelerate=Easing.bezier(.3,0,.8,.15),cinematic=Easing.bezier(.45,0,.25,1);
+const emphasized=Easing.bezier(.2,0,0,1),accelerate=Easing.bezier(.3,0,.8,.15);
 /** Material emphasized: a quick start and a long, exact settle. */
 export const ease=(t:number,start:number,end:number)=>emphasized(clamp((t-start)/(end-start)));
 /** Exits accelerate away instead of drifting. */
@@ -22,26 +22,40 @@ export const pop=(t:number,start:number,duration=.7)=>{
   return lerp(value,1,clamp((frame-length*.7)/(length*.3)));
 };
 
-/** Phrase camera keyframes are shared by the foreground and the slower background. */
-const CAMERA=[[0,1,0,0,0],...timeline.events.cameraMoves.flatMap((move,i)=>{
-  const previous=i?timeline.events.cameraMoves[i-1].to:[1,0,0,0];
-  return [[move.at,...previous],[move.at+move.duration,...move.to]];
-})];
-const cameraPose=(t:number)=>{
-  let i=0;while(i<CAMERA.length-2&&t>=CAMERA[i+1][0])i++;
-  const [t0,s0,x0,y0,r0]=CAMERA[i],[t1,s1,x1,y1,r1]=CAMERA[i+1];
-  const p=cinematic(clamp((t-t0)/(t1-t0)));
-  return {x:lerp(x0,x1,p),y:lerp(y0,y1,p),angle:lerp(r0,r1,p),scale:lerp(s0,s1,p)};
+export type View={x:number;y:number;scale:number;angle:number};
+const ViewContext=createContext<View>({x:960,y:540,scale:1,angle:0});
+/** Adapted from Android Insider's focus camera and logarithmic shape-to-ground sizing. */
+export const logSize=(a:number,b:number,p:number)=>a*Math.pow(b/a,p);
+export const mixView=(a:View,b:View,p:number):View=>({x:lerp(a.x,b.x,p),y:lerp(a.y,b.y,p),scale:logSize(a.scale,b.scale,p),angle:lerp(a.angle,b.angle,p)});
+const viewAffine=(v:View)=>{
+  const a=v.angle*Math.PI/180,dx=(v.x-960)*v.scale,dy=(v.y-540)*v.scale;
+  return {x:-dx*Math.cos(a)+dy*Math.sin(a),y:-dx*Math.sin(a)-dy*Math.cos(a),scale:v.scale,angle:v.angle};
 };
-export const camera=(t:number,depth=1)=>{
-  const c=cameraPose(t);
-  return `translate(${c.x*depth}px,${c.y*depth}px) rotate(${c.angle*depth}deg) scale(${1+(c.scale-1)*depth})`;
+const affineCss=(c:View,depth=1)=>`translate(${c.x*depth}px,${c.y*depth}px) rotate(${c.angle*depth}deg) scale(${1+(c.scale-1)*depth})`;
+export const CameraRig:React.FC<{view:View;children:React.ReactNode}>=({view,children})=><ViewContext.Provider value={view}><div style={{position:'absolute',inset:0,transformOrigin:'50% 50%',transform:affineCss(viewAffine(view))}}>{children}</div></ViewContext.Provider>;
+export const projectPart=(rect:Rect,box:Rect,pose:PhonePose)=>{
+  const a=pose.angle*Math.PI/180,dx=(rect.x-box.x+rect.width/2-box.width/2)*pose.scale,dy=(rect.y-box.y+rect.height/2-box.height/2)*pose.scale;
+  return {x:pose.x+dx*Math.cos(a)-dy*Math.sin(a),y:pose.y+dx*Math.sin(a)+dy*Math.cos(a)};
 };
+/** The reference film grows an originating shape far enough to cover every corner. */
+export const coverSize=(x:number,y:number)=>Math.max(Math.hypot(x,y),Math.hypot(1920-x,y),Math.hypot(x,1080-y),Math.hypot(1920-x,1080-y))/.34*1.06;
+export const ShapeWipes:React.FC<{seconds:number}>=({seconds:t})=><>{timeline.events.wipes.map(w=>{
+  if(t<w.at-w.lead||t>=w.at+w.duration)return null;
+  const size=coverSize(w.x,w.y),grow=ease(t,w.at-w.lead,w.at),leave=ease(t,w.at,w.at+w.duration);
+  return <Shape key={w.at} name={w.shape} color={w.color} size={t<w.at?logSize(100,size,grow):size} x={w.x+(w.direction*(1920+size))*leave} y={w.y} angle={30*grow}/>;
+})}</>;
+
+/** Whole-word masks from the reference headline system, with padded descenders. */
+export const KineticLine:React.FC<{seconds:number;text:string;notes:number[];x:number;y:number;size:number;width?:number;exit?:number;color?:string}>=({seconds:t,text,notes,x,y,size,width=1780,exit=0,color=INK})=><div style={{position:'absolute',left:x,top:y,width,fontFamily:'Google Sans Flex',fontSize:size,fontWeight:750,lineHeight:1.02,letterSpacing:-size*.045,color,transform:`translateX(${-2200*exit}px)`}}>{text.split(' ').map((word,i)=>{
+  const p=pop(t,notes[i]??notes[0],.18);
+  return <span key={i} style={{display:'inline-block',overflow:'hidden',padding:'.08em .05em .26em',margin:'-.08em -.05em -.26em',marginRight:'.18em',whiteSpace:'nowrap'}}><span style={{display:'inline-block',transform:`translateY(${(1-p)*145}%)`,fontVariationSettings:`'wght' ${lerp(520,750,p)}, 'wdth' ${lerp(80,100,p)}`}}>{word}</span></span>;
+})}</div>;
 
 /** A short accent weighted by the beat sheet, with no activity between notes. */
 export const beat=(t:number,target?:string)=>{
-  const hit=[...timeline.events.beats].reverse().find(b=>b.at<=t&&(!target||b.responses.some(r=>'target' in r&&r.target===target)));
-  return hit?hit.strength*Math.exp(-(t-hit.at)*18):0;
+  const cue=target?[...timeline.events.accents].reverse().find(a=>a.at<=t&&a.target===target):undefined;
+  const hit=[...timeline.events.beats].reverse().find(b=>target?b.at===cue?.at:b.at<=t);
+  return hit?hit.strength*Math.exp(-(t-hit.at)*18)*(1-ease(t-hit.at,.1,.2)):0;
 };
 export const phoneScaleAt=(t:number,scale:number)=>scale*(1+.008*beat(t,'phone'));
 
@@ -53,15 +67,13 @@ export const projectPhone=(rect:Rect,pose:PhonePose,t:number)=>{
   return {x:pose.x+x*Math.cos(a)-y*Math.sin(a),y:pose.y+x*Math.sin(a)+y*Math.cos(a),scale:s};
 };
 
-/** A tool name that lands on a beat, so a chapter names what the screen holds. */
-export const Chip:React.FC<{text:string;color:string;ink:string;progress:number;active?:number}>=({text,color,ink,progress,active=0})=><span style={{display:'inline-block',padding:'12px 26px',borderRadius:999,background:color,color:ink,fontSize:34,fontWeight:600,lineHeight:1.1,whiteSpace:'nowrap',transform:`translateY(${(1-progress)*400}px) scale(${lerp(.6,1,progress)*(1+.08*active)})`}}>{text}</span>;
-
 /** Background stages share the camera direction at a lower depth than the subject. */
 export const Shape:React.FC<{name:string;color:string;size:number;x:number;y:number;angle?:number;scale?:number;seconds?:number;mask?:string}>=({name,color,size,x,y,angle=0,scale=1,seconds,mask:maskUrl})=>{
+  const view=useContext(ViewContext);
   const mask=<div aria-hidden="true" style={{position:'absolute',width:size,height:size,left:0,top:0,background:color,maskImage:`url("${maskUrl??shapeUrl(name)}")`,WebkitMaskImage:`url("${maskUrl??shapeUrl(name)}")`,maskSize:'contain',WebkitMaskSize:'contain',maskRepeat:'no-repeat',transform:`translate(${x-size/2}px,${y-size/2}px) rotate(${angle}deg) scale(${scale})`}}/>;
   if(seconds===undefined)return mask;
-  const c=cameraPose(seconds);
-  return <div style={{position:'absolute',inset:0,transformOrigin:'50% 50%',transform:`scale(${1/c.scale}) rotate(${-c.angle}deg) translate(${-c.x}px,${-c.y}px) ${camera(seconds,.4)}`}}>{mask}</div>;
+  const c=viewAffine(view);
+  return <div style={{position:'absolute',inset:0,transformOrigin:'50% 50%',transform:`scale(${1/c.scale}) rotate(${-c.angle}deg) translate(${-c.x}px,${-c.y}px) ${affineCss(c,.4)}`}}>{mask}</div>;
 };
 
 /** The original lid swings around the right lip, carrying its handle into the open pose. */
@@ -94,7 +106,11 @@ export const Phone:React.FC<{id:string;state?:Record<string,unknown>;x:number;y:
           focusPart(root,focusSelector);
           if(onParts){
             const parts:Geometry={};
-            for(const node of root.querySelectorAll<HTMLElement>('[data-tool]'))if(node.dataset.tool)parts[node.dataset.tool]=measuredRect(node,root);
+            for(const node of root.querySelectorAll<HTMLElement>('[data-tool]'))if(node.dataset.tool){
+              parts[node.dataset.tool]=measuredRect(node,root);
+              const wheel=node.querySelector<HTMLElement>('.decision-wheel');
+              if(wheel)parts[node.dataset.tool+'-face']=measuredRect(wheel,root);
+            }
             onParts(parts);
           }
           if(hideWidgets)for(const node of root.querySelectorAll<HTMLElement>('.qt-live,.qt-breathe,.qt-colors'))node.style.visibility='hidden';

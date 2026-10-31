@@ -10,7 +10,7 @@
     "title": "App Toolkit: Your toolkit",
     "headline": "App Toolkit. Your toolkit.",
     "description": "App Toolkit for Android opens into live tools for direction, measuring, counting and everyday choices. Watch the toolbox become your toolkit in one app.",
-    "longDescription": "The original App Toolkit mark opens as a chest. Four live widgets leave its mouth and gather into a bento before the real phone screen forms around them. Quick Tools, Measure and Play & Decide follow the full soundtrack, with measured card transitions and a final gold burst.",
+    "longDescription": "The original App Toolkit mark opens as a chest and launches four live tools. Large Compass, Level, Flashlight, SOS and Measure close-ups lead to the spinning decision wheel. Three Pixel phones show Quick Tools, Measure and Play & Decide before the final gold burst.",
     "altText": "A toolbox opens into live widgets that assemble into App Toolkit's three screens on Pixel phones.",
     "keywords": [
       "App Toolkit",
@@ -47,35 +47,75 @@
     },
     "output/images/scene-01.png": {
       "title": "App Toolkit: scene 1",
-      "altText": "Tool symbols land inside the existing Material shapes on the opening music notes."
+      "altText": "Three cropped Material shapes frame a clear centre before the App Toolkit mark arrives."
     },
     "output/images/scene-02.png": {
       "title": "App Toolkit: scene 2",
-      "altText": "The mirrored toolbox lid rests behind the body on its hinge seam."
+      "altText": "The original toolbox lid swings open around the right lip with its handle attached."
     },
     "output/images/scene-03.png": {
       "title": "App Toolkit: scene 3",
-      "altText": "Compass, level, flashlight and SOS leave the chest through four separate lanes."
+      "altText": "Compass, level, flashlight and SOS surround the chest after four separate launches."
     },
     "output/images/scene-04.png": {
       "title": "App Toolkit: scene 4",
-      "altText": "Four real widgets form a large 2x2 grid beside One place."
+      "altText": "Four real widgets form a large connected bento beside One place."
     },
     "output/images/scene-05.png": {
       "title": "App Toolkit: scene 5",
-      "altText": "The real Quick Tools screen appears in the Pixel frame beside Quick tools."
+      "altText": "Four live widgets return to the real Quick Tools screen beside giant Quick tools words."
     },
     "output/images/scene-06.png": {
       "title": "App Toolkit: scene 6",
-      "altText": "The Measure screen and live bill splitter appear beside Angles, Units, Bills and Counts."
+      "altText": "The live bill splitter displays the share per person beside the word Split."
     },
     "output/images/scene-07.png": {
       "title": "App Toolkit: scene 7",
-      "altText": "The decision wheel lands on Sushi beside the real Play and Decide screen."
+      "altText": "The decision wheel lands on Sushi while number, die and coin results arrive below."
     },
     "output/images/scene-08.png": {
       "title": "App Toolkit: scene 8",
-      "altText": "Three App Toolkit screens fan out beside the mark, tagline and Google Play badge."
+      "altText": "Three large App Toolkit screens fan out beside the mark, tagline and Google Play badge."
+    },
+    "output/images/shot-list-24-frames.png": {
+      "title": "App Toolkit: 24-frame trailer review",
+      "altText": "24 timed frames show chest launches, large live tools, the wheel and three closing destinations."
+    },
+    "output/images/shot-list-preview-sheet.png": {
+      "title": "App Toolkit: Trailer detail review",
+      "altText": "Timed frames show connected corners, live tool close-ups, chapter changes and the final gold mark."
+    },
+    "output/images/shot-list-boundaries.png": {
+      "title": "App Toolkit: Scene boundary review",
+      "altText": "Paired frames show covered scene boundaries and the chest before the first launch."
+    },
+    "output/images/shot-list-pacing-01.png": {
+      "title": "App Toolkit: Opening pacing review",
+      "altText": "Timed frames show corner shapes, the app icon opening and four tools launching from the chest."
+    },
+    "output/images/shot-list-pacing-02.png": {
+      "title": "App Toolkit: Bento and compass pacing",
+      "altText": "Timed frames show the four-card bento joining, entering the screen and opening into Compass and Level."
+    },
+    "output/images/shot-list-pacing-03.png": {
+      "title": "App Toolkit: Quick Tools pacing review",
+      "altText": "Timed frames show Flashlight brightness, SOS pulses, the returning cards and the Measure screen bridge."
+    },
+    "output/images/shot-list-pacing-04.png": {
+      "title": "App Toolkit: Measure and wheel pacing",
+      "altText": "Timed frames show Protractor, Converter, Bill Splitter and Counter, followed by the spinning wheel."
+    },
+    "output/images/shot-list-pacing-05.png": {
+      "title": "App Toolkit: Closing pacing review",
+      "altText": "Timed frames show Sushi, three chance results, the large device fan and the final gold burst."
+    },
+    "output/images/open-chest-large.png": {
+      "title": "App Toolkit: Chest opening detail",
+      "altText": "The original toolbox body and intact lid fill the frame, with the handle attached to the open lid."
+    },
+    "output/images/review-sheet.png": {
+      "title": "App Toolkit: 24-frame trailer review",
+      "altText": "24 timed frames show chest launches, large live tools, the wheel and three closing destinations."
     }
   },
   "soundtrack": {

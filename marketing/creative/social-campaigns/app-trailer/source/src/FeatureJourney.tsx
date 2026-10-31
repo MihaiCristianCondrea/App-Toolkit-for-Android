@@ -1,64 +1,74 @@
 import React,{useCallback,useState} from 'react';
 import {Geometry,Rect,LiveCrop,isolatedRadii,radiusCss} from './Kit';
-import {Headline,Phone,PhonePose,Shape,projectPhone,beat,ease,lerp,pop} from './visuals';
-import {QuickCaption,quickPhonePose,quickState} from './OpeningJourney';
+import {Phone,PhonePose,Shape,CameraRig,View,KineticLine,projectPhone,projectPart,mixView,beat,ease,lerp,pop} from './visuals';
+import {quickPhonePose,quickState,quickView} from './OpeningJourney';
 import timeline from './timeline.json';
-
 const e=timeline.events;
-const HEROES=[
-  {tool:'protractor',word:'Angles.',in:e.measureHeroes[0],out:e.heroReturns[0],end:e.measureHeroes[1]},
-  {tool:'unit_converter',word:'Units.',in:e.measureHeroes[1],out:e.heroReturns[1],end:e.measureHeroes[2]},
-  {tool:'bill_splitter',word:'Bills.',in:e.measureHeroes[2],out:e.heroReturns[2],end:e.measureHeroes[3]},
-  {tool:'counter',word:'Counts.',in:e.measureHeroes[3],out:e.heroReturns[3],end:e.play},
-];
-const CHANCE=[{tool:'random_number',at:e.chance[0],x:1140,scale:.85,angle:-4},{tool:'dice_roll',at:e.chance[1],x:1430,scale:1.05,angle:5},{tool:'coin_flip',at:e.chance[2],x:1700,scale:.95,angle:-5}];
-const heroProgress=(t:number,h:typeof HEROES[number])=>ease(t,h.in,h.in+.3)*(1-ease(t,h.out,h.end));
 
-/** A crop replaces its hidden screen counterpart, then returns to that measured rectangle. */
-const Container:React.FC<{tool:string;screen:string;rect:Rect;state:Record<string,unknown>;pose:PhonePose;seconds:number;progress:number;x:number;y:number;scale:number;angle?:number}>=({tool,screen,rect,state,pose,seconds,progress,x,y,scale,angle=0})=>{
-  const source=projectPhone(rect,pose,seconds),s=lerp(source.scale,scale,progress),radii=isolatedRadii(rect,progress);
-  return <div data-hero-part={tool} style={{position:'absolute',width:rect.width,height:rect.height,borderRadius:radiusCss(radii),transformOrigin:'50% 50%',transform:`translate(${lerp(source.x,x,progress)-rect.width/2}px,${lerp(source.y,y,progress)-rect.height/2}px) rotate(${lerp(pose.angle,angle,progress)}deg) scale(${s})`,boxShadow:`0 ${18*progress}px ${36*progress}px rgba(59,45,20,${.14*progress})`}}>
-    <LiveCrop screen={screen} selector={`[data-tool="${tool}"]`} state={{...state,searchQuery:''}} radii={radii}/>
-  </div>;
-};
+const stateAt=(t:number)=>({
+  counterValue:42+e.measureActions.counter.filter(at=>t>=at).length,
+  protractorAngle:Math.round(lerp(20,135,ease(t,...e.measureActions.angle as [number,number]))),
+  converterInput:Math.round(lerp(10,25,ease(t,...e.measureActions.converter as [number,number]))),
+  billAmount:120,splitPeople:t>=e.measureActions.split[0]?'4':'2',
+});
+const playAt=(t:number)=>({wheelText:'Pizza\nSushi\nPasta',wheelRotation:1260*ease(t,e.wheelStart,e.wheelEnd),wheelWinner:t>=e.wheelEnd?'Sushi':'',randomResult:t<e.chance[0]?null:73,diceResult:t>=e.chance[1]?5:null,coinSide:t>=e.chance[2]?'Heads':null});
 
-export const FeatureJourney:React.FC<{seconds:number;geometry:Geometry|null}>=({seconds:t,geometry})=>{
+/** A real crop keeps its measured native rectangle while the camera changes the framing. */
+const Hero:React.FC<{tool:string;screen:string;rect:Rect;state:Record<string,unknown>;pose:PhonePose;radii:number[];seconds:number;clip?:string}>=({tool,screen,rect,state,pose,radii,seconds:t,clip})=><div data-hero-part={tool} style={{position:'absolute',width:rect.width,height:rect.height,borderRadius:radiusCss(radii),clipPath:clip,transformOrigin:'50% 50%',transform:`translate(${pose.x-rect.width/2}px,${pose.y-rect.height/2}px) rotate(${pose.angle}deg) scale(${pose.scale*(1+.022*beat(t,'hero'))})`,boxShadow:'0 16px 32px rgba(59,45,20,.14)'}}><LiveCrop screen={screen} selector={`[data-tool="${tool}"]`} state={state} radii={radii}/></div>;
+
+export const FeatureJourney:React.FC<{seconds:number;geometry:Geometry}>=({seconds:t,geometry})=>{
   const [parts,setParts]=useState<Geometry>({});
   const measured=useCallback((g:Geometry)=>setParts(old=>JSON.stringify(old)===JSON.stringify(g)?old:g),[]);
-  const isPlay=t>=e.play,move=ease(t,e.phonePan,e.phonePanEnd);
-  const active=[...HEROES].reverse().find(h=>t>=h.in&&t<h.end);
-  const count=42+[e.cues.at20_84,e.cues.at21_12,e.cues.at21_46].filter(at=>t>=at).length;
-  const measureState={counterValue:count,protractorAngle:Math.round(lerp(20,135,ease(t,e.cues.at18_38,e.cues.at18_92))),converterInput:Math.round(lerp(10,25,ease(t,e.cues.at19_42,e.cues.at19_88))),splitTotal:'120',splitPeople:t>=e.cues.at20_56?'4':'2'};
-  const shuffle=Math.floor(t*30),playState={wheelText:'Pizza\nSushi\nPasta',wheelRotation:1260*ease(t,e.wheelStart,e.wheelEnd),wheelWinner:t>=e.wheelEnd?'Sushi':'',randomResult:t<e.chance[0]?null:t<e.chance[1]?1+(shuffle*37)%100:73,diceResult:t<e.chance[1]||t>=e.chance[2]?5:1+(shuffle*5)%6,coinSide:t>=e.chance[2]&&t<e.cues.at25_68?'Tails':'Heads'};
+  const isPlay=t>=e.play,active=[...e.measureShots].reverse().find(s=>t>=s.at)??e.measureShots[0];
   const transition=ease(t,isPlay?e.play:e.measure,(isPlay?e.play:e.measure)+.3);
-  const nav=geometry?.[isPlay?'Play & Decide':'Measure'];
+  const nav=geometry[isPlay?'Play & Decide':'Measure'];
   if(!nav)throw new Error('Missing measured tab geometry');
-  const tab={x:nav.x+nav.width/2,y:nav.y+nav.height/2};
-  const returnAll=1-ease(t,e.chanceReturn,e.close),wheelVisible=isPlay&&t>=e.wheelEntry&&t<e.close;
-  const hidden=isPlay?[...(wheelVisible?['decision_wheel']:[]),...CHANCE.filter(c=>t>=c.at&&t<e.close).map(c=>c.tool)]:active?[active.tool]:[];
-  const leave=ease(t,e.close,e.close+.4),ground=isPlay?ease(t,e.wheelEntry,e.cues.at22_86)*returnAll:active?heroProgress(t,active):0;
-  const from=quickPhonePose(e.measure),to=e.closingOrigin,resolve=ease(t,e.wheelEnd,e.chance[0]);
-  const offstage=isPlay?resolve*(1-ease(t,e.chanceReturn,e.close)):0;
-  const pose={x:lerp(from.x,to.x,move)-55*ground-900*offstage,y:lerp(from.y,to.y,move),scale:lerp(from.scale,to.scale,move)*(1-.2*offstage),angle:lerp(from.angle,to.angle,move)+2*ground+12*offstage};
-  const shot=isPlay?{x:lerp(1370,550,resolve),y:650,scale:2,angle:lerp(-3,-7,resolve)}:e.featureShots[active?HEROES.indexOf(active):0];
-  const heroRect=parts[isPlay?'decision_wheel':active?.tool??'protractor'];
-  const source=heroRect?projectPhone(heroRect,pose,t):{x:1430,y:600};
+  const origin=quickPhonePose(e.measure),depart=ease(t,e.measure+.22,e.measure+.78);
+  const phone={...origin,x:origin.x-3000*depart};
+  const shot=e.shots.find(s=>s.at===active.at)!;
+  const measureState=stateAt(t),playState=playAt(t);
+  const wide=ease(t,e.wheelWide,e.wheelWideEnd),wheelRect=parts.decision_wheel;
+  const wheelFace=parts['decision_wheel-face'];
+  const push=ease(t,e.wheelStart,e.wheelStart+.3),diameter=lerp(850,960,push);
+  const focusScale=wheelFace?diameter/wheelFace.height:1;
+  const offset=wheelRect&&wheelFace?projectPart(wheelFace,wheelRect,{x:0,y:0,scale:focusScale,angle:0}):{x:0,y:0};
+  const enter=ease(t,e.wheelEntry-.14,e.wheelEntry+.28);
+  const wheelPose={x:lerp(lerp(1440,960,push)-offset.x,960,wide)+1900*(1-enter),y:lerp(540-offset.y,330,wide),scale:lerp(focusScale,2.5,wide),angle:0};
+  const bounds=wheelRect&&wheelFace?[wheelFace.y-wheelRect.y,wheelRect.x+wheelRect.width-wheelFace.x-wheelFace.width,wheelRect.y+wheelRect.height-wheelFace.y-wheelFace.height,wheelFace.x-wheelRect.x]:[0,0,0,0];
+  const wheelClip=`inset(${bounds.map(n=>Math.max(0,n)*(1-wide)).join('px ')}px round ${lerp((wheelFace?.width??0)/2,28,wide)}px)`;
+  const view:View=t<e.measureShots[0].at?mixView(quickView(e.measure,geometry),active.view,ease(t,e.measure,e.measureShots[0].at)):
+    isPlay?{x:lerp(960,980,wide),y:lerp(540,520,wide),scale:lerp(1,1.03,wide),angle:lerp(-2,0,push)*(1-wide)}:
+    mixView(active.view,active.to,ease(t,active.at+shot.settle,active.end));
   return <>
-    <Shape name={isPlay?'soft_burst':'flower'} color={isPlay?'#E8D3DC':'#FDE7A2'} size={820} x={lerp(source.x,shot.x,ground)+2000*leave} y={lerp(source.y,shot.y,ground)} scale={ground*(1+.055*beat(t,'phone'))} angle={lerp(-35,shot.angle,ground)+9*beat(t,'phone')} seconds={t}/>
-    {t<e.close?<Phone seconds={t} id={isPlay?'play':'numbers'} state={isPlay?playState:measureState} x={pose.x} y={pose.y} scale={pose.scale} angle={pose.angle}
-      underId={isPlay?'numbers':'quick-tools'} underState={isPlay?{counterValue:45,protractorAngle:135,converterInput:25,splitTotal:'120',splitPeople:'4'}:quickState(e.measure)}
-      transition={transition} revealFrom={tab} underFocusSelector={isPlay?'[data-tool="counter"]':undefined} focusSelector={`[data-tool="${isPlay?'decision_wheel':active?.tool??'protractor'}"]`} hiddenParts={hidden} onParts={measured}/>:null}
-    {t<e.cues.at17_7?<QuickCaption seconds={t} exit={ease(t,e.measure,e.cues.at17_7)}/>:null}
-    {!isPlay?<>
-      <div style={{transform:`translateX(${2200*ease(t,e.measureHeroes[3],e.cues.at21_12)}px)`}}><Headline seconds={t} text="Measure." x={1060} y={110} width={740} size={132}/></div>
-      {HEROES.map((h,i)=>t>=h.in&&t<h.end?<React.Fragment key={h.tool}>
-        <div style={{position:'absolute',left:1060,top:280,width:740,overflow:'hidden',fontSize:54,fontWeight:650,color:'#006A60'}}><div style={{transform:`translateY(${140*(1-pop(t,h.in,.32))-140*ease(t,h.out,h.end)}%)`}}>{h.word}</div></div>
-        {parts[h.tool]?<Container seconds={t} tool={h.tool} screen="numbers" rect={parts[h.tool]} state={measureState} pose={pose} progress={heroProgress(t,h)} {...e.featureShots[i]}/>:null}
-      </React.Fragment>:null)}
-    </>:<>
-      <div style={{transform:`translateY(${-1000*leave}px)`}}><Headline seconds={t} text="Let chance decide." x={1060} y={140} width={740} size={112}/></div>
-      {wheelVisible&&parts.decision_wheel?<Container seconds={t} tool="decision_wheel" screen="play" rect={parts.decision_wheel} state={playState} pose={pose} progress={ease(t,e.wheelEntry,e.cues.at22_86)*returnAll} x={shot.x} y={shot.y} scale={shot.scale} angle={shot.angle}/>:null}
-      {CHANCE.map(c=>t>=c.at&&t<e.close&&parts[c.tool]?<Container seconds={t} key={c.tool} tool={c.tool} screen="play" rect={parts[c.tool]} state={playState} pose={pose} progress={ease(t,c.at,c.at+.3)*returnAll} x={c.x} y={710} scale={c.scale} angle={c.angle}/>:null)}
-    </>}
+    {t<e.measureShots[0].at+.2?<KineticLine seconds={t} text="Measure." notes={e.type['Measure.']} x={96} y={260} size={300} exit={ease(t,e.measureShots[0].at-.12,e.measureShots[0].at+.2)}/>:null}
+    <CameraRig view={view}>
+      <Phone seconds={t} id={isPlay?'play':'numbers'} state={isPlay?playState:measureState} {...phone}
+        underId={isPlay?'numbers':'quick-tools'} underState={isPlay?stateAt(e.play):quickState(e.measure)} transition={transition}
+        revealFrom={{x:nav.x+nav.width/2,y:nav.y+nav.height/2}} focusSelector={`[data-tool="${isPlay?'decision_wheel':active.tool}"]`}
+        hiddenParts={isPlay?['decision_wheel','random_number','dice_roll','coin_flip']:e.measureShots.map(s=>s.tool)} onParts={measured}/>
+      {!isPlay?e.measureShots.map((s,i)=>{
+        const r=parts[s.tool],next=e.measureShots[i+1]?.at??e.play;
+        if(!r||t<(i?s.at-.14:e.measure)||t>=next+.24)return null;
+        const enter=ease(t,i?s.at-.14:e.measure,s.at+.28),out=ease(t,next-.14,next+.24);
+        const source=projectPhone(r,origin,t),scale=Math.min(s.height/r.height,1720/r.width);
+        const p={x:lerp(i?s.x+1900:source.x,s.x,enter)-2400*out,y:lerp(i?s.y:source.y,s.y,enter),scale:lerp(i?scale*.85:source.scale,scale,enter),angle:lerp(i?s.angle+8:origin.angle,s.angle,enter)};
+        return <React.Fragment key={s.tool}>
+          <Shape name={i%2?'soft_burst':'flower'} color={i%2?'#BBDCD3':'#F6A800'} size={1000} x={p.x} y={p.y} scale={enter*(1+.04*beat(t,'hero'))} angle={s.angle+8*beat(t,'hero')} seconds={t}/>
+          <Hero seconds={t} tool={s.tool} screen="numbers" rect={r} state={measureState} pose={p} radii={isolatedRadii(r,enter)}/>
+        </React.Fragment>;
+      }):null}
+      {isPlay&&wheelRect?(()=>{
+        const enter=ease(t,e.wheelEntry-.14,e.wheelEntry+.28),p=wheelPose;
+        return <><Shape name="soft_burst" color="#D6AFBF" size={1100} x={960} y={570} scale={enter*(1+.05*beat(t,'hero'))} angle={40*ease(t,e.wheelStart,e.wheelEnd)} seconds={t}/><Hero seconds={t} tool="decision_wheel" screen="play" rect={wheelRect} state={playState} pose={p} radii={[28,28,28,28]} clip={wheelClip}/></>;
+      })():null}
+      {isPlay?['random_number','dice_roll','coin_flip'].map((tool,i)=>{
+        const r=parts[tool],at=e.chance[i];if(!r||t<at)return null;
+        const p=pop(t,at,.4),scale=Math.min(480/r.width,390/r.height);
+        return <Hero key={tool} seconds={t} tool={tool} screen="play" rect={r} state={playState} radii={[28,28,28,28]} pose={{x:400+560*i,y:950-r.height*scale/2+1000*(1-p),scale:scale*lerp(.7,1,p),angle:lerp(i%2?-12:12,0,p)}}/>;
+      }):null}
+    </CameraRig>
+
+    {!isPlay&&t>=active.at?<KineticLine seconds={t} text={active.word} notes={[active.at]} x={active.textX} y={active.textY} size={active.textSize} width={800} exit={ease(t,active.end-.14,active.end+.1)}/>:null}
+    {isPlay&&t<e.wheelStart+.28?<KineticLine seconds={t} text="Let chance decide." notes={e.type['Let chance decide.']} x={96} y={120} width={1050} size={220} exit={ease(t,e.wheelStart,e.wheelStart+.28)}/>:null}
   </>;
 };

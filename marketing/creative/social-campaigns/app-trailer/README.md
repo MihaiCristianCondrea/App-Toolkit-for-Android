@@ -1,10 +1,10 @@
 # App Toolkit: Your toolkit
 
-A 16:9 product trailer based on the owner's toolbox sketches. The existing mark opens, real widgets leave its mouth and the camera follows their actions. The same pieces assemble into a Pixel screen, lift back out for live demonstrations and return before the closing fan.
+A 16:9 product trailer based on the owner's toolbox sketches. The mark opens, four live widgets leave its mouth and the camera tracks them into close-ups. A connected bento becomes the real screen, then the film travels through large UI fragments before three full-height destinations fan into the closing.
 
 | | |
 | --- | --- |
-| Status | Sketchbook opening and connected bento preview |
+| Status | Shot-list preview, awaiting playback approval |
 | Sound | The complete supplied `soundtrack.mp3`, 29.88 seconds, unchanged speed and volume |
 | Design size | 1920 x 1080 |
 | Preview | 960 x 540 at 90 fps |
@@ -24,12 +24,13 @@ npm ci
 npm run assets
 npm run lint
 npm run check
+npm run beats
 npm run preview
 ```
 
 `npm run dev` opens the editable Remotion Studio project. `npm run frames` makes eight review frames and a contact sheet. `npm run render` makes the approved 2K master. All timings are seconds, and `Root.tsx` owns the frame rate.
 
-`npm run sheet` renders the standard 19 samples at 20% scale into `output/images/review-sheet.png`. To review a move, pass seconds: `npm run sheet -- 1.7 1.85 2.0 2.4 3.0`. Set `BROWSER_EXECUTABLE` to a local Chrome executable when needed. Requires Python with Pillow.
+`npm run sheet` renders the standard 19 samples at 20% scale into `output/images/review-sheet.png`. To review a move, pass seconds: `npm run sheet -- 1.7 1.85 2.0 2.4 3.0`. Set `BROWSER_EXECUTABLE` to a local Chrome executable when needed. Requires Python with Pillow. The whole-cut review uses 24 evenly spaced midpoint samples, `(i + 0.5) * 29.88 / 24`, passed as seconds. The encoded preview is also sampled at 6 fps with FFmpeg for pacing and scene-boundary review.
 
 The **App trailer preview** Actions workflow also builds the preview and publishes the review files as an artifact. Its manual **master** input renders the approved 2K version. A master is not rendered automatically on a push.
 
@@ -37,14 +38,14 @@ The **App trailer preview** Actions workflow also builds the preview and publish
 
 | Time | Picture |
 | --- | --- |
-| 0.00 to 1.76 | Three large background shapes frame the opening. The original app icon pops into the centre on 1.04, then anticipates opening. |
-| 1.76 to 3.32 | The lid swings 135 degrees around the right lip, with its handle visible. The body moves down into its launcher pose, matching the owner's sketchbook direction. |
-| 3.32 to 6.76 | Four real cards leave through separate lanes. The camera whips from Compass and Flashlight to Level and SOS while the flashlight fill changes smoothly and SOS runs its native preview pulse. |
-| 6.76 to 10.08 | Cards join into a tight 2x2 bento beside "One place." Connected corners ease down to 8 px while the four outside corners remain 28 px. The camera then pushes closer. |
-| 10.08 to 17.14 | The bento becomes the centre-built screen. Quick Tools pushes the device right, then Compass and Level lift into live close-ups and return. A tool-name belt advances below. |
-| 17.14 to 21.98 | Measure opens in the same device as it crosses left. Four tools grow into varied hero poses. The camera takes a solo Counter close-up and follows it back into the phone. |
-| 21.98 to 26.26 | Play opens with shared-axis motion. The wheel grows out and spins; its result sends the device offstage while the wheel crosses left. Chance cards arrive on the right, then return as the phone re-enters. |
-| 26.26 to 29.88 | Three labelled destinations fan from the outgoing device pose. The mark, headline and original Play badge hold from 27.90 to 29.40. The gold explosion fills the frame and the final mark lands at 29.80. |
+| 0.00 to 1.76 | Three cropped corner accents spring in on the motif. The centre stays clear until the original mark arrives on 1.76. |
+| 1.76 to 3.32 | The large mark pops. On 2.32 its intact lid swings around the right lip, handle attached, while the camera pulls wide for the swing, then pans to the lower launcher. |
+| 3.32 to 6.76 | Compass and Flashlight receive large face close-ups; Level and SOS get wider context. All four start at the mouth and keep separate lanes. The camera then pulls wide around the chest. |
+| 6.76 to 10.08 | The four cards join a connected bento beside 280 px whole-word type. Connected corners ease to 8 px. A close push and shape wipe carry the same objects into their native screen positions. |
+| 10.08 to 17.14 | The camera travels along a rail of live Compass, Level, Flashlight and SOS crops. The four cards return to a large device beside 260 px Quick tools type, then the camera pushes into the measured Measure tab. |
+| 17.14 to 21.98 | The shared-axis screen bridge gives way to a large Protractor, an extreme Converter crop, Bill Splitter and a landscape Counter. Originating shape wipes connect their different scales and angles. |
+| 21.98 to 26.26 | The real wheel circle grows beside giant chapter words, fills almost the whole height for its spin, then expands back into its card on Sushi. Number, die and coin land in a row on consecutive onsets. |
+| 26.26 to 29.88 | Three devices at 86% scale enter as a fan with depth. Labelled destinations, identity and the original badge hold 27.90 to 29.40. The kit-gold explosion covers the frame and the final mark lands on 29.80. |
 
 Major gestures follow detected bass onsets in `source/src/music-analysis.json`. Its BPM is an estimate, not a claim about the song. The timeline follows the supplied track rather than forcing the music onto an invented grid.
 
@@ -62,29 +63,31 @@ Ads and the More apps footer are disabled in the film. Product backgrounds, acce
 
 ## Motion rules
 
-1. `music-analysis.json` stays read-only. Each of its 94 onsets has a concrete cue reference or visible accent in `timeline.json`. `npm run beats` rejects missing responses, unresolved cues, absent accent targets, large gestures starting within 0.15 seconds, and camera changes away from phrase boundaries.
-2. The original SVG paths remain the only logo artwork. Background shapes frame the original mark, with no opening symbol badges. The lid rotates around its right lip and shares the body's drop. Its full artwork and handle remain visible; it renders behind the launched widgets while the body remains in front.
-3. Only four cards leave the box. Their paths alternate sides, begin small behind the body and carry their own soft shadows. Standalone crops and their actual UI surfaces have four 28 px corners. The connected 2x2 bento has 8 px inner corners and 28 px outer corners, eased as the gaps close. The phone handoff restores its measured native radii. Geometry guards check every flight frame and the corner endpoints; capture checks the applied DOM radii.
-4. Copy and subjects have clear resting regions within the 96 px safe margin. Camera moves deliberately leave the column layout for tool close-ups. The gathered grid uses measured heights to fit the closer view. Shapes follow the camera at 40% depth and punch or turn on specific hits, with no ambient loop.
-5. The screen builds outward from its centre. Tab changes use a 30 px shared-axis X move with a 0.3-second fade-through. That fade always travels with the screen.
-6. Featured cards replace hidden counterparts in the phone, grow from measured bounds and return with the reverse container transform. One projection includes the device rotation, scale and beat accent for both Quick Tools and feature cards. Below-fold tools scroll into view before measurement; outgoing tabs retain their scroll position.
-7. Headline words spring through masks on named notes, modulating Google Sans Flex width and weight, then reach exact rest. Captions and the moving tool-name belt stay clear of hero cards. Camera moves follow phrase boundaries; the Counter return and camera pull-back share one gesture. Fast pans, card travel and the ending use short CameraMotionBlur windows.
-8. The closing foreground holds for 1.5 seconds before the mark anticipates at 29.40. The explosion uses the UI kit's `--tk-gold-container` role at 29.54, with motion blur only through 29.79 for that move. An opaque gold cover prevents text showing through from 29.70; the final mark is at exact rest on the last frame.
-9. All animation comes from frame state and transforms. The capture pauses native animations, including those inside open component roots, and seeks functional previews to the supplied frame time. Flashlight brightness uses a frame-derived fill transform. Finite entrance and digit animations finish without a wall clock. Audio plays in full at unity gain without a trim, loop or fade. Ads and More apps stay disabled. Master size remains 2560 x 1440 at 90 fps, rendered by the owner after preview approval.
+1. `music-analysis.json` stays read-only. All 94 onsets reference visible gestures, native value changes or short accents in `timeline.json`. The beat audit rejects gaps, unresolved or unused references, absent targets, large gesture starts closer than 0.15 seconds, and camera changes outside phrase boundaries.
+2. `events.shots` is the shot list. Each phrase names its framing, composition, transition and settle. Consecutive shots have different compositions. The camera alternates measured face close-ups, card context, the wide bento and device views. The opening's empty centre before 1.76 and the final identity hold are deliberate exceptions to continuous product occupancy and movement.
+3. The original logo paths remain the only mark artwork. Three cropped background accents frame it, with no symbol badges. The intact lid rotates around the right lip and shares the body's drop. The body renders in front of launching cards; the lid stays behind them.
+4. Four cards leave the mouth at scale 0.3 with shared-transform contact shadows. Every flight frame is checked for intersections using native measured boxes. Standalone surfaces and their crop/shadow bounds have 28 px corners. Only connected seams ease to 8 px in the 2x2 bento; the phone handoff restores native radii.
+5. Shape wipes grow logarithmically from the outgoing subject until every corner is covered, then travel offscreen over the next shot's ground. Shapes follow the camera at 40% depth. Rotation and scale accents finish on individual hits, with no idle loop.
+6. The Quick Tools rail uses the native widget faces as camera targets. Compass swings, Level settles, Flashlight brightness fills, and SOS uses its native animation on the frame clock. Cards return to the exact phone projection before their native counterparts reappear. Whole-word tool names replace the clipped ticker.
+7. The Measure tab is measured from the live navigation. The camera enters it; screens use a 30 px shared-axis X move and 0.3-second fade-through. That fade travels with the screen. The Protractor lifts from its measured screen rectangle. Later cards travel through originating shape wipes, with varied scale, angle and framing.
+8. The wheel uses its measured native circle as the visible container during the spin. Its clip expands into the original full card during the pull-back. The three chance cards retain their real aspect ratios and share a landing baseline.
+9. Chapter words are 220 to 300 px, spring through padded whole-word masks and modulate Google Sans Flex width and weight. The UI pushes the chapter type away. Fast tracking, whip moves, the spinning wheel and the final hit use bounded CameraMotionBlur windows. The longer hold belongs to the closing identity.
+10. The closing devices are 86% scale with restrained depth rotations. The foreground reaches exact rest before the 1.5-second hold. At 29.40 the mark anticipates; the original kit-gold burst explodes at 29.54, covers all text by 29.70 and settles the final mark on the last frame.
+11. All motion derives from frame state. Transforms move objects; no animated layout positions, timers or random calls are introduced. The bridge pauses native animations, including open component roots, and seeks functional previews to frame time. Audio remains complete at unity gain. Ads and More apps stay off. The master remains 2560 x 1440 at 90 fps and is rendered only after owner approval.
 
 ## Guidance and references
 
 The opening follows the owner's `human idea/` images: background shapes, the original icon, then the chest opening. The campaign follows `marketing/STARTUP.md`, the marketing UI, motion-video, Material 3, writing-style, metadata, taste-skill and UI Unslop guidance. The official Remotion create, markup, multi-scene and motion-blur guidance informed the source structure and camera work. The installed Remotion packages remain pinned to 4.0.529. Image-generation and unrelated visual directions do not replace the owner's artwork or existing design system.
 
-The Android Insider `develop` trailer's font and UI mounting gate and Smart Cleaner `develop`'s `LiveScreen` bridge informed the integration. Their completed campaign sources are reference material and were not changed.
+The completed Android Insider `android-insider-stay-curious` source supplies the focus-camera, logarithmic shape coverage and padded kinetic-word patterns adapted here. Smart Cleaner's finished `keep-what-matters-v5.zip` supplies the UI-fragment, connected-corner and screen-bridge reference. Their sources were read only. The existing App Toolkit bridge retains its font/image gate, capture guards and frame-derived native animation.
 
 ## Review
 
 See `source/FIDELITY.md`. Preparation and structural checks can pass independently of visual review. A successful render does not establish parity, readable choreography or correct timing.
 
-- [x] TypeScript, scene continuity, unchanged audio hash, device aperture and onset coverage checks.
-- [x] 20% contact sheets for the sketchbook opening, lid swing, standalone and connected corners, live previews and scene handoffs. Repeated out-of-order SOS captures match pixel for pixel.
-- [x] Complete 960 x 540 preview render with the supplied soundtrack; encoded motion strips and boundary frames inspected.
-- [ ] Full-speed preview and sound approval by the owner before the 2K master.
+- [x] TypeScript, scene continuity, unchanged audio hash, device aperture and all-onset coverage checks.
+- [x] Iterated close-up, corner, copy-clearance, container and ending sheets; 24 evenly spaced samples for the full cut.
+- [x] Complete current 960 x 540 preview, five 6 fps pacing strips, 72 encoded samples and all scene boundaries.
+- [ ] Owner playback with sound before the 2K master.
 
-The gather shows four real widgets in a connected 2x2 arrangement and restores their exact measured positions during the phone handoff. Other tools stay inside the phone. The UI kit and Android screens were not changed. See `source/FIDELITY.md` for the review scope.
+The film uses the existing UI kit without changes to its screens. See `source/FIDELITY.md` for the exact validation scope and remaining review limits.

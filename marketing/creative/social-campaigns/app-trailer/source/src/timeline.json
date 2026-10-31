@@ -9,908 +9,1020 @@
       "id": "motif",
       "start": 0,
       "end": 1.76,
-      "title": "Shapes frame the app icon",
-      "action": "Three original background shapes arrive on the opening notes; the app icon pops into the centre on 1.04. No Material Symbol badges."
+      "title": "Frame the empty centre",
+      "action": "Three cropped corner accents arrive on the motif, leaving the centre clear for the mark. The original app icon arrives on 1.76, with no Material Symbol badges."
     },
     {
       "id": "split",
       "start": 1.76,
       "end": 3.32,
-      "title": "Swing open the chest",
-      "action": "The original lid rotates around the right lip with its handle visible, while the body moves down into the launcher pose."
+      "title": "Pop the mark, swing the lid",
+      "action": "The large central mark pops, then its intact lid swings around the right lip on 2.32. The camera pans to the lower launcher and the handle stays attached."
     },
     {
       "id": "burst",
       "start": 3.32,
       "end": 6.76,
-      "title": "Follow the tools",
-      "action": "Four real widgets leave with full 28 px corners. Compass and Level move, the flashlight fill changes continuously, and SOS uses its native preview animation on the frame clock."
+      "title": "Track four live cards",
+      "action": "Four cards rise from the measured mouth into separate lanes. The camera alternates large widget faces with wider card views, then pulls wide around the chest."
     },
     {
       "id": "one-place",
       "start": 6.76,
       "end": 10.08,
-      "title": "Gather, then push into the bento",
-      "action": "Four widgets meet in a tight 2x2 bento. Only the connected corners shrink smoothly to 8 px; outer corners remain 28 px, before the camera pushes closer."
+      "title": "Join and enter the screen",
+      "action": "The cards join into a full-height connected bento beside giant whole-word type. Connected corners ease to 8 px. A shape wipe and close push carry the same cards into their real screen positions."
     },
     {
       "id": "quick-tools",
       "start": 10.08,
       "end": 17.14,
-      "title": "Lift the tools into use",
-      "action": "The bento assembles into the centre-built device. Compass and Level lift from their exact screen rectangles, demonstrate live values, then return as the tool-name belt advances."
+      "title": "Enter the tools",
+      "action": "The camera moves along a rail of live Compass, Level, Flashlight and SOS crops. Full-frame faces alternate with wider context. The cards return to a large phone, huge Quick tools type takes the left side, and the camera enters the measured Measure tab."
     },
     {
       "id": "measure",
       "start": 17.14,
       "end": 21.98,
-      "title": "Follow four measurements",
-      "action": "The device crosses left. Four measured cards grow into varied hero poses; the counter takes a solo close-up, then the camera follows its return into the device."
+      "title": "Angles, units, split and count",
+      "action": "The real tab uses shared-axis motion. The Protractor grows from its measured screen rectangle, followed by a large Converter, Bill Splitter and landscape Counter. Shape wipes from each outgoing card carry the next framing."
     },
     {
       "id": "play",
       "start": 21.98,
       "end": 26.26,
-      "title": "Give chance the stage",
-      "action": "The wheel grows from the phone and spins. Its result sends the device offstage as the wheel crosses left; chance cards fly into the right side, then all return for the closing fan."
+      "title": "Spin, then land three results",
+      "action": "The wheel circle grows from its real card while Let chance decide crosses the left side. The wheel fills nearly the whole height, spins to Sushi, then expands back into its card as the camera pulls wide. Number, die and coin land on consecutive onsets."
     },
     {
       "id": "close",
       "start": 26.26,
       "end": 29.88,
-      "title": "App Toolkit. Your toolkit.",
-      "action": "Three labelled destinations hold beside the original badge for 1.5 seconds; the mark anticipates at 29.4, kit gold explodes at 29.54 and the centred mark lands at 29.8."
+      "title": "Fan the destinations, land in gold",
+      "action": "Three large devices enter as a fan with depth. Quick Tools, Measure and Play & Decide are labelled below. The original mark, headline and Play badge hold 27.90 to 29.40, before the original gold ending covers the frame and the mark lands on 29.80."
     }
   ],
   "events": {
-    "lidOpen": 1.76,
+    "lidOpen": 2.32,
     "launch": 3.32,
     "gather": 6.76,
     "gatherEnd": 8.02,
-    "pullBack": 10.08,
-    "pullBackEnd": 11.44,
-    "shellBuildEnd": 12.46,
-    "featureMove": 11.44,
+    "pullBack": 9.52,
+    "pullBackEnd": 10.08,
     "measure": 17.14,
     "play": 21.98,
     "close": 26.26,
-    "logo": 1.04,
-    "launches": [3.32, 3.76, 4.04, 4.34],
-    "chips": [14.88, 15.18, 15.44, 15.66, 15.98, 16.44],
-    "measureHeroes": [18.14, 19.14, 19.98, 20.84],
-    "chance": [24.54, 25.12, 25.4],
-    "wheelStart": 22.86,
+    "logo": 1.76,
+    "launches": [
+      3.32,
+      4.04,
+      4.58,
+      5.16
+    ],
+    "chance": [
+      24.54,
+      25.12,
+      25.4
+    ],
+    "wheelStart": 22.56,
     "wheelEnd": 24,
-    "fan": [26.5, 26.82, 26.26],
-    "brand": 27.04,
-    "tagline": 27.26,
+    "fan": [
+      26.5,
+      26.82,
+      26.26
+    ],
     "badge": 27.68,
     "hold": 27.9,
     "blurWindows": [
-      [1.76, 2.32],
-      [4.58, 4.8],
-      [5.16, 5.38],
-      [5.74, 6.04],
-      [6.76, 7.06],
-      [8.98, 9.34],
-      [10.08, 11.02],
-      [13.16, 13.52],
-      [13.96, 14.24],
-      [14.88, 15.18],
-      [15.44, 15.7],
-      [15.98, 16.22],
-      [16.78, 17.14],
-      [17.7, 18.14],
-      [18.62, 18.82],
-      [19.42, 19.62],
-      [21.12, 21.34],
-      [21.72, 22.5],
-      [23.4, 23.66],
-      [24, 24.54],
-      [26, 26.82],
-      [29.54, 29.79]
+      [
+        1.76,
+        2.1
+      ],
+      [
+        2.32,
+        2.66
+      ],
+      [
+        3.32,
+        3.56
+      ],
+      [
+        4.04,
+        4.28
+      ],
+      [
+        4.58,
+        4.82
+      ],
+      [
+        5.16,
+        5.4
+      ],
+      [
+        5.74,
+        6.08
+      ],
+      [
+        6.76,
+        7.1
+      ],
+      [
+        8.98,
+        9.32
+      ],
+      [
+        9.52,
+        9.86
+      ],
+      [
+        10.08,
+        10.34
+      ],
+      [
+        11.44,
+        11.68
+      ],
+      [
+        12.92,
+        13.14
+      ],
+      [
+        13.96,
+        14.18
+      ],
+      [
+        15.18,
+        15.52
+      ],
+      [
+        16.78,
+        17.12
+      ],
+      [
+        17.14,
+        17.48
+      ],
+      [
+        17.7,
+        17.98
+      ],
+      [
+        18.62,
+        18.84
+      ],
+      [
+        19.42,
+        19.64
+      ],
+      [
+        20.84,
+        21.06
+      ],
+      [
+        21.98,
+        22.26
+      ],
+      [
+        22.56,
+        24
+      ],
+      [
+        24.24,
+        24.54
+      ],
+      [
+        26.26,
+        26.92
+      ],
+      [
+        29.54,
+        29.79
+      ],
+      [
+        3.92,
+        4.28
+      ],
+      [
+        4.46,
+        4.82
+      ],
+      [
+        5.04,
+        5.4
+      ],
+      [
+        2.64,
+        2.9
+      ]
     ],
     "beats": [
       {
         "at": 0.02,
         "strength": 0.55,
         "responses": [
-          {"ref": "/backdropNotes/0", "kind": "shape", "label": "Background shape 1 enters", "big": false}
+          {"ref": "/accents/0/at", "kind": "nudge", "target": "intro-stage", "label": "intro-stage accent", "big": false},
+          {"ref": "/backdropNotes/0", "kind": "shape", "label": "backdropNotes 1", "big": false}
         ]
       },
       {
         "at": 0.32,
         "strength": 0.55,
         "responses": [
-          {"ref": "/backdropNotes/1", "kind": "shape", "label": "Background shape 2 enters", "big": false}
+          {"ref": "/accents/1/at", "kind": "nudge", "target": "intro-stage", "label": "intro-stage accent", "big": false},
+          {"ref": "/backdropNotes/1", "kind": "shape", "label": "backdropNotes 2", "big": false}
         ]
       },
       {
         "at": 0.62,
         "strength": 0.55,
         "responses": [
-          {"ref": "/backdropNotes/2", "kind": "shape", "label": "Background shape 3 enters", "big": false}
+          {"ref": "/accents/2/at", "kind": "nudge", "target": "intro-stage", "label": "intro-stage accent", "big": false},
+          {"ref": "/backdropNotes/2", "kind": "shape", "label": "backdropNotes 3", "big": false}
         ]
       },
       {
         "at": 1.04,
         "strength": 0.55,
         "responses": [
-          {"ref": "/logo", "kind": "logo", "label": "Original app icon pops onto the shape stage", "big": true}
+          {"ref": "/accents/3/at", "kind": "nudge", "target": "intro-stage", "label": "intro-stage accent", "big": false}
         ]
       },
       {
         "at": 1.46,
         "strength": 0.55,
         "responses": [
-          {"ref": "/logoAnticipation", "kind": "logo", "label": "Closed mark anticipates its opening", "big": false}
+          {"ref": "/accents/4/at", "kind": "nudge", "target": "intro-stage", "label": "intro-stage accent", "big": false}
         ]
       },
       {
         "at": 1.76,
         "strength": 1,
         "responses": [
-          {"ref": "/lidOpen", "kind": "logo", "label": "Lid swings around the right lip as the body drops", "big": true}
+          {"ref": "/accents/5/at", "kind": "nudge", "target": "toolbox", "label": "toolbox accent", "big": false},
+          {"ref": "/shots/1/at", "kind": "camera", "label": "central-mark", "big": true},
+          {"ref": "/logo", "kind": "hit", "label": "logo", "big": false}
         ]
       },
       {
         "at": 2.32,
         "strength": 0.55,
         "responses": [
-          {"ref": "/lidSettled", "kind": "logo", "label": "Open lid settles with its handle visible", "big": false}
+          {"ref": "/accents/6/at", "kind": "nudge", "target": "toolbox", "label": "toolbox accent", "big": false},
+          {"ref": "/shots/2/at", "kind": "camera", "label": "open-chest", "big": true},
+          {"ref": "/lidOpen", "kind": "hit", "label": "lidOpen", "big": false}
         ]
       },
       {
         "at": 2.64,
         "strength": 1,
         "responses": [
-          {"ref": "/cameraMoves/0/at", "kind": "camera", "label": "Follow phrase 1", "big": true}
+          {"ref": "/accents/7/at", "kind": "nudge", "target": "toolbox", "label": "toolbox accent", "big": false},
+          {"ref": "/shots/3/at", "kind": "camera", "label": "chest-landing", "big": true}
         ]
       },
       {
         "at": 2.9,
         "strength": 0.55,
         "responses": [
-          {"ref": "/beats/8/at", "kind": "nudge", "label": "toolbox accent", "big": false, "target": "toolbox"}
+          {"ref": "/accents/8/at", "kind": "nudge", "target": "toolbox", "label": "toolbox accent", "big": false}
         ]
       },
       {
         "at": 3.32,
         "strength": 1,
         "responses": [
-          {"ref": "/launches/0", "kind": "card", "label": "Launch tool 1", "big": true}
+          {"ref": "/accents/9/at", "kind": "nudge", "target": "hero", "label": "hero accent", "big": false},
+          {"ref": "/shots/4/at", "kind": "camera", "label": "launch-compass-face", "big": true},
+          {"ref": "/launches/0", "kind": "launch", "label": "launches 1", "big": false}
         ]
       },
       {
         "at": 3.76,
         "strength": 1,
         "responses": [
-          {"ref": "/launches/1", "kind": "card", "label": "Launch tool 2", "big": true}
+          {"ref": "/accents/10/at", "kind": "nudge", "target": "hero", "label": "hero accent", "big": false}
         ]
       },
       {
         "at": 4.04,
         "strength": 1,
         "responses": [
-          {"ref": "/launches/2", "kind": "card", "label": "Launch tool 3", "big": true}
+          {"ref": "/accents/11/at", "kind": "nudge", "target": "hero", "label": "hero accent", "big": false},
+          {"ref": "/shots/5/at", "kind": "camera", "label": "launch-level-context", "big": true},
+          {"ref": "/launches/1", "kind": "launch", "label": "launches 2", "big": false}
         ]
       },
       {
         "at": 4.34,
         "strength": 1,
         "responses": [
-          {"ref": "/launches/3", "kind": "card", "label": "Launch tool 4", "big": true}
+          {"ref": "/accents/12/at", "kind": "nudge", "target": "hero", "label": "hero accent", "big": false}
         ]
       },
       {
         "at": 4.58,
         "strength": 1,
         "responses": [
-          {"ref": "/cameraMoves/1/at", "kind": "camera", "label": "Follow phrase 2", "big": true}
+          {"ref": "/accents/13/at", "kind": "nudge", "target": "hero", "label": "hero accent", "big": false},
+          {"ref": "/shots/6/at", "kind": "camera", "label": "launch-flashlight-face", "big": true},
+          {"ref": "/launches/2", "kind": "launch", "label": "launches 3", "big": false}
         ]
       },
       {
         "at": 4.92,
         "strength": 0.55,
         "responses": [
-          {"ref": "/demo/torchHits/1", "kind": "value", "label": "Flashlight brightness fills smoothly to two steps", "big": false}
+          {"ref": "/accents/14/at", "kind": "nudge", "target": "hero", "label": "hero accent", "big": false}
         ]
       },
       {
         "at": 5.16,
         "strength": 1,
         "responses": [
-          {"ref": "/cameraMoves/2/at", "kind": "camera", "label": "Follow phrase 3", "big": true}
+          {"ref": "/accents/15/at", "kind": "nudge", "target": "hero", "label": "hero accent", "big": false},
+          {"ref": "/shots/7/at", "kind": "camera", "label": "launch-sos-context", "big": true},
+          {"ref": "/launches/3", "kind": "launch", "label": "launches 4", "big": false}
         ]
       },
       {
         "at": 5.74,
         "strength": 1,
         "responses": [
-          {"ref": "/cameraMoves/3/at", "kind": "camera", "label": "Follow phrase 4", "big": true}
+          {"ref": "/accents/16/at", "kind": "nudge", "target": "hero", "label": "hero accent", "big": false},
+          {"ref": "/shots/8/at", "kind": "camera", "label": "four-launches", "big": true}
         ]
       },
       {
         "at": 6.08,
         "strength": 0.55,
         "responses": [
-          {"ref": "/beats/17/at", "kind": "nudge", "label": "opening-3 accent", "big": false, "target": "opening-3"}
+          {"ref": "/accents/17/at", "kind": "nudge", "target": "hero", "label": "hero accent", "big": false}
         ]
       },
       {
         "at": 6.32,
         "strength": 0.55,
         "responses": [
-          {"ref": "/beats/18/at", "kind": "nudge", "label": "opening-3 accent", "big": false, "target": "opening-3"}
+          {"ref": "/accents/18/at", "kind": "nudge", "target": "hero", "label": "hero accent", "big": false}
         ]
       },
       {
         "at": 6.76,
         "strength": 1,
         "responses": [
-          {"ref": "/gather", "kind": "layout", "label": "Gather four cards", "big": true},
-          {"ref": "/type/One place./0", "kind": "word", "label": "One reveal", "big": false}
+          {"ref": "/accents/19/at", "kind": "nudge", "target": "stage", "label": "stage accent", "big": false},
+          {"ref": "/shots/9/at", "kind": "camera", "label": "connected-bento", "big": true},
+          {"ref": "/type/One place./0", "kind": "type", "label": "One word", "big": false}
         ]
       },
       {
         "at": 7.06,
         "strength": 0.55,
         "responses": [
-          {"ref": "/type/One place./1", "kind": "word", "label": "place. reveal", "big": false}
+          {"ref": "/accents/20/at", "kind": "nudge", "target": "stage", "label": "stage accent", "big": false},
+          {"ref": "/type/One place./1", "kind": "type", "label": "place. word", "big": false}
         ]
       },
       {
         "at": 7.46,
         "strength": 0.55,
         "responses": [
-          {"ref": "/beats/21/at", "kind": "nudge", "label": "stage accent", "big": false, "target": "stage"}
+          {"ref": "/accents/21/at", "kind": "nudge", "target": "stage", "label": "stage accent", "big": false}
         ]
       },
       {
         "at": 7.7,
         "strength": 0.55,
         "responses": [
-          {"ref": "/beats/22/at", "kind": "nudge", "label": "stage accent", "big": false, "target": "stage"},
-          {"ref": "/bentoJoin/0", "kind": "shape", "label": "Inner corners begin joining as the gaps close", "big": false}
+          {"ref": "/accents/22/at", "kind": "nudge", "target": "stage", "label": "stage accent", "big": false}
         ]
       },
       {
         "at": 8.02,
         "strength": 0.55,
         "responses": [
-          {"ref": "/beats/23/at", "kind": "nudge", "label": "stage accent", "big": false, "target": "stage"},
-          {"ref": "/bentoJoin/1", "kind": "shape", "label": "Connected bento seams settle at 8 px", "big": false}
+          {"ref": "/accents/23/at", "kind": "nudge", "target": "stage", "label": "stage accent", "big": false}
         ]
       },
       {
         "at": 8.26,
         "strength": 0.55,
         "responses": [
-          {"ref": "/beats/24/at", "kind": "nudge", "label": "stage accent", "big": false, "target": "stage"}
+          {"ref": "/accents/24/at", "kind": "nudge", "target": "stage", "label": "stage accent", "big": false}
         ]
       },
       {
         "at": 8.58,
         "strength": 0.55,
         "responses": [
-          {"ref": "/beats/25/at", "kind": "nudge", "label": "stage accent", "big": false, "target": "stage"}
+          {"ref": "/accents/25/at", "kind": "nudge", "target": "stage", "label": "stage accent", "big": false}
         ]
       },
       {
         "at": 8.98,
         "strength": 1,
         "responses": [
-          {"ref": "/cameraMoves/4/at", "kind": "camera", "label": "Follow phrase 5", "big": true}
+          {"ref": "/accents/26/at", "kind": "nudge", "target": "stage", "label": "stage accent", "big": false},
+          {"ref": "/shots/10/at", "kind": "camera", "label": "bento-push", "big": true}
         ]
       },
       {
         "at": 9.22,
         "strength": 0.55,
         "responses": [
-          {"ref": "/beats/27/at", "kind": "nudge", "label": "stage accent", "big": false, "target": "stage"}
+          {"ref": "/accents/27/at", "kind": "nudge", "target": "stage", "label": "stage accent", "big": false}
         ]
       },
       {
         "at": 9.52,
         "strength": 0.55,
         "responses": [
-          {"ref": "/beats/28/at", "kind": "nudge", "label": "stage accent", "big": false, "target": "stage"}
+          {"ref": "/accents/28/at", "kind": "nudge", "target": "stage", "label": "stage accent", "big": false},
+          {"ref": "/shots/11/at", "kind": "camera", "label": "screen-handoff", "big": true}
         ]
       },
       {
         "at": 9.74,
         "strength": 0.55,
         "responses": [
-          {"ref": "/beats/29/at", "kind": "nudge", "label": "stage accent", "big": false, "target": "stage"}
+          {"ref": "/accents/29/at", "kind": "nudge", "target": "stage", "label": "stage accent", "big": false}
         ]
       },
       {
         "at": 10.08,
         "strength": 1,
         "responses": [
-          {"ref": "/pullBack", "kind": "container", "label": "Assemble screen", "big": true}
+          {"ref": "/accents/30/at", "kind": "nudge", "target": "hero", "label": "hero accent", "big": false},
+          {"ref": "/shots/12/at", "kind": "camera", "label": "compass-needle", "big": true},
+          {"ref": "/quickActions/heading/0", "kind": "value", "label": "heading live value", "big": false}
         ]
       },
       {
         "at": 10.3,
         "strength": 0.55,
         "responses": [
-          {"ref": "/beats/31/at", "kind": "nudge", "label": "stage accent", "big": false, "target": "stage"}
+          {"ref": "/accents/31/at", "kind": "nudge", "target": "hero", "label": "hero accent", "big": false}
         ]
       },
       {
         "at": 10.62,
         "strength": 1,
         "responses": [
-          {"ref": "/cameraMoves/5/at", "kind": "camera", "label": "Follow phrase 6", "big": true}
+          {"ref": "/accents/32/at", "kind": "nudge", "target": "hero", "label": "hero accent", "big": false},
+          {"ref": "/quickActions/heading/1", "kind": "value", "label": "heading live value", "big": false}
         ]
       },
       {
         "at": 10.9,
         "strength": 0.55,
         "responses": [
-          {"ref": "/beats/33/at", "kind": "nudge", "label": "stage accent", "big": false, "target": "stage"}
+          {"ref": "/accents/33/at", "kind": "nudge", "target": "hero", "label": "hero accent", "big": false},
+          {"ref": "/quickActions/heading/2", "kind": "value", "label": "heading live value", "big": false}
         ]
       },
       {
         "at": 11.44,
         "strength": 1,
         "responses": [
-          {"ref": "/featureMove", "kind": "layout", "label": "Quick Tools push", "big": true},
-          {"ref": "/type/Quick tools./0", "kind": "word", "label": "Quick reveal", "big": false}
+          {"ref": "/accents/34/at", "kind": "nudge", "target": "hero", "label": "hero accent", "big": false},
+          {"ref": "/shots/13/at", "kind": "camera", "label": "level-context", "big": true},
+          {"ref": "/quickActions/heading/3", "kind": "value", "label": "heading live value", "big": false},
+          {"ref": "/quickActions/level/0", "kind": "value", "label": "level live value", "big": false}
         ]
       },
       {
         "at": 12,
         "strength": 0.55,
         "responses": [
-          {"ref": "/type/Quick tools./1", "kind": "word", "label": "tools. reveal", "big": false}
+          {"ref": "/accents/35/at", "kind": "nudge", "target": "hero", "label": "hero accent", "big": false}
         ]
       },
       {
         "at": 12.22,
         "strength": 0.55,
         "responses": [
-          {"ref": "/beats/36/at", "kind": "nudge", "label": "stage accent", "big": false, "target": "stage"}
+          {"ref": "/accents/36/at", "kind": "nudge", "target": "hero", "label": "hero accent", "big": false}
         ]
       },
       {
         "at": 12.46,
         "strength": 0.55,
         "responses": [
-          {"ref": "/beats/37/at", "kind": "nudge", "label": "stage accent", "big": false, "target": "stage"}
+          {"ref": "/accents/37/at", "kind": "nudge", "target": "hero", "label": "hero accent", "big": false},
+          {"ref": "/quickActions/level/1", "kind": "value", "label": "level live value", "big": false}
         ]
       },
       {
         "at": 12.92,
         "strength": 1,
         "responses": [
-          {"ref": "/cameraMoves/6/at", "kind": "camera", "label": "Follow phrase 7", "big": true}
+          {"ref": "/accents/38/at", "kind": "nudge", "target": "hero", "label": "hero accent", "big": false},
+          {"ref": "/shots/14/at", "kind": "camera", "label": "brightness-fill", "big": true},
+          {"ref": "/quickActions/torch/0", "kind": "value", "label": "torch live value", "big": false}
         ]
       },
       {
         "at": 13.16,
         "strength": 1,
         "responses": [
-          {"ref": "/quickHeroIn/0", "kind": "card", "label": "Lift Quick Tools hero 1", "big": true}
+          {"ref": "/accents/39/at", "kind": "nudge", "target": "hero", "label": "hero accent", "big": false},
+          {"ref": "/quickActions/torch/1", "kind": "value", "label": "torch live value", "big": false}
         ]
       },
       {
         "at": 13.72,
         "strength": 0.55,
         "responses": [
-          {"ref": "/demo/heroTurn", "kind": "value", "label": "Compass needle turns east", "big": false}
+          {"ref": "/accents/40/at", "kind": "nudge", "target": "hero", "label": "hero accent", "big": false},
+          {"ref": "/quickActions/torch/2", "kind": "value", "label": "torch live value", "big": false}
         ]
       },
       {
         "at": 13.96,
         "strength": 1,
         "responses": [
-          {"ref": "/cameraMoves/7/at", "kind": "camera", "label": "Follow phrase 8", "big": true}
+          {"ref": "/accents/41/at", "kind": "nudge", "target": "hero", "label": "hero accent", "big": false},
+          {"ref": "/shots/15/at", "kind": "camera", "label": "sos-pulse", "big": true},
+          {"ref": "/quickActions/torch/3", "kind": "value", "label": "torch live value", "big": false},
+          {"ref": "/quickActions/sos/0", "kind": "value", "label": "sos live value", "big": false}
         ]
       },
       {
         "at": 14.28,
         "strength": 0.55,
         "responses": [
-          {"ref": "/demo/heroTurnEnd", "kind": "value", "label": "Compass reaches its new bearing", "big": false}
+          {"ref": "/accents/42/at", "kind": "nudge", "target": "hero", "label": "hero accent", "big": false}
         ]
       },
       {
         "at": 14.6,
         "strength": 0.55,
         "responses": [
-          {"ref": "/demo/heroReturn", "kind": "value", "label": "Compass rotates back into alignment", "big": false}
+          {"ref": "/accents/43/at", "kind": "nudge", "target": "hero", "label": "hero accent", "big": false}
         ]
       },
       {
         "at": 14.88,
         "strength": 1,
         "responses": [
-          {"ref": "/chips/0", "kind": "chip", "label": "Tool chip 1", "big": false},
-          {"ref": "/quickHeroOut/0", "kind": "card", "label": "Return Quick Tools hero 1", "big": true}
+          {"ref": "/accents/44/at", "kind": "nudge", "target": "hero", "label": "hero accent", "big": false}
         ]
       },
       {
         "at": 15.18,
         "strength": 0.55,
         "responses": [
-          {"ref": "/chips/1", "kind": "chip", "label": "Tool chip 2", "big": false}
+          {"ref": "/accents/45/at", "kind": "nudge", "target": "hero", "label": "hero accent", "big": false},
+          {"ref": "/shots/16/at", "kind": "camera", "label": "quick-device-return", "big": true},
+          {"ref": "/type/Quick tools./0", "kind": "type", "label": "Quick word", "big": false},
+          {"ref": "/quickActions/sos/1", "kind": "value", "label": "sos live value", "big": false}
         ]
       },
       {
         "at": 15.44,
         "strength": 1,
         "responses": [
-          {"ref": "/chips/2", "kind": "chip", "label": "Tool chip 3", "big": false},
-          {"ref": "/quickHeroIn/1", "kind": "card", "label": "Lift Quick Tools hero 2", "big": true}
+          {"ref": "/accents/46/at", "kind": "nudge", "target": "hero", "label": "hero accent", "big": false},
+          {"ref": "/type/Quick tools./1", "kind": "type", "label": "tools. word", "big": false}
         ]
       },
       {
         "at": 15.66,
         "strength": 0.55,
         "responses": [
-          {"ref": "/chips/3", "kind": "chip", "label": "Tool chip 4", "big": false}
+          {"ref": "/accents/47/at", "kind": "nudge", "target": "hero", "label": "hero accent", "big": false}
         ]
       },
       {
         "at": 15.98,
         "strength": 1,
         "responses": [
-          {"ref": "/chips/4", "kind": "chip", "label": "Tool chip 5", "big": false},
-          {"ref": "/cameraMoves/8/at", "kind": "camera", "label": "Follow phrase 9", "big": true}
+          {"ref": "/accents/48/at", "kind": "nudge", "target": "hero", "label": "hero accent", "big": false}
         ]
       },
       {
         "at": 16.44,
         "strength": 0.55,
         "responses": [
-          {"ref": "/chips/5", "kind": "chip", "label": "Tool chip 6", "big": false}
+          {"ref": "/accents/49/at", "kind": "nudge", "target": "phone", "label": "phone accent", "big": false}
         ]
       },
       {
         "at": 16.78,
         "strength": 1,
         "responses": [
-          {"ref": "/quickHeroOut/1", "kind": "card", "label": "Return Quick Tools hero 2", "big": true}
+          {"ref": "/accents/50/at", "kind": "nudge", "target": "phone", "label": "phone accent", "big": false},
+          {"ref": "/shots/17/at", "kind": "camera", "label": "measure-tab", "big": true}
         ]
       },
       {
         "at": 17.14,
         "strength": 1,
         "responses": [
-          {"ref": "/measure", "kind": "chapter", "label": "Quick Tools to Measure", "big": true}
+          {"ref": "/accents/51/at", "kind": "nudge", "target": "hero", "label": "hero accent", "big": false},
+          {"ref": "/shots/18/at", "kind": "camera", "label": "measure-word", "big": true},
+          {"ref": "/type/Measure./0", "kind": "type", "label": "Measure. word", "big": false}
         ]
       },
       {
         "at": 17.36,
         "strength": 0.55,
         "responses": [
-          {"ref": "/beats/52/at", "kind": "nudge", "label": "phone accent", "big": false, "target": "phone"}
+          {"ref": "/accents/52/at", "kind": "nudge", "target": "hero", "label": "hero accent", "big": false}
         ]
       },
       {
         "at": 17.7,
         "strength": 1,
         "responses": [
-          {"ref": "/cameraMoves/9/at", "kind": "camera", "label": "Follow phrase 10", "big": true}
+          {"ref": "/accents/53/at", "kind": "nudge", "target": "hero", "label": "hero accent", "big": false},
+          {"ref": "/shots/19/at", "kind": "camera", "label": "protractor-angle", "big": true},
+          {"ref": "/measureActions/angle/0", "kind": "value", "label": "angle live value", "big": false}
         ]
       },
       {
         "at": 17.92,
         "strength": 1,
         "responses": [
-          {"ref": "/phonePan", "kind": "layout", "label": "Move device to left column", "big": true}
+          {"ref": "/accents/54/at", "kind": "nudge", "target": "hero", "label": "hero accent", "big": false}
         ]
       },
       {
         "at": 18.14,
         "strength": 1,
         "responses": [
-          {"ref": "/measureHeroes/0", "kind": "card", "label": "Lift Measure tool 1", "big": true},
-          {"ref": "/type/Measure./0", "kind": "word", "label": "Measure. reveal", "big": false}
+          {"ref": "/accents/55/at", "kind": "nudge", "target": "hero", "label": "hero accent", "big": false}
         ]
       },
       {
         "at": 18.38,
         "strength": 0.55,
         "responses": [
-          {"ref": "/beats/56/at", "kind": "nudge", "label": "phone accent", "big": false, "target": "phone"}
+          {"ref": "/accents/56/at", "kind": "nudge", "target": "hero", "label": "hero accent", "big": false},
+          {"ref": "/measureActions/angle/1", "kind": "value", "label": "angle live value", "big": false}
         ]
       },
       {
         "at": 18.62,
         "strength": 1,
         "responses": [
-          {"ref": "/cameraMoves/10/at", "kind": "camera", "label": "Follow phrase 11", "big": true}
+          {"ref": "/accents/57/at", "kind": "nudge", "target": "hero", "label": "hero accent", "big": false},
+          {"ref": "/shots/20/at", "kind": "camera", "label": "converter-values", "big": true},
+          {"ref": "/measureActions/converter/0", "kind": "value", "label": "converter live value", "big": false}
         ]
       },
       {
         "at": 18.84,
         "strength": 1,
         "responses": [
-          {"ref": "/heroReturns/0", "kind": "card", "label": "Return Measure tool 1", "big": true}
+          {"ref": "/accents/58/at", "kind": "nudge", "target": "hero", "label": "hero accent", "big": false}
         ]
       },
       {
         "at": 19.14,
         "strength": 1,
         "responses": [
-          {"ref": "/measureHeroes/1", "kind": "card", "label": "Lift Measure tool 2", "big": true}
+          {"ref": "/accents/59/at", "kind": "nudge", "target": "hero", "label": "hero accent", "big": false},
+          {"ref": "/measureActions/converter/1", "kind": "value", "label": "converter live value", "big": false}
         ]
       },
       {
         "at": 19.42,
         "strength": 1,
         "responses": [
-          {"ref": "/cameraMoves/11/at", "kind": "camera", "label": "Follow phrase 12", "big": true}
+          {"ref": "/accents/60/at", "kind": "nudge", "target": "hero", "label": "hero accent", "big": false},
+          {"ref": "/shots/21/at", "kind": "camera", "label": "bill-split", "big": true}
         ]
       },
       {
         "at": 19.7,
         "strength": 1,
         "responses": [
-          {"ref": "/heroReturns/1", "kind": "card", "label": "Return Measure tool 2", "big": true}
+          {"ref": "/accents/61/at", "kind": "nudge", "target": "hero", "label": "hero accent", "big": false}
         ]
       },
       {
         "at": 19.98,
         "strength": 1,
         "responses": [
-          {"ref": "/measureHeroes/2", "kind": "card", "label": "Lift Measure tool 3", "big": true}
+          {"ref": "/accents/62/at", "kind": "nudge", "target": "hero", "label": "hero accent", "big": false},
+          {"ref": "/measureActions/split/0", "kind": "value", "label": "split live value", "big": false}
         ]
       },
       {
         "at": 20.56,
         "strength": 1,
         "responses": [
-          {"ref": "/heroReturns/2", "kind": "card", "label": "Return Measure tool 3", "big": true}
+          {"ref": "/accents/63/at", "kind": "nudge", "target": "hero", "label": "hero accent", "big": false}
         ]
       },
       {
         "at": 20.84,
         "strength": 1,
         "responses": [
-          {"ref": "/measureHeroes/3", "kind": "card", "label": "Lift Measure tool 4", "big": true}
+          {"ref": "/accents/64/at", "kind": "nudge", "target": "hero", "label": "hero accent", "big": false},
+          {"ref": "/shots/22/at", "kind": "camera", "label": "counter-landscape", "big": true},
+          {"ref": "/measureActions/counter/0", "kind": "value", "label": "counter live value", "big": false}
         ]
       },
       {
         "at": 21.12,
         "strength": 1,
         "responses": [
-          {"ref": "/cameraMoves/12/at", "kind": "camera", "label": "Follow phrase 13", "big": true}
+          {"ref": "/accents/65/at", "kind": "nudge", "target": "hero", "label": "hero accent", "big": false},
+          {"ref": "/measureActions/counter/1", "kind": "value", "label": "counter live value", "big": false}
         ]
       },
       {
         "at": 21.46,
         "strength": 0.55,
         "responses": [
-          {"ref": "/cues/at21_46", "kind": "value", "label": "Counter ticks to 45 in close-up", "big": false}
+          {"ref": "/accents/66/at", "kind": "nudge", "target": "hero", "label": "hero accent", "big": false},
+          {"ref": "/measureActions/counter/2", "kind": "value", "label": "counter live value", "big": false}
         ]
       },
       {
         "at": 21.72,
         "strength": 1,
         "responses": [
-          {"ref": "/heroReturns/3", "kind": "card", "label": "Return Measure tool 4", "big": true},
-          {"ref": "/cameraMoves/13/at", "kind": "camera", "label": "Follow the counter back to its device", "big": false}
+          {"ref": "/accents/67/at", "kind": "nudge", "target": "hero", "label": "hero accent", "big": false}
         ]
       },
       {
         "at": 21.98,
         "strength": 1,
         "responses": [
-          {"ref": "/play", "kind": "chapter", "label": "Measure to Play", "big": true},
-          {"ref": "/type/Let chance decide./0", "kind": "word", "label": "Let reveal", "big": false}
+          {"ref": "/accents/68/at", "kind": "nudge", "target": "hero", "label": "hero accent", "big": false},
+          {"ref": "/shots/23/at", "kind": "camera", "label": "chance-title-wheel", "big": true},
+          {"ref": "/type/Let chance decide./0", "kind": "type", "label": "Let word", "big": false},
+          {"ref": "/type/Let chance decide./1", "kind": "type", "label": "chance word", "big": false}
         ]
       },
       {
         "at": 22.26,
         "strength": 1,
         "responses": [
-          {"ref": "/type/Let chance decide./1", "kind": "word", "label": "chance reveal", "big": false}
+          {"ref": "/accents/69/at", "kind": "nudge", "target": "hero", "label": "hero accent", "big": false},
+          {"ref": "/type/Let chance decide./2", "kind": "type", "label": "decide. word", "big": false}
         ]
       },
       {
         "at": 22.56,
         "strength": 1,
         "responses": [
-          {"ref": "/wheelEntry", "kind": "card", "label": "Lift wheel", "big": true},
-          {"ref": "/type/Let chance decide./2", "kind": "word", "label": "decide. reveal", "big": false}
+          {"ref": "/accents/70/at", "kind": "nudge", "target": "hero", "label": "hero accent", "big": false},
+          {"ref": "/shots/24/at", "kind": "camera", "label": "spinning-wheel", "big": true}
         ]
       },
       {
         "at": 22.86,
         "strength": 1,
         "responses": [
-          {"ref": "/wheelStart", "kind": "spin", "label": "Spin wheel", "big": true}
+          {"ref": "/accents/71/at", "kind": "nudge", "target": "hero", "label": "hero accent", "big": false}
         ]
       },
       {
         "at": 23.14,
         "strength": 0.55,
         "responses": [
-          {"ref": "/beats/72/at", "kind": "nudge", "target": "phone", "label": "Wheel and device accent", "big": false}
+          {"ref": "/accents/72/at", "kind": "nudge", "target": "hero", "label": "hero accent", "big": false}
         ]
       },
       {
         "at": 23.4,
         "strength": 1,
         "responses": [
-          {"ref": "/cameraMoves/14/at", "kind": "camera", "label": "Follow phrase 15", "big": true}
+          {"ref": "/accents/73/at", "kind": "nudge", "target": "hero", "label": "hero accent", "big": false}
         ]
       },
       {
         "at": 23.76,
         "strength": 0.55,
         "responses": [
-          {"ref": "/beats/74/at", "kind": "nudge", "label": "phone accent", "big": false, "target": "phone"}
+          {"ref": "/accents/74/at", "kind": "nudge", "target": "hero", "label": "hero accent", "big": false}
         ]
       },
       {
         "at": 24,
         "strength": 0.55,
         "responses": [
-          {"ref": "/wheelEnd", "kind": "device", "label": "Wheel resolves and sends the device offstage", "big": true}
+          {"ref": "/accents/75/at", "kind": "nudge", "target": "hero", "label": "hero accent", "big": false}
         ]
       },
       {
         "at": 24.24,
         "strength": 1,
         "responses": [
-          {"ref": "/cameraMoves/15/at", "kind": "camera", "label": "Follow phrase 16", "big": true}
+          {"ref": "/accents/76/at", "kind": "nudge", "target": "hero", "label": "hero accent", "big": false},
+          {"ref": "/shots/25/at", "kind": "camera", "label": "chance-results-row", "big": true}
         ]
       },
       {
         "at": 24.54,
         "strength": 1,
         "responses": [
-          {"ref": "/chance/0", "kind": "card", "label": "Lift chance tool 1", "big": true}
+          {"ref": "/accents/77/at", "kind": "nudge", "target": "hero", "label": "hero accent", "big": false},
+          {"ref": "/chance/0", "kind": "launch", "label": "chance 1", "big": true}
         ]
       },
       {
         "at": 25.12,
         "strength": 1,
         "responses": [
-          {"ref": "/chance/1", "kind": "card", "label": "Lift chance tool 2", "big": true}
+          {"ref": "/accents/78/at", "kind": "nudge", "target": "hero", "label": "hero accent", "big": false},
+          {"ref": "/chance/1", "kind": "launch", "label": "chance 2", "big": true}
         ]
       },
       {
         "at": 25.4,
         "strength": 1,
         "responses": [
-          {"ref": "/chance/2", "kind": "card", "label": "Lift chance tool 3", "big": true}
+          {"ref": "/accents/79/at", "kind": "nudge", "target": "hero", "label": "hero accent", "big": false},
+          {"ref": "/chance/2", "kind": "launch", "label": "chance 3", "big": true}
         ]
       },
       {
         "at": 25.68,
         "strength": 0.55,
         "responses": [
-          {"ref": "/cues/at25_68", "kind": "value", "label": "Coin settles on Heads", "big": false}
+          {"ref": "/accents/80/at", "kind": "nudge", "target": "hero", "label": "hero accent", "big": false}
         ]
       },
       {
         "at": 26,
         "strength": 1,
         "responses": [
-          {"ref": "/chanceReturn", "kind": "container", "label": "Return chance group", "big": true}
+          {"ref": "/accents/81/at", "kind": "nudge", "target": "hero", "label": "hero accent", "big": false}
         ]
       },
       {
         "at": 26.26,
         "strength": 1,
         "responses": [
-          {"ref": "/close", "kind": "chapter", "label": "Closing fan: Play", "big": true}
+          {"ref": "/accents/82/at", "kind": "nudge", "target": "phone", "label": "phone accent", "big": false},
+          {"ref": "/shots/26/at", "kind": "camera", "label": "destination-fan", "big": true},
+          {"ref": "/fan/2", "kind": "launch", "label": "fan 3", "big": false}
         ]
       },
       {
         "at": 26.5,
         "strength": 1,
         "responses": [
-          {"ref": "/fan/0", "kind": "fan", "label": "Fan destination 1", "big": true}
+          {"ref": "/accents/83/at", "kind": "nudge", "target": "phone", "label": "phone accent", "big": false},
+          {"ref": "/fan/0", "kind": "launch", "label": "fan 1", "big": true}
         ]
       },
       {
         "at": 26.82,
         "strength": 1,
         "responses": [
-          {"ref": "/fan/1", "kind": "fan", "label": "Fan destination 2", "big": true}
+          {"ref": "/accents/84/at", "kind": "nudge", "target": "phone", "label": "phone accent", "big": false},
+          {"ref": "/fan/1", "kind": "launch", "label": "fan 2", "big": true}
         ]
       },
       {
         "at": 27.04,
         "strength": 0.55,
         "responses": [
-          {"ref": "/type/App Toolkit./0", "kind": "word", "label": "App reveal", "big": false}
+          {"ref": "/accents/85/at", "kind": "nudge", "target": "phone", "label": "phone accent", "big": false},
+          {"ref": "/type/App Toolkit./0", "kind": "type", "label": "App word", "big": false}
         ]
       },
       {
         "at": 27.26,
         "strength": 0.55,
         "responses": [
-          {"ref": "/type/App Toolkit./1", "kind": "word", "label": "Toolkit. reveal", "big": false},
-          {"ref": "/type/Your toolkit./0", "kind": "word", "label": "Your reveal", "big": false}
+          {"ref": "/accents/86/at", "kind": "nudge", "target": "phone", "label": "phone accent", "big": false},
+          {"ref": "/type/App Toolkit./1", "kind": "type", "label": "Toolkit. word", "big": false},
+          {"ref": "/type/Your toolkit./0", "kind": "type", "label": "Your word", "big": false}
         ]
       },
       {
         "at": 27.68,
         "strength": 0.55,
         "responses": [
-          {"ref": "/type/Your toolkit./1", "kind": "word", "label": "toolkit. reveal", "big": false}
+          {"ref": "/accents/87/at", "kind": "nudge", "target": "phone", "label": "phone accent", "big": false},
+          {"ref": "/type/Your toolkit./1", "kind": "type", "label": "toolkit. word", "big": false},
+          {"ref": "/badge", "kind": "hit", "label": "badge", "big": false}
         ]
       },
       {
         "at": 27.96,
         "strength": 0.55,
         "responses": [
-          {"ref": "/beats/88/at", "kind": "nudge", "label": "closing-stage accent", "big": false, "target": "closing-stage"}
+          {"ref": "/accents/88/at", "kind": "nudge", "target": "closing-stage", "label": "closing-stage accent", "big": false}
         ]
       },
       {
         "at": 28.26,
         "strength": 0.55,
         "responses": [
-          {"ref": "/beats/89/at", "kind": "nudge", "label": "closing-stage accent", "big": false, "target": "closing-stage"}
+          {"ref": "/accents/89/at", "kind": "nudge", "target": "closing-stage", "label": "closing-stage accent", "big": false}
         ]
       },
       {
         "at": 28.88,
         "strength": 0.55,
         "responses": [
-          {"ref": "/beats/90/at", "kind": "nudge", "label": "closing-stage accent", "big": false, "target": "closing-stage"}
+          {"ref": "/accents/90/at", "kind": "nudge", "target": "closing-stage", "label": "closing-stage accent", "big": false}
         ]
       },
       {
         "at": 29.14,
         "strength": 0.55,
         "responses": [
-          {"ref": "/beats/91/at", "kind": "nudge", "label": "closing-stage accent", "big": false, "target": "closing-stage"}
+          {"ref": "/accents/91/at", "kind": "nudge", "target": "closing-stage", "label": "closing-stage accent", "big": false}
         ]
       },
       {
         "at": 29.54,
         "strength": 1,
         "responses": [
-          {"ref": "/finalExplosion", "kind": "burst", "label": "Final explosion", "big": true}
+          {"ref": "/accents/92/at", "kind": "nudge", "target": "closing-stage", "label": "closing-stage accent", "big": false},
+          {"ref": "/finalExplosion", "kind": "hit", "label": "finalExplosion", "big": true}
         ]
       },
       {
         "at": 29.8,
         "strength": 1,
         "responses": [
-          {"ref": "/finalLogo", "kind": "mark", "label": "Final logo", "big": true}
+          {"ref": "/accents/93/at", "kind": "nudge", "target": "closing-stage", "label": "closing-stage accent", "big": false},
+          {"ref": "/finalLogo", "kind": "hit", "label": "finalLogo", "big": true}
         ]
       }
     ],
-    "cues": {
-      "at20_84": 20.84,
-      "at21_72": 21.72,
-      "at17_7": 17.7,
-      "at21_12": 21.12,
-      "at21_46": 21.46,
-      "at18_38": 18.38,
-      "at18_92": 18.92,
-      "at19_42": 19.42,
-      "at19_88": 19.88,
-      "at20_56": 20.56,
-      "at22_86": 22.86,
-      "at25_68": 25.68,
-      "at26_26": 26.26,
-      "at26_82": 26.82,
-      "at27_26": 27.26,
-      "at27_04": 27.04,
-      "at27_68": 27.68,
-      "at27_96": 27.96
-    },
     "type": {
-      "One place.": [6.76, 7.06],
-      "Quick tools.": [11.44, 12],
-      "Measure.": [18.14],
-      "Let chance decide.": [21.98, 22.26, 22.56],
-      "App Toolkit.": [27.04, 27.26],
-      "Your toolkit.": [27.26, 27.68]
+      "One place.": [
+        6.76,
+        7.06
+      ],
+      "Quick tools.": [
+        15.18,
+        15.44
+      ],
+      "Measure.": [
+        17.14
+      ],
+      "Let chance decide.": [
+        21.98,
+        21.98,
+        22.26
+      ],
+      "App Toolkit.": [
+        27.04,
+        27.26
+      ],
+      "Your toolkit.": [
+        27.26,
+        27.68
+      ]
     },
-    "heroReturns": [18.84, 19.7, 20.56, 21.72],
-    "chanceReturn": 26,
-    "wheelEntry": 22.56,
-    "phonePan": 17.92,
-    "phonePanEnd": 18.14,
+    "wheelEntry": 21.98,
     "finalAnticipation": 29.4,
     "finalExplosion": 29.54,
     "finalLogo": 29.8,
     "closingStage": 27.96,
-    "cameraMoves": [
-      {
-        "at": 2.64,
-        "duration": 0.22,
-        "to": [1.12, 0, 25, 0]
-      },
-      {
-        "at": 4.58,
-        "duration": 0.22,
-        "to": [1.2, 370, 10, -1]
-      },
-      {
-        "at": 5.16,
-        "duration": 0.22,
-        "to": [1.2, -520, 10, 1]
-      },
-      {
-        "at": 5.74,
-        "duration": 0.3,
-        "to": [1.04, 0, 0, 0]
-      },
-      {
-        "at": 8.98,
-        "duration": 0.36,
-        "to": [1.16, -50, 0, 0]
-      },
-      {
-        "at": 10.62,
-        "duration": 0.4,
-        "to": [1.04, 0, 0, 0]
-      },
-      {
-        "at": 12.92,
-        "duration": 0.3,
-        "to": [1.08, -20, 0, 0]
-      },
-      {
-        "at": 13.96,
-        "duration": 0.28,
-        "to": [1.04, 10, 0, 0]
-      },
-      {
-        "at": 15.98,
-        "duration": 0.24,
-        "to": [1.1, 10, 0, 0]
-      },
-      {
-        "at": 17.7,
-        "duration": 0.2,
-        "to": [1, 0, 0, 0]
-      },
-      {
-        "at": 18.62,
-        "duration": 0.2,
-        "to": [1.06, -10, 0, 0]
-      },
-      {
-        "at": 19.42,
-        "duration": 0.2,
-        "to": [1.03, 15, 10, 0]
-      },
-      {
-        "at": 21.12,
-        "duration": 0.22,
-        "to": [1.35, -480, -60, 0]
-      },
-      {
-        "at": 21.72,
-        "duration": 0.24,
-        "to": [1.02, 0, 0, 0]
-      },
-      {
-        "at": 23.4,
-        "duration": 0.26,
-        "to": [1.1, -40, -10, 0]
-      },
-      {
-        "at": 24.24,
-        "duration": 0.24,
-        "to": [1.02, 0, 0, 0]
-      }
+    "phrases": [
+      0,
+      1.76,
+      2.32,
+      2.64,
+      3.32,
+      4.04,
+      4.58,
+      5.16,
+      5.74,
+      6.76,
+      8.98,
+      9.52,
+      10.08,
+      11.44,
+      12.92,
+      13.96,
+      15.18,
+      16.78,
+      17.14,
+      17.7,
+      18.62,
+      19.42,
+      20.84,
+      21.98,
+      22.56,
+      24.24,
+      26.26,
+      29.4
     ],
-    "phrases": [0, 1.76, 2.64, 3.32, 4.58, 5.16, 5.74, 6.76, 8.98, 10.08, 10.62, 11.44, 12.92, 13.96, 15.98, 17.14, 17.7, 17.92, 18.62, 19.42, 21.12, 21.72, 21.98, 22.26, 23.4, 24.24, 26.26, 27.96, 29.54],
     "finalCover": 29.7,
     "finalRest": 29.877777777777776,
-    "quickHeroIn": [13.16, 15.44],
-    "quickHeroOut": [14.88, 16.78],
-    "quickHeroEnd": [15.18, 17.14],
     "demo": {
-      "headingStart": 4.58,
-      "headingEnd": 4.92,
-      "torchHits": [4.34, 4.92, 5.74, 6.32],
+      "headingStart": 3.32,
+      "headingEnd": 4.04,
+      "torchHits": [
+        4.34,
+        4.92,
+        5.74,
+        6.32
+      ],
       "heroTurn": 13.72,
       "heroTurnEnd": 14.28,
       "heroReturn": 14.6,
@@ -919,69 +1031,1050 @@
       "levelTiltEnd": 15.44,
       "levelSettle": 15.66,
       "levelEnd": 16.44,
-      "torchLevels": [1, 5, 2, 4, 3],
+      "torchLevels": [
+        1,
+        5,
+        2,
+        4,
+        3
+      ],
       "sosStart": 5.16
     },
-    "featureShots": [
-      {
-        "x": 1320,
-        "y": 685,
-        "scale": 2.3,
-        "angle": -5
-      },
-      {
-        "x": 1450,
-        "y": 670,
-        "scale": 2.25,
-        "angle": 4
-      },
-      {
-        "x": 1320,
-        "y": 685,
-        "scale": 2.2,
-        "angle": -3
-      },
-      {
-        "x": 1360,
-        "y": 615,
-        "scale": 1.85,
-        "angle": 0
-      }
-    ],
-    "closingOrigin": {
-      "x": 460,
-      "y": 560,
-      "scale": 0.74,
-      "angle": 5
-    },
     "bentoPush": 8.98,
-    "logoAnticipation": 1.46,
-    "lidSettled": 2.32,
-    "chestLanding": 2.64,
-    "backdropNotes": [0.02, 0.32, 0.62],
+    "lidSettled": 2.64,
+    "chestLanding": 2.9,
+    "backdropNotes": [
+      0.02,
+      0.32,
+      0.62
+    ],
     "backgroundShapes": [
       {
         "file": "16 Sided Cookie.svg",
         "color": "var(--tk-gold-container)",
-        "size": 1000,
-        "from": [20, 950, 0],
-        "to": [80, 100, -35]
+        "size": 420,
+        "from": [
+          80,
+          1000,
+          0
+        ],
+        "to": [
+          80,
+          90,
+          -35
+        ]
       },
       {
         "file": "4 Sided Cookie.svg",
         "color": "#FDE7A2",
-        "size": 680,
-        "from": [1890, 130, -10],
-        "to": [1920, 960, 25]
+        "size": 420,
+        "from": [
+          1870,
+          90,
+          -10
+        ],
+        "to": [
+          1870,
+          1000,
+          25
+        ]
       },
       {
         "file": "Rounded Triangle.svg",
         "color": "#F6A800",
-        "size": 380,
-        "from": [1640, 850, 15],
-        "to": [220, 860, -30]
+        "size": 360,
+        "from": [
+          1780,
+          880,
+          15
+        ],
+        "to": [
+          160,
+          880,
+          -30
+        ]
       }
     ],
-    "bentoJoin": [7.7, 8.02]
+    "bentoJoin": [
+      7.7,
+      8.02
+    ],
+    "launchWide": 5.74,
+    "launchWideEnd": 6.32,
+    "quickStart": 10.08,
+    "launchOrigin": {
+      "x": 1150,
+      "y": 698
+    },
+    "launchPoses": [
+      {
+        "x": 420,
+        "y": 290
+      },
+      {
+        "x": 1500,
+        "y": 290
+      },
+      {
+        "x": 600,
+        "y": 720
+      },
+      {
+        "x": 1540,
+        "y": 720
+      }
+    ],
+    "launchFraming": [
+      {
+        "kind": "face",
+        "height": 760,
+        "screenX": 1080,
+        "angle": -4
+      },
+      {
+        "kind": "card",
+        "height": 900,
+        "screenX": 1140,
+        "angle": 5
+      },
+      {
+        "kind": "face",
+        "height": 850,
+        "screenX": 1120,
+        "angle": -3
+      },
+      {
+        "kind": "card",
+        "height": 900,
+        "screenX": 1120,
+        "angle": 3
+      }
+    ],
+    "wipes": [
+      {
+        "at": 6.76,
+        "lead": 0.14,
+        "duration": 0.24,
+        "x": 960,
+        "y": 540,
+        "shape": "cookie_9sided",
+        "color": "#D0E9E3",
+        "direction": 1
+      },
+      {
+        "at": 9.52,
+        "lead": 0.14,
+        "duration": 0.24,
+        "x": 960,
+        "y": 540,
+        "shape": "soft_burst",
+        "color": "#D0E9E3",
+        "direction": -1
+      },
+      {
+        "at": 10.08,
+        "lead": 0.14,
+        "duration": 0.24,
+        "x": 960,
+        "y": 540,
+        "shape": "cookie_9sided",
+        "color": "#D0E9E3",
+        "direction": 1
+      },
+      {
+        "at": 11.44,
+        "lead": 0.14,
+        "duration": 0.24,
+        "x": 1080,
+        "y": 540,
+        "shape": "4_cookie",
+        "color": "#D0E9E3",
+        "direction": -1
+      },
+      {
+        "at": 12.92,
+        "lead": 0.14,
+        "duration": 0.24,
+        "x": 760,
+        "y": 540,
+        "shape": "flower",
+        "color": "#FDE7A2",
+        "direction": 1
+      },
+      {
+        "at": 13.96,
+        "lead": 0.14,
+        "duration": 0.24,
+        "x": 1100,
+        "y": 540,
+        "shape": "soft_burst",
+        "color": "#E8D3DC",
+        "direction": -1
+      },
+      {
+        "at": 17.14,
+        "lead": 0.14,
+        "duration": 0.24,
+        "x": 960,
+        "y": 540,
+        "shape": "flower",
+        "color": "#FDE7A2",
+        "direction": 1
+      },
+      {
+        "at": 18.62,
+        "lead": 0.14,
+        "duration": 0.24,
+        "x": 1200,
+        "y": 570,
+        "shape": "flower",
+        "color": "#FDE7A2",
+        "direction": -1
+      },
+      {
+        "at": 19.42,
+        "lead": 0.14,
+        "duration": 0.24,
+        "x": 720,
+        "y": 590,
+        "shape": "soft_burst",
+        "color": "#FDE7A2",
+        "direction": 1
+      },
+      {
+        "at": 20.84,
+        "lead": 0.14,
+        "duration": 0.24,
+        "x": 1200,
+        "y": 590,
+        "shape": "cookie_9sided",
+        "color": "#D0E9E3",
+        "direction": -1
+      },
+      {
+        "at": 21.98,
+        "lead": 0.14,
+        "duration": 0.24,
+        "x": 960,
+        "y": 660,
+        "shape": "soft_burst",
+        "color": "#E8D3DC",
+        "direction": 1
+      },
+      {
+        "at": 26.26,
+        "lead": 0.14,
+        "duration": 0.24,
+        "x": 960,
+        "y": 350,
+        "shape": "soft_burst",
+        "color": "#FFF4D9",
+        "direction": -1
+      }
+    ],
+    "shots": [
+      {
+        "at": 0,
+        "end": 1.76,
+        "framing": "wide",
+        "composition": "corner-stage",
+        "transition": "spring corner accents",
+        "settle": 1.76
+      },
+      {
+        "at": 1.76,
+        "end": 2.32,
+        "framing": "extreme close-up",
+        "composition": "central-mark",
+        "transition": "anticipation and overshoot",
+        "settle": 0.42
+      },
+      {
+        "at": 2.32,
+        "end": 2.64,
+        "framing": "wide",
+        "composition": "open-chest",
+        "transition": "pull back before the right-hinge swing",
+        "settle": 0.32
+      },
+      {
+        "at": 2.64,
+        "end": 3.32,
+        "framing": "medium",
+        "composition": "chest-landing",
+        "transition": "pan closer after the lid settles",
+        "settle": 0.26
+      },
+      {
+        "at": 3.32,
+        "end": 4.04,
+        "framing": "extreme close-up",
+        "composition": "launch-compass-face",
+        "transition": "track from the mouth",
+        "settle": 0.18
+      },
+      {
+        "at": 4.04,
+        "end": 4.58,
+        "framing": "medium",
+        "composition": "launch-level-context",
+        "transition": "whip back to the mouth and follow",
+        "settle": 0.18
+      },
+      {
+        "at": 4.58,
+        "end": 5.16,
+        "framing": "extreme close-up",
+        "composition": "launch-flashlight-face",
+        "transition": "track brightness fill",
+        "settle": 0.18
+      },
+      {
+        "at": 5.16,
+        "end": 5.74,
+        "framing": "medium",
+        "composition": "launch-sos-context",
+        "transition": "whip and track the native pulse",
+        "settle": 0.18
+      },
+      {
+        "at": 5.74,
+        "end": 6.76,
+        "framing": "wide",
+        "composition": "four-launches",
+        "transition": "pull wide around the chest",
+        "settle": 0.58
+      },
+      {
+        "at": 6.76,
+        "end": 8.98,
+        "framing": "medium",
+        "composition": "connected-bento",
+        "transition": "shape-to-ground wipe and corner join",
+        "settle": 0.7
+      },
+      {
+        "at": 8.98,
+        "end": 9.52,
+        "framing": "extreme close-up",
+        "composition": "bento-push",
+        "transition": "push into the bento",
+        "settle": 0.54
+      },
+      {
+        "at": 9.52,
+        "end": 10.08,
+        "framing": "medium",
+        "composition": "screen-handoff",
+        "transition": "shape wipe into the real screen",
+        "settle": 0.4
+      },
+      {
+        "at": 10.08,
+        "end": 11.44,
+        "framing": "extreme close-up",
+        "composition": "compass-needle",
+        "transition": "push from the screen into the compass",
+        "settle": 0.26
+      },
+      {
+        "at": 11.44,
+        "end": 12.92,
+        "framing": "medium",
+        "composition": "level-context",
+        "transition": "whip across the live widget rail",
+        "settle": 0.24
+      },
+      {
+        "at": 12.92,
+        "end": 13.96,
+        "framing": "extreme close-up",
+        "composition": "brightness-fill",
+        "transition": "whip into the flashlight face",
+        "settle": 0.22
+      },
+      {
+        "at": 13.96,
+        "end": 15.18,
+        "framing": "medium",
+        "composition": "sos-pulse",
+        "transition": "track the native SOS pulse",
+        "settle": 0.22
+      },
+      {
+        "at": 15.18,
+        "end": 16.78,
+        "framing": "wide",
+        "composition": "quick-device-return",
+        "transition": "pull out as the four cards return",
+        "settle": 0.65
+      },
+      {
+        "at": 16.78,
+        "end": 17.14,
+        "framing": "extreme close-up",
+        "composition": "measure-tab",
+        "transition": "push through the measured tab",
+        "settle": 0.36
+      },
+      {
+        "at": 17.14,
+        "end": 17.7,
+        "framing": "wide",
+        "composition": "measure-word",
+        "transition": "shared-axis screen bridge and type push",
+        "settle": 0.56
+      },
+      {
+        "at": 17.7,
+        "end": 18.62,
+        "framing": "medium",
+        "composition": "protractor-angle",
+        "transition": "container transform from the real screen",
+        "settle": 0.28
+      },
+      {
+        "at": 18.62,
+        "end": 19.42,
+        "framing": "extreme close-up",
+        "composition": "converter-values",
+        "transition": "shape wipe from the angle card",
+        "settle": 0.22
+      },
+      {
+        "at": 19.42,
+        "end": 20.84,
+        "framing": "medium",
+        "composition": "bill-split",
+        "transition": "match the value panel through a shape wipe",
+        "settle": 0.22
+      },
+      {
+        "at": 20.84,
+        "end": 21.98,
+        "framing": "wide",
+        "composition": "counter-landscape",
+        "transition": "shape wipe into a landscape counter",
+        "settle": 0.22
+      },
+      {
+        "at": 21.98,
+        "end": 22.56,
+        "framing": "medium",
+        "composition": "chance-title-wheel",
+        "transition": "wheel pushes through the chapter words",
+        "settle": 0.28
+      },
+      {
+        "at": 22.56,
+        "end": 24.24,
+        "framing": "extreme close-up",
+        "composition": "spinning-wheel",
+        "transition": "push from the card into its measured spinning wheel",
+        "settle": 0.3
+      },
+      {
+        "at": 24.24,
+        "end": 26.26,
+        "framing": "wide",
+        "composition": "chance-results-row",
+        "transition": "snap wide as three results land",
+        "settle": 0.3
+      },
+      {
+        "at": 26.26,
+        "end": 29.4,
+        "framing": "medium",
+        "composition": "destination-fan",
+        "transition": "shape wipe into three large devices with depth",
+        "settle": 0.64
+      },
+      {
+        "at": 29.4,
+        "end": 29.88,
+        "framing": "extreme close-up",
+        "composition": "gold-hit",
+        "transition": "mark squash and full-frame gold explosion",
+        "settle": 0.14
+      }
+    ],
+    "quickReturn": 15.18,
+    "quickReturnEnd": 16.44,
+    "quickPhoneIn": 15.18,
+    "quickPhoneLanded": 15.98,
+    "tabPush": 16.78,
+    "macroScale": 2.7,
+    "macroEntryEnd": 10.62,
+    "quickShots": [
+      {
+        "at": 10.08,
+        "end": 11.44,
+        "widget": 0,
+        "kind": "face",
+        "height": 850,
+        "screenX": 1080,
+        "angle": -4,
+        "railX": 420
+      },
+      {
+        "at": 11.44,
+        "end": 12.92,
+        "widget": 1,
+        "kind": "card",
+        "height": 960,
+        "screenX": 760,
+        "angle": 5,
+        "railX": 1080
+      },
+      {
+        "at": 12.92,
+        "end": 13.96,
+        "widget": 2,
+        "kind": "face",
+        "height": 900,
+        "screenX": 1100,
+        "angle": -3,
+        "railX": 1740
+      },
+      {
+        "at": 13.96,
+        "end": 15.18,
+        "widget": 3,
+        "kind": "card",
+        "height": 960,
+        "screenX": 780,
+        "angle": 4,
+        "railX": 2400
+      }
+    ],
+    "quickActions": {
+      "heading": [
+        10.08,
+        10.62,
+        10.9,
+        11.44
+      ],
+      "level": [
+        11.44,
+        12.46
+      ],
+      "torch": [
+        12.92,
+        13.16,
+        13.72,
+        13.96
+      ],
+      "torchValues": [
+        3,
+        5,
+        1,
+        4,
+        3
+      ],
+      "sos": [
+        13.96,
+        15.18
+      ]
+    },
+    "measureShots": [
+      {
+        "at": 17.7,
+        "end": 18.62,
+        "tool": "protractor",
+        "word": "Angles.",
+        "x": 1400,
+        "y": 570,
+        "height": 900,
+        "angle": -5,
+        "textX": 96,
+        "textY": 180,
+        "textSize": 230,
+        "view": {
+          "x": 960,
+          "y": 540,
+          "scale": 1,
+          "angle": 0
+        },
+        "to": {
+          "x": 1020,
+          "y": 550,
+          "scale": 1.1,
+          "angle": -2
+        }
+      },
+      {
+        "at": 18.62,
+        "end": 19.42,
+        "tool": "unit_converter",
+        "word": "Units.",
+        "x": 720,
+        "y": 590,
+        "height": 1320,
+        "angle": 4,
+        "textX": 1190,
+        "textY": 500,
+        "textSize": 225,
+        "view": {
+          "x": 960,
+          "y": 540,
+          "scale": 1,
+          "angle": 2
+        },
+        "to": {
+          "x": 900,
+          "y": 570,
+          "scale": 1.1,
+          "angle": 0
+        }
+      },
+      {
+        "at": 19.42,
+        "end": 20.84,
+        "tool": "bill_splitter",
+        "word": "Split.",
+        "x": 1200,
+        "y": 590,
+        "height": 880,
+        "angle": -4,
+        "textX": 96,
+        "textY": 350,
+        "textSize": 270,
+        "view": {
+          "x": 960,
+          "y": 540,
+          "scale": 1,
+          "angle": 0
+        },
+        "to": {
+          "x": 1010,
+          "y": 560,
+          "scale": 1.1,
+          "angle": -2
+        }
+      },
+      {
+        "at": 20.84,
+        "end": 21.98,
+        "tool": "counter",
+        "word": "Counts.",
+        "x": 960,
+        "y": 730,
+        "height": 550,
+        "angle": 0,
+        "textX": 96,
+        "textY": 70,
+        "textSize": 220,
+        "view": {
+          "x": 960,
+          "y": 540,
+          "scale": 1,
+          "angle": -3
+        },
+        "to": {
+          "x": 960,
+          "y": 600,
+          "scale": 1.07,
+          "angle": 0
+        }
+      }
+    ],
+    "wheelWide": 24.24,
+    "wheelWideEnd": 24.54,
+    "measureActions": {
+      "angle": [
+        17.7,
+        18.38
+      ],
+      "converter": [
+        18.62,
+        19.14
+      ],
+      "split": [
+        19.98
+      ],
+      "counter": [
+        20.84,
+        21.12,
+        21.46
+      ]
+    },
+    "accents": [
+      {
+        "at": 0.02,
+        "target": "intro-stage"
+      },
+      {
+        "at": 0.32,
+        "target": "intro-stage"
+      },
+      {
+        "at": 0.62,
+        "target": "intro-stage"
+      },
+      {
+        "at": 1.04,
+        "target": "intro-stage"
+      },
+      {
+        "at": 1.46,
+        "target": "intro-stage"
+      },
+      {
+        "at": 1.76,
+        "target": "toolbox"
+      },
+      {
+        "at": 2.32,
+        "target": "toolbox"
+      },
+      {
+        "at": 2.64,
+        "target": "toolbox"
+      },
+      {
+        "at": 2.9,
+        "target": "toolbox"
+      },
+      {
+        "at": 3.32,
+        "target": "hero"
+      },
+      {
+        "at": 3.76,
+        "target": "hero"
+      },
+      {
+        "at": 4.04,
+        "target": "hero"
+      },
+      {
+        "at": 4.34,
+        "target": "hero"
+      },
+      {
+        "at": 4.58,
+        "target": "hero"
+      },
+      {
+        "at": 4.92,
+        "target": "hero"
+      },
+      {
+        "at": 5.16,
+        "target": "hero"
+      },
+      {
+        "at": 5.74,
+        "target": "hero"
+      },
+      {
+        "at": 6.08,
+        "target": "hero"
+      },
+      {
+        "at": 6.32,
+        "target": "hero"
+      },
+      {
+        "at": 6.76,
+        "target": "stage"
+      },
+      {
+        "at": 7.06,
+        "target": "stage"
+      },
+      {
+        "at": 7.46,
+        "target": "stage"
+      },
+      {
+        "at": 7.7,
+        "target": "stage"
+      },
+      {
+        "at": 8.02,
+        "target": "stage"
+      },
+      {
+        "at": 8.26,
+        "target": "stage"
+      },
+      {
+        "at": 8.58,
+        "target": "stage"
+      },
+      {
+        "at": 8.98,
+        "target": "stage"
+      },
+      {
+        "at": 9.22,
+        "target": "stage"
+      },
+      {
+        "at": 9.52,
+        "target": "stage"
+      },
+      {
+        "at": 9.74,
+        "target": "stage"
+      },
+      {
+        "at": 10.08,
+        "target": "hero"
+      },
+      {
+        "at": 10.3,
+        "target": "hero"
+      },
+      {
+        "at": 10.62,
+        "target": "hero"
+      },
+      {
+        "at": 10.9,
+        "target": "hero"
+      },
+      {
+        "at": 11.44,
+        "target": "hero"
+      },
+      {
+        "at": 12,
+        "target": "hero"
+      },
+      {
+        "at": 12.22,
+        "target": "hero"
+      },
+      {
+        "at": 12.46,
+        "target": "hero"
+      },
+      {
+        "at": 12.92,
+        "target": "hero"
+      },
+      {
+        "at": 13.16,
+        "target": "hero"
+      },
+      {
+        "at": 13.72,
+        "target": "hero"
+      },
+      {
+        "at": 13.96,
+        "target": "hero"
+      },
+      {
+        "at": 14.28,
+        "target": "hero"
+      },
+      {
+        "at": 14.6,
+        "target": "hero"
+      },
+      {
+        "at": 14.88,
+        "target": "hero"
+      },
+      {
+        "at": 15.18,
+        "target": "hero"
+      },
+      {
+        "at": 15.44,
+        "target": "hero"
+      },
+      {
+        "at": 15.66,
+        "target": "hero"
+      },
+      {
+        "at": 15.98,
+        "target": "hero"
+      },
+      {
+        "at": 16.44,
+        "target": "phone"
+      },
+      {
+        "at": 16.78,
+        "target": "phone"
+      },
+      {
+        "at": 17.14,
+        "target": "hero"
+      },
+      {
+        "at": 17.36,
+        "target": "hero"
+      },
+      {
+        "at": 17.7,
+        "target": "hero"
+      },
+      {
+        "at": 17.92,
+        "target": "hero"
+      },
+      {
+        "at": 18.14,
+        "target": "hero"
+      },
+      {
+        "at": 18.38,
+        "target": "hero"
+      },
+      {
+        "at": 18.62,
+        "target": "hero"
+      },
+      {
+        "at": 18.84,
+        "target": "hero"
+      },
+      {
+        "at": 19.14,
+        "target": "hero"
+      },
+      {
+        "at": 19.42,
+        "target": "hero"
+      },
+      {
+        "at": 19.7,
+        "target": "hero"
+      },
+      {
+        "at": 19.98,
+        "target": "hero"
+      },
+      {
+        "at": 20.56,
+        "target": "hero"
+      },
+      {
+        "at": 20.84,
+        "target": "hero"
+      },
+      {
+        "at": 21.12,
+        "target": "hero"
+      },
+      {
+        "at": 21.46,
+        "target": "hero"
+      },
+      {
+        "at": 21.72,
+        "target": "hero"
+      },
+      {
+        "at": 21.98,
+        "target": "hero"
+      },
+      {
+        "at": 22.26,
+        "target": "hero"
+      },
+      {
+        "at": 22.56,
+        "target": "hero"
+      },
+      {
+        "at": 22.86,
+        "target": "hero"
+      },
+      {
+        "at": 23.14,
+        "target": "hero"
+      },
+      {
+        "at": 23.4,
+        "target": "hero"
+      },
+      {
+        "at": 23.76,
+        "target": "hero"
+      },
+      {
+        "at": 24,
+        "target": "hero"
+      },
+      {
+        "at": 24.24,
+        "target": "hero"
+      },
+      {
+        "at": 24.54,
+        "target": "hero"
+      },
+      {
+        "at": 25.12,
+        "target": "hero"
+      },
+      {
+        "at": 25.4,
+        "target": "hero"
+      },
+      {
+        "at": 25.68,
+        "target": "hero"
+      },
+      {
+        "at": 26,
+        "target": "hero"
+      },
+      {
+        "at": 26.26,
+        "target": "phone"
+      },
+      {
+        "at": 26.5,
+        "target": "phone"
+      },
+      {
+        "at": 26.82,
+        "target": "phone"
+      },
+      {
+        "at": 27.04,
+        "target": "phone"
+      },
+      {
+        "at": 27.26,
+        "target": "phone"
+      },
+      {
+        "at": 27.68,
+        "target": "phone"
+      },
+      {
+        "at": 27.96,
+        "target": "closing-stage"
+      },
+      {
+        "at": 28.26,
+        "target": "closing-stage"
+      },
+      {
+        "at": 28.88,
+        "target": "closing-stage"
+      },
+      {
+        "at": 29.14,
+        "target": "closing-stage"
+      },
+      {
+        "at": 29.54,
+        "target": "closing-stage"
+      },
+      {
+        "at": 29.8,
+        "target": "closing-stage"
+      }
+    ]
   }
 }

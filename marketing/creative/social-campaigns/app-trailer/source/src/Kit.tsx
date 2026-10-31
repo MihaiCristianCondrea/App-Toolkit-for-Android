@@ -119,6 +119,8 @@ export const GeometryProbe:React.FC<{onGeometry:(g:Geometry)=>void}>=({onGeometr
     const node=root.querySelector<HTMLElement>(widget.selector);
     if(!node)throw new Error(`Missing real widget: ${widget.id}`);
     geometry[widget.id]=measuredRect(node,root);
+    const face=node.querySelector<HTMLElement>('.qt-live__face');
+    if(face)geometry[widget.id+'-face']=measuredRect(face,root);
   }
   const shell=root.querySelector('mnw-android-screen')?.shadowRoot;
   for(const button of shell?.querySelectorAll<HTMLButtonElement>('.navbar__item')??[]){
