@@ -141,14 +141,19 @@ export const OpeningJourney:React.FC<{seconds:number;onGeometry?:(g:Geometry)=>v
     {g&&macros?WIDGETS.slice(0,4).map((w,i)=>{
       const r=g[w.id],p=macroPose(t,g,i),join=ease(t,e.quickStart,e.macroEntryEnd)*(1-ease(t,e.quickReturn,e.quickReturnEnd)),radii=isolatedRadii(r,join);
       const punch=1+.025*beat(t,'hero');
-      return <div key={w.id} data-macro-widget={w.id} style={{position:'absolute',width:r.width,height:r.height,borderRadius:radiusCss(radii),transformOrigin:'50% 50%',transform:`translate(${p.x-r.width/2}px,${p.y-r.height/2}px) rotate(${p.angle}deg) scale(${p.scale*punch})`,boxShadow:'0 16px 32px rgba(59,45,20,.14)'}}><LiveCrop screen="quick-tools" selector={w.selector} state={state} radii={radii}/></div>;
+      const nextShot=e.quickShots[i+1];
+      const hidePassed=nextShot&&t>=nextShot.at&&t<e.quickReturn;
+      const opacity=hidePassed?1-ease(t,nextShot.at,nextShot.at+.16):1;
+      return <div key={w.id} data-macro-widget={w.id} style={{position:'absolute',width:r.width,height:r.height,borderRadius:radiusCss(radii),transformOrigin:'50% 50%',transform:`translate(${p.x-r.width/2}px,${p.y-r.height/2}px) rotate(${p.angle}deg) scale(${p.scale*punch})`,opacity,boxShadow:'0 16px 32px rgba(59,45,20,.14)'}}><LiveCrop screen="quick-tools" selector={w.selector} state={state} radii={radii}/></div>;
     }):null}
     </CameraRig>
     {t>=e.gather&&t<e.bentoPush+.3?<KineticLine seconds={t} text="One place." notes={e.type['One place.']} x={110} y={230} width={950} size={280} exit={ease(t,e.bentoPush,e.bentoPush+.3)}/>:null}
     {t>=e.launches[0]&&t<e.launchWide?(()=>{const i=e.launches.filter(at=>t>=at).length-1;return <KineticLine seconds={t} text={names[i]} notes={names[i].split(' ').map(()=>e.launches[i])} x={100} y={925} size={78} width={1700}/>;})():null}
     {t>=e.quickStart&&t<e.quickReturn?(()=>{
       const shot=[...e.quickShots].reverse().find(s=>t>=s.at)!;
-      return <KineticLine seconds={t} text={names[shot.widget]} notes={names[shot.widget].split(' ').map(()=>shot.at)} x={100} y={925} size={78} width={1720}/>;
+      const onRight=shot.widget===3;
+      const exit=ease(t,shot.end-.12,shot.end);
+      return <KineticLine key={shot.widget} seconds={t} text={names[shot.widget]} notes={names[shot.widget].split(' ').map(()=>shot.at)} x={onRight?1180:80} y={925} size={shot.widget===1?68:78} width={onRight?640:700} exit={exit}/>;
     })():null}
     {t>=e.quickReturn?<QuickCaption seconds={t}/>:null}
   </>;

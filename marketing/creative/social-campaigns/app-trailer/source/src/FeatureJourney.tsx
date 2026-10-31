@@ -14,7 +14,10 @@ const stateAt=(t:number)=>({
 const playAt=(t:number)=>({wheelText:'Pizza\nSushi\nPasta',wheelRotation:1260*ease(t,e.wheelStart,e.wheelEnd),wheelWinner:t>=e.wheelEnd?'Sushi':'',randomResult:t<e.chance[0]?null:73,diceResult:t>=e.chance[1]?5:null,coinSide:t>=e.chance[2]?'Heads':null});
 
 /** A real crop keeps its measured native rectangle while the camera changes the framing. */
-const Hero:React.FC<{tool:string;screen:string;rect:Rect;state:Record<string,unknown>;pose:PhonePose;radii:number[];seconds:number;clip?:string}>=({tool,screen,rect,state,pose,radii,seconds:t,clip})=><div data-hero-part={tool} style={{position:'absolute',width:rect.width,height:rect.height,borderRadius:radiusCss(radii),clipPath:clip,transformOrigin:'50% 50%',transform:`translate(${pose.x-rect.width/2}px,${pose.y-rect.height/2}px) rotate(${pose.angle}deg) scale(${pose.scale*(1+.022*beat(t,'hero'))})`,boxShadow:'0 16px 32px rgba(59,45,20,.14)'}}><LiveCrop screen={screen} selector={`[data-tool="${tool}"]`} state={state} radii={radii}/></div>;
+const Hero:React.FC<{tool:string;screen:string;rect:Rect;state:Record<string,unknown>;pose:PhonePose;radii:number[];seconds:number;clip?:string}>=({tool,screen,rect,state,pose,radii,seconds:t,clip})=>{
+  const punch=(tool==='decision_wheel'&&t>=e.wheelWideEnd)?1:(1+.022*beat(t,'hero'));
+  return <div data-hero-part={tool} style={{position:'absolute',width:rect.width,height:rect.height,borderRadius:radiusCss(radii),clipPath:clip,transformOrigin:'50% 50%',transform:`translate(${pose.x-rect.width/2}px,${pose.y-rect.height/2}px) rotate(${pose.angle}deg) scale(${pose.scale*punch})`,boxShadow:'0 16px 32px rgba(59,45,20,.14)'}}><LiveCrop screen={screen} selector={`[data-tool="${tool}"]`} state={state} radii={radii}/></div>;
+};
 
 export const FeatureJourney:React.FC<{seconds:number;geometry:Geometry}>=({seconds:t,geometry})=>{
   const [parts,setParts]=useState<Geometry>({});
@@ -33,7 +36,7 @@ export const FeatureJourney:React.FC<{seconds:number;geometry:Geometry}>=({secon
   const focusScale=wheelFace?diameter/wheelFace.height:1;
   const offset=wheelRect&&wheelFace?projectPart(wheelFace,wheelRect,{x:0,y:0,scale:focusScale,angle:0}):{x:0,y:0};
   const enter=ease(t,e.wheelEntry-.14,e.wheelEntry+.28);
-  const wheelPose={x:lerp(lerp(1440,960,push)-offset.x,960,wide)+1900*(1-enter),y:lerp(540-offset.y,330,wide),scale:lerp(focusScale,2.5,wide),angle:0};
+  const wheelPose={x:lerp(lerp(1440,960,push)-offset.x,960,wide)+1900*(1-enter),y:lerp(540-offset.y,270,wide),scale:lerp(focusScale,2.5,wide),angle:0};
   const bounds=wheelRect&&wheelFace?[wheelFace.y-wheelRect.y,wheelRect.x+wheelRect.width-wheelFace.x-wheelFace.width,wheelRect.y+wheelRect.height-wheelFace.y-wheelFace.height,wheelFace.x-wheelRect.x]:[0,0,0,0];
   const wheelClip=`inset(${bounds.map(n=>Math.max(0,n)*(1-wide)).join('px ')}px round ${lerp((wheelFace?.width??0)/2,28,wide)}px)`;
   const view:View=t<e.measureShots[0].at?mixView(quickView(e.measure,geometry),active.view,ease(t,e.measure,e.measureShots[0].at)):
@@ -63,8 +66,8 @@ export const FeatureJourney:React.FC<{seconds:number;geometry:Geometry}>=({secon
       })():null}
       {isPlay?['random_number','dice_roll','coin_flip'].map((tool,i)=>{
         const r=parts[tool],at=e.chance[i];if(!r||t<at)return null;
-        const p=pop(t,at,.4),scale=Math.min(480/r.width,390/r.height);
-        return <Hero key={tool} seconds={t} tool={tool} screen="play" rect={r} state={playState} radii={[28,28,28,28]} pose={{x:400+560*i,y:950-r.height*scale/2+1000*(1-p),scale:scale*lerp(.7,1,p),angle:lerp(i%2?-12:12,0,p)}}/>;
+        const p=pop(t,at,.34),scale=Math.min(480/r.width,390/r.height);
+        return <Hero key={tool} seconds={t} tool={tool} screen="play" rect={r} state={playState} radii={[28,28,28,28]} pose={{x:400+560*i,y:970-r.height*scale/2+1000*(1-p),scale:scale*lerp(.7,1,p),angle:lerp(i%2?-12:12,0,p)}}/>;
       }):null}
     </CameraRig>
 
