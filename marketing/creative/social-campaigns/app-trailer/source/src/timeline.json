@@ -24,42 +24,42 @@
       "start": 3.32,
       "end": 6.76,
       "title": "Track four live cards",
-      "action": "Four cards rise from the measured mouth into separate lanes. The camera alternates large widget faces with wider card views, then pulls wide around the chest."
+      "action": "Four whole live cards rise from the mouth into separate lanes with attached elevation. The camera tracks each, opens its framing between launches, then pulls wide into a tight arc above the chest."
     },
     {
       "id": "one-place",
       "start": 6.76,
       "end": 10.08,
       "title": "Join and enter the screen",
-      "action": "The cards join into a full-height connected bento beside giant whole-word type. Connected corners ease to 8 px. A shape wipe and close push carry the same cards into their real screen positions."
+      "action": "The four cards separate into rows and join a connected bento. One place arrives once the text column is clear. The camera keeps the cards whole while the device grows around their native screen positions."
     },
     {
       "id": "quick-tools",
       "start": 10.08,
       "end": 17.14,
       "title": "Enter the tools",
-      "action": "The camera moves along a rail of live Compass, Level, Flashlight and SOS crops. Full-frame faces alternate with wider context. The cards return to a large phone, huge Quick tools type takes the left side, and the camera enters the measured Measure tab."
+      "action": "Native Compass, Level, Flashlight and SOS actions start on their shot onsets. The camera widens through paired whole-card framing between close-ups, while shapes grow from the live faces. The cards return to a device pushed right by Quick tools before the measured tab push."
     },
     {
       "id": "measure",
       "start": 17.14,
       "end": 21.98,
       "title": "Angles, units, split and count",
-      "action": "The real tab uses shared-axis motion. The Protractor grows from its measured screen rectangle, followed by a large Converter, Bill Splitter and landscape Counter. Shape wipes from each outgoing card carry the next framing."
+      "action": "The real tab uses shared-axis motion. Protractor grows from its measured screen rectangle, followed by Converter, Bill Splitter and Counter. Each card and its owning word travel together over a tool-colour ground wipe."
     },
     {
       "id": "play",
       "start": 21.98,
       "end": 26.26,
       "title": "Spin, then land three results",
-      "action": "The wheel circle grows from its real card while Let chance decide crosses the left side. The wheel fills nearly the whole height, spins to Sushi, then expands back into its card as the camera pulls wide. Number, die and coin land on consecutive onsets."
+      "action": "The measured wheel circle fills the height, spins to Sushi, then expands into its card. After the wheel settles, number, die and coin land in a centred row with equal gaps and a y 970 baseline."
     },
     {
       "id": "close",
       "start": 26.26,
       "end": 29.88,
       "title": "Fan the destinations, land in gold",
-      "action": "Three large devices enter as a fan with depth. Quick Tools, Measure and Play & Decide are labelled below. The original mark, headline and Play badge hold 27.90 to 29.40, before the original gold ending covers the frame and the mark lands on 29.80."
+      "action": "A large Play screen carries the first closing frame into a three-device fan with depth. A consistent left identity column and separate destination labels hold 27.90 to 29.40. The original gold ending covers all text by 29.70 and lands the mark on 29.80."
     }
   ],
   "events": {
@@ -91,7 +91,7 @@
       26.82,
       26.26
     ],
-    "badge": 27.68,
+    "badge": 27.26,
     "hold": 27.9,
     "blurWindows": [
       [
@@ -565,12 +565,6 @@
             "kind": "camera",
             "label": "connected-bento",
             "big": true
-          },
-          {
-            "ref": "/type/One place./0",
-            "kind": "type",
-            "label": "One word",
-            "big": false
           }
         ]
       },
@@ -583,12 +577,6 @@
             "kind": "nudge",
             "target": "stage",
             "label": "stage accent",
-            "big": false
-          },
-          {
-            "ref": "/type/One place./1",
-            "kind": "type",
-            "label": "place. word",
             "big": false
           }
         ]
@@ -603,6 +591,12 @@
             "target": "stage",
             "label": "stage accent",
             "big": false
+          },
+          {
+            "ref": "/type/One place./0",
+            "kind": "type",
+            "label": "One word",
+            "big": false
           }
         ]
       },
@@ -615,6 +609,12 @@
             "kind": "nudge",
             "target": "stage",
             "label": "stage accent",
+            "big": false
+          },
+          {
+            "ref": "/type/One place./1",
+            "kind": "type",
+            "label": "place. word",
             "big": false
           }
         ]
@@ -1025,12 +1025,6 @@
             "big": true
           },
           {
-            "ref": "/type/Quick tools./0",
-            "kind": "type",
-            "label": "Quick word",
-            "big": false
-          },
-          {
             "ref": "/quickActions/sos/1",
             "kind": "value",
             "label": "sos live value",
@@ -1050,9 +1044,9 @@
             "big": false
           },
           {
-            "ref": "/type/Quick tools./1",
+            "ref": "/type/Quick tools./0",
             "kind": "type",
-            "label": "tools. word",
+            "label": "Quick word",
             "big": false
           }
         ]
@@ -1079,6 +1073,12 @@
             "kind": "nudge",
             "target": "hero",
             "label": "hero accent",
+            "big": false
+          },
+          {
+            "ref": "/type/Quick tools./1",
+            "kind": "type",
+            "label": "tools. word",
             "big": false
           }
         ]
@@ -1640,6 +1640,12 @@
             "target": "hero",
             "label": "hero accent",
             "big": false
+          },
+          {
+            "ref": "/chanceLayout/values/0",
+            "kind": "value",
+            "label": "Coin lands on Heads",
+            "big": false
           }
         ]
       },
@@ -1652,6 +1658,12 @@
             "kind": "nudge",
             "target": "hero",
             "label": "hero accent",
+            "big": false
+          },
+          {
+            "ref": "/chanceLayout/values/1",
+            "kind": "value",
+            "label": "Number ticks to 73",
             "big": false
           }
         ]
@@ -1697,6 +1709,12 @@
             "kind": "launch",
             "label": "fan 1",
             "big": true
+          },
+          {
+            "ref": "/type/App Toolkit./0",
+            "kind": "type",
+            "label": "App word",
+            "big": false
           }
         ]
       },
@@ -1716,6 +1734,12 @@
             "kind": "launch",
             "label": "fan 2",
             "big": true
+          },
+          {
+            "ref": "/type/App Toolkit./1",
+            "kind": "type",
+            "label": "Toolkit. word",
+            "big": false
           }
         ]
       },
@@ -1731,9 +1755,9 @@
             "big": false
           },
           {
-            "ref": "/type/App Toolkit./0",
+            "ref": "/type/Your toolkit./0",
             "kind": "type",
-            "label": "App word",
+            "label": "Your word",
             "big": false
           }
         ]
@@ -1750,15 +1774,15 @@
             "big": false
           },
           {
-            "ref": "/type/App Toolkit./1",
+            "ref": "/type/Your toolkit./1",
             "kind": "type",
-            "label": "Toolkit. word",
+            "label": "toolkit. word",
             "big": false
           },
           {
-            "ref": "/type/Your toolkit./0",
-            "kind": "type",
-            "label": "Your word",
+            "ref": "/badge",
+            "kind": "hit",
+            "label": "badge",
             "big": false
           }
         ]
@@ -1772,18 +1796,6 @@
             "kind": "nudge",
             "target": "phone",
             "label": "phone accent",
-            "big": false
-          },
-          {
-            "ref": "/type/Your toolkit./1",
-            "kind": "type",
-            "label": "toolkit. word",
-            "big": false
-          },
-          {
-            "ref": "/badge",
-            "kind": "hit",
-            "label": "badge",
             "big": false
           }
         ]
@@ -1881,12 +1893,12 @@
     ],
     "type": {
       "One place.": [
-        6.76,
-        7.06
+        7.46,
+        7.7
       ],
       "Quick tools.": [
-        15.18,
-        15.44
+        15.44,
+        15.98
       ],
       "Measure.": [
         17.14
@@ -1897,12 +1909,12 @@
         22.26
       ],
       "App Toolkit.": [
-        27.04,
-        27.26
+        26.5,
+        26.82
       ],
       "Your toolkit.": [
-        27.26,
-        27.68
+        27.04,
+        27.26
       ]
     },
     "wheelEntry": 21.98,
@@ -2031,25 +2043,25 @@
     "launchWideEnd": 6.32,
     "quickStart": 10.08,
     "launchOrigin": {
-      "x": 1150,
-      "y": 698
+      "x": 1100,
+      "y": 774.5
     },
     "launchPoses": [
       {
-        "x": 420,
-        "y": 290
+        "x": 450,
+        "y": 430
       },
       {
-        "x": 1500,
-        "y": 290
+        "x": 1110,
+        "y": 250
       },
       {
-        "x": 600,
-        "y": 720
+        "x": 780,
+        "y": 250
       },
       {
-        "x": 1540,
-        "y": 720
+        "x": 1440,
+        "y": 430
       }
     ],
     "launchFraming": [
@@ -2108,11 +2120,32 @@
         "color": "#FDE7A2"
       },
       {
-        "at": 20.84,
-        "x": 1200,
-        "y": 590,
+        "at": 17.7,
+        "x": 1400,
+        "y": 500,
+        "shape": "flower",
+        "color": "#FFF2C6"
+      },
+      {
+        "at": 18.62,
+        "x": 1120,
+        "y": 500,
         "shape": "cookie_9sided",
-        "color": "#D0E9E3"
+        "color": "#FDE7A2"
+      },
+      {
+        "at": 19.42,
+        "x": 1600,
+        "y": 500,
+        "shape": "soft_burst",
+        "color": "#F7D4E3"
+      },
+      {
+        "at": 20.84,
+        "x": 1360,
+        "y": 650,
+        "shape": "4_cookie",
+        "color": "#E8E6F0"
       },
       {
         "at": 21.98,
@@ -2213,9 +2246,9 @@
       {
         "at": 8.98,
         "end": 9.52,
-        "framing": "extreme close-up",
-        "composition": "bento-push",
-        "transition": "push into the bento",
+        "framing": "wide",
+        "composition": "bento-device-container",
+        "transition": "reframe the whole bento as the device grows around it",
         "settle": 0.54
       },
       {
@@ -2264,7 +2297,7 @@
         "framing": "wide",
         "composition": "quick-device-return",
         "transition": "pull out as the four cards return",
-        "settle": 0.65
+        "settle": 1.2600000000000016
       },
       {
         "at": 16.78,
@@ -2371,7 +2404,11 @@
         "height": 864,
         "screenX": 1220,
         "angle": 0,
-        "railX": 420
+        "railX": 420,
+        "stage": {
+          "shape": "cookie_9sided",
+          "color": "#A4D9D0"
+        }
       },
       {
         "at": 11.44,
@@ -2381,7 +2418,11 @@
         "height": 864,
         "screenX": 1220,
         "angle": 0,
-        "railX": 1080
+        "railX": 1080,
+        "stage": {
+          "shape": "4_cookie",
+          "color": "#A4D9D0"
+        }
       },
       {
         "at": 12.92,
@@ -2391,7 +2432,11 @@
         "height": 864,
         "screenX": 1220,
         "angle": 0,
-        "railX": 1740
+        "railX": 1740,
+        "stage": {
+          "shape": "flower",
+          "color": "#F6A800"
+        }
       },
       {
         "at": 13.96,
@@ -2401,7 +2446,11 @@
         "height": 864,
         "screenX": 1220,
         "angle": 0,
-        "railX": 2400
+        "railX": 2400,
+        "stage": {
+          "shape": "soft_burst",
+          "color": "#D6AFBF"
+        }
       }
     ],
     "quickActions": {
@@ -2445,7 +2494,7 @@
         "angle": -5,
         "textX": 96,
         "textY": 180,
-        "textSize": 230,
+        "textSize": 240,
         "view": {
           "x": 960,
           "y": 540,
@@ -2457,7 +2506,9 @@
           "y": 550,
           "scale": 1.1,
           "angle": -2
-        }
+        },
+        "ground": "#FFF2C6",
+        "shape": "flower"
       },
       {
         "at": 18.62,
@@ -2470,7 +2521,7 @@
         "angle": 4,
         "textX": 1190,
         "textY": 500,
-        "textSize": 225,
+        "textSize": 240,
         "view": {
           "x": 960,
           "y": 540,
@@ -2482,7 +2533,9 @@
           "y": 570,
           "scale": 1.1,
           "angle": 0
-        }
+        },
+        "ground": "#FDE7A2",
+        "shape": "cookie_9sided"
       },
       {
         "at": 19.42,
@@ -2495,7 +2548,7 @@
         "angle": -4,
         "textX": 96,
         "textY": 350,
-        "textSize": 270,
+        "textSize": 240,
         "view": {
           "x": 960,
           "y": 540,
@@ -2507,7 +2560,9 @@
           "y": 560,
           "scale": 1.1,
           "angle": -2
-        }
+        },
+        "ground": "#F7D4E3",
+        "shape": "soft_burst"
       },
       {
         "at": 20.84,
@@ -2520,7 +2575,7 @@
         "angle": 0,
         "textX": 96,
         "textY": 70,
-        "textSize": 220,
+        "textSize": 240,
         "view": {
           "x": 960,
           "y": 540,
@@ -2532,11 +2587,13 @@
           "y": 600,
           "scale": 1.07,
           "angle": 0
-        }
+        },
+        "ground": "#E8E6F0",
+        "shape": "4_cookie"
       }
     ],
     "wheelWide": 24.24,
-    "wheelWideEnd": 24.54,
+    "wheelWideEnd": 24.44,
     "measureActions": {
       "angle": [
         17.7,
@@ -2979,7 +3036,132 @@
         ]
       },
       "hitOffset": 8,
-      "groundStart": 240
+      "groundStart": 240,
+      "typeReveal": 0.12,
+      "wordTravel": 96,
+      "pushLead": 0.14,
+      "pushEnter": 0.28,
+      "pushOut": 0.28,
+      "pushTravel": 1900
+    },
+    "openingPolish": {
+      "introDuration": 0.42,
+      "introScale": 0.6,
+      "introPush": [
+        1,
+        1.04
+      ],
+      "introEntries": [
+        [
+          -160,
+          120,
+          20
+        ],
+        [
+          140,
+          -120,
+          -20
+        ],
+        [
+          160,
+          80,
+          20
+        ]
+      ],
+      "chestY": 700,
+      "chestSize": 350,
+      "restScale": 1.1,
+      "gatherSeparateEnd": 7.06,
+      "gatherScale": 1.3,
+      "gatherX": 1300,
+      "gatherY": 540,
+      "deviceScale": 0.95,
+      "stageColor": "#A4D9D0",
+      "stageSize": 1600,
+      "stageDepth": 0.4,
+      "stageDuration": 0.6,
+      "stageAngle": -30,
+      "stageRotationHit": 10
+    },
+    "quickChapter": {
+      "at": 15.18,
+      "duration": 0.4,
+      "fromX": 960,
+      "toX": 1590,
+      "fromScale": 0.45,
+      "scale": 0.94,
+      "angle": -3,
+      "x": 96,
+      "y": 200,
+      "width": 1400,
+      "travel": 96,
+      "typeAt": 15.44,
+      "widthAxis": 90
+    },
+    "chanceLayout": {
+      "baseline": 970,
+      "gap": 70,
+      "width": 450,
+      "height": 420,
+      "land": 0.34,
+      "travel": 120,
+      "startScale": 0.85,
+      "startAngle": 8,
+      "values": [
+        25.68,
+        26.0
+      ],
+      "sourceX": 960,
+      "sourceY": 270,
+      "sourceScale": 0.3
+    },
+    "closingLayout": {
+      "phoneX": [
+        1000,
+        1350,
+        1700
+      ],
+      "phoneY": [
+        490,
+        480,
+        490
+      ],
+      "scale": 0.86,
+      "land": 0.64,
+      "entry": {
+        "x": 1280,
+        "y": 540,
+        "scale": 1.5,
+        "angle": 0
+      },
+      "travelX": 120,
+      "travelY": 540,
+      "startScale": 0.78,
+      "startAngle": 8,
+      "labelWidth": 300,
+      "labelY": 970,
+      "labelTravel": 240,
+      "textX": 96,
+      "textWidth": 664,
+      "markX": 206,
+      "markY": 258,
+      "markSize": 220,
+      "titleY": 392,
+      "subtitleY": 581,
+      "badgeY": 698,
+      "badgeWidth": 350,
+      "gap": 24,
+      "markAt": 26.26,
+      "titleWidthAxis": 85,
+      "entryReveal": 0.9,
+      "revealTail": 0.8
+    },
+    "quickStage": {
+      "duration": 0.35,
+      "size": 1600,
+      "depth": 0.4,
+      "exit": 0.3,
+      "angle": 20
     }
   }
 }

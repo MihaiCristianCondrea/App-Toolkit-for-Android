@@ -16,6 +16,12 @@ assert.equal(timeline.events.launches.length,4);
 assert.equal(timeline.events.backdropNotes.length,3);
 assert.equal(timeline.events.backgroundShapes.length,3);
 assert.equal(timeline.events.iconNotes,undefined,'Intro uses background shapes and the original mark');
+const e=timeline.events;
+assert.ok(e.chance[0]>=e.wheelWideEnd+.1-1e-9,'Results must wait for the settled wheel');
+assert.ok(e.blurWindows.every(([a,b])=>b-a<=e.polish.blur.duration+1e-9),'Whip blur exceeds the cap');
+assert.ok(e.polish.blur.shutter<=180&&e.polish.blur.tail<=.18,'Blur trail exceeds its readability cap');
+for(let i=1;i<e.closingLayout.phoneX.length;i++)assert.ok(e.closingLayout.phoneX[i]-e.closingLayout.phoneX[i-1]-e.closingLayout.labelWidth>=40,'Closing labels are too close');
+assert.ok(e.closingLayout.textX+e.closingLayout.textWidth<=760,'Closing text leaves its column');
 const media=JSON.parse(fs.readFileSync(path.join(source,'src/generated/media.json')));
 assert.equal(timeline.scenes.length,8);
 assert.equal(timeline.scenes[0].start,0);
@@ -27,6 +33,12 @@ assert.equal(hash(path.join(source,'public/audio/soundtrack.mp3')),media.soundtr
 const device=JSON.parse(fs.readFileSync(path.join(source,'src/generated/device.json')));
 assert.equal(device.display.width,1280);assert.equal(device.display.height,2856);
 assert.equal(device.display.x,60);assert.equal(device.display.y,61);
+const entry=timeline.events.closingLayout.entry;
+const entryWidth=430*entry.scale*e.closingLayout.entryReveal;
+const entryHeight=430*device.display.height/device.display.width*entry.scale*e.closingLayout.entryReveal;
+const visibleEntryHeight=Math.max(0,Math.min(1080,entry.y+entryHeight/2)-Math.max(0,entry.y-entryHeight/2));
+const visibleEntryWidth=Math.max(0,Math.min(1920,entry.x+entryWidth/2)-Math.max(0,entry.x-entryWidth/2));
+assert.ok(visibleEntryWidth*visibleEntryHeight>=1920*1080*.3,'The first closing screen is too small');
 const video=process.argv[2];
 if(video){
   const result=JSON.parse(execFileSync(process.env.FFPROBE_PATH||'ffprobe',['-v','error','-show_entries','format=duration:stream=codec_type,width,height,r_frame_rate,sample_rate,channels','-of','json',video],{encoding:'utf8'}));

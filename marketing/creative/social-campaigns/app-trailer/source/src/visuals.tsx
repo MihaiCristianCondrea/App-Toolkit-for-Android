@@ -38,6 +38,15 @@ export const projectPart=(rect:Rect,box:Rect,pose:PhonePose)=>{
   const a=pose.angle*Math.PI/180,dx=(rect.x-box.x+rect.width/2-box.width/2)*pose.scale,dy=(rect.y-box.y+rect.height/2-box.height/2)*pose.scale;
   return {x:pose.x+dx*Math.cos(a)-dy*Math.sin(a),y:pose.y+dx*Math.sin(a)+dy*Math.cos(a)};
 };
+export const projectPoint=(point:{x:number;y:number},view:View)=>{
+  const c=viewAffine(view),a=view.angle*Math.PI/180,dx=(point.x-960)*view.scale,dy=(point.y-540)*view.scale;
+  return {x:960+c.x+dx*Math.cos(a)-dy*Math.sin(a),y:540+c.y+dx*Math.sin(a)+dy*Math.cos(a)};
+};
+export const projectedCard=(rect:Rect,pose:PhonePose,view:View)=>{
+  const p=projectPoint(pose,view),a=(pose.angle+view.angle)*Math.PI/180,s=pose.scale*view.scale;
+  const w=(Math.abs(Math.cos(a))*rect.width+Math.abs(Math.sin(a))*rect.height)*s,h=(Math.abs(Math.cos(a))*rect.height+Math.abs(Math.sin(a))*rect.width)*s;
+  return {left:p.x-w/2,right:p.x+w/2,top:p.y-h/2,bottom:p.y+h/2};
+};
 /** The reference film grows an originating shape far enough to cover every corner. */
 export const coverSize=(x:number,y:number)=>Math.max(Math.hypot(x,y),Math.hypot(1920-x,y),Math.hypot(x,1080-y),Math.hypot(1920-x,1080-y))/.34*1.06;
 export const TYPE={chapter:{size:240,weight:750},toolLabel:{size:56,weight:650},closingTitle:{size:128,weight:750},closingSubtitle:{size:72,weight:650},phoneLabel:{size:36,weight:650}} as const;
@@ -57,7 +66,7 @@ export const GroundWipe:React.FC<{from:{x:number;y:number};color:string;at:numbe
   if(t>=at+d)return <div style={{position:'absolute',inset:0,background:color}}/>;
   return <Shape name={shape} color={color} size={logSize(timeline.events.polish.groundStart,coverSize(from.x,from.y),ease(t,at,at+d))} x={from.x} y={from.y}/>;
 };
-export const Ground:React.FC=()=><>{timeline.events.wipes.map(w=><GroundWipe key={w.at} from={{x:w.x,y:w.y}} color={w.color} at={w.at} shape={w.shape}/>)}</>;
+export const Ground:React.FC=()=><>{timeline.events.wipes.filter(w=>!timeline.events.measureShots.some(s=>s.at===w.at)).map(w=><GroundWipe key={w.at} from={{x:w.x,y:w.y}} color={w.color} at={w.at} shape={w.shape}/>)}</>;
 
 /** A sharp current frame keeps the six-sample trail below the opacity cap. */
 export const BoundedMotionBlur:React.FC<{children:React.ReactNode}>=({children})=>{
@@ -66,17 +75,17 @@ export const BoundedMotionBlur:React.FC<{children:React.ReactNode}>=({children})
 };
 
 /** Fit the projected whole card, including roll, inside the safe crop rectangle. */
-export const closeupView=(rect:Rect,pose:PhonePose,view:View):View=>{
+export const closeupView=(rect:Rect,pose:PhonePose,view:View,target?:{x:number;y:number}):View=>{
   const c=timeline.events.polish.crop,a=(pose.angle+view.angle)*Math.PI/180;
   const w=Math.abs(Math.cos(a))*rect.width+Math.abs(Math.sin(a))*rect.height,h=Math.abs(Math.cos(a))*rect.height+Math.abs(Math.sin(a))*rect.width;
   const scale=Math.min(view.scale,(c.right-c.left)/(w*pose.scale),(c.bottom-c.top)/(h*pose.scale));
-  const dx=(c.screenX-960)/scale,dy=(c.screenY-540)/scale,r=-view.angle*Math.PI/180;
+  const dx=((target?.x??c.screenX)-960)/scale,dy=((target?.y??c.screenY)-540)/scale,r=-view.angle*Math.PI/180;
   return {x:pose.x-dx*Math.cos(r)+dy*Math.sin(r),y:pose.y-dx*Math.sin(r)-dy*Math.cos(r),scale,angle:view.angle};
 };
 /** Whole-word masks from the reference headline system, with padded descenders. */
-export const KineticLine:React.FC<{seconds:number;text:string;notes:number[];x:number;y:number;size?:number;width?:number;exit?:number;color?:string;weight?:number}>=({seconds:t,text,notes,x,y,size=TYPE.chapter.size,width=1780,exit=0,color=INK,weight=TYPE.chapter.weight})=><div style={{position:'absolute',left:x,top:y,width,fontFamily:'Google Sans Flex',fontSize:size,fontWeight:weight,lineHeight:1.02,letterSpacing:-size*.045,color,transform:`translateX(${-2200*exit}px)`}}>{text.split(' ').map((word,i)=>{
-  const p=pop(t,notes[i]??notes[0],.18);
-  return <span key={i} style={{display:'inline-block',overflow:'hidden',padding:'.08em .05em .26em',margin:'-.08em -.05em -.26em',marginRight:'.18em',whiteSpace:'nowrap'}}><span style={{display:'inline-block',transform:`translateY(${(1-p)*145}%)`,fontVariationSettings:`'wght' ${lerp(520,weight,p)}, 'wdth' ${lerp(80,100,p)}`}}>{word}</span></span>;
+export const KineticLine:React.FC<{seconds:number;text:string;notes:number[];x:number;y:number;size?:number;width?:number;exit?:number;color?:string;weight?:number;wdth?:number}>=({seconds:t,text,notes,x,y,size=TYPE.chapter.size,width=1780,exit=0,color=INK,weight=TYPE.chapter.weight,wdth=100})=><div style={{position:'absolute',left:0,top:0,width,fontFamily:'Google Sans Flex',fontSize:size,fontWeight:weight,lineHeight:1.02,letterSpacing:-size*.045,color,transform:`translate(${x}px,${y}px)`}}>{text.split(' ').map((word,i)=>{
+  const at=notes[i]??notes[0],p=ease(t,at,at+timeline.events.polish.typeReveal);
+  return <span key={i} style={{display:'inline-block',overflow:'hidden',padding:'.08em .05em .26em',margin:'-.08em -.05em -.26em',marginRight:'.18em',whiteSpace:'nowrap'}}><span style={{display:'inline-block',transform:`translateY(${((1-p)+exit)*145}%)`,fontVariationSettings:`'wght' ${lerp(520,weight,p)}, 'wdth' ${lerp(80,wdth,p)}`}}>{word}</span></span>;
 })}</div>;
 
 export const ToolLabel:React.FC<{seconds:number;text:string;at:number;exit?:number}>=({seconds,text,at,exit=0})=>{
@@ -122,7 +131,7 @@ export const Toolbox:React.FC<{x:number;y:number;size:number;open:number;scale?:
   </div>;
 };
 
-export const Phone:React.FC<{id:string;state?:Record<string,unknown>;x:number;y:number;scale:number;angle?:number;shell?:number;ui?:number;hideWidgets?:boolean;revealFrom?:{x:number;y:number};reveal?:number;underId?:string;underState?:Record<string,unknown>;transition?:number;focusSelector?:string;underFocusSelector?:string;hiddenParts?:string[];hiddenSelectors?:string[];onParts?:(g:Geometry)=>void;seconds?:number;level?:number}>=({id,state={},x,y,scale,angle=0,shell=1,ui=1,hideWidgets=false,reveal=1,revealFrom={x:215,y:900},underId,underState,transition=1,focusSelector,underFocusSelector,hiddenParts=[],hiddenSelectors=[],onParts,seconds=0,level=2})=>{
+export const Phone:React.FC<{id:string;state?:Record<string,unknown>;x:number;y:number;scale:number;angle?:number;shell?:number;ui?:number;hideWidgets?:boolean;revealFrom?:{x:number;y:number};reveal?:number;underId?:string;underState?:Record<string,unknown>;transition?:number;focusSelector?:string;underFocusSelector?:string;hiddenParts?:string[];hiddenSelectors?:string[];onParts?:(g:Geometry)=>void;seconds?:number;level?:number;build?:number}>=({id,state={},x,y,scale,angle=0,shell=1,ui=1,hideWidgets=false,reveal=1,revealFrom={x:215,y:900},underId,underState,transition=1,focusSelector,underFocusSelector,hiddenParts=[],hiddenSelectors=[],onParts,seconds=0,level=2,build=1})=>{
   const direction=revealFrom.x<215?-1:1;
   const focusPart=(root:HTMLElement,selector?:string)=>{
     const focus=selector?root.querySelector<HTMLElement>(selector):null;
@@ -130,6 +139,7 @@ export const Phone:React.FC<{id:string;state?:Record<string,unknown>;x:number;y:
     if(focus&&viewport){const r=localRect(focus,root),v=localRect(viewport,root);if(r.y<v.y||r.y+r.height>v.y+v.height)viewport.scrollTop+=r.y-v.y-(v.height-r.height)/2;}
   };
   return <div data-phone={id} style={{position:'absolute',width:SKIN_WIDTH,height:SKIN_HEIGHT,filter:elevation(level,{x,y,scale,angle}),transformOrigin:'50% 50%',transform:`translate(${x-SKIN_WIDTH/2}px,${y-SKIN_HEIGHT/2}px) rotate(${angle}deg) scale(${phoneScaleAt(seconds,scale)})`}}>
+    <div style={{position:'absolute',inset:0,clipPath:build<1?`inset(${(1-build)*50}%)`:undefined}}>
     <Img src={staticFile('device/back.webp')} style={{position:'absolute',inset:0,width:'100%',height:'100%',opacity:shell}}/>
     <div style={{position:'absolute',left:DISPLAY.x,top:DISPLAY.y,width:DISPLAY.width,height:DISPLAY.height,borderRadius:DISPLAY.radius,overflow:'hidden'}}>
       {underId&&transition<1?<LiveScreen id={underId} state={underState} onReady={root=>focusPart(root,underFocusSelector)} style={{position:'absolute',inset:0,opacity:1-ease(transition,0,.35),transform:`translateX(${-30*direction*transition}px)`}}/>:null}
@@ -137,6 +147,15 @@ export const Phone:React.FC<{id:string;state?:Record<string,unknown>;x:number;y:
         {/* Visibility cues must remount the capture even while its displayed values hold. */}
         <LiveScreen id={id} state={{...state,_filmHideWidgets:hideWidgets,_filmHiddenParts:hiddenParts,_filmHiddenSelectors:hiddenSelectors}} onReady={root=>{
           focusPart(root,focusSelector);
+          if(id==='play'&&Math.abs(seconds*90-Math.round(timeline.events.close*90))<.01){
+            const box=root.getBoundingClientRect(),frame=root.closest('[data-phone]')?.parentElement?.getBoundingClientRect();
+            if(frame){
+              const inset=(1-reveal)/2,left=Math.max(frame.left,box.left+box.width*inset),right=Math.min(frame.right,box.right-box.width*inset),top=Math.max(frame.top,box.top+box.height*inset),bottom=Math.min(frame.bottom,box.bottom-box.height*inset);
+              const coverage=Math.max(0,right-left)*Math.max(0,bottom-top)/(frame.width*frame.height);
+              if(coverage<.3)throw new Error(`Closing screen covers only ${coverage*100}% of the frame`);
+              console.info(`Closing rendered screen coverage: ${(coverage*100).toFixed(2)}%`);
+            }
+          }
           if(onParts){
             const parts:Geometry={};
             for(const node of root.querySelectorAll<HTMLElement>('[data-tool]'))if(node.dataset.tool){
@@ -153,11 +172,12 @@ export const Phone:React.FC<{id:string;state?:Record<string,unknown>;x:number;y:
       </div>
       <Img src={staticFile('device/mask.webp')} style={{position:'absolute',inset:0,width:'100%',height:'100%',opacity:shell,pointerEvents:'none'}}/>
     </div>
+    </div>
   </div>;
 };
 
-export const Headline:React.FC<{text:string;x:number;y:number;width?:number;size?:number;progress?:number;seconds?:number;align?:'left'|'center'}>=({text,x,y,width=760,size=TYPE.closingTitle.size,progress=1,seconds,align='left'})=><div data-headline style={{position:'absolute',left:x,top:y,width,color:INK,fontFamily:'Google Sans Flex',fontSize:size,lineHeight:1.04,fontWeight:size===TYPE.closingTitle.size?TYPE.closingTitle.weight:TYPE.closingSubtitle.weight,letterSpacing:-size*.045,textAlign:align,paddingBottom:size*.25}}>{text.split(' ').map((word,i)=>{
+export const Headline:React.FC<{text:string;x:number;y:number;width?:number;size?:number;progress?:number;seconds?:number;align?:'left'|'center';wdth?:number}>=({text,x,y,width=760,size=TYPE.closingTitle.size,progress=1,seconds,align='left',wdth=100})=><div data-headline style={{position:'absolute',left:x,top:y,width,color:INK,fontFamily:'Google Sans Flex',fontSize:size,lineHeight:1.04,fontWeight:size===TYPE.closingTitle.size?TYPE.closingTitle.weight:TYPE.closingSubtitle.weight,letterSpacing:-size*.045,textAlign:align,whiteSpace:'nowrap',paddingBottom:size*.25}}>{text.split(' ').map((word,i)=>{
   const notes=(timeline.events.type as Record<string,number[]>)[text];
   const p=seconds!==undefined&&notes?(seconds>=timeline.events.close?ease(seconds,notes[i],notes[i]+.2):pop(seconds,notes[i],.34)):clamp(progress*1.5-i*.22);
-  return <span key={i} style={{display:'inline-block',overflow:'hidden',verticalAlign:'top',paddingBottom:'.15em',marginBottom:'-.15em',marginRight:'.19em'}}><span style={{display:'inline-block',transform:`translate(${(1-clamp(p))*-24}px,${(1-p)*140}%) skewX(${9*(1-clamp(p))}deg)`,fontVariationSettings:`'wght' ${lerp(450,650,p)}, 'wdth' ${lerp(75,100,p)}`}}>{word}</span></span>;
+  return <span key={i} style={{display:'inline-block',overflow:'hidden',verticalAlign:'top',paddingBottom:'.15em',marginBottom:'-.15em',marginRight:'.19em'}}><span style={{display:'inline-block',transform:`translate(${(1-clamp(p))*-24}px,${(1-p)*140}%) skewX(${9*(1-clamp(p))}deg)`,fontVariationSettings:`'wght' ${lerp(450,size===TYPE.closingTitle.size?TYPE.closingTitle.weight:TYPE.closingSubtitle.weight,p)}, 'wdth' ${lerp(75,wdth,p)}`}}>{word}</span></span>;
 })}</div>;

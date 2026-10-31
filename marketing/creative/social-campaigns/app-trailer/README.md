@@ -4,7 +4,7 @@ A 16:9 product trailer based on the owner's toolbox sketches. The mark opens, fo
 
 | | |
 | --- | --- |
-| Status | Shot-list preview, awaiting playback approval |
+| Status | Polished preview, awaiting owner playback approval |
 | Sound | The complete supplied `soundtrack.mp3`, 29.88 seconds, unchanged speed and volume |
 | Design size | 1920 x 1080 |
 | Preview | 960 x 540 at 90 fps |
@@ -40,12 +40,12 @@ The **App trailer preview** Actions workflow also builds the preview and publish
 | --- | --- |
 | 0.00 to 1.76 | Three cropped corner accents spring in on the motif. The centre stays clear until the original mark arrives on 1.76. |
 | 1.76 to 3.32 | The large mark pops. On 2.32 its intact lid swings around the right lip, handle attached, while the camera pulls wide for the swing, then pans to the lower launcher. |
-| 3.32 to 6.76 | Compass and Flashlight receive large face close-ups; Level and SOS get wider context. All four start at the mouth and keep separate lanes. The camera then pulls wide around the chest. |
-| 6.76 to 10.08 | The four cards join a connected bento beside 280 px whole-word type. Connected corners ease to 8 px. A close push and shape wipe carry the same objects into their native screen positions. |
-| 10.08 to 17.14 | The camera travels along a rail of live Compass, Level, Flashlight and SOS crops. The four cards return to a large device beside 260 px Quick tools type, then the camera pushes into the measured Measure tab. |
-| 17.14 to 21.98 | The shared-axis screen bridge gives way to a large Protractor, an extreme Converter crop, Bill Splitter and a landscape Counter. Originating shape wipes connect their different scales and angles. |
-| 21.98 to 26.26 | The real wheel circle grows beside giant chapter words, fills almost the whole height for its spin, then expands back into its card on Sushi. Number, die and coin land in a row on consecutive onsets. |
-| 26.26 to 29.88 | Three devices at 86% scale enter as a fan with depth. Labelled destinations, identity and the original badge hold 27.90 to 29.40. The kit-gold explosion covers the frame and the final mark lands on 29.80. |
+| 3.32 to 6.76 | Four whole native cards receive tracked close-ups with a separate lower-left label. They start at the mouth and keep separate lanes. Between launches the camera opens its framing, then shows a tight arc above the chest. |
+| 6.76 to 10.08 | The cards separate into rows, then join a connected bento beside 240 px whole-word type. Seams ease to 8 px. A mint stage grows behind them, and the device builds from its centre around their native screen positions without clipping the cards. |
+| 10.08 to 17.14 | The camera travels along whole live Compass, Level, Flashlight and SOS cards. Each native face grows its own backdrop. The camera widens between neighbours and the cards return to a device pushed right by 240 px Quick tools type, before the measured tab push. |
+| 17.14 to 21.98 | The shared-axis screen bridge gives way to whole Protractor, Converter and Bill Splitter cards, then a landscape Counter. Each owning word moves with its card; a wipe attached to that moving card supplies its native tool-colour ground. |
+| 21.98 to 26.26 | The real wheel circle grows beside chapter words, fills almost the whole height for its spin, then expands back into its card on Sushi. After it settles, number, die and coin land with equal gaps and their bottoms at y 970. |
+| 26.26 to 29.88 | A large Play screen carries the first frame into three devices at 86% scale in a fan with depth. The left identity column, labelled destinations and original badge hold 27.90 to 29.40. The unchanged gold explosion covers all text by 29.70; the final mark lands on 29.80. |
 
 Major gestures follow detected bass onsets in `source/src/music-analysis.json`. Its BPM is an estimate, not a claim about the song. The timeline follows the supplied track rather than forcing the music onto an invented grid.
 
@@ -67,12 +67,12 @@ Ads and the More apps footer are disabled in the film. Product backgrounds, acce
 2. `events.shots` is the shot list. Each phrase names its framing, composition, transition and settle. Consecutive shots have different compositions. The camera alternates measured face close-ups, card context, the wide bento and device views. The opening's empty centre before 1.76 and the final identity hold are deliberate exceptions to continuous product occupancy and movement.
 3. The original logo paths remain the only mark artwork. Three cropped background accents frame it, with no symbol badges. The intact lid rotates around the right lip and shares the body's drop. The body renders in front of launching cards; the lid stays behind them.
 4. Four cards leave the mouth at scale 0.3 with shared-transform contact shadows. Every flight frame is checked for intersections using native measured boxes. Standalone surfaces and their crop/shadow bounds have 28 px corners. Only connected seams ease to 8 px in the 2x2 bento; the phone handoff restores native radii.
-5. Shape wipes grow logarithmically from the outgoing subject until every corner is covered, then travel offscreen over the next shot's ground. Shapes follow the camera at 40% depth. Rotation and scale accents finish on individual hits, with no idle loop.
-6. The Quick Tools rail uses the native widget faces as camera targets. Compass swings, Level settles, Flashlight brightness fills, and SOS uses its native animation on the frame clock. Cards return to the exact phone projection before their native counterparts reappear. Whole-word tool names replace the clipped ticker.
-7. The Measure tab is measured from the live navigation. The camera enters it; screens use a 30 px shared-axis X move and 0.3-second fade-through. That fade travels with the screen. The Protractor lifts from its measured screen rectangle. Later cards travel through originating shape wipes, with varied scale, angle and framing.
-8. The wheel uses its measured native circle as the visible container during the spin. Its clip expands into the original full card during the pull-back. The three chance cards retain their real aspect ratios and share a landing baseline.
-9. Chapter words are 220 to 300 px, spring through padded whole-word masks and modulate Google Sans Flex width and weight. The UI pushes the chapter type away. Fast tracking, whip moves, the spinning wheel and the final hit use bounded CameraMotionBlur windows. The longer hold belongs to the closing identity.
-10. The closing devices are 86% scale with restrained depth rotations. The foreground reaches exact rest before the 1.5-second hold. At 29.40 the mark anticipates; the original kit-gold burst explodes at 29.54, covers all text by 29.70 and settles the final mark on the last frame.
+5. GroundWipe grows a kit mask logarithmically from the current subject over 0.36 seconds, behind the UI, then retains that colour as the new ground. Separate subject stages use 40% parallax. Rotation and scale accents finish on hits, with no idle loop.
+6. Launch and Quick Tools close-ups fit the projected whole card, including camera roll, inside a 48 px margin and above the fixed label line at 96,980. Neighbouring Quick Tools shots widen through a framing that contains both cards. Passed cards retire by the next settle. Compass swings, Level settles, Flashlight fills and SOS pulses from each shot's onset. Cards return to their exact native phone projections.
+7. The Measure tab is measured from the live navigation. The camera enters it; screens use a 30 px shared-axis X move and 0.3-second fade-through. That fade travels with the screen. The Protractor lifts from its measured screen rectangle. Later cards and their owning words share one push, with varied scale and framing. The UI renders above campaign words, and an outgoing word retires with its card. Incoming Measure titles remain hidden until their whole card is inside the frame; the previous card carries that interval.
+8. The wheel uses its measured native circle as the visible container during the spin. Its clip expands into the original full card during the pull-back. The three chance cards start at least 0.1 seconds after the wheel settles. Their real aspect ratios share the screen-space baseline y 970 and equal 70 px gaps, independent of the camera.
+9. Campaign type has one scale: chapter 240/750, tool label 56/650, closing title 128/750, subtitle 72/650 and phone label 36/650. Padded whole-word masks modulate width and weight. The UI pushes chapter type aside. CameraMotionBlur runs only for the fastest 0.12 seconds of a move, with six samples at 180 degrees and a maximum 18% trail over a sharp current frame.
+10. The closing devices are 86% scale with restrained depth rotations, level 3 shadows while travelling and level 2 at rest. The first rendered Play aperture covers at least 30% of the frame. Labels have 50 px gaps; identity occupies x 96 to 760 with 24 px logical gaps. The foreground reaches exact rest before the 1.5-second hold. At 29.40 the mark anticipates; the original kit-gold burst explodes at 29.54, covers all text by 29.70 and settles the final mark on the last frame.
 11. All motion derives from frame state. Transforms move objects; no animated layout positions, timers or random calls are introduced. The bridge pauses native animations, including open component roots, and seeks functional previews to frame time. Audio remains complete at unity gain. Ads and More apps stay off. The master remains 2560 x 1440 at 90 fps and is rendered only after owner approval.
 
 ## Guidance and references
@@ -87,7 +87,7 @@ See `source/FIDELITY.md`. Preparation and structural checks can pass independent
 
 - [x] TypeScript, scene continuity, unchanged audio hash, device aperture and all-onset coverage checks.
 - [x] Iterated close-up, corner, copy-clearance, container and ending sheets; 24 evenly spaced samples for the full cut.
-- [x] Complete current 960 x 540 preview, five 6 fps pacing strips, 72 encoded samples and all scene boundaries.
+- [x] Complete revised 960 x 540 preview, five 6 fps pacing strips, 139 encoded samples, dense blur samples and both sides of all scene boundaries.
 - [ ] Owner playback with sound before the 2K master.
 
 The film uses the existing UI kit without changes to its screens. See `source/FIDELITY.md` for the exact validation scope and remaining review limits.
@@ -100,6 +100,8 @@ Ground colours come from cumulative `GroundWipe` shapes behind the product. Each
 
 Campaign type uses one scale: chapters 240/750, tool labels 56/650, closing title 128, closing subtitle 72 and phone labels 36. Close-up labels share the bottom-left anchor at 96,980. Product UI retains its native type.
 
-Close-up framing fits the projected whole card within a 48 px frame margin and reserves a separate label line. Passed cards unmount by the next shot's settle, with no opacity fade. Fast camera trails use six samples at 180 degrees, with at most 18% trail opacity over a sharp current frame, for 0.12 seconds per whip.
+Launch and Quick Tools framing fits the projected whole card within a 48 px frame margin and reserves a separate label line. Passed cards unmount by the next shot's settle, with no opacity fade. Fast camera trails use six samples at 180 degrees, with at most 18% trail opacity over a sharp current frame, for 0.12 seconds per whip.
 
-The Part 1 still verification is recorded in `source/FIDELITY.md`. Scene polish and the final moving-preview review follow separately.
+The bento/device handoff clips the growing device shell, rather than the card artwork.
+
+The item-by-item rendered verification times and moving-preview scope are recorded in `source/FIDELITY.md`.
