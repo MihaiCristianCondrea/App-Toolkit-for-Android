@@ -12,7 +12,8 @@
     "render": "node scripts/render.mjs master",
     "frames": "node scripts/render.mjs frames",
     "sheet": "node scripts/sheet.mjs",
-    "beats": "node scripts/beat-audit.mjs"
+    "beats": "node scripts/beat-audit.mjs",
+    "sketchbook": "python scripts/generate_sketchbook.py"
   },
   "dependencies": {
     "@remotion/cli": "4.0.529",
