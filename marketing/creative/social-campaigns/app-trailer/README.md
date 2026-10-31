@@ -11,6 +11,23 @@ A 16:9 product trailer based on the owner's toolbox sketches. The mark opens, fo
 | Master | 2560 x 1440 at 90 fps, rendered after creative review |
 | Output | `output/video/` and `output/images/`, generated and ignored by Git |
 
+## Version 2
+
+`source/src/v2/TrailerV2.tsx` is a complete rework in one file, registered as the `AppTrailerV2` composition beside the original `AppTrailer`. Every shot starts on a detected onset:
+
+| Time | Picture |
+| --- | --- |
+| 0.00 to 1.76 | The sketch's corner shapes arrive one per motif note. |
+| 1.76 to 3.32 | The mark pops, its lid swings about the right hinge like a chest lid (handle attached) and the box settles low as the launcher. |
+| 3.32 to 6.76 | Compass, Bubble level, Flash Dimmer and SOS rise out of the box, one per note, and lock into a bento whose inner corners tighten to 8 px. |
+| 6.76 to 10.08 | A teal ground grows from the bento; it moves right and grows beside "One place.". |
+| 10.08 to 17.14 | The bento becomes the phone. Each Quick Tools widget lifts out of the screen on its note while its name lands. |
+| 17.14 to 21.98 | A gold ground and the Measure screen grow from the Measure tab; Protractor, Unit Converter, Bill Splitter and Counter push through the left column with live values. |
+| 21.98 to 26.26 | A pink ground and Play & Decide grow from their tab; the wheel spins to Sushi, then random number, dice and coin land. |
+| 26.26 to 29.88 | The three destinations fan in beside the mark, title and Google Play badge; a gold burst from the mark takes the frame. |
+
+Render it with `COMPOSITION=AppTrailerV2 npm run preview` (or `npm run render` for the master once approved). Stills: `npx remotion still src/index.ts AppTrailerV2 out.png --frame <seconds*90>`.
+
 ## Build
 
 Requires Node 22+, Python with Pillow and FFmpeg/ffprobe on PATH. Use a full FFmpeg build: the metadata integrity check needs `streamhash`, which Remotion's bundled build omits. From a clean clone:

@@ -17,7 +17,7 @@ const render=args=>run(process.execPath,[cli,...args]);
 if(mode!=='frames'){
   const raw=`${output}/video/app-toolkit-${mode}-raw.mp4`;
   const final=`${output}/video/app-toolkit-${mode}.mp4`;
-  render(['render','src/index.ts','AppTrailer',raw,'--scale',mode==='master'?String(4/3):'.5','--codec','h264','--crf',mode==='master'?'16':'20','--audio-codec','aac','--audio-bitrate','320k','--concurrency','2','--log','info']);
+  render(['render','src/index.ts',(process.env.COMPOSITION||'AppTrailer'),raw,'--scale',mode==='master'?String(4/3):'.5','--codec','h264','--crf',mode==='master'?'16':'20','--audio-codec','aac','--audio-bitrate','320k','--concurrency','2','--log','info']);
   const manifest=JSON.parse(fs.readFileSync('../app-trailer-metadata.json'));
   run(process.env.FFMPEG_PATH||'ffmpeg',['-y','-v','error','-i',raw,'-map','0','-c','copy','-metadata',`title=${manifest.copy.title}`,'-metadata','artist=Mihai-Cristian Condrea','-metadata',`description=${manifest.copy.description}`,'-metadata',`comment=${manifest.copy.longDescription}`,'-metadata',`keywords=${manifest.copy.keywords.join(', ')}`,'-movflags','+faststart',final]);
   run(process.execPath,['scripts/check.mjs',final]);
@@ -25,7 +25,7 @@ if(mode!=='frames'){
 }
 if(mode==='frames'||!fs.existsSync(`${output}/images/contact-sheet.png`)){
   const shots=[1,2.6,5.9,8.8,15.5,20.5,25.5,28.8];
-  for(let i=0;i<shots.length;i++)render(['still','src/index.ts','AppTrailer',`${output}/images/scene-${String(i+1).padStart(2,'0')}.png`,'--frame',String(Math.round(shots[i]*90)),'--scale','.5','--log','error']);
+  for(let i=0;i<shots.length;i++)render(['still','src/index.ts',(process.env.COMPOSITION||'AppTrailer'),`${output}/images/scene-${String(i+1).padStart(2,'0')}.png`,'--frame',String(Math.round(shots[i]*90)),'--scale','.5','--log','error']);
   run(process.env.PYTHON_PATH||'python',['scripts/review.py']);
 }
 const files=['images','video'].flatMap(dir=>fs.readdirSync(`${output}/${dir}`).filter(file=>/\.(png|mp4)$/.test(file)).map(file=>`${output}/${dir}/${file}`));
