@@ -14,7 +14,7 @@ const Picture:React.FC=()=>{
   const [geometry,setGeometry]=useState<Geometry|null>(null);
   const measured=useCallback((g:Geometry)=>setGeometry(old=>old??g),[]);
   return <AbsoluteFill style={{background:GROUND,fontFamily:'Google Sans Flex',color:'#3B2D14',overflow:'hidden'}}>
-    <style>{`*,*::before,*::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}html,body{margin:0} [data-phone] mnw-android-screen{overflow:hidden}`}</style>
+    <style>{`*,*::before,*::after{animation-play-state:paused!important;transition:none!important;scroll-behavior:auto!important}html,body{margin:0} [data-phone] mnw-android-screen{overflow:hidden}`}</style>
     <AbsoluteFill style={{transformOrigin:'50% 50%',transform:camera(seconds)}}>
     <Sequence name="Toolbox to Quick Tools" durationInFrames={Math.round(timeline.events.measure*fps)}>
       <OpeningJourney seconds={seconds} onGeometry={measured}/>

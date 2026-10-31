@@ -13,7 +13,9 @@ execFileSync(process.execPath,[path.join(source,'scripts/beat-audit.mjs')],{stdi
 assert.ok(Object.values(timeline.events.type).flat().every(at=>music.onsetsSeconds.includes(at)),'Headline words must start on detected notes');
 assert.ok(timeline.events.finalAnticipation-timeline.events.hold>=1.5,'Closing identity must hold at least 1.5 seconds');
 assert.equal(timeline.events.launches.length,4);
-assert.equal(timeline.events.iconNotes.length,6);
+assert.equal(timeline.events.backdropNotes.length,3);
+assert.equal(timeline.events.backgroundShapes.length,3);
+assert.equal(timeline.events.iconNotes,undefined,'Intro uses background shapes and the original mark');
 const media=JSON.parse(fs.readFileSync(path.join(source,'src/generated/media.json')));
 assert.equal(timeline.scenes.length,8);
 assert.equal(timeline.scenes[0].start,0);

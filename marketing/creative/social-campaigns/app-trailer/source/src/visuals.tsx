@@ -1,7 +1,7 @@
 import React from 'react';
 import {Easing, Img, spring, staticFile} from 'remotion';
 import {shapeUrl} from '../../../../../ui/src/kit/assets.js';
-import {DISPLAY,LiveScreen,SKIN_HEIGHT,SKIN_WIDTH,localRect,Geometry,Rect} from './Kit';
+import {DISPLAY,LiveScreen,SKIN_HEIGHT,SKIN_WIDTH,localRect,measuredRect,Geometry,Rect} from './Kit';
 import timeline from './timeline.json';
 
 export const INK='#3B2D14';
@@ -57,24 +57,22 @@ export const projectPhone=(rect:Rect,pose:PhonePose,t:number)=>{
 export const Chip:React.FC<{text:string;color:string;ink:string;progress:number;active?:number}>=({text,color,ink,progress,active=0})=><span style={{display:'inline-block',padding:'12px 26px',borderRadius:999,background:color,color:ink,fontSize:34,fontWeight:600,lineHeight:1.1,whiteSpace:'nowrap',transform:`translateY(${(1-progress)*400}px) scale(${lerp(.6,1,progress)*(1+.08*active)})`}}>{text}</span>;
 
 /** Background stages share the camera direction at a lower depth than the subject. */
-export const Shape:React.FC<{name:string;color:string;size:number;x:number;y:number;angle?:number;scale?:number;seconds?:number}>=({name,color,size,x,y,angle=0,scale=1,seconds})=>{
-  const mask=<div aria-hidden="true" style={{position:'absolute',width:size,height:size,left:0,top:0,background:color,maskImage:`url("${shapeUrl(name)}")`,WebkitMaskImage:`url("${shapeUrl(name)}")`,maskSize:'contain',WebkitMaskSize:'contain',maskRepeat:'no-repeat',transform:`translate(${x-size/2}px,${y-size/2}px) rotate(${angle}deg) scale(${scale})`}}/>;
+export const Shape:React.FC<{name:string;color:string;size:number;x:number;y:number;angle?:number;scale?:number;seconds?:number;mask?:string}>=({name,color,size,x,y,angle=0,scale=1,seconds,mask:maskUrl})=>{
+  const mask=<div aria-hidden="true" style={{position:'absolute',width:size,height:size,left:0,top:0,background:color,maskImage:`url("${maskUrl??shapeUrl(name)}")`,WebkitMaskImage:`url("${maskUrl??shapeUrl(name)}")`,maskSize:'contain',WebkitMaskSize:'contain',maskRepeat:'no-repeat',transform:`translate(${x-size/2}px,${y-size/2}px) rotate(${angle}deg) scale(${scale})`}}/>;
   if(seconds===undefined)return mask;
   const c=cameraPose(seconds);
   return <div style={{position:'absolute',inset:0,transformOrigin:'50% 50%',transform:`scale(${1/c.scale}) rotate(${-c.angle}deg) translate(${-c.x}px,${-c.y}px) ${camera(seconds,.4)}`}}>{mask}</div>;
 };
 
-/** The visible bottom edge of the folding lid stays at the body's 44.24% seam. */
-export const Toolbox:React.FC<{x:number;y:number;size:number;open:number;scale?:number;angle?:number;squash?:number}>=({x,y,size,open,scale=1,angle=0,squash=0})=>{
-  const fold=Math.cos(Math.PI*clamp(open)),drop=clamp(open)*size*.22;
-  // Compensate around the lid face's centre so its mirrored inside remains above the seam.
-  const compensation=size*(.4424-.23494)/2*(1-Math.abs(fold));
-  const visibleSeam=size*.33867+size*(.4424-.23494)/2*Math.abs(fold)+compensation;
-  if(Math.abs(visibleSeam-size*.4424)>1e-6)throw new Error('Toolbox lid detached from its seam');
+/** The original lid swings around the right lip, carrying its handle into the open pose. */
+export const Toolbox:React.FC<{x:number;y:number;size:number;open:number;scale?:number;angle?:number;squash?:number;layer?:'body'|'lid'|'both'}>=({x,y,size,open,scale=1,angle=0,squash=0,layer='both'})=>{
+  const p=clamp(open),drop=p*size*.22;
+  const seam=(366.1-154.55)/478.2,lip=(375.7-154.55)/478.2;
+  const hingeShift=p*(lip-seam)*size;
   return <div data-toolbox style={{position:'absolute',width:size,height:size,transform:`translate(${x-size/2}px,${y-size/2}px) rotate(${angle}deg) scale(${scale})`}}>
     <div style={{position:'absolute',inset:0,transformOrigin:'50% 92%',transform:`scale(${1+squash*.07},${1-squash*.09})`}}>
-      <Img src={staticFile('toolbox-lid.svg')} style={{position:'absolute',inset:0,width:'100%',height:'100%',transformOrigin:'50% 33.867%',transform:`translateY(${drop+compensation}px) scaleY(${fold})`,zIndex:fold<0?1:3,clipPath:fold<0?'inset(23.494% 0 55.76% 0)':undefined,filter:`brightness(${lerp(1,.8,clamp(open))})`}}/>
-      <Img src={staticFile('toolbox-base.svg')} style={{position:'absolute',inset:0,width:'100%',height:'100%',zIndex:2,transform:`translateY(${drop}px)`}}/>
+      {layer!=='body'?<Img data-toolbox-lid src={staticFile('toolbox-lid.svg')} style={{position:'absolute',inset:0,width:'100%',height:'100%',transformOrigin:`97% ${seam*100}%`,transform:`translateY(${drop+hingeShift}px) rotate(${135*p}deg)`,zIndex:p>0?1:3}}/>:null}
+      {layer!=='lid'?<Img src={staticFile('toolbox-base.svg')} style={{position:'absolute',inset:0,width:'100%',height:'100%',zIndex:2,transform:`translateY(${drop}px)`}}/>:null}
     </div>
   </div>;
 };
@@ -96,7 +94,7 @@ export const Phone:React.FC<{id:string;state?:Record<string,unknown>;x:number;y:
           focusPart(root,focusSelector);
           if(onParts){
             const parts:Geometry={};
-            for(const node of root.querySelectorAll<HTMLElement>('[data-tool]'))if(node.dataset.tool)parts[node.dataset.tool]=localRect(node,root);
+            for(const node of root.querySelectorAll<HTMLElement>('[data-tool]'))if(node.dataset.tool)parts[node.dataset.tool]=measuredRect(node,root);
             onParts(parts);
           }
           if(hideWidgets)for(const node of root.querySelectorAll<HTMLElement>('.qt-live,.qt-breathe,.qt-colors'))node.style.visibility='hidden';

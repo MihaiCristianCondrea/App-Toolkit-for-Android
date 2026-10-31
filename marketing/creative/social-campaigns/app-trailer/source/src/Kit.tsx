@@ -11,6 +11,31 @@ export const SKIN_HEIGHT=device.height*SKIN_SCALE;
 export const DISPLAY={x:device.display.x*SKIN_SCALE,y:device.display.y*SKIN_SCALE,width:PHONE_WIDTH,height:PHONE_HEIGHT,radius:device.display.radius*SKIN_SCALE};
 export type Rect={x:number;y:number;width:number;height:number;radii?:number[]};
 export type Geometry=Record<string,Rect>;
+export const measuredRect=(node:HTMLElement,root:HTMLElement):Rect=>{
+  const css=getComputedStyle(node);
+  return {...localRect(node,root),radii:[css.borderTopLeftRadius,css.borderTopRightRadius,css.borderBottomRightRadius,css.borderBottomLeftRadius].map(parseFloat)};
+};
+export const isolatedRadii=(rect:Rect,p:number)=>(rect.radii??[28,28,28,28]).map(r=>r+(28-r)*p);
+export const radiusCss=(radii:readonly number[])=>radii.map(r=>`${r}px`).join(' ');
+
+/** Native functional motion is paused and sought, including animations inside open component roots. */
+const seekAnimations=(host:HTMLElement,seconds:number)=>{
+  const animations=new Set(host.getAnimations({subtree:true}));
+  const shadows=(root:ParentNode)=>{
+    for(const node of root.querySelectorAll('*'))if(node.shadowRoot){
+      for(const animation of node.shadowRoot.getAnimations())animations.add(animation);
+      shadows(node.shadowRoot);
+    }
+  };
+  shadows(host);
+  const functional=new Set(['qt-sos','tk-breathe','water-breathe','water-ripple','water-pulse','sos-preview']);
+  for(const animation of animations){
+    animation.pause();
+    animation.playbackRate=0;
+    const end=Number(animation.effect?.getComputedTiming().endTime??0);
+    animation.currentTime=animation instanceof CSSAnimation&&functional.has(animation.animationName)?Math.max(0,seconds)*1000:Number.isFinite(end)?end:0;
+  }
+};
 export const WIDGETS=[
   {id:'compass',selector:'.qt-live[aria-label^="Compass,"]',query:''},
   {id:'level',selector:'.qt-live[aria-label^="Bubble level,"]',query:''},
@@ -73,8 +98,12 @@ export const LiveScreen:React.FC<{id:string;state?:Record<string,unknown>;onRead
       await embed.mount(host,id,{...JSON.parse(key),showAds:false,moreApps:[]},{frame:false,palette:'blue',window:{width:PHONE_WIDTH,height:PHONE_HEIGHT,system:'phone'}});
       await Promise.all([...host.querySelectorAll('img')].map(img=>img.decode()));
       await frame();
-      // Interactive digit motion has no wall clock in a film. The supplied frame owns the value.
-      for(const animation of host.getAnimations({subtree:true}))animation.finish();
+      seekAnimations(host,Number(JSON.parse(key)._filmMotionSeconds??0));
+      const fill=host.querySelector<HTMLElement>('.qt-live__fill');
+      const ratio=JSON.parse(key)._filmTorchFill;
+      if(fill&&typeof ratio==='number'){
+        fill.style.height='100%';fill.style.transformOrigin='50% 100%';fill.style.transform=`scaleY(${ratio})`;
+      }
       if(live)callback.current?.(host);
       await frame();
     })().catch(cancelRender).finally(()=>continueRender(handle));
@@ -89,9 +118,7 @@ export const GeometryProbe:React.FC<{onGeometry:(g:Geometry)=>void}>=({onGeometr
   for(const widget of WIDGETS){
     const node=root.querySelector<HTMLElement>(widget.selector);
     if(!node)throw new Error(`Missing real widget: ${widget.id}`);
-    const box=localRect(node,root);
-    const style=getComputedStyle(node);
-    geometry[widget.id]={...box,radii:[style.borderTopLeftRadius,style.borderTopRightRadius,style.borderBottomRightRadius,style.borderBottomLeftRadius].map(parseFloat)};
+    geometry[widget.id]=measuredRect(node,root);
   }
   const shell=root.querySelector('mnw-android-screen')?.shadowRoot;
   for(const button of shell?.querySelectorAll<HTMLButtonElement>('.navbar__item')??[]){
@@ -103,10 +130,10 @@ export const GeometryProbe:React.FC<{onGeometry:(g:Geometry)=>void}>=({onGeometr
 }}/>;
 
 /** Crop the real rendered widget, retaining its Material components, fonts, shape and theme context. */
-export const LiveCrop:React.FC<{screen:string;selector:string;state?:Record<string,unknown>;style?:React.CSSProperties}>=({screen,selector,state={},style})=>{
+export const LiveCrop:React.FC<{screen:string;selector:string;state?:Record<string,unknown>;style?:React.CSSProperties;radii?:readonly number[]}>=({screen,selector,state={},style,radii})=>{
   const [box,setBox]=useState<Rect|null>(null);
-  return <div data-kit-crop={selector} style={{position:'relative',width:box?.width??0,height:box?.height??0,overflow:'hidden',...style}}>
-    <LiveScreen id={screen} state={state} style={{position:'absolute',left:0,top:0,transform:`translate(${-Number(box?.x??0)}px,${-Number(box?.y??0)}px)`}} onReady={root=>{
+  return <div data-kit-crop={selector} style={{position:'relative',width:box?.width??0,height:box?.height??0,overflow:'hidden',borderRadius:radii?radiusCss(radii):undefined,...style}}>
+    <LiveScreen id={screen} state={{...state,_filmCropRadii:radii}} style={{position:'absolute',left:0,top:0,transform:`translate(${-Number(box?.x??0)}px,${-Number(box?.y??0)}px)`}} onReady={root=>{
       const node=root.querySelector<HTMLElement>(selector);
       if(!node)throw new Error(`No ${selector} in real ${screen} screen`);
       // Bring below-fold parts above the shell's fixed navigation before cropping.
@@ -115,7 +142,12 @@ export const LiveCrop:React.FC<{screen:string;selector:string;state?:Record<stri
         const part=localRect(node,root),viewport=localRect(content,root);
         content.scrollTop+=part.y-viewport.y-(viewport.height-part.height)/2;
       }
-      const next=localRect(node,root);
+      const next=measuredRect(node,root);
+      if(radii){
+        node.style.borderRadius=radiusCss(radii);
+        const actual=measuredRect(node,root).radii!;
+        if(actual.some((r,i)=>Math.abs(r-radii[i])>.05))throw new Error('Crop corners diverged from their bento surface');
+      }
       setBox(old=>old&&JSON.stringify(old)===JSON.stringify(next)?old:next);
     }}/>
   </div>;

@@ -1,5 +1,5 @@
 import React,{useCallback,useState} from 'react';
-import {Geometry,Rect,LiveCrop} from './Kit';
+import {Geometry,Rect,LiveCrop,isolatedRadii,radiusCss} from './Kit';
 import {Headline,Phone,PhonePose,Shape,projectPhone,beat,ease,lerp,pop} from './visuals';
 import {QuickCaption,quickPhonePose,quickState} from './OpeningJourney';
 import timeline from './timeline.json';
@@ -16,9 +16,9 @@ const heroProgress=(t:number,h:typeof HEROES[number])=>ease(t,h.in,h.in+.3)*(1-e
 
 /** A crop replaces its hidden screen counterpart, then returns to that measured rectangle. */
 const Container:React.FC<{tool:string;screen:string;rect:Rect;state:Record<string,unknown>;pose:PhonePose;seconds:number;progress:number;x:number;y:number;scale:number;angle?:number}>=({tool,screen,rect,state,pose,seconds,progress,x,y,scale,angle=0})=>{
-  const source=projectPhone(rect,pose,seconds),s=lerp(source.scale,scale,progress);
-  return <div data-hero-part={tool} style={{position:'absolute',width:rect.width,height:rect.height,transformOrigin:'50% 50%',transform:`translate(${lerp(source.x,x,progress)-rect.width/2}px,${lerp(source.y,y,progress)-rect.height/2}px) rotate(${lerp(pose.angle,angle,progress)}deg) scale(${s})`,boxShadow:`0 ${18*progress}px ${36*progress}px rgba(59,45,20,${.14*progress})`}}>
-    <LiveCrop screen={screen} selector={`[data-tool="${tool}"]`} state={{...state,searchQuery:''}} style={{borderRadius:lerp(8,28,progress)}}/>
+  const source=projectPhone(rect,pose,seconds),s=lerp(source.scale,scale,progress),radii=isolatedRadii(rect,progress);
+  return <div data-hero-part={tool} style={{position:'absolute',width:rect.width,height:rect.height,borderRadius:radiusCss(radii),transformOrigin:'50% 50%',transform:`translate(${lerp(source.x,x,progress)-rect.width/2}px,${lerp(source.y,y,progress)-rect.height/2}px) rotate(${lerp(pose.angle,angle,progress)}deg) scale(${s})`,boxShadow:`0 ${18*progress}px ${36*progress}px rgba(59,45,20,${.14*progress})`}}>
+    <LiveCrop screen={screen} selector={`[data-tool="${tool}"]`} state={{...state,searchQuery:''}} radii={radii}/>
   </div>;
 };
 

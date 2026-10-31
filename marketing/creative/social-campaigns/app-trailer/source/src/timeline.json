@@ -9,29 +9,29 @@
       "id": "motif",
       "start": 0,
       "end": 1.76,
-      "title": "Build the kit on the motif",
-      "action": "Six kit symbols arrive in a clear 3x2 formation on five notes; Water and Breathe share the last note."
+      "title": "Shapes frame the app icon",
+      "action": "Three original background shapes arrive on the opening notes; the app icon pops into the centre on 1.04. No Material Symbol badges."
     },
     {
       "id": "split",
       "start": 1.76,
       "end": 3.32,
-      "title": "Open the chest",
-      "action": "The original lid folds behind the body at their seam and shares its drop; the mirrored inside hides the handle."
+      "title": "Swing open the chest",
+      "action": "The original lid rotates around the right lip with its handle visible, while the body moves down into the launcher pose."
     },
     {
       "id": "burst",
       "start": 3.32,
       "end": 6.76,
       "title": "Follow the tools",
-      "action": "Four real cards fan through separate lanes. The camera whips from Compass and Flashlight to Level and SOS as live values change."
+      "action": "Four real widgets leave with full 28 px corners. Compass and Level move, the flashlight fill changes continuously, and SOS uses its native preview animation on the frame clock."
     },
     {
       "id": "one-place",
       "start": 6.76,
       "end": 10.08,
       "title": "Gather, then push into the bento",
-      "action": "Four widgets gather beside One place. After the headline hold, the grid spreads across the frame and the camera pushes closer."
+      "action": "Four widgets meet in a tight 2x2 bento. Only the connected corners shrink smoothly to 8 px; outer corners remain 28 px, before the camera pushes closer."
     },
     {
       "id": "quick-tools",
@@ -74,8 +74,7 @@
     "measure": 17.14,
     "play": 21.98,
     "close": 26.26,
-    "iconNotes": [0.02, 0.32, 0.62, 1.04, 1.46, 1.46],
-    "logo": 1.76,
+    "logo": 1.04,
     "launches": [3.32, 3.76, 4.04, 4.34],
     "chips": [14.88, 15.18, 15.44, 15.66, 15.98, 16.44],
     "measureHeroes": [18.14, 19.14, 19.98, 20.84],
@@ -116,50 +115,49 @@
         "at": 0.02,
         "strength": 0.55,
         "responses": [
-          {"ref": "/iconNotes/0", "kind": "symbol", "label": "Motif symbol 1", "big": false}
+          {"ref": "/backdropNotes/0", "kind": "shape", "label": "Background shape 1 enters", "big": false}
         ]
       },
       {
         "at": 0.32,
         "strength": 0.55,
         "responses": [
-          {"ref": "/iconNotes/1", "kind": "symbol", "label": "Motif symbol 2", "big": false}
+          {"ref": "/backdropNotes/1", "kind": "shape", "label": "Background shape 2 enters", "big": false}
         ]
       },
       {
         "at": 0.62,
         "strength": 0.55,
         "responses": [
-          {"ref": "/iconNotes/2", "kind": "symbol", "label": "Motif symbol 3", "big": false}
+          {"ref": "/backdropNotes/2", "kind": "shape", "label": "Background shape 3 enters", "big": false}
         ]
       },
       {
         "at": 1.04,
         "strength": 0.55,
         "responses": [
-          {"ref": "/iconNotes/3", "kind": "symbol", "label": "Motif symbol 4", "big": false}
+          {"ref": "/logo", "kind": "logo", "label": "Original app icon pops onto the shape stage", "big": true}
         ]
       },
       {
         "at": 1.46,
         "strength": 0.55,
         "responses": [
-          {"ref": "/iconNotes/4", "kind": "symbol", "label": "Motif symbol 5", "big": false},
-          {"ref": "/iconNotes/5", "kind": "symbol", "label": "Motif symbol 6", "big": false}
+          {"ref": "/logoAnticipation", "kind": "logo", "label": "Closed mark anticipates its opening", "big": false}
         ]
       },
       {
         "at": 1.76,
         "strength": 1,
         "responses": [
-          {"ref": "/logo", "kind": "mark", "label": "Chest opens", "big": true}
+          {"ref": "/lidOpen", "kind": "logo", "label": "Lid swings around the right lip as the body drops", "big": true}
         ]
       },
       {
         "at": 2.32,
         "strength": 0.55,
         "responses": [
-          {"ref": "/beats/6/at", "kind": "nudge", "label": "toolbox accent", "big": false, "target": "toolbox"}
+          {"ref": "/lidSettled", "kind": "logo", "label": "Open lid settles with its handle visible", "big": false}
         ]
       },
       {
@@ -215,7 +213,7 @@
         "at": 4.92,
         "strength": 0.55,
         "responses": [
-          {"ref": "/demo/torchHits/1", "kind": "value", "label": "Flashlight drops to one brightness step", "big": false}
+          {"ref": "/demo/torchHits/1", "kind": "value", "label": "Flashlight brightness fills smoothly to two steps", "big": false}
         ]
       },
       {
@@ -272,14 +270,16 @@
         "at": 7.7,
         "strength": 0.55,
         "responses": [
-          {"ref": "/beats/22/at", "kind": "nudge", "label": "stage accent", "big": false, "target": "stage"}
+          {"ref": "/beats/22/at", "kind": "nudge", "label": "stage accent", "big": false, "target": "stage"},
+          {"ref": "/bentoJoin/0", "kind": "shape", "label": "Inner corners begin joining as the gaps close", "big": false}
         ]
       },
       {
         "at": 8.02,
         "strength": 0.55,
         "responses": [
-          {"ref": "/beats/23/at", "kind": "nudge", "label": "stage accent", "big": false, "target": "stage"}
+          {"ref": "/beats/23/at", "kind": "nudge", "label": "stage accent", "big": false, "target": "stage"},
+          {"ref": "/bentoJoin/1", "kind": "shape", "label": "Connected bento seams settle at 8 px", "big": false}
         ]
       },
       {
@@ -904,15 +904,13 @@
     "phrases": [0, 1.76, 2.64, 3.32, 4.58, 5.16, 5.74, 6.76, 8.98, 10.08, 10.62, 11.44, 12.92, 13.96, 15.98, 17.14, 17.7, 17.92, 18.62, 19.42, 21.12, 21.72, 21.98, 22.26, 23.4, 24.24, 26.26, 27.96, 29.54],
     "finalCover": 29.7,
     "finalRest": 29.877777777777776,
-    "iconsExitEnd": 2.32,
     "quickHeroIn": [13.16, 15.44],
     "quickHeroOut": [14.88, 16.78],
     "quickHeroEnd": [15.18, 17.14],
     "demo": {
       "headingStart": 4.58,
       "headingEnd": 4.92,
-      "torchHits": [4.34, 4.92, 5.16],
-      "sosHits": [5.16, 5.74, 6.08, 6.32],
+      "torchHits": [4.34, 4.92, 5.74, 6.32],
       "heroTurn": 13.72,
       "heroTurnEnd": 14.28,
       "heroReturn": 14.6,
@@ -920,7 +918,9 @@
       "levelTilt": 14.88,
       "levelTiltEnd": 15.44,
       "levelSettle": 15.66,
-      "levelEnd": 16.44
+      "levelEnd": 16.44,
+      "torchLevels": [1, 5, 2, 4, 3],
+      "sosStart": 5.16
     },
     "featureShots": [
       {
@@ -954,6 +954,34 @@
       "scale": 0.74,
       "angle": 5
     },
-    "bentoPush": 8.98
+    "bentoPush": 8.98,
+    "logoAnticipation": 1.46,
+    "lidSettled": 2.32,
+    "chestLanding": 2.64,
+    "backdropNotes": [0.02, 0.32, 0.62],
+    "backgroundShapes": [
+      {
+        "file": "16 Sided Cookie.svg",
+        "color": "var(--tk-gold-container)",
+        "size": 1000,
+        "from": [20, 950, 0],
+        "to": [80, 100, -35]
+      },
+      {
+        "file": "4 Sided Cookie.svg",
+        "color": "#FDE7A2",
+        "size": 680,
+        "from": [1890, 130, -10],
+        "to": [1920, 960, 25]
+      },
+      {
+        "file": "Rounded Triangle.svg",
+        "color": "#F6A800",
+        "size": 380,
+        "from": [1640, 850, 15],
+        "to": [220, 860, -30]
+      }
+    ],
+    "bentoJoin": [7.7, 8.02]
   }
 }
