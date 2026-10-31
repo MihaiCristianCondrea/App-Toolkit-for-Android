@@ -23,7 +23,7 @@ A 16:9 product trailer based on the owner's toolbox sketches. The mark opens, fo
 | 6.76 to 10.08 | A teal ground grows from the bento; it moves right and grows beside "One place.". |
 | 10.08 to 17.14 | The bento becomes the phone. Each Quick Tools widget lifts out of the screen on its note while its name lands. |
 | 17.14 to 21.98 | A gold ground and the Measure screen grow from the Measure tab; Protractor, Unit Converter, Bill Splitter and Counter push through the left column with live values. |
-| 21.98 to 26.26 | A pink ground and Play & Decide grow from their tab; the wheel spins to Sushi, then random number, dice and coin land. |
+| 21.98 to 26.26 | A pink ground and Play & Decide grow from their tab while the phone springs to the left half; on the right the wheel spins to Sushi, then random number, dice and coin land. |
 | 26.26 to 29.88 | The three destinations fan in beside the mark, title and Google Play badge; a gold burst from the mark takes the frame. |
 
 Render it with `COMPOSITION=AppTrailerV2 npm run preview` (or `npm run render` for the master once approved). Stills: `npx remotion still src/index.ts AppTrailerV2 out.png --frame <seconds*90>`.

@@ -58,6 +58,8 @@ const Toolbox:React.FC<{x:number;y:number;size:number;open:number;scale:number;s
 
 type Pose={x:number;y:number;scale:number};
 const PHONE:Pose={x:1340,y:540,scale:.9};
+/** Play mirrors the layout: the phone springs to the left half and the story moves to the right. */
+const phoneAt=(t:number):Pose=>{const m=pop(t,T.play+.05,.7);return {x:lerp(PHONE.x,580,m),y:PHONE.y,scale:PHONE.scale};};
 /** Where a measured part of the screen lands on the canvas for a phone pose. */
 const onPhone=(r:Rect,p:Pose)=>({x:p.x-SKIN_WIDTH*p.scale/2+(DISPLAY.x+r.x+r.width/2)*p.scale,y:p.y-SKIN_HEIGHT*p.scale/2+(DISPLAY.y+r.y+r.height/2)*p.scale});
 
@@ -100,7 +102,7 @@ export const TrailerV2:React.FC=()=>{
   const chapter=[0,T.mark,T.place,T.phone,T.measure,T.play,T.close,T.boom].reduce((a,b)=>t>=b?b:a,0);
   const push=1+.035*ease(t,chapter,chapter+3.2)+(t>T.launches[0]&&t<T.boom?.012*beat:0);
 
-  const nav=(label:string)=>g?.[label]?onPhone(g[label],PHONE):{x:PHONE.x,y:960};
+  const nav=(label:string)=>g?.[label]?onPhone(g[label],phoneAt(t)):{x:PHONE.x,y:960};
   const navLocal=(label:string)=>g?.[label]?{x:g[label].x+g[label].width/2,y:g[label].y+g[label].height/2}:{x:215,y:900};
 
   // Bento geometry from the measured cards.
@@ -162,7 +164,8 @@ export const TrailerV2:React.FC=()=>{
         const tab=isPlay?ease(t,T.play,T.play+.5):isMeasure?ease(t,T.measure,T.measure+.5):1;
         const lifted=LIFTS.find(([,],k)=>t>=T.lifts[k]&&t<T.lifts[k]+.62)?.[0];
         const hide=t<T.phoneEnd?WIDGETS.slice(0,4).map(w=>w.selector):!isMeasure&&!isPlay&&lifted?[WIDGETS.find(w=>w.id===lifted)!.selector]:[];
-        return <Phone id={id} pose={{...PHONE,scale:PHONE.scale*lerp(1.08,1,toPhone)}} angle={-2*hit(t)} shell={toPhone}
+        const swing=t>=T.play?Math.sin(Math.PI*ease(t,T.play+.05,T.play+.6))*-6:0;
+        return <Phone id={id} pose={{...phoneAt(t),scale:PHONE.scale*lerp(1.08,1,toPhone)}} angle={-2*hit(t)+swing} shell={toPhone}
           state={isPlay?playState:isMeasure?measureState:quick} hide={hide}
           reveal={t<T.phoneEnd?toPhone:tab} from={t<T.phoneEnd?{x:215,y:480}:navLocal(isPlay?'Play & Decide':'Measure')}
           under={isPlay?{id:'numbers',state:measureState}:isMeasure?{id:'quick-tools',state:quick}:undefined}/>;
@@ -199,12 +202,12 @@ export const TrailerV2:React.FC=()=>{
       </div>:null}
 
       {/* Play: the wheel spins large, then the three chance tools land on consecutive notes. */}
-      <Words t={t} text="Let chance decide." at={T.playWords} x={110} y={70} size={150} width={800} exitAt={T.close-.3}/>
+      <Words t={t} text="Let chance decide." at={T.playWords} x={1010} y={70} size={150} width={860} exitAt={T.close-.3} exitX={1600}/>
       {t>=T.playWords[1]&&t<T.close?<>
-        <div style={{position:'absolute',left:110,top:420,transformOrigin:'0 0',transform:`translateY(${(1-pop(t,T.playWords[1],.5))*700-easeIn(t,T.chance[0],T.chance[0]+.3)*900}px) scale(1.75)`}}>
+        <div style={{position:'absolute',left:1010,top:420,transformOrigin:'0 0',transform:`translateY(${(1-pop(t,T.playWords[1],.5))*700-easeIn(t,T.chance[0],T.chance[0]+.3)*900}px) scale(1.75)`}}>
           <LiveCrop screen="play" selector=".play-wheel-card" state={{...playState,searchQuery:'Decision Wheel'}} radii={[28,28,28,28]}/>
         </div>
-        {['random_number','dice_roll','coin_flip'].map((tool,k)=>t>=T.chance[k+1]?<div key={tool} style={{position:'absolute',left:110+[0,0,270][k],top:lerp(1150,[380,610,610][k],pop(t,T.chance[k+1],.45)),transformOrigin:'0 0',transform:`scale(${k?1.2:1.2}) rotate(${lerp(10,0,pop(t,T.chance[k+1],.45))}deg)`}}>
+        {['random_number','dice_roll','coin_flip'].map((tool,k)=>t>=T.chance[k+1]?<div key={tool} style={{position:'absolute',left:1010+[0,0,316][k],top:lerp(1250,[430,690,690][k],pop(t,T.chance[k+1],.45)),transformOrigin:'0 0',transform:`scale(1.5) rotate(${lerp(10,0,pop(t,T.chance[k+1],.45))}deg)`}}>
           <LiveCrop screen="play" selector={`[data-tool="${tool}"]`} state={{...playState,searchQuery:''}} radii={[28,28,28,28]}/>
         </div>:null)}
       </>:null}
