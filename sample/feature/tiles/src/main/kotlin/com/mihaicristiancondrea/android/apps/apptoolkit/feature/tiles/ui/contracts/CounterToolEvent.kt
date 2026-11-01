@@ -20,6 +20,7 @@ package com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.contra
 /** What the Counter tool asks its ViewModel to do. */
 sealed interface CounterToolEvent {
     data object Increment : CounterToolEvent
+    data object Decrement : CounterToolEvent
 
     /** Sets the shared count, the Quick Settings tile's too, back to zero. */
     data object Reset : CounterToolEvent

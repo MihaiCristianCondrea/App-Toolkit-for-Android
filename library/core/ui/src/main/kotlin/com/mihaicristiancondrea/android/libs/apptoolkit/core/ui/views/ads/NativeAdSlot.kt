@@ -59,6 +59,8 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preference
  * @param style the ad's finish on this screen: badge silhouette and colour, text sizes and colours,
  * and whether the call to action is a filled pill or a text button. It overrides only what it names,
  * so the default leaves the presentation exactly as it was built.
+ * @param label replaces the disclosure text ("Sponsored Ad"), for a placement whose label reads as
+ * a section title. It must still say the content is an ad, and it stays inside the ad view.
  * @param cache keeps the ad while the slot is out of composition. Ignored without [cacheKey].
  * @param cacheKey identifies this slot in [cache]; unique among the slots composed at one time.
  * @param onAdLoaded invoked with whether an ad is currently displayed.
@@ -73,6 +75,7 @@ fun NativeAdSlot(
     cornerRadius: Dp = SizeConstants.ExtraLargeSize,
     containerColor: Color = Color.Unspecified,
     style: NativeAdStyle = NativeAdStyle(),
+    label: String? = null,
     cache: NativeAdCache? = null,
     cacheKey: Any? = null,
     onAdLoaded: (Boolean) -> Unit = {},
@@ -131,6 +134,7 @@ fun NativeAdSlot(
             nativeAd = nativeAd,
             palette = nativeAdPalette(),
             style = style,
+            label = label,
         )
     }
 }

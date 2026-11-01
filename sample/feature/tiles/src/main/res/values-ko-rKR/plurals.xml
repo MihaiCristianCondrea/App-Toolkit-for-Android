@@ -20,4 +20,12 @@
         <item quantity="other">%1$d 도구</item>
     </plurals>
 
+    <plurals name="widget_wheel_choices">
+        <item quantity="other">선택지 %d개 · 돌림판 열기</item>
+    </plurals>
+
+    <plurals name="widget_people">
+        <item quantity="other">%d명</item>
+    </plurals>
+
 </resources>

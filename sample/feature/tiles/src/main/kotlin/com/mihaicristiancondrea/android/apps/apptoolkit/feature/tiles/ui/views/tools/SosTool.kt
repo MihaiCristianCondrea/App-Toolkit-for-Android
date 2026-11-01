@@ -17,102 +17,26 @@
 
 package com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.tools
 
-import androidx.compose.animation.animateColorAsState
-import androidx.compose.animation.core.RepeatMode
-import androidx.compose.animation.core.animateFloatAsState
-import androidx.compose.animation.core.infiniteRepeatable
-import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.WarningAmber
-import androidx.compose.material3.Icon
+import androidx.compose.foundation.layout.heightIn
+import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.graphicsLayer
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.tooling.preview.Preview
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.ResultPill
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.ButtonMeasurements
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.GeneralButton
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.R
 
 @Composable
-fun SosTool(
-    isActive: Boolean,
-    onToggle: () -> Unit
-) {
-    val alpha by animateFloatAsState(
-        targetValue = if (isActive) 1f else 0.5f,
-        animationSpec = if (isActive) {
-            infiniteRepeatable(
-                animation = tween(durationMillis = 500),
-                repeatMode = RepeatMode.Reverse
-            )
-        } else {
-            tween(durationMillis = 500)
-        },
-        label = "sos-alpha"
-    )
-
-    val color by animateColorAsState(
-        targetValue = if (isActive) Color.Red else MaterialTheme.colorScheme.primary,
-        label = "sos-color"
-    )
-
-    Column(
-        verticalArrangement = Arrangement.spacedBy(SizeConstants.MediumSize),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        modifier = Modifier.fillMaxWidth()
-    ) {
-        ResultPill(
-            label = if (isActive) "SOS ACTIVE" else "SOS Ready",
-            modifier = Modifier.graphicsLayer { this.alpha = alpha }
-        )
-
-        Box(
-            modifier = Modifier.padding(vertical = SizeConstants.LargeSize),
-            contentAlignment = Alignment.Center
-        ) {
-            Icon(
-                imageVector = Icons.Outlined.WarningAmber,
-                contentDescription = null,
-                modifier = Modifier.size(SizeConstants.OneHundredSize),
-                tint = color
-            )
+fun SosTool(isActive: Boolean, onToggle: () -> Unit) {
+    Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+        SignalPanel(isActive, "SOS", "··· −−− ···")
+        Button(onClick = onToggle, modifier = Modifier.fillMaxWidth().heightIn(min = 56.dp)) {
+            Text(stringResource(if (isActive) R.string.morse_stop else R.string.morse_start))
         }
-
-        Spacer(modifier = Modifier.height(SizeConstants.SmallSize))
-
-        GeneralButton(
-            onClick = onToggle,
-            measurements = ButtonMeasurements.Medium,
-            containerColor = if (isActive) Color.Red else null,
-            contentColor = if (isActive) Color.White else null,
-            label = if (isActive) "STOP SOS" else "START SOS",
-        )
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-private fun SosToolPreview() {
-    MaterialTheme {
-        Surface {
-            SosTool(
-                isActive = false,
-                onToggle = {},
-            )
-        }
+        Text(stringResource(R.string.signal_guidance), style = MaterialTheme.typography.bodySmall)
     }
 }

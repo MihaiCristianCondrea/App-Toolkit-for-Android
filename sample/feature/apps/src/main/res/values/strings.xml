@@ -35,14 +35,17 @@
     <string name="app_details_storage">Storage</string>
     <string name="app_details_version">Version %1$s</string>
     <string name="app_details_view_on_play_store">View on Google Play</string>
-    <string name="apps_filter_all">All</string>
     <string name="error_failed_to_load_apps">Failed to load apps</string>
     <string name="error_failed_to_update_favorite">Failed to update favorite</string>
     <string name="favorite_apps">Favorites</string>
-    <string name="summary_share_message">Check out this app that I\'m using. It has some really cool features that you might find interesting. You can download it from the Play Store at: %1$s</string>
     <!-- Navigation -->
-    <string name="apps_tools_title">Apps</string>
 
-    <string name="open_random_app">Open random app</string>
-    <string name="apps_search_hint">Search apps</string>
+    <string name="more_apps_title">More apps</string>
+    <string name="more_apps_view_all">View all</string>
+    <string name="more_apps_view_all_description">View all apps on Google Play</string>
+    <string name="more_apps_google_play">Google Play</string>
+    <string name="more_apps_open">Open</string>
+    <string name="more_apps_empty">No apps are available right now.</string>
+    <string name="more_apps_store_action_description">Open %1$s on Google Play</string>
+    <string name="more_apps_open_action_description">Open %1$s</string>
 </resources>

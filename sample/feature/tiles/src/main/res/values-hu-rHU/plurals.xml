@@ -21,4 +21,14 @@
         <item quantity="other">%1$d eszközök</item>
     </plurals>
 
+    <plurals name="widget_wheel_choices">
+        <item quantity="one">%d lehetőség · Kerék megnyitása</item>
+        <item quantity="other">%d lehetőség · Kerék megnyitása</item>
+    </plurals>
+
+    <plurals name="widget_people">
+        <item quantity="one">%d fő</item>
+        <item quantity="other">%d fő</item>
+    </plurals>
+
 </resources>

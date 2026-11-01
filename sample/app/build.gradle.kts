@@ -129,7 +129,6 @@ android {
         vectorDrawables {
             useSupportLibrary = true
         }
-        multiDexEnabled = true
 
         val githubProps = Properties()
         val githubFile = rootProject.file("github.properties")
@@ -209,7 +208,6 @@ dependencies {
     baselineProfile(project(":sample:baselineprofile"))
     testImplementation(project(":library:core:testing"))
     implementation(project(":sample:core:analytics"))
-    implementation(project(":sample:core:datastore"))
     implementation(project(":sample:integration:ads"))
     implementation(project(":sample:feature:apps"))
     implementation(project(":sample:feature:components"))

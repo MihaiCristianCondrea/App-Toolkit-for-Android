@@ -19,9 +19,8 @@ package com.mihaicristiancondrea.android.apps.apptoolkit.feature.onboarding.ui.m
 
 object OnboardingKeys {
     const val WELCOME = "welcome"
-    const val PERSONALIZATION_OPTIONS = "personalization_options"
     const val THEME_OPTIONS = "theme_options"
-    const val FEATURE_HIGHLIGHT_1 = "feature_highlight_1"
+    const val QUICK_SETTINGS = "quick_settings"
     const val CRASHLYTICS_OPTIONS = "crashlytics_options"
     const val ONBOARDING_COMPLETE = "onboarding_complete"
 }

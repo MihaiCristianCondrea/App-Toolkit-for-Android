@@ -35,12 +35,15 @@
     <string name="app_details_storage">Storage</string>
     <string name="app_details_version">Version %1$s</string>
     <string name="app_details_view_on_play_store">Megtekintés a Google Playen</string>
-    <string name="apps_filter_all">Mind</string>
     <string name="error_failed_to_load_apps">Nem sikerült betölteni az appokat</string>
     <string name="error_failed_to_update_favorite">Nem sikerült frissíteni a kedvencet</string>
     <string name="favorite_apps">Kedvencek</string>
-    <string name="summary_share_message">Nézd meg ezt a fantasztikus alkalmazást, amit használok. Nagyon érdekes funkciói vannak, amik neked is tetszhetnek. Letöltheted a Play Áruházból itt: %1$s</string>
-    <string name="apps_tools_title">Alkalmazások elemre</string>
-    <string name="open_random_app">Véletlenszerű app megnyitása</string>
-    <string name="apps_search_hint">Alkalmazások keresése</string>
+    <string name="more_apps_title">További alkalmazások</string>
+    <string name="more_apps_view_all">Összes</string>
+    <string name="more_apps_view_all_description">Az összes alkalmazás megtekintése a Google Playen</string>
+    <string name="more_apps_google_play">Google Play</string>
+    <string name="more_apps_open">Megnyitás</string>
+    <string name="more_apps_empty">Jelenleg nincs elérhető alkalmazás.</string>
+    <string name="more_apps_store_action_description">%1$s megnyitása a Google Playen</string>
+    <string name="more_apps_open_action_description">%1$s megnyitása</string>
 </resources>

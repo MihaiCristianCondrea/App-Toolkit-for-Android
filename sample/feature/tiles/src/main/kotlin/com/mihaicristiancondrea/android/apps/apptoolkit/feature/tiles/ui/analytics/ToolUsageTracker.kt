@@ -21,20 +21,14 @@ import com.mihaicristiancondrea.android.apps.apptoolkit.core.analytics.contracts
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.utils.constants.ToolkitTileIds
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.telemetry.TelemetryRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.telemetry.models.AnalyticsEvent
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.telemetry.models.AnalyticsValue
 
 /**
- * Reports `tool_used` for one quick tool, at most once for each time its sheet is open.
+ * Reports `tool_used` once per use-session, at the first meaningful action or watched interval.
  *
- * Opening a tool is already reported as `view_item` from the catalogue, and says nothing about
- * whether the person did anything with it. This is the step after: the first action that shows
- * real use, such as a flip, a roll, or a finished breath. Reporting it once per opening, instead of
- * on every action, keeps the event a count of sessions in which the tool was used, so a user
- * rolling the dice forty times does not outweigh forty users rolling once.
+ * ViewModels call [endSession] when their existing tool lifecycle ends. Shared overview controls
+ * can begin use before a sheet opens; repeated taps do not inflate the number of use-sessions.
  *
- * The tool ViewModels outlive their sheet, so each one calls [endSession] when its sheet closes.
- *
- * @param toolId one of [ToolkitTileIds], so the value stays bounded and matches the catalogue.
+ * @param toolId one of [ToolkitTileIds], so identifiers stay bounded and match the catalogue.
  */
 class ToolUsageTracker(
     private val telemetryRepository: TelemetryRepository,
@@ -42,19 +36,19 @@ class ToolUsageTracker(
 ) {
     private var hasReportedUse: Boolean = false
 
-    /** Reports the tool as used, unless it already was since its sheet opened. */
+    /** Reports the first use since the last [endSession]. */
     fun markUsed() {
         if (hasReportedUse) return
         hasReportedUse = true
         telemetryRepository.logEvent(
             AnalyticsEvent(
                 name = AppGa4Contract.EventName.TOOL_USED,
-                params = mapOf(AppGa4Contract.Param.TOOL_ID to AnalyticsValue.Str(toolId)),
+                params = toolJourneyParams(toolId),
             ),
         )
     }
 
-    /** Starts over, so the next opening of the sheet can report use again. */
+    /** Starts a new use-session without reporting an event. */
     fun endSession() {
         hasReportedUse = false
     }

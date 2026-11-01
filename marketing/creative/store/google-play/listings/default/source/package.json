@@ -1,0 +1,24 @@
+{
+  "name": "app-toolkit-play-default-listing",
+  "private": true,
+  "type": "module",
+  "description": "App Toolkit's default Google Play listing visuals, rendered with Remotion from the UI kit's real screens",
+  "scripts": {
+    "assets": "node scripts/sync-assets.mjs",
+    "dev": "npm run assets && remotion studio",
+    "render": "npm run assets && node scripts/render.mjs",
+    "lint": "tsc"
+  },
+  "dependencies": {
+    "@remotion/bundler": "4.0.529",
+    "@remotion/cli": "4.0.529",
+    "@remotion/renderer": "4.0.529",
+    "react": "19.2.3",
+    "react-dom": "19.2.3",
+    "remotion": "4.0.529"
+  },
+  "devDependencies": {
+    "@types/react": "19.2.7",
+    "typescript": "5.9.3"
+  }
+}

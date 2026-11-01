@@ -17,6 +17,7 @@
 
 package com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.catalog
 
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.icons.ToolSymbols
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -29,13 +30,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.AddCircleOutline
-import androidx.compose.material.icons.outlined.Block
-import androidx.compose.material.icons.outlined.CheckCircle
-import androidx.compose.material.icons.outlined.ExpandLess
-import androidx.compose.material.icons.outlined.ExpandMore
-import androidx.compose.material.icons.outlined.GridView
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
@@ -50,7 +44,6 @@ import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.R
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.models.ToolkitTileStatus
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.contracts.ToolkitTilesEvent
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.models.ToolkitTile
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.models.ToolkitTileCategory
@@ -81,7 +74,6 @@ internal fun HiddenAdPreloaders(
         adItems.forEach { item ->
             QuickToolsNativeAdCard(
                 adUnitId = item.adUnitId,
-                position = GroupedItemPosition.MIDDLE,
                 onStatusChanged = { isLoaded ->
                     onEvent(ToolkitTilesEvent.AdStatusChanged(item.id, isLoaded))
                 },
@@ -97,16 +89,11 @@ internal fun TilesFilters(
     onFilterSelected: (ToolkitTilesFilter) -> Unit,
 ) {
     val filters = remember(categories) {
-        val allTiles = categories.flatMap { it.tiles }
-        val statuses = allTiles.map { it.status }.toSet()
+        val categoryIds = categories.filter { it.tiles.isNotEmpty() }.mapTo(mutableSetOf()) { it.id }
 
         ToolkitTilesFilterItems.filter { item ->
-            when (item.filter) {
-                ToolkitTilesFilter.All -> true
-                ToolkitTilesFilter.Added -> statuses.contains(ToolkitTileStatus.Added)
-                ToolkitTilesFilter.NotAdded -> statuses.contains(ToolkitTileStatus.NotAdded)
-                ToolkitTilesFilter.Unsupported -> statuses.contains(ToolkitTileStatus.Unsupported)
-            }
+            val categoryId = item.filter.categoryId
+            categoryId == null || categoryId in categoryIds
         }.toImmutableList()
     }
 
@@ -133,6 +120,7 @@ internal fun TileCategorySection(
     category: ToolkitTileCategory,
     position: GroupedItemPosition,
     expanded: Boolean,
+    collapsible: Boolean,
     modifier: Modifier = Modifier,
     selectedFilter: ToolkitTilesFilter = ToolkitTilesFilter.All,
     onToggle: () -> Unit,
@@ -169,15 +157,17 @@ internal fun TileCategorySection(
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                 )
-                GeneralButton(
-                    style = GeneralButtonStyle.Text,
-                    onClick = onToggle,
-                    iconSize = SizeConstants.ButtonIconSize,
-                    icon = ToolkitIcon.Vector(if (expanded) Icons.Outlined.ExpandLess else Icons.Outlined.ExpandMore),
-                    contentDescription = stringResource(
+                if (collapsible) {
+                    GeneralButton(
+                        style = GeneralButtonStyle.Text,
+                        onClick = onToggle,
+                        iconSize = SizeConstants.ButtonIconSize,
+                        icon = ToolkitIcon.Vector(if (expanded) ToolSymbols.ExpandLess else ToolSymbols.ExpandMore),
+                        contentDescription = stringResource(
                             id = if (expanded) R.string.tiles_collapse_category else R.string.tiles_expand_category,
                         ),
-                )
+                    )
+                }
             }
             AnimatedVisibility(visible = expanded) {
                 Column(verticalArrangement = Arrangement.spacedBy(SizeConstants.ExtraTinySize)) {
@@ -258,21 +248,26 @@ private val ToolkitTilesFilterItems: ImmutableList<ToolkitTilesFilterItem> = per
     ToolkitTilesFilterItem(
         ToolkitTilesFilter.All,
         R.string.tiles_filter_all,
-        Icons.Outlined.GridView
+        ToolSymbols.GridView,
     ),
     ToolkitTilesFilterItem(
-        ToolkitTilesFilter.Added,
-        R.string.tiles_filter_added,
-        Icons.Outlined.CheckCircle
+        ToolkitTilesFilter.Sensors,
+        R.string.tiles_category_sensors,
+        ToolSymbols.Explore,
     ),
     ToolkitTilesFilterItem(
-        ToolkitTilesFilter.NotAdded,
-        R.string.tiles_filter_not_added,
-        Icons.Outlined.AddCircleOutline
+        ToolkitTilesFilter.Utilities,
+        R.string.tiles_category_utilities,
+        ToolSymbols.Casino,
     ),
     ToolkitTilesFilterItem(
-        ToolkitTilesFilter.Unsupported,
-        R.string.tiles_filter_unsupported,
-        Icons.Outlined.Block
+        ToolkitTilesFilter.System,
+        R.string.tiles_category_system,
+        ToolSymbols.FlashlightOn,
+    ),
+    ToolkitTilesFilterItem(
+        ToolkitTilesFilter.Wellbeing,
+        R.string.tiles_category_wellbeing,
+        ToolSymbols.Favorite,
     ),
 )

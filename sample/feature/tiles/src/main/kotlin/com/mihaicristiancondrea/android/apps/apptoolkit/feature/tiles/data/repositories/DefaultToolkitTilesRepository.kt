@@ -90,35 +90,28 @@ class DefaultToolkitTilesRepository(
     }
 
     private val catalogue: ImmutableList<ToolkitTileCategoryData> = persistentListOf(
-        ToolkitTileCategoryData(
-            id = "sensors",
-            initiallyExpanded = true,
-            tiles = persistentListOf(
-                tile(ToolkitTileIds.BUBBLE_LEVEL),
-                tile(ToolkitTileIds.COMPASS),
-                tile(ToolkitTileIds.REACTION_TEST),
-            ),
-        ),
-        ToolkitTileCategoryData(
-            id = "utilities",
-            tiles = persistentListOf(
-                tile(ToolkitTileIds.COIN_FLIP, requestKey = ToolkitTileIds.COIN_FLIP),
-                tile(ToolkitTileIds.DICE_ROLL, requestKey = ToolkitTileIds.DICE_ROLL),
-                tile(ToolkitTileIds.COUNTER, requestKey = ToolkitTileIds.COUNTER),
-                tile("material_colors", quickTool = ToolkitQuickTool.MaterialColors),
-                tile(ToolkitTileIds.MORSE),
-            ),
-        ),
-        ToolkitTileCategoryData(
-            id = "system",
-            tiles = persistentListOf(
-                tile(ToolkitTileIds.FLASH_DIMMER, requestKey = ToolkitTileIds.FLASH_DIMMER),
-            ),
-        ),
-        ToolkitTileCategoryData(
-            id = "wellbeing",
-            tiles = persistentListOf(tile(ToolkitTileIds.BREATHING), tile(ToolkitTileIds.SOS)),
-        ),
+        ToolkitTileCategoryData(id = "sensors", tiles = persistentListOf(
+            tile(ToolkitTileIds.COMPASS), tile(ToolkitTileIds.BUBBLE_LEVEL),
+        )),
+        ToolkitTileCategoryData(id = "system", tiles = persistentListOf(
+            tile(ToolkitTileIds.FLASH_DIMMER, requestKey = ToolkitTileIds.FLASH_DIMMER), tile(ToolkitTileIds.SOS),
+        )),
+        ToolkitTileCategoryData(id = "sound", tiles = persistentListOf(tile(ToolkitTileIds.WATER_EJECT))),
+        ToolkitTileCategoryData(id = "wellbeing", tiles = persistentListOf(tile(ToolkitTileIds.BREATHING))),
+        // The last Quick Tools section: Material Colors opens its full-height palette page.
+        ToolkitTileCategoryData(id = "colors", tiles = persistentListOf(
+            tile(ToolkitTileIds.MATERIAL_COLORS, quickTool = ToolkitQuickTool.MaterialColors),
+        )),
+        ToolkitTileCategoryData(id = "chance", tiles = persistentListOf(
+            tile(ToolkitTileIds.DECISION_WHEEL), tile(ToolkitTileIds.RANDOM_NUMBER),
+            tile(ToolkitTileIds.COIN_FLIP, requestKey = ToolkitTileIds.COIN_FLIP),
+            tile(ToolkitTileIds.DICE_ROLL, requestKey = ToolkitTileIds.DICE_ROLL),
+        )),
+        ToolkitTileCategoryData(id = "measure", tiles = persistentListOf(
+            tile(ToolkitTileIds.RULER), tile(ToolkitTileIds.PROTRACTOR), tile(ToolkitTileIds.UNIT_CONVERTER),
+            tile(ToolkitTileIds.BILL_SPLITTER), tile(ToolkitTileIds.COUNTER, requestKey = ToolkitTileIds.COUNTER),
+            tile(ToolkitTileIds.REACTION_TEST),
+        )),
     )
 }
 

@@ -5,7 +5,7 @@ description: >
   platform (youtube.txt, instagram.txt, x.txt, linkedin.txt, tiktok.txt,
   facebook.txt, threads.txt). Asks the developer which platforms the campaign
   goes to, reads the project block in marketing/README.md and the campaign
-  manifest, and writes marketing/social-campaigns/<campaign-slug>/captions/.
+  manifest, and writes marketing/creative/social-campaigns/<campaign-slug>/captions/.
   Use when a video, carousel or image campaign is ready to publish.
 metadata:
   author: Mihai-Cristian Condrea
@@ -29,7 +29,7 @@ One campaign, one set of facts, one file per platform. Every word follows [`writ
 Before writing, ask the developer two things, with the usual answers as defaults:
 
 1. **Captions for this campaign?** Usually yes. If no, stop here.
-2. **Which platforms?** Offer the list below; preselect the ones earlier campaigns in `social-campaigns/` used.
+2. **Which platforms?** Offer the list below; preselect the ones earlier campaigns in `creative/social-campaigns/` used.
 
 | Platform | File | Template and example |
 | --- | --- | --- |
@@ -56,7 +56,7 @@ Pick keywords and hashtags for the audience the product is for, following [`refe
 ## 3. Write the files
 
 ```text
-marketing/social-campaigns/<campaign-slug>/captions/
+marketing/creative/social-campaigns/<campaign-slug>/captions/
 ├── youtube.txt
 ├── instagram.txt
 └── ...

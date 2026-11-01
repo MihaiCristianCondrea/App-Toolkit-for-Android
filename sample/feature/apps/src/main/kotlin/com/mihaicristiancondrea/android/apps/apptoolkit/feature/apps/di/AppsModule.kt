@@ -27,7 +27,7 @@ import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.data.reposi
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.data.repositories.DefaultFavoritesRepository
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.data.repositories.DeveloperAppsRepository
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.data.repositories.FavoritesRepository
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.ui.AppsListViewModel
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.ui.MoreAppsViewModel
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.di.AppToolkitDiConstants
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.di.DataStoreQualifiers
 import kotlinx.serialization.json.Json
@@ -62,7 +62,7 @@ val appsModule: Module = module {
     }
 
     viewModel {
-        AppsListViewModel(
+        MoreAppsViewModel(
             developerAppsRepository = get(),
             installedAppsRepository = get(),
             favoritesRepository = get(),

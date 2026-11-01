@@ -18,6 +18,10 @@
 
 package com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.catalog
 
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.mappers.badgeShape
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.graphics.lerp
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.icons.ToolSymbols
 import androidx.compose.foundation.background
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
@@ -27,8 +31,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.CheckCircle
 import androidx.compose.material3.AssistChip
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -51,28 +53,28 @@ import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.models.
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.models.ToolkitTileIcon
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
 
+/**
+ * A tool's badge, as the kit's `shapeBadge` draws it: the icon in the tool's accent, on the accent
+ * mixed 26% into the highest surface container, cut from the tool's badge shape.
+ */
 @Composable
 internal fun TileIconBadge(
     icon: ToolkitTileIcon,
     large: Boolean = false,
 ) {
     val colors = icon.iconColors()
-    val size =
-        if (large) SizeConstants.LauncherIconSize + SizeConstants.SmallSize else SizeConstants.FortyFourSize
     Box(
-        modifier = Modifier.size(size),
+        modifier = Modifier
+            .size(if (large) 64.dp else 44.dp)
+            .clip(shape = icon.badgeShape())
+            .background(color = lerp(MaterialTheme.colorScheme.surfaceContainerHighest, colors.container, 0.26f)),
         contentAlignment = Alignment.Center,
     ) {
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .clip(shape = icon.backgroundShape())
-                .background(color = colors.container.copy(alpha = 0.15f)),
-        )
         Icon(
             imageVector = icon.imageVector(),
             contentDescription = null,
             tint = colors.content,
+            modifier = Modifier.size(if (large) 32.dp else 24.dp),
         )
     }
 }
@@ -120,7 +122,7 @@ internal fun TileAvailabilityChip() {
         label = { Text(text = stringResource(id = R.string.tiles_chip_tile)) },
         leadingIcon = {
             Icon(
-                imageVector = Icons.Outlined.CheckCircle,
+                imageVector = ToolSymbols.CheckCircle,
                 contentDescription = null,
                 modifier = Modifier.size(SizeConstants.ButtonIconSize),
             )

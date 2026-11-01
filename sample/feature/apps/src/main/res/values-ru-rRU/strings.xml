@@ -35,12 +35,15 @@
     <string name="app_details_storage">Storage</string>
     <string name="app_details_version">Version %1$s</string>
     <string name="app_details_view_on_play_store">Посмотреть в Google Play</string>
-    <string name="apps_filter_all">Все</string>
     <string name="error_failed_to_load_apps">Не удалось загрузить приложения</string>
     <string name="error_failed_to_update_favorite">Не удалось обновить избранное</string>
     <string name="favorite_apps">Избранное</string>
-    <string name="summary_share_message">Оцените это удивительное приложение, которое я использую. В нём есть интересные функции. Вы можете скачать его из Play Store по адресу: %1$s</string>
-    <string name="apps_tools_title">Приложения</string>
-    <string name="open_random_app">Открыть случайное приложение</string>
-    <string name="apps_search_hint">Поиск приложений</string>
+    <string name="more_apps_title">Другие приложения</string>
+    <string name="more_apps_view_all">Все</string>
+    <string name="more_apps_view_all_description">Все приложения в Google Play</string>
+    <string name="more_apps_google_play">Google Play</string>
+    <string name="more_apps_open">Открыть</string>
+    <string name="more_apps_empty">Сейчас нет доступных приложений.</string>
+    <string name="more_apps_store_action_description">Открыть %1$s в Google Play</string>
+    <string name="more_apps_open_action_description">Открыть %1$s</string>
 </resources>

@@ -17,6 +17,10 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen
 
+import android.os.SystemClock
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
+import androidx.compose.ui.input.nestedscroll.NestedScrollSource
 import android.view.View
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.telemetry.models.TrackedScreen
 import java.util.concurrent.ConcurrentHashMap
@@ -101,6 +105,35 @@ internal class ScreenEntrance(
     var resumed: Boolean = false
 
     val cascade: VisibilityCascade = VisibilityCascade()
+
+    /** When content in the screen last scrolled, on [SystemClock.uptimeMillis]; read on the main thread. */
+    private var scrolledAt: Long = NEVER_SCROLLED
+
+    /**
+     * Notes every scroll inside the screen, a person's drag or the fling after it. [ScreenHost]
+     * installs it around the screen's content, so any list in it reports here.
+     */
+    val scrollWatcher: NestedScrollConnection = object : NestedScrollConnection {
+        override fun onPreScroll(available: Offset, source: NestedScrollSource): Offset {
+            scrolledAt = SystemClock.uptimeMillis()
+            return Offset.Zero
+        }
+    }
+
+    /**
+     * Whether the screen's content is scrolling now. An element that arrives meanwhile was
+     * brought in by the scroll, not by the screen opening, so it enters at once, outside the
+     * cascade.
+     */
+    fun isScrolling(now: Long = SystemClock.uptimeMillis()): Boolean =
+        scrolledAt != NEVER_SCROLLED && now - scrolledAt <= SCROLL_QUIET_MILLIS
+
+    private companion object {
+        const val NEVER_SCROLLED: Long = Long.MIN_VALUE
+
+        /** How long after the last scroll step the content still counts as scrolling. */
+        const val SCROLL_QUIET_MILLIS: Long = 150L
+    }
 }
 
 /** The [ScreenEntrance] of the screen around this point, if it is inside a [ScreenHost]. */

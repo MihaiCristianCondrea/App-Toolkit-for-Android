@@ -31,7 +31,7 @@ Three layers, later ones winning:
 | Layer | File | Holds |
 | --- | --- | --- |
 | Project | `marketing/README.md`, section "Project metadata" | App name, package, store and site URLs, repository, category, language, project keywords, credits |
-| Campaign | `marketing/social-campaigns/<campaign-slug>/<campaign-slug>-metadata.json` | Campaign title and date, the copy (title, description, alt text, keywords, hashtags) |
+| Campaign | `marketing/creative/social-campaigns/<campaign-slug>/<campaign-slug>-metadata.json` | Campaign title and date, the copy (title, description, alt text, keywords, hashtags) |
 | File | the manifest's `files` map | Overrides for one file, keyed by its path relative to the manifest |
 
 ### First run in a project: write the project block
@@ -116,12 +116,12 @@ Needs Python 3.10+ with `pillow` and `mutagen`, plus `exiftool` and `ffmpeg` for
 ```bash
 pip install pillow mutagen      # exiftool: https://exiftool.org ; ffmpeg: https://ffmpeg.org
 S=marketing/skills/built-in/metadata/scripts/inject_metadata.py
-M=marketing/social-campaigns/<campaign-slug>/<campaign-slug>-metadata.json
+M=marketing/creative/social-campaigns/<campaign-slug>/<campaign-slug>-metadata.json
 
-python3 $S --manifest $M --dry-run marketing/social-campaigns/<campaign-slug>/output/**/*   # what would be written
-python3 $S --manifest $M --jsonld marketing/social-campaigns/<campaign-slug>/output/schema.jsonld \
-  marketing/social-campaigns/<campaign-slug>/output/**/*                                    # write and verify
-python3 $S --manifest $M --check marketing/social-campaigns/<campaign-slug>/output/**/*     # audit later
+python3 $S --manifest $M --dry-run marketing/creative/social-campaigns/<campaign-slug>/output/**/*   # what would be written
+python3 $S --manifest $M --jsonld marketing/creative/social-campaigns/<campaign-slug>/output/schema.jsonld \
+  marketing/creative/social-campaigns/<campaign-slug>/output/**/*                                    # write and verify
+python3 $S --manifest $M --check marketing/creative/social-campaigns/<campaign-slug>/output/**/*     # audit later
 ```
 
 The script is idempotent: run it again after every re-render.

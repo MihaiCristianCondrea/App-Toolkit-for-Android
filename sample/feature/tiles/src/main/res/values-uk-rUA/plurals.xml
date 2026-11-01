@@ -23,4 +23,18 @@
         <item quantity="other">інструменти %1$d</item>
     </plurals>
 
+    <plurals name="widget_wheel_choices">
+        <item quantity="one">%d варіант · Відкрити колесо</item>
+        <item quantity="few">%d варіанти · Відкрити колесо</item>
+        <item quantity="many">%d варіантів · Відкрити колесо</item>
+        <item quantity="other">%d варіанта · Відкрити колесо</item>
+    </plurals>
+
+    <plurals name="widget_people">
+        <item quantity="one">%d особа</item>
+        <item quantity="few">%d особи</item>
+        <item quantity="many">%d осіб</item>
+        <item quantity="other">%d особи</item>
+    </plurals>
+
 </resources>

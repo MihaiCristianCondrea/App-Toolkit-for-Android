@@ -20,4 +20,12 @@
         <item quantity="other">%1$d ツール</item>
     </plurals>
 
+    <plurals name="widget_wheel_choices">
+        <item quantity="other">%d 個の選択肢 · ホイールを開く</item>
+    </plurals>
+
+    <plurals name="widget_people">
+        <item quantity="other">%d 人</item>
+    </plurals>
+
 </resources>

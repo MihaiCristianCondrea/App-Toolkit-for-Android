@@ -35,12 +35,15 @@
     <string name="app_details_storage">Storage</string>
     <string name="app_details_version">Version %1$s</string>
     <string name="app_details_view_on_play_store">ดูบน Google Play</string>
-    <string name="apps_filter_all">ทั้งหมด</string>
     <string name="error_failed_to_load_apps">ไม่สามารถโหลดแอปได้</string>
     <string name="error_failed_to_update_favorite">ไม่สามารถอัปเดตรายการโปรดได้</string>
     <string name="favorite_apps">รายการโปรด</string>
-    <string name="summary_share_message">ลองดูแอปนี้ที่ฉันใช้อยู่. มีฟีเจอร์เจ๋ง ๆ มากมายที่คุณอาจสนใจ ดาวน์โหลดได้จาก Play Store ที่: %1$s</string>
-    <string name="apps_tools_title">แอพ</string>
-    <string name="open_random_app">เปิดแอปแบบสุ่ม</string>
-    <string name="apps_search_hint">ค้นหาแอป</string>
+    <string name="more_apps_title">แอปอื่นๆ</string>
+    <string name="more_apps_view_all">ดูทั้งหมด</string>
+    <string name="more_apps_view_all_description">ดูแอปทั้งหมดใน Google Play</string>
+    <string name="more_apps_google_play">Google Play</string>
+    <string name="more_apps_open">เปิด</string>
+    <string name="more_apps_empty">ไม่มีแอปให้ใช้ในขณะนี้</string>
+    <string name="more_apps_store_action_description">เปิด %1$s ใน Google Play</string>
+    <string name="more_apps_open_action_description">เปิด %1$s</string>
 </resources>

@@ -64,10 +64,10 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.R as About
 class AppGraphTest {
 
     private fun graph(
-        showComponents: Boolean = false,
+        showDebugPages: Boolean = false,
         onShowChangelog: () -> Unit = {},
     ): ShellGraph = appGraph(
-        showComponents = showComponents,
+        showDebugPages = showDebugPages,
         onShowChangelog = onShowChangelog,
     )
 
@@ -76,14 +76,14 @@ class AppGraphTest {
     @Test
     fun `the sample retains the optional bottom banner slot`() {
         assertNotNull(graph().banner)
-        assertNotNull(graph(showComponents = true).banner)
+        assertNotNull(graph(showDebugPages = true).banner)
     }
 
     @Test
-    fun `the tabs are tiles then apps, and a launch opens on tiles`() {
+    fun `the tabs are tiles, numbers, then apps, and a launch opens on tiles`() {
         val graph = graph()
 
-        assertEquals(listOf(ToolkitTilesRoute, AppsListRoute), graph.tabs.map { it.key })
+        assertEquals(listOf(ToolkitTilesRoute, NumbersRoute, PlayRoute), graph.tabs.map { it.key })
         assertEquals(ToolkitTilesRoute, graph.start)
     }
 
@@ -95,7 +95,9 @@ class AppGraphTest {
             return dataStore.startupValueFlow(ToolkitTilesRoute.ROUTE_ID, ::startKeyFor).first()
         }
 
-        assertEquals(AppsListRoute, startFor(AppsListRoute.ROUTE_ID))
+        assertEquals(ToolkitTilesRoute, startFor(LEGACY_APPS_ROUTE_ID))
+        assertEquals(PlayRoute, startFor(PlayRoute.ROUTE_ID))
+        assertEquals(NumbersRoute, startFor(NumbersRoute.ROUTE_ID))
         assertEquals(ToolkitTilesRoute, startFor(ToolkitTilesRoute.ROUTE_ID))
         // A blank value, or one a removed page left behind, opens the default tab.
         assertEquals(ToolkitTilesRoute, startFor(""))
@@ -104,7 +106,7 @@ class AppGraphTest {
 
     @Test
     fun `every page the app opens is registered`() {
-        val graph = graph(showComponents = true)
+        val graph = graph(showDebugPages = true)
         val pages = listOf(
             SettingsRoute,
             DisplaySettingsRoute,
@@ -131,14 +133,18 @@ class AppGraphTest {
     }
 
     @Test
-    fun `the components showcase is offered only once it is shown`() {
-        assertFalse(ComponentsRoute in graph(showComponents = false).drawerLinks())
-        assertTrue(ComponentsRoute in graph(showComponents = true).drawerLinks())
+    fun `the components showcase is a debug page`() {
+        val release = graph(showDebugPages = false)
+        listOf(ComponentsRoute, ArticleDemoRoute(branded = false)).forEach { key ->
+            assertFalse(release.contains(key), "$key is registered outside debug")
+        }
+        assertFalse(ComponentsRoute in release.drawerLinks())
+        assertTrue(ComponentsRoute in graph(showDebugPages = true).drawerLinks())
     }
 
     @Test
     fun `the drawer ends with settings, help, updates and share, pinned to the bottom`() {
-        val drawer = graph(showComponents = true).drawer
+        val drawer = graph(showDebugPages = true).drawer
         val footer = drawer.takeLast(4)
 
         assertEquals(DrawerEntry.Spacer, drawer[drawer.size - 5])
@@ -146,7 +152,7 @@ class AppGraphTest {
         assertEquals(HelpRoute, (footer[1] as DrawerEntry.Link).key)
         assertEquals(AboutR.string.updates, (footer[2] as DrawerEntry.Action).label)
         assertEquals(AboutR.string.share, (footer[3] as DrawerEntry.Action).label)
-        // The app's own entries come first, and developer options are reached from Advanced.
+        // The debug page comes first, and developer options are reached from Advanced.
         assertEquals(ComponentsRoute, (drawer.first() as DrawerEntry.Link).key)
         assertFalse(DeveloperOptionsRoute in graph().drawerLinks())
     }

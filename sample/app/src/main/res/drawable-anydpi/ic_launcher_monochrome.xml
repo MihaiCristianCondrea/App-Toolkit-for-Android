@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ Copyright (©) 2026 Mihai-Cristian Condrea
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
+  -->
+
+<!-- The themed icon: the handle, clear of the lid, and the box with the wrench and screwdriver cut out of it. -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:width="432dp"
+    android:height="432dp"
+    android:viewportWidth="432"
+    android:viewportHeight="432"
+    tools:ignore="VectorRaster,VectorPath">
+
+    <group
+        android:scaleX="0.41824"
+        android:scaleY="0.41824"
+        android:translateX="88.02"
+        android:translateY="51.362">
+        <path
+            android:fillColor="#FFFFFFFF"
+            android:pathData="M167.3,257.3v-26.2c0-30.4,24.6-55,55-55h167.3c30.4,0,55,24.6,55,55v26.2h-45.4v-23.8c0-10.5-8.6-19.1-19.1-19.1H231.9c-10.5,0-19.1,8.6-19.1,19.1v23.8H167.3z" />
+        <path
+            android:fillColor="#FFFFFFFF"
+            android:fillType="evenOdd"
+            android:pathData="M129.1,266.9h353.8c34.3,0,62.2,27.9,62.2,62.2v22.7c0,7.9-6.5,14.3-14.3,14.3H81.3c-7.9,0-14.3-6.5-14.3-14.3v-22.7C66.9,294.8,94.8,266.9,129.1,266.9z M81.3,375.7h449.4c7.9,0,14.3,6.5,14.3,14.3v159c0,34.3-27.9,62.2-62.2,62.2H129.1c-34.3,0-62.2-27.9-62.2-62.2V390C66.9,382.1,73.4,375.7,81.3,375.7z M145.99 430.46l23.52 30.1c6.1 7.8 17.32 9.18 25.12 3.09s9.18-17.32 3.09-25.13l-23.52-30.1c-0.62-1.93 0.48-3.93 2.33-4.49 0.52-0.15 1.1-0.22 1.66-0.15 25.09-5.9 50.12 9.57 56.09 34.6 2.86 12.11 0.79 24.89-5.86 35.54l49.26 63.04c6.9 8.83 5.33 21.6-3.5 28.5-8.83 6.9-21.6 5.33-28.5-3.5l-49.25-63.04c-24.49 7.96-50.78-5.38-58.74-29.87-3.81-11.87-2.87-24.79 2.91-35.9 0.24-1.97 1.91-3.4 3.9-3.3C145.04 430.06 145.52 430.19 145.99 430.46z M397.25 476.3l13.5 13.5c7 7 7 18.31 0 25.32l-45.61 45.61c-7 7-18.31 7-25.31 0L326.32 547.22c-7-7-7-18.31 0-25.31L371.93 476.3C378.86 469.23 390.25 469.3 397.25 476.3z M401.49 470.36l15.2 15.2 22.84-22.84 19.02-4.59c3.39-0.85 6.08-3.25 7.36-6.51l16.26-28.99c1.77-3.32 1.13-7.35-1.48-9.97l-6.23-6.22c-2.62-2.62-6.72-3.32-9.97-1.49l-28.99 16.27c-3.25 1.27-5.66 3.96-6.5 7.35l-4.6 19.02L401.56 470.43z" />
+    </group>
+</vector>

@@ -21,4 +21,16 @@
         <item quantity="other">Outils %1$d</item>
     </plurals>
 
+    <plurals name="widget_wheel_choices">
+        <item quantity="one">%d choix · Ouvrir la roue</item>
+        <item quantity="many">%d choix · Ouvrir la roue</item>
+        <item quantity="other">%d choix · Ouvrir la roue</item>
+    </plurals>
+
+    <plurals name="widget_people">
+        <item quantity="one">%d personne</item>
+        <item quantity="many">%d personnes</item>
+        <item quantity="other">%d personnes</item>
+    </plurals>
+
 </resources>

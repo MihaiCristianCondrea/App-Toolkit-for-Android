@@ -2,12 +2,11 @@
 
 ## Purpose
 
-The hidden components showcase and the unlock gesture that reveals it.
+The components showcase, a debug-only page for checking the Toolkit's components on a device.
 
 ## Owns
 
-- The concrete `ComponentsShowcaseRepository`, which owns the unlock flag.
-- `ComponentsScreen` and the unlock threshold behavior. `ComponentsRoute` belongs to app/navigation.
+- `ComponentsScreen`. `ComponentsRoute` belongs to app/navigation.
 - Localized strings for the component showcase.
 - The article app bar demo: `ArticleBarShowcase` opens `ArticleDemoRoute`, a made-up article
   (`ArticleDemoScreen`) that declares `ScaffoldArticleTopBar`, without a brand or with
@@ -25,14 +24,13 @@ The hidden components showcase and the unlock gesture that reveals it.
 
 ## Does not own
 
-- Where the unlock gesture is performed. The app composition root supplies that bridge to the
-  reusable About screen.
+- Whether the page exists: `:sample:app` registers it, and its drawer entry, only in debug builds.
 - The page registration and the drawer entry, both in `:sample:app`'s `appGraph`, and drawer
   rendering, owned by [`:library:shell`](../../../library/shell/README.md).
 
 ## Depends on
 
-- `:sample:core:datastore` and `:sample:core:analytics`.
+- `:sample:core:analytics`.
 - [`:library:apptoolkit`](../../../library/apptoolkit/README.md) for the screen and state contracts.
 
 ## Used by
@@ -43,13 +41,8 @@ The hidden components showcase and the unlock gesture that reveals it.
 
 ```mermaid
 flowchart TD
-    About[Version taps in About content] --> Bridge[App-owned About bridge]
-    Bridge --> Repo[ComponentsShowcaseRepository]
-    Repo --> Counter{Unlock threshold reached?}
-    Counter -->|no| State[Updated tap progress]
-    Counter -->|yes| Store[AppPreferencesDataSource]
-    Store --> Repo[ComponentsShowcaseRepository.isUnlocked]
-    Repo --> Drawer[":sample:app" drawer entry, shown when unlocked]
+    Debug{Debug build?} -->|yes| Drawer[":sample:app" drawer entry]
+    Debug -->|no| None[No page, no entry]
     Drawer --> Page[ComponentsRoute page]
     Page --> Screen[ComponentsScreen]
     Screen --> Sections[Button / FAB / text field / filter / input / layout / preference showcases]
@@ -57,32 +50,24 @@ flowchart TD
 
 ## Architectural decisions
 
-- This UI showcase intentionally has no `domain` package. It only observes a persisted flag through
-  one repository, so a pass-through use case would add no business logic or reusable operation.
-- The app owns the cross-feature gesture bridge and the drawer entry, while this feature owns the
-  threshold rule and the persisted unlock state it exposes as `isUnlocked`.
+- This UI showcase has no `domain` or `data` package: it only renders components.
+- It is a developer page, so release builds do not register it. There used to be an About
+  version-tap unlock that showed it in release builds; it was removed with the flag it stored.
 - The shell never sees this feature: it renders whatever drawer entries the app's graph declares.
-- A concrete repository is sufficient because there is one DataStore-backed implementation and no
-  module boundary that requires substitution.
 
 ## Public contracts
 
-- `ComponentsShowcaseRepository`, `ComponentsRoute` and `ComponentsScreen`. The drawer entry that reveals the
-  showcase is assembled by `:sample:app`, which reads `isUnlocked`.
+- `ComponentsScreen`. The route and the drawer entry are assembled by `:sample:app`.
 
 ## Internal implementations
 
-- Tap counting and the showcase screen content.
-
-## Current risks
-
-The unlock gesture remains deliberately hidden in the About experience. Moving or removing that
-host bridge changes discoverability even though the feature itself remains independent.
+- The showcase screen content.
 
 ## Migration notes
 
-`ComponentsShowcaseRepository` is concrete because the sample has one DataStore implementation. It
-serializes threshold writes and is the sole owner of the persisted unlock mutation.
+`ComponentsShowcaseRepository`, `componentsModule` and the `components_showcase_unlocked`
+preference were removed with the About unlock. An install that had unlocked the page keeps the
+stale preference, which nothing reads.
 
 Navigation keys and the complete graph live in `:sample:app` under `app/navigation`.
 Features expose callbacks rather than importing app-owned route keys.

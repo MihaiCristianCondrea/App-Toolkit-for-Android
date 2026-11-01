@@ -2,135 +2,43 @@
 
 ---
 
-# October 23, 2026
+# October 30, 2026
 
-**Version:** `26.10.36`
-
-### Added
-
-- The app changelog has an info button that opens App Toolkit's releases on GitHub, for the
-  library's notes behind each version.
-
-### Changed
-
-- Existing app-icons widgets may need to be added again because their receiver component name
-  changed during the sample architecture cleanup.
-- Existing Quick Settings tiles may need to be removed and added again after this update because
-  their service component names changed.
-
-### Improved
-
-- Screens move at a calmer pace and bring their content in as they open, including Apps and
-  Quick Tools when picked from the navigation. Going back to a screen keeps it as it was. The
-  developer options can play it on every visit or only the first time. See App Toolkit's releases
-  for the details.
-- Opening a screen no longer shows a blank page first: its content starts arriving while the page
-  slides in, and the Apps list keeps its loading cards until its apps take their place.
-- The Apps list brings in its filter chips, then its cards.
-- The Components, Quick Tools and article demo screens enter the way the Toolkit's screens do,
-  each section or card in turn.
-
-### Fixed
-
-- Opening an installed app can fall back to its Settings page when Android denies the launcher
-  lookup, rather than letting the lookup failure escape.
-- Stopping or replacing Morse and SOS playback waits for in-flight torch commands, keeping the
-  flashlight off after stopping.
-- Counter storage failures are handled instead of escaping the action, while accepted writes
-  still finish if the Quick Settings service disappears.
-- Unlocking the components showcase reports the achievement only once the unlock is saved, and
-  never again on later taps.
-
----
-
-# October 17, 2026
-
-**Version:** `26.10.32`
-
-### Fixed
-
-- Automatic consent requests interrupted by an unavailable activity retry on a later resume without
-  showing an error message or reporting a nonfatal exception. Consumer apps with their own main
-  ViewModel should adopt the handling documented in `sample/app/README.md`.
-
-### Changed
-
-- Existing Quick Settings tiles may need to be removed and added again after this update because
-  their service component names changed.
-
-### Improved
-
-- Quick Settings catalogue reads own their IO dispatching, so callers no longer need to move
-  repository work off the main thread.
-- Opening an app from the Apps list no longer checks installed packages on the main thread.
-- Release builds use startup and scrolling profiles generated from the sample app's catalog journeys.
-- Breathing and SOS animations update their graphics layers without recomposing on every frame.
-  The Quick Tools catalog distinguishes category and ad rows when reusing lazy items.
-
----
-
-# October 03, 2026
-
-**Version:** `26.10.31`
+**Version:** `26.09.38`
 
 ### Added
 
-- Search the quick tools and the apps from the app bar.
-- Pick the weather from a new button in the theme settings' top bar, once you find the easter egg on the About screen: snow with the Christmas colours, snow or rain over any colours all year, or nothing at all. The rain gusts, comes and goes in showers, and splashes where it lands.
-- Pressing a button in Components shows a snackbar: plain, with an Undo action, as an error with Retry, with an icon and its own colours, or drawn by the screen itself, depending on the group.
+- Unit Converter for length, mass, temperature and volume.
+- Tip & Bill Splitter.
+- Random Number Picker with custom ranges.
+- Ruler with calibration and advanced measurement options.
+- Protractor.
+- Decision Wheel to add your choices and spin to pick one at random.
+- Water Eject that play a timed speaker tone with a clear Start and Stop control.
+- Live tool widgets with interactive controls.
 
 ### Changed
 
-- The ad above bottom navigation is now gone.
-- Settings, Help, Support and the components showcase now open as pages of the main screen, with the same back swipe animation as before, and the Settings shortcut opens Settings directly.
-- Every settings page, About, the licenses, permissions and ads settings now open inside the app too. On tablets and wide windows the settings categories open beside the list.
-- The first-launch screens now run inside the app, so finishing onboarding takes you straight to your start page.
-- The information icon beside the app in Android's permission manager and privacy dashboard opens the app's privacy settings again, and back returns you to the system's settings.
-- On tablets, foldables and wide windows the navigation becomes a side rail or a permanent drawer, and long pages keep a comfortable width.
-- On tablets and wide windows, Settings, Help and the other pages open beside the side navigation, which stays in place and shows where you are, so you can switch straight to another page or tab.
-- Settings, Help & feedback, Updates and Share are always at the bottom of the navigation drawer.
-- Layout options such as the app bar and bottom bar style, the navigation colour and the back swipe now live in Display settings. Developer options move to Advanced settings, and appear once you find the easter egg on the About screen.
-
-### Changed
-
-- Existing Quick Settings tiles may need to be removed and added again after this update because
-  their service component names changed.
+- Redesigned Quick Tools, Measure and Play & Decide screens.
+- Replaced the Apps screen with a More apps carousel.
+- Updated the app icon.
+- Redesigned onboarding.
 
 ### Improved
 
-- Every quick tool reports its actions and any failure in them, so problems with the compass, level, breathing, SOS, Morse, flash dimmer, counter and reaction test can be traced.
-- The menu button turns into a back arrow when you open a screen, instead of popping in and out, and the navigation icons animate when you tap them.
-- The welcome and onboarding pages keep a comfortable width on tablets.
-- On tablets and wide windows, a page opened from the side navigation looks like a tab, without a back button.
-- The labelled floating action buttons shrink to their icon while you scroll down and grow back when you scroll up.
-- Settings on a tablet shows its illustration and a Get help button beside the list until you open a category.
-- On tablets and in landscape, Help and the other pages from the side navigation fade in place instead of sliding in, the side rail starts collapsed after a rotation, and the app bar next to the rail has square corners.
-- Switching between Quick tools and Apps no longer makes the search bar flicker, and a back swipe from the right edge on a tablet's settings detail follows your finger.
-- What's new now separates releases with a wavy line.
-- Search the settings from the top of the settings list, down to single options such as dark theme or the app bar.
-- The app bar can hide as you scroll too, in Display settings, so the whole screen makes room for the content.
-- Rolling the dice does less work on each frame of the animation.
-- The apps widget loads its icons at the same time instead of one after another, and reuses the icons the app has already downloaded.
-- The apps widget shows the apps it loaded last time straight away and refreshes them once the network answers, instead of waiting on the network.
-- Starring an app no longer redraws every app card.
-- Opening the Quick Settings panel no longer saves the quick tools' tile state each time.
+- Added decrement controls to Counter.
+- Improved tool animations and screen transitions.
+- Updated colors, shapes and layouts.
+- Improved support for tablets and foldables.
 
 ### Fixed
 
-- The native ad on Help shows its icon inside the shaped badge.
-- If the quick tools cannot load, the tab says why and offers Retry.
-- Offline, the apps list shows the apps it saved last time, with a message and a Try again button.
-- A favorite that cannot be saved now shows a message instead of hiding the apps list.
-- Tapping favorites on two apps quickly now saves both.
-- Copying an app's package name no longer shows a duplicate toast on Android 13 and newer. Older versions keep the copy confirmation.
-- The favourite star in an app's details now fills and empties as you tap it, as it does on the app's card.
-- Tapping the tab you are already on no longer plays its icon backwards or shows it unselected.
-- The compass tile no longer crashes on phones whose sensors report an invalid reading.
-- Without a connection, the Apps tab now shows the apps it loaded last time, with a message saying they could not be refreshed, instead of an error screen.
-- Retry on the Apps tab works again after a failed load.
-- Removing your last favourite no longer leaves the Apps tab on an empty Favourites filter with no chip to leave it: it goes back to All.
-- The Apps tab shows freshly loaded apps even when saving them for offline use fails.
-- The compass and the level stop using their sensors while the app is in the background, even with the tool open.
+- Flash Dimmer brightness and torch flickering.
+- Morse and SOS playback conflicts.
+- Reaction Test double-tap handling.
+- Breathing session restart issues.
+- App installation status not refreshing after returning from Google Play.
+- Counter saving and app-launch error handling.
 
 ---
 

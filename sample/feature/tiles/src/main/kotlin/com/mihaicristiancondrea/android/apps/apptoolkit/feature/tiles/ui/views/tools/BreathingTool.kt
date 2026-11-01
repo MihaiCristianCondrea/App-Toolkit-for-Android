@@ -17,6 +17,7 @@
 
 package com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.tools
 
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.icons.ToolSymbols
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.spring
 import androidx.compose.foundation.background
@@ -27,8 +28,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.FavoriteBorder
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
@@ -37,6 +36,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.res.stringResource
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.R
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.models.BreathingPhase
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.models.BreathingState
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.ResultPill
@@ -55,13 +56,7 @@ fun BreathingTool(state: BreathingState) {
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier.fillMaxWidth()
     ) {
-        Row(
-            horizontalArrangement = Arrangement.spacedBy(SizeConstants.MediumSize),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            ResultPill(label = state.phase.name.replace("_", " "))
-            ResultPill(label = "${state.secondsLeft}s")
-        }
+
         Box(
             modifier = Modifier
                 .size(SizeConstants.TwoHundredSize)
@@ -80,7 +75,7 @@ fun BreathingTool(state: BreathingState) {
             contentAlignment = Alignment.Center
         ) {
             Icon(
-                imageVector = Icons.Outlined.FavoriteBorder,
+                imageVector = ToolSymbols.Favorite,
                 contentDescription = null,
                 modifier = Modifier.size(64.dp),
                 tint = when (state.phase) {
@@ -89,6 +84,18 @@ fun BreathingTool(state: BreathingState) {
                     else -> MaterialTheme.colorScheme.onSurfaceVariant
                 }
             )
+        }
+        Row(
+            horizontalArrangement = Arrangement.spacedBy(4.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            ResultPill(label = stringResource(when (state.phase) {
+                BreathingPhase.INHALE -> R.string.breathe_inhale
+                BreathingPhase.EXHALE -> R.string.breathe_exhale
+                BreathingPhase.HOLD_FULL, BreathingPhase.HOLD_EMPTY -> R.string.breathe_hold
+                else -> R.string.morse_ready
+            }))
+            ResultPill(label = "${state.secondsLeft}s", start = false)
         }
     }
 }

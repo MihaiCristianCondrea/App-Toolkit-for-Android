@@ -42,6 +42,7 @@ class FlashDimmerToolViewModel(
     screenName = AppScreenTracking.Screens.TOOLKIT_TILES.name,
     viewModelName = "FlashDimmerToolViewModel",
 ) {
+    private var controlJob: kotlinx.coroutines.Job? = null
     private val usage = ToolUsageTracker(telemetryRepository, ToolkitTileIds.FLASH_DIMMER)
 
     init {
@@ -63,24 +64,29 @@ class FlashDimmerToolViewModel(
     }
 
     private fun setLevel(level: Int) {
-        launchReport(action = Actions.SET_LEVEL) {
-            morseRepository.stop()
-            torchRepository.setLevel(level)
-            usage.markUsed()
+        controlJob = controlJob.restart {
+            launchReport(action = Actions.SET_LEVEL) {
+                morseRepository.stop()
+                torchRepository.setLevel(level)
+                usage.markUsed()
+            }
         }
     }
 
     private fun applyPreset(preset: TorchPreset) {
-        launchReport(action = Actions.APPLY_PRESET) {
-            morseRepository.stop()
-            torchRepository.applyPreset(preset)
-            usage.markUsed()
+        controlJob = controlJob.restart {
+            launchReport(action = Actions.APPLY_PRESET) {
+                morseRepository.stop()
+                torchRepository.applyPreset(preset)
+                usage.markUsed()
+            }
         }
     }
 
     private fun dismiss() {
+        controlJob?.cancel()
         usage.endSession()
-        launchReport(action = Actions.TURN_OFF) {
+        controlJob = launchReport(action = Actions.TURN_OFF) {
             morseRepository.stop()
             torchRepository.turnOff()
         }

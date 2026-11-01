@@ -17,7 +17,6 @@
 
 package com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.utils
 
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.models.ToolkitTileStatus
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.models.ToolkitTileCategory
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.states.ToolkitTilesFilter
 import kotlinx.collections.immutable.ImmutableList
@@ -25,18 +24,9 @@ import kotlinx.collections.immutable.toImmutableList
 
 internal fun ImmutableList<ToolkitTileCategory>.filterFor(
     filter: ToolkitTilesFilter,
-): List<ToolkitTileCategory> = when (filter) {
-    ToolkitTilesFilter.All -> this
-    ToolkitTilesFilter.Added -> filterByStatus(ToolkitTileStatus.Added)
-    ToolkitTilesFilter.NotAdded -> filterByStatus(ToolkitTileStatus.NotAdded)
-    ToolkitTilesFilter.Unsupported -> filterByStatus(ToolkitTileStatus.Unsupported)
-}
-
-private fun ImmutableList<ToolkitTileCategory>.filterByStatus(
-    status: ToolkitTileStatus,
-): List<ToolkitTileCategory> = mapNotNull { category ->
-    val tiles = category.tiles.filter { tile -> tile.status == status }
-    if (tiles.isEmpty()) null else category.copy(tiles = tiles.toImmutableList())
+): List<ToolkitTileCategory> {
+    val categoryId = filter.categoryId ?: return this
+    return filter { category -> category.id == categoryId }
 }
 
 /**

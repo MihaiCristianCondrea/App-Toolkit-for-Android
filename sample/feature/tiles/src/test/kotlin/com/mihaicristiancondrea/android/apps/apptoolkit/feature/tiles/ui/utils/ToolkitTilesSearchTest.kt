@@ -21,6 +21,7 @@ import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.model
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.models.ToolkitTile
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.models.ToolkitTileCategory
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.models.ToolkitTileIcon
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.states.ToolkitTilesFilter
 import kotlinx.collections.immutable.persistentListOf
 import org.junit.jupiter.api.Test
 import kotlin.test.assertEquals
@@ -30,15 +31,15 @@ class ToolkitTilesSearchTest {
     // String resources stand in as ids; the test resolves them from this table.
     private val text = mapOf(
         1 to "Sensors", 2 to "Level", 3 to "Check a surface is flat", 4 to "Compass", 5 to "Find north",
-        6 to "Games", 7 to "Coin flip", 8 to "Heads or tails",
+        6 to "Utilities", 7 to "Coin flip", 8 to "Heads or tails",
     )
 
     private fun tile(id: String, title: Int, summary: Int) =
         ToolkitTile(id, title, summary, ToolkitTileIcon.Level, ToolkitTileStatus.Added)
 
-    private val catalog = listOf(
+    private val catalog = persistentListOf(
         ToolkitTileCategory("sensors", 1, ToolkitTileIcon.Level, persistentListOf(tile("level", 2, 3), tile("compass", 4, 5))),
-        ToolkitTileCategory("games", 6, ToolkitTileIcon.Coin, persistentListOf(tile("coin", 7, 8))),
+        ToolkitTileCategory("utilities", 6, ToolkitTileIcon.Coin, persistentListOf(tile("coin", 7, 8))),
     )
 
     private fun search(query: String) = catalog.search(query) { id -> text.getValue(id) }
@@ -51,7 +52,7 @@ class ToolkitTilesSearchTest {
     @Test
     fun `a tile matches by title or summary and keeps only matching tiles`() {
         assertEquals(listOf("sensors" to listOf("compass")), search("north").map { it.id to it.tiles.map { tile -> tile.id } })
-        assertEquals(listOf("games" to listOf("coin")), search("COIN").map { it.id to it.tiles.map { tile -> tile.id } })
+        assertEquals(listOf("utilities" to listOf("coin")), search("COIN").map { it.id to it.tiles.map { tile -> tile.id } })
     }
 
     @Test
@@ -62,5 +63,13 @@ class ToolkitTilesSearchTest {
     @Test
     fun `nothing matching leaves nothing`() {
         assertEquals(emptyList(), search("camera"))
+    }
+
+    @Test
+    fun `filtering by All keeps every category and filtering by a category keeps only that category`() {
+        assertEquals(catalog, catalog.filterFor(ToolkitTilesFilter.All))
+        assertEquals(listOf("sensors"), catalog.filterFor(ToolkitTilesFilter.Sensors).map { it.id })
+        assertEquals(listOf("utilities"), catalog.filterFor(ToolkitTilesFilter.Utilities).map { it.id })
+        assertEquals(emptyList(), catalog.filterFor(ToolkitTilesFilter.Wellbeing))
     }
 }

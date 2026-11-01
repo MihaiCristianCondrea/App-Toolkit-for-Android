@@ -17,6 +17,8 @@
 
 package com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views
 
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.icons.ToolSymbols
+import androidx.compose.foundation.layout.navigationBarsPadding
 import android.os.Build
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -25,13 +27,9 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.ui.unit.dp
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.Add
-import androidx.compose.material.icons.outlined.Close
-import androidx.compose.material.icons.outlined.Info
-import androidx.compose.material.icons.outlined.Widgets
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -42,16 +40,20 @@ import androidx.compose.material3.SheetValue
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberBottomSheetState
+import androidx.compose.runtime.LaunchedEffect
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.analytics.toolOpenedEvent
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.analytics.LocalTelemetry
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.R
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.models.ToolkitTileStatus
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.utils.constants.ToolkitTileIds
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.mappers.helperSummaryResId
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.mappers.helperTitleResId
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.models.ToolkitTile
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.navigation.BillSplitterToolRoute
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.navigation.BreathingToolRoute
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.navigation.CoinFlipToolRoute
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.navigation.CompassToolRoute
@@ -60,10 +62,15 @@ import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.navigat
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.navigation.FlashDimmerToolRoute
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.navigation.LevelToolRoute
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.navigation.MorseToolRoute
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.navigation.ProtractorToolRoute
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.navigation.RandomNumberToolRoute
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.navigation.ReactionTestToolRoute
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.navigation.RulerToolRoute
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.navigation.SosToolRoute
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.navigation.UnitConverterToolRoute
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.catalog.TileIconBadge
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.previews.GenericToolPreview
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.utils.constants.ToolkitTileIds
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.icons.ToolkitIcon
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.ButtonMeasurements
@@ -83,7 +90,22 @@ fun ToolkitToolBottomSheet(
     onClose: () -> Unit,
     onAddTile: () -> Unit,
     onSetupTile: () -> Unit,
+    startReaction: Boolean = false,
 ) {
+    val telemetry = LocalTelemetry.current
+    LaunchedEffect(tile.id) {
+        telemetry.logEvent(toolOpenedEvent(tile.id))
+    }
+    when (tile.id) {
+        ToolkitTileIds.PROTRACTOR -> {
+            ProtractorToolRoute(onClose = onClose)
+            return
+        }
+        ToolkitTileIds.RULER -> {
+            RulerToolRoute(onClose = onClose)
+            return
+        }
+    }
     val sheetState = rememberBottomSheetState(
         initialValue = SheetValue.Hidden,
         enabledValues = setOf(SheetValue.Hidden, SheetValue.Expanded)
@@ -97,11 +119,14 @@ fun ToolkitToolBottomSheet(
         Column(
             modifier = Modifier
                 .fillMaxWidth()
+                .verticalScroll(rememberScrollState())
+                // The sheet reaches behind the system navigation; its last control stays above it.
+                .navigationBarsPadding()
                 .padding(SizeConstants.LargeSize),
             verticalArrangement = Arrangement.spacedBy(SizeConstants.LargeSize),
         ) {
             ToolSheetHeader(tile = tile, onClose = onClose)
-            ToolInteractiveContent(tile = tile)
+            ToolInteractiveContent(tile = tile, startReaction = startReaction)
             ToolIntegrationSection(
                 tile = tile,
                 onAddTile = onAddTile,
@@ -137,11 +162,11 @@ private fun ToolSheetHeader(
             )
         }
         GeneralButton(
-                    style = GeneralButtonStyle.Text,
-                    onClick = onClose,
-                    icon = ToolkitIcon.Vector(Icons.Outlined.Close),
-                    contentDescription = stringResource(id = R.string.tool_dialog_close_content_description),
-                )
+            style = GeneralButtonStyle.Text,
+            onClick = onClose,
+            icon = ToolkitIcon.Vector(ToolSymbols.Close),
+            contentDescription = stringResource(id = R.string.tool_dialog_close_content_description),
+        )
     }
 }
 
@@ -165,7 +190,7 @@ private fun ToolStatusSummary(tile: ToolkitTile) {
             verticalAlignment = Alignment.CenterVertically,
         ) {
             Icon(
-                imageVector = Icons.Outlined.Info,
+                imageVector = ToolSymbols.Info,
                 contentDescription = null,
                 tint = MaterialTheme.colorScheme.primary,
             )
@@ -187,18 +212,25 @@ private fun ToolStatusSummary(tile: ToolkitTile) {
 @Composable
 private fun ToolInteractiveContent(
     tile: ToolkitTile,
+    startReaction: Boolean,
 ) {
     when (tile.id) {
+        ToolkitTileIds.WATER_EJECT -> com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.navigation.WaterEjectToolRoute()
+        ToolkitTileIds.DECISION_WHEEL -> com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.navigation.DecisionWheelToolRoute()
         ToolkitTileIds.COIN_FLIP -> CoinFlipToolRoute()
         ToolkitTileIds.DICE_ROLL -> DiceRollToolRoute()
         ToolkitTileIds.COUNTER -> CounterToolRoute()
         ToolkitTileIds.COMPASS -> CompassToolRoute()
         ToolkitTileIds.BUBBLE_LEVEL -> LevelToolRoute()
-        ToolkitTileIds.REACTION_TEST -> ReactionTestToolRoute()
+        ToolkitTileIds.REACTION_TEST -> ReactionTestToolRoute(autoStart = startReaction)
         ToolkitTileIds.SOS -> SosToolRoute()
         ToolkitTileIds.MORSE -> MorseToolRoute()
         ToolkitTileIds.BREATHING -> BreathingToolRoute()
         ToolkitTileIds.FLASH_DIMMER -> FlashDimmerToolRoute()
+        ToolkitTileIds.PROTRACTOR -> Unit
+        ToolkitTileIds.BILL_SPLITTER -> BillSplitterToolRoute()
+        ToolkitTileIds.RANDOM_NUMBER -> RandomNumberToolRoute()
+        ToolkitTileIds.UNIT_CONVERTER -> UnitConverterToolRoute()
         else -> GenericToolPreview(tile = tile)
     }
 }
@@ -279,7 +311,7 @@ private fun QuickSettingsIntegrationCard(
                 verticalAlignment = Alignment.CenterVertically,
             ) {
                 Icon(
-                    imageVector = Icons.Outlined.Widgets,
+                    imageVector = ToolSymbols.Widgets,
                     contentDescription = null,
                     tint = contentColor
                 )
@@ -317,7 +349,7 @@ private fun QuickSettingsIntegrationCard(
                 measurements = ButtonMeasurements.Medium,
                 onClick = onAddTile,
                 label = stringResource(id = R.string.tiles_add_to_qs),
-                icon = ToolkitIcon.Vector(Icons.Outlined.Add),
+                icon = ToolkitIcon.Vector(ToolSymbols.Add),
                 shape = actionShape,
                 containerColor = containerColor,
                 contentColor = contentColor,
@@ -325,4 +357,3 @@ private fun QuickSettingsIntegrationCard(
         }
     }
 }
-

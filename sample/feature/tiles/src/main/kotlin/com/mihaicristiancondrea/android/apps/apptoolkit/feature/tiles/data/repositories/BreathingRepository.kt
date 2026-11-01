@@ -45,8 +45,12 @@ class BreathingRepository(
     private var job: Job? = null
 
     fun start() {
-        job?.cancel()
+        val previous = job
+        previous?.cancel()
         job = repositoryScope.launch {
+            // The cancelled session resets the state as it ends; wait for that, so it cannot land
+            // after this session's first phase.
+            previous?.join()
             try {
                 runPhase(BreathingPhase.PREPARING, DURATION_PREPARING, 1f, 1f)
                 while (isActive) runCycle()
@@ -95,7 +99,8 @@ class BreathingRepository(
         }
     }
 
-    private companion object {
+    // Internal: the Quick Tools Breathe card shows the same rhythm the exercise runs.
+    internal companion object {
         const val DURATION_PREPARING = 1000L
         const val DURATION_INHALE = 4000L
         const val DURATION_HOLD_FULL = 2000L

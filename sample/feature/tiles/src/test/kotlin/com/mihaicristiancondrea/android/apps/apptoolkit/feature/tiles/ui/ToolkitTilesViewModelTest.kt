@@ -102,9 +102,9 @@ class ToolkitTilesViewModelTest {
         val viewModel = createViewModel(FakeToolkitTilesRepository())
         advance()
 
-        viewModel.onEvent(ToolkitTilesEvent.FilterSelected(ToolkitTilesFilter.Added))
+        viewModel.onEvent(ToolkitTilesEvent.FilterSelected(ToolkitTilesFilter.Sensors))
 
-        assertEquals(ToolkitTilesFilter.Added, viewModel.state.value.selectedFilter)
+        assertEquals(ToolkitTilesFilter.Sensors, viewModel.state.value.selectedFilter)
     }
 
     @Test

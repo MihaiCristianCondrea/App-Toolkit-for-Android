@@ -27,16 +27,22 @@ import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.local
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.local.sensors.SensorLocalDataSource
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.local.torch.AndroidTorchDataSource
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.local.torch.TorchDataSource
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.repositories.BillSplitterRepository
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.repositories.BreathingRepository
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.repositories.CounterRepository
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.repositories.DefaultToolkitTilesRepository
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.repositories.DefaultTorchRepository
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.repositories.MorseRepository
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.repositories.RulerRepository
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.repositories.SensorRepository
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.repositories.SosRepository
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.repositories.ToolkitTilesRepository
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.repositories.TorchRepository
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.repositories.UnitConversionRepository
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.services.getTileServiceRequests
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.ProtractorToolViewModel
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.BillSplitterToolViewModel
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.RandomNumberToolViewModel
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.BreathingToolViewModel
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.CoinFlipToolViewModel
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.CompassToolViewModel
@@ -46,16 +52,24 @@ import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.FlashDi
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.LevelToolViewModel
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.MorseToolViewModel
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.ReactionTestToolViewModel
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.RulerToolViewModel
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.SosToolViewModel
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.ToolkitTilesViewModel
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.UnitConverterToolViewModel
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.di.DataStoreQualifiers
 import org.koin.android.ext.koin.androidContext
-import org.koin.core.module.dsl.viewModel
 import org.koin.core.module.Module
+import org.koin.core.module.dsl.viewModel
 import org.koin.core.qualifier.named
 import org.koin.dsl.module
 
 val tilesModule: Module = module {
+    single<com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.local.audio.SpeakerAudioDataSource> {
+        com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.local.audio.AndroidSpeakerAudioDataSource(context = androidContext(), dispatchers = get())
+    }
+    single { com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.repositories.WaterEjectRepository(audio = get()) }
+    viewModel { com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.WaterEjectToolViewModel(repository = get(), telemetryRepository = get()) }
+    viewModel { com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.WheelToolViewModel(telemetryRepository = get(), savedStateHandle = get()) }
     single<TorchDataSource> { AndroidTorchDataSource(context = androidContext()) }
     single<SensorLocalDataSource> {
         AndroidSensorLocalDataSource(context = androidContext(), dispatchers = get())
@@ -97,6 +111,14 @@ val tilesModule: Module = module {
             dispatchers = get()
         )
     }
+    single { BillSplitterRepository() }
+    viewModel { ProtractorToolViewModel(telemetryRepository = get(), savedStateHandle = get()) }
+    viewModel { BillSplitterToolViewModel(repository = get(), telemetryRepository = get(), savedStateHandle = get()) }
+    viewModel { RandomNumberToolViewModel(telemetryRepository = get(), savedStateHandle = get()) }
+    single { UnitConversionRepository() }
+    single { RulerRepository(preferences = get()) }
+    viewModel { UnitConverterToolViewModel(repository = get(), telemetryRepository = get(), savedStateHandle = get()) }
+    viewModel { RulerToolViewModel(repository = get(), telemetryRepository = get(), savedStateHandle = get()) }
     single { CounterRepository(preferencesDataSource = get(), dispatchers = get()) }
     single {
         SosRepository(
@@ -110,14 +132,14 @@ val tilesModule: Module = module {
             telemetryRepository = get(),
         )
     }
-    viewModel { CoinFlipToolViewModel(telemetryRepository = get()) }
-    viewModel { DiceRollToolViewModel(telemetryRepository = get()) }
+    viewModel { CoinFlipToolViewModel(telemetryRepository = get(), savedStateHandle = get()) }
+    viewModel { DiceRollToolViewModel(telemetryRepository = get(), savedStateHandle = get()) }
     viewModel { CounterToolViewModel(repository = get(), telemetryRepository = get()) }
     viewModel { CompassToolViewModel(repository = get(), telemetryRepository = get()) }
     viewModel { LevelToolViewModel(repository = get(), telemetryRepository = get()) }
     viewModel { BreathingToolViewModel(repository = get(), telemetryRepository = get()) }
     viewModel { SosToolViewModel(repository = get(), telemetryRepository = get()) }
-    viewModel { MorseToolViewModel(repository = get(), telemetryRepository = get()) }
+    viewModel { MorseToolViewModel(repository = get(), telemetryRepository = get(), savedStateHandle = get()) }
     viewModel {
         FlashDimmerToolViewModel(
             torchRepository = get(),

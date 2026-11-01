@@ -82,6 +82,19 @@ class MorseRepositoryTest {
         assertEquals("Maximum", torch.commands.last())
         repository.stop()
     }
+
+    @Test
+    fun `stopping with nothing playing leaves the torch alone`() = runTest {
+        val dispatcher = StandardTestDispatcher(testScheduler)
+        val torch = MorseRecordingTorchRepository()
+        val repository = MorseRepository(torch, TestDispatchers(dispatcher))
+
+        // The Flash Dimmer and its tile stop Morse before every level change; that must not switch the torch off.
+        repository.stop()
+        runCurrent()
+
+        assertEquals(emptyList<String>(), torch.commands)
+    }
 }
 
 private class MorseRecordingTorchRepository : TorchRepository {

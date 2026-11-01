@@ -23,10 +23,26 @@ plugins {
 
 android {
     namespace = "com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles"
+
+    testOptions {
+        unitTests.isIncludeAndroidResources = true
+        unitTests.all { test ->
+            test.jvmArgs(
+                "--add-opens=java.base/java.io=ALL-UNNAMED",
+                "--add-opens=java.base/java.lang=ALL-UNNAMED",
+                "--add-opens=java.base/java.util=ALL-UNNAMED",
+                "--add-exports=java.base/jdk.internal.access=ALL-UNNAMED",
+            )
+        }
+    }
 }
 
 dependencies {
     testImplementation(project(":library:core:testing"))
+    testImplementation(libs.androidx.compose.ui.test.junit4)
+    testImplementation(libs.androidx.test.ext.junit)
+    testRuntimeOnly(libs.test.junit.vintage.engine)
+    debugImplementation(libs.androidx.compose.ui.test.manifest)
     implementation(project(":sample:core:analytics"))
     api(project(":sample:integration:ads"))
     api(project(":library:apptoolkit"))

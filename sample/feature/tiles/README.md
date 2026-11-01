@@ -1,192 +1,84 @@
-# `:sample:feature:tiles` Logic Graph
+# `:sample:feature:tiles`
 
 ## Purpose
 
-Quick tools: the in-app tool catalogue and the Quick Settings tile services behind it.
+The native Quick Tools, Measure and Play & Decide workspaces, their tool sheets, and their Quick Settings services. The approved visual reference is `marketing/ui`.
 
-## Owns
+## Ownership
 
-- `ToolkitTilesRepository`, which owns the source-neutral catalogue and coordinates current tile
-  status with persisted category expansion preferences.
-- Local data sources for preferences, Quick Settings, sensors/display, haptics, and
-  torch access.
-- `SensorRepository`, `BreathingRepository`, `TorchRepository`, `MorseRepository`,
-  `SosRepository`, and `CounterRepository`, which remain the data-layer entry points and own
-  coordination or runtime state.
-- UI catalogue models and mappers, the screen and dedicated tool ViewModels, tool composables,
-  the Quick Settings services. `ToolkitTilesRoute` belongs to app/navigation.
-- Localized Quick Tools strings and plurals, and the Quick Settings tile and coin icons.
-- Feature-owned manifest permissions for haptics and flashlight access. The feature
-  declares no foreground service and no wake locks.
+- `ToolkitTilesRepository` publishes the source-neutral catalogue for all three workspaces and Quick Settings membership. UI mappers own resources, shapes and artwork.
+- Sensor, breathing, torch, Morse, SOS, counter, conversion, bill and ruler repositories retain their existing responsibilities. `WaterEjectRepository` is the entry point to finite speaker playback; `AndroidSpeakerAudioDataSource` owns AudioTrack and audio focus.
+- Dedicated `LoggedScreenViewModel` classes own tool state and events. Koin supplies their repositories and `SavedStateHandle` where input restoration is needed. No feature depends on another feature.
+- The app module owns serializable navigation keys and the shell graph. This feature exposes screens without importing app-owned routes.
+- Shared widget geometry lives in `ui/views/catalog`. The compass and level clip to the same 8-sided and 16-sided brand SVG paths as the web kit.
 
-## Does not own
+## Workspaces
 
-- Its registration as a tab, done by `:sample:app`'s `appGraph`.
-- Native ad rendering, owned by [`:library:core:ui`](../../../library/core/ui/README.md); this
-  module supplies only the quick-tools card styling.
+Material Colors uses a connected bento palette: one large primary swatch followed by the remaining scheme roles, with fewer columns on narrow screens and at larger font sizes. Each tile copies its ARGB value. Android 12+ system accent and neutral palettes remain real platform resources, arranged as horizontally scrollable tone strips. The header stays above the scrolling content, and the app's background and custom accent scheme are unchanged. The marketing sheet mirrors the app-role bento and copying; browser previews do not invent Android system palettes.
 
-## Depends on
+| Destination | Sections and tools |
+| --- | --- |
+| Quick Tools | Sensors: Compass, Bubble Level. Light & signals: Flash Dimmer, combined Morse & SOS. Hardware & sound: Water Eject. Wellbeing: Breathe. Colors, last: Material Colors. |
+| Measure | Length & angle: Surface Ruler, Protractor. Convert & split: Unit Converter, Tip & Bill Splitter. Count & time: Counter, Reaction Test. |
+| Play & Decide | Decision Wheel, Random Number, Coin Flip, Dice Roll. |
 
-- `:sample:core:analytics` and `:sample:integration:ads`.
-- [`:library:apptoolkit`](../../../library/apptoolkit/README.md) for ad slots and screen contracts.
+The widgets follow the marketing kit's (`marketing/ui`): `views/catalog/LiveWidget.kt` draws its live widget (a small uppercase label, the tool's face in its shape on a tint of its accent, a bold value and a note), and the tool accents in `iconColors()` are the kit's `--tk-*` tokens. `RedesignVisualTest` renders the three tabs, light and dark, to `build/outputs/redesign/` for side-by-side review with the kit.
 
-## Used by
+Tool headings and individual overview cards join the shared screen entrance cascade. Sections do not animate as a second enclosing layer. Motion settings and reduced motion remain owned by the library. `ToolDesignTheme` supplies fixed light and dark product accent colours to the workspaces and their tool sheets. The app theme retains ownership of the screen background and neutral surfaces. ToolWorkspace reserves the shell padding outside its clipped scrolling viewport, so cards and their animations cannot draw under the navigation bars. The marketing preview uses the same roles in `src/theme/toolkit.css`.
 
-- `:sample:app`, for DI and the navigation graph.
+`ToolkitTilesScreen(footer = ...)` takes a host slot drawn after the Quick Tools sections and hidden while searching. The app passes the apps feature's "More apps" carousel there, since sibling features may not depend on each other.
 
-## Flow chart
+All three primary tabs read their localized search query from `LocalShellSearch`. Empty sections disappear when searching. Quick Tools no longer shows category chips or collapse controls; the old expansion preference is retained for compatibility and is not applied to the new overview.
 
-```mermaid
-flowchart TD
-    Screen[ToolkitTilesScreen] -->|catalog events| VM[ToolkitTilesViewModel]
-    VM --> Tiles[ToolkitTilesRepository]
-    Tiles --> Catalogue[Source-neutral catalog]
-    Tiles --> Preferences[ToolkitTilesPreferencesDataSource]
-    Preferences --> Store[Preferences DataStore]
-    Tiles --> QS[QuickSettingsTilesLocalDataSource]
-    Tiles --> TorchCapability[TorchRepository capability Flow]
-    TorchCapability --> Filter{Flashlight available?}
-    Catalogue --> Filter
-    Filter -->|no| Remove[Remove SOS / Morse / dimmer]
-    Filter -->|yes| Published[Published catalog state]
-    Remove --> Published
-    Published --> VM
-    VM --> UiMap[Resource and artwork UI mappers]
-    UiMap --> Screen
-    Screen --> ToolVMs[Dedicated stateful tool ViewModels]
-    ToolVMs --> Repositories[Sensor / breathing / system / torch repositories]
-    Repositories --> Sources[Feature-local Android data sources]
-    Sos[SosRepository] --> Morse[MorseRepository single playback job]
-    Morse --> Torch[TorchRepository shared state]
-    Services[Quick Settings services] --> Repositories
-    Services -->|observe while listening| Torch
-    Services --> Counter[CounterRepository persisted count]
-    ToolVMs --> Counter
-    Counter --> Preferences
-```
+The overview and sheet use the same entry-owned tool ViewModels. Currency, tip selection, converter values, counter updates and chance results therefore stay in sync. Dice and coin visuals are directly interactive; the surrounding card opens their sheet. Reaction Test Start both opens the sheet and starts a round.
 
-## Architectural decisions
+Counter in Measure and Random Number in Play use the shared `AnimatedDigit` for their overview values. Place values stay keyed from the right across carries, signed results keep their reading order, and accessibility receives the complete value once. Random Number retains its `?` placeholder and rolls that slot into the first result. The marketing widgets mirror changed-digit motion and respect reduced motion; initial rendering remains still.
 
-- Repositories are the only entry points to platform-backed sources; ViewModels and framework
-  services do not call sensor, torch, haptics, or settings sources directly.
-- The catalog is source-neutral. Resource IDs, icons, descriptions, and ad styling are mapped in the
-  UI layer after availability filtering.
-- `currentTileCategories()` is suspend and safe to call from the main thread. The Quick Settings
-  source moves its Settings provider and preference snapshot reads to injected IO; the ViewModel
-  switches only its own UI-model mapping to Default.
-- Torch state is shared because in-app tools and system-created services can operate concurrently.
-  Morse start/stop operations are suspending and serialized. Replacement and shutdown await the
-  previous job's final torch-off command before returning; SOS delegates to the same owner.
-- Counter writes remain process-owned while callers await completion and receive storage failures.
-  Tile services catch and report action failures, and a destroyed caller cannot cancel an accepted write.
-- Membership writes pass through `ToolkitTilesRepository`. DI supplies the request-key-to-component
-  registry to the local source; data code does not import UI service declarations.
-- Each tool with behavior of its own has a dedicated ViewModel, one class per file in `ui/`, with
-  its `XToolUiState` in `ui/states/` and its `XToolEvent` in `ui/contracts/`. Every one extends
-  `LoggedScreenViewModel` and reports under the `ToolkitTiles` screen name, because the tools open in
-  that screen's bottom sheet, with the class name as `viewModelName`. One-shot work (a flip, a roll,
-  a counter write, a torch change) runs through `launchReport`, and repository streams (sensor
-  readings, torch and Morse playback state, the stored count) through `collectReport` for the
-  ViewModel's lifetime. The routes in `ToolRoutes.kt` collect `state` and send events: the Compass
-  and Level sensors start and stop with the app's foreground state, and every tool is dismissed when
-  its sheet leaves composition. No tool ViewModel queues messages, so the routes host no
-  `MessageHost`; their failures are only reported.
-- Material Colors has no ViewModel; its dialog is local UI behavior.
-- The catalogue screen is on `core.ui.screen`. `ToolkitTilesViewModel` exposes `state`, whose
-  `categories` is a `Loadable`, and builds the UI models on the default dispatcher, its own CPU work.
-  Adding a tile is a state flag, `pendingTileRequest`, that `ToolkitTilesScreen` turns into the
-  Quick Settings request and clears with `TileRequestLaunched`. The no-tile message is a queued
-  message shown as a toast, because it comes while a tool's bottom sheet would cover a snackbar.
-  `ToolkitTilesScreen` and the stateless `ToolkitTilesScreenContent` share `ToolkitTilesScreen.kt`.
+## State and lifecycle
 
-## Public contracts
+- Counter remains DataStore-backed and shared with its Quick Settings service. Accepted writes survive the caller disappearing; storage failures are reported.
+- Bill, converter, random-range, ruler draft calibration/reading/range, protractor, Morse input, dice/coin outcomes and wheel choices use `SavedStateHandle`. Dismissing a sheet retains inputs and results. A new process never resumes audio or flashing automatically.
+- Compass and level overview instances have distinct keys from sheet instances. Each starts sampling only while its lifecycle is started and stops on stop or disposal. The sheet retains its existing foreground sensor handling.
+- Torch strength writes cancel superseded UI requests. Leaving the foreground or disposing the tool stops its in-app torch work. Morse and SOS share the existing serialized playback owner, so replacement waits for the previous final torch-off command.
+- Water Eject starts only from an explicit action. It requests transient audio focus and plays a finite 30-second 165 Hz cycle at a conservative track gain. Stop, focus loss, dismissal, backgrounding and ViewModel cancellation release playback and audio focus. It never changes system volume or requests a foreground service, microphone access or a wake lock. The UI does not promise waterproofing or repair.
+- Wheel choices accept 2–12 non-blank lines. A spin selects one index uniformly, locks editing and resolves that segment under the fixed pointer. Dismissal settles the selected result rather than drawing again. Motion and haptic feedback belong to the Compose view, and animation follows the system motion scale.
+- Reaction Test cancels its pending signal when the app stops. Foreground return does not manufacture a reaction result.
 
-- `ToolkitTilesRepository`, `TorchRepository`, `MorseRepository`, `CounterRepository`,
-  `ToolkitTilesViewModel`, the
-  dedicated tool ViewModels, `ToolkitTilesScreen`, `ToolkitTilesRoute` and the source-neutral
-  tile models.
+## Numeric tools
 
-## Internal implementations
+Bill splitting uses decimal arithmetic and rounds each share up to cover the total. USD, EUR, GBP, RON and INR use two fractional digits; JPY uses whole yen. Currency changes formatting and precision, not exchange rates. Turning off the tip preserves the chosen rate but applies zero until re-enabled.
 
-- Camera2 torch discovery/control, sensor sampling, haptics, Quick Settings inspection, UI
-  catalogue mapping, and tool composables.
+Unit Converter retains bidirectional conversion and physical validation. Swap exchanges units and values while keeping the active quantity. Native menus and focus behavior replace the web controls.
 
-## Source ownership and risks
+Surface Ruler and Protractor use full-screen native dialogs. The ruler covers the whole display, cutout included, with the system bars hidden, so its scales start at the physical edge. Its scales run down the long side: in portrait with the vertical DPI, in landscape with the horizontal DPI, times the persisted calibration. Simple shows the scales and a reading dragged from zero; advanced adds the measurement range and the settings in `RulerSettings` (units, edge, zero end, inch steps), which `RulerRepository` saves as they change. Calibration keeps room for its reference line at maximum scale so its controls do not move. Protractor places its baseline on the left in portrait and on the bottom with a right control dock in wide windows. Its touch mapping shares geometry with drawing and retains an accessible slider and angle presets.
 
-Android platform APIs are isolated in `data/local` sources. ViewModels and services use
-repositories as the data-layer entry points, while source interfaces provide deterministic test
-boundaries around external resources.
+## Ads and Quick Settings
 
-`ToolkitTilesRepository` removes SOS, Morse and Flash Dimmer from the published catalogue when the
-shared torch capability reports that no flashlight is available. Catalogue resource IDs and
-artwork identifiers live in UI models and mappers; the repository publishes only source-neutral
-IDs, status, behavior kind, and platform request keys.
+The existing Quick Tools native placement follows Light & signals (or Sensors when torch tools are unavailable) and is suppressed during search. `QuickToolsNativeAdViewFactory` lays it out as the marketing kit's `.qt-ad`: the disclosure label drawn as a "Sponsored content" section title inside the `NativeAdView`, then a card with the icon in a nine-sided cookie and a full-width tonal action. Measure adds one native placement between Convert & split and Count & time. Play & Decide adds one below the complete Chance group. Both use the existing general native ad unit, with separate screen-owned caches and placement keys. The shared ad state loads before exposing the slot, so loading or unavailable ads leave no gap and rendering reuses the loaded ad. Search suppresses both the request and placement. Tool sheets and full-screen tools add no placements. Native ad rendering and ownership remain in core UI.
 
-`TorchRepository` has a contract because Morse/SOS, the in-app dimmer and a system-created Quick
-Settings service share one observable source of truth. `MorseRepository` owns the only patterned
-torch playback job; SOS delegates its fixed message to it so custom Morse, SOS and steady
-brightness controls cannot compete. Torch strength is exposed on Android 13+ when hardware reports
-multiple levels; older and single-level devices fall back to a binary toggle.
+Quick Settings service names, request keys and the released application ID remain unchanged. Android 13+ uses the existing system add-tile request. Older releases retain manual setup instructions. The catalogue still hides torch tools on devices without a torch. No new manifest permission is introduced by this redesign.
 
-### Quick Settings tile services
+## Product analytics
 
-Every service extends `TrackedTileService`. Tiles backed by shared state (Flash Dimmer, Counter)
-render from their repository between `onStartListening` and `onStopListening`, so changes made by the
-in-app tool, the system flashlight or SOS/Morse appear while the panel is open. Rendering a snapshot
-once instead leaves a stale tile, most visibly when the torch was already on before the process
-started and the camera reports it only after the first render.
+The shared tool sheet host emits one custom `tool_opened` event on entry, including full-screen
+ruler and protractor. It replaces Quick Tools' former `view_item` opening signal; Measure and Play
+now have the same coverage. Recomposition does not emit another opening. Restoring an open tool
+is a new visit. Material Colors has its own sheet and emits the same opening event there.
 
-The Counter tile and the in-app Counter share one DataStore-backed count through
-`CounterRepository`. System UI unbinds tile services freely, so an in-memory count would silently
-reset; closing the Counter sheet no longer clears the count, and its Reset button resets the tile.
+`tool_used` retains its once-per-use-session semantics and now includes the bounded `workspace`
+(`quick_tools`, `measure`, `play`). Inline coin, dice and counter actions also count as use;
+they do not manufacture a sheet opening. A use-session can include inline actions followed by a
+sheet visit until that tool's existing lifecycle resets its tracker.
 
-Tile subtitles exist only from Android 10, below the module's minimum SDK. `TileText` moves a tap's
-result into the label on Android 8 and 9, where it would otherwise be invisible. Declining the
-system add-tile prompt is treated as the user's choice, not as a failure.
+Water Eject counts use only when playback publishes its first countdown. Stop, background or
+dismissal resets its use-session. Each accepted playback job reports `tool_cycle_finished` with
+`completed`, `cancelled` or `failed`, including failures before playback. Duplicate Start and idle
+Stop do not produce extra cycle results. Cancellation reasons are grouped, and completion means
+the audio cycle returned, not that water was removed. No audio, inputs, readings, wheel labels,
+winners, bill amounts or search text are attached to these events.
 
-## Search
+Consent, transport, destination screen views and ad impressions remain library-owned.
 
-The tab declares a search field in its app bar, and `ToolkitTilesScreen` reads its query from
-`LocalShellSearch`. After the filter chips, `search` keeps a whole category whose name matches, or
-only the tiles whose title or summary match; every match is shown expanded, whatever the stored
-expansion. Titles and summaries are string resources, so the query is matched against them in the
-current language. `ToolkitTilesSearchTest` covers the rules.
+## Validation
 
-## Migration notes
-
-The catalogue and status pass formerly lived in pass-through use cases. They remain repository
-work, while all Android resource and artwork mapping now happens in the UI layer. Stateful or
-platform-backed bottom-sheet tools retain dedicated ViewModels; the catalogue ViewModel owns only
-catalogue, filter, expansion, ad and add/setup state.
-
-### Quick Settings membership and Android versions
-
-`NotAdded` means an unpinned Quick Settings service on Android 13+, where the system add-tile
-request is supported. In-app sensor tools remain available. Older versions omit the add action and
-the filter, and retain the Tile-ready tools instructions for manually editing Quick Settings.
-The helper card reuses those localized instructions rather than describing missing tool functionality.
-
-Membership normalizes Android's custom tile component format. When secure settings are unavailable,
-system tile lifecycle callbacks and successful pin results supply locally recorded membership.
-The open tool sheet refreshes after pin requests.
-
-No tool here runs in the background. Every tool works while its sheet is open, which keeps the
-feature free of foreground services, wake locks, and the Play Console declarations they carry.
-
-Navigation keys and the complete graph live in `:sample:app` under `app/navigation`.
-Features expose callbacks rather than importing app-owned route keys.
-
-
-## Service components
-
-Quick Settings entry points live in the feature services package. Their manifest component names
-changed from ui.services to services in pre28. Remove and re-add any sample tiles pinned before
-that update. Tile IDs and preference keys are unchanged; tile text models live in ui/models.
-
-## Shared presentation
-
-- `DiceRollTool` is the only public dice entry point; its renderer stays private.
-- `MessageToastHost` from core UI presents queued tool messages with short errors, preserving the
-  sheet behavior without a local copy of the host.
-- `ToolkitTilesNativeAdViewFactory` adapts the default Compact holder's padding, icon size and
-  headline cap. `NativeAdStyle` owns the round badge, inset and text-action appearance.
+Run the tiles unit and Compose tests, app navigation/DI tests, module-boundary verification and Android lint. `RedesignStateTest` covers currency/tip restoration, converter swaps, wheel locking and selection, protractor geometry and audio cancellation/retry. `RedesignVisualTest` renders native overview captures under Robolectric for comparison with marketing. Hardware behavior still needs a device check, especially sensor calibration, torch strength and speaker output.

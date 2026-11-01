@@ -2,13 +2,14 @@
 name: marketing-startup
 description: >
   Start any marketing task in an app repository: read the product, set up the
-  marketing/ folder and a campaign under marketing/social-campaigns/<campaign-slug>/, write
+  marketing/ folder (creative/, research/) and a campaign under
+  marketing/creative/social-campaigns/<campaign-slug>/, write
   the campaign README, and hand off to the skills that make the media, tag it
   and caption it. Load first for any campaign, video, carousel, store graphic or
   press asset.
 metadata:
   author: Mihai-Cristian Condrea
-  last-updated: '2026-10-16'
+  last-updated: '2026-10-28'
   keywords:
   - marketing
   - startup
@@ -46,17 +47,26 @@ marketing/
 ├── briefs/                   # brand.md, product-positioning.md
 ├── ui/                       # the UI kit: app screens as web components (marketing-ui skill)
 ├── assets/                   # logos, device frames, shapes, store badges, fonts
-├── store/
-│   └── google-play/          the store listing (store-listing skill)
-├── social-campaigns/
-│   ├── <campaign-slug>/      # one folder per campaign in progress, every media type
-│   └── completed/            # published campaigns
+├── research/                 # analytics exports and other input, each with a README (source, dates); never quoted
+├── creative/                 # everything that is made, each with its source
+│   ├── store/
+│   │   └── google-play/      # the store listing (store-listing skill)
+│   ├── social-campaigns/
+│   │   ├── <campaign-slug>/  # one folder per campaign in progress, every media type
+│   │   └── completed/        # published campaigns
+│   ├── templates/            # starting points for new work, such as ui-motion-starter (Remotion over the UI kit)
+│   └── <content>/            # optional: a content series the app publishes, such as lessons/ or news/
+├── scripts/                  # launchers that list and render campaigns, once there is one
 └── skills/
     ├── llms.txt              # one line per skill
     ├── built-in/             # these skills: edit freely
     ├── design-taste/         # installed from their authors: never edit
     └── google/               # installed from Google: never edit
 ```
+
+Make a folder only when it gets its first file; an empty `creative/templates/` or `research/` is not added.
+`research/` is input, not output: analytics and concept exports inform the briefs and the screens, but their numbers
+never appear in copy, captions or store text.
 
 Skills under `design-taste/` and `google/` stay exactly as their creators published them. To change how they are used, change `STARTUP.md` or a built-in skill, not them.
 
@@ -65,7 +75,7 @@ Skills under `design-taste/` and `google/` stay exactly as their creators publis
 A campaign is one release or idea, published as any mix of video, images, carousels and text. Its slug is short, lowercase and hyphenated (`ask-studio-bot`, `stay-curious-trailer`).
 
 ```text
-marketing/social-campaigns/
+marketing/creative/social-campaigns/
 ├── <campaign-slug>/                    # in progress
 │   ├── README.md                       # what it is, how to build it, QA notes (template below)
 │   ├── <campaign-slug>-metadata.json   # metadata skill
@@ -96,9 +106,9 @@ Thumbs.db
 
 `output/` is never committed: every file in it is rebuilt from `source/`, and the finished files go to the platforms and the owner's archive, not to Git. Reviewers get a preview sent to them, not a commit.
 
-When a campaign is published, move its folder to `social-campaigns/completed/<campaign-slug>/` (fix any relative paths in `source/` for the extra folder level) and note the publish date in its README. Completed campaigns are a record: never re-render or edit them unless the owner asks. A new idea, even a variation of a completed one, is a new campaign.
+When a campaign is published, move its folder to `creative/social-campaigns/completed/<campaign-slug>/` (fix any relative paths in `source/` for the extra folder level) and note the publish date in its README. Completed campaigns are a record: never re-render or edit them unless the owner asks. A new idea, even a variation of a completed one, is a new campaign.
 
-`social-campaigns/completed/` holds one `README.md` that says so, created with the folder:
+`creative/social-campaigns/completed/` holds one `README.md` that says so, created with the folder:
 
 ```markdown
 # Completed campaigns
@@ -108,7 +118,7 @@ Every campaign in this folder is published and finished. It is kept as a record 
 - Do not modify, re-render or update these campaigns, unless the owner asks for one specifically.
 - They may not follow the current marketing skills, folder layout or tooling. That is expected: they are legacy
   code that served its campaign, not a template to keep up to date.
-- To reuse one, copy what you need into a new campaign under `social-campaigns/` and bring it up to date there.
+- To reuse one, copy what you need into a new campaign under `creative/social-campaigns/` and bring it up to date there.
 ```
 
 When only a few campaigns are completed, the owner may still choose to bring them up to date; with many, the rule above is what keeps the folder maintainable.

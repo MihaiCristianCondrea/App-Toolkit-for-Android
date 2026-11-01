@@ -23,15 +23,17 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.telemetry.mo
 object AppScreenTracking {
     object Screens {
         val MAIN = TrackedScreen(name = "Main", className = "MainScreen")
-        val APPS_LIST = TrackedScreen(name = "AppsList", className = "AppsListScreen")
         val TOOLKIT_TILES = TrackedScreen(name = "ToolkitTiles", className = "ToolkitTilesScreen")
+        val PLAY = TrackedScreen(name = "Play", className = "PlayScreen")
+        val NUMBERS = TrackedScreen(name = "Numbers", className = "NumbersScreen")
         val COMPONENTS = TrackedScreen(name = "Components", className = "ComponentsScreen")
         val ARTICLE_DEMO = TrackedScreen(name = "ArticleDemo", className = "ArticleDemoScreen")
 
         val all: List<TrackedScreen> = listOf(
             MAIN,
-            APPS_LIST,
             TOOLKIT_TILES,
+            NUMBERS,
+            PLAY,
             COMPONENTS,
             ARTICLE_DEMO,
         )

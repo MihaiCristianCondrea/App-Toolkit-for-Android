@@ -20,10 +20,8 @@ package com.mihaicristiancondrea.android.apps.apptoolkit.di
 import android.content.Context
 import com.mihaicristiancondrea.android.apps.apptoolkit.BuildConfig
 import com.mihaicristiancondrea.android.apps.apptoolkit.core.apptoolkit.di.appToolkitHostModules
-import com.mihaicristiancondrea.android.apps.apptoolkit.core.datastore.di.dataStoreModule
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.about.di.aboutModule
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.di.appsModule
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.components.di.componentsModule
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.display.di.displayModule
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.faq.utils.constants.FaqConstants
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.onboarding.di.onboardingModule
@@ -40,12 +38,10 @@ import org.koin.core.module.Module
 /** The exact Koin graph started by the sample application. */
 fun sampleAppModules(hostBuildConfig: AppToolkitHostBuildConfig): List<Module> = buildList {
     addAll(sampleToolkitModules(hostBuildConfig = hostBuildConfig))
-    add(dataStoreModule)
     add(appModule)
     add(tilesModule)
     add(appsModule)
     add(widgetModule)
-    add(componentsModule)
     add(adsIntegrationModule)
     add(onboardingModule)
 }

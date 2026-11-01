@@ -15,10 +15,8 @@
   ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
   -->
 <resources>
-    <string name="onboarding_feature1_description">App Toolkit, AppToolkit kitaplığının farklı yönlerini öne çıkarmak ve Android deneyiminizi iyileştirmek için tasarlanmış uygulamalardan oluşan bir seçki sunar. AppToolkit kitaplığıyla neler yapılabileceğini görün.</string>
-    <string name="onboarding_feature1_title">Uygulamaları keşfedin</string>
-    <string name="onboarding_personalization_description">Bu uygulama, AppToolkit kitaplığının çok yönlü ve kullanıcı odaklı uygulamalar nasıl oluşturduğunu gösterir. Kitaplığın farklı özelliklerini ve uygulamalarını görmek için örnek uygulamaları keşfedin.</string>
-    <string name="onboarding_personalization_title">AppToolkit kitaplığını iş başında görün</string>
-    <string name="onboarding_welcome_description">AppToolkit kitaplığının yeteneklerini keşfedin. Kitaplığın gücünü göstermek ve Android geliştirme ile kullanıcı deneyiminizi iyileştirmek için oluşturulmuş uygulamaları keşfedin.</string>
+    <string name="onboarding_welcome_description">Günlük araçlar, sensörler ve karar yardımcıları, hepsi tek bir yerde.</string>
     <string name="onboarding_welcome_title">App Toolkit’e hoş geldiniz</string>
+    <string name="onboarding_quick_settings_title">Tek dokunuşla Hızlı Ayarlar</string>
+    <string name="onboarding_quick_settings_description">Uygulamayı açmadan yazı tura atmak, el fenerini ayarlamak veya nesneleri saymak için Android Hızlı Ayarlar bölümüne araçlar ekleyin.</string>
 </resources>

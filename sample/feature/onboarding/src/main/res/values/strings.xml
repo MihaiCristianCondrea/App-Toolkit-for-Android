@@ -15,10 +15,8 @@
   ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
   -->
 <resources>
-    <string name="onboarding_feature1_description">App Toolkit introduces a selection of applications, explore the list of apps and open your favorites.</string>
-    <string name="onboarding_feature1_title">Discover applications</string>
-    <string name="onboarding_personalization_description">This app demonstrates how the AppToolkit library can be used in your own projects to create professional and user-friendly apps.</string>
-    <string name="onboarding_personalization_title">See the AppToolkit library in action</string>
-    <string name="onboarding_welcome_description">Explore the capabilities of the AppToolkit library. Discover features, components, and tools that help you build better apps faster.</string>
+    <string name="onboarding_welcome_description">Everyday tools, sensors, and decision helpers, all in one place.</string>
     <string name="onboarding_welcome_title">Welcome to App Toolkit</string>
+    <string name="onboarding_quick_settings_title">Quick Settings in one tap</string>
+    <string name="onboarding_quick_settings_description">Add tools to Android Quick Settings to flip a coin, adjust your flashlight, or count items without opening the app.</string>
 </resources>

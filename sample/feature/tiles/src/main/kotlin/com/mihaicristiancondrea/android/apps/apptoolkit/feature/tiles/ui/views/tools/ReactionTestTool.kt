@@ -17,6 +17,7 @@
 
 package com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.tools
 
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.icons.ToolSymbols
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -31,9 +32,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.PlayArrow
-import androidx.compose.material.icons.outlined.Refresh
 import androidx.compose.material3.AssistChip
 import androidx.compose.material3.AssistChipDefaults
 import androidx.compose.material3.Card
@@ -197,7 +195,7 @@ fun ReactionTestTool(
                 measurements = ButtonMeasurements.Medium,
                 onClick = onStart,
                 enabled = state.phase != ReactionTestPhase.Waiting && state.phase != ReactionTestPhase.Signal,
-                icon = ToolkitIcon.Vector(Icons.Outlined.PlayArrow),
+                icon = ToolkitIcon.Vector(ToolSymbols.PlayArrow),
                 label = stringResource(
                     id = when (state.phase) {
                         ReactionTestPhase.Idle -> R.string.tool_reaction_test_start
@@ -211,7 +209,7 @@ fun ReactionTestTool(
                     style = GeneralButtonStyle.Outlined,
                     measurements = ButtonMeasurements.Medium,
                     onClick = onReset,
-                    icon = ToolkitIcon.Vector(Icons.Outlined.Refresh),
+                    icon = ToolkitIcon.Vector(ToolSymbols.Refresh),
                     label = stringResource(id = R.string.tool_counter_reset),
                 )
             }

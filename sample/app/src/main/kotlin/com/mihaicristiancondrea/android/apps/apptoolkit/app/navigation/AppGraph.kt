@@ -18,18 +18,21 @@
 package com.mihaicristiancondrea.android.apps.apptoolkit.app.navigation
 
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.Apps
+import androidx.compose.material.icons.filled.Straighten
+import androidx.compose.material.icons.filled.Casino
+import androidx.compose.material.icons.outlined.Casino
+import androidx.compose.material.icons.outlined.Straighten
 import androidx.compose.material.icons.outlined.Widgets
 import androidx.compose.ui.res.stringResource
 import androidx.navigation3.runtime.NavKey
 import com.mihaicristiancondrea.android.apps.apptoolkit.R
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.R as AppsR
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.ui.AppsListScreen
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.ui.MoreAppsSection
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.components.R as ComponentsR
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.components.ui.ArticleDemoScreen
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.components.ui.ComponentsScreen
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.settings.ui.AboutSettingsScreen
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.R as TilesR
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.PlayScreen
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.NumbersScreen
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.ToolkitTilesScreen
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.main.ui.navigation.toolkitFooter
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.main.ui.navigation.toolkitGraph
@@ -39,6 +42,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.ico
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.icons.ToolkitIconReplayMode
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.ads.AdsConfig
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.ads.BottomAppBarNativeAdBanner
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.ui.AboutScreen
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.ui.navigation.aboutPages
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.ShellGraph
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.TabSearch
@@ -51,8 +55,9 @@ import org.koin.core.qualifier.named
 const val ACTION_OPEN_SETTINGS: String = "com.d4rk.android.apps.apptoolkit.action.OPEN_SETTINGS"
 
 /**
- * The sample's whole navigation: two tabs, the drawer, the overflow menu, the components page and
- * its article bar demo, the optional bottom banner and the intents it answers. The demo registers a
+ * The sample's whole navigation: three tabs, the drawer, the overflow menu, the debug pages (the
+ * components page and its article bar demo), the optional bottom banner and the intents it answers.
+ * The demo registers a
  * small bar, the one an article draws anyway, so it does not open large for its first frame.
  * `toolkitGraph` adds the Toolkit's own pages (settings, help, support, the first-launch start
  * screens and the rest).
@@ -60,12 +65,12 @@ const val ACTION_OPEN_SETTINGS: String = "com.d4rk.android.apps.apptoolkit.actio
  * Routes and the graph belong to `:sample:app` under app/navigation. Features expose callbacks
  * rather than importing app route keys.
  *
- * @param showComponents Whether the drawer offers the components showcase: in debug builds, or once
- * it has been unlocked.
+ * @param showDebugPages Whether the drawer offers the debug pages, the components showcase: in debug
+ * builds.
  * @param onShowChangelog Shows the changelog dialog, which the drawer's Updates entry opens.
  */
 fun appGraph(
-    showComponents: Boolean,
+    showDebugPages: Boolean,
     onShowChangelog: () -> Unit,
 ): ShellGraph = toolkitGraph(
     appTitle = R.string.app_name,
@@ -82,30 +87,41 @@ fun appGraph(
         // The app bar holds a search field for the tools; the screen filters by its query.
         search = TabSearch(hint = TilesR.string.tiles_search_hint),
     ) {
-        ToolkitTilesScreen()
+        // "More apps" ends Quick Tools: the apps feature's carousel, placed by the app since the two
+        // features may not depend on each other.
+        ToolkitTilesScreen(footer = { MoreAppsSection() })
     }
     tab(
-        key = AppsListRoute,
-        label = AppsR.string.apps_tools_title,
-        icon = ToolkitIcon.Vector(Icons.Outlined.Apps),
-        // Every `Apps` variant bundled with Compose is squares; the selected state uses the dot
-        // grid Material Symbols draws for this glyph.
-        selectedIcon = ToolkitIcon.Resource(R.drawable.ic_apps_dots),
-        search = TabSearch(hint = AppsR.string.apps_search_hint),
+        key = NumbersRoute,
+        label = TilesR.string.measure_title,
+        search = TabSearch(hint = TilesR.string.tiles_search_hint),
+        icon = ToolkitIcon.Vector(Icons.Outlined.Straighten),
+        selectedIcon = ToolkitIcon.Vector(Icons.Filled.Straighten),
     ) {
-        AppsListScreen()
+        NumbersScreen()
     }
-    page<ComponentsRoute>(title = { stringResource(ComponentsR.string.components_title) }) {
-        val navigator = com.mihaicristiancondrea.android.libs.apptoolkit.navigation.LocalShellNavigator.current
-        ComponentsScreen(onOpenArticleDemo = { navigator.navigate(ArticleDemoRoute(it)) })
+    tab(
+        key = PlayRoute,
+        label = TilesR.string.play_title,
+        icon = ToolkitIcon.Vector(Icons.Outlined.Casino),
+        selectedIcon = ToolkitIcon.Vector(Icons.Filled.Casino),
+        search = TabSearch(hint = TilesR.string.tiles_search_hint),
+    ) {
+        PlayScreen()
     }
-    page<ArticleDemoRoute>(
-        topBar = TopBarStyle.Small,
-        title = { stringResource(ComponentsR.string.components_section_article_bar) },
-    ) { key ->
-        ArticleDemoScreen(branded = key.branded)
+    if (showDebugPages) {
+        page<ComponentsRoute>(title = { stringResource(ComponentsR.string.components_title) }) {
+            val navigator = com.mihaicristiancondrea.android.libs.apptoolkit.navigation.LocalShellNavigator.current
+            ComponentsScreen(onOpenArticleDemo = { navigator.navigate(ArticleDemoRoute(it)) })
+        }
+        page<ArticleDemoRoute>(
+            topBar = TopBarStyle.Small,
+            title = { stringResource(ComponentsR.string.components_section_article_bar) },
+        ) { key ->
+            ArticleDemoScreen(branded = key.branded)
+        }
     }
-    aboutPages { AboutSettingsScreen() }
+    aboutPages { AboutScreen() }
     banner {
         val config: AdsConfig = koinInject(qualifier = named(AdsQualifiers.BOTTOM_NAV_BAR_NATIVE_AD))
         BottomAppBarNativeAdBanner(
@@ -116,7 +132,7 @@ fun appGraph(
     }
 
     drawer {
-        if (showComponents) {
+        if (showDebugPages) {
             link(
                 key = ComponentsRoute,
                 label = ComponentsR.string.components_title,
@@ -131,9 +147,15 @@ fun appGraph(
 
 /**
  * The tab a launch opens on, from the startup page chosen in the display settings, which stores
- * the tab's [AppsListRoute.ROUTE_ID] or [ToolkitTilesRoute.ROUTE_ID].
+ * the tab's [NumbersRoute.ROUTE_ID], [PlayRoute.ROUTE_ID] or [ToolkitTilesRoute.ROUTE_ID]. An install
+ * that stored the removed Apps page, [LEGACY_APPS_ROUTE_ID], opens Quick Tools, where its apps now are.
  */
 fun startKeyFor(route: String): NavKey = when (route) {
-    AppsListRoute.ROUTE_ID -> AppsListRoute
+    PlayRoute.ROUTE_ID -> PlayRoute
+    NumbersRoute.ROUTE_ID -> NumbersRoute
+    LEGACY_APPS_ROUTE_ID -> ToolkitTilesRoute
     else -> ToolkitTilesRoute
 }
+
+/** The startup-page value of the Apps page that "More apps" in Quick Tools replaced. */
+internal const val LEGACY_APPS_ROUTE_ID: String = "apps_list"

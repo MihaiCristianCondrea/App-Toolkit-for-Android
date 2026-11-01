@@ -64,8 +64,7 @@ class RepositoryConventionsTest {
     fun storageAndDeviceInspectionDoNotImportUiHelpers() {
         val consumers = productionSources().filter { source ->
             val path = source.relativePath()
-            path.startsWith("sample/core/datastore/") ||
-                (path.startsWith("library/feature/issuereporter/") && "/data/" in path)
+            path.startsWith("library/feature/issuereporter/") && "/data/" in path
         }
         assertTrue(consumers.isNotEmpty())
         val violations = consumers.filter { source ->

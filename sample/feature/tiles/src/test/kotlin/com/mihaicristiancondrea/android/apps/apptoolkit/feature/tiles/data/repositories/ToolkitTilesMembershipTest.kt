@@ -42,11 +42,11 @@ class ToolkitTilesMembershipTest {
             DefaultToolkitTilesPreferencesDataSource(FakePreferencesDataStore()),
             source,
         )
-        repository.recordTileMembership("counter", true)
-        val added = repository.currentTileCategories().flatMap { it.tiles }.single { it.requestKey == "counter" }
+        repository.recordTileMembership("coin_flip", true)
+        val added = repository.currentTileCategories().flatMap { it.tiles }.single { it.requestKey == "coin_flip" }
         assertEquals(ToolkitTileStatus.Added, added.status)
-        repository.recordTileMembership("counter", false)
-        val removed = repository.currentTileCategories().flatMap { it.tiles }.single { it.requestKey == "counter" }
+        repository.recordTileMembership("coin_flip", false)
+        val removed = repository.currentTileCategories().flatMap { it.tiles }.single { it.requestKey == "coin_flip" }
         assertEquals(ToolkitTileStatus.NotAdded, removed.status)
     }
 }

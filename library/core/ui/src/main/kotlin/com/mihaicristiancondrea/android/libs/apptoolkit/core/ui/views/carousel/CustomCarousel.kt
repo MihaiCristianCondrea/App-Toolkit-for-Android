@@ -100,12 +100,11 @@ fun <T> CustomCarousel(
 
         LargeVerticalSpacer()
 
-        DotsIndicator(
+        AospPageIndicator(
+            pagerState = pagerState,
             modifier = Modifier
-                .align(alignment = Alignment.CenterHorizontally)
+                .align(Alignment.CenterHorizontally)
                 .padding(bottom = SizeConstants.SmallSize),
-            totalDots = currentItems.size,
-            selectedIndex = pagerState.currentPage,
             dotSize = SizeConstants.MediumSize / 2,
         )
     }

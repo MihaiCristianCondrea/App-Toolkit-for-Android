@@ -20,7 +20,8 @@ package com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.ui.unit.dp
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -32,12 +33,16 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.consta
 fun ResultPill(
     label: String,
     modifier: Modifier = Modifier,
+    start: Boolean = true,
 ) {
     Box(
         modifier = modifier
             .background(
                 color = MaterialTheme.colorScheme.primaryContainer,
-                shape = CircleShape,
+                shape = RoundedCornerShape(
+                    topStart = if (start) 30.dp else 8.dp, bottomStart = if (start) 30.dp else 8.dp,
+                    topEnd = if (start) 8.dp else 30.dp, bottomEnd = if (start) 8.dp else 30.dp,
+                ),
             )
             .padding(
                 horizontal = SizeConstants.ExtraLargeSize,

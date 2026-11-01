@@ -44,7 +44,6 @@ import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.R
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.ui.contracts.AppActionLauncher
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.icons.ToolkitIcon
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.ads.AdsConfig
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.grid.GroupedGrid
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.grid.GroupedGridItem
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.grid.GroupedGridMeasurements
@@ -53,7 +52,7 @@ import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
 
 /**
- * Groups app-detail actions and their sponsored row in one [GroupedGrid].
+ * Groups app-detail actions in an ad-free [GroupedGrid].
  */
 @OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
@@ -62,7 +61,6 @@ internal fun AppDetailsQuickActions(
     isFavorite: Boolean,
     isAppInstalled: Boolean?,
     actionLauncher: AppActionLauncher,
-    adsConfig: AdsConfig,
     onFavoriteClick: () -> Unit,
 ) {
     val notificationsLabel: String = stringResource(id = R.string.app_details_notifications)
@@ -155,6 +153,5 @@ internal fun AppDetailsQuickActions(
         modifier = Modifier.padding(horizontal = SizeConstants.LargeSize),
         measurements = GroupedGridMeasurements.Small,
         iconShape = badgeShape,
-        adUnitId = adsConfig.bannerAdUnitId,
     )
 }

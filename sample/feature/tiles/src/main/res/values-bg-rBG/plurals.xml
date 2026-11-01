@@ -21,4 +21,14 @@
         <item quantity="other">инструменти %1$d</item>
     </plurals>
 
+    <plurals name="widget_wheel_choices">
+        <item quantity="one">%d избор · Отвори колелото</item>
+        <item quantity="other">%d избора · Отвори колелото</item>
+    </plurals>
+
+    <plurals name="widget_people">
+        <item quantity="one">%d човек</item>
+        <item quantity="other">%d души</item>
+    </plurals>
+
 </resources>

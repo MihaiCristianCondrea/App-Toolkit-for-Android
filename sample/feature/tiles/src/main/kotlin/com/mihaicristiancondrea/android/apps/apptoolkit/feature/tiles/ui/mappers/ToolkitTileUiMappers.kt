@@ -22,10 +22,10 @@ import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.R
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.models.ToolkitTileCategoryData
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.models.ToolkitTileData
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.models.ToolkitTileStatus
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.utils.constants.ToolkitTileIds
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.models.ToolkitTile
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.models.ToolkitTileCategory
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.models.ToolkitTileIcon
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.utils.constants.ToolkitTileIds
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
 
@@ -40,7 +40,7 @@ internal fun List<ToolkitTileCategoryData>.toUiModels(): ImmutableList<ToolkitTi
         )
     }.toImmutableList()
 
-private fun ToolkitTileData.toUiModel(): ToolkitTile {
+internal fun ToolkitTileData.toUiModel(): ToolkitTile {
     val visuals = id.tileVisuals()
     return ToolkitTile(
         id = id,
@@ -55,14 +55,20 @@ private fun ToolkitTileData.toUiModel(): ToolkitTile {
 }
 
 private fun String.categoryVisuals(): CategoryVisuals = when (this) {
-    "sensors" -> CategoryVisuals(R.string.tiles_category_sensors, ToolkitTileIcon.Compass)
+    "sensors" -> CategoryVisuals(R.string.section_sensors, ToolkitTileIcon.Compass)
     "utilities" -> CategoryVisuals(R.string.tiles_category_utilities, ToolkitTileIcon.Dice)
-    "system" -> CategoryVisuals(R.string.tiles_category_system, ToolkitTileIcon.FlashDimmer)
+    "chance" -> CategoryVisuals(R.string.section_chance, ToolkitTileIcon.Dice)
+    "measure" -> CategoryVisuals(R.string.measure_title, ToolkitTileIcon.Ruler)
+    "sound" -> CategoryVisuals(R.string.section_sound, ToolkitTileIcon.Water)
+    "system" -> CategoryVisuals(R.string.section_light, ToolkitTileIcon.FlashDimmer)
     "wellbeing" -> CategoryVisuals(R.string.tiles_category_wellbeing, ToolkitTileIcon.Breathing)
+    "colors" -> CategoryVisuals(R.string.tiles_category_colors, ToolkitTileIcon.Palette)
     else -> error("Unknown Toolkit Tiles category: $this")
 }
 
 private fun String.tileVisuals(): TileVisuals = when (this) {
+    ToolkitTileIds.DECISION_WHEEL -> TileVisuals(R.string.wheel_title, R.string.wheel_summary, ToolkitTileIcon.Wheel)
+    ToolkitTileIds.WATER_EJECT -> TileVisuals(R.string.water_title, R.string.water_summary, ToolkitTileIcon.Water)
     ToolkitTileIds.BUBBLE_LEVEL -> TileVisuals(
         R.string.tile_bubble_level_title,
         R.string.tile_bubble_level_summary,
@@ -99,7 +105,7 @@ private fun String.tileVisuals(): TileVisuals = when (this) {
         ToolkitTileIcon.Counter
     )
 
-    "material_colors" -> TileVisuals(
+    ToolkitTileIds.MATERIAL_COLORS -> TileVisuals(
         R.string.tool_material_colors_title,
         R.string.tool_material_colors_summary,
         ToolkitTileIcon.Palette
@@ -124,11 +130,16 @@ private fun String.tileVisuals(): TileVisuals = when (this) {
     )
 
     ToolkitTileIds.SOS -> TileVisuals(
-        R.string.tile_sos_title,
-        R.string.tile_sos_summary,
+        R.string.morse_sos_title,
+        R.string.morse_sos_summary,
         ToolkitTileIcon.Sos
     )
 
+    ToolkitTileIds.UNIT_CONVERTER -> TileVisuals(R.string.tile_converter_title, R.string.tile_converter_summary, ToolkitTileIcon.Converter)
+    ToolkitTileIds.RULER -> TileVisuals(R.string.tile_ruler_title, R.string.tile_ruler_summary, ToolkitTileIcon.Ruler)
+    ToolkitTileIds.PROTRACTOR -> TileVisuals(R.string.tile_protractor_title, R.string.tile_protractor_summary, ToolkitTileIcon.Protractor)
+    ToolkitTileIds.BILL_SPLITTER -> TileVisuals(R.string.tile_bill_splitter_title, R.string.tile_bill_splitter_summary, ToolkitTileIcon.BillSplitter)
+    ToolkitTileIds.RANDOM_NUMBER -> TileVisuals(R.string.tile_random_number_title, R.string.tile_random_number_summary, ToolkitTileIcon.RandomNumber)
     else -> error("Unknown Toolkit Tile: $this")
 }
 

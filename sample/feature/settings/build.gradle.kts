@@ -25,6 +25,5 @@ android {
 
 dependencies {
     testImplementation(project(":library:core:testing"))
-    api(project(":sample:core:datastore"))
     api(project(":library:apptoolkit"))
 }

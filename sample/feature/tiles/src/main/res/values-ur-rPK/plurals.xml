@@ -21,4 +21,14 @@
         <item quantity="other">%1$d ٹولز</item>
     </plurals>
 
+    <plurals name="widget_wheel_choices">
+        <item quantity="one">%d انتخاب · پہیہ کھولیں</item>
+        <item quantity="other">%d انتخابات · پہیہ کھولیں</item>
+    </plurals>
+
+    <plurals name="widget_people">
+        <item quantity="one">%d شخص</item>
+        <item quantity="other">%d افراد</item>
+    </plurals>
+
 </resources>

@@ -45,6 +45,10 @@ class CounterRepository(
         scope.async { storageCall { preferencesDataSource.incrementCounter() } }.await()
     }
 
+    suspend fun decrement() {
+        scope.async { storageCall { preferencesDataSource.decrementCounter() } }.await()
+    }
+
     suspend fun reset() {
         scope.async { storageCall { preferencesDataSource.resetCounter() } }.await()
     }

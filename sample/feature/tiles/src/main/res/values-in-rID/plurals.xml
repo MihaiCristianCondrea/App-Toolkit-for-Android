@@ -20,4 +20,12 @@
         <item quantity="other">Alat %1$d</item>
     </plurals>
 
+    <plurals name="widget_wheel_choices">
+        <item quantity="other">%d pilihan · Buka roda</item>
+    </plurals>
+
+    <plurals name="widget_people">
+        <item quantity="other">%d orang</item>
+    </plurals>
+
 </resources>

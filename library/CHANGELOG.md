@@ -2,6 +2,59 @@
 
 ---
 
+# Unreleased
+
+**Version:** `3.0.0-pre30`
+
+### Added
+
+- `AppShowcase` in `:library:core:ui` (`views.showcase`) draws a stateless "more apps" carousel of
+  filled 28dp app cards (icon, name, category, full-width description and a tonal Open or Google Play action) with a
+  "View all" action, loading, empty and failed-with-retry states, live-region announcements and
+  adaptive card widths and individual shared entrance animations. Hosts own fetching and actions through `ShowcaseApp`, `AppShowcaseState`
+  and `AppShowcaseLabels`. Actions use GeneralButton in Tonal style;
+  `onCardsVisibilityChanged` optionally reports 50% row visibility for host-owned exposure policy.
+
+- `AospPageIndicator` in `:library:core:ui` (`views.carousel`) provides an Android 10-inspired
+  capsule page indicator with both continuous `PagerState` tracking and animated integer-index
+  overloads, sliding-window support for large page counts, RTL layout support and custom
+  accessibility state descriptions.
+
+- Native ads can be laid out further by the host: `NativeAdSlot(label = ...)` replaces the
+  disclosure text for a placement whose label reads as a section title (it must still say the
+  content is an ad), `NativeAdViewHolder(decorate = ...)` lets a custom `NativeAdViewFactory` paint
+  views the holder does not know about on every repaint, and `NativeAdPalette` carries
+  `surfaceContainerHigh`, `tertiary`, `tertiaryContainer` and `onTertiaryContainer`, with defaults
+  so existing constructors still compile.
+
+### Changed
+
+- Native ad text uses the app's typeface (Google Sans Flex) at the weight each view needs, through
+  the new `TextView.useAppFont(weight)`, instead of the system font. `headlineBold` now switches
+  between weights 700 and 400 of that typeface.
+- Breaking API replacement: `DotsIndicator` and `IndicatorDot` in `:library:core:ui`
+  (`views.carousel`) and `PageIndicatorDots` in `:library:feature:onboarding`
+  (`ui.views.controls`) are removed and replaced by `AospPageIndicator` in `:library:core:ui`
+  (`views.carousel`). `CustomCarousel` and `OnboardingFooter` now use `AospPageIndicator` directly.
+- Breaking API rename: `FirebaseOnboardingPage` is now `TelemetryOnboardingPage` in
+  `:library:feature:diagnostics` (`ui.onboarding`). Update host imports and calls; there is no
+  deprecated alias. The page covers usage and diagnostics reporting and analytics/advertising
+  consent. Consent behavior and the `isSelected` parameter are unchanged.
+- `ScreenHost` lays its content out in a `Box` that passes its minimum size on, so it can watch the
+  content's scrolling. A screen with one root element is unaffected; several root elements now
+  stack in that `Box` instead of following the parent's layout, so wrap them in one.
+- The default animated splash icon (`anim_splash`) draws App Toolkit's new toolbox: the box hops
+  once a second while the wrench and screwdriver rock. Apps that set their own `anim_splash` are
+  unaffected.
+
+### Fixed
+
+- Rows a fast scroll or fling brings into view no longer stay half-faded. They enter at once on the
+  motion scheme's fast springs, outside the screen's cascade, which kept growing while rows
+  streamed in and made each wait longer than the last.
+
+---
+
 # October 23, 2026
 
 **Version:** `3.0.0-pre29`

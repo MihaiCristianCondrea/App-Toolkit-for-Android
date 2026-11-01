@@ -21,4 +21,14 @@
         <item quantity="other">%1$d उपकरण</item>
     </plurals>
 
+    <plurals name="widget_wheel_choices">
+        <item quantity="one">%d विकल्प · व्हील खोलें</item>
+        <item quantity="other">%d विकल्प · व्हील खोलें</item>
+    </plurals>
+
+    <plurals name="widget_people">
+        <item quantity="one">%d व्यक्ति</item>
+        <item quantity="other">%d लोग</item>
+    </plurals>
+
 </resources>

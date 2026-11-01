@@ -1,0 +1,4 @@
+interface:
+  display_name: "UI Unslop"
+  short_description: "Fully remove formulaic styling from existing UI"
+  default_prompt: "Use $ui-unslop to remove all unjustified formulaic styling from this interface, verify the rendered result, and preserve its behavior."

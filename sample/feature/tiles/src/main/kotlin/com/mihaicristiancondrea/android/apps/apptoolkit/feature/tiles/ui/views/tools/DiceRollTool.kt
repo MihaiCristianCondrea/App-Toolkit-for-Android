@@ -17,16 +17,20 @@
 
 package com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.tools
 
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.icons.ToolSymbols
+import androidx.compose.ui.semantics.Role
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.tween
+import androidx.compose.foundation.clickable
+import androidx.compose.ui.platform.LocalView
+import androidx.compose.ui.platform.LocalHapticFeedback
+import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.PlayArrow
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
@@ -74,8 +78,12 @@ fun DiceRollTool(
     result: Int,
     rollRequest: Int,
     onRoll: () -> Unit,
+    compact: Boolean = false,
 ) {
-    var displayedResult: Int by remember { mutableIntStateOf(1) }
+    val haptic = LocalHapticFeedback.current
+    val view = LocalView.current
+    var displayedResult: Int by remember { mutableIntStateOf(result) }
+    var lastRequest by remember { mutableIntStateOf(rollRequest) }
     var rolling: Boolean by remember { mutableStateOf(false) }
 
     val rotationX = remember { Animatable(targetAnglesFor(displayedResult).first) }
@@ -85,7 +93,8 @@ fun DiceRollTool(
     val translationY = remember { Animatable(0f) }
 
     LaunchedEffect(rollRequest) {
-        if (rollRequest == 0) return@LaunchedEffect
+        if (rollRequest == lastRequest) return@LaunchedEffect
+        lastRequest = rollRequest
 
         rolling = true
 
@@ -188,6 +197,7 @@ fun DiceRollTool(
             }
         }
 
+        if (view.hasWindowFocus()) haptic.performHapticFeedback(HapticFeedbackType.LongPress)
         displayedResult = finalResult
         rolling = false
     }
@@ -202,7 +212,16 @@ fun DiceRollTool(
             rotationY = { rotationY.value },
             rotationZ = { rotationZ.value },
             modifier = Modifier
-                .size(150.dp)
+                .size(if (compact) 118.dp else 150.dp)
+                // No ripple: a rectangle of ink spreading over the die looked wrong. The roll is the feedback.
+                .clickable(
+                    interactionSource = null,
+                    indication = null,
+                    enabled = !rolling,
+                    onClickLabel = stringResource(R.string.tool_dice_roll_action),
+                    role = Role.Button,
+                    onClick = onRoll,
+                )
                 .graphicsLayer {
                     scaleX = scale.value
                     scaleY = scale.value
@@ -210,9 +229,9 @@ fun DiceRollTool(
                 },
         )
 
-        Spacer(modifier = Modifier.height(SizeConstants.ExtraLargeSize))
+        if (!compact) Spacer(modifier = Modifier.height(SizeConstants.ExtraLargeSize))
 
-        GeneralButton(
+        if (!compact) GeneralButton(
             onClick = {
                 if (!rolling) {
                     onRoll()
@@ -220,7 +239,7 @@ fun DiceRollTool(
             },
             enabled = !rolling,
             measurements = ButtonMeasurements.Medium,
-            icon = ToolkitIcon.Vector(imageVector = Icons.Outlined.PlayArrow),
+            icon = ToolkitIcon.Vector(imageVector = ToolSymbols.PlayArrow),
             label = stringResource(id = R.string.tool_dice_roll_action),
         )
     }
@@ -355,7 +374,7 @@ private fun DrawScope.drawProceduralDiceCube(
             face.depth
         }
 
-    val edgeWidth: Float = cubeHalfSize * 0.08f
+    val edgeWidth: Float = cubeHalfSize * 0.1f
 
     fillPaint.pathEffect = cornerEffect
     strokePaint.pathEffect = cornerEffect
@@ -454,13 +473,14 @@ private fun DrawScope.drawProjectedPip(
 }
 
 private fun pipCentersFor(value: Int): List<Offset> {
-    val topLeft = Offset(x = 0.29f, y = 0.29f)
-    val topRight = Offset(x = 0.71f, y = 0.29f)
+    // The centres of the kit's 3 x 3 pip grid: 16 px of padding and 5 px gaps on an 86 px face.
+    val topLeft = Offset(x = 0.271f, y = 0.271f)
+    val topRight = Offset(x = 0.729f, y = 0.271f)
     val center = Offset(x = 0.5f, y = 0.5f)
-    val middleLeft = Offset(x = 0.29f, y = 0.5f)
-    val middleRight = Offset(x = 0.71f, y = 0.5f)
-    val bottomLeft = Offset(x = 0.29f, y = 0.71f)
-    val bottomRight = Offset(x = 0.71f, y = 0.71f)
+    val middleLeft = Offset(x = 0.271f, y = 0.5f)
+    val middleRight = Offset(x = 0.729f, y = 0.5f)
+    val bottomLeft = Offset(x = 0.271f, y = 0.729f)
+    val bottomRight = Offset(x = 0.729f, y = 0.729f)
 
     return when (value) {
         1 -> listOf(center)
@@ -728,9 +748,10 @@ private const val RollDurationMillis = 960
 private const val FullRotationDegrees = 360f
 
 private const val CameraDistance = 3.2f
-private const val CubeHalfSizeFraction = 0.34f
-private const val CornerRadiusFraction = 0.18f
-private const val PipRadius = 0.064f
+// The die faces the viewer at rest, its face about 58% of its box: the marketing kit's 86 px die in a 150 px stage.
+private const val CubeHalfSizeFraction = 0.2f
+private const val CornerRadiusFraction = 0.4f
+private const val PipRadius = 0.085f
 private const val PipSegmentCount = 18
 
 private const val FullCircleRadians = PI * 2.0
@@ -748,3 +769,4 @@ private fun DiceRollToolPreview() {
         }
     }
 }
+

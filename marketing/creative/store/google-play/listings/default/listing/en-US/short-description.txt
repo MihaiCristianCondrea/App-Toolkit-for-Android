@@ -1,0 +1,1 @@
+Compass, level, ruler, unit converter, bill splitter and a decision wheel.

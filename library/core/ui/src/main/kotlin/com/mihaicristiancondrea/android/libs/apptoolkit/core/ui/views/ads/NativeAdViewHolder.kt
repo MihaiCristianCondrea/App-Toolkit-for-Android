@@ -18,7 +18,6 @@
 package com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.ads
 
 import android.graphics.Rect
-import android.graphics.Typeface
 import android.util.TypedValue
 import android.view.View
 import android.widget.ImageView
@@ -34,6 +33,11 @@ import com.google.android.libraries.ads.mobile.sdk.nativead.NativeAdView
 
 /**
  * Strong references to the views a native ad binds to, so binding never needs `findViewById`.
+ *
+ * @param decorate Runs at the end of [applyPalette], for a custom [NativeAdViewFactory] whose layout
+ * has views the holder does not know about (a card behind part of the ad, a header icon) or that
+ * finishes a known view differently (a disclosure label drawn as a title instead of a chip). It runs
+ * on every repaint, so it follows theme changes the same way the holder's own views do.
  */
 class NativeAdViewHolder(
     val presentation: NativeAdPresentation,
@@ -48,6 +52,7 @@ class NativeAdViewHolder(
     val body: TextView?,
     val advertiser: TextView,
     val callToAction: TextView?,
+    private val decorate: (NativeAdViewHolder.(palette: NativeAdPalette, style: NativeAdStyle) -> Unit)? = null,
 ) {
     private val initialIconPadding = iconFrame?.let {
         Rect(it.paddingLeft, it.paddingTop, it.paddingRight, it.paddingBottom)
@@ -75,7 +80,7 @@ class NativeAdViewHolder(
             headline.setTextSize(TypedValue.COMPLEX_UNIT_SP, size)
         }
         style.headlineBold?.let { bold ->
-            headline.setTypeface(headline.typeface, if (bold) Typeface.BOLD else Typeface.NORMAL)
+            headline.useAppFont(weight = if (bold) FONT_WEIGHT_BOLD else FONT_WEIGHT_REGULAR)
         }
 
         body?.let { bodyView ->
@@ -157,6 +162,7 @@ class NativeAdViewHolder(
         if (presentation is NativeAdPresentation.BarRow) {
             content.setBackgroundColor(palette.surfaceContainer)
         }
+        decorate?.invoke(this, palette, style)
     }
 
     fun bind(nativeAd: NativeAd, sponsoredLabel: String) {

@@ -17,35 +17,21 @@
 
 package com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.mappers
 
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.AddCircleOutline
-import androidx.compose.material.icons.outlined.Casino
-import androidx.compose.material.icons.outlined.CheckCircle
-import androidx.compose.material.icons.outlined.Close
-import androidx.compose.material.icons.outlined.Dehaze
-import androidx.compose.material.icons.outlined.Explore
-import androidx.compose.material.icons.outlined.FavoriteBorder
-import androidx.compose.material.icons.outlined.FlashlightOn
-import androidx.compose.material.icons.outlined.Info
-import androidx.compose.material.icons.outlined.MonetizationOn
-import androidx.compose.material.icons.outlined.MoreHoriz
-import androidx.compose.material.icons.outlined.Palette
-import androidx.compose.material.icons.outlined.Straighten
-import androidx.compose.material.icons.outlined.Timer
-import androidx.compose.material.icons.outlined.WarningAmber
-import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
-import androidx.compose.material3.MaterialShapes
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.icons.ToolSymbols
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.toShape
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
+import androidx.compose.ui.graphics.luminance
 import androidx.compose.ui.graphics.vector.ImageVector
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.models.ToolkitTileStatus
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.R
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.models.ToolkitTileStatus
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.models.StatusColors
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.models.ToolkitTile
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.models.ToolkitTileIcon
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.catalog.Cookie16Shape
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.catalog.Cookie8Shape
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.catalog.KitShape
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.utils.constants.ToolkitTileIds
 
 internal fun ToolkitTile.previewTextResId(): Int = when (id) {
@@ -56,42 +42,51 @@ internal fun ToolkitTile.previewTextResId(): Int = when (id) {
 }
 
 internal fun ToolkitTileIcon.imageVector(): ImageVector = when (this) {
-    ToolkitTileIcon.Level -> Icons.Outlined.Straighten
-    ToolkitTileIcon.Compass -> Icons.Outlined.Explore
-    ToolkitTileIcon.Coin -> Icons.Outlined.MonetizationOn
-    ToolkitTileIcon.Dice -> Icons.Outlined.Casino
-    ToolkitTileIcon.Counter -> Icons.Outlined.Dehaze
-    ToolkitTileIcon.Breathing -> Icons.Outlined.FavoriteBorder
-    ToolkitTileIcon.Sos -> Icons.Outlined.WarningAmber
-    ToolkitTileIcon.Morse -> Icons.Outlined.MoreHoriz
-    ToolkitTileIcon.FlashDimmer -> Icons.Outlined.FlashlightOn
-    ToolkitTileIcon.Palette -> Icons.Outlined.Palette
-    ToolkitTileIcon.Timer -> Icons.Outlined.Timer
+    ToolkitTileIcon.Wheel -> ToolSymbols.RotateRight
+    ToolkitTileIcon.Water -> ToolSymbols.WaterDrop
+    ToolkitTileIcon.Protractor -> ToolSymbols.Architecture
+    ToolkitTileIcon.BillSplitter -> ToolSymbols.Calculate
+    ToolkitTileIcon.RandomNumber -> ToolSymbols.Casino
+    ToolkitTileIcon.Level -> ToolSymbols.Straighten
+    ToolkitTileIcon.Compass -> ToolSymbols.Explore
+    ToolkitTileIcon.Coin -> ToolSymbols.MonetizationOn
+    ToolkitTileIcon.Dice -> ToolSymbols.Casino
+    ToolkitTileIcon.Counter -> ToolSymbols.Dehaze
+    ToolkitTileIcon.Breathing -> ToolSymbols.Favorite
+    ToolkitTileIcon.Sos -> ToolSymbols.Emergency
+    ToolkitTileIcon.Morse -> ToolSymbols.Emergency
+    ToolkitTileIcon.FlashDimmer -> ToolSymbols.FlashlightOn
+    ToolkitTileIcon.Palette -> ToolSymbols.Palette
+    ToolkitTileIcon.Timer -> ToolSymbols.Timer
+    ToolkitTileIcon.Converter -> ToolSymbols.Straighten
+    ToolkitTileIcon.Ruler -> ToolSymbols.SquareFoot
+}
+
+/** The kit's shape behind a tool's live face (see [KitShape]). */
+@Composable
+internal fun ToolkitTileIcon.backgroundShape(): Shape = when (this) {
+    ToolkitTileIcon.Compass -> Cookie8Shape
+    ToolkitTileIcon.Level -> Cookie16Shape
+    ToolkitTileIcon.Sos, ToolkitTileIcon.Morse -> KitShape.Cookie7
+    ToolkitTileIcon.FlashDimmer -> KitShape.Burst
+    ToolkitTileIcon.Water, ToolkitTileIcon.Protractor, ToolkitTileIcon.Converter, ToolkitTileIcon.Timer -> KitShape.Cookie9
+    ToolkitTileIcon.Breathing, ToolkitTileIcon.BillSplitter, ToolkitTileIcon.Palette -> KitShape.SoftBurst
+    ToolkitTileIcon.Counter -> KitShape.Flower
+    ToolkitTileIcon.Coin, ToolkitTileIcon.Dice, ToolkitTileIcon.Ruler, ToolkitTileIcon.Wheel -> KitShape.Cookie12
+    ToolkitTileIcon.RandomNumber -> KitShape.Gem
 }
 
 /**
- * Material shape behind a tile icon, resolved for the active theme and shape choice.
+ * The shape of a tool's badge in its sheet header, the kit's `TOOLS[id].shape`. It is the live face's
+ * shape for every tool but two: the compass and the level draw their faces in the brand cookies and
+ * their badges in the kit's `sunny` and `pill`.
  */
-@OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
-internal fun ToolkitTileIcon.backgroundShape(): Shape = when (this) {
-    ToolkitTileIcon.Level,
-    ToolkitTileIcon.Compass,
-    ToolkitTileIcon.Timer -> MaterialShapes.Cookie9Sided
-
-    ToolkitTileIcon.Breathing -> MaterialShapes.SoftBurst
-
-    ToolkitTileIcon.FlashDimmer -> MaterialShapes.Flower
-
-    ToolkitTileIcon.Coin,
-    ToolkitTileIcon.Dice,
-    ToolkitTileIcon.Counter,
-    ToolkitTileIcon.Morse -> MaterialShapes.Cookie12Sided
-
-    ToolkitTileIcon.Sos -> MaterialShapes.Gem
-
-    else -> MaterialShapes.Circle
-}.toShape()
+internal fun ToolkitTileIcon.badgeShape(): Shape = when (this) {
+    ToolkitTileIcon.Compass -> KitShape.Sunny
+    ToolkitTileIcon.Level -> KitShape.Pill
+    else -> backgroundShape()
+}
 
 internal fun ToolkitTileStatus.labelResId(): Int = when (this) {
     ToolkitTileStatus.Added -> R.string.tiles_status_added
@@ -101,50 +96,29 @@ internal fun ToolkitTileStatus.labelResId(): Int = when (this) {
 }
 
 internal fun ToolkitTileStatus.icon(): ImageVector = when (this) {
-    ToolkitTileStatus.Added -> Icons.Outlined.CheckCircle
-    ToolkitTileStatus.Available -> Icons.Outlined.Info
-    ToolkitTileStatus.NotAdded -> Icons.Outlined.AddCircleOutline
-    ToolkitTileStatus.Unsupported -> Icons.Outlined.Close
+    ToolkitTileStatus.Added -> ToolSymbols.CheckCircle
+    ToolkitTileStatus.Available -> ToolSymbols.Info
+    ToolkitTileStatus.NotAdded -> ToolSymbols.AddCircle
+    ToolkitTileStatus.Unsupported -> ToolSymbols.Close
 }
 
+/** The tool accents of marketing/ui/src/kit/kit.css (--tk-teal, --tk-orange, --tk-magenta, --tk-gold), light and dark. */
 @Composable
 internal fun ToolkitTileIcon.iconColors(): StatusColors {
-    val isDark = androidx.compose.foundation.isSystemInDarkTheme()
+    val dark = MaterialTheme.colorScheme.surface.luminance() < .5f
     return when (this) {
-        ToolkitTileIcon.Level,
-        ToolkitTileIcon.Compass,
-        ToolkitTileIcon.Timer -> StatusColors(
-            container = if (isDark) Color(0xFF006A60) else Color(0xFF00A091),
-            content = if (isDark) Color(0xFF74DED1) else Color(0xFF006A60),
-        )
-
+        ToolkitTileIcon.Level, ToolkitTileIcon.Compass, ToolkitTileIcon.Water -> StatusColors(
+            container = if (dark) Color(0xFF225B53) else Color(0xFF00A091),
+            content = if (dark) Color(0xFF8FD3C7) else Color(0xFF006A60))
         ToolkitTileIcon.Breathing -> StatusColors(
-            container = if (isDark) Color(0xFF8B4100) else Color(0xFFFF8B26),
-            content = if (isDark) Color(0xFFFFB88E) else Color(0xFF8B4100),
-        )
-
-        ToolkitTileIcon.Coin,
-        ToolkitTileIcon.Dice,
-        ToolkitTileIcon.Counter,
-        ToolkitTileIcon.Morse -> StatusColors(
-            container = if (isDark) Color(0xFF6B5E00) else Color(0xFFE2C900),
-            content = if (isDark) Color(0xFFFBE44D) else Color(0xFF6B5E00),
-        )
-
-        ToolkitTileIcon.FlashDimmer -> StatusColors(
-            container = if (isDark) Color(0xFF91005A) else Color(0xFFE2008E),
-            content = if (isDark) Color(0xFFFFB0D3) else Color(0xFF91005A),
-        )
-
-        ToolkitTileIcon.Palette -> StatusColors(
-            container = if (isDark) Color(0xFF7A4E00) else Color(0xFFFFB84D),
-            content = if (isDark) Color(0xFFFFDDA8) else Color(0xFF7A4E00),
-        )
-
-        ToolkitTileIcon.Sos -> StatusColors(
-            container = if (isDark) Color(0xFFB10000) else Color(0xFFEE0000),
-            content = if (isDark) Color(0xFFFFDAD6) else Color(0xFFB10000),
-        )
+            container = if (dark) Color(0xFF79471D) else Color(0xFFFF8B26),
+            content = if (dark) Color(0xFFE7BC98) else Color(0xFF8B4100))
+        ToolkitTileIcon.Sos, ToolkitTileIcon.Morse -> StatusColors(
+            container = if (dark) Color(0xFF753354) else Color(0xFFE2008E),
+            content = if (dark) Color(0xFFE4B1CA) else Color(0xFF91005A))
+        else -> StatusColors(
+            container = if (dark) Color(0xFF746528) else Color(0xFFE2C900),
+            content = if (dark) Color(0xFFDCCB7A) else Color(0xFF6B5E00))
     }
 }
 

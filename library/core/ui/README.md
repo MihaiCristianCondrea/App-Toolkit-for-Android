@@ -117,6 +117,14 @@ flowchart TD
 - `GeneralButton` is the action-button entry point for all five styles and labelled/icon-only content.
   See the [3.0 button contract and migration](../designsystem/README.md#generalbutton-30).
 - `GeneralTextField` is the text-input entry point; see [GeneralTextField](#generaltextfield).
+- `AppShowcase` (`views.showcase`) is a stateless "more apps" carousel: a titled row of filled
+  app cards with a "View all" action, snapping horizontally. It takes `ShowcaseApp` items, an
+  `AppShowcaseState` (`Loading`, `Ready`, `Empty`, `Failed`) and `AppShowcaseLabels` built with
+  `appShowcaseLabels(...)`; the host fetches the apps and handles `onAppClick`, `onAppAction`
+  (open when `installed`, store otherwise), `onViewAll` and `onRetry`. Its GeneralButton actions
+  use Tonal style without colour overrides. Optional `onCardsVisibilityChanged` reports whether
+  at least half the cards row is visible; hosts own lifecycle, dwell time and telemetry. Cards are `min(86%, 360dp)`
+  wide on compact widths and fill whole columns of at least 260dp above 600dp.
 - `MainTopAppBar` and `SearchTopAppBar` are the two host app bars; see
   [Top app bars](#top-app-bars). Pages of the shell get `ShellTopAppBar` from the page frame
   instead.
@@ -173,6 +181,9 @@ flowchart TD
   Items move on `MaterialTheme.motionScheme` too, and an item's children stack as a plain item's
   do. The one exception is an item holding only filter chips or a native ad slot: keep it a plain
   `item`, so the chips cascade one by one and the ad enters when it loads.
+- Rows a scroll or fling brings into view still enter, but at once and on the fast springs,
+  outside the screen's cascade. `ScreenHost` watches its content's nested scrolling to tell them
+  from the rows the screen opens with, so a fast fling no longer leaves the list half-faded.
 - `EntranceReplay` and `LocalEntranceReplay` decide when a screen's entrance plays: `OnOpen`, the
   default, each time a screen is opened or its tab is picked from the navigation, but not on going
   back to it; `EveryVisit` on every return as well; `FirstVisit` only for the first copy of each
@@ -185,6 +196,12 @@ flowchart TD
   system's `il_wavy_line` as a divider. The wave is drawn rather than tiled from the drawable, so it
   scales with the divider's band and fits a whole number of half-waves into any length; the fitting
   is `wavyLineGeometry`, which is unit tested.
+- `AospPageIndicator` in `views/carousel` draws an Android 10-inspired page indicator whose active
+  dot stretches into a rounded capsule across page transitions. The `PagerState` overload reads
+  continuous scroll offset during drawing so swipe and programmatic page transitions never queue
+  stale targets; the `(pageCount, selectedIndex)` overload animates single-step changes and snaps
+  across multi-page jumps. Long carousels use a continuous sliding window (`pageIndicatorWindowStart`),
+  which is unit tested alongside `pageIndicatorPosition`.
 
 
 - New ViewModels extend `core.ui.screen.ScreenViewModel`, or `core.ui.screen.LoggedScreenViewModel`

@@ -17,15 +17,13 @@
 
 package com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui
 
-import android.content.Context
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.catalog.ToolDesignTheme
+
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.icons.ToolSymbols
 import android.widget.Toast
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
@@ -37,8 +35,19 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalResources
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.res.stringResource
+import androidx.lifecycle.compose.LifecycleStartEffect
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.states.LiveToolsUiState
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.catalog.QuickToolsWidgets
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.catalog.ToolSection
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.catalog.ToolWorkspace
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.mappers.imageVector
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.contracts.CompassToolEvent
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.contracts.LevelToolEvent
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.contracts.FlashDimmerToolEvent
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.compose.LocalLifecycleOwner
@@ -47,27 +56,20 @@ import com.mihaicristiancondrea.android.apps.apptoolkit.core.analytics.models.Ap
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.models.ToolkitQuickTool
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.models.ToolkitTileStatus
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.contracts.ToolkitTilesEvent
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.models.PositionedToolkitTilesListItem
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.models.ToolkitTile
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.models.ToolkitTileCategory
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.models.ToolkitTileIcon
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.models.ToolkitTilesListItem
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.states.ToolkitTilesUiState
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.utils.filterFor
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.utils.requestQuickSettingsTile
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.utils.search
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.MaterialColorsToolDialog
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.ToolkitToolBottomSheet
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.ads.QuickToolsNativeAdCard
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.ads.ToolkitTilesNativeAdViewFactory
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.ads.QuickToolsNativeAdViewFactory
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.catalog.EmptyFilterCard
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.catalog.HiddenAdPreloaders
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.catalog.HowToAddTilesCard
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.catalog.TileCategorySection
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.catalog.TilesFilters
 import com.mihaicristiancondrea.android.apps.apptoolkit.integration.ads.constants.AdsConstants
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.analytics.logViewItem
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.Loadable
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.MessageToastHost
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.ScreenHost
@@ -75,12 +77,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.ScreenSta
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.UiMessage
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.ads.LocalNativeAdViewFactory
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.ads.rememberAdsEnabled
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.analytics.LocalTelemetry
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.modifiers.animatedItem
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.modifiers.animatedItemsIndexed
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.groupedItemPosition
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.shell.contentPadding
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.spacers.NavigationBarSpacer
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.LocalShellSearch
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
@@ -95,7 +92,22 @@ private val TilesScreen = AppScreenTracking.Screens.TOOLKIT_TILES
  * request and the tab's search query, and re-reads tile membership on every resume.
  */
 @Composable
-fun ToolkitTilesScreen() {
+fun ToolkitTilesScreen(footer: @Composable () -> Unit = {}) {
+    val compass: CompassToolViewModel = koinViewModel(key = "overview-compass")
+    val level: LevelToolViewModel = koinViewModel(key = "overview-level")
+    val flash: FlashDimmerToolViewModel = koinViewModel()
+    LifecycleStartEffect(flash) { onStopOrDispose { flash.onEvent(FlashDimmerToolEvent.Dismiss) } }
+    val heading by compass.state.collectAsStateWithLifecycle()
+    val tilt by level.state.collectAsStateWithLifecycle()
+    val torch by flash.state.collectAsStateWithLifecycle()
+    LifecycleStartEffect(compass, level) {
+        compass.onEvent(CompassToolEvent.StartSensor)
+        level.onEvent(LevelToolEvent.StartSensor)
+        onStopOrDispose {
+            compass.onEvent(CompassToolEvent.StopSensor)
+            level.onEvent(LevelToolEvent.StopSensor)
+        }
+    }
     val viewModel: ToolkitTilesViewModel = koinViewModel()
     val state: ToolkitTilesUiState by viewModel.state.collectAsStateWithLifecycle()
     val messages: ImmutableList<UiMessage> by viewModel.messages.collectAsStateWithLifecycle()
@@ -131,13 +143,16 @@ fun ToolkitTilesScreen() {
 
     ScreenHost(screen = TilesScreen, status = state.categories) {
         CompositionLocalProvider(
-            LocalNativeAdViewFactory provides remember { ToolkitTilesNativeAdViewFactory() }
+            LocalNativeAdViewFactory provides remember { QuickToolsNativeAdViewFactory() }
         ) {
             ToolkitTilesScreenContent(
                 state = state,
+                live = LiveToolsUiState(heading.azimuth, tilt.pitch, tilt.roll, torch.torch),
+                onFlashLevel = { flash.onEvent(FlashDimmerToolEvent.LevelChanged(it)) },
                 contentPadding = contentPadding(),
                 onEvent = viewModel::onEvent,
                 searchQuery = LocalShellSearch.current?.query.orEmpty(),
+                footer = footer,
             )
         }
     }
@@ -148,6 +163,8 @@ fun ToolkitTilesScreen() {
  * cards between them, and the tool a tapped tile opens.
  *
  * @param searchQuery What the tab's search field holds; matches show expanded.
+ * @param footer Drawn after the last section while nothing is searched. The app puts its "More
+ * apps" carousel here, since that comes from a feature this one may not depend on.
  */
 @Composable
 internal fun ToolkitTilesScreenContent(
@@ -155,188 +172,85 @@ internal fun ToolkitTilesScreenContent(
     contentPadding: PaddingValues,
     onEvent: (ToolkitTilesEvent) -> Unit,
     searchQuery: String = "",
+    live: LiveToolsUiState = LiveToolsUiState(),
+    onFlashLevel: (Int) -> Unit = {},
+    footer: @Composable () -> Unit = {},
 ) {
-    ScreenStateHandler(
-        state = state.categories,
-        contentPadding = contentPadding,
-        onRetry = { onEvent(ToolkitTilesEvent.Load) },
-    ) { ready ->
-        ToolkitTilesCatalog(
-            categories = ready.value,
-            state = state,
+    ToolDesignTheme {
+
+        ScreenStateHandler(
+            state = state.categories,
             contentPadding = contentPadding,
-            onEvent = onEvent,
-            searchQuery = searchQuery,
-        )
+            onRetry = { onEvent(ToolkitTilesEvent.Load) },
+            showAd = false,
+        ) { ready ->
+            ToolkitTilesCatalog(
+                categories = ready.value,
+                state = state,
+                contentPadding = contentPadding,
+                onEvent = onEvent,
+                searchQuery = searchQuery,
+                live = live, onFlashLevel = onFlashLevel,
+                footer = footer,
+            )
+        }
     }
 }
 
 @Composable
 private fun ToolkitTilesCatalog(
-    categories: ImmutableList<ToolkitTileCategory>,
-    state: ToolkitTilesUiState,
-    contentPadding: PaddingValues,
-    onEvent: (ToolkitTilesEvent) -> Unit,
-    searchQuery: String,
+    categories: ImmutableList<ToolkitTileCategory>, state: ToolkitTilesUiState,
+    contentPadding: PaddingValues, onEvent: (ToolkitTilesEvent) -> Unit, searchQuery: String,
+    live: LiveToolsUiState, onFlashLevel: (Int) -> Unit,
+    footer: @Composable () -> Unit,
 ) {
     val showAds = rememberAdsEnabled()
-    val telemetry = LocalTelemetry.current
-    var selectedTile by remember { mutableStateOf<ToolkitTile?>(null) }
-    var quickToolDialog by remember { mutableStateOf<ToolkitQuickTool?>(null) }
-    val resources = LocalContext.current.resources
-    val filteredCategories = remember(categories, state.selectedFilter, searchQuery, resources) {
-        categories.filterFor(state.selectedFilter).search(searchQuery, resources::getString)
+    var selectedId by androidx.compose.runtime.saveable.rememberSaveable { mutableStateOf<String?>(null) }
+    val resources = LocalResources.current
+    // Chance and Measure have tabs of their own; Quick Tools shows the rest, Colors last.
+    val filtered = categories.filter { it.id !in setOf("chance", "measure") }
+        .toImmutableList().search(searchQuery, resources::getString)
+    // On torchless devices Light & signals is absent, so keep the ad after Sensors.
+    val adAfterCategoryId = filtered.lastOrNull { it.id == "sensors" || it.id == "system" }?.id
+    val ad = ToolkitTilesListItem.Ad("ad_trailing", AdsConstants.QUICK_TOOLS_NATIVE_AD_UNIT_ID)
+    fun open(tile: ToolkitTile) {
+        selectedId = tile.id
     }
-    val searching = searchQuery.isNotBlank()
-    val listItems = remember(filteredCategories) {
-        buildList {
-            filteredCategories.forEachIndexed { index, category ->
-                add(ToolkitTilesListItem.Category(category))
-                if ((index + 1) % 2 == 0) {
-                    add(
-                        ToolkitTilesListItem.Ad(
-                            id = "ad_after_${category.id}",
-                            adUnitId = AdsConstants.QUICK_TOOLS_NATIVE_AD_UNIT_ID,
-                        )
-                    )
-                }
-            }
-            if (isNotEmpty() && last() !is ToolkitTilesListItem.Ad) {
-                add(
-                    ToolkitTilesListItem.Ad(
-                        id = "ad_trailing",
-                        adUnitId = AdsConstants.QUICK_TOOLS_NATIVE_AD_UNIT_ID,
-                    )
-                )
-            }
-        }.toImmutableList()
-    }
-
-    val visibleListItems = remember(listItems, state.loadedAdIds, showAds) {
-        listItems
-            .filter { item -> item.isVisible(loadedAdIds = state.loadedAdIds, showAds = showAds) }
-            .let { visibleItems ->
-                visibleItems.mapIndexed { index, item ->
-                    PositionedToolkitTilesListItem(
-                        item = item,
-                        position = groupedItemPosition(index, visibleItems.size),
-                    )
-                }
-            }
-            .toImmutableList()
-    }
-    val preloadedAdItems = remember(listItems, state.loadedAdIds, showAds) {
-        if (!showAds) return@remember persistentListOf()
-        listItems
-            .filterIsInstance<ToolkitTilesListItem.Ad>()
-            .filterNot { adItem -> adItem.id in state.loadedAdIds }
-            .toImmutableList()
-    }
-
-    Box(modifier = Modifier.fillMaxSize()) {
-        LazyColumn(
-            modifier = Modifier.fillMaxSize(),
-            verticalArrangement = Arrangement.spacedBy(SizeConstants.ExtraTinySize),
-            contentPadding = PaddingValues(
-                start = SizeConstants.LargeSize,
-                top = contentPadding.calculateTopPadding() + SizeConstants.LargeSize,
-                end = SizeConstants.LargeSize,
-                bottom = contentPadding.calculateBottomPadding() + SizeConstants.LargeSize,
-            ),
-        ) {
-            // The chips enter one after another on their own, ahead of the categories.
-            item(key = "filters", contentType = "filters") {
-                TilesFilters(
-                    categories = categories,
-                    selectedFilter = state.selectedFilter,
-                    onFilterSelected = { filter -> onEvent(ToolkitTilesEvent.FilterSelected(filter)) },
-                )
-            }
-            item(key = "top_spacing", contentType = "spacing") { Spacer(modifier = Modifier.height(SizeConstants.SmallSize)) }
-            if (listItems.isEmpty()) {
-                animatedItem(key = "empty", contentType = "empty") {
-                    EmptyFilterCard()
-                }
-            } else {
-                animatedItemsIndexed(
-                    items = visibleListItems,
-                    key = { _, positionedItem -> "${state.selectedFilter}_${positionedItem.item.stableKey}" },
-                    contentType = { _, positionedItem ->
-                        when (positionedItem.item) {
-                            is ToolkitTilesListItem.Category -> "category"
-                            is ToolkitTilesListItem.Ad -> "ad"
-                        }
-                    },
-                ) { _, positionedItem ->
-                    val item = positionedItem.item
-                    val position = positionedItem.position
-
-                    when (item) {
-                        is ToolkitTilesListItem.Category -> {
-                            val category = item.category
-                            val expanded = searching || category.id in state.expandedCategoryIds
-                            TileCategorySection(
-                                category = category,
-                                position = position,
-                                expanded = expanded,
-                                selectedFilter = state.selectedFilter,
-                                onToggle = { onEvent(ToolkitTilesEvent.CategoryToggled(category.id)) },
-                                onPreviewTile = { tile ->
-                                    telemetry.logViewItem(
-                                        itemId = tile.id,
-                                        itemName = tile.id,
-                                        itemCategory = category.id,
-                                    )
-                                    if (tile.quickTool == ToolkitQuickTool.MaterialColors) {
-                                        quickToolDialog = ToolkitQuickTool.MaterialColors
-                                    } else {
-                                        selectedTile = tile
-                                    }
-                                },
-                            )
-                        }
-
-                        is ToolkitTilesListItem.Ad -> {
-                            QuickToolsNativeAdCard(
-                                adUnitId = item.adUnitId,
-                                position = position,
-                                initiallyLoaded = item.id in state.loadedAdIds,
-                                onStatusChanged = { isLoaded ->
-                                    onEvent(ToolkitTilesEvent.AdStatusChanged(item.id, isLoaded))
-                                },
-                            )
-                        }
+    Box(Modifier.fillMaxSize()) {
+        ToolWorkspace(contentPadding) {
+            if (filtered.isEmpty()) EmptyFilterCard()
+            filtered.forEach { category ->
+                Box {
+                    ToolSection(stringResource(category.titleResId), when (category.id) {
+                        "sensors" -> ToolSymbols.Rounded.Sensors
+                        "system" -> ToolSymbols.Rounded.FlashlightOn
+                        "sound" -> ToolSymbols.Rounded.Speaker
+                        "wellbeing" -> ToolSymbols.Rounded.SelfImprovement
+                        "colors" -> ToolSymbols.Rounded.Palette
+                        else -> category.icon.imageVector()
+                    }) {
+                        QuickToolsWidgets(category.tiles, live, ::open, onFlashLevel)
                     }
                 }
+                if (category.id == adAfterCategoryId && showAds && searchQuery.isBlank() && ad.id in state.loadedAdIds) {
+                    QuickToolsNativeAdCard(adUnitId = ad.adUnitId,
+                        initiallyLoaded = true,
+                        onStatusChanged = { onEvent(ToolkitTilesEvent.AdStatusChanged(ad.id, it)) })
+                }
             }
-            item(key = "bottom_spacing", contentType = "spacing") { Spacer(modifier = Modifier.height(SizeConstants.SmallSize)) }
-            animatedItem(key = "instructions", contentType = "instructions") {
-                HowToAddTilesCard()
-            }
-            item(key = "navigation_spacing", contentType = "navigation_spacing") {
-                NavigationBarSpacer()
-            }
+            if (searchQuery.isBlank()) footer()
         }
-
-        HiddenAdPreloaders(
-            adItems = preloadedAdItems,
-            onEvent = onEvent,
-        )
+        if (adAfterCategoryId != null && showAds && searchQuery.isBlank() && ad.id !in state.loadedAdIds) {
+            HiddenAdPreloaders(adItems = persistentListOf(ad), onEvent = onEvent)
+        }
     }
-
-    selectedTile?.let { selected ->
-        val tile = categories.asSequence().flatMap { it.tiles }
-            .firstOrNull { it.id == selected.id } ?: selected
-        ToolkitToolBottomSheet(
-            tile = tile,
-            onClose = { selectedTile = null },
+    val tile = categories.flatMap { it.tiles }.firstOrNull { it.id == selectedId }
+    if (tile?.quickTool == ToolkitQuickTool.MaterialColors) {
+        MaterialColorsToolDialog(onClose = { selectedId = null })
+    } else if (tile != null) {
+        ToolkitToolBottomSheet(tile, onClose = { selectedId = null },
             onAddTile = { onEvent(ToolkitTilesEvent.AddTileClicked(tile.requestKey)) },
-            onSetupTile = { onEvent(ToolkitTilesEvent.TileSetupClicked(tile.id)) },
-        )
-    }
-
-    if (quickToolDialog == ToolkitQuickTool.MaterialColors) {
-        MaterialColorsToolDialog(onClose = { quickToolDialog = null })
+            onSetupTile = { onEvent(ToolkitTilesEvent.TileSetupClicked(tile.id)) })
     }
 }
 
@@ -391,18 +305,4 @@ private fun ToolkitTilesScreenContentLoadingPreview() {
             onEvent = {},
         )
     }
-}
-
-private val ToolkitTilesListItem.stableKey: String
-    get() = when (this) {
-        is ToolkitTilesListItem.Category -> category.id
-        is ToolkitTilesListItem.Ad -> id
-    }
-
-private fun ToolkitTilesListItem.isVisible(
-    loadedAdIds: Set<String>,
-    showAds: Boolean,
-): Boolean = when (this) {
-    is ToolkitTilesListItem.Category -> true
-    is ToolkitTilesListItem.Ad -> showAds && id in loadedAdIds
 }

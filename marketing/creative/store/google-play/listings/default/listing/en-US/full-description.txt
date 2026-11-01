@@ -1,0 +1,55 @@
+App Toolkit brings practical Android tools together in one simple, easy-to-use app. Whether you need to measure an angle, split a bill, check your direction, or make a quick decision, you'll find the tools you need in one place.
+
+Explore three main sections: Quick Tools for everyday utilities and live sensors, Measure for calculations and measurements, and Play & Decide for random choices and interactive tools.
+
+From a compass and bubble level to a flashlight, ruler, unit converter, counter, reaction test, and decision wheel, App Toolkit makes everyday tasks easier. Many tools can be used directly from their interactive widgets, while others offer additional controls when opened.
+
+Features
+
+🛠️ Essential Quick-Access Utilities
+• Compass: Check your heading and direction using your phone's sensors.
+• Bubble Level: Measure your phone's tilt and check whether a surface is level.
+• Flash Dimmer: Turn on the flashlight and adjust its brightness on supported devices.
+• Morse Flashlight: Enter a message and transmit it using your phone's flashlight.
+• SOS Flash: Send an SOS light pattern with a simple tap.
+• Water Eject: Play a timed speaker tone that may help dislodge water droplets. It does not repair water damage.
+
+📐 Measurement & Calculation Tools
+• Ruler: Measure objects directly on your screen with calibration, millimetres, inches, and advanced measurement options.
+• Protractor: Measure angles with an interactive, full-screen protractor.
+• Unit Converter: Convert between units of length, mass, temperature, volume, and data.
+• Tip & Bill Splitter: Calculate tips, divide bills between people, and choose your preferred currency.
+• Reaction Test: Test your reaction speed and compare your results over time.
+
+🎲 Play & Decide
+• Decision Wheel: Add your own choices, spin the wheel, and let it pick for you.
+• Random Number Picker: Generate random numbers within a custom range or choose from quick presets.
+• Coin Flip: Flip an animated coin whenever you need a quick decision.
+• Dice Roll: Roll a 3D animated die directly from the app.
+
+📱 Colors & Quick Access
+• Material Colors Explorer: Explore the app's color palette and supported Android system colors, with options to copy color values.
+• Quick Settings Tiles: Add supported tools to Android's Quick Settings panel for easier access.
+
+🧘 Wellness & Focus
+• Guided Breathing: Follow a simple breathing exercise with gentle animations to help you slow down and relax.
+
+Benefits
+
+🛠️ All-in-One Convenience
+• Less App Clutter: Keep useful everyday tools together instead of switching between multiple apps.
+• Quick Access: Open tools in seconds, interact with live widgets, or use supported Quick Settings tiles.
+• Simple Controls: Clear layouts, useful information, and easy-to-use controls make each tool accessible.
+• Adaptive Design: Enjoy a modern Material 3 Expressive interface with colorful cards, smooth motion, and layouts for different screen sizes.
+
+How it works
+Each section groups related tools together, with interactive widgets that show useful information or let you perform quick actions.
+Tap a tool to access its additional controls, adjust its settings, or view detailed results. Supported tools can also be added to Android's Quick Settings panel for convenient access outside the app.
+
+Get started today
+Download App Toolkit and explore a collection of useful tools for measuring, calculating, deciding, and everyday convenience.
+
+Feedback
+App Toolkit is continually being improved with new tools, refinements, and bug fixes.
+If you have a feature suggestion or encounter a problem, you can leave a Google Play review or use Help & feedback inside the app. When reporting an issue, please describe what happened so it can be investigated and fixed.
+Thank you for using App Toolkit!

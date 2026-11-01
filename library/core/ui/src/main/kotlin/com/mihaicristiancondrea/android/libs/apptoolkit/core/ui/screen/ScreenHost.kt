@@ -17,6 +17,9 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen
 
+import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.Modifier
+import androidx.compose.foundation.layout.Box
 import android.app.Activity
 import androidx.activity.compose.LocalActivity
 import androidx.compose.runtime.Composable
@@ -116,7 +119,12 @@ fun ScreenHost(
     if (fabs != null) {
         ScaffoldFabs(fabs)
     }
-    CompositionLocalProvider(LocalScreenEntrance provides entrance, content = content)
+    CompositionLocalProvider(LocalScreenEntrance provides entrance) {
+        // Watches the screen's scrolling, so rows a scroll brings in appear rather than enter.
+        Box(Modifier.nestedScroll(entrance.scrollWatcher), propagateMinConstraints = true) {
+            content()
+        }
+    }
     if (viewModel != null) {
         MessageHost(viewModel = viewModel, onAction = onMessageAction)
     }

@@ -23,10 +23,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.platform.LocalContext
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.R
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.data.models.AppSummary
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.context.openPlayStoreForApp
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.context.shareApp
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.utils.AppLauncher
 import kotlinx.coroutines.launch
 
@@ -54,20 +52,6 @@ fun rememberOpenAppAction(
                     }
                 }
             }
-        }
-    }
-}
-
-@Composable
-fun rememberShareAppAction(): (AppSummary) -> Unit {
-    val context = LocalContext.current
-    val currentContext by rememberUpdatedState(newValue = context)
-    return remember(currentContext) {
-        { appInfo ->
-            currentContext.shareApp(
-                shareMessageFormat = R.string.summary_share_message,
-                packageName = appInfo.packageName
-            )
         }
     }
 }
