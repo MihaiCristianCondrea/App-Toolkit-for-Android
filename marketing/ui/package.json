@@ -16,7 +16,8 @@
     "@material/web": "^2.5.0",
     "lit": "^3.3.3",
     "material-next-web-components": "0.1.0",
-    "material-symbols": "^0.47.5"
+    "material-symbols": "^0.47.5",
+    "three": "^0.180.0"
   },
   "devDependencies": {
     "@material/material-color-utilities": "^0.3.0",

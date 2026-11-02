@@ -4,6 +4,10 @@
 
 # Unreleased
 
+### Added
+
+- `src/kit/pixel-3d.js` renders the Pixel 9 Pro XL in 3D with three.js, to turn the phone in before the live screen takes its place. The model stays in the private android-skills repository (BlenderKit Royalty Free, not redistributable); `npm run assets` copies it and the Draco decoder into ignored `public/`.
+
 ### Changed
 
 - Use Material Next `0.0.7` from npm for launcher Edit-mode and drag animations and compact drawer alignment.
