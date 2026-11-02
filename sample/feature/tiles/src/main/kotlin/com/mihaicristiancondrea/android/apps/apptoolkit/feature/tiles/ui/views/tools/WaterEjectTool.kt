@@ -29,9 +29,9 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.size
-import androidx.compose.material3.Button
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.GeneralButton
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.ButtonMeasurements
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -54,9 +54,12 @@ internal fun WaterEjectTool(state: WaterEjectToolUiState, onEvent: (WaterEjectTo
         WaterEjectVisual(state.running)
         Text(if (state.running) state.seconds.toString()+" s" else "165 Hz", style = MaterialTheme.typography.displayMedium)
         Text(stringResource(R.string.water_guidance), style = MaterialTheme.typography.bodyMedium)
-        Button(onClick = { onEvent(if (state.running) WaterEjectToolEvent.Stop else WaterEjectToolEvent.Start) }, modifier = Modifier.fillMaxWidth().heightIn(min = 56.dp)) {
-            Text(stringResource(if (state.running) R.string.water_stop else R.string.water_start))
-        }
+        GeneralButton(
+            onClick = { onEvent(if (state.running) WaterEjectToolEvent.Stop else WaterEjectToolEvent.Start) },
+            modifier = Modifier.fillMaxWidth(),
+            measurements = ButtonMeasurements.Medium,
+            label = stringResource(if (state.running) R.string.water_stop else R.string.water_start),
+        )
         if (state.failed) Text(stringResource(R.string.water_failed), color = MaterialTheme.colorScheme.error)
         Text(stringResource(R.string.water_note), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
     }

@@ -53,7 +53,9 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.material3.FilledTonalButton
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.GeneralButton
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.GeneralButtonStyle
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.icons.ToolkitIcon
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -275,11 +277,13 @@ private fun ReactionWidget(tile: ToolkitTile, bestMs: Long?, shape: Shape, onOpe
                     )
                 }
             }
-            FilledTonalButton(onClick = onStart) {
-                Icon(ToolSymbols.PlayArrow, null, Modifier.size(18.dp))
-                Spacer(Modifier.width(8.dp))
-                Text(stringResource(R.string.tool_reaction_test_start))
-            }
+            GeneralButton(
+                onClick = onStart,
+                style = GeneralButtonStyle.Tonal,
+                icon = ToolkitIcon.Vector(ToolSymbols.PlayArrow),
+                iconSize = 18.dp,
+                label = stringResource(R.string.tool_reaction_test_start),
+            )
         }
     }
 }

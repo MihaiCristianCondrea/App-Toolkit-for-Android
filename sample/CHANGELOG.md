@@ -4,6 +4,10 @@
 
 # Unreleased
 
+### Improved
+
+- SOS, Water Eject, Counter and Reaction Test actions use consistent button feedback. Unit Converter's swap action now bounces when pressed.
+
 ### Fixed
 
 - Live tool widget shapes retain their accent tint in dark mode, matching the marketing UI.
