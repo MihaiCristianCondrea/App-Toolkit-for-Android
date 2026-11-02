@@ -83,8 +83,8 @@ internal val DeveloperPageUrl: String = AppLinks.PLAY_STORE_DEVELOPER + AppLinks
  * "More apps": the developer's other apps as a carousel at the end of Quick Tools, which the app
  * places there through the screen's footer.
  *
- * A tap on an installed app opens it; on one that is not, it opens the app's details sheet, whose
- * Play Store action installs it. A card's own button opens the app or its store page directly, and
+ * A card tap always opens its details sheet. Its button opens an installed app or shows details
+ * for an app that is not installed. The sheet provides the Play Store action, and
  * "View all" opens the developer's page on Google Play. The section and its details
  * sheet are ad-free.
  */
@@ -139,10 +139,6 @@ fun MoreAppsSection(modifier: Modifier = Modifier) {
             telemetry.logAppInteraction(MoreAppsViewModel.INTERACTION_SOURCE, app, AppInteractionType.OpenInstalledApp)
             openApp(app)
         },
-        onOpenStore = { app ->
-            telemetry.logAppInteraction(MoreAppsViewModel.INTERACTION_SOURCE, app, AppInteractionType.OpenInPlayStore)
-            appActionLauncher.openPlayStore(app.packageName)
-        },
         onViewAll = {
             telemetry.logSelectContent(contentType = "developer_page", itemId = AppLinks.DEFAULT_DEVELOPER_ID)
             context.openUrl(DeveloperPageUrl)
@@ -169,8 +165,7 @@ fun MoreAppsSection(modifier: Modifier = Modifier) {
  * Renders [state] with the library's [AppShowcase], and the details sheet of the selected app.
  * Holds no ViewModel and opens nothing itself, so it renders in tests with plain values.
  *
- * @param onOpenApp An installed app's card or button was tapped.
- * @param onOpenStore A not-installed app's button was tapped.
+ * @param onOpenApp An installed app's Open button was tapped.
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -178,7 +173,6 @@ internal fun MoreAppsSectionContent(
     state: MoreAppsUiState,
     onEvent: (MoreAppsEvent) -> Unit,
     onOpenApp: (AppSummary) -> Unit,
-    onOpenStore: (AppSummary) -> Unit,
     onViewAll: () -> Unit,
     onDetailsClosed: (AppSummary) -> Unit,
     onFavoriteToggle: (AppSummary) -> Unit,
@@ -199,11 +193,11 @@ internal fun MoreAppsSectionContent(
             icon = MoreAppsIcon,
             onAppClick = { app ->
                 val summary = summaries[app.key] ?: return@AppShowcase
-                if (app.installed) onOpenApp(summary) else onEvent(MoreAppsEvent.AppSelected(app.key))
+                onEvent(MoreAppsEvent.AppSelected(summary.packageName))
             },
             onAppAction = { app ->
                 val summary = summaries[app.key] ?: return@AppShowcase
-                if (app.installed) onOpenApp(summary) else onOpenStore(summary)
+                if (app.installed) onOpenApp(summary) else onEvent(MoreAppsEvent.AppSelected(app.key))
             },
             onViewAll = onViewAll,
             onRetry = { onEvent(MoreAppsEvent.Load) },
@@ -246,13 +240,13 @@ internal fun MoreAppsSectionContent(
 
 @Composable
 private fun moreAppsLabels(): AppShowcaseLabels {
-    val storeDescription = stringResource(R.string.more_apps_store_action_description)
+    val storeDescription = stringResource(R.string.more_apps_details_action_description)
     val openDescription = stringResource(R.string.more_apps_open_action_description)
     return appShowcaseLabels(
         title = stringResource(R.string.more_apps_title),
         viewAll = stringResource(R.string.more_apps_view_all),
         viewAllDescription = stringResource(R.string.more_apps_view_all_description),
-        store = stringResource(R.string.more_apps_google_play),
+        store = stringResource(R.string.more_apps_open_details),
         open = stringResource(R.string.more_apps_open),
         empty = stringResource(R.string.more_apps_empty),
         failed = stringResource(R.string.error_failed_to_load_apps),

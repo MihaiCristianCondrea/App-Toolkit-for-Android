@@ -48,4 +48,6 @@
     <string name="more_apps_empty">No apps are available right now.</string>
     <string name="more_apps_store_action_description">Open %1$s on Google Play</string>
     <string name="more_apps_open_action_description">Open %1$s</string>
+    <string name="more_apps_open_details">Open details</string>
+    <string name="more_apps_details_action_description">Open details: %1$s</string>
 </resources>

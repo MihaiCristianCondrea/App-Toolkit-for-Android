@@ -46,4 +46,6 @@
     <string name="more_apps_empty">এই মুহূর্তে কোনো অ্যাপ নেই।</string>
     <string name="more_apps_store_action_description">Google Play-তে %1$s খুলুন</string>
     <string name="more_apps_open_action_description">%1$s খুলুন</string>
+    <string name="more_apps_open_details">বিস্তারিত খুলুন</string>
+    <string name="more_apps_details_action_description">বিস্তারিত খুলুন: %1$s</string>
 </resources>

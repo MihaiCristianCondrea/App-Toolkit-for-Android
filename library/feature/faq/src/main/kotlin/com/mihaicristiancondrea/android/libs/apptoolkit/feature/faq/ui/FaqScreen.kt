@@ -48,16 +48,17 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.ScreenHos
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.ScreenStateHandler
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.ads.rememberAdsEnabled
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.analytics.LocalTelemetry
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.analytics.logGa4Event
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.shell.contentPadding
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.R
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.data.models.FaqId
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.data.models.FaqItem
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.ui.analytics.FAQ_SCREEN
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.ui.analytics.FaqActionNames
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.ui.analytics.FaqPreferenceKeys
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.ui.analytics.FaqContentTypes
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.ui.analytics.FaqItemIds
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.ui.analytics.faqActionEvent
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.ui.analytics.faqPreferenceTapEvent
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.ui.analytics.faqQuestionSelectEvent
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.ui.analytics.faqSelectContentEvent
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.ui.contracts.FaqEvent
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.ui.states.FaqUiState
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.ui.views.lists.FaqList
@@ -88,9 +89,11 @@ fun FaqScreen() {
     val activity = LocalActivity.current
     val reviewHost: ReviewHost? = remember(activity) { activity?.let(::ReviewHost) }
     var showFeedbackSheet: Boolean by rememberSaveable { mutableStateOf(value = false) }
+    var feedbackActionSelected: Boolean by remember { mutableStateOf(value = false) }
 
     LaunchedEffect(state.openStoreListing) {
         if (state.openStoreListing) {
+            telemetry.logEvent(faqActionEvent(actionName = FaqActionNames.STORE_LISTING_OPENED))
             context.openPlayStoreForApp(context.packageName)
             viewModel.onEvent(FaqEvent.StoreListingOpened)
         }
@@ -105,7 +108,7 @@ fun FaqScreen() {
                 icon = ToolkitIcon.Vector(Icons.Outlined.RateReview),
                 label = stringResource(id = R.string.feedback),
                 onClick = {
-                    telemetry.logGa4Event(faqPreferenceTapEvent(preferenceKey = FaqPreferenceKeys.FEEDBACK))
+                    feedbackActionSelected = false
                     telemetry.logEvent(faqActionEvent(actionName = FaqActionNames.FEEDBACK_SHEET_OPENED))
                     showFeedbackSheet = true
                 },
@@ -115,37 +118,56 @@ fun FaqScreen() {
         FaqScreenContent(
             state = state,
             showFeedbackSheet = showFeedbackSheet,
-            onFeedbackSheetDismissed = { showFeedbackSheet = false },
+            onFeedbackSheetDismissed = {
+                if (!feedbackActionSelected) {
+                    telemetry.logEvent(faqActionEvent(actionName = FaqActionNames.FEEDBACK_SHEET_DISMISSED))
+                }
+                showFeedbackSheet = false
+            },
             onRetry = {
                 telemetry.logEvent(faqActionEvent(actionName = FaqActionNames.RETRY_LOAD))
                 viewModel.onEvent(FaqEvent.Load)
             },
             onRequestFeature = {
-                telemetry.logGa4Event(faqPreferenceTapEvent(preferenceKey = FaqPreferenceKeys.REQUEST_FEATURE))
+                feedbackActionSelected = true
+                telemetry.logEvent(
+                    faqSelectContentEvent(
+                        contentType = FaqContentTypes.FEEDBACK_OPTION,
+                        itemId = FaqItemIds.REQUEST_FEATURE,
+                    ),
+                )
                 context.openUrl(AppLinks.FEATURE_REQUESTS_FORM)
             },
             onLeaveReview = {
-                telemetry.logGa4Event(faqPreferenceTapEvent(preferenceKey = FaqPreferenceKeys.LEAVE_REVIEW))
+                feedbackActionSelected = true
+                telemetry.logEvent(
+                    faqSelectContentEvent(
+                        contentType = FaqContentTypes.FEEDBACK_OPTION,
+                        itemId = FaqItemIds.LEAVE_REVIEW,
+                    ),
+                )
                 reviewHost?.let { host -> viewModel.onEvent(FaqEvent.RequestReview(host = host)) }
             },
             onQuestionToggled = { question, position, expanded ->
-                telemetry.logGa4Event(
-                    faqPreferenceTapEvent(
-                        preferenceKey = FaqPreferenceKeys.FAQ_ITEM,
+                telemetry.logEvent(
+                    faqQuestionSelectEvent(
                         faqId = question.id.value,
-                        faqPosition = position,
+                        position = position,
                         expanded = expanded,
-                    )
+                    ),
                 )
             },
             onShowMoreQuestions = {
-                telemetry.logGa4Event(
-                    faqPreferenceTapEvent(preferenceKey = FaqPreferenceKeys.SHOW_MORE_QUESTIONS)
+                telemetry.logEvent(
+                    faqActionEvent(actionName = FaqActionNames.SHOW_MORE_QUESTIONS),
                 )
             },
             onContactUs = {
                 telemetry.logEvent(
-                    faqPreferenceTapEvent(preferenceKey = FaqPreferenceKeys.CONTACT_US).toAnalyticsEvent()
+                    faqSelectContentEvent(
+                        contentType = FaqContentTypes.SUPPORT,
+                        itemId = FaqItemIds.CONTACT_US,
+                    ),
                 )
                 context.sendEmailToDeveloper(applicationNameRes = CommonR.string.app_name)
             },
