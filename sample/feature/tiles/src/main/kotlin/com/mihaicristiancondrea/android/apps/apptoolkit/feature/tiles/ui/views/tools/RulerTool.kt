@@ -378,8 +378,10 @@ private fun RulerSettingsPanel(
 
         RulerSetting(rangeLabel) {
             val rangeSliderState = rememberRangeSliderState(startValue = state.start, endValue = state.end)
-            rangeSliderState.startValue = state.start
-            rangeSliderState.endValue = state.end
+            androidx.compose.runtime.SideEffect {
+                if (rangeSliderState.startValue != state.start) rangeSliderState.startValue = state.start
+                if (rangeSliderState.endValue != state.end) rangeSliderState.endValue = state.end
+            }
             RangeSlider(
                 state = rangeSliderState,
                 onValueChange = { onEvent(RulerToolEvent.RangeChanged(it.start, it.endInclusive)) },
@@ -408,7 +410,9 @@ private fun RulerSettingsPanel(
                 // The scales are the reference: they follow the slider, so a real ruler held against one shows when they agree.
                 Text(text = stringResource(R.string.tool_ruler_reference), style = MaterialTheme.typography.bodySmall)
                 val scaleSliderState = rememberSliderState(value = state.scale, trackRange = 0.5f..2f)
-                scaleSliderState.value = state.scale
+                androidx.compose.runtime.SideEffect {
+                    if (scaleSliderState.value != state.scale) scaleSliderState.value = state.scale
+                }
                 Slider(
                     state = scaleSliderState,
                     onValueChange = { onEvent(RulerToolEvent.ScaleChanged(it)) },

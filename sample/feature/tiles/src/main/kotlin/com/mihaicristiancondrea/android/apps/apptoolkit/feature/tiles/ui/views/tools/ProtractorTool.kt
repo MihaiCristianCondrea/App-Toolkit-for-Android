@@ -81,6 +81,11 @@ fun ProtractorTool(state: ProtractorToolUiState, onEvent: (ProtractorToolEvent) 
     val surfaceColor = MaterialTheme.colorScheme.surface
     val labelStyle = MaterialTheme.typography.labelSmall.copy(color = color)
     val textMeasurer = rememberTextMeasurer()
+    val measuredLabels = androidx.compose.runtime.remember(labelStyle) {
+        (0..180 step 10).associateWith { degree -> textMeasurer.measure(degree.toString(), labelStyle) }
+    }
+    val dial = androidx.compose.runtime.remember { Path() }
+    val sector = androidx.compose.runtime.remember { Path() }
     val title = stringResource(R.string.tile_protractor_title)
     Dialog(onDismissRequest = onClose, properties = DialogProperties(usePlatformDefaultWidth = false, decorFitsSystemWindows = false)) {
         Surface(Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.surface) {
@@ -101,25 +106,24 @@ fun ProtractorTool(state: ProtractorToolUiState, onEvent: (ProtractorToolEvent) 
                         return if (geometry.landscape) pivot + Offset(cos(angle).toFloat(), -sin(angle).toFloat()) * distance
                         else pivot + Offset(sin(angle).toFloat(), -cos(angle).toFloat()) * distance
                     }
-                    val dial = Path().apply {
-                        moveTo(pivot.x, pivot.y)
-                        for (degree in 0..180) { val p = point(degree.toFloat(), radius); lineTo(p.x, p.y) }
-                        close()
-                    }
+                    dial.reset()
+                    dial.moveTo(pivot.x, pivot.y)
+                    for (degree in 0..180) { val p = point(degree.toFloat(), radius); dial.lineTo(p.x, p.y) }
+                    dial.close()
                     drawPath(dial, dialColor)
-                    val sector = Path().apply {
-                        moveTo(pivot.x, pivot.y)
-                        for (degree in 0..state.angle.toInt()) { val p = point(degree.toFloat(), radius); lineTo(p.x, p.y) }
-                        close()
-                    }
+                    sector.reset()
+                    sector.moveTo(pivot.x, pivot.y)
+                    for (degree in 0..state.angle.toInt()) { val p = point(degree.toFloat(), radius); sector.lineTo(p.x, p.y) }
+                    sector.close()
                     drawPath(sector, sectorColor)
                     drawArc(color.copy(alpha = .4f), if (geometry.landscape) 180f else -90f, 180f, false,
                         pivot - Offset(radius, radius), Size(radius * 2, radius * 2), style = Stroke(1.dp.toPx()))
+                    val labelStep = if (radius < 200.dp.toPx()) 30 else 10
                     for (degree in 0..180) {
                         val tick = if (degree % 10 == 0) 20.dp.toPx() else if (degree % 5 == 0) 12.dp.toPx() else 6.dp.toPx()
                         drawLine(color.copy(alpha = .7f), point(degree.toFloat(), radius - tick), point(degree.toFloat(), radius), 1.dp.toPx())
-                        if (degree % (if (radius < 200.dp.toPx()) 30 else 10) == 0) {
-                            val label = textMeasurer.measure(degree.toString(), labelStyle)
+                        if (degree % labelStep == 0) {
+                            val label = measuredLabels.getValue(degree)
                             val p = point(degree.toFloat(), radius - 38.dp.toPx())
                             // Kept on screen: 0 and 180 sit on the edge the pivot is on.
                             drawText(label, topLeft = Offset(
@@ -157,7 +161,9 @@ fun ProtractorTool(state: ProtractorToolUiState, onEvent: (ProtractorToolEvent) 
                         }
                     }
                     val sliderState = rememberSliderState(value = state.angle, trackRange = 0f..180f)
-                    sliderState.value = state.angle
+                    androidx.compose.runtime.SideEffect {
+                        if (sliderState.value != state.angle) sliderState.value = state.angle
+                    }
                     Slider(state = sliderState, onValueChange = { onEvent(ProtractorToolEvent.AngleChanged(it)) }, modifier = Modifier.semantics { contentDescription = title })
                     Row(Modifier.fillMaxWidth()) {
                         listOf(0f,45f,90f,180f).forEach { angle ->

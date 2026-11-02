@@ -97,9 +97,9 @@ fun ToolkitTilesScreen(footer: @Composable () -> Unit = {}) {
     val level: LevelToolViewModel = koinViewModel(key = "overview-level")
     val flash: FlashDimmerToolViewModel = koinViewModel()
     LifecycleStartEffect(flash) { onStopOrDispose { flash.onEvent(FlashDimmerToolEvent.Dismiss) } }
-    val heading by compass.state.collectAsStateWithLifecycle()
-    val tilt by level.state.collectAsStateWithLifecycle()
-    val torch by flash.state.collectAsStateWithLifecycle()
+    val headingState = compass.state.collectAsStateWithLifecycle()
+    val tiltState = level.state.collectAsStateWithLifecycle()
+    val torchState = flash.state.collectAsStateWithLifecycle()
     LifecycleStartEffect(compass, level) {
         compass.onEvent(CompassToolEvent.StartSensor)
         level.onEvent(LevelToolEvent.StartSensor)
@@ -147,7 +147,12 @@ fun ToolkitTilesScreen(footer: @Composable () -> Unit = {}) {
         ) {
             ToolkitTilesScreenContent(
                 state = state,
-                live = LiveToolsUiState(heading.azimuth, tilt.pitch, tilt.roll, torch.torch),
+                live = {
+                    val heading = headingState.value
+                    val tilt = tiltState.value
+                    val torch = torchState.value
+                    LiveToolsUiState(heading.azimuth, tilt.pitch, tilt.roll, torch.torch)
+                },
                 onFlashLevel = { flash.onEvent(FlashDimmerToolEvent.LevelChanged(it)) },
                 contentPadding = contentPadding(),
                 onEvent = viewModel::onEvent,
@@ -172,7 +177,7 @@ internal fun ToolkitTilesScreenContent(
     contentPadding: PaddingValues,
     onEvent: (ToolkitTilesEvent) -> Unit,
     searchQuery: String = "",
-    live: LiveToolsUiState = LiveToolsUiState(),
+    live: () -> LiveToolsUiState = { LiveToolsUiState() },
     onFlashLevel: (Int) -> Unit = {},
     footer: @Composable () -> Unit = {},
 ) {
@@ -197,22 +202,28 @@ internal fun ToolkitTilesScreenContent(
     }
 }
 
+private val QuickToolsExcludedCategoryIds = setOf("chance", "measure")
+
 @Composable
 private fun ToolkitTilesCatalog(
     categories: ImmutableList<ToolkitTileCategory>, state: ToolkitTilesUiState,
     contentPadding: PaddingValues, onEvent: (ToolkitTilesEvent) -> Unit, searchQuery: String,
-    live: LiveToolsUiState, onFlashLevel: (Int) -> Unit,
+    live: () -> LiveToolsUiState, onFlashLevel: (Int) -> Unit,
     footer: @Composable () -> Unit,
 ) {
     val showAds = rememberAdsEnabled()
     var selectedId by androidx.compose.runtime.saveable.rememberSaveable { mutableStateOf<String?>(null) }
     val resources = LocalResources.current
     // Chance and Measure have tabs of their own; Quick Tools shows the rest, Colors last.
-    val filtered = categories.filter { it.id !in setOf("chance", "measure") }
-        .toImmutableList().search(searchQuery, resources::getString)
+    val filtered = remember(categories, searchQuery, resources) {
+        categories.filter { it.id !in QuickToolsExcludedCategoryIds }
+            .toImmutableList().search(searchQuery, resources::getString)
+    }
     // On torchless devices Light & signals is absent, so keep the ad after Sensors.
-    val adAfterCategoryId = filtered.lastOrNull { it.id == "sensors" || it.id == "system" }?.id
-    val ad = ToolkitTilesListItem.Ad("ad_trailing", AdsConstants.QUICK_TOOLS_NATIVE_AD_UNIT_ID)
+    val adAfterCategoryId = remember(filtered) {
+        filtered.lastOrNull { it.id == "sensors" || it.id == "system" }?.id
+    }
+    val ad = remember { ToolkitTilesListItem.Ad("ad_trailing", AdsConstants.QUICK_TOOLS_NATIVE_AD_UNIT_ID) }
     fun open(tile: ToolkitTile) {
         selectedId = tile.id
     }
@@ -243,7 +254,9 @@ private fun ToolkitTilesCatalog(
             HiddenAdPreloaders(adItems = persistentListOf(ad), onEvent = onEvent)
         }
     }
-    val tile = categories.flatMap { it.tiles }.firstOrNull { it.id == selectedId }
+    val tile = remember(categories, selectedId) {
+        if (selectedId == null) null else categories.flatMap { it.tiles }.firstOrNull { it.id == selectedId }
+    }
     if (tile?.quickTool == ToolkitQuickTool.MaterialColors) {
         MaterialColorsToolDialog(onClose = { selectedId = null })
     } else if (tile != null) {

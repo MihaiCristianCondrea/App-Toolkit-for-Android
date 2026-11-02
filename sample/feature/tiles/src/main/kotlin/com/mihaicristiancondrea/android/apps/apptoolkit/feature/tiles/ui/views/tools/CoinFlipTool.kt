@@ -92,7 +92,7 @@ fun CoinFlipTool(side: CoinSide, flipRequest: Int, onFlip: () -> Unit, compact: 
         }
     }
 
-    val rotation by animateFloatAsState(
+    val rotationState = animateFloatAsState(
         targetValue = rotationTarget,
         animationSpec = tween(
             durationMillis = 1000,
@@ -102,12 +102,8 @@ fun CoinFlipTool(side: CoinSide, flipRequest: Int, onFlip: () -> Unit, compact: 
         finishedListener = { flipping = false; if (flipRequest > 0) if (view.hasWindowFocus()) haptic.performHapticFeedback(HapticFeedbackType.LongPress) }
     )
 
-    // The kit's toss: the coin rises 24 dp and grows to 1.12 by 35% of the spin, then settles.
-    val progress = if (rotationTarget == rotationStart) 1f else ((rotation - rotationStart) / (rotationTarget - rotationStart)).coerceIn(0f, 1f)
-    val lift = if (progress < 0.35f) progress / 0.35f else (1f - progress) / 0.65f
     val density = LocalDensity.current
-    val scale = 1f + 0.12f * lift
-    val translationY = with(density) { -24.dp.toPx() } * lift
+    val maxLiftPx = with(density) { -24.dp.toPx() }
 
     Column(
         verticalArrangement = Arrangement.spacedBy(SizeConstants.SmallSize),
@@ -115,7 +111,7 @@ fun CoinFlipTool(side: CoinSide, flipRequest: Int, onFlip: () -> Unit, compact: 
         modifier = Modifier.fillMaxWidth()
     ) {
         Coin(
-            rotationY = rotation,
+            rotationY = { rotationState.value },
             diameter = if (compact) 88.dp else 120.dp,
             modifier = Modifier
                 .clickable(
@@ -127,9 +123,14 @@ fun CoinFlipTool(side: CoinSide, flipRequest: Int, onFlip: () -> Unit, compact: 
                     onClick = onFlip,
                 )
                 .graphicsLayer {
+                    val rotation = rotationState.value
+                    // The kit's toss: the coin rises 24 dp and grows to 1.12 by 35% of the spin, then settles.
+                    val progress = if (rotationTarget == rotationStart) 1f else ((rotation - rotationStart) / (rotationTarget - rotationStart)).coerceIn(0f, 1f)
+                    val lift = if (progress < 0.35f) progress / 0.35f else (1f - progress) / 0.65f
+                    val scale = 1f + 0.12f * lift
                     this.scaleX = scale
                     this.scaleY = scale
-                    this.translationY = translationY
+                    this.translationY = maxLiftPx * lift
                 }
         )
 
@@ -178,6 +179,13 @@ internal fun Coin(
     rotationY: Float,
     diameter: Dp,
     modifier: Modifier = Modifier
+) = Coin(rotationY = { rotationY }, diameter = diameter, modifier = modifier)
+
+@Composable
+internal fun Coin(
+    rotationY: () -> Float,
+    diameter: Dp,
+    modifier: Modifier = Modifier
 ) {
     val scheme = MaterialTheme.colorScheme
     val rimColor = lerp(scheme.primaryContainer, scheme.primary, 0.45f)
@@ -187,7 +195,7 @@ internal fun Coin(
     val iconSize = if (diameter < 120.dp) 48.dp else 64.dp
 
     Canvas(modifier.size(diameter)) {
-        val radians = Math.toRadians(rotationY.toDouble())
+        val radians = Math.toRadians(rotationY().toDouble())
         val cos = cos(radians).toFloat()
         val sin = sin(radians).toFloat()
         val radius = size.minDimension / 2f

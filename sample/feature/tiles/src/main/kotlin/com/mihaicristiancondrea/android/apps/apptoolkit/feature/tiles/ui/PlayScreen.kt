@@ -138,7 +138,13 @@ internal fun PlayScreenContent(coin: CoinFlipToolUiState, dice: DiceRollToolUiSt
         val context = LocalContext.current
         val resources = LocalResources.current
         val query = searchQuery.trim()
-        val tools = catalogTools.filter { query.isBlank() || resources.getString(it.titleResId).contains(query,true) || resources.getString(it.summaryResId).contains(query,true) }
+        val tools = androidx.compose.runtime.remember(catalogTools, query, resources) {
+            if (query.isBlank()) catalogTools
+            else catalogTools.filter {
+                resources.getString(it.titleResId).contains(query, true) ||
+                    resources.getString(it.summaryResId).contains(query, true)
+            }
+        }
         ToolWorkspace(padding) {
             if (tools.isEmpty()) Text(stringResource(R.string.tiles_filter_empty))
             else ToolSection(stringResource(R.string.section_chance), ToolSymbols.Rounded.Casino, Modifier) {

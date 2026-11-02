@@ -7,6 +7,7 @@
 ### Improved
 
 - SOS, Water Eject, Counter and Reaction Test actions use consistent button feedback. Unit Converter's swap action now bounces when pressed.
+- Smoother Bubble Level, Compass and animated tool visuals with reduced UI recompositions across Quick Tools, Measure and Play & Decide.
 
 ### Fixed
 

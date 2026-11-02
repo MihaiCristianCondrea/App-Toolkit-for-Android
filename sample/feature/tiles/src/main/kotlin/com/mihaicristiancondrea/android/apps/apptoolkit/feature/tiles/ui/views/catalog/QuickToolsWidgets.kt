@@ -74,8 +74,10 @@ import kotlin.math.roundToInt
  * Colors as wide cards. Every widget opens its tool; on a torch that can dim, a vertical swipe over the
  * flashlight's shape sets the brightness instead.
  */
+import kotlinx.collections.immutable.ImmutableList
+
 @Composable
-internal fun QuickToolsWidgets(tools: List<ToolkitTile>, live: LiveToolsUiState, onOpen: (ToolkitTile) -> Unit, onLevel: (Int) -> Unit) {
+internal fun QuickToolsWidgets(tools: ImmutableList<ToolkitTile>, live: () -> LiveToolsUiState, onOpen: (ToolkitTile) -> Unit, onLevel: (Int) -> Unit) {
     val single = tools.singleOrNull()
     when (single?.id) {
         ToolkitTileIds.BREATHING -> return BreatheCard(single) { onOpen(single) }
@@ -86,30 +88,35 @@ internal fun QuickToolsWidgets(tools: List<ToolkitTile>, live: LiveToolsUiState,
         val modifier = Modifier.weight(1f).fillMaxHeight()
         when (tile.id) {
             ToolkitTileIds.COMPASS -> {
-                val heading = live.heading.roundToInt().mod(360)
+                val currentLive = live()
+                val heading = currentLive.heading.roundToInt().mod(360)
                 LiveWidget(
                     label = stringResource(tile.titleResId),
                     accent = tile.icon.iconColors(),
                     faceShape = tile.icon.backgroundShape(),
                     value = stringResource(R.string.tile_service_azimuth_format, heading),
-                    note = compassDirection(live.heading),
+                    note = compassDirection(currentLive.heading),
                     onClick = { onOpen(tile) },
                     modifier = modifier,
                     shape = shape,
-                ) { CompassRose(live.heading, Modifier.size(136.dp), face = false, degreeLabels = false) }
+                ) { CompassRose(live().heading, Modifier.size(136.dp), face = false, degreeLabels = false) }
             }
             ToolkitTileIds.BUBBLE_LEVEL -> {
-                val flat = abs(live.pitch) < 1f && abs(live.roll) < 1f
+                val currentLive = live()
+                val flat = abs(currentLive.pitch) < 1f && abs(currentLive.roll) < 1f
                 LiveWidget(
                     label = stringResource(tile.titleResId),
                     accent = tile.icon.iconColors(),
                     faceShape = tile.icon.backgroundShape(),
                     value = stringResource(if (flat) R.string.tile_preview_level_result else R.string.widget_level_tilted),
-                    note = String.format(LocalConfiguration.current.locales[0], "%.1f° · %.1f°", abs(live.roll), abs(live.pitch)),
+                    note = String.format(LocalConfiguration.current.locales[0], "%.1f° · %.1f°", abs(currentLive.roll), abs(currentLive.pitch)),
                     onClick = { onOpen(tile) },
                     modifier = modifier,
                     shape = shape,
-                ) { LevelFace(live.pitch, live.roll, Modifier.fillMaxSize()) }
+                ) {
+                    val faceLive = live()
+                    LevelFace(faceLive.pitch, faceLive.roll, Modifier.fillMaxSize())
+                }
             }
             ToolkitTileIds.FLASH_DIMMER -> FlashlightWidget(tile, live, onLevel, modifier, shape) { onOpen(tile) }
             else -> LiveWidget(
@@ -138,13 +145,13 @@ internal fun QuickToolsWidgets(tools: List<ToolkitTile>, live: LiveToolsUiState,
 @Composable
 private fun FlashlightWidget(
     tile: ToolkitTile,
-    live: LiveToolsUiState,
+    live: () -> LiveToolsUiState,
     onLevel: (Int) -> Unit,
     modifier: Modifier,
     shape: androidx.compose.ui.graphics.Shape,
     onOpen: () -> Unit,
 ) {
-    val torch = live.torch
+    val torch = live().torch
     val maximum = torch.capabilities.maximumLevel
     val dims = torch.capabilities.supportsDimming && maximum > 1
     val level = if (torch.isEnabled) torch.currentLevel.coerceIn(0, maximum.coerceAtLeast(1)) else 0

@@ -39,12 +39,13 @@ class SensorReadingsTest {
     }
 
     @Test
-    fun `headings are whole degrees from 0 to 359`() {
+    fun `headings are degrees from 0 to 360 with fractional precision`() {
         assertEquals(0f, azimuthDegrees(0f))
         assertEquals(90f, azimuthDegrees((PI / 2).toFloat()))
         assertEquals(270f, azimuthDegrees((-PI / 2).toFloat()))
         assertEquals(180f, azimuthDegrees(PI.toFloat()))
         assertEquals(0f, azimuthDegrees((2 * PI).toFloat()))
+        assertEquals(45.5f, azimuthDegrees(Math.toRadians(45.5).toFloat())!!, 0.001f)
     }
 
     @Test
