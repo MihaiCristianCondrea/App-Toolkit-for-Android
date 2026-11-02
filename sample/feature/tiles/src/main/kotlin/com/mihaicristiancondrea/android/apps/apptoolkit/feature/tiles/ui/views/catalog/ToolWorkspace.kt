@@ -63,17 +63,27 @@ import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.models.
  * nothing while the bottom bar shows, the whole bar once it has gone.
  */
 @Composable
-internal fun ToolWorkspace(padding: PaddingValues, content: @Composable ColumnScope.() -> Unit) {
+internal fun ToolWorkspace(
+    padding: PaddingValues,
+    footer: @Composable () -> Unit = {},
+    content: @Composable ColumnScope.() -> Unit,
+) {
     Column(
         modifier = Modifier
             .fillMaxSize()
             .verticalScroll(rememberScrollState())
             .padding(padding)
             .navigationBarsPadding()
-            .padding(start = 16.dp, end = 16.dp, top = 8.dp, bottom = 16.dp),
+            .padding(top = 8.dp, bottom = 16.dp),
         verticalArrangement = Arrangement.spacedBy(24.dp),
-        content = content,
-    )
+    ) {
+        Column(
+            modifier = Modifier.padding(horizontal = 16.dp),
+            verticalArrangement = Arrangement.spacedBy(24.dp),
+            content = content,
+        )
+        footer()
+    }
 }
 
 @Composable

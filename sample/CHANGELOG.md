@@ -10,6 +10,7 @@
 
 ### Fixed
 
+- More apps cards scroll to the screen edges while keeping their resting alignment with the other Quick Tools widgets.
 - Live tool widget shapes retain their accent tint in dark mode, matching the marketing UI.
 
 ---

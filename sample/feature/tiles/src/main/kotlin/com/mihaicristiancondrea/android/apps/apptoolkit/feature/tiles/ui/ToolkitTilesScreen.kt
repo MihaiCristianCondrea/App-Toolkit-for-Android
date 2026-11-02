@@ -217,7 +217,7 @@ private fun ToolkitTilesCatalog(
         selectedId = tile.id
     }
     Box(Modifier.fillMaxSize()) {
-        ToolWorkspace(contentPadding) {
+        ToolWorkspace(contentPadding, footer = { if (searchQuery.isBlank()) footer() }) {
             if (filtered.isEmpty()) EmptyFilterCard()
             filtered.forEach { category ->
                 Box {
@@ -238,7 +238,6 @@ private fun ToolkitTilesCatalog(
                         onStatusChanged = { onEvent(ToolkitTilesEvent.AdStatusChanged(ad.id, it)) })
                 }
             }
-            if (searchQuery.isBlank()) footer()
         }
         if (adAfterCategoryId != null && showAds && searchQuery.isBlank() && ad.id !in state.loadedAdIds) {
             HiddenAdPreloaders(adItems = persistentListOf(ad), onEvent = onEvent)

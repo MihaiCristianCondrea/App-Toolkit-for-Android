@@ -161,6 +161,7 @@ fun MoreAppsSection(modifier: Modifier = Modifier) {
         detailsActionLauncher = detailsActionLauncher,
         onCardsVisibilityChanged = { cardsVisible = it },
         modifier = modifier,
+        contentPadding = PaddingValues(horizontal = 16.dp),
     )
 }
 
