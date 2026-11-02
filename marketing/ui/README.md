@@ -87,6 +87,19 @@ closed desktop navigation, interactive sheets, comparison and the public embed e
 screen, preset, sheet and navigation surface the way videos do (without `set()`) to catch anything that needs it. It
 checks the web migration; Android screenshot parity remains a separate campaign check.
 
+## 3D device
+
+`src/kit/pixel-3d.js` renders the Pixel 9 Pro XL in 3D with three.js (`createPixel3D(canvas)`, then
+`pose(turn)` from 0, the back, to 1, the front). `attachScreen(element)` puts a live screen (a
+frameless `ScreenHost`, 430 × 957) on its display through a CSS3D layer drawn with the same camera,
+so the real UI turns with the phone and stays interactive.
+
+The model is a BlenderKit Royalty Free asset, usable in our work but not redistributable, so this
+public repository never contains it. `npm run assets` copies it from a sibling `android-skills`
+checkout (or `ANDROID_SKILLS=/path/to/android-skills`) into ignored `public/models/`, with three.js's
+Draco decoder in `public/draco/`. Without it, keep the flat frame. The `marketing-ui` skill covers the
+technique and the scroll-built presentation rules.
+
 ## Translated Screens (`src/screens/`)
 
 * `quick-tools.js` - `ToolkitTilesScreen.kt` (live sensor and torch widgets, Water Eject under Hardware & sound, Breathe, and Material Colors as the last section).

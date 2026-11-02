@@ -3,6 +3,9 @@
 //  - marketing/assets/illustrations            -> public/illustrations/
 //  - marketing/assets/logos/*.svg              -> public/logos/
 //  - marketing/assets/shapes/*.svg             -> public/shapes/
+//  - the 3D Pixel 9 Pro XL, from a sibling      -> public/models/  (never committed: see README.md)
+//    android-skills checkout or ANDROID_SKILLS
+//  - three.js's Draco decoder                   -> public/draco/
 import { cpSync, copyFileSync, existsSync, mkdirSync, readdirSync } from "node:fs";
 import { join } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -61,3 +64,19 @@ if (existsSync(shapesDir)) {
 const packageAssets = fileURLToPath(new URL("../node_modules/material-next-web-components/assets/marketing/", import.meta.url));
 cpSync(packageAssets, join(pub, "material-next"), {recursive: true, filter: path => !path.endsWith("README.md")});
 console.log("App Toolkit and Material Next assets synced");
+
+// The 3D Pixel is a BlenderKit Royalty Free asset: usable here, not redistributable, so it is
+// copied from the private android-skills repository into ignored public/models/ when available.
+const skills = process.env.ANDROID_SKILLS ?? join(repo, "..", "android-skills");
+const pixelModel = join(skills, "marketing", "assets", "device-models", "pixel-9-pro-xl", "pixel-9-pro-xl.glb");
+if (existsSync(pixelModel)) {
+  mkdirSync(join(pub, "models"), { recursive: true });
+  copyFileSync(pixelModel, join(pub, "models", "pixel-9-pro-xl.glb"));
+} else {
+  console.log("3D Pixel skipped: no android-skills checkout (set ANDROID_SKILLS); pixel-3d.js falls back to the flat frame.");
+}
+const draco = here("../node_modules/three/examples/jsm/libs/draco/gltf/");
+if (existsSync(draco)) {
+  mkdirSync(join(pub, "draco"), { recursive: true });
+  for (const f of ["draco_decoder.js", "draco_decoder.wasm", "draco_wasm_wrapper.js"]) copyFileSync(join(draco, f), join(pub, "draco", f));
+}
