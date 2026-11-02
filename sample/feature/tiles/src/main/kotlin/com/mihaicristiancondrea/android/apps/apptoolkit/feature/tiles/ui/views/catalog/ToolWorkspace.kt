@@ -20,7 +20,6 @@ package com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.
 import androidx.compose.foundation.layout.navigationBarsPadding
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.modifiers.animateVisibility
 
-import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
@@ -54,8 +53,9 @@ import androidx.compose.ui.unit.sp
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.models.ToolkitTile
 
 /**
- * A tab's scrolling body. The shell's [padding] covers the bottom bar, banner and player; it is
- * reserved outside the clipped viewport so cards never sit under them.
+ * A tab's scrolling body. The viewport extends edge-to-edge so cards scroll behind the bottom bar,
+ * banner, player and transparent system navigation bar, while [padding] reserves space inside the
+ * scrollable content so the last card can still scroll clear of them.
  *
  * The bottom bar hides on scroll and takes the system navigation bar's inset with it, so while it
  * is hidden [padding] no longer covers the gesture or button bar. The shell consumes what its
@@ -67,10 +67,9 @@ internal fun ToolWorkspace(padding: PaddingValues, content: @Composable ColumnSc
     Column(
         modifier = Modifier
             .fillMaxSize()
+            .verticalScroll(rememberScrollState())
             .padding(padding)
             .navigationBarsPadding()
-            .clipToBounds()
-            .verticalScroll(rememberScrollState())
             .padding(start = 16.dp, end = 16.dp, top = 8.dp, bottom = 16.dp),
         verticalArrangement = Arrangement.spacedBy(24.dp),
         content = content,

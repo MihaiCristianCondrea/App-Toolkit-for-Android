@@ -47,33 +47,35 @@ import kotlin.test.assertTrue
 class ToolWorkspaceInsetsTest {
     @get:Rule val compose = createAndroidComposeRule<ComponentActivity>()
 
-    @Test fun visibleRowsStayInsideTheShellInsetsBeforeAndAfterScrolling() {
+    @Test fun rowsScrollBehindBarsAndClearBottomInsetsAtEnd() {
         compose.setContent {
             MaterialTheme {
                 Surface(Modifier.fillMaxSize()) {
                     ToolWorkspace(PaddingValues(top = 48.dp, bottom = 96.dp)) {
-                        repeat(16) { Box(Modifier.fillMaxWidth().height(96.dp).testTag("row")) }
+                        repeat(16) { index ->
+                            Box(Modifier.fillMaxWidth().height(96.dp).testTag("row_$index"))
+                        }
                     }
                 }
             }
         }
         compose.waitForIdle()
-        assertRowsClearBars()
-        compose.onNode(hasScrollAction()).performTouchInput { swipeUp() }
-        compose.waitForIdle()
-        assertRowsClearBars()
-    }
-
-    private fun assertRowsClearBars() {
         val root = compose.onRoot().fetchSemanticsNode().boundsInRoot
         val top = with(compose.density) { 48.dp.toPx() }
         val bottom = root.bottom - with(compose.density) { 96.dp.toPx() }
-        val visibleRows = compose.onAllNodesWithTag("row").fetchSemanticsNodes()
-            .map { it.boundsInRoot }.filter { it.width > 0f && it.height > 0f }
-        assertTrue(visibleRows.isNotEmpty())
-        for (bounds in visibleRows) {
-            assertTrue(bounds.top >= top - 1f, "Row overlaps the top bar: $bounds")
-            assertTrue(bounds.bottom <= bottom + 1f, "Row overlaps the bottom bars: $bounds")
+
+        val firstBeforeScroll = compose.onAllNodesWithTag("row_0").fetchSemanticsNodes().single().boundsInRoot
+        val visibleBeforeScroll = (0 until 16)
+            .mapNotNull { i -> compose.onAllNodesWithTag("row_$i").fetchSemanticsNodes().firstOrNull()?.boundsInRoot }
+            .filter { it.width > 0f && it.height > 0f }
+        assertTrue(firstBeforeScroll.top >= top - 1f, "First row overlaps the top bar before scroll: $firstBeforeScroll")
+        assertTrue(visibleBeforeScroll.last().bottom > bottom, "Rows should extend behind the bottom bar while scrolling: ${visibleBeforeScroll.last()}")
+
+        repeat(4) {
+            compose.onNode(hasScrollAction()).performTouchInput { swipeUp() }
+            compose.waitForIdle()
         }
+        val lastAfterScroll = compose.onAllNodesWithTag("row_15").fetchSemanticsNodes().single().boundsInRoot
+        assertTrue(lastAfterScroll.bottom <= bottom + 1f, "Last row overlaps the bottom bars at end of scroll: $lastAfterScroll")
     }
 }

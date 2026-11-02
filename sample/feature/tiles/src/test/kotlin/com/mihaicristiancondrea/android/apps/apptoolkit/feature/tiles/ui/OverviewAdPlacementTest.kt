@@ -39,6 +39,8 @@ import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.states.
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.style.LocalAdsEnabled
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.FakeTelemetryRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.analytics.LocalTelemetry
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.modifiers.EntranceStyle
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.modifiers.LocalEntranceStyle
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -79,7 +81,11 @@ class OverviewAdPlacementTest {
     private fun render(content: @Composable () -> Unit) {
         compose.setContent {
             MaterialTheme {
-                CompositionLocalProvider(LocalAdsEnabled provides false, LocalTelemetry provides FakeTelemetryRepository()) {
+                CompositionLocalProvider(
+                    LocalAdsEnabled provides false,
+                    LocalTelemetry provides FakeTelemetryRepository(),
+                    LocalEntranceStyle provides EntranceStyle.None,
+                ) {
                     Surface { content() }
                 }
             }
