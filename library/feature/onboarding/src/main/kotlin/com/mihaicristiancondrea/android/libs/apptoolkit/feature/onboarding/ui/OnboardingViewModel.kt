@@ -18,14 +18,21 @@
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.onboarding.ui
 
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.telemetry.TelemetryRepository
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.analytics.logTutorialBegin
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.analytics.logTutorialComplete
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.telemetry.models.AnalyticsValue
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.UiText
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.LoggedScreenViewModel
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.toErrorMessage
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.onboarding.R
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.OnboardingRepository
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.onboarding.ui.analytics.OnboardingActionNames
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.onboarding.ui.analytics.OnboardingParams
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.onboarding.ui.analytics.onboardingActionEvent
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.onboarding.ui.analytics.onboardingStepViewEvent
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.onboarding.ui.analytics.onboardingTutorialBeginEvent
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.onboarding.ui.analytics.onboardingTutorialCompleteEvent
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.onboarding.ui.contracts.OnboardingCompletionMethod
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.onboarding.ui.contracts.OnboardingEvent
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.onboarding.ui.contracts.OnboardingStepDirection
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.onboarding.ui.states.OnboardingCompletion
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.onboarding.ui.states.OnboardingUiState
 import com.mihaicristiancondrea.android.libs.apptoolkit.integration.consent.data.repositories.ConsentRepository
@@ -55,15 +62,37 @@ class OnboardingViewModel(
     private var completeJob: Job? = null
 
     init {
-        telemetryRepository.logTutorialBegin()
+        telemetryRepository.logEvent(onboardingTutorialBeginEvent())
         observeCompletion()
     }
 
     override fun handleEvent(event: OnboardingEvent) {
         when (event) {
-            is OnboardingEvent.PageSelected -> setState { copy(currentTabIndex = event.index) }
+            is OnboardingEvent.PageSelected -> onPageSelected(event)
             is OnboardingEvent.RequestConsent -> requestConsent(host = event.host)
-            OnboardingEvent.CompleteOnboarding -> completeOnboarding()
+            is OnboardingEvent.CompleteOnboarding -> completeOnboarding(method = event.method)
+        }
+    }
+
+    private fun onPageSelected(event: OnboardingEvent.PageSelected) {
+        setState { copy(currentTabIndex = event.index) }
+        telemetryRepository.logEvent(
+            onboardingStepViewEvent(
+                stepIndex = event.index,
+                pageKey = event.pageKey,
+                direction = event.direction.trackingLabel,
+            ),
+        )
+        if (event.direction == OnboardingStepDirection.BACKWARD) {
+            telemetryRepository.logEvent(
+                onboardingActionEvent(
+                    actionName = OnboardingActionNames.STEP_BACK,
+                    params = buildMap {
+                        put(OnboardingParams.STEP_INDEX, AnalyticsValue.LongVal(event.index.toLong()))
+                        event.pageKey?.let { put(OnboardingParams.PAGE_KEY, AnalyticsValue.Str(it)) }
+                    },
+                ),
+            )
         }
     }
 
@@ -97,7 +126,8 @@ class OnboardingViewModel(
     }
 
     /** A second tap restarts the save rather than running two, so only one result shows. */
-    private fun completeOnboarding() {
+    private fun completeOnboarding(method: OnboardingCompletionMethod = OnboardingCompletionMethod.DONE) {
+        val pageIndex = state.value.currentTabIndex
         completeJob = completeJob.restart {
             launchReport(
                 action = Actions.COMPLETE_ONBOARDING,
@@ -108,7 +138,22 @@ class OnboardingViewModel(
             ) {
                 setState { copy(completion = OnboardingCompletion.Saving) }
                 onboardingRepository.setOnboardingCompleted()
-                telemetryRepository.logTutorialComplete()
+                telemetryRepository.logEvent(
+                    onboardingTutorialCompleteEvent(
+                        method = method.trackingLabel,
+                        pageIndex = pageIndex,
+                    ),
+                )
+                if (method == OnboardingCompletionMethod.SKIP) {
+                    telemetryRepository.logEvent(
+                        onboardingActionEvent(
+                            actionName = OnboardingActionNames.SKIP,
+                            params = mapOf(
+                                OnboardingParams.STEP_INDEX to AnalyticsValue.LongVal(pageIndex.toLong()),
+                            ),
+                        ),
+                    )
+                }
                 setState { copy(completion = OnboardingCompletion.Saved) }
             }
         }

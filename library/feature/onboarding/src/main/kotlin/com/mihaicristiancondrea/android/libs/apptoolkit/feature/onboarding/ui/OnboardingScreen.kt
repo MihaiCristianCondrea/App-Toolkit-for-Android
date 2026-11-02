@@ -47,8 +47,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -58,7 +61,6 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.LifecycleResumeEffect
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.telemetry.models.TrackedScreen
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.icons.ToolkitIcon
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.MessageHost
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.ScreenHost
@@ -68,8 +70,12 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.modifiers.
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.shell.LocalPageSnackbarHostState
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.snackbar.DefaultSnackbarHost
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.onboarding.R
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.onboarding.ui.analytics.ONBOARDING_SCREEN
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.onboarding.ui.contracts.OnboardingCompletionMethod
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.onboarding.ui.contracts.OnboardingEvent
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.onboarding.ui.contracts.OnboardingStepDirection
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.onboarding.ui.models.OnboardingPage
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.onboarding.ui.models.key
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.onboarding.ui.providers.OnboardingProvider
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.onboarding.ui.states.OnboardingCompletion
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.onboarding.ui.states.OnboardingUiState
@@ -84,11 +90,6 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import org.koin.compose.koinInject
 import org.koin.compose.viewmodel.koinViewModel
-
-private const val ONBOARDING_SCREEN_NAME = "Onboarding"
-private const val ONBOARDING_SCREEN_CLASS = "OnboardingScreen"
-private val ONBOARDING_SCREEN: TrackedScreen =
-    TrackedScreen(name = ONBOARDING_SCREEN_NAME, className = ONBOARDING_SCREEN_CLASS)
 
 /** How wide an onboarding page grows on a large window; it is centred in the rest. */
 internal val OnboardingContentMaxWidth: Dp = 640.dp
@@ -158,6 +159,7 @@ internal fun OnboardingScreenContent(
 ) {
     val coroutineScope: CoroutineScope = rememberCoroutineScope()
     val pagerState: PagerState = rememberPagerState(initialPage = state.currentTabIndex) { pages.size }
+    var lastReportedPage: Int by rememberSaveable { mutableIntStateOf(-1) }
 
     BackHandler(enabled = pages.isNotEmpty() && pagerState.currentPage > 0) {
         coroutineScope.launch {
@@ -166,7 +168,21 @@ internal fun OnboardingScreenContent(
     }
 
     LaunchedEffect(pagerState.currentPage) {
-        onEvent(OnboardingEvent.PageSelected(index = pagerState.currentPage))
+        val currentPage = pagerState.currentPage
+        val direction = when {
+            lastReportedPage == -1 -> OnboardingStepDirection.INITIAL
+            currentPage > lastReportedPage -> OnboardingStepDirection.FORWARD
+            currentPage < lastReportedPage -> OnboardingStepDirection.BACKWARD
+            else -> OnboardingStepDirection.INITIAL
+        }
+        lastReportedPage = currentPage
+        onEvent(
+            OnboardingEvent.PageSelected(
+                index = currentPage,
+                pageKey = pages.getOrNull(currentPage)?.key,
+                direction = direction,
+            )
+        )
     }
 
     Scaffold(
@@ -184,7 +200,13 @@ internal fun OnboardingScreenContent(
                         ) {
                             GeneralButton(
                                 style = GeneralButtonStyle.Outlined,
-                                onClick = { onEvent(OnboardingEvent.CompleteOnboarding) },
+                                onClick = {
+                                    onEvent(
+                                        OnboardingEvent.CompleteOnboarding(
+                                            method = OnboardingCompletionMethod.SKIP,
+                                        )
+                                    )
+                                },
                                 icon = ToolkitIcon.Vector(imageVector = Icons.Filled.SkipNext),
                                 contentDescription = stringResource(id = R.string.skip_button_content_description),
                                 label = stringResource(id = R.string.skip_button_text)
@@ -205,7 +227,11 @@ internal fun OnboardingScreenContent(
                                 pagerState.animateScrollToPage(pagerState.currentPage + 1)
                             }
                         } else {
-                            onEvent(OnboardingEvent.CompleteOnboarding)
+                            onEvent(
+                                OnboardingEvent.CompleteOnboarding(
+                                    method = OnboardingCompletionMethod.DONE,
+                                )
+                            )
                         }
                     },
                     onBackClicked = {

@@ -119,6 +119,10 @@ flowchart TD
   `OnboardingCompletion.Saved` in state and the screen enters the shell when it sees that, so a
   save that ends during a rotation still leaves. The stored flag, `isOnboardingCompleted`, is not
   used to navigate: it is already true when onboarding is opened again from the developer options.
+- The onboarding flow logs `tutorial_begin` on entry and `tutorial_complete` on completion,
+  distinguishing `method = "done"` from `method = "skip"`. Moving between pages logs
+  `onboarding_step_view` with the page index, stable page key and direction, while skipping and theme
+  edits record action events under the `Onboarding` screen.
 - A failed completion write shows an error message and leaves the pages on screen, since finishing
   is the only way out. `screen_state` reports `success` while the pages show, `loading` while
   saving and `error` after a failed save.

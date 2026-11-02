@@ -19,6 +19,7 @@ package com.mihaicristiancondrea.android.libs.apptoolkit.feature.onboarding.ui
 
 import android.app.Activity
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.exceptions.StorageException
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.telemetry.models.AnalyticsValue
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.UiText
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.FakeTelemetryRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.UnconfinedDispatcherExtension
@@ -26,7 +27,11 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.R as CoreUiR
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.UiMessage
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.onboarding.R
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.OnboardingRepository
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.onboarding.ui.analytics.OnboardingActionNames
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.onboarding.ui.analytics.OnboardingParams
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.onboarding.ui.contracts.OnboardingCompletionMethod
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.onboarding.ui.contracts.OnboardingEvent
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.onboarding.ui.contracts.OnboardingStepDirection
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.onboarding.ui.states.OnboardingCompletion
 import com.mihaicristiancondrea.android.libs.apptoolkit.integration.consent.data.repositories.ConsentRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.integration.consent.data.models.ConsentHost
@@ -110,14 +115,69 @@ class OnboardingViewModelTest {
         }
 
     @Test
-    fun `selecting a page keeps its index`() = runTest(dispatcherExtension.testDispatcher) {
-        val viewModel = createViewModel()
-        advance()
+    fun `selecting a page keeps its index and logs step view telemetry`() =
+        runTest(dispatcherExtension.testDispatcher) {
+            val viewModel = createViewModel()
+            advance()
 
-        viewModel.onEvent(OnboardingEvent.PageSelected(index = 3))
+            viewModel.onEvent(
+                OnboardingEvent.PageSelected(
+                    index = 3,
+                    pageKey = "quick_settings",
+                    direction = OnboardingStepDirection.FORWARD,
+                )
+            )
 
-        assertEquals(3, viewModel.state.value.currentTabIndex)
-    }
+            assertEquals(3, viewModel.state.value.currentTabIndex)
+            val stepView = telemetryRepository.loggedEvents.single { it.name == "onboarding_step_view" }
+            assertEquals(AnalyticsValue.LongVal(3L), stepView.params[OnboardingParams.STEP_INDEX])
+            assertEquals(AnalyticsValue.Str("quick_settings"), stepView.params[OnboardingParams.PAGE_KEY])
+            assertEquals(AnalyticsValue.Str("forward"), stepView.params[OnboardingParams.DIRECTION])
+        }
+
+    @Test
+    fun `navigating backward logs step view and step back action`() =
+        runTest(dispatcherExtension.testDispatcher) {
+            val viewModel = createViewModel()
+            advance()
+
+            viewModel.onEvent(
+                OnboardingEvent.PageSelected(
+                    index = 1,
+                    pageKey = "theme",
+                    direction = OnboardingStepDirection.BACKWARD,
+                )
+            )
+
+            val stepBack = telemetryRepository.loggedEvents.single {
+                it.name == "settings_action" && it.params["action_name"] == AnalyticsValue.Str(OnboardingActionNames.STEP_BACK)
+            }
+            assertEquals(AnalyticsValue.LongVal(1L), stepBack.params[OnboardingParams.STEP_INDEX])
+        }
+
+    @Test
+    fun `skipping saves completion and logs skip method`() =
+        runTest(dispatcherExtension.testDispatcher) {
+            val repository = FakeOnboardingRepository()
+            val viewModel = createViewModel(repository = repository)
+            advance()
+
+            viewModel.onEvent(OnboardingEvent.PageSelected(index = 1, pageKey = "theme"))
+            viewModel.onEvent(OnboardingEvent.CompleteOnboarding(method = OnboardingCompletionMethod.SKIP))
+            advance()
+
+            assertTrue(repository.completion.value)
+            assertEquals(OnboardingCompletion.Saved, viewModel.state.value.completion)
+            val completeEvent = telemetryRepository.loggedEvents.single { it.name == "tutorial_complete" }
+            assertEquals(AnalyticsValue.Str("skip"), completeEvent.params[OnboardingParams.METHOD])
+            assertEquals(AnalyticsValue.LongVal(1L), completeEvent.params[OnboardingParams.STEP_INDEX])
+
+            assertTrue(
+                telemetryRepository.loggedEvents.any {
+                    it.name == "settings_action" && it.params["action_name"] == AnalyticsValue.Str(OnboardingActionNames.SKIP)
+                }
+            )
+        }
 
     @Test
     fun `completing saves it, logs tutorial_complete and asks to enter the shell`() =
@@ -132,6 +192,8 @@ class OnboardingViewModelTest {
             assertTrue(repository.completion.value)
             assertEquals(OnboardingCompletion.Saved, viewModel.state.value.completion)
             assertTrue("tutorial_complete" in loggedEventNames)
+            val completeEvent = telemetryRepository.loggedEvents.single { it.name == "tutorial_complete" }
+            assertEquals(AnalyticsValue.Str("done"), completeEvent.params[OnboardingParams.METHOD])
             assertTrue(viewModel.messages.value.isEmpty())
         }
 
