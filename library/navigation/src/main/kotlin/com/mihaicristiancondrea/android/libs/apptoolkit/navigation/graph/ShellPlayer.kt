@@ -25,12 +25,19 @@ import androidx.compose.runtime.Immutable
  *
  * The shell owns the gesture, the position and the hand-off with the bars: the mini player sits on
  * the navigation bar, the bar slides away as the player is dragged up, back collapses it, and the
- * content underneath is padded so nothing hides behind it. The app only draws the two states.
+ * content underneath is padded so nothing hides behind it. When [onDismiss] is supplied, swiping
+ * down on the collapsed mini player dismisses it. The app only draws the two states and owns its
+ * playback state.
  *
  * @param isActive Read while composing, so it can be backed by snapshot state. The player enters
  * when it turns true and sinks away when it turns false.
  * @param mini The collapsed row. It fills a fixed-height pill; tapping the pill outside the app's
- * own buttons expands it.
+ * own buttons expands it, and swiping down when [onDismiss] is provided dismisses it.
+ * @param onDismiss Optional callback invoked once when the person dismisses the collapsed mini
+ * player (by swiping it down or triggering the accessibility dismiss action). Dismissal requests
+ * the host to stop playback and clear its active player state (for example, `stopAndClearMix()`);
+ * the Toolkit does not stop media or own the host's playback state. When null, downward drags on
+ * the collapsed mini player do not dismiss it.
  * @param expanded The full-screen player. It is given the call that collapses it again, for a
  * close or chevron button.
  */
@@ -38,5 +45,17 @@ import androidx.compose.runtime.Immutable
 class ShellPlayer(
     val isActive: @Composable () -> Boolean,
     val mini: @Composable () -> Unit,
+    val onDismiss: (() -> Unit)? = null,
     val expanded: @Composable (collapse: () -> Unit) -> Unit,
-)
+) {
+    constructor(
+        isActive: @Composable () -> Boolean,
+        mini: @Composable () -> Unit,
+        expanded: @Composable (collapse: () -> Unit) -> Unit,
+    ) : this(
+        isActive = isActive,
+        mini = mini,
+        onDismiss = null,
+        expanded = expanded,
+    )
+}

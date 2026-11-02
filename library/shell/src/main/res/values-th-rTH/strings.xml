@@ -18,4 +18,5 @@
     <string name="shell_open_navigation">เปิดการนำทาง</string>
     <string name="shell_expand_navigation">ขยายการนำทาง</string>
     <string name="shell_collapse_navigation">ยุบการนำทาง</string>
+    <string name="shell_dismiss_player">ปิดเครื่องเล่น</string>
 </resources>

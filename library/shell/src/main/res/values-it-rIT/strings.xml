@@ -18,4 +18,5 @@
     <string name="shell_open_navigation">Apri navigazione</string>
     <string name="shell_expand_navigation">Espandi navigazione</string>
     <string name="shell_collapse_navigation">Comprimi navigazione</string>
+    <string name="shell_dismiss_player">Chiudi lettore</string>
 </resources>

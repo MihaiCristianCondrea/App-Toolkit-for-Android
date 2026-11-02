@@ -185,4 +185,30 @@ class ShellCapabilitiesTest {
 
         assertTrue(ShellCapabilities.of(graph).hasMultipleStartOptions)
     }
+
+    @Test
+    fun `ShellPlayer preserves constructor and trailing-lambda compatibility with optional onDismiss`() {
+        var dismissed = 0
+        val namedWithoutDismiss = ShellPlayer(isActive = { true }, mini = {}, expanded = {})
+        val positionalWithoutDismiss = ShellPlayer({ true }, {}, {})
+        val trailingWithoutDismiss = ShellPlayer(isActive = { true }, mini = {}) {}
+        val namedWithDismiss = ShellPlayer(
+            isActive = { true },
+            mini = {},
+            onDismiss = { dismissed++ },
+            expanded = {},
+        )
+        val trailingWithDismiss = ShellPlayer(
+            isActive = { true },
+            mini = {},
+            onDismiss = { dismissed++ },
+        ) {}
+
+        assertTrue(namedWithoutDismiss.onDismiss == null)
+        assertTrue(positionalWithoutDismiss.onDismiss == null)
+        assertTrue(trailingWithoutDismiss.onDismiss == null)
+        namedWithDismiss.onDismiss?.invoke()
+        trailingWithDismiss.onDismiss?.invoke()
+        assertTrue(dismissed == 2)
+    }
 }

@@ -18,4 +18,5 @@
     <string name="shell_open_navigation">Отваряне на навигацията</string>
     <string name="shell_expand_navigation">Разгъване на навигацията</string>
     <string name="shell_collapse_navigation">Свиване на навигацията</string>
+    <string name="shell_dismiss_player">Затваряне на плейъра</string>
 </resources>

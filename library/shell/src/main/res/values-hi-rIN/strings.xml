@@ -18,4 +18,5 @@
     <string name="shell_open_navigation">नेविगेशन खोलें</string>
     <string name="shell_expand_navigation">नेविगेशन बड़ा करें</string>
     <string name="shell_collapse_navigation">नेविगेशन छोटा करें</string>
+    <string name="shell_dismiss_player">प्लेयर खारिज करें</string>
 </resources>

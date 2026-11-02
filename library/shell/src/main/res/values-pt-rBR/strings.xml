@@ -18,4 +18,5 @@
     <string name="shell_open_navigation">Abrir navegação</string>
     <string name="shell_expand_navigation">Expandir navegação</string>
     <string name="shell_collapse_navigation">Recolher navegação</string>
+    <string name="shell_dismiss_player">Dispensar reprodutor</string>
 </resources>

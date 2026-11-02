@@ -38,7 +38,7 @@ drawer and transition the graph describes. It is the chrome around the navigatio
 - An app's defaults for the Toolkit, in `settings`: `AppToolkitDefaults` and its
   `appToolkitDefaults { }` builder, which hold the app's `ShellSettings` and its
   `NavigationDefaults`.
-- The strings the chrome adds: open, expand and collapse navigation.
+- The strings the chrome adds: open, expand and collapse navigation, and dismiss player.
 
 ## Does not own
 
@@ -229,7 +229,12 @@ JUnit 5. They start Koin with the theme, display and ads repositories `AppTheme`
   `largeIncreased` corners.
 - **The player sits under the navigation.** In the bottom bar layout it lives inside the modal
   drawer's content, and in the rail layouts it is drawn before the modal rail, so opening either
-  covers it. On a permanent drawer it docks beside the drawer.
+  covers it. On a permanent drawer it docks beside the drawer. Swiping up or tapping the collapsed
+  pill expands it, swiping down or pressing back on the expanded surface only collapses it to the
+  dock, and when `ShellPlayer.onDismiss` is provided, swiping down on the collapsed pill (or
+  invoking its accessibility dismiss action) translates and fades the pill without disturbing
+  `PlayerExpansion` or the shell's bars before requesting the host to stop playback and clear its
+  active player state.
 - **Insets are cutout-safe.** App bars, content and the rail keep clear of the display cutout as
   well as the system bars, on whichever side it is.
 - **Search lives in the app bar.** A tab declared with `TabSearch` gets a field in the app bar's
