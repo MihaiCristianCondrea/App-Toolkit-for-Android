@@ -7,11 +7,13 @@
  *
  *   const pixel = await createPixel3D(canvas);      // or { modelUrl, dracoPath }
  *   pixel.resize(canvas.clientWidth, canvas.clientHeight);
+ *   pixel.attachScreen(screenElement);              // a live 430 x 957 element, e.g. a frameless ScreenHost
  *   pixel.pose(turn);                               // 0 shows the back, 1 the front
  *
- * Lay the canvas exactly over Material Next's Pixel 9 Pro XL frame (the aspects match), turn the
- * phone to the front, then show the live screen in its place: the display material is dark glass,
- * so nothing fake is ever on the phone's screen. Rendering is on demand, never on a loop.
+ * WebGL cannot paint a live page into a texture, so a CSS3DRenderer layer, drawn with the same
+ * camera, carries the real screen element on the display plane: it turns with the phone, hides when
+ * the display faces away, and stays interactive. Put the canvas in a positioned container; the layer
+ * is inserted right after it. Rendering is on demand, never on a loop.
  */
 import {
   ACESFilmicToneMapping,
@@ -29,11 +31,22 @@ import {
 import { DRACOLoader } from "three/examples/jsm/loaders/DRACOLoader.js";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
 import { RoomEnvironment } from "three/examples/jsm/environments/RoomEnvironment.js";
+import { CSS3DObject, CSS3DRenderer } from "three/examples/jsm/renderers/CSS3DRenderer.js";
 
 export const PIXEL_MODEL_URL = "/models/pixel-9-pro-xl.glb";
 export const DRACO_DECODER_PATH = "/draco/";
 const SCREEN_MATERIAL = "GP9XL_Screen";
 const FIELD_OF_VIEW = 18;
+/** The kit's phone window in CSS pixels. */
+export const SCREEN_WIDTH = 430;
+export const SCREEN_HEIGHT = 957;
+/** CSS3D maps world units to CSS pixels, so the scene works in millimetres. */
+const MM = 1000;
+/** The glass spans the whole front; the lit display sits inside the bezel. Millimetres. */
+const BEZEL_MM = 2.4;
+const DISPLAY_CORNER_MM = 8;
+const FRONT_CAMERA_TOP_MM = 4.6;
+const FRONT_CAMERA_MM = 3.4;
 
 /** Smoothstep, so a turn starts and lands softly. */
 export const easeTurn = (t) => {
@@ -82,11 +95,36 @@ export async function createPixel3D(canvas, { modelUrl = PIXEL_MODEL_URL, dracoP
   rightWayUp.rotation.z = Math.PI;
   const turntable = new Group();
   turntable.add(rightWayUp);
+  turntable.scale.setScalar(MM);
   scene.add(turntable);
 
-  const camera = new PerspectiveCamera(FIELD_OF_VIEW, 1, 0.01, 10);
-  camera.position.set(0, 0, (Math.max(size.x, size.z) * 0.5) / Math.tan((FIELD_OF_VIEW * Math.PI) / 360));
-  const draw = () => renderer.render(scene, camera);
+  // Where the display is, in millimetres, measured at rest.
+  scene.updateMatrixWorld(true);
+  const display = new Box3();
+  phone.traverse((node) => {
+    if (!(node instanceof Mesh)) return;
+    const materials = Array.isArray(node.material) ? node.material : [node.material];
+    if (materials.includes(glass)) display.expandByObject(node);
+  });
+  const displayCentre = display.getCenter(new Vector3());
+  const displaySize = display.getSize(new Vector3());
+
+  const camera = new PerspectiveCamera(FIELD_OF_VIEW, 1, 1, 10000);
+  camera.position.set(0, 0, (Math.max(size.x, size.z) * MM * 0.5) / Math.tan((FIELD_OF_VIEW * Math.PI) / 360));
+
+  const cssScene = new Scene();
+  const cssTurntable = new Group();
+  cssScene.add(cssTurntable);
+  const cssRenderer = new CSS3DRenderer();
+  Object.assign(cssRenderer.domElement.style, { position: "absolute", inset: "0" });
+  canvas.after(cssRenderer.domElement);
+  let screenObject;
+
+  const draw = () => {
+    cssTurntable.rotation.copy(turntable.rotation);
+    renderer.render(scene, camera);
+    cssRenderer.render(cssScene, camera);
+  };
 
   return {
     /** `turn` 0 shows the back, 1 the front; `tilt` leans it in radians. */
@@ -95,9 +133,36 @@ export async function createPixel3D(canvas, { modelUrl = PIXEL_MODEL_URL, dracoP
       turntable.rotation.x = tilt;
       draw();
     },
+    /** Places a live SCREEN_WIDTH x SCREEN_HEIGHT element on the display, inside the bezel. */
+    attachScreen(screen) {
+      if (screenObject) cssTurntable.remove(screenObject);
+      const widthMm = displaySize.x - 2 * BEZEL_MM;
+      const heightMm = displaySize.y - 2 * BEZEL_MM;
+      const pxPerMm = SCREEN_WIDTH / widthMm;
+      Object.assign(screen.style, {
+        width: `${SCREEN_WIDTH}px`,
+        height: `${SCREEN_HEIGHT}px`,
+        overflow: "hidden",
+        borderRadius: `${DISPLAY_CORNER_MM * pxPerMm}px`,
+        backfaceVisibility: "hidden",
+      });
+      // The layer covers the model's front camera, so draw it on the screen.
+      const lens = document.createElement("span");
+      Object.assign(lens.style, {
+        position: "absolute", left: "50%", transform: "translateX(-50%)", borderRadius: "50%", background: "#000",
+        top: `${FRONT_CAMERA_TOP_MM * pxPerMm}px`, width: `${FRONT_CAMERA_MM * pxPerMm}px`, height: `${FRONT_CAMERA_MM * pxPerMm}px`,
+      });
+      screen.append(lens);
+      screenObject = new CSS3DObject(screen);
+      screenObject.position.set(displayCentre.x, displayCentre.y, display.max.z + 0.05);
+      screenObject.scale.set(widthMm / SCREEN_WIDTH, heightMm / SCREEN_HEIGHT, 1);
+      cssTurntable.add(screenObject);
+      draw();
+    },
     resize(width, height) {
       if (width <= 0 || height <= 0) return;
       renderer.setSize(width, height, false);
+      cssRenderer.setSize(width, height);
       camera.aspect = width / height;
       camera.updateProjectionMatrix();
       draw();
@@ -107,6 +172,7 @@ export async function createPixel3D(canvas, { modelUrl = PIXEL_MODEL_URL, dracoP
       pmrem.dispose();
       glass.dispose();
       renderer.dispose();
+      cssRenderer.domElement.remove();
     },
   };
 }

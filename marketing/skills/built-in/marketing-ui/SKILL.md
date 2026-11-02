@@ -194,23 +194,30 @@ The Pixel 9 Pro XL model lives in this repository at
 (read its licence: it is never committed to a public repository). Use it where a flat frame cannot
 explain the moment: the phone arriving, turning, or the UI assembling into it. The screens stay HTML.
 
-The technique that works on a web page, first used on the Smart Cleaner presentation
-(`profile`, `#smart-cleaner-for-android`):
+The phone on a web page is this model, with the live screen on its display. First used on the
+Smart Cleaner presentation (`profile`, `#smart-cleaner-for-android`):
 
-1. **The 3D phone carries the motion, the live screen carries the truth.** Render the model with
-   three.js on a canvas laid exactly over the device frame (same centre and size; the model's aspect
-   matches Material Next's frame). Turn it from back to front on scroll, then cross over to the live
-   `ScreenHost` the moment it faces front. Swap the model's `GP9XL_Screen` material for dark glass,
-   so nothing fake is ever on its display.
-2. **Load it lazily and only when it can play.** Import three.js and the model on demand, render on
+1. **The live screen rides the 3D phone.** WebGL cannot paint a live page into a texture, so render
+   the model with three.js and add a `CSS3DRenderer` layer over the canvas, drawn with the same
+   camera, holding the real screen element (a frameless `ScreenHost`, 430 × 957). Place it on the
+   display plane just above the glass, inset by the bezel (about 2.4 mm) with the panel's corner
+   radius (about 8 mm) converted to pixels, and set `backface-visibility: hidden` so it disappears
+   when the phone turns away. It stays interactive: taps reach the screen. Draw the front camera over
+   it, since the layer covers the model's. Keep the model's `GP9XL_Screen` material as dark glass.
+2. **Work in millimetres.** CSS3D maps world units to CSS pixels: scale the model ×1000 so its
+   matrices stay well conditioned.
+3. **Load it lazily and only when it can play.** Import three.js and the model on demand, render on
    demand (only when the pose or size changes), and skip it entirely with reduced motion or without
-   WebGL: the flat frame is the fallback, so a failure shows a complete page.
-3. **Draco.** The meshes are Draco-compressed. Ship three.js's decoder
+   WebGL: the screens keep Material Next's flat frame, so a failure shows a complete page.
+4. **Draco.** The meshes are Draco-compressed. Ship three.js's decoder
    (`three/examples/jsm/libs/draco/gltf/`) next to the model and give `DRACOLoader` that path.
-4. **Keep layers honest.** Fetch the bytes in the data layer and parse them with
+5. **Keep layers honest.** Fetch the bytes in the data layer and parse them with
    `GLTFLoader.parseAsync()` in presentation code.
+6. **Motion.** Turn the phone in as it arrives (from edge-on through three quarters to the front,
+   with a tilt that settles), driven by scroll progress so it reverses cleanly.
 
-App Toolkit's hub ships the renderer as `src/kit/pixel-3d.js` (`createPixel3D(canvas, { modelUrl })`).
+App Toolkit's hub ships the renderer as `src/kit/pixel-3d.js` (`createPixel3D(canvas, { modelUrl })`, then
+`attachScreen(element)`).
 
 ### Scroll-built pages
 

@@ -90,8 +90,9 @@ checks the web migration; Android screenshot parity remains a separate campaign 
 ## 3D device
 
 `src/kit/pixel-3d.js` renders the Pixel 9 Pro XL in 3D with three.js (`createPixel3D(canvas)`, then
-`pose(turn)` from 0, the back, to 1, the front). Lay its canvas over Material Next's Pixel 9 Pro XL
-frame, turn it to the front, then show the live screen in its place: its display is dark glass.
+`pose(turn)` from 0, the back, to 1, the front). `attachScreen(element)` puts a live screen (a
+frameless `ScreenHost`, 430 × 957) on its display through a CSS3D layer drawn with the same camera,
+so the real UI turns with the phone and stays interactive.
 
 The model is a BlenderKit Royalty Free asset, usable in our work but not redistributable, so this
 public repository never contains it. `npm run assets` copies it from a sibling `android-skills`
