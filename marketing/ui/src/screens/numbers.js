@@ -13,7 +13,7 @@ import { APP } from "../config/identity.js";
 const TOOLS = {
   ruler: { id: "ruler", title: "Surface Ruler", subtitle: "Measure small objects on screen", icon: "square_foot", shape: "cookie_12sided", palette: "gold", supportsTile: false },
   protractor: { id: "protractor", title: "Protractor", subtitle: "Measure an angle", icon: "architecture", shape: "cookie_9sided", palette: "gold", supportsTile: false },
-  bill_splitter: { id: "bill_splitter", title: "Tip & Bill Splitter", subtitle: "Calculate tip and each person's share", icon: "calculate", shape: "soft_burst", palette: "gold", supportsTile: false },
+  bill_splitter: { id: "bill_splitter", title: "Tip & Bill Splitter", subtitle: "Calculate tip and each person's share", icon: "calculate", shape: "soft_burst", palette: "magenta", supportsTile: false },
   unit_converter: { id: "unit_converter", title: "Unit Converter", subtitle: "Length, weight, temperature, volume and data", icon: "straighten", shape: "cookie_9sided", palette: "gold", supportsTile: false },
   counter: { id: "counter", title: "Counter", subtitle: "Tap to add to a running count", icon: "dehaze", shape: "flower", palette: "gold", supportsTile: true },
   reaction_test: { id: "reaction_test", title: "Reaction Test", subtitle: "Test your reflexes with random delays", icon: "timer", shape: "cookie_9sided", palette: "gold", supportsTile: false },

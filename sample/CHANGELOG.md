@@ -2,6 +2,14 @@
 
 ---
 
+# Unreleased
+
+### Fixed
+
+- Live tool widget shapes retain their accent tint in dark mode, matching the marketing UI.
+
+---
+
 # October 30, 2026
 
 **Version:** `26.09.38`

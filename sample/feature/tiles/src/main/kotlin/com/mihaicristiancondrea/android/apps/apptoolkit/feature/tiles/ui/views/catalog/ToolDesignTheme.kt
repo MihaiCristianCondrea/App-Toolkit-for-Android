@@ -23,7 +23,12 @@ import androidx.compose.material3.lightColorScheme
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.lerp
 import androidx.compose.ui.graphics.luminance
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.mappers.hasToolAccent
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.mappers.iconColors
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.models.StatusColors
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.models.ToolkitTileIcon
 
 /** Product accent roles, shared with the marketing preview. Host surface roles are preserved. */
 internal val ToolLightColors = lightColorScheme(
@@ -106,6 +111,46 @@ internal val ToolDarkColors = darkColorScheme(
 @Composable
 internal fun ToolDesignTheme(content: @Composable () -> Unit) {
     MaterialTheme(colorScheme = toolColorScheme(MaterialTheme.colorScheme), content = content)
+}
+
+/**
+ * Draws a tool's sheet in the tool's own accent (see [hasToolAccent]) instead of gold, so the shapes, pills,
+ * buttons and cards inside it match the badge and widget that opened it. Other tools keep the tool theme.
+ */
+@Composable
+internal fun ToolAccentTheme(icon: ToolkitTileIcon, content: @Composable () -> Unit) {
+    if (!icon.hasToolAccent()) {
+        content()
+        return
+    }
+    MaterialTheme(colorScheme = toolAccentScheme(MaterialTheme.colorScheme, icon.iconColors()), content = content)
+}
+
+/**
+ * The tool roles as tints of one [accent]: containers mix the accent into the host's highest surface (22%
+ * for primary and tertiary, 14% for secondary), and text on them is the accent pulled toward `onSurface`
+ * so it stays readable. The marketing kit builds the same roles in `.tk-sheet-content[data-accent]`.
+ */
+internal fun toolAccentScheme(host: ColorScheme, accent: StatusColors): ColorScheme {
+    val onAccent = if (host.surface.luminance() < .5f) host.surface else Color.White
+    val container = lerp(host.surfaceContainerHighest, accent.container, .22f)
+    val quietContainer = lerp(host.surfaceContainerHighest, accent.container, .14f)
+    val onContainer = lerp(accent.content, host.onSurface, .35f)
+    return host.copy(
+        primary = accent.content,
+        onPrimary = onAccent,
+        primaryContainer = container,
+        onPrimaryContainer = onContainer,
+        inversePrimary = accent.container,
+        secondary = lerp(accent.content, host.onSurface, .45f),
+        onSecondary = onAccent,
+        secondaryContainer = quietContainer,
+        onSecondaryContainer = onContainer,
+        tertiary = accent.content,
+        onTertiary = onAccent,
+        tertiaryContainer = container,
+        onTertiaryContainer = onContainer,
+    )
 }
 
 /** Keep the app's backdrop and neutral surfaces while fixing the coloured tool roles. */
