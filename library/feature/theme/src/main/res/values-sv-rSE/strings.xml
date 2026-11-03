@@ -15,11 +15,13 @@
   ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
   -->
 <resources>
-    <string name="holiday_greeting_christmas_title">Trevlig helg!</string>
-    <string name="holiday_greeting_christmas_message">Jultemat är här, med snö som faller över hela appen. Vill du använda det tills helgerna är över?</string>
-    <string name="holiday_greeting_halloween_title">Glad Halloween!</string>
-    <string name="holiday_greeting_halloween_message">Den läskiga säsongen är här. Vill du använda Halloween-temat så länge den varar?</string>
-    <string name="holiday_greeting_use_theme">Använd högtidstemat under helgerna</string>
+    <string name="holiday_greeting_christmas_title">Brrr… Julen är här!</string>
+    <string name="holiday_greeting_christmas_message">Snögubbarna har kommit, och ett frostigt nytt utseende väntar. Redo att ge appen lite vintermagi?</string>
+    <string name="holiday_greeting_christmas_accept">Låt det snöa!</string>
+    <string name="holiday_greeting_halloween_title">Pumporna har vaknat!</string>
+    <string name="holiday_greeting_halloween_message">Månen lyser, pumporna flinar och ett kusligt nytt utseende väntar. Redo för en halloweenförvandling?</string>
+    <string name="holiday_greeting_halloween_accept">Bli läskig!</string>
+    <string name="holiday_greeting_keep_theme">Behåll mitt tema</string>
     <string name="dark_theme">Mörkt tema</string>
     <string name="weather_effect">Vädereffekt</string>
     <string name="weather_effect_automatic">Automatiskt</string>

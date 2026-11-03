@@ -117,8 +117,11 @@ manager.
 What people see:
 
 - On the first screen they open during Christmas (December 24 to January 7) or Halloween
-  (October 31 to November 2), a greeting offers the holiday theme with a checkbox that starts
-  ticked. It appears once per holiday occurrence.
+  (October 31 to November 2), a greeting offers the holiday theme. It is a floating card with the
+  season's illustration as its whole background (`il_christmas_season`, `il_halloween_season`),
+  the title and message on a scrim at the top and two dialog buttons at the bottom: the filled one
+  takes the theme, the outlined one, back and a tap outside keep the current theme. Its colours
+  are the season's own in light and dark mode. It appears once per holiday occurrence.
 - Accepting applies the holiday palette. When the holiday ends, the palette and wallpaper-colors
   setting they had before come back, unless they picked another palette during the holiday.
 - Snow falls over the app while the Christmas palette is on screen, during the Christmas season.
@@ -153,5 +156,9 @@ What people see:
 `ThemeSettingsViewModelTest` covers the first load, waiting for the stored preferences, a failed
 read and its retry, each event, and failed writes. `SeasonalThemeOverlayViewModelTest` covers when
 snow or rain falls, the greeting flow, failed restores and answers, and that two activities never
-stack two greetings. Both use hand-written fakes of the two repositories. Keep palette qualifiers,
+stack two greetings. Both use hand-written fakes of the two repositories. `HolidayGreetingDialogTest`
+runs under Robolectric: each answer, the heading and the decorative art, and screenshots of both
+seasons in light and dark mode, on compact, phone, landscape and tablet windows and with a large
+font. `./gradlew :library:feature:theme:recordRoborazziDebug` rewrites them in
+`src/test/screenshots`; `verifyRoborazziDebug` fails when the greeting no longer matches. Keep palette qualifiers,
 stored identifiers, and default selection compatible with host overrides and existing preferences.

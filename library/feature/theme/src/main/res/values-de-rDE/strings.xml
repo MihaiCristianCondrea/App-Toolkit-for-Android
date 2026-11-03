@@ -15,11 +15,13 @@
   ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
   -->
 <resources>
-    <string name="holiday_greeting_christmas_title">Frohe Feiertage!</string>
-    <string name="holiday_greeting_christmas_message">Das Weihnachtsdesign ist da, mit Schnee in der ganzen App. Möchtest du es bis zum Ende der Feiertage verwenden?</string>
-    <string name="holiday_greeting_halloween_title">Fröhliches Halloween!</string>
-    <string name="holiday_greeting_halloween_message">Die gruselige Zeit ist da. Möchtest du das Halloween-Design verwenden, solange sie dauert?</string>
-    <string name="holiday_greeting_use_theme">Feiertagsdesign während der Feiertage verwenden</string>
+    <string name="holiday_greeting_christmas_title">Brrr… Weihnachten ist da!</string>
+    <string name="holiday_greeting_christmas_message">Die Schneemänner sind angekommen, und ein frostiger neuer Look wartet. Bereit für etwas Winterzauber in der App?</string>
+    <string name="holiday_greeting_christmas_accept">Lass es schneien!</string>
+    <string name="holiday_greeting_halloween_title">Die Kürbisse sind erwacht!</string>
+    <string name="holiday_greeting_halloween_message">Der Mond leuchtet, die Kürbisse grinsen, und ein schaurig neuer Look wartet. Bereit für ein Halloween-Makeover?</string>
+    <string name="holiday_greeting_halloween_accept">Lass es spuken!</string>
+    <string name="holiday_greeting_keep_theme">Mein Design behalten</string>
     <string name="dark_theme">Dunkles Thema</string>
     <string name="weather_effect">Wettereffekt</string>
     <string name="weather_effect_automatic">Automatisch</string>

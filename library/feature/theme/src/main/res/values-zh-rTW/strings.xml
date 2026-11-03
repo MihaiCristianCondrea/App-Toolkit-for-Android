@@ -15,11 +15,13 @@
   ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
   -->
 <resources>
-    <string name="holiday_greeting_christmas_title">佳節愉快！</string>
-    <string name="holiday_greeting_christmas_message">聖誕主題來了，整個應用程式都會飄雪。要在假期結束前一直使用這個主題嗎？</string>
-    <string name="holiday_greeting_halloween_title">萬聖節快樂！</string>
-    <string name="holiday_greeting_halloween_message">萬聖節季節到了。要在季節結束前一直使用萬聖節主題嗎？</string>
-    <string name="holiday_greeting_use_theme">在節日期間使用節日主題</string>
+    <string name="holiday_greeting_christmas_title">呼～聖誕節來了！</string>
+    <string name="holiday_greeting_christmas_message">雪人已經抵達，全新的冰雪造型正等著你。準備好為應用程式帶來一點冬日魔法了嗎？</string>
+    <string name="holiday_greeting_christmas_accept">下雪吧！</string>
+    <string name="holiday_greeting_halloween_title">南瓜們醒來了！</string>
+    <string name="holiday_greeting_halloween_message">月亮閃耀、南瓜咧嘴笑，全新的萬聖節造型正等著你。準備好來場萬聖節變身了嗎？</string>
+    <string name="holiday_greeting_halloween_accept">來點驚嚇！</string>
+    <string name="holiday_greeting_keep_theme">保留我的主題</string>
     <string name="dark_theme">深色主題</string>
     <string name="weather_effect">天氣效果</string>
     <string name="weather_effect_automatic">自動</string>

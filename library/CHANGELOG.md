@@ -29,6 +29,11 @@
 
 ### Changed
 
+- `HolidayGreetingDialog` is a seasonal card: the Christmas or Halloween illustration fills it, the
+  title and message sit on a scrim at the top and two dialog buttons at the bottom, in the season's
+  own colours whatever the app's theme. The filled button takes the holiday theme; the outlined one,
+  back and a tap outside keep the current one. The checkbox is gone, and `onAnswer` is unchanged.
+
 - Native ad text uses the app's typeface (Google Sans Flex) at the weight each view needs, through
   the new `TextView.useAppFont(weight)`, instead of the system font. `headlineBold` now switches
   between weights 700 and 400 of that typeface.

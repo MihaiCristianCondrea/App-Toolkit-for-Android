@@ -15,11 +15,13 @@
   ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
   -->
 <resources>
-    <string name="holiday_greeting_christmas_title">শুভ ছুটির দিন!</string>
-    <string name="holiday_greeting_christmas_message">ক্রিসমাস থিম এসে গেছে, পুরো অ্যাপ জুড়ে তুষার পড়ছে। ছুটি শেষ না হওয়া পর্যন্ত এটি ব্যবহার করতে চান?</string>
-    <string name="holiday_greeting_halloween_title">শুভ হ্যালোইন!</string>
-    <string name="holiday_greeting_halloween_message">ভুতুড়ে মৌসুম এসে গেছে। যতদিন চলে ততদিন হ্যালোইন থিম ব্যবহার করতে চান?</string>
-    <string name="holiday_greeting_use_theme">ছুটির সময় ছুটির থিম ব্যবহার করুন</string>
+    <string name="holiday_greeting_christmas_title">ব্র্‌র্‌… বড়দিন এসে গেছে!</string>
+    <string name="holiday_greeting_christmas_message">তুষারমানবেরা এসে গেছে, আর একটি নতুন হিমেল রূপ অপেক্ষা করছে। অ্যাপে একটু শীতের জাদু আনতে প্রস্তুত?</string>
+    <string name="holiday_greeting_christmas_accept">তুষার পড়ুক!</string>
+    <string name="holiday_greeting_halloween_title">কুমড়োরা জেগে উঠেছে!</string>
+    <string name="holiday_greeting_halloween_message">চাঁদ জ্বলজ্বল করছে, কুমড়োরা হাসছে, আর একটি নতুন ভুতুড়ে রূপ অপেক্ষা করছে। হ্যালোইনের সাজে সাজতে প্রস্তুত?</string>
+    <string name="holiday_greeting_halloween_accept">ভুতুড়ে হয়ে যাক!</string>
+    <string name="holiday_greeting_keep_theme">আমার থিম রাখুন</string>
     <string name="dark_theme">ডার্ক থিম</string>
     <string name="weather_effect">আবহাওয়ার ইফেক্ট</string>
     <string name="weather_effect_automatic">স্বয়ংক্রিয়</string>
