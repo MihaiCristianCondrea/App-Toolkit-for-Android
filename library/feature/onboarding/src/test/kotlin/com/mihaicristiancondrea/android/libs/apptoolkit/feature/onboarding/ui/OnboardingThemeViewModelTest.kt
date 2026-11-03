@@ -131,6 +131,10 @@ class OnboardingThemeViewModelTest {
             listOf("themeMode=light", "amoled=false", "dynamicPalette=1", "staticPalette=green"),
             preferences.writes,
         )
+        val themeActions = telemetryRepository.loggedEvents.filter {
+            it.name == "settings_action" && it.params["action_name"] == AnalyticsValue.Str("theme_customized")
+        }
+        assertEquals(4, themeActions.size)
         assertTrue(viewModel.messages.value.isEmpty())
     }
 

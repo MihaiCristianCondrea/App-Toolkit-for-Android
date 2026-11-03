@@ -121,8 +121,8 @@ flowchart TD
 - The repository throws only when there is nothing to show. A failed catalog with bundled questions
   to fall back on is not an error, and a catalog that loaded empty is `Loadable.Empty`, with Retry.
 - `FaqScreenContent` logs nothing and opens nothing. Every tap reaches `FaqScreen` as a named
-  callback, which logs the same GA4 events as before and opens the form, mail or store listing,
-  since those need a `Context`.
+  callback, which logs GA4 events (`select_content` for content selection, action events for buttons
+  and overflow menu items) and opens the form, mail or store listing, since those need a `Context`.
 - When the in-app review cannot show, the ViewModel sets `openStoreListing` and the screen opens the
   store listing, then reports back with `StoreListingOpened`. A flag in state, not a one-off event,
   so it still happens when the review finishes during a configuration change.

@@ -20,11 +20,18 @@ package com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.ui.graphics.Color
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.catalog.toolColorScheme
+import androidx.compose.ui.graphics.lerp
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.mappers.hasToolAccent
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.models.StatusColors
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.models.ToolkitTileIcon
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.catalog.ToolDarkColors
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.catalog.ToolLightColors
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.catalog.toolAccentScheme
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.catalog.toolColorScheme
 import org.junit.jupiter.api.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertFalse
+import kotlin.test.assertTrue
 
 class ToolColorSchemeTest {
     @Test fun preservesHostBackgroundAndNeutralRoles() {
@@ -57,5 +64,24 @@ class ToolColorSchemeTest {
         assertEquals(ToolLightColors.secondaryContainer, light.secondaryContainer)
         assertEquals(ToolDarkColors.primary, dark.primary)
         assertEquals(ToolDarkColors.tertiaryContainer, dark.tertiaryContainer)
+    }
+
+    @Test fun appliesToolAccentToBottomSheetColorSchemeOnlyForAccentedTools() {
+        assertTrue(ToolkitTileIcon.Level.hasToolAccent())
+        assertTrue(ToolkitTileIcon.Water.hasToolAccent())
+        assertTrue(ToolkitTileIcon.Breathing.hasToolAccent())
+        assertTrue(ToolkitTileIcon.Sos.hasToolAccent())
+        assertTrue(ToolkitTileIcon.Morse.hasToolAccent())
+        assertTrue(ToolkitTileIcon.BillSplitter.hasToolAccent())
+        assertFalse(ToolkitTileIcon.Compass.hasToolAccent())
+        assertFalse(ToolkitTileIcon.FlashDimmer.hasToolAccent())
+
+        val host = toolColorScheme(lightColorScheme())
+        val accent = StatusColors(container = Color(0xFFEE0000), content = Color(0xFFB10000))
+        val scheme = toolAccentScheme(host, accent)
+        assertEquals(accent.content, scheme.primary)
+        assertEquals(accent.container, scheme.inversePrimary)
+        assertEquals(lerp(host.surfaceContainerHighest, accent.container, .22f), scheme.primaryContainer)
+        assertEquals(lerp(accent.content, host.onSurface, .35f), scheme.onPrimaryContainer)
     }
 }

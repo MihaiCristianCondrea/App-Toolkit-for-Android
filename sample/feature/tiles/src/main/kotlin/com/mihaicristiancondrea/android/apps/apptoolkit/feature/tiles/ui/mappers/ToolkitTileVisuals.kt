@@ -102,24 +102,44 @@ internal fun ToolkitTileStatus.icon(): ImageVector = when (this) {
     ToolkitTileStatus.Unsupported -> ToolSymbols.Close
 }
 
-/** The tool accents of marketing/ui/src/kit/kit.css (--tk-teal, --tk-orange, --tk-magenta, --tk-gold), light and dark. */
+/**
+ * The tool accents of marketing/ui/src/kit/kit.css (--tk-teal, --tk-blue, --tk-orange, --tk-red, --tk-magenta,
+ * --tk-gold), light and dark. Sensors are teal, Water Eject blue, Breathe orange, SOS and Morse red, the bill
+ * splitter pink, and every other tool gold.
+ */
 @Composable
 internal fun ToolkitTileIcon.iconColors(): StatusColors {
     val dark = MaterialTheme.colorScheme.surface.luminance() < .5f
     return when (this) {
-        ToolkitTileIcon.Level, ToolkitTileIcon.Compass, ToolkitTileIcon.Water -> StatusColors(
+        ToolkitTileIcon.Level, ToolkitTileIcon.Compass -> StatusColors(
             container = if (dark) Color(0xFF225B53) else Color(0xFF00A091),
             content = if (dark) Color(0xFF8FD3C7) else Color(0xFF006A60))
+        ToolkitTileIcon.Water -> StatusColors(
+            container = if (dark) Color(0xFF234B82) else Color(0xFF2D7DF6),
+            content = if (dark) Color(0xFFA4C7F7) else Color(0xFF0B4FA8))
         ToolkitTileIcon.Breathing -> StatusColors(
             container = if (dark) Color(0xFF79471D) else Color(0xFFFF8B26),
             content = if (dark) Color(0xFFE7BC98) else Color(0xFF8B4100))
         ToolkitTileIcon.Sos, ToolkitTileIcon.Morse -> StatusColors(
+            container = if (dark) Color(0xFFB10000) else Color(0xFFEE0000),
+            content = if (dark) Color(0xFFFF897D) else Color(0xFFB10000))
+        ToolkitTileIcon.BillSplitter -> StatusColors(
             container = if (dark) Color(0xFF753354) else Color(0xFFE2008E),
             content = if (dark) Color(0xFFE4B1CA) else Color(0xFF91005A))
         else -> StatusColors(
             container = if (dark) Color(0xFF746528) else Color(0xFFE2C900),
             content = if (dark) Color(0xFFDCCB7A) else Color(0xFF6B5E00))
     }
+}
+
+/**
+ * Whether the tool's sheet is drawn in its own accent instead of the gold tool theme. The compass is not
+ * listed: its sheet draws its accent itself.
+ */
+internal fun ToolkitTileIcon.hasToolAccent(): Boolean = when (this) {
+    ToolkitTileIcon.Level, ToolkitTileIcon.Water, ToolkitTileIcon.Breathing,
+    ToolkitTileIcon.Sos, ToolkitTileIcon.Morse, ToolkitTileIcon.BillSplitter -> true
+    else -> false
 }
 
 @Composable

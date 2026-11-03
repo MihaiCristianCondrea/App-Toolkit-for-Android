@@ -46,4 +46,6 @@
     <string name="more_apps_empty">Jelenleg nincs elérhető alkalmazás.</string>
     <string name="more_apps_store_action_description">%1$s megnyitása a Google Playen</string>
     <string name="more_apps_open_action_description">%1$s megnyitása</string>
+    <string name="more_apps_open_details">Részletek megnyitása</string>
+    <string name="more_apps_details_action_description">Részletek megnyitása: %1$s</string>
 </resources>

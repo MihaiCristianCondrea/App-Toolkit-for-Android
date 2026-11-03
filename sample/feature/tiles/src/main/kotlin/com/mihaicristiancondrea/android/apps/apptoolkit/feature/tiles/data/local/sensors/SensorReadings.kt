@@ -18,8 +18,6 @@
 
 package com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.local.sensors
 
-import kotlin.math.roundToInt
-
 /**
  * Whether every value of a sensor reading is a real number. Some sensor drivers report NaN or
  * infinity, for example while they calibrate; such a reading carries no direction, and every angle
@@ -29,13 +27,12 @@ internal fun FloatArray.isFiniteReading(): Boolean = all { it.isFinite() }
 
 /**
  * The compass heading for an azimuth of [radians], as `SensorManager.getOrientation` gives it, in
- * whole degrees from 0 to 359. Null when the azimuth is not a real number, which `roundToInt`
- * would refuse.
+ * degrees from 0 to 360. Null when the azimuth is not a real number.
  */
 internal fun azimuthDegrees(radians: Float): Float? {
     if (!radians.isFinite()) return null
-    val degrees = Math.toDegrees(radians.toDouble()).roundToInt()
-    return (((degrees % FULL_TURN) + FULL_TURN) % FULL_TURN).toFloat()
+    val degrees = Math.toDegrees(radians.toDouble()).toFloat()
+    return degrees.mod(FULL_TURN).let { if (it == 0f) 0f else it }
 }
 
 /**
@@ -47,4 +44,4 @@ internal fun tiltDegrees(pitchRadians: Float, rollRadians: Float): Pair<Float, F
     return Math.toDegrees(pitchRadians.toDouble()).toFloat() to Math.toDegrees(rollRadians.toDouble()).toFloat()
 }
 
-private const val FULL_TURN = 360
+private const val FULL_TURN = 360f

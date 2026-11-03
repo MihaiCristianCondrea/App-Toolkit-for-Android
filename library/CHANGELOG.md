@@ -2,7 +2,20 @@
 
 ---
 
-# Unreleased
+# November 02, 2026
+
+**Version:** `3.0.0-pre31`
+
+### Added
+
+- `ShellPlayer` in `:library:navigation` (`graph`) accepts an optional `onDismiss: (() -> Unit)? = null`
+  callback, enabling swipe-down-to-dismiss and an accessible dismiss action on the collapsed
+  mini-player in `:library:shell` while keeping dismissal motion separate from `PlayerExpansion` and
+  leaving expanded-to-collapsed gestures and hosts that omit `onDismiss` unchanged.
+
+---
+
+# November 01, 2026
 
 **Version:** `3.0.0-pre30`
 

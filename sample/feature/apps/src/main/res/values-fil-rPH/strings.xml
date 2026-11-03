@@ -46,4 +46,6 @@
     <string name="more_apps_empty">Walang available na app sa ngayon.</string>
     <string name="more_apps_store_action_description">Buksan ang %1$s sa Google Play</string>
     <string name="more_apps_open_action_description">Buksan ang %1$s</string>
+    <string name="more_apps_open_details">Buksan ang mga detalye</string>
+    <string name="more_apps_details_action_description">Buksan ang mga detalye: %1$s</string>
 </resources>

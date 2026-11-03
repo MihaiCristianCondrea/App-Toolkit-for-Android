@@ -18,4 +18,5 @@
     <string name="shell_open_navigation">Öppna navigering</string>
     <string name="shell_expand_navigation">Expandera navigering</string>
     <string name="shell_collapse_navigation">Komprimera navigering</string>
+    <string name="shell_dismiss_player">Stäng spelare</string>
 </resources>

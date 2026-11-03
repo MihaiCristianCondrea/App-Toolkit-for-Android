@@ -220,9 +220,14 @@ try {
       checks++;
     }
     await page.locator('.mc-sheet').evaluate(el => { el.style.width = ''; });
+    await page.locator(SHEET).evaluate(el => Promise.all(el.getAnimations().map(a => a.finished)));
+    const sheetY = (await page.locator('.mc-sheet').boundingBox()).y;
     const headerY = (await page.locator('.mc-sheet__head').boundingBox()).y;
+    assert.equal(headerY, sheetY);
+    await page.locator('.mc-sheet__body').evaluate(el => { el.scrollTop = el.scrollHeight; });
     await page.locator('.mc-swatch').last().scrollIntoViewIfNeeded();
     assert.equal((await page.locator('.mc-sheet__head').boundingBox()).y, headerY);
+    assert.equal((await page.locator('.mc-sheet').boundingBox()).y, sheetY);
     checks++;
     for (const theme of ['light', 'dark']) {
       const state = encodeURIComponent(JSON.stringify({activeToolId: 'material_colors'}));
@@ -230,16 +235,23 @@ try {
       await page.waitForFunction(() => [...document.querySelectorAll('.mc-swatch__hex')].length === 12 && [...document.querySelectorAll('.mc-swatch__hex')].every(el => /^#[0-9A-F]{8}$/.test(el.textContent)));
       // Both black and white labels must meet normal-text contrast on the real scheme colours.
       const contrast = await page.locator('.mc-swatch').evaluateAll(nodes => {
-        const luminance = css => {
+        const channels = css => {
           const ctx = document.createElement('canvas').getContext('2d');
           ctx.fillStyle = css; ctx.fillRect(0, 0, 1, 1);
-          const rgb = [...ctx.getImageData(0, 0, 1, 1).data].slice(0, 3).map(v => {
+          return [...ctx.getImageData(0, 0, 1, 1).data];
+        };
+        const luminance = rgb => {
+          const [r, g, b] = rgb.map(v => {
             const c = v / 255; return c <= .04045 ? c / 12.92 : ((c + .055) / 1.055) ** 2.4;
           });
-          return .2126 * rgb[0] + .7152 * rgb[1] + .0722 * rgb[2];
+          return .2126 * r + .7152 * g + .0722 * b;
         };
         return nodes.every(el => {
-          const style = getComputedStyle(el), bg = luminance(style.backgroundColor), ink = luminance(style.color);
+          const style = getComputedStyle(el);
+          const [r, g, b, a] = channels(style.backgroundColor);
+          const surface = channels(getComputedStyle(el.closest('.mc-sheet')).backgroundColor);
+          const bg = luminance([r, g, b].map((v, i) => v * a / 255 + surface[i] * (1 - a / 255)));
+          const ink = luminance(channels(style.color));
           return (Math.max(bg, ink) + .05) / (Math.min(bg, ink) + .05) >= 4.5;
         });
       });

@@ -53,7 +53,9 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.material3.FilledTonalButton
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.GeneralButton
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.GeneralButtonStyle
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.icons.ToolkitIcon
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -152,14 +154,22 @@ internal fun NumbersScreenContent(
         val locale = LocalConfiguration.current.locales[0]
         val context = LocalContext.current
         val query = searchQuery.trim()
-        val tools = catalogTools.filter { query.isBlank() || resources.getString(it.titleResId).contains(query, true) || resources.getString(it.summaryResId).contains(query, true) }
-        ToolWorkspace(contentPadding) {
-            if (tools.isEmpty()) Text(stringResource(R.string.tiles_filter_empty))
-            val sections = listOf(
+        val tools = androidx.compose.runtime.remember(catalogTools, query, resources) {
+            if (query.isBlank()) catalogTools
+            else catalogTools.filter {
+                resources.getString(it.titleResId).contains(query, true) ||
+                    resources.getString(it.summaryResId).contains(query, true)
+            }
+        }
+        val sections = androidx.compose.runtime.remember {
+            listOf(
                 Triple(R.string.section_length, ToolSymbols.Rounded.SquareFoot, listOf(ToolkitTileIds.RULER, ToolkitTileIds.PROTRACTOR)),
                 Triple(R.string.section_convert, ToolSymbols.Rounded.SwapHoriz, listOf(ToolkitTileIds.UNIT_CONVERTER, ToolkitTileIds.BILL_SPLITTER)),
                 Triple(R.string.section_count, ToolSymbols.Rounded.Timer, listOf(ToolkitTileIds.COUNTER, ToolkitTileIds.REACTION_TEST)),
             )
+        }
+        ToolWorkspace(contentPadding) {
+            if (tools.isEmpty()) Text(stringResource(R.string.tiles_filter_empty))
             sections.forEach { (title, icon, ids) ->
                 val visible = tools.filter { it.id in ids }
                 if (visible.isNotEmpty()) ToolSection(stringResource(title), icon, Modifier) {
@@ -275,11 +285,13 @@ private fun ReactionWidget(tile: ToolkitTile, bestMs: Long?, shape: Shape, onOpe
                     )
                 }
             }
-            FilledTonalButton(onClick = onStart) {
-                Icon(ToolSymbols.PlayArrow, null, Modifier.size(18.dp))
-                Spacer(Modifier.width(8.dp))
-                Text(stringResource(R.string.tool_reaction_test_start))
-            }
+            GeneralButton(
+                onClick = onStart,
+                style = GeneralButtonStyle.Tonal,
+                icon = ToolkitIcon.Vector(ToolSymbols.PlayArrow),
+                iconSize = 18.dp,
+                label = stringResource(R.string.tool_reaction_test_start),
+            )
         }
     }
 }

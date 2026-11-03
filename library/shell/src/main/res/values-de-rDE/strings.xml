@@ -18,4 +18,5 @@
     <string name="shell_open_navigation">Navigation öffnen</string>
     <string name="shell_expand_navigation">Navigation maximieren</string>
     <string name="shell_collapse_navigation">Navigation minimieren</string>
+    <string name="shell_dismiss_player">Player schließen</string>
 </resources>

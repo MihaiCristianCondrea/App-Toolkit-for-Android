@@ -188,6 +188,12 @@ Screens then call `LocalShellNavigator.current.navigate(key)` with any registere
 
 - The graph DSL and `ShellGraph`, including `contains`, `destination`, `keyFor`, `startOptions`,
   `tabIndexOf` and `defaults`.
+- `ShellPlayer(isActive, mini, onDismiss, expanded)`, registered with `player(...)`. `isActive`
+  controls visibility, `mini` draws the collapsed pill, `expanded(collapse)` draws the full-window
+  player, and optional `onDismiss` (default `null`) is invoked once when the person dismisses the
+  collapsed pill (by swiping down or triggering the accessibility dismiss action). Dismissal asks
+  the host to stop playback and clear its active player state; the Toolkit does not stop media or
+  own playback state.
 - `ShellTab`, whose badge is a fixed `badge` or a `badgeText` read in composition, such as an
   unread count from state: null shows none and an empty string a dot.
 - `NavigationDefaults` and `ShellGraphBuilder(appTitle, appIcon, defaults)`. A null `topBar` on

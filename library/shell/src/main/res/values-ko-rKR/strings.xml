@@ -18,4 +18,5 @@
     <string name="shell_open_navigation">탐색 메뉴 열기</string>
     <string name="shell_expand_navigation">탐색 메뉴 펼치기</string>
     <string name="shell_collapse_navigation">탐색 메뉴 접기</string>
+    <string name="shell_dismiss_player">플레이어 닫기</string>
 </resources>

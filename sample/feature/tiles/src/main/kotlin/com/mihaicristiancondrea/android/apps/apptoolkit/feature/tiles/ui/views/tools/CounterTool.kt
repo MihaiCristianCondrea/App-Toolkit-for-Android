@@ -20,11 +20,8 @@ package com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.icons.ToolSymbols
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.size
-import androidx.compose.material3.FilledIconButton
-import androidx.compose.material3.OutlinedIconButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
-import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.unit.dp
@@ -50,6 +47,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.consta
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.icons.ToolkitIcon
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.ButtonMeasurements
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.GeneralButton
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.ButtonFeedback
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.GeneralButtonStyle
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.digits.AnimatedDigit
 
@@ -141,12 +139,19 @@ private fun CounterToolPreview() {
 /** The overview counter fills the space between two 64 dp controls, including long counts. */
 @Composable
 internal fun CounterControls(count: Int, onIncrement: () -> Unit, onDecrement: () -> Unit) {
-    val haptic = LocalHapticFeedback.current
     Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
         Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-            OutlinedIconButton(onClick = { haptic.performHapticFeedback(HapticFeedbackType.TextHandleMove); onDecrement() }, enabled = count > 0, modifier = Modifier.size(64.dp)) {
-                Icon(ToolSymbols.Remove, stringResource(R.string.tool_counter_decrement))
-            }
+            GeneralButton(
+                onClick = onDecrement,
+                style = GeneralButtonStyle.Outlined,
+                enabled = count > 0,
+                modifier = Modifier.size(64.dp),
+                measurements = ButtonMeasurements.Large,
+                iconSize = 24.dp,
+                icon = ToolkitIcon.Vector(ToolSymbols.Remove),
+                contentDescription = stringResource(R.string.tool_counter_decrement),
+                feedback = ButtonFeedback(hapticFeedbackType = HapticFeedbackType.TextHandleMove),
+            )
             Surface(Modifier.weight(1f), shape = CircleShape, color = MaterialTheme.colorScheme.primaryContainer) {
                 BoxWithConstraints(Modifier.padding(horizontal = 12.dp, vertical = 16.dp), contentAlignment = Alignment.Center) {
                     val density = LocalDensity.current
@@ -160,9 +165,16 @@ internal fun CounterControls(count: Int, onIncrement: () -> Unit, onDecrement: (
                     )
                 }
             }
-            FilledIconButton(onClick = { haptic.performHapticFeedback(HapticFeedbackType.TextHandleMove); onIncrement() }, enabled = count < Int.MAX_VALUE, modifier = Modifier.size(64.dp)) {
-                Icon(ToolSymbols.Add, stringResource(R.string.tool_counter_increment))
-            }
+            GeneralButton(
+                onClick = onIncrement,
+                enabled = count < Int.MAX_VALUE,
+                modifier = Modifier.size(64.dp),
+                measurements = ButtonMeasurements.Large,
+                iconSize = 24.dp,
+                icon = ToolkitIcon.Vector(ToolSymbols.Add),
+                contentDescription = stringResource(R.string.tool_counter_increment),
+                feedback = ButtonFeedback(hapticFeedbackType = HapticFeedbackType.TextHandleMove),
+            )
         }
     }
 }

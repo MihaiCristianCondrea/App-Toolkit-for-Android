@@ -797,6 +797,8 @@ mnw-android-screen,
   --tk-gold-content: #6b5e00;
   --tk-teal-container: #00a091;
   --tk-teal-content: #006a60;
+  --tk-blue-container: #2d7df6;
+  --tk-blue-content: #0b4fa8;
   --tk-orange-container: #ff8b26;
   --tk-orange-content: #8b4100;
   --tk-magenta-container: #e2008e;
@@ -813,6 +815,8 @@ mnw-android-screen,
   --tk-gold-content: #dccb7a;
   --tk-teal-container: #225b53;
   --tk-teal-content: #8fd3c7;
+  --tk-blue-container: #234b82;
+  --tk-blue-content: #a4c7f7;
   --tk-orange-container: #79471d;
   --tk-orange-content: #e7bc98;
   --tk-magenta-container: #753354;
@@ -1354,8 +1358,10 @@ mnw-android-screen,
 .qt-tile__status { margin: 2px 0 0; font: 600 13px/18px "Space Grotesk", var(--md-ref-typeface-plain); font-variant-numeric: tabular-nums; color: var(--md-sys-color-on-surface-variant); }
 .qt-tile[data-accent="gold"] .qt-tile__status { color: var(--tk-gold-content); }
 .qt-tile[data-accent="teal"] .qt-tile__status { color: var(--tk-teal-content); }
+.qt-tile[data-accent="blue"] .qt-tile__status { color: var(--tk-blue-content); }
 .qt-tile[data-accent="orange"] .qt-tile__status { color: var(--tk-orange-content); }
 .qt-tile[data-accent="magenta"] .qt-tile__status { color: var(--tk-magenta-content); }
+.qt-tile[data-accent="red"] .qt-tile__status { color: var(--tk-red-content); }
 .qt-tile[data-accent="amber"] .qt-tile__status { color: var(--tk-amber-content); }
 .qt-howto-card { background: var(--md-sys-color-surface-container-low); border-radius: 28px; padding: 16px 20px; display: block; }
 .qt-howto-title { font: 600 16px/24px var(--md-ref-typeface-plain); }
@@ -1464,7 +1470,9 @@ mnw-android-screen,
 .qt-live-row > :last-child { border-radius: 8px 28px 28px 8px; }
 .qt-live-row > :only-child { border-radius: 28px; }
 .qt-live[data-accent="gold"] { --qt-live-accent: var(--tk-gold-container); --qt-live-content: var(--tk-gold-content); }
+.qt-live[data-accent="blue"] { --qt-live-accent: var(--tk-blue-container); --qt-live-content: var(--tk-blue-content); }
 .qt-live[data-accent="magenta"] { --qt-live-accent: var(--tk-magenta-container); --qt-live-content: var(--tk-magenta-content); }
+.qt-live[data-accent="red"] { --qt-live-accent: var(--tk-red-container); --qt-live-content: var(--tk-red-content); }
 .qt-live:hover { background: var(--md-sys-color-surface-container-highest); }
 .qt-live:focus-visible, .qt-live__control:focus-visible { outline: 2px solid var(--md-sys-color-primary); outline-offset: 2px; }
 .qt-live__label { align-self: flex-start; padding-left: 4px; font: 600 12px/16px "Space Grotesk", var(--md-ref-typeface-plain); letter-spacing: .5px; text-transform: uppercase; color: var(--md-sys-color-on-surface-variant); }
@@ -1508,9 +1516,9 @@ mnw-android-screen,
 .tk-pill--single { border-radius: 30px; }
 
 /* LevelTool.kt, on the 16-sided cookie. */
-.tk-level { position: relative; width: 200px; height: 200px; display: grid; place-items: center; background: var(--md-sys-color-surface-variant); }
+.tk-level { position: relative; width: 200px; height: 200px; display: grid; place-items: center; background: var(--md-sys-color-primary-container); }
 .tk-level > * { grid-area: 1 / 1; }
-.tk-level__target { width: 40px; height: 40px; border-radius: 50%; box-shadow: inset 0 0 0 2px var(--md-sys-color-outline); }
+.tk-level__target { width: 40px; height: 40px; border-radius: 50%; box-shadow: inset 0 0 0 2px color-mix(in srgb, var(--md-sys-color-on-primary-container) 40%, transparent); }
 .tk-level__bubble { width: 30px; height: 30px; border-radius: 50%; background: var(--md-sys-color-secondary); transition: transform .2s ease; }
 .tk-level__bubble.is-level { background: var(--md-sys-color-primary); }
 
@@ -1543,7 +1551,7 @@ mnw-android-screen,
 
 .sc-rounded { --md-icon-font: "Material Symbols Rounded"; font-family: "Material Symbols Rounded"; }
 .tk-level__cross { width: 100%; height: 100%; }
-.tk-level__cross line { stroke: var(--md-sys-color-outline); stroke-width: 1; opacity: .6; }
+.tk-level__cross line { stroke: var(--md-sys-color-on-primary-container); stroke-width: 1; opacity: .25; }
 .qt-section__title { display: flex; align-items: center; gap: 8px; }
 .qt-section__title md-icon { --md-icon-size: 20px; color: var(--md-sys-color-primary); }
 
@@ -1710,8 +1718,36 @@ mnw-android-screen,
 .chance-coin__face:not(.chance-coin__face--back) { transform:translateZ(5px); }
 .chance-coin__rim { position:absolute; inset:0; border-radius:50%; background:color-mix(in srgb, var(--md-sys-color-primary) 45%, var(--md-sys-color-primary-container)); }
 
-/* ToolkitToolBottomSheet.kt: the header, the tool and the Quick Settings card 16 dp apart, inside the shell's sheet. */
+/* ToolkitToolBottomSheet.kt: the header, the tool and the Quick Settings card 16 dp apart, inside the shell's sheet.
+   ToolAccentTheme (ToolDesignTheme.kt) overrides the sheet's M3 accent roles for tools with their own accent. */
 .tk-sheet-content { display: flex; flex-direction: column; gap: 16px; }
+.tk-sheet-content[data-accent="teal"] { --_accent-container: var(--tk-teal-container); --_accent-content: var(--tk-teal-content); }
+.tk-sheet-content[data-accent="blue"] { --_accent-container: var(--tk-blue-container); --_accent-content: var(--tk-blue-content); }
+.tk-sheet-content[data-accent="orange"] { --_accent-container: var(--tk-orange-container); --_accent-content: var(--tk-orange-content); }
+.tk-sheet-content[data-accent="red"] { --_accent-container: var(--tk-red-container); --_accent-content: var(--tk-red-content); }
+.tk-sheet-content[data-accent="magenta"] { --_accent-container: var(--tk-magenta-container); --_accent-content: var(--tk-magenta-content); }
+.tk-sheet-content[data-accent] {
+  --_on-accent: #ffffff;
+  --_container: color-mix(in srgb, var(--_accent-container) 22%, var(--md-sys-color-surface-container-highest));
+  --_quiet-container: color-mix(in srgb, var(--_accent-container) 14%, var(--md-sys-color-surface-container-highest));
+  --_on-container: color-mix(in srgb, var(--md-sys-color-on-surface) 35%, var(--_accent-content));
+  --md-sys-color-primary: var(--_accent-content);
+  --md-sys-color-on-primary: var(--_on-accent);
+  --md-sys-color-primary-container: var(--_container);
+  --md-sys-color-on-primary-container: var(--_on-container);
+  --md-sys-color-inverse-primary: var(--_accent-container);
+  --md-sys-color-secondary: color-mix(in srgb, var(--md-sys-color-on-surface) 45%, var(--_accent-content));
+  --md-sys-color-on-secondary: var(--_on-accent);
+  --md-sys-color-secondary-container: var(--_quiet-container);
+  --md-sys-color-on-secondary-container: var(--_on-container);
+  --md-sys-color-tertiary: var(--_accent-content);
+  --md-sys-color-on-tertiary: var(--_on-accent);
+  --md-sys-color-tertiary-container: var(--_container);
+  --md-sys-color-on-tertiary-container: var(--_on-container);
+}
+[data-theme="dark"] .tk-sheet-content[data-accent] {
+  --_on-accent: var(--md-sys-color-surface);
+}
 
 /* Compose Slider / RangeSlider (kit/slider.js): a 16 dp track split by a 4 x 44 dp handle with
    6 dp gaps, 8 dp outer corners and 2 dp corners at the handle, stop dots on the inactive ends. */

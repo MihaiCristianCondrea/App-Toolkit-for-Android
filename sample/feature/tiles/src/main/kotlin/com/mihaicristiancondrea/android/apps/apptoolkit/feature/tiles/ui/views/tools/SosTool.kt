@@ -20,8 +20,8 @@ package com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.heightIn
-import androidx.compose.material3.Button
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.GeneralButton
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.ButtonMeasurements
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -34,9 +34,12 @@ import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.R
 fun SosTool(isActive: Boolean, onToggle: () -> Unit) {
     Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
         SignalPanel(isActive, "SOS", "··· −−− ···")
-        Button(onClick = onToggle, modifier = Modifier.fillMaxWidth().heightIn(min = 56.dp)) {
-            Text(stringResource(if (isActive) R.string.morse_stop else R.string.morse_start))
-        }
+        GeneralButton(
+            onClick = onToggle,
+            modifier = Modifier.fillMaxWidth(),
+            measurements = ButtonMeasurements.Medium,
+            label = stringResource(if (isActive) R.string.morse_stop else R.string.morse_start),
+        )
         Text(stringResource(R.string.signal_guidance), style = MaterialTheme.typography.bodySmall)
     }
 }

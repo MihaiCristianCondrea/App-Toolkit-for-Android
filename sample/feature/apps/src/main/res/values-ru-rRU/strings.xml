@@ -46,4 +46,6 @@
     <string name="more_apps_empty">Сейчас нет доступных приложений.</string>
     <string name="more_apps_store_action_description">Открыть %1$s в Google Play</string>
     <string name="more_apps_open_action_description">Открыть %1$s</string>
+    <string name="more_apps_open_details">Открыть сведения</string>
+    <string name="more_apps_details_action_description">Открыть сведения: %1$s</string>
 </resources>

@@ -18,4 +18,5 @@
     <string name="shell_open_navigation">Deschide navigarea</string>
     <string name="shell_expand_navigation">Extinde navigarea</string>
     <string name="shell_collapse_navigation">Restrânge navigarea</string>
+    <string name="shell_dismiss_player">Închide playerul</string>
 </resources>

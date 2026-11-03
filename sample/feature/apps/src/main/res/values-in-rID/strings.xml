@@ -46,4 +46,6 @@
     <string name="more_apps_empty">Tidak ada aplikasi yang tersedia saat ini.</string>
     <string name="more_apps_store_action_description">Buka %1$s di Google Play</string>
     <string name="more_apps_open_action_description">Buka %1$s</string>
+    <string name="more_apps_open_details">Buka detail</string>
+    <string name="more_apps_details_action_description">Buka detail: %1$s</string>
 </resources>

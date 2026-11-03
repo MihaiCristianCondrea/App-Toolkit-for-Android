@@ -46,4 +46,6 @@
     <string name="more_apps_empty">Зараз немає доступних додатків.</string>
     <string name="more_apps_store_action_description">Відкрити %1$s у Google Play</string>
     <string name="more_apps_open_action_description">Відкрити %1$s</string>
+    <string name="more_apps_open_details">Відкрити відомості</string>
+    <string name="more_apps_details_action_description">Відкрити відомості: %1$s</string>
 </resources>

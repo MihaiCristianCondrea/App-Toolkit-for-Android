@@ -42,3 +42,11 @@ sealed class OnboardingPage {
     ) : OnboardingPage()
 }
 
+/** Stable identifier for the onboarding page. */
+val OnboardingPage.key: String
+    get() = when (this) {
+        is OnboardingPage.DefaultPage -> key
+        is OnboardingPage.CustomPage -> key
+    }
+
+

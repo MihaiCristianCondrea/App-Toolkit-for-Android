@@ -17,20 +17,17 @@
 
 package com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.tools
 
+import androidx.compose.animation.core.Spring
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.spring
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
-import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
-import androidx.compose.material3.MaterialShapes
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.catalog.Cookie16Shape
-import androidx.compose.material3.toShape
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -41,21 +38,33 @@ import androidx.compose.ui.unit.dp
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.mappers.iconColors
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.models.ToolkitTileIcon
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.ResultPill
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.catalog.Cookie16Shape
 import kotlin.math.abs
 
-@OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
 fun LevelTool(pitch: Float, roll: Float, compact: Boolean = false) {
     val colors = MaterialTheme.colorScheme
+    val animatedPitch = animateFloatAsState(
+        targetValue = pitch,
+        animationSpec = spring(stiffness = Spring.StiffnessMediumLow),
+        label = "level-pitch",
+    )
+    val animatedRoll = animateFloatAsState(
+        targetValue = roll,
+        animationSpec = spring(stiffness = Spring.StiffnessMediumLow),
+        label = "level-roll",
+    )
     Column(Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(12.dp)) {
         Canvas(Modifier.size(if (compact) 112.dp else 200.dp).clip(Cookie16Shape)) {
+            val currentPitch = animatedPitch.value
+            val currentRoll = animatedRoll.value
             drawRect(colors.primaryContainer)
             drawLine(colors.onPrimaryContainer.copy(alpha = .25f), Offset(0f, center.y), Offset(size.width, center.y), 1.dp.toPx())
             drawLine(colors.onPrimaryContainer.copy(alpha = .25f), Offset(center.x, 0f), Offset(center.x, size.height), 1.dp.toPx())
             drawCircle(colors.onPrimaryContainer.copy(alpha = .4f), size.minDimension * .12f, style = Stroke(1.dp.toPx()))
-            drawCircle(if (abs(pitch) < 1f && abs(roll) < 1f) colors.primary else colors.secondary,
-                size.minDimension * .075f, center + Offset(-roll.coerceIn(-45f,45f), -pitch.coerceIn(-45f,45f)) * (size.minDimension * .4f / 45f))
+            drawCircle(if (abs(currentPitch) < 1f && abs(currentRoll) < 1f) colors.primary else colors.secondary,
+                size.minDimension * .075f, center + Offset(-currentRoll.coerceIn(-45f, 45f), -currentPitch.coerceIn(-45f, 45f)) * (size.minDimension * .4f / 45f))
         }
         if (compact) {
             Text("P: "+pitch.toInt()+"° · R: "+roll.toInt()+"°", style = MaterialTheme.typography.bodySmall)
@@ -74,13 +83,25 @@ fun LevelTool(pitch: Float, roll: Float, compact: Boolean = false) {
 @Composable
 internal fun LevelFace(pitch: Float, roll: Float, modifier: Modifier = Modifier) {
     val accent = ToolkitTileIcon.Level.iconColors()
+    val animatedPitch = animateFloatAsState(
+        targetValue = pitch,
+        animationSpec = spring(stiffness = Spring.StiffnessMediumLow),
+        label = "level-face-pitch",
+    )
+    val animatedRoll = animateFloatAsState(
+        targetValue = roll,
+        animationSpec = spring(stiffness = Spring.StiffnessMediumLow),
+        label = "level-face-roll",
+    )
     Canvas(modifier) {
+        val currentPitch = animatedPitch.value
+        val currentRoll = animatedRoll.value
         val unit = size.minDimension / 100f
         val guide = accent.content.copy(alpha = 0.5f)
         drawLine(guide, Offset(0f, center.y), Offset(size.width, center.y), unit)
         drawLine(guide, Offset(center.x, 0f), Offset(center.x, size.height), unit)
         drawCircle(guide, 18f * unit, style = Stroke(unit))
-        val bubble = center + Offset(-(roll / 10f).coerceIn(-1f, 1f), -(pitch / 10f).coerceIn(-1f, 1f)) * (30f * unit)
+        val bubble = center + Offset(-(currentRoll / 10f).coerceIn(-1f, 1f), -(currentPitch / 10f).coerceIn(-1f, 1f)) * (30f * unit)
         drawCircle(accent.container, 9f * unit, bubble)
         drawCircle(accent.content, 9f * unit, bubble, style = Stroke(1.5f * unit))
     }

@@ -46,4 +46,6 @@
     <string name="more_apps_empty">Momentan nu sunt aplicații disponibile.</string>
     <string name="more_apps_store_action_description">Deschide %1$s pe Google Play</string>
     <string name="more_apps_open_action_description">Deschide %1$s</string>
+    <string name="more_apps_open_details">Deschide detaliile</string>
+    <string name="more_apps_details_action_description">Deschide detaliile: %1$s</string>
 </resources>

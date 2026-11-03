@@ -69,6 +69,7 @@ import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.navigat
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.navigation.SosToolRoute
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.navigation.UnitConverterToolRoute
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.catalog.TileIconBadge
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.catalog.ToolAccentTheme
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.previews.GenericToolPreview
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.utils.constants.ToolkitTileIds
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
@@ -116,22 +117,24 @@ fun ToolkitToolBottomSheet(
         onDismissRequest = onClose,
         dragHandle = null,
     ) {
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .verticalScroll(rememberScrollState())
-                // The sheet reaches behind the system navigation; its last control stays above it.
-                .navigationBarsPadding()
-                .padding(SizeConstants.LargeSize),
-            verticalArrangement = Arrangement.spacedBy(SizeConstants.LargeSize),
-        ) {
-            ToolSheetHeader(tile = tile, onClose = onClose)
-            ToolInteractiveContent(tile = tile, startReaction = startReaction)
-            ToolIntegrationSection(
-                tile = tile,
-                onAddTile = onAddTile,
-                onSetupTile = onSetupTile,
-            )
+        ToolAccentTheme(tile.icon) {
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .verticalScroll(rememberScrollState())
+                    // The sheet reaches behind the system navigation; its last control stays above it.
+                    .navigationBarsPadding()
+                    .padding(SizeConstants.LargeSize),
+                verticalArrangement = Arrangement.spacedBy(SizeConstants.LargeSize),
+            ) {
+                ToolSheetHeader(tile = tile, onClose = onClose)
+                ToolInteractiveContent(tile = tile, startReaction = startReaction)
+                ToolIntegrationSection(
+                    tile = tile,
+                    onAddTile = onAddTile,
+                    onSetupTile = onSetupTile,
+                )
+            }
         }
     }
 }

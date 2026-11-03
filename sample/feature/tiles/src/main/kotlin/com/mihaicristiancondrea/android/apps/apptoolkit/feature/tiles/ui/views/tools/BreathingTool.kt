@@ -31,7 +31,6 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.graphicsLayer
@@ -45,7 +44,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.consta
 
 @Composable
 fun BreathingTool(state: BreathingState) {
-    val scale by animateFloatAsState(
+    val scaleState = animateFloatAsState(
         targetValue = state.progress,
         animationSpec = spring(),
         label = "breathing-scale"
@@ -61,6 +60,7 @@ fun BreathingTool(state: BreathingState) {
             modifier = Modifier
                 .size(SizeConstants.TwoHundredSize)
                 .graphicsLayer {
+                    val scale = scaleState.value
                     scaleX = scale
                     scaleY = scale
                 }

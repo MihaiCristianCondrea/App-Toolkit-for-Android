@@ -141,25 +141,26 @@ fun MaterialColorsToolDialog(
                 ),
                 verticalArrangement = Arrangement.spacedBy(SizeConstants.MediumSize),
             ) {
-                item {
+                item(contentType = "description") {
                     Text(
                         text = stringResource(id = R.string.tool_material_colors_description),
                         style = MaterialTheme.typography.bodyMedium,
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
                     )
                 }
-                item {
+                item(contentType = "app_bento") {
                     AppColorBento(table = appColorTable)
                 }
                 if (androidColorTables.isNotEmpty()) {
                     items(
                         items = androidColorTables,
                         key = AndroidColorTable::title,
+                        contentType = { "tone_strip" },
                     ) { table ->
                         AndroidToneStrip(table = table)
                     }
                 } else {
-                    item {
+                    item(contentType = "unavailable") {
                         Text(
                             text = stringResource(id = R.string.tool_material_colors_android_unavailable),
                             style = MaterialTheme.typography.bodyMedium,
@@ -225,7 +226,7 @@ private fun AndroidToneStrip(table: AndroidColorTable) {
         Text(table.title, style = MaterialTheme.typography.titleMedium)
         val tileWidth = 116.dp * LocalDensity.current.fontScale.coerceAtLeast(1f)
         LazyRow(horizontalArrangement = Arrangement.spacedBy(4.dp)) {
-            items(table.colors, key = AndroidColorData::name) { color ->
+            items(table.colors, key = AndroidColorData::name, contentType = { "swatch" }) { color ->
                 ColorSwatch(
                     name = color.name,
                     color = colorResource(color.colorResId),

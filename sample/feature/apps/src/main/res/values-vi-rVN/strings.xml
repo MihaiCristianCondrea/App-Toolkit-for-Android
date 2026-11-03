@@ -46,4 +46,6 @@
     <string name="more_apps_empty">Hiện không có ứng dụng nào.</string>
     <string name="more_apps_store_action_description">Mở %1$s trên Google Play</string>
     <string name="more_apps_open_action_description">Mở %1$s</string>
+    <string name="more_apps_open_details">Mở chi tiết</string>
+    <string name="more_apps_details_action_description">Mở chi tiết: %1$s</string>
 </resources>

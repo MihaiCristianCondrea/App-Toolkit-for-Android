@@ -18,4 +18,5 @@
     <string name="shell_open_navigation">開啟導覽</string>
     <string name="shell_expand_navigation">展開導覽</string>
     <string name="shell_collapse_navigation">收合導覽</string>
+    <string name="shell_dismiss_player">關閉播放器</string>
 </resources>

@@ -38,7 +38,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
-import androidx.compose.ui.graphics.lerp
+import androidx.compose.ui.graphics.compositeOver
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Dp
@@ -120,8 +120,9 @@ internal fun LiveWidget(
     face: @Composable BoxScope.() -> Unit,
 ) {
     val scheme = MaterialTheme.colorScheme
-    val container = if (signal) lerp(scheme.surfaceContainerHigh, accent.container, 0.16f) else scheme.surfaceContainerHigh
-    val faceColor = lerp(scheme.surfaceContainerLowest, accent.container, if (signal) 0.30f else 0.22f)
+    // Match the marketing kit's sRGB color-mix rather than interpolating in Oklab.
+    val container = if (signal) accent.container.copy(alpha = 0.16f).compositeOver(scheme.surfaceContainerHigh) else scheme.surfaceContainerHigh
+    val faceColor = accent.container.copy(alpha = if (signal) 0.30f else 0.22f).compositeOver(scheme.surfaceContainerLowest)
     val faceSize: Dp = if (signal) 156.dp else 148.dp
     Surface(onClick = onClick, modifier = modifier.animateVisibility(), shape = shape, color = container, contentColor = scheme.onSurface) {
         Column(

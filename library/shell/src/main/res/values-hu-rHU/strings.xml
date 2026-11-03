@@ -18,4 +18,5 @@
     <string name="shell_open_navigation">Navigáció megnyitása</string>
     <string name="shell_expand_navigation">Navigáció kibontása</string>
     <string name="shell_collapse_navigation">Navigáció összecsukása</string>
+    <string name="shell_dismiss_player">Lejátszó bezárása</string>
 </resources>

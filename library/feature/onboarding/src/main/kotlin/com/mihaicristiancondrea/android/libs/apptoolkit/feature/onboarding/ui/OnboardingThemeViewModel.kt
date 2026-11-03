@@ -22,6 +22,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.repo
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.repositories.ThemePreferencesRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.LoggedScreenViewModel
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.toErrorMessage
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.onboarding.ui.analytics.onboardingThemeCustomizedEvent
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.onboarding.ui.contracts.OnboardingThemeEvent
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.onboarding.ui.states.OnboardingThemeUiState
 import kotlinx.coroutines.flow.combine
@@ -87,6 +88,7 @@ class OnboardingThemeViewModel(
      * to completion, so a quick second tap never cancels the first.
      */
     private fun persist(setting: String, write: suspend () -> Unit) {
+        telemetryRepository.logEvent(onboardingThemeCustomizedEvent(setting = setting))
         launchReport(
             action = Actions.PERSIST_ONBOARDING_THEME,
             extra = mapOf(ExtraKeys.SETTING to setting),

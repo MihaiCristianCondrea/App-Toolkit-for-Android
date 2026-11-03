@@ -103,21 +103,28 @@ internal fun DecisionWheelVisual(state: WheelToolUiState, compact: Boolean = fal
     val inks = listOf(colors.onPrimary, colors.onPrimaryContainer, colors.onSurface)
     val measurer = rememberTextMeasurer()
     val textStyle = MaterialTheme.typography.labelSmall
+    val items = remember(state.choices) { state.choices.take(12) }
+    val measuredLabels = remember(items, compact, textStyle, inks) {
+        if (compact || items.size < 2) emptyList()
+        else items.mapIndexed { index, text ->
+            measurer.measure(text.take(12), textStyle.copy(color = inks[index % 3]))
+        }
+    }
+    val pointerPath = remember { Path() }
     Canvas(Modifier.size(if (compact) 136.dp else 248.dp)) {
         val radius = size.minDimension / 2f - 8.dp.toPx()
         drawCircle(colors.surface, radius + 6.dp.toPx())
-        val items = state.choices.take(12)
         // Without choices the wheel shows the two it starts with, as the kit's overview does.
         if (items.size < 2) {
             for (i in 0..1) drawArc(fills[i], -90f + i * 180f, 180f, true, center - Offset(radius,radius), Size(radius*2,radius*2))
         }
         if (items.size >= 2) rotate(rotation.value) {
             val sweep = 360f / items.size
-            items.forEachIndexed { index, text ->
+            items.forEachIndexed { index, _ ->
                 drawArc(fills[index % 3], -90f + index * sweep, sweep, true, center - Offset(radius,radius), Size(radius*2,radius*2))
                 if (!compact) {
                     val angle = Math.toRadians((-90f + (index + .5f) * sweep).toDouble())
-                    val label = measurer.measure(text.take(12), textStyle.copy(color = inks[index % 3]))
+                    val label = measuredLabels[index]
                     val p = center + Offset(cos(angle).toFloat(),sin(angle).toFloat()) * radius * .6f
                     drawText(label, topLeft = p - Offset(label.size.width / 2f,label.size.height / 2f))
                 }
@@ -125,6 +132,11 @@ internal fun DecisionWheelVisual(state: WheelToolUiState, compact: Boolean = fal
         }
         drawCircle(colors.surface, 16.dp.toPx())
         drawCircle(colors.primary, 5.dp.toPx())
-        drawPath(Path().apply { moveTo(center.x - 9.dp.toPx(),0f); lineTo(center.x + 9.dp.toPx(),0f); lineTo(center.x,18.dp.toPx()); close() }, colors.primary)
+        pointerPath.reset()
+        pointerPath.moveTo(center.x - 9.dp.toPx(), 0f)
+        pointerPath.lineTo(center.x + 9.dp.toPx(), 0f)
+        pointerPath.lineTo(center.x, 18.dp.toPx())
+        pointerPath.close()
+        drawPath(pointerPath, colors.primary)
     }
 }

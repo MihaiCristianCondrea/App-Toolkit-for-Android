@@ -46,10 +46,13 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.R as CommonR
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.links.AppLinks
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.context.openUrl
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.AppVersionInfo
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.analytics.LocalTelemetry
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.AnimatedIconButtonDirection
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.dialogs.VersionInfoAlertDialog
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.dropdown.CommonDropdownMenuItem
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.R
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.ui.analytics.FaqActionNames
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.ui.analytics.faqActionEvent
 
 /**
  * The help page's app bar menu: version information, terms, privacy policy and licenses.
@@ -74,6 +77,7 @@ fun FaqScreenMenuActions(
     showDialog: Boolean,
     onShowDialogChange: (Boolean) -> Unit,
 ) {
+    val telemetry = LocalTelemetry.current
     val context = LocalContext.current
     val navigator = LocalShellNavigator.current
     val showMenu = rememberSaveable { mutableStateOf(value = false) }
@@ -105,6 +109,7 @@ fun FaqScreenMenuActions(
             icon = Icons.Outlined.Shop,
             onClick = {
                 closeMenu()
+                telemetry.logEvent(faqActionEvent(actionName = FaqActionNames.MENU_PLAY_STORE))
                 context.openUrl(
                     "${AppLinks.PLAY_STORE_APP}${context.packageName}"
                 )
@@ -116,6 +121,7 @@ fun FaqScreenMenuActions(
             icon = Icons.Outlined.Info,
             onClick = {
                 closeMenu()
+                telemetry.logEvent(faqActionEvent(actionName = FaqActionNames.MENU_VERSION_INFO))
                 onShowDialogChange(true)
             }
         )
@@ -125,6 +131,7 @@ fun FaqScreenMenuActions(
             icon = Icons.Outlined.Science,
             onClick = {
                 closeMenu()
+                telemetry.logEvent(faqActionEvent(actionName = FaqActionNames.MENU_BETA_PROGRAM))
                 context.openUrl(
                     "${AppLinks.PLAY_STORE_BETA}${context.packageName}"
                 )
@@ -136,6 +143,7 @@ fun FaqScreenMenuActions(
             icon = Icons.Outlined.Description,
             onClick = {
                 closeMenu()
+                telemetry.logEvent(faqActionEvent(actionName = FaqActionNames.MENU_TERMS_OF_SERVICE))
                 context.openUrl(AppLinks.TERMS_OF_SERVICE)
             }
         )
@@ -145,6 +153,7 @@ fun FaqScreenMenuActions(
             icon = Icons.Outlined.PrivacyTip,
             onClick = {
                 closeMenu()
+                telemetry.logEvent(faqActionEvent(actionName = FaqActionNames.MENU_PRIVACY_POLICY))
                 context.openUrl(AppLinks.PRIVACY_POLICY)
             }
         )
@@ -154,6 +163,7 @@ fun FaqScreenMenuActions(
             icon = Icons.Outlined.Balance,
             onClick = {
                 closeMenu()
+                telemetry.logEvent(faqActionEvent(actionName = FaqActionNames.MENU_LICENSES))
                 navigator.navigate(LicensesRoute)
             }
         )

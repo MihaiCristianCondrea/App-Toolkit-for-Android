@@ -18,4 +18,5 @@
     <string name="shell_open_navigation">Gezinmeyi aç</string>
     <string name="shell_expand_navigation">Gezinmeyi genişlet</string>
     <string name="shell_collapse_navigation">Gezinmeyi daralt</string>
+    <string name="shell_dismiss_player">Oynatıcıyı kapat</string>
 </resources>

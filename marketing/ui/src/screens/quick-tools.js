@@ -12,11 +12,11 @@ import { STRIP } from "../kit/material-colors.js";
  * counter and the calculators live on the Measure tab.
  */
 const TOOLS = {
-  water_eject: {id:"water_eject",title:"Water Eject",subtitle:"Play a short speaker tone",icon:"water_drop",shape:"cookie_9sided",palette:"teal",supportsTile:false},
+  water_eject: {id:"water_eject",title:"Water Eject",subtitle:"Play a short speaker tone",icon:"water_drop",shape:"cookie_9sided",palette:"blue",supportsTile:false},
   compass: { id: "compass", title: "Compass", subtitle: "Heading from the geomagnetic sensor", icon: "explore", shape: "sunny", palette: "teal", kindLabel: "Quick tool", supportsTile: true },
   bubble_level: { id: "bubble_level", title: "Bubble Level", subtitle: "Roll and pitch from the gravity sensor", icon: "straighten", shape: "pill", palette: "teal", kindLabel: "Quick tool", supportsTile: true },
   flash_dimmer: { id: "flash_dimmer", title: "Flash Dimmer", subtitle: "Set the torch brightness", icon: "flashlight_on", shape: "burst", palette: "gold", kindLabel: "Quick tool", supportsTile: true },
-  morse_sos: { id: "morse_sos", title: "Morse & SOS", subtitle: "Send a message with the torch", icon: "emergency", shape: "cookie_7sided", palette: "magenta", kindLabel: "Quick tool", supportsTile: true },
+  morse_sos: { id: "morse_sos", title: "Morse & SOS", subtitle: "Send a message with the torch", icon: "emergency", shape: "cookie_7sided", palette: "red", kindLabel: "Quick tool", supportsTile: true },
   // ToolkitTileVisuals.kt: Breathing is a SoftBurst in the orange role, with the FavoriteBorder icon.
   breathing: { id: "breathing", title: "Breathe", subtitle: "Start a short guided breathing pause", icon: "favorite", shape: "soft_burst", palette: "orange", kindLabel: "Quick tool", supportsTile: false },
   material_colors: { id: "material_colors", title: "Material Colors", subtitle: "Preview the app palette and Android Material You tonal colors", icon: "palette", shape: "soft_burst", palette: "gold", supportsTile: false },
@@ -137,7 +137,7 @@ export default {
       <div class="qt-live__face ${extra}" style=${shapeMaskStyle(mask)}>${content}</div>`;
 
     const live = {
-      water_eject: () => html`<div class="qt-live" data-tool="water_eject" role="button" tabindex="0" @click=${()=>open("water_eject")} @keydown=${activate("water_eject")}><span class="qt-live__label">Water Eject</span>${face(shapeUrl("cookie_9sided"),html`<md-icon class="qt-live__icon">water_drop</md-icon>`)}<span class="qt-live__value">165 Hz</span><span class="qt-live__note">30-second speaker tone</span></div>`,
+      water_eject: () => html`<div class="qt-live" data-accent="blue" data-tool="water_eject" role="button" tabindex="0" @click=${()=>open("water_eject")} @keydown=${activate("water_eject")}><span class="qt-live__label">Water Eject</span>${face(shapeUrl("cookie_9sided"),html`<md-icon class="qt-live__icon">water_drop</md-icon>`)}<span class="qt-live__value">165 Hz</span><span class="qt-live__note">30-second speaker tone</span></div>`,
       compass: () => html`
         <div class="qt-live" data-accent="teal" role="button" tabindex="0" @click=${() => open("compass")} @keydown=${activate("compass")}
           aria-label="Compass, ${heading} degrees ${direction(heading)}">
@@ -168,7 +168,7 @@ export default {
           </div>
         </div>`,
       morse_sos: () => html`
-        <div class="qt-live qt-live--signal" data-accent="magenta" role="button" tabindex="0" @click=${() => open("morse_sos")} @keydown=${activate("morse_sos")}
+        <div class="qt-live qt-live--signal" data-accent="red" role="button" tabindex="0" @click=${() => open("morse_sos")} @keydown=${activate("morse_sos")}
           aria-label="SOS, ${s.sosActive ? "sending" : "ready"}">
           <span class="qt-live__label">SOS</span>
           ${face(shapeUrl("cookie_7sided"), html`<span class="qt-live__sos">SOS</span>`, s.sosActive ? "qt-live__face--sending" : "")}

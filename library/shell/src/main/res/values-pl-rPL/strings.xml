@@ -18,4 +18,5 @@
     <string name="shell_open_navigation">Otwórz nawigację</string>
     <string name="shell_expand_navigation">Rozwiń nawigację</string>
     <string name="shell_collapse_navigation">Zwiń nawigację</string>
+    <string name="shell_dismiss_player">Zamknij odtwarzacz</string>
 </resources>

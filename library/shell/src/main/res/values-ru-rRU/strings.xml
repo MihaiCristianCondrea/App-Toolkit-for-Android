@@ -18,4 +18,5 @@
     <string name="shell_open_navigation">Открыть навигацию</string>
     <string name="shell_expand_navigation">Развернуть навигацию</string>
     <string name="shell_collapse_navigation">Свернуть навигацию</string>
+    <string name="shell_dismiss_player">Закрыть плеер</string>
 </resources>

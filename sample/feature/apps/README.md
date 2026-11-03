@@ -20,9 +20,9 @@ details, favorites and install state.
   catalogue as an atomic JSON file. PackageManager access belongs to the Toolkit repository.
 - `MoreAppsViewModel`, `MoreAppsUiState`, `MoreAppsEvent`, and `MoreAppsSection` with its
   stateless `MoreAppsSectionContent`, which draws the library's `AppShowcase` and the details sheet.
-- What a tap does: an installed app opens; one that is not opens its details sheet, whose Play
-  Store action installs it. A card's button opens the app or its store page, and "View all" opens
-  the developer's page on Google Play.
+- A card tap always opens its details sheet. The card's Open button launches an installed app;
+  otherwise Open details opens the sheet. The sheet provides the Play Store action, and
+  "View all" opens the developer's page on Google Play.
 - Localized strings, and `ui/mappers/MoreAppsErrorMappers.kt`, which gives each failure the shared
   `toUiText` text or the feature's fallback.
 - `MoreAppsIcon`, the Material Symbols Rounded "apps" icon of the section's title.

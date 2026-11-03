@@ -2,6 +2,20 @@
 
 ---
 
+# Unreleased
+
+### Improved
+
+- SOS, Water Eject, Counter and Reaction Test actions use consistent button feedback. Unit Converter's swap action now bounces when pressed.
+- Smoother Bubble Level, Compass and animated tool visuals with reduced UI recompositions across Quick Tools, Measure and Play & Decide.
+
+### Fixed
+
+- More apps cards scroll to the screen edges while keeping their resting alignment with the other Quick Tools widgets.
+- Live tool widget shapes retain their accent tint in dark mode, matching the marketing UI.
+
+---
+
 # October 30, 2026
 
 **Version:** `26.09.38`

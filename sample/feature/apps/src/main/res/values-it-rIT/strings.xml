@@ -46,4 +46,6 @@
     <string name="more_apps_empty">Al momento non ci sono app disponibili.</string>
     <string name="more_apps_store_action_description">Apri %1$s su Google Play</string>
     <string name="more_apps_open_action_description">Apri %1$s</string>
+    <string name="more_apps_open_details">Apri dettagli</string>
+    <string name="more_apps_details_action_description">Apri dettagli: %1$s</string>
 </resources>

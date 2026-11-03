@@ -58,6 +58,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.style.bounceClick
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.R
@@ -104,7 +105,7 @@ fun UnitConverterTool(state: UnitConverterToolUiState, onEvent: (UnitConverterTo
                     contentColor = MaterialTheme.colorScheme.onPrimaryContainer,
                 ),
                 modifier = Modifier.align(Alignment.CenterEnd).padding(end = 20.dp)
-                    .size(48.dp).border(4.dp, MaterialTheme.colorScheme.surface, CircleShape).padding(4.dp)) {
+                    .size(48.dp).bounceClick().border(4.dp, MaterialTheme.colorScheme.surface, CircleShape).padding(4.dp)) {
                 Icon(ToolSymbols.SwapVert, stringResource(R.string.swap_units))
             }
         }

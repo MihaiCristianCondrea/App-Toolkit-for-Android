@@ -46,4 +46,6 @@
     <string name="more_apps_empty">目前沒有可用的應用程式。</string>
     <string name="more_apps_store_action_description">在 Google Play 開啟 %1$s</string>
     <string name="more_apps_open_action_description">開啟 %1$s</string>
+    <string name="more_apps_open_details">開啟詳細資訊</string>
+    <string name="more_apps_details_action_description">開啟詳細資訊: %1$s</string>
 </resources>

@@ -46,4 +46,6 @@
     <string name="more_apps_empty">現在利用できるアプリはありません。</string>
     <string name="more_apps_store_action_description">Google Play で %1$s を開く</string>
     <string name="more_apps_open_action_description">%1$s を開く</string>
+    <string name="more_apps_open_details">詳細を開く</string>
+    <string name="more_apps_details_action_description">詳細を開く: %1$s</string>
 </resources>

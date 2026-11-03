@@ -18,4 +18,5 @@
     <string name="shell_open_navigation">Buksan ang navigation</string>
     <string name="shell_expand_navigation">I-expand ang navigation</string>
     <string name="shell_collapse_navigation">I-collapse ang navigation</string>
+    <string name="shell_dismiss_player">I-dismiss ang player</string>
 </resources>

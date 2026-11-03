@@ -115,8 +115,9 @@ export function toolOverlay({ tool, state, onState, onClose, showQuickSettingsAc
   }
   const isAdded = Boolean(state.addedTiles?.[tool.id]);
   const showQsCard = showQuickSettingsAction && tool.supportsTile !== false;
+  const accent = tool.palette && tool.palette !== "gold" && tool.id !== "compass" ? tool.palette : nothing;
   const content = html`
-    <div class="tk-sheet-content">
+    <div class="tk-sheet-content" data-accent=${accent}>
       <div class="tk-sheet-title-row">
         ${shapeBadge({ shape: tool.shape, icon: tool.icon, palette: tool.palette || "gold", size: 64, iconSize: 32 })}
         <div class="tk-sheet-title-meta">

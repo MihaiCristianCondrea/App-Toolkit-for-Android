@@ -46,4 +46,6 @@
     <string name="more_apps_empty">Şu anda kullanılabilir uygulama yok.</string>
     <string name="more_apps_store_action_description">%1$s uygulamasını Google Play\'de aç</string>
     <string name="more_apps_open_action_description">%1$s uygulamasını aç</string>
+    <string name="more_apps_open_details">Ayrıntıları aç</string>
+    <string name="more_apps_details_action_description">Ayrıntıları aç: %1$s</string>
 </resources>

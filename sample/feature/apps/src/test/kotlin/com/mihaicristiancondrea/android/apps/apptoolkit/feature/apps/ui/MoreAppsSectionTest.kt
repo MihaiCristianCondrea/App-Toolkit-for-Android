@@ -56,7 +56,6 @@ class MoreAppsSectionTest {
 
     private val events = mutableListOf<MoreAppsEvent>()
     private val opened = mutableListOf<String>()
-    private val stores = mutableListOf<String>()
     private var viewAll = 0
 
     private fun show(state: MoreAppsUiState, fontScale: Float = 1f) {
@@ -67,7 +66,6 @@ class MoreAppsSectionTest {
                     state = state,
                     onEvent = { event: MoreAppsEvent -> events += event },
                     onOpenApp = { app: AppSummary -> opened += app.packageName },
-                    onOpenStore = { app: AppSummary -> stores += app.packageName },
                     onViewAll = { viewAll++ },
                     onCardsVisibilityChanged = {},
                     onDetailsClosed = {},
@@ -85,25 +83,25 @@ class MoreAppsSectionTest {
     )
 
     @Test
-    fun `an installed app opens and one that is not shows its details`() {
+    fun `card taps always show details`() {
         show(ready)
 
         compose.onNodeWithText("Smart Cleaner").performClick()
         compose.onNodeWithText("Android Insider").performClick()
 
-        assertEquals(listOf(installed.packageName), opened)
-        assertEquals(listOf<MoreAppsEvent>(MoreAppsEvent.AppSelected(notInstalled.packageName)), events)
+        assertEquals(emptyList<String>(), opened)
+        assertEquals(listOf<MoreAppsEvent>(MoreAppsEvent.AppSelected(installed.packageName), MoreAppsEvent.AppSelected(notInstalled.packageName)), events)
     }
 
     @Test
-    fun `a card's button opens the app or its store page`() {
+    fun `a card's button opens the installed app or shows details`() {
         show(ready)
 
         compose.onNodeWithContentDescription("Open Smart Cleaner").performClick()
-        compose.onNodeWithContentDescription("Open Android Insider on Google Play").performScrollTo().performClick()
+        compose.onNodeWithContentDescription("Open details: Android Insider").performScrollTo().performClick()
 
         assertEquals(listOf(installed.packageName), opened)
-        assertEquals(listOf(notInstalled.packageName), stores)
+        assertEquals(listOf<MoreAppsEvent>(MoreAppsEvent.AppSelected(notInstalled.packageName)), events)
     }
 
     @Test

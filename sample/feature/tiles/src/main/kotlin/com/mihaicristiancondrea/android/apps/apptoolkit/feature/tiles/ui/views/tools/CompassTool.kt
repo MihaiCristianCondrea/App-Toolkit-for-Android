@@ -20,28 +20,21 @@ package com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.spring
-import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.isSystemInDarkTheme
-import androidx.compose.ui.draw.clip
-import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
-import androidx.compose.material3.MaterialShapes
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.catalog.Cookie8Shape
-import androidx.compose.material3.toShape
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.drawWithCache
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Path
@@ -54,16 +47,16 @@ import androidx.compose.ui.graphics.drawscope.rotate
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
-import androidx.compose.ui.text.TextMeasurer
-import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.drawText
+import androidx.compose.ui.text.TextLayoutResult
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.drawText
 import androidx.compose.ui.text.rememberTextMeasurer
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.R
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.mappers.iconColors
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.models.ToolkitTileIcon
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.catalog.Cookie8Shape
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
 import kotlin.math.roundToInt
 
@@ -121,13 +114,12 @@ internal fun CompassRose(azimuth: Float, modifier: Modifier = Modifier, face: Bo
     val heading = azimuth.roundToInt().mod(FULL_TURN)
     val direction = stringResource(DIRECTIONS[((heading + 22) / 45) % DIRECTIONS.size])
     // The rose turns the short way round: 359° to 1° is a 2° turn, not 358°.
-    var turn by remember { mutableFloatStateOf(azimuth) }
-    LaunchedEffect(azimuth) {
-        turn += ((azimuth - turn) % FULL_TURN + 540f) % FULL_TURN - 180f
-    }
-    val rotation by animateFloatAsState(
-        targetValue = turn,
-        animationSpec = spring(stiffness = Spring.StiffnessLow),
+    val turnTracker = remember { floatArrayOf(azimuth) }
+    val targetTurn = turnTracker[0] + ((azimuth - turnTracker[0]) % FULL_TURN + 540f) % FULL_TURN - 180f
+    turnTracker[0] = targetTurn
+    val rotationState = animateFloatAsState(
+        targetValue = targetTurn,
+        animationSpec = spring(stiffness = Spring.StiffnessMediumLow),
         label = "compass-rose",
     )
     val accent = ToolkitTileIcon.Compass.iconColors()
@@ -144,9 +136,57 @@ internal fun CompassRose(azimuth: Float, modifier: Modifier = Modifier, face: Bo
     val textMeasurer = rememberTextMeasurer()
     val appFont = MaterialTheme.typography.labelSmall
     val description = stringResource(R.string.tool_compass_heading_description, heading, direction)
-    Canvas(modifier = modifier.semantics { contentDescription = description }) {
-        drawRose(rotation, names, colors, textMeasurer, appFont, degreeLabels)
-    }
+    Spacer(
+        modifier = modifier
+            .semantics { contentDescription = description }
+            .drawWithCache {
+                val u = size.minDimension / 200f
+                val centerX = size.width / 2f
+                val centerY = size.height / 2f
+                val top = centerY - 100f * u
+                val numberStyle = appFont.copy(color = colors.tick, fontSize = (9f * u).toSp(), fontWeight = FontWeight.Medium)
+                val measuredDegrees = if (degreeLabels) {
+                    DEGREE_LABELS.map { degrees -> degrees.toFloat() to textMeasurer.measure(degrees.toString(), numberStyle) }
+                } else {
+                    emptyList()
+                }
+                val measuredCardinals = names.mapIndexed { index, name ->
+                    val style = appFont.copy(
+                        color = if (index == 0) colors.north else colors.majorTick,
+                        fontSize = (11f * u).toSp(),
+                        fontWeight = FontWeight.Bold,
+                    )
+                    index * 90f to textMeasurer.measure(name, style)
+                }
+                val lubber = Path().apply {
+                    moveTo(centerX, top)
+                    lineTo(centerX + 5f * u, top + 9f * u)
+                    lineTo(centerX - 5f * u, top + 9f * u)
+                    close()
+                }
+                val pointer = Path().apply {
+                    moveTo(centerX, top + 62f * u)
+                    lineTo(centerX + 24f * u, top + 128f * u)
+                    lineTo(centerX, top + 116f * u)
+                    lineTo(centerX - 24f * u, top + 128f * u)
+                    close()
+                }
+                val pointerStroke = Stroke(width = 2f * u, join = StrokeJoin.Round)
+                onDrawBehind {
+                    drawRose(
+                        rotation = rotationState.value,
+                        u = u,
+                        top = top,
+                        colors = colors,
+                        measuredDegrees = measuredDegrees,
+                        measuredCardinals = measuredCardinals,
+                        lubber = lubber,
+                        pointer = pointer,
+                        pointerStroke = pointerStroke,
+                    )
+                }
+            },
+    )
 }
 
 private class RoseColors(
@@ -157,20 +197,30 @@ private class RoseColors(
     val pointerOutline: Color,
 )
 
-private fun DrawScope.drawRose(rotation: Float, names: List<String>, colors: RoseColors, textMeasurer: TextMeasurer, appFont: TextStyle, degreeLabels: Boolean = true) {
-    // One unit of the 200-unit square the rose is designed on.
-    val u = size.minDimension / 200f
-    val top = center.y - 100f * u
+private fun DrawScope.drawRose(
+    rotation: Float,
+    u: Float,
+    top: Float,
+    colors: RoseColors,
+    measuredDegrees: List<Pair<Float, TextLayoutResult>>,
+    measuredCardinals: List<Pair<Float, TextLayoutResult>>,
+    lubber: Path,
+    pointer: Path,
+    pointerStroke: Stroke,
+) {
     if (colors.face != Color.Transparent) drawCircle(colors.face, radius = 98f * u)
 
     rotate(-rotation) {
         for (step in 0 until FULL_TURN / 5) {
             val degrees = step * 5
-            val (length, width, color) = when {
-                degrees == 0 -> Triple(9f, 3f, colors.north)
-                degrees % 30 == 0 -> Triple(9f, 2.2f, colors.majorTick)
-                degrees % 10 == 0 -> Triple(6f, 1.2f, colors.tick.copy(alpha = 0.7f))
-                else -> Triple(4f, 0.8f, colors.tick.copy(alpha = 0.45f))
+            val length: Float
+            val width: Float
+            val color: Color
+            when {
+                degrees == 0 -> { length = 9f; width = 3f; color = colors.north }
+                degrees % 30 == 0 -> { length = 9f; width = 2.2f; color = colors.majorTick }
+                degrees % 10 == 0 -> { length = 6f; width = 1.2f; color = colors.tick.copy(alpha = 0.7f) }
+                else -> { length = 4f; width = 0.8f; color = colors.tick.copy(alpha = 0.45f) }
             }
             rotate(degrees.toFloat()) {
                 drawLine(
@@ -182,42 +232,22 @@ private fun DrawScope.drawRose(rotation: Float, names: List<String>, colors: Ros
                 )
             }
         }
-        val numberStyle = appFont.copy(color = colors.tick, fontSize = (9f * u).toSp(), fontWeight = FontWeight.Medium)
-        if (degreeLabels) for (degrees in DEGREE_LABELS) {
-            rotate(degrees.toFloat()) { drawCentered(textMeasurer, degrees.toString(), numberStyle, top + 19f * u) }
+        for ((degrees, layout) in measuredDegrees) {
+            rotate(degrees) {
+                drawText(layout, topLeft = Offset(center.x - layout.size.width / 2f, top + 19f * u))
+            }
         }
-        names.forEachIndexed { index, name ->
-            val style = appFont.copy(
-                color = if (index == 0) colors.north else colors.majorTick,
-                fontSize = (11f * u).toSp(),
-                fontWeight = FontWeight.Bold,
-            )
-            rotate(index * 90f) { drawCentered(textMeasurer, name, style, top + 34f * u) }
+        for ((degrees, layout) in measuredCardinals) {
+            rotate(degrees) {
+                drawText(layout, topLeft = Offset(center.x - layout.size.width / 2f, top + 34f * u))
+            }
         }
     }
 
     // The lubber mark and the pointer stay still: they are the phone.
-    val lubber = Path().apply {
-        moveTo(center.x, top)
-        lineTo(center.x + 5f * u, top + 9f * u)
-        lineTo(center.x - 5f * u, top + 9f * u)
-        close()
-    }
     drawPath(lubber, colors.north)
-    val pointer = Path().apply {
-        moveTo(center.x, top + 62f * u)
-        lineTo(center.x + 24f * u, top + 128f * u)
-        lineTo(center.x, top + 116f * u)
-        lineTo(center.x - 24f * u, top + 128f * u)
-        close()
-    }
     drawPath(pointer, colors.majorTick)
-    drawPath(pointer, colors.pointerOutline, style = Stroke(width = 2f * u, join = StrokeJoin.Round))
-}
-
-private fun DrawScope.drawCentered(textMeasurer: TextMeasurer, text: String, style: TextStyle, y: Float) {
-    val layout = textMeasurer.measure(text, style)
-    drawText(layout, topLeft = Offset(center.x - layout.size.width / 2f, y))
+    drawPath(pointer, colors.pointerOutline, style = pointerStroke)
 }
 
 private const val FULL_TURN = 360

@@ -46,4 +46,6 @@
     <string name="more_apps_empty">Inga appar är tillgängliga just nu.</string>
     <string name="more_apps_store_action_description">Öppna %1$s på Google Play</string>
     <string name="more_apps_open_action_description">Öppna %1$s</string>
+    <string name="more_apps_open_details">Öppna information</string>
+    <string name="more_apps_details_action_description">Öppna information: %1$s</string>
 </resources>
