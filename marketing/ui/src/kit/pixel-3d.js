@@ -54,6 +54,27 @@ export const easeTurn = (t) => {
   return x * x * (3 - 2 * x);
 };
 
+/** Releases every geometry, material and texture under `root` (and in `extra`), once each. */
+function disposeModel(root, extra = []) {
+  const released = new Set();
+  const release = (resource) => {
+    if (!resource || released.has(resource)) return;
+    released.add(resource);
+    resource.dispose();
+  };
+  const releaseMaterial = (material) => {
+    for (const value of Object.values(material)) {
+      if (value && value !== material && typeof value.dispose === "function") release(value);
+    }
+    release(material);
+  };
+  root.traverse((node) => {
+    release(node.geometry);
+    if (node.material) [node.material].flat().forEach(releaseMaterial);
+  });
+  extra.forEach(releaseMaterial);
+}
+
 export async function createPixel3D(canvas, { modelUrl = PIXEL_MODEL_URL, dracoPath = DRACO_DECODER_PATH } = {}) {
   const renderer = new WebGLRenderer({ canvas, alpha: true, antialias: true });
   renderer.setPixelRatio(Math.min(2, window.devicePixelRatio || 1));
@@ -73,9 +94,15 @@ export async function createPixel3D(canvas, { modelUrl = PIXEL_MODEL_URL, dracoP
   const phone = gltf.scene;
   const glass = new MeshPhysicalMaterial({ color: 0x07090d, roughness: 0.08, metalness: 0, clearcoat: 1 });
   let screenY = 0;
+  // Swapped-out display materials leave the tree, so they are disposed separately.
+  const replaced = new Set();
   phone.traverse((node) => {
     if (!(node instanceof Mesh)) return;
-    const swap = (material) => (material.name === SCREEN_MATERIAL ? glass : material);
+    const swap = (material) => {
+      if (material.name !== SCREEN_MATERIAL) return material;
+      replaced.add(material);
+      return glass;
+    };
     node.material = Array.isArray(node.material) ? node.material.map(swap) : swap(node.material);
     const materials = Array.isArray(node.material) ? node.material : [node.material];
     if (materials.includes(glass)) screenY = new Box3().setFromObject(node).getCenter(new Vector3()).y;
@@ -168,9 +195,9 @@ export async function createPixel3D(canvas, { modelUrl = PIXEL_MODEL_URL, dracoP
       draw();
     },
     dispose() {
+      disposeModel(phone, [...replaced]);
       environment.dispose();
       pmrem.dispose();
-      glass.dispose();
       renderer.dispose();
       cssRenderer.domElement.remove();
     },
