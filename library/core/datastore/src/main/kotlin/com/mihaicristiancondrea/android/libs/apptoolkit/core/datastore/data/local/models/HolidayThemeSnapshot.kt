@@ -31,4 +31,5 @@ data class HolidayThemeSnapshot(
     val season: HolidaySeason,
     val previousPaletteId: String,
     val previousDynamicColors: Boolean,
+    val previousThemeMode: String? = null,
 )

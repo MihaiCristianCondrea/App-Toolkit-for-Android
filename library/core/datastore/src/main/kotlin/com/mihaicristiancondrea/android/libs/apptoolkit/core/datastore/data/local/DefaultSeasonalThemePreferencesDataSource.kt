@@ -55,6 +55,9 @@ class DefaultSeasonalThemePreferencesDataSource(
     private val previousDynamicColorsKey =
         booleanPreferencesKey(name = DataStoreNamesConstants.DATA_STORE_HOLIDAY_PREVIOUS_DYNAMIC_COLORS)
 
+    private val themeModeKey = stringPreferencesKey(DataStoreNamesConstants.DATA_STORE_THEME_MODE)
+    private val previousThemeModeKey = stringPreferencesKey("holiday_previous_theme_mode")
+
     override val seasonalThemesUnlocked: Flow<Boolean> = dataStore.data.map { preferences ->
         preferences[unlockedKey] == true
     }.distinctUntilChanged()
@@ -107,6 +110,7 @@ class DefaultSeasonalThemePreferencesDataSource(
                 paletteId = StaticPaletteIds.sanitize(preferences[ThemePreferenceKeys.staticPaletteId] ?: StaticPaletteIds.DEFAULT),
                 dynamicColors = preferences[ThemePreferenceKeys.dynamicColors] != false,
                 snapshot = preferences.readHolidaySnapshot(),
+                themeMode = preferences[themeModeKey] ?: DataStoreNamesConstants.THEME_MODE_FOLLOW_SYSTEM,
             )
             val next = transform(current)
             if (next.paletteId != current.paletteId) {
@@ -115,6 +119,7 @@ class DefaultSeasonalThemePreferencesDataSource(
             if (next.dynamicColors != current.dynamicColors) {
                 preferences[ThemePreferenceKeys.dynamicColors] = next.dynamicColors
             }
+            if (next.themeMode != current.themeMode) preferences[themeModeKey] = next.themeMode
             if (next.snapshot != current.snapshot) preferences.writeHolidaySnapshot(next.snapshot)
         }
     }
@@ -127,6 +132,7 @@ class DefaultSeasonalThemePreferencesDataSource(
             season = season,
             previousPaletteId = StaticPaletteIds.sanitize(this[previousPaletteKey] ?: StaticPaletteIds.DEFAULT),
             previousDynamicColors = this[previousDynamicColorsKey] != false,
+            previousThemeMode = this[previousThemeModeKey],
         )
     }
 
@@ -135,10 +141,13 @@ class DefaultSeasonalThemePreferencesDataSource(
             remove(holidaySeasonKey)
             remove(previousPaletteKey)
             remove(previousDynamicColorsKey)
+            remove(previousThemeModeKey)
         } else {
             this[holidaySeasonKey] = snapshot.season.name
             this[previousPaletteKey] = snapshot.previousPaletteId
             this[previousDynamicColorsKey] = snapshot.previousDynamicColors
+            if (snapshot.previousThemeMode != null) this[previousThemeModeKey] = snapshot.previousThemeMode
+            else remove(previousThemeModeKey)
         }
     }
 }

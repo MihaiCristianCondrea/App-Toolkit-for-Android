@@ -95,10 +95,11 @@ class SeasonalThemeOverlayViewModel(
     /** Shows a due greeting unless another activity's overlay already shows one. */
     private fun lookUpGreeting(date: LocalDate) {
         launchReport(action = Actions.PENDING_HOLIDAY_GREETING) {
-            val due: HolidaySeason? = seasonal.pendingHolidayGreeting(date)
-            if (due != null && HolidayGreetingPresence.claim()) {
-                greetingClaimed = true
-                setState { copy(greeting = due) }
+            seasonal.pendingHolidayGreeting(date)?.let { season ->
+                if (HolidayGreetingPresence.claim()) {
+                    greetingClaimed = true
+                    setState { copy(greeting = season) }
+                }
             }
         }
     }

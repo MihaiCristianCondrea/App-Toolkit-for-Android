@@ -17,6 +17,7 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.repositories
 
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.datastore.DataStoreNamesConstants
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.models.WeatherEffect
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.models.HolidaySeason
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.models.SeasonalThemeState
@@ -68,27 +69,41 @@ class DefaultSeasonalThemeRepository(
         seasonal.updateHolidayTheme { current ->
             val snapshot = current.snapshot ?: return@updateHolidayTheme current
             if (today.holidaySeason == snapshot.season) return@updateHolidayTheme current
+            val restoredMode = if (snapshot.previousThemeMode != null && current.themeMode == DataStoreNamesConstants.THEME_MODE_DARK) snapshot.previousThemeMode else current.themeMode
             if (!current.dynamicColors && current.paletteId == snapshot.season.paletteId) {
                 current.copy(
                     paletteId = snapshot.previousPaletteId,
                     dynamicColors = snapshot.previousDynamicColors,
                     snapshot = null,
+                    themeMode = restoredMode,
                 )
             } else {
-                current.copy(snapshot = null)
+                current.copy(snapshot = null, themeMode = restoredMode)
             }
         }
     }
 
     private suspend fun applyHolidayTheme(season: HolidaySeason) {
         seasonal.updateHolidayTheme { current ->
-            if (!current.dynamicColors && current.paletteId == season.paletteId) return@updateHolidayTheme current
-            val snapshot = current.snapshot?.copy(season = season) ?: HolidayThemeSnapshot(
+            if (!current.dynamicColors && current.paletteId == season.paletteId &&
+                (season != HolidaySeason.HALLOWEEN || current.themeMode == DataStoreNamesConstants.THEME_MODE_DARK)
+            ) return@updateHolidayTheme current
+            val snapshot = current.snapshot?.copy(
+                season = season,
+                previousThemeMode = current.snapshot.previousThemeMode
+                    ?: current.themeMode.takeIf { season == HolidaySeason.HALLOWEEN },
+            ) ?: HolidayThemeSnapshot(
                 season = season,
                 previousPaletteId = current.paletteId,
                 previousDynamicColors = current.dynamicColors,
+                previousThemeMode = if (season == HolidaySeason.HALLOWEEN) current.themeMode else null,
             )
-            current.copy(paletteId = season.paletteId, dynamicColors = false, snapshot = snapshot)
+            current.copy(
+                paletteId = season.paletteId,
+                dynamicColors = false,
+                themeMode = if (season == HolidaySeason.HALLOWEEN) DataStoreNamesConstants.THEME_MODE_DARK else current.themeMode,
+                snapshot = snapshot,
+            )
         }
     }
 }

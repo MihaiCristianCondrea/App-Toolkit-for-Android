@@ -122,7 +122,8 @@ What people see:
   the title and message on a scrim at the top and two dialog buttons at the bottom: the filled one
   takes the theme, the outlined one, back and a tap outside keep the current theme. Its colours
   are the season's own in light and dark mode. It appears once per holiday occurrence.
-- Accepting applies the holiday palette. When the holiday ends, the palette and wallpaper-colors
+- Accepting applies the holiday palette. Halloween also enables dark mode, restoring the previous mode
+  after the holiday if it has not been changed. When the holiday ends, the palette and wallpaper-colors
   setting they had before come back, unless they picked another palette during the holiday.
 - Snow falls over the app while the Christmas palette is on screen, during the Christmas season.
   Snow is skipped when animations are turned off system-wide.

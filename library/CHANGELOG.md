@@ -2,6 +2,20 @@
 
 ---
 
+# Unreleased
+
+### Changed
+
+- Accepting the Halloween theme now enables dark mode and restores the previous mode after the holiday unless it was changed.
+- Updated the Christmas palette (`christmasPalette`) to pair holly crimson and evergreen pine with
+  icy snow-blue tertiary accents, snowy frost-tinted surfaces in light mode, and winter-night
+  surfaces in dark mode.
+- Updated the Halloween palette (`halloweenPalette`) to pair vivid jack-o'-lantern pumpkin orange
+  with witch violet and toxic potion green, ghostly mist-tinted surfaces in light mode, and midnight
+  graveyard surfaces in dark mode.
+
+---
+
 # November 02, 2026
 
 **Version:** `3.0.0-pre31`
