@@ -62,11 +62,12 @@ dependencyResolutionManagement {
 }
 ```
 
-Then add the toolkit artifact to the consuming module:
+For the upcoming `3.0.0-pre32` release, add the toolkit artifact to the consuming module once it is
+published:
 
 ```kotlin
 dependencies {
-    implementation("com.github.MihaiCristianCondrea.App-Toolkit-for-Android:apptoolkit:3.0.0-pre30")
+    implementation("com.github.MihaiCristianCondrea.App-Toolkit-for-Android:apptoolkit:3.0.0-pre32")
 }
 ```
 

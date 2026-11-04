@@ -60,6 +60,9 @@ Quick Settings service names, request keys and the released application ID remai
 
 ## Product analytics
 
+Tool event names, parameters, outcomes and required schemas live in `ui/analytics` beside their
+builders. Feature tests check the schemas using the shared validation rules.
+
 The shared tool sheet host emits one custom `tool_opened` event on entry, including full-screen
 ruler and protractor. It replaces Quick Tools' former `view_item` opening signal; Measure and Play
 now have the same coverage. Recomposition does not emit another opening. Restoring an open tool

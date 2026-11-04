@@ -6,7 +6,8 @@
 
 ### Changed
 
-- Accepting the Halloween theme now enables dark mode and restores the previous mode after the holiday unless it was changed.
+- Accepting the Halloween theme enables dark mode. After the holiday, the previous mode returns
+  if the user has not changed it.
 - Updated the Christmas palette (`christmasPalette`) to pair holly crimson and evergreen pine with
   icy snow-blue tertiary accents, snowy frost-tinted surfaces in light mode, and winter-night
   surfaces in dark mode.

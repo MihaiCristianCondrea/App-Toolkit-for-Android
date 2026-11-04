@@ -17,8 +17,9 @@
 
 package com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui
 
-import com.mihaicristiancondrea.android.apps.apptoolkit.core.analytics.contracts.AppGa4Contract
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.analytics.ToolGa4Contract
 import com.mihaicristiancondrea.android.apps.apptoolkit.core.analytics.contracts.AppGa4ContractValidator
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.analytics.ToolGa4ContractValidator
 import com.mihaicristiancondrea.android.apps.apptoolkit.core.analytics.models.AppScreenTracking
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.local.sensors.FakeSensorLocalDataSource
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.repositories.FakeTorchRepository
@@ -59,8 +60,8 @@ class ToolAnalyticsTest {
     private val telemetryRepository = FakeTelemetryRepository()
 
     private fun toolUses(): List<String> = telemetryRepository.loggedEvents
-        .filter { it.name == AppGa4Contract.EventName.TOOL_USED }
-        .map { (it.params.getValue(AppGa4Contract.Param.TOOL_ID) as AnalyticsValue.Str).value }
+        .filter { it.name == ToolGa4Contract.EventName.TOOL_USED }
+        .map { (it.params.getValue(ToolGa4Contract.Param.TOOL_ID) as AnalyticsValue.Str).value }
 
     private fun startedActions(viewModelName: String): List<String> = telemetryRepository.loggedEvents
         .filter { it.name == "vm_op_start" && it.params["view_model"] == AnalyticsValue.Str(viewModelName) }
@@ -163,11 +164,11 @@ class ToolAnalyticsTest {
         viewModel.onEvent(ReactionTestToolEvent.Tap)
 
         val score = telemetryRepository.loggedEvents
-            .single { it.name == AppGa4Contract.EventName.POST_SCORE }
-        assertEquals(AnalyticsValue.LongVal(215L), score.params[AppGa4Contract.Param.SCORE])
+            .single { it.name == ToolGa4Contract.EventName.POST_SCORE }
+        assertEquals(AnalyticsValue.LongVal(215L), score.params[ToolGa4Contract.Param.SCORE])
         assertEquals(
             AnalyticsValue.Str(ToolkitTileIds.REACTION_TEST),
-            score.params[AppGa4Contract.Param.CHARACTER],
+            score.params[ToolGa4Contract.Param.CHARACTER],
         )
         assertEquals(listOf(ToolkitTileIds.REACTION_TEST), toolUses())
     }
@@ -210,7 +211,7 @@ class ToolAnalyticsTest {
 
     private fun AnalyticsEvent.assertSatisfiesContract() {
         assertTrue(AppGa4ContractValidator.isValidEventName(name), name)
-        assertEquals(emptySet(), AppGa4ContractValidator.missingRequiredParams(name, params.keys))
+        assertEquals(emptySet(), ToolGa4ContractValidator.missingRequiredParams(name, params.keys))
         assertEquals(emptySet(), AppGa4ContractValidator.forbiddenParams(params.keys))
     }
 }

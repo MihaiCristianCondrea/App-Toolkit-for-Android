@@ -8,8 +8,8 @@ Firebase transport or Compose tracking APIs.
 ## Owns
 
 - `models.AppScreenTracking`, the sample's screens as `TrackedScreen`s, passed to `ScreenHost`.
-- `contracts.AppGa4Contract`, event names, parameter names, required schemas, and forbidden
-  parameter keys.
+- `contracts.AppGa4Contract`, shared event names, parameter names, required schemas, and forbidden
+  parameter keys. Feature-specific schemas live with their feature analytics.
 - Contract tests that reject invalid event names, duplicate screens, and unsafe required fields.
 
 ## Does not own

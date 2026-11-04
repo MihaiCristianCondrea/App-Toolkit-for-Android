@@ -17,7 +17,7 @@
 
 package com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui
 
-import com.mihaicristiancondrea.android.apps.apptoolkit.core.analytics.contracts.AppGa4Contract
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.analytics.ToolGa4Contract
 import com.mihaicristiancondrea.android.apps.apptoolkit.core.analytics.models.AppScreenTracking
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.repositories.WaterEjectRepository
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.analytics.ToolUsageTracker
@@ -49,7 +49,7 @@ class WaterEjectToolViewModel(
                 if (currentState.running) return
                 val currentGeneration = ++generation
                 setState { copy(running = true, failed = false, seconds = 30) }
-                var outcome = AppGa4Contract.ToolCycleOutcome.FAILED
+                var outcome = ToolGa4Contract.ToolCycleOutcome.FAILED
                 cycle = launchReport(
                     action = Actions.PLAY,
                     onError = {
@@ -64,7 +64,7 @@ class WaterEjectToolViewModel(
                                 setState { copy(seconds = seconds) }
                             }
                         }
-                        outcome = AppGa4Contract.ToolCycleOutcome.COMPLETED
+                        outcome = ToolGa4Contract.ToolCycleOutcome.COMPLETED
                     } finally {
                         if (generation == currentGeneration) setState { copy(running = false) }
                     }
@@ -72,7 +72,7 @@ class WaterEjectToolViewModel(
                     // Completion also runs if Stop cancels a job before its coroutine starts.
                     job.invokeOnCompletion { cause ->
                         val result = if (cause is CancellationException) {
-                            AppGa4Contract.ToolCycleOutcome.CANCELLED
+                            ToolGa4Contract.ToolCycleOutcome.CANCELLED
                         } else outcome
                         telemetryRepository.logEvent(toolCycleFinishedEvent(ToolkitTileIds.WATER_EJECT, result))
                     }

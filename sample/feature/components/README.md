@@ -6,7 +6,8 @@ The components showcase, a debug-only page for checking the Toolkit's components
 
 ## Owns
 
-- `ComponentsScreen`. `ComponentsRoute` belongs to app/navigation.
+- `ComponentsScreen` and its analytics contract and event builder in `ui/analytics`.
+  `ComponentsRoute` belongs to app/navigation.
 - Localized strings for the component showcase.
 - The article app bar demo: `ArticleBarShowcase` opens `ArticleDemoRoute`, a made-up article
   (`ArticleDemoScreen`) that declares `ScaffoldArticleTopBar`, without a brand or with

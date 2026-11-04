@@ -17,7 +17,7 @@
 
 package com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui
 
-import com.mihaicristiancondrea.android.apps.apptoolkit.core.analytics.contracts.AppGa4Contract
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.analytics.ToolGa4Contract
 import com.mihaicristiancondrea.android.apps.apptoolkit.core.analytics.contracts.AppGa4ContractValidator
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.local.audio.SpeakerAudioDataSource
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.repositories.WaterEjectRepository
@@ -47,21 +47,29 @@ class ToolJourneyAnalyticsTest {
     }
 
     @Test
+    fun toolSchemasHaveValidNamesAndNoForbiddenParameters() {
+        ToolGa4Contract.requiredParamsByEvent.forEach { (name, params) ->
+            assertTrue(AppGa4ContractValidator.isValidEventName(name), name)
+            assertTrue(AppGa4ContractValidator.forbiddenParams(params).isEmpty(), name)
+        }
+    }
+
+    @Test
     fun catalogueOpeningsHaveBoundedWorkspacesAndNoInputs() {
         val ids = ToolkitTileIds::class.java.fields.filter { it.type == String::class.java }
             .map { it.get(null) as String }
         assertTrue(ids.isNotEmpty())
         ids.forEach { id ->
             val event = toolOpenedEvent(id)
-            assertEquals(AppGa4Contract.EventName.TOOL_OPENED, event.name)
-            assertEquals(AppGa4Contract.requiredParams(event.name), event.params.keys)
-            assertEquals(AnalyticsValue.Str(id), event.params[AppGa4Contract.Param.TOOL_ID])
-            assertTrue(event.params[AppGa4Contract.Param.WORKSPACE] in
+            assertEquals(ToolGa4Contract.EventName.TOOL_OPENED, event.name)
+            assertEquals(ToolGa4Contract.requiredParams(event.name), event.params.keys)
+            assertEquals(AnalyticsValue.Str(id), event.params[ToolGa4Contract.Param.TOOL_ID])
+            assertTrue(event.params[ToolGa4Contract.Param.WORKSPACE] in
                 setOf("quick_tools", "measure", "play").map { AnalyticsValue.Str(it) })
             assertTrue(AppGa4ContractValidator.forbiddenParams(event.params.keys).isEmpty())
         }
-        assertEquals(AnalyticsValue.Str("measure"), toolOpenedEvent(ToolkitTileIds.RULER).params[AppGa4Contract.Param.WORKSPACE])
-        assertEquals(AnalyticsValue.Str("play"), toolOpenedEvent(ToolkitTileIds.DECISION_WHEEL).params[AppGa4Contract.Param.WORKSPACE])
+        assertEquals(AnalyticsValue.Str("measure"), toolOpenedEvent(ToolkitTileIds.RULER).params[ToolGa4Contract.Param.WORKSPACE])
+        assertEquals(AnalyticsValue.Str("play"), toolOpenedEvent(ToolkitTileIds.DECISION_WHEEL).params[ToolGa4Contract.Param.WORKSPACE])
     }
 
     @Test
@@ -70,10 +78,10 @@ class ToolJourneyAnalyticsTest {
         assertFailsWith<IllegalArgumentException> {
             toolCycleFinishedEvent(ToolkitTileIds.WATER_EJECT, "raw exception message")
         }
-        AppGa4Contract.ToolCycleOutcome.all.forEach { outcome ->
+        ToolGa4Contract.ToolCycleOutcome.all.forEach { outcome ->
             val event = toolCycleFinishedEvent(ToolkitTileIds.WATER_EJECT, outcome)
-            assertEquals(AppGa4Contract.requiredParams(event.name), event.params.keys)
-            assertEquals(AnalyticsValue.Str(outcome), event.params[AppGa4Contract.Param.OUTCOME])
+            assertEquals(ToolGa4Contract.requiredParams(event.name), event.params.keys)
+            assertEquals(AnalyticsValue.Str(outcome), event.params[ToolGa4Contract.Param.OUTCOME])
         }
     }
 
@@ -91,7 +99,7 @@ class ToolJourneyAnalyticsTest {
         }
         val model = WaterEjectToolViewModel(WaterEjectRepository(source), telemetry)
         model.onEvent(WaterEjectToolEvent.Stop)
-        assertTrue(telemetry.loggedEvents.none { it.name == AppGa4Contract.EventName.TOOL_CYCLE_FINISHED })
+        assertTrue(telemetry.loggedEvents.none { it.name == ToolGa4Contract.EventName.TOOL_CYCLE_FINISHED })
         model.onEvent(WaterEjectToolEvent.Start)
         model.onEvent(WaterEjectToolEvent.Start)
         assertEquals(1, starts)
@@ -99,12 +107,12 @@ class ToolJourneyAnalyticsTest {
         model.onEvent(WaterEjectToolEvent.Stop)
         model.onEvent(WaterEjectToolEvent.Start)
         dispatcher.testDispatcher.scheduler.advanceUntilIdle()
-        val results = telemetry.loggedEvents.filter { it.name == AppGa4Contract.EventName.TOOL_CYCLE_FINISHED }
+        val results = telemetry.loggedEvents.filter { it.name == ToolGa4Contract.EventName.TOOL_CYCLE_FINISHED }
         assertEquals(listOf("cancelled", "completed"), results.map {
-            (it.params.getValue(AppGa4Contract.Param.OUTCOME) as AnalyticsValue.Str).value
+            (it.params.getValue(ToolGa4Contract.Param.OUTCOME) as AnalyticsValue.Str).value
         })
-        assertEquals(2, telemetry.loggedEvents.count { it.name == AppGa4Contract.EventName.TOOL_USED })
-        results.forEach { assertEquals(AppGa4Contract.requiredParams(it.name), it.params.keys) }
+        assertEquals(2, telemetry.loggedEvents.count { it.name == ToolGa4Contract.EventName.TOOL_USED })
+        results.forEach { assertEquals(ToolGa4Contract.requiredParams(it.name), it.params.keys) }
     }
 
     @Test
@@ -116,10 +124,10 @@ class ToolJourneyAnalyticsTest {
         val model = WaterEjectToolViewModel(WaterEjectRepository(source), telemetry)
         model.onEvent(WaterEjectToolEvent.Start)
         assertTrue(model.state.value.failed)
-        assertTrue(telemetry.loggedEvents.none { it.name == AppGa4Contract.EventName.TOOL_USED })
-        val result = telemetry.loggedEvents.single { it.name == AppGa4Contract.EventName.TOOL_CYCLE_FINISHED }
-        assertEquals(AnalyticsValue.Str("failed"), result.params[AppGa4Contract.Param.OUTCOME])
-        assertEquals(AppGa4Contract.requiredParams(result.name), result.params.keys)
+        assertTrue(telemetry.loggedEvents.none { it.name == ToolGa4Contract.EventName.TOOL_USED })
+        val result = telemetry.loggedEvents.single { it.name == ToolGa4Contract.EventName.TOOL_CYCLE_FINISHED }
+        assertEquals(AnalyticsValue.Str("failed"), result.params[ToolGa4Contract.Param.OUTCOME])
+        assertEquals(ToolGa4Contract.requiredParams(result.name), result.params.keys)
     }
 
     @Test
@@ -134,8 +142,8 @@ class ToolJourneyAnalyticsTest {
         val model = WaterEjectToolViewModel(WaterEjectRepository(source), telemetry)
         model.onEvent(WaterEjectToolEvent.Start)
         assertTrue(!model.state.value.running && !model.state.value.failed)
-        val result = telemetry.loggedEvents.single { it.name == AppGa4Contract.EventName.TOOL_CYCLE_FINISHED }
-        assertEquals(AnalyticsValue.Str("cancelled"), result.params[AppGa4Contract.Param.OUTCOME])
+        val result = telemetry.loggedEvents.single { it.name == ToolGa4Contract.EventName.TOOL_CYCLE_FINISHED }
+        assertEquals(AnalyticsValue.Str("cancelled"), result.params[ToolGa4Contract.Param.OUTCOME])
     }
 
     @Test
@@ -152,8 +160,8 @@ class ToolJourneyAnalyticsTest {
         model.onEvent(WaterEjectToolEvent.Stop)
         scheduler.advanceUntilIdle()
         assertEquals(0, starts)
-        assertTrue(telemetry.loggedEvents.none { it.name == AppGa4Contract.EventName.TOOL_USED })
-        val result = telemetry.loggedEvents.single { it.name == AppGa4Contract.EventName.TOOL_CYCLE_FINISHED }
-        assertEquals(AnalyticsValue.Str("cancelled"), result.params[AppGa4Contract.Param.OUTCOME])
+        assertTrue(telemetry.loggedEvents.none { it.name == ToolGa4Contract.EventName.TOOL_USED })
+        val result = telemetry.loggedEvents.single { it.name == ToolGa4Contract.EventName.TOOL_CYCLE_FINISHED }
+        assertEquals(AnalyticsValue.Str("cancelled"), result.params[ToolGa4Contract.Param.OUTCOME])
     }
 }

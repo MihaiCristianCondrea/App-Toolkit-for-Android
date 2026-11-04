@@ -17,7 +17,6 @@
 
 package com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.ui.analytics
 
-import com.mihaicristiancondrea.android.apps.apptoolkit.core.analytics.contracts.AppGa4Contract
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.data.models.AppSummary
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.telemetry.TelemetryRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.telemetry.models.AnalyticsEvent
@@ -34,23 +33,23 @@ fun TelemetryRepository.logAppInteraction(
 ) {
     logEvent(
         event = AnalyticsEvent(
-            name = AppGa4Contract.EventName.APP_CARD_INTERACTION,
+            name = AppInteractionGa4Contract.EVENT,
             params = buildMap {
-                put(AppGa4Contract.Param.SOURCE, AnalyticsValue.Str(source))
+                put(AppInteractionGa4Contract.SOURCE, AnalyticsValue.Str(source))
                 put(
-                    AppGa4Contract.Param.INTERACTION,
+                    AppInteractionGa4Contract.INTERACTION,
                     AnalyticsValue.Str(interaction.name.lowercase())
                 )
-                put(AppGa4Contract.Param.PACKAGE_NAME, AnalyticsValue.Str(appInfo.packageName))
-                put(AppGa4Contract.Param.APP_NAME, AnalyticsValue.Str(appInfo.name))
+                put(AppInteractionGa4Contract.PACKAGE_NAME, AnalyticsValue.Str(appInfo.packageName))
+                put(AppInteractionGa4Contract.APP_NAME, AnalyticsValue.Str(appInfo.name))
                 appInfo.category?.id?.let {
-                    put(AppGa4Contract.Param.APP_CATEGORY_ID, AnalyticsValue.Str(it))
+                    put(AppInteractionGa4Contract.APP_CATEGORY_ID, AnalyticsValue.Str(it))
                 }
                 appInfo.category?.label?.let {
-                    put(AppGa4Contract.Param.APP_CATEGORY_LABEL, AnalyticsValue.Str(it))
+                    put(AppInteractionGa4Contract.APP_CATEGORY_LABEL, AnalyticsValue.Str(it))
                 }
                 interactionContext?.let {
-                    put(AppGa4Contract.Param.INTERACTION_CONTEXT, AnalyticsValue.Str(it))
+                    put(AppInteractionGa4Contract.INTERACTION_CONTEXT, AnalyticsValue.Str(it))
                 }
             }
         )

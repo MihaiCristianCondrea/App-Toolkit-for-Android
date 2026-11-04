@@ -17,7 +17,7 @@
 
 package com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.analytics
 
-import com.mihaicristiancondrea.android.apps.apptoolkit.core.analytics.contracts.AppGa4Contract
+
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.utils.constants.ToolkitTileIds
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.telemetry.TelemetryRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.telemetry.models.AnalyticsEvent
@@ -42,7 +42,7 @@ class ToolUsageTracker(
         hasReportedUse = true
         telemetryRepository.logEvent(
             AnalyticsEvent(
-                name = AppGa4Contract.EventName.TOOL_USED,
+                name = ToolGa4Contract.EventName.TOOL_USED,
                 params = toolJourneyParams(toolId),
             ),
         )

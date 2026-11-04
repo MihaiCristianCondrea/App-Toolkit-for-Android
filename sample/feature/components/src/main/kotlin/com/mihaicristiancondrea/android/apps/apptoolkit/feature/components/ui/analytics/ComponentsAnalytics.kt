@@ -17,7 +17,6 @@
 
 package com.mihaicristiancondrea.android.apps.apptoolkit.feature.components.ui.analytics
 
-import com.mihaicristiancondrea.android.apps.apptoolkit.core.analytics.contracts.AppGa4Contract
 import com.mihaicristiancondrea.android.apps.apptoolkit.core.analytics.models.AppScreenTracking
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.telemetry.models.AnalyticsValue
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.analytics.Ga4EventData
@@ -25,9 +24,9 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.analytics
 /** Builds the click event a component showcase logs for [component] and its optional [variant]. */
 internal fun componentClickEvent(component: String, variant: String? = null): Ga4EventData {
     val params = buildMap {
-        put(AppGa4Contract.Param.SCREEN, AnalyticsValue.Str(AppScreenTracking.Screens.COMPONENTS.name))
-        put(AppGa4Contract.Param.COMPONENT, AnalyticsValue.Str(component))
-        variant?.let { put(AppGa4Contract.Param.VARIANT, AnalyticsValue.Str(it)) }
+        put(ComponentsGa4Contract.SCREEN, AnalyticsValue.Str(AppScreenTracking.Screens.COMPONENTS.name))
+        put(ComponentsGa4Contract.COMPONENT, AnalyticsValue.Str(component))
+        variant?.let { put(ComponentsGa4Contract.VARIANT, AnalyticsValue.Str(it)) }
     }
-    return Ga4EventData(name = AppGa4Contract.EventName.COMPONENTS_CLICK, params = params)
+    return Ga4EventData(name = ComponentsGa4Contract.EVENT, params = params)
 }
