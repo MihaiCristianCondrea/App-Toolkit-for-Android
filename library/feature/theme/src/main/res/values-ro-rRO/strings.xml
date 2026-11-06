@@ -15,11 +15,13 @@
   ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
   -->
 <resources>
-    <string name="holiday_greeting_christmas_title">Sărbători fericite!</string>
-    <string name="holiday_greeting_christmas_message">Tema de Crăciun a sosit, cu zăpadă care cade în toată aplicația. Vrei să o folosești până se termină sărbătorile?</string>
-    <string name="holiday_greeting_halloween_title">Halloween fericit!</string>
-    <string name="holiday_greeting_halloween_message">A venit sezonul înfricoșător. Vrei să folosești tema de Halloween cât durează?</string>
-    <string name="holiday_greeting_use_theme">Folosește tema de sărbători în timpul sărbătorilor</string>
+    <string name="holiday_greeting_christmas_title">Brrr… A venit Crăciunul!</string>
+    <string name="holiday_greeting_christmas_message">Oamenii de zăpadă au sosit și te așteaptă un nou aspect înghețat. Ești gata să aduci puțină magie de iarnă în aplicație?</string>
+    <string name="holiday_greeting_christmas_accept">Să ningă!</string>
+    <string name="holiday_greeting_halloween_title">Dovlecii s-au trezit!</string>
+    <string name="holiday_greeting_halloween_message">Luna strălucește, dovlecii zâmbesc și te așteaptă un nou aspect înfricoșător. Ești gata pentru o transformare de Halloween?</string>
+    <string name="holiday_greeting_halloween_accept">Să fie înfricoșător!</string>
+    <string name="holiday_greeting_keep_theme">Păstrează tema mea</string>
     <string name="dark_theme">Temă întunecată</string>
     <string name="weather_effect">Efect meteo</string>
     <string name="weather_effect_automatic">Automat</string>

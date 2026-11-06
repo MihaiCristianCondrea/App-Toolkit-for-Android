@@ -7,7 +7,8 @@ details, favorites and install state.
 
 ## Owns
 
-- App interaction event builders in `ui/analytics`, and the reporting launcher in `ui/utils`.
+- App interaction event names, parameters, schemas and builders in `ui/analytics`, and the reporting
+  launcher in `ui/utils`.
 - App-card launching through the Toolkit's `InstalledAppsRepository` and `AppLauncher`; the sample
   keeps its Play Store fallback when a package is absent or cannot be launched.
 - `DeveloperAppsRepository`, `FavoritesRepository` and their `Default` implementations.

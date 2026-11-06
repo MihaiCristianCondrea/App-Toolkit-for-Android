@@ -213,7 +213,11 @@ Smart Cleaner presentation (`profile`, `#smart-cleaner-for-android`):
    (`three/examples/jsm/libs/draco/gltf/`) next to the model and give `DRACOLoader` that path.
 5. **Keep layers honest.** Fetch the bytes in the data layer and parse them with
    `GLTFLoader.parseAsync()` in presentation code.
-6. **Motion.** Turn the phone in as it arrives (from edge-on through three quarters to the front,
+6. **Own the lifecycle.** Keep the model and decoder outside any folder a sync script rebuilds, and
+   make the build fail when either is missing. Create every phone or none: if one fails, dispose the
+   ones already built. `dispose()` must free every geometry, material and texture in the model, plus
+   any material it swapped out, not only the renderer.
+7. **Motion.** Turn the phone in as it arrives (from edge-on through three quarters to the front,
    with a tilt that settles), driven by scroll progress so it reverses cleanly.
 
 App Toolkit's hub ships the renderer as `src/kit/pixel-3d.js` (`createPixel3D(canvas, { modelUrl })`, then

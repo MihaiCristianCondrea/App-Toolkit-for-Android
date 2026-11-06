@@ -31,35 +31,35 @@
                     <path
                         android:name="glob_p"
                         android:pathData="M -8.62 3.02 C -8.62 3.02 8.47 3.02 8.47 3.02 M -8.62 -3.03 C -8.62 -3.03 8.47 -3.03 8.47 -3.03 M 0 -9 C 4.97 -9 9 -4.97 9 0 C 9 4.97 4.97 9 0 9 C -4.97 9 -9 4.97 -9 0 C -9 -4.97 -4.97 -9 0 -9"
-                        android:strokeColor="#ffffff"
+                        android:strokeColor="@android:color/white"
                         android:strokeWidth="2" />
                 </group>
                 <group android:name="mer_1" android:translateX="10.137" android:translateY="12">
                     <path
                         android:name="mer_2_path"
                         android:pathData="M 1.39 9 C 0.63 8.08 -1.63 4.94 -1.63 0.03 C -1.63 -4.87 0.61 -8.04 1.38 -8.98"
-                        android:strokeColor="#ffffff"
+                        android:strokeColor="@android:color/white"
                         android:strokeWidth="2" />
                 </group>
                 <group android:name="mer_2" android:translateX="13.84" android:translateY="12">
                     <path
                         android:name="mer_3_path"
                         android:pathData="M -1.39 -9 C -0.63 -8.09 1.63 -4.95 1.63 -0.03 C 1.63 4.9 -0.64 8.08 -1.39 9"
-                        android:strokeColor="#ffffff"
+                        android:strokeColor="@android:color/white"
                         android:strokeWidth="2" />
                 </group>
                 <group android:name="mer_3" android:scaleY="0" android:translateX="13.84" android:translateY="12">
                     <path
                         android:name="mer_3_path_1"
                         android:pathData="M -1.29 8.99 C 3.42 8.7 7.16 4.79 7.16 0 C 7.16 -4.79 3.41 -8.71 -1.32 -8.98"
-                        android:strokeColor="#ffffff"
+                        android:strokeColor="@android:color/white"
                         android:strokeWidth="2" />
                 </group>
                 <group android:name="mer_4" android:scaleY="0" android:translateX="13.84" android:translateY="12">
                     <path
                         android:name="mer_4_path"
                         android:pathData="M -1.29 -8.98 C 3.42 -8.7 7.16 -4.78 7.16 0 C 7.16 4.8 3.41 8.72 -1.32 8.99"
-                        android:strokeColor="#ffffff"
+                        android:strokeColor="@android:color/white"
                         android:strokeWidth="2" />
                 </group>
             </group>

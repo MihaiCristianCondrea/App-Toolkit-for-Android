@@ -62,11 +62,11 @@ dependencyResolutionManagement {
 }
 ```
 
-Then add the toolkit artifact to the consuming module:
+Add the toolkit artifact to the consuming module:
 
 ```kotlin
 dependencies {
-    implementation("com.github.MihaiCristianCondrea.App-Toolkit-for-Android:apptoolkit:3.0.0-pre30")
+    implementation("com.github.MihaiCristianCondrea.App-Toolkit-for-Android:apptoolkit:3.0.0-pre32")
 }
 ```
 
@@ -133,6 +133,7 @@ The build enforces these boundaries:
 - App composition packages cannot be imported from reusable sample modules.
 - Core modules cannot import feature implementations.
 - Analytics screen names come from `AppScreenTracking`, not inline literals.
+- A feature builds its analytics events only in its own `ui/analytics` package.
 
 The library has rules of its own: shared library modules (core, integration, navigation and shell)
 cannot depend on features or on
@@ -145,8 +146,10 @@ guards complement compilation, unit tests, lint, and on-device validation.
 
 The current modularization keeps runtime and tests on the same `sampleAppModules` DI declaration.
 Feature Android components are declared by their owning manifests, advertising configuration lives
-in `:sample:integration:ads`, and product-specific analytics identifiers live in
-`:sample:core:analytics`. The app remains the intentional merge point for the final manifest,
+in `:sample:integration:ads`, and `:sample:core:analytics` keeps only the analytics vocabulary
+features share: the GA4 recommended events and the screen registry. Each feature owns its own
+events, parameters and builders in its `ui/analytics` package, so the shared module does not grow
+with every feature; apps built on the Toolkit are encouraged to do the same. The app remains the intentional merge point for the final manifest,
 runtime graph, and complete destination set. This can produce conflicts when several destinations
 are added at once, and the shared sample convention still enables Compose for contract-only sample
 modules. Existing boundary checks reduce these risks but do not replace feature-specific tests.

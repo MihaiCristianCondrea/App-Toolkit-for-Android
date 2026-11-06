@@ -15,11 +15,13 @@
   ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
   -->
 <resources>
-    <string name="holiday_greeting_christmas_title">С праздниками!</string>
-    <string name="holiday_greeting_christmas_message">Новогодняя тема уже здесь, и по всему приложению идёт снег. Использовать её до конца праздников?</string>
-    <string name="holiday_greeting_halloween_title">С Хэллоуином!</string>
-    <string name="holiday_greeting_halloween_message">Настал жуткий сезон. Использовать тему Хэллоуина, пока он длится?</string>
-    <string name="holiday_greeting_use_theme">Использовать праздничную тему во время праздников</string>
+    <string name="holiday_greeting_christmas_title">Бррр… Рождество уже здесь!</string>
+    <string name="holiday_greeting_christmas_message">Снеговики уже пришли, а вас ждёт новый морозный образ. Готовы добавить в приложение немного зимнего волшебства?</string>
+    <string name="holiday_greeting_christmas_accept">Пусть идёт снег!</string>
+    <string name="holiday_greeting_halloween_title">Тыквы проснулись!</string>
+    <string name="holiday_greeting_halloween_message">Луна сияет, тыквы ухмыляются, а вас ждёт новый жуткий образ. Готовы к преображению на Хэллоуин?</string>
+    <string name="holiday_greeting_halloween_accept">Пора пугать!</string>
+    <string name="holiday_greeting_keep_theme">Оставить мою тему</string>
     <string name="dark_theme">Тёмная тема</string>
     <string name="weather_effect">Погодный эффект</string>
     <string name="weather_effect_automatic">Автоматически</string>

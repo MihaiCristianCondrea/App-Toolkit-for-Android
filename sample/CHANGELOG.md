@@ -2,7 +2,9 @@
 
 ---
 
-# Unreleased
+# November 06, 2026
+
+**Version:** `26.11.02`
 
 ### Improved
 

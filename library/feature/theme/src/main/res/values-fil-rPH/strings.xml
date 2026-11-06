@@ -15,11 +15,13 @@
   ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
   -->
 <resources>
-    <string name="holiday_greeting_christmas_title">Maligayang pista!</string>
-    <string name="holiday_greeting_christmas_message">Narito na ang Christmas theme, may niyebeng bumabagsak sa buong app. Gusto mo ba itong gamitin hanggang matapos ang pista?</string>
-    <string name="holiday_greeting_halloween_title">Maligayang Halloween!</string>
-    <string name="holiday_greeting_halloween_message">Narito na ang nakakatakot na season. Gusto mo bang gamitin ang Halloween theme habang tumatagal ito?</string>
-    <string name="holiday_greeting_use_theme">Gamitin ang holiday theme habang pista</string>
+    <string name="holiday_greeting_christmas_title">Brrr… Pasko na!</string>
+    <string name="holiday_greeting_christmas_message">Dumating na ang mga snowman, at may naghihintay na bagong malamig na itsura. Handa ka na bang magdala ng kaunting mahika ng taglamig sa app?</string>
+    <string name="holiday_greeting_christmas_accept">Paulanin ang niyebe!</string>
+    <string name="holiday_greeting_halloween_title">Gising na ang mga kalabasa!</string>
+    <string name="holiday_greeting_halloween_message">Nagliliwanag ang buwan, nakangiti ang mga kalabasa, at may naghihintay na bagong nakakatakot na itsura. Handa ka na ba sa Halloween makeover?</string>
+    <string name="holiday_greeting_halloween_accept">Takutin na!</string>
+    <string name="holiday_greeting_keep_theme">Panatilihin ang tema ko</string>
     <string name="dark_theme">Madilim na tema</string>
     <string name="weather_effect">Epekto ng panahon</string>
     <string name="weather_effect_automatic">Awtomatiko</string>

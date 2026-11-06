@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="utf-8"?>
+<animated-vector xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:aapt="http://schemas.android.com/aapt">
+    <aapt:attr name="android:drawable">
+        <vector android:height="823.0dip" android:width="823.0dip" android:viewportWidth="823.0" android:viewportHeight="823.0">
+            <group android:name="blue1" android:translateX="411.5" android:translateY="411.5">
+                <path android:name="blue1_path" android:pathData="M0 -395 C218,-395 395,-218 395,0 C395,218 218,395 0,395 C-218,395 -395,218 -395,0 C-395,-218 -218,-395 0,-395c " android:strokeColor="@android:color/white" android:strokeWidth="27.0" android:strokeLineCap="round" android:strokeLineJoin="round" android:strokeAlpha="1.0" />
+            </group>
+            <group android:name="blue2" android:translateX="411.5" android:translateY="411.5">
+                <path android:name="blue2_path" android:pathData=" M0 -395 C218,-395 395,-218 395,0 C395,218 218,395 0,395 C-218,395 -395,218 -395,0 C-395,-218 -218,-395 0,-395c " android:strokeColor="@android:color/white" android:strokeWidth="28.0" android:strokeLineCap="round" android:strokeLineJoin="round" android:strokeAlpha="1.0" />
+            </group>
+            <group android:name="blue3" android:translateX="411.5" android:translateY="411.5">
+                <path android:name="blue3_path" android:pathData=" M0 -395 C218,-395 395,-218 395,0 C395,218 218,395 0,395 C-218,395 -395,218 -395,0 C-395,-218 -218,-395 0,-395c " android:strokeColor="@android:color/white" android:strokeWidth="29.0" android:strokeLineCap="round" android:strokeLineJoin="round" android:strokeAlpha="1.0" />
+            </group>
+            <group android:name="blue4" android:translateX="411.5" android:translateY="411.5">
+                <path android:name="blue4_path" android:pathData=" M0 -395 C218,-395 395,-218 395,0 C395,218 218,395 0,395 C-218,395 -395,218 -395,0 C-395,-218 -218,-395 0,-395c " android:strokeColor="@android:color/white" android:strokeWidth="30.0" android:strokeLineCap="round" android:strokeLineJoin="round" android:strokeAlpha="1.0" />
+            </group>
+        </vector>
+    </aapt:attr>
+    <target android:name="blue1_path">
+        <aapt:attr name="android:animation">
+            <objectAnimator  android:duration="1983" android:repeatCount="infinite" android:valueFrom="0" android:valueTo="1" android:valueType="floatType" android:propertyName="trimPathStart" >
+                <aapt:attr name="android:interpolator">
+                    <pathInterpolator android:pathData="M0,0 l.21,0 c.571,0 .194,.755 .79,1" />
+                </aapt:attr>
+            </objectAnimator>
+        </aapt:attr>
+    </target>
+    <target android:name="blue1_path">
+        <aapt:attr name="android:animation">
+            <objectAnimator  android:duration="1983" android:repeatCount="infinite" android:valueFrom="0" android:valueTo="1" android:valueType="floatType" android:propertyName="trimPathEnd" >
+                <aapt:attr name="android:interpolator">
+                    <pathInterpolator android:pathData="M0,0 c0.606,0.315 0.2,1 1.0,1.0" />
+                </aapt:attr>
+            </objectAnimator>
+        </aapt:attr>
+    </target>
+    <target android:name="blue1">
+        <aapt:attr name="android:animation">
+            <objectAnimator  android:duration="1983" android:repeatCount="infinite" android:valueFrom="0" android:valueTo="355" android:valueType="floatType" android:propertyName="rotation" >
+                <aapt:attr name="android:interpolator">
+                    <pathInterpolator android:pathData="M0,0 c0.829,0.228 0.2,0.915 1.0,1.0" />
+                </aapt:attr>
+            </objectAnimator>
+        </aapt:attr>
+    </target>
+    <target android:name="blue2_path">
+        <aapt:attr name="android:animation">
+            <objectAnimator  android:duration="1983" android:repeatCount="infinite" android:valueFrom="0" android:valueTo="1" android:valueType="floatType" android:propertyName="trimPathStart" >
+                <aapt:attr name="android:interpolator">
+                    <pathInterpolator android:pathData="M0,0 l.21,0 c.571,0 .145,.831 .79,1" />
+                </aapt:attr>
+            </objectAnimator>
+        </aapt:attr>
+    </target>
+    <target android:name="blue2_path">
+        <aapt:attr name="android:animation">
+            <objectAnimator  android:duration="1983" android:repeatCount="infinite" android:valueFrom="0" android:valueTo="1" android:valueType="floatType" android:propertyName="trimPathEnd" >
+                <aapt:attr name="android:interpolator">
+                    <pathInterpolator android:pathData="M0,0 c0.606,0.315 0.2,1 1.0,1.0" />
+                </aapt:attr>
+            </objectAnimator>
+        </aapt:attr>
+    </target>
+    <target android:name="blue2">
+        <aapt:attr name="android:animation">
+            <objectAnimator  android:duration="1983" android:repeatCount="infinite" android:valueFrom="0" android:valueTo="355" android:valueType="floatType" android:propertyName="rotation" >
+                <aapt:attr name="android:interpolator">
+                    <pathInterpolator android:pathData="M0,0 c0.792,0.233 0.2,0.915 1.0,1.0" />
+                </aapt:attr>
+            </objectAnimator>
+        </aapt:attr>
+    </target>
+    <target android:name="blue3_path">
+        <aapt:attr name="android:animation">
+            <objectAnimator  android:duration="1983" android:repeatCount="infinite" android:valueFrom="0" android:valueTo="1" android:valueType="floatType" android:propertyName="trimPathStart" >
+                <aapt:attr name="android:interpolator">
+                    <pathInterpolator android:pathData="M0,0 l.21,0 c.6138,0 .007,.883 .79,1" />
+                </aapt:attr>
+            </objectAnimator>
+        </aapt:attr>
+    </target>
+    <target android:name="blue3_path">
+        <aapt:attr name="android:animation">
+            <objectAnimator  android:duration="1983" android:repeatCount="infinite" android:valueFrom="0" android:valueTo="1" android:valueType="floatType" android:propertyName="trimPathEnd" >
+                <aapt:attr name="android:interpolator">
+                    <pathInterpolator android:pathData="M0,0 c0.606,0.315 0.2,1 1.0,1.0" />
+                </aapt:attr>
+            </objectAnimator>
+        </aapt:attr>
+    </target>
+    <target android:name="blue3">
+        <aapt:attr name="android:animation">
+            <set android:ordering="together">
+                <objectAnimator  android:duration="1983" android:repeatCount="infinite" android:valueFrom="0" android:valueTo="355" android:valueType="floatType" android:propertyName="rotation" >
+                    <aapt:attr name="android:interpolator">
+                        <pathInterpolator android:pathData="M0,0 c0.762,0.225 0.2,0.915 1.0,1.0" />
+                    </aapt:attr>
+                </objectAnimator>
+            </set>
+        </aapt:attr>
+    </target>
+    <target android:name="blue4_path">
+        <aapt:attr name="android:animation">
+            <objectAnimator  android:duration="1983" android:repeatCount="infinite" android:valueFrom="0" android:valueTo="1" android:valueType="floatType" android:propertyName="trimPathStart" >
+                <aapt:attr name="android:interpolator">
+                    <pathInterpolator android:pathData="M0,0 l.21,0 c.572,0 0,1 .79,1" />
+                </aapt:attr>
+            </objectAnimator>
+        </aapt:attr>
+    </target>
+    <target android:name="blue4_path">
+        <aapt:attr name="android:animation">
+            <objectAnimator  android:duration="1983" android:repeatCount="infinite" android:valueFrom="0" android:valueTo="1" android:valueType="floatType" android:propertyName="trimPathEnd" >
+                <aapt:attr name="android:interpolator">
+                    <pathInterpolator android:pathData="M0,0 c0.606,0.315 0.2,1 1.0,1.0" />
+                </aapt:attr>
+            </objectAnimator>
+        </aapt:attr>
+    </target>
+    <target android:name="blue4">
+        <aapt:attr name="android:animation">
+            <objectAnimator  android:duration="1983" android:repeatCount="infinite" android:valueFrom="0" android:valueTo="355" android:valueType="floatType" android:propertyName="rotation" >
+                <aapt:attr name="android:interpolator">
+                    <pathInterpolator android:pathData="M0,0 c0.606,0.172 0.2,0.915 1.0,1.0" />
+                </aapt:attr>
+            </objectAnimator>
+        </aapt:attr>
+    </target>
+</animated-vector>

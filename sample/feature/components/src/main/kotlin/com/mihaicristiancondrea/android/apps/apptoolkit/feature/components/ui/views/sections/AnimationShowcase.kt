@@ -77,20 +77,43 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.R as D
  * duplicating drawables.
  */
 private val animationSamples = listOf(
-    "anim_check" to DesignSystemR.drawable.anim_check,
-    "anim_square_container" to DesignSystemR.drawable.anim_square_container,
+    // Navigation and actions
+    "anim_home" to DesignSystemR.drawable.anim_home,
     "anim_grid" to DesignSystemR.drawable.anim_grid,
     "anim_grid_select" to DesignSystemR.drawable.anim_grid_select,
-    "anim_settings" to DesignSystemR.drawable.anim_settings,
-    "anim_share" to DesignSystemR.drawable.anim_share,
+    "anim_square_container" to DesignSystemR.drawable.anim_square_container,
+    "anim_check" to DesignSystemR.drawable.anim_check,
     "anim_edit" to DesignSystemR.drawable.anim_edit,
-    "anim_graphic_eq" to DesignSystemR.drawable.anim_graphic_eq,
+    "anim_share" to DesignSystemR.drawable.anim_share,
+    "anim_visibility_strike" to DesignSystemR.drawable.anim_visibility_strike,
+
+    // System and status
+    "anim_settings" to DesignSystemR.drawable.anim_settings,
     "anim_language" to DesignSystemR.drawable.anim_language,
+    "anim_loading" to DesignSystemR.drawable.anim_loading,
+    "anim_server" to DesignSystemR.drawable.anim_server,
+
+    // Content
+    "anim_book" to DesignSystemR.drawable.anim_book,
+    "anim_games" to DesignSystemR.drawable.anim_games,
+    "anim_play_puzzle" to DesignSystemR.drawable.anim_play_puzzle,
+    "anim_offer_tag" to DesignSystemR.drawable.anim_offer_tag,
+    "anim_star" to DesignSystemR.drawable.anim_star,
+
+    // Time
     "anim_alarm" to DesignSystemR.drawable.anim_alarm,
     "anim_stopwatch" to DesignSystemR.drawable.anim_stopwatch,
     "anim_timer" to DesignSystemR.drawable.anim_timer,
+
+    // Media controls
+    "anim_graphic_eq" to DesignSystemR.drawable.anim_graphic_eq,
+    "anim_media_play" to DesignSystemR.drawable.anim_media_play,
     "anim_queue_music" to DesignSystemR.drawable.anim_queue_music,
-    "anim_visibility_strike" to DesignSystemR.drawable.anim_visibility_strike,
+    "anim_sound_bars" to DesignSystemR.drawable.anim_sound_bars,
+    "anim_volume_collapse" to DesignSystemR.drawable.anim_volume_collapse,
+    "anim_volume_expand" to DesignSystemR.drawable.anim_volume_expand,
+
+    // Device controls
     "anim_device_blinds" to DesignSystemR.drawable.anim_device_blinds,
     "anim_device_camera" to DesignSystemR.drawable.anim_device_camera,
     "anim_device_fan" to DesignSystemR.drawable.anim_device_fan,
@@ -103,10 +126,6 @@ private val animationSamples = listOf(
     "anim_device_thermostat" to DesignSystemR.drawable.anim_device_thermostat,
     "anim_device_tv" to DesignSystemR.drawable.anim_device_tv,
     "anim_device_vacuum" to DesignSystemR.drawable.anim_device_vacuum,
-    "anim_media_play" to DesignSystemR.drawable.anim_media_play,
-    "anim_sound_bars" to DesignSystemR.drawable.anim_sound_bars,
-    "anim_volume_collapse" to DesignSystemR.drawable.anim_volume_collapse,
-    "anim_volume_expand" to DesignSystemR.drawable.anim_volume_expand,
 )
 
 private val replayModes: ImmutableList<ToolkitIconReplayMode> =

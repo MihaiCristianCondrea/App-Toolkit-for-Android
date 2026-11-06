@@ -15,11 +15,13 @@
   ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
   -->
 <resources>
-    <string name="holiday_greeting_christmas_title">Chúc mừng ngày lễ!</string>
-    <string name="holiday_greeting_christmas_message">Chủ đề Giáng sinh đã đến, với tuyết rơi khắp ứng dụng. Bạn có muốn dùng chủ đề này cho đến hết kỳ nghỉ lễ không?</string>
-    <string name="holiday_greeting_halloween_title">Chúc mừng Halloween!</string>
-    <string name="holiday_greeting_halloween_message">Mùa Halloween đã đến. Bạn có muốn dùng chủ đề Halloween cho đến khi mùa lễ kết thúc không?</string>
-    <string name="holiday_greeting_use_theme">Dùng chủ đề ngày lễ trong dịp lễ</string>
+    <string name="holiday_greeting_christmas_title">Brrr… Giáng sinh đến rồi!</string>
+    <string name="holiday_greeting_christmas_message">Những người tuyết đã đến, và một diện mạo mới lạnh giá đang chờ bạn. Sẵn sàng mang chút phép màu mùa đông vào ứng dụng chưa?</string>
+    <string name="holiday_greeting_christmas_accept">Cho tuyết rơi nào!</string>
+    <string name="holiday_greeting_halloween_title">Những quả bí ngô đã thức giấc!</string>
+    <string name="holiday_greeting_halloween_message">Mặt trăng tỏa sáng, những quả bí ngô nhe răng cười, và một diện mạo mới rùng rợn đang chờ bạn. Sẵn sàng lột xác cho Halloween chưa?</string>
+    <string name="holiday_greeting_halloween_accept">Hù dọa thôi!</string>
+    <string name="holiday_greeting_keep_theme">Giữ chủ đề của tôi</string>
     <string name="dark_theme">Giao diện tối</string>
     <string name="weather_effect">Hiệu ứng thời tiết</string>
     <string name="weather_effect_automatic">Tự động</string>

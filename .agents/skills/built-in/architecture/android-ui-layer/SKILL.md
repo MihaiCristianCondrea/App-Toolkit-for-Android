@@ -166,6 +166,15 @@ their own queue.
 - Keep `XScreen.kt` to the screen and its content. A list with its own visual state, a sheet and
   the screen's analytics builders go in files of their own: `views/lists/`, `views/sheets/` and
   `analytics/`.
+- A feature's analytics live in the feature, in `ui/analytics/`: `XAnalytics.kt` holds its
+  `internal` event names, action names, parameter keys and the builders that make each event
+  (`xActionEvent(...)`), and an `XGa4Contract.kt` when the feature has a schema of its own to
+  validate. The ViewModel and the screen call the builders and log through `TelemetryRepository`
+  or `LocalTelemetry`. A name the app shares across features is referenced from the shared
+  analytics module (`const val SCREEN = SettingsAnalytics.Params.SCREEN`), never copied as a new
+  string. The shared module keeps only what several features use: when one feature is its only
+  user, the name moves to that feature's `ui/analytics/`. Test the builders in
+  `test/.../ui/analytics/XAnalyticsTest.kt`.
 - Preview `XScreenContent` in its Ready state. The default empty and failure screens inject an ad
   unit through Koin while their ad shows, so preview them with `showAd = false`.
 

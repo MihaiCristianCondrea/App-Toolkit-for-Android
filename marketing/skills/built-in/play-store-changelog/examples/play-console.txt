@@ -1,0 +1,30 @@
+<en-US>
+Added
+• Search Quick Tools and Apps from the top bar.
+• Rain and snow effects in theme settings.
+
+Changed
+• Removed the bottom banner ad.
+• New side navigation and two-pane layouts on tablets.
+• Settings and Help now open directly in the app.
+
+Improved & Fixed
+• App bar and floating buttons adapt to scrolling.
+• Apps list caching for offline use.
+• Fixed background sensor battery drain and consent retry errors.
+</en-US>
+<ro>
+Adăugate
+• Caută în Instrumente rapide și Aplicații din bara de sus.
+• Efecte de ploaie și ninsoare în teme.
+
+Modificate
+• Am eliminat reclama banner de jos.
+• Navigare laterală și două panouri pe tablete.
+• Setările și Ajutorul se deschid în aplicație.
+
+Îmbunătățiri și corecții
+• Bara de sus și butoanele se adaptează la derulare.
+• Cache offline pentru fila Aplicații.
+• Am corectat consumul bateriei de către senzori și erorile la consimțământ.
+</ro>

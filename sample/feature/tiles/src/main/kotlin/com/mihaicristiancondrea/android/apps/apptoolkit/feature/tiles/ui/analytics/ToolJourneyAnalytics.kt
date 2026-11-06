@@ -17,7 +17,7 @@
 
 package com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.analytics
 
-import com.mihaicristiancondrea.android.apps.apptoolkit.core.analytics.contracts.AppGa4Contract
+
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.utils.constants.ToolkitTileIds
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.telemetry.models.AnalyticsEvent
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.telemetry.models.AnalyticsValue
@@ -35,19 +35,19 @@ internal fun toolWorkspace(toolId: String): String = when (toolId) {
 }
 
 internal fun toolOpenedEvent(toolId: String): AnalyticsEvent = AnalyticsEvent(
-    name = AppGa4Contract.EventName.TOOL_OPENED,
+    name = ToolGa4Contract.EventName.TOOL_OPENED,
     params = toolJourneyParams(toolId),
 )
 
 internal fun toolCycleFinishedEvent(toolId: String, outcome: String): AnalyticsEvent {
-    require(outcome in AppGa4Contract.ToolCycleOutcome.all)
+    require(outcome in ToolGa4Contract.ToolCycleOutcome.all)
     return AnalyticsEvent(
-        name = AppGa4Contract.EventName.TOOL_CYCLE_FINISHED,
-        params = toolJourneyParams(toolId) + (AppGa4Contract.Param.OUTCOME to AnalyticsValue.Str(outcome)),
+        name = ToolGa4Contract.EventName.TOOL_CYCLE_FINISHED,
+        params = toolJourneyParams(toolId) + (ToolGa4Contract.Param.OUTCOME to AnalyticsValue.Str(outcome)),
     )
 }
 
 internal fun toolJourneyParams(toolId: String): Map<String, AnalyticsValue> = mapOf(
-    AppGa4Contract.Param.TOOL_ID to AnalyticsValue.Str(toolId),
-    AppGa4Contract.Param.WORKSPACE to AnalyticsValue.Str(toolWorkspace(toolId)),
+    ToolGa4Contract.Param.TOOL_ID to AnalyticsValue.Str(toolId),
+    ToolGa4Contract.Param.WORKSPACE to AnalyticsValue.Str(toolWorkspace(toolId)),
 )

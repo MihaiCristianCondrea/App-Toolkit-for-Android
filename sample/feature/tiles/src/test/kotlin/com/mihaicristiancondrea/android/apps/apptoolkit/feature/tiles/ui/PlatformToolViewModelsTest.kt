@@ -17,7 +17,7 @@
 
 package com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui
 
-import com.mihaicristiancondrea.android.apps.apptoolkit.core.analytics.contracts.AppGa4Contract
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.analytics.ToolGa4Contract
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.local.sensors.FakeSensorLocalDataSource
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.models.TorchPreset
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.repositories.FakeTorchRepository
@@ -132,8 +132,8 @@ class PlatformToolViewModelsTest {
         assertEquals(2, viewModel.state.value.torch.currentLevel)
         assertTrue(
             telemetryRepository.loggedEvents.any { event ->
-                event.name == AppGa4Contract.EventName.TOOL_USED &&
-                    event.params[AppGa4Contract.Param.TOOL_ID] == AnalyticsValue.Str(ToolkitTileIds.FLASH_DIMMER)
+                event.name == ToolGa4Contract.EventName.TOOL_USED &&
+                    event.params[ToolGa4Contract.Param.TOOL_ID] == AnalyticsValue.Str(ToolkitTileIds.FLASH_DIMMER)
             },
         )
 

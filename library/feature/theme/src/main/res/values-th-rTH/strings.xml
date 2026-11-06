@@ -15,11 +15,13 @@
   ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
   -->
 <resources>
-    <string name="holiday_greeting_christmas_title">สุขสันต์วันหยุด!</string>
-    <string name="holiday_greeting_christmas_message">ธีมคริสต์มาสมาแล้ว พร้อมหิมะตกทั่วทั้งแอป อยากใช้ธีมนี้จนจบเทศกาลไหม</string>
-    <string name="holiday_greeting_halloween_title">สุขสันต์วันฮาโลวีน!</string>
-    <string name="holiday_greeting_halloween_message">ฤดูแห่งความหลอนมาถึงแล้ว อยากใช้ธีมฮาโลวีนตลอดช่วงนี้ไหม</string>
-    <string name="holiday_greeting_use_theme">ใช้ธีมเทศกาลในช่วงเทศกาล</string>
+    <string name="holiday_greeting_christmas_title">บรื๋อ… คริสต์มาสมาแล้ว!</string>
+    <string name="holiday_greeting_christmas_message">มนุษย์หิมะมาถึงแล้ว และหน้าตาใหม่แสนหนาวเย็นกำลังรออยู่ พร้อมเติมความมหัศจรรย์ของฤดูหนาวให้แอปหรือยัง</string>
+    <string name="holiday_greeting_christmas_accept">ให้หิมะตกเลย!</string>
+    <string name="holiday_greeting_halloween_title">ฟักทองตื่นแล้ว!</string>
+    <string name="holiday_greeting_halloween_message">พระจันทร์ส่องแสง ฟักทองยิ้มกว้าง และหน้าตาใหม่สุดหลอนกำลังรออยู่ พร้อมแปลงโฉมรับฮาโลวีนหรือยัง</string>
+    <string name="holiday_greeting_halloween_accept">หลอนกันเลย!</string>
+    <string name="holiday_greeting_keep_theme">ใช้ธีมเดิมของฉัน</string>
     <string name="dark_theme">ธีมมืด</string>
     <string name="weather_effect">เอฟเฟกต์สภาพอากาศ</string>
     <string name="weather_effect_automatic">อัตโนมัติ</string>

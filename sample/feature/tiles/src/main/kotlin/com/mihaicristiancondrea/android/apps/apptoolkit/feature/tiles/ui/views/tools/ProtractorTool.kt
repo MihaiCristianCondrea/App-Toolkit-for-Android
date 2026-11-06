@@ -36,8 +36,6 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.material3.HorizontalDivider
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Slider
 import androidx.compose.material3.Surface
@@ -67,6 +65,9 @@ import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.R
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.contracts.ProtractorToolEvent
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.states.ProtractorToolUiState
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.models.protractorGeometry
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.icons.ToolkitIcon
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.GeneralButton
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.GeneralButtonStyle
 import kotlin.math.cos
 import kotlin.math.sin
 
@@ -141,7 +142,12 @@ fun ProtractorTool(state: ProtractorToolUiState, onEvent: (ProtractorToolEvent) 
                 }
                 Row(Modifier.fillMaxWidth().statusBarsPadding().padding(16.dp), verticalAlignment = Alignment.CenterVertically) {
                     Text(title, style = MaterialTheme.typography.headlineSmall, modifier = Modifier.weight(1f))
-                    IconButton(onClick = onClose) { Icon(ToolSymbols.Close, stringResource(R.string.tool_dialog_close_content_description)) }
+                    GeneralButton(
+                        style = GeneralButtonStyle.Text,
+                        onClick = onClose,
+                        icon = ToolkitIcon.Vector(ToolSymbols.Close),
+                        contentDescription = stringResource(R.string.tool_dialog_close_content_description),
+                    )
                 }
                 // In landscape the three-button navigation sits at the side: the dock keeps clear of it.
                 val dock = if (geometry.landscape) Modifier.align(Alignment.CenterEnd).navigationBarsPadding().displayCutoutPadding().width(280.dp).padding(24.dp)

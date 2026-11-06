@@ -17,7 +17,7 @@
 
 package com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.analytics
 
-import com.mihaicristiancondrea.android.apps.apptoolkit.core.analytics.contracts.AppGa4Contract
+
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.utils.constants.ToolkitTileIds
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.telemetry.TelemetryRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.telemetry.models.AnalyticsEvent
@@ -32,10 +32,10 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.telemetry.mo
 fun TelemetryRepository.logReactionScore(reactionTimeMs: Long) {
     logEvent(
         AnalyticsEvent(
-            name = AppGa4Contract.EventName.POST_SCORE,
+            name = ToolGa4Contract.EventName.POST_SCORE,
             params = mapOf(
-                AppGa4Contract.Param.SCORE to AnalyticsValue.LongVal(reactionTimeMs),
-                AppGa4Contract.Param.CHARACTER to AnalyticsValue.Str(ToolkitTileIds.REACTION_TEST),
+                ToolGa4Contract.Param.SCORE to AnalyticsValue.LongVal(reactionTimeMs),
+                ToolGa4Contract.Param.CHARACTER to AnalyticsValue.Str(ToolkitTileIds.REACTION_TEST),
             ),
         ),
     )
@@ -44,15 +44,15 @@ fun TelemetryRepository.logReactionScore(reactionTimeMs: Long) {
 /**
  * Reports how Android answered a request to add a quick tool to Quick Settings.
  *
- * @param outcome one of [AppGa4Contract.TileRequestOutcome].
+ * @param outcome one of [ToolGa4Contract.TileRequestOutcome].
  */
 fun TelemetryRepository.logQuickSettingsTileRequest(tileId: String, outcome: String) {
     logEvent(
         AnalyticsEvent(
-            name = AppGa4Contract.EventName.QUICK_SETTINGS_TILE_REQUEST,
+            name = ToolGa4Contract.EventName.QUICK_SETTINGS_TILE_REQUEST,
             params = mapOf(
-                AppGa4Contract.Param.TILE_ID to AnalyticsValue.Str(tileId),
-                AppGa4Contract.Param.OUTCOME to AnalyticsValue.Str(outcome),
+                ToolGa4Contract.Param.TILE_ID to AnalyticsValue.Str(tileId),
+                ToolGa4Contract.Param.OUTCOME to AnalyticsValue.Str(outcome),
             ),
         ),
     )

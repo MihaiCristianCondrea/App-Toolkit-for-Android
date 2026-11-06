@@ -15,11 +15,13 @@
   ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
   -->
 <resources>
-    <string name="holiday_greeting_christmas_title">त्योहारों की शुभकामनाएँ!</string>
-    <string name="holiday_greeting_christmas_message">क्रिसमस थीम आ गई है, पूरे ऐप में बर्फ़ गिर रही है। क्या आप इसे छुट्टियाँ खत्म होने तक इस्तेमाल करना चाहेंगे?</string>
-    <string name="holiday_greeting_halloween_title">हैप्पी हैलोवीन!</string>
-    <string name="holiday_greeting_halloween_message">डरावना मौसम आ गया है। क्या आप इसके रहते हैलोवीन थीम इस्तेमाल करना चाहेंगे?</string>
-    <string name="holiday_greeting_use_theme">छुट्टियों के दौरान त्योहार थीम इस्तेमाल करें</string>
+    <string name="holiday_greeting_christmas_title">ब्र्र्र… क्रिसमस आ गया!</string>
+    <string name="holiday_greeting_christmas_message">स्नोमैन आ गए हैं, और एक नया बर्फ़ीला लुक आपका इंतज़ार कर रहा है। ऐप में थोड़ा सर्दियों का जादू लाने के लिए तैयार हैं?</string>
+    <string name="holiday_greeting_christmas_accept">बर्फ़ गिरने दो!</string>
+    <string name="holiday_greeting_halloween_title">कद्दू जाग गए हैं!</string>
+    <string name="holiday_greeting_halloween_message">चाँद चमक रहा है, कद्दू मुस्कुरा रहे हैं, और एक नया डरावना लुक आपका इंतज़ार कर रहा है। हैलोवीन मेकओवर के लिए तैयार हैं?</string>
+    <string name="holiday_greeting_halloween_accept">डरावना हो जाए!</string>
+    <string name="holiday_greeting_keep_theme">मेरी थीम रखें</string>
     <string name="dark_theme">डार्क थीम</string>
     <string name="weather_effect">मौसम इफ़ेक्ट</string>
     <string name="weather_effect_automatic">अपने-आप</string>

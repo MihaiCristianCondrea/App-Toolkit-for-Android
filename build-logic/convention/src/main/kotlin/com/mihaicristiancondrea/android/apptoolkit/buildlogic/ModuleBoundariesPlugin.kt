@@ -49,7 +49,7 @@ class ModuleBoundariesPlugin : Plugin<Project> {
     private fun registerRepositoryCheck(rootProject: Project) {
         rootProject.tasks.register(CHECK_TASK_NAME) {
             group = "verification"
-            description = "Checks sample and library source ownership, package separation, tree conventions, analytics ownership, and telemetry conventions."
+            description = "Checks sample and library source ownership, package separation, tree conventions, analytics ownership and placement, and telemetry conventions."
 
             doLast {
                 val sampleRoot = rootProject.layout.projectDirectory.dir("sample").asFile
@@ -73,6 +73,8 @@ class ModuleBoundariesPlugin : Plugin<Project> {
                 checkTreeConventions(libraryRoot, librarySourceFiles, violations)
                 checkAnalyticsOwnership(sampleRoot, sourceFiles, violations)
                 checkAnalyticsOwnership(libraryRoot, librarySourceFiles, violations)
+                checkFeatureAnalyticsPlacement(sampleRoot, sourceFiles, violations)
+                checkFeatureAnalyticsPlacement(libraryRoot, librarySourceFiles, violations)
 
                 if (violations.isNotEmpty()) {
                     throw GradleException(
@@ -272,6 +274,27 @@ class ModuleBoundariesPlugin : Plugin<Project> {
         }
     }
 
+    /**
+     * A feature's analytics live in the feature, in its `ui/analytics` package: the events it
+     * builds, their names and parameters. Screens and ViewModels call those builders instead of
+     * building events inline, and the shared analytics module keeps only what several features use.
+     */
+    private fun checkFeatureAnalyticsPlacement(
+        root: File,
+        sourceFiles: Set<File>,
+        violations: MutableList<String>,
+    ) {
+        sourceFiles.filter { "/src/main/" in it.invariantSeparatorsPath }.forEach { file ->
+            val module = modulePath(root, file)
+            if (!module.startsWith(":${root.name}:feature:") && !module.startsWith(":${root.name}:integration:")) return@forEach
+            if ("/ui/analytics/" in file.invariantSeparatorsPath) return@forEach
+            ANALYTICS_EVENT_BUILD_REGEX.find(file.readText())?.let { match ->
+                violations += "${file.relativeTo(root)} builds ${match.groupValues[1]} outside ui/analytics; " +
+                    "add a builder to the feature's ui/analytics package and call it"
+            }
+        }
+    }
+
     private fun checkScreenTracking(
         sampleRoot: File,
         sourceFiles: Set<File>,
@@ -344,6 +367,9 @@ class ModuleBoundariesPlugin : Plugin<Project> {
 
         val VAGUE_MAPPER_REGEX = Regex("(?m)^\\s*(?:\\w+\\s+)*fun\\s+(?:<[^>]+>\\s*)?[\\w.<>?, ]+\\.(toDomain|toModel|toData|toUi|toEntity|toDto)\\(")
         val DOMAIN_ROOT_REGEX = Regex("^.*?\\.domain(?=\\.|$)")
+        /** Building an analytics event: a call to its constructor. */
+        val ANALYTICS_EVENT_BUILD_REGEX = Regex("\\b(AnalyticsEvent|Ga4EventData)\\(")
+
         /** Modules that implement telemetry, and so may name analytics from their data layer. */
         val ANALYTICS_INFRASTRUCTURE_MODULES = setOf(":library:integration:firebase")
 

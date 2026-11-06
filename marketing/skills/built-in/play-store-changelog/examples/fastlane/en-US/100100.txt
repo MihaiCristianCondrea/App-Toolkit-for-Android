@@ -1,0 +1,13 @@
+Added
+• Search Quick Tools and Apps from the top bar.
+• Rain and snow effects in theme settings.
+
+Changed
+• Removed the bottom banner ad.
+• New side navigation and two-pane layouts on tablets.
+• Settings and Help now open directly in the app.
+
+Improved & Fixed
+• App bar and floating buttons adapt to scrolling.
+• Apps list caching for offline use.
+• Fixed background sensor battery drain and consent retry errors.

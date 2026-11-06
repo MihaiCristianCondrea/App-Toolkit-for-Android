@@ -18,7 +18,9 @@
 package com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui
 
 import com.mihaicristiancondrea.android.apps.apptoolkit.core.analytics.contracts.AppGa4Contract
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.analytics.ToolGa4Contract
 import com.mihaicristiancondrea.android.apps.apptoolkit.core.analytics.contracts.AppGa4ContractValidator
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.analytics.ToolGa4ContractValidator
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.models.ToolkitTileCategoryData
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.repositories.ToolkitTilesRepository
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.utils.constants.ToolkitTileIds
@@ -74,18 +76,18 @@ class ToolkitTilesAnalyticsTest {
         viewModel.onEvent(
             ToolkitTilesEvent.TileRequestFinished(
                 requestKey = ToolkitTileIds.COUNTER,
-                outcome = AppGa4Contract.TileRequestOutcome.DECLINED,
+                outcome = ToolGa4Contract.TileRequestOutcome.DECLINED,
             ),
         )
 
-        val request = eventsNamed(AppGa4Contract.EventName.QUICK_SETTINGS_TILE_REQUEST).single()
+        val request = eventsNamed(ToolGa4Contract.EventName.QUICK_SETTINGS_TILE_REQUEST).single()
         assertEquals(
             AnalyticsValue.Str(ToolkitTileIds.COUNTER),
-            request.params[AppGa4Contract.Param.TILE_ID],
+            request.params[ToolGa4Contract.Param.TILE_ID],
         )
         assertEquals(
-            AnalyticsValue.Str(AppGa4Contract.TileRequestOutcome.DECLINED),
-            request.params[AppGa4Contract.Param.OUTCOME],
+            AnalyticsValue.Str(ToolGa4Contract.TileRequestOutcome.DECLINED),
+            request.params[ToolGa4Contract.Param.OUTCOME],
         )
         verify { repository.refreshTileCategories() }
     }
@@ -131,7 +133,7 @@ class ToolkitTilesAnalyticsTest {
         val viewModel = viewModel()
         viewModel.onEvent(ToolkitTilesEvent.CategoryToggled(CATEGORY_ID))
         viewModel.onEvent(ToolkitTilesEvent.FilterSelected(ToolkitTilesFilter.entries.last()))
-        AppGa4Contract.TileRequestOutcome.all.forEach { outcome ->
+        ToolGa4Contract.TileRequestOutcome.all.forEach { outcome ->
             viewModel.onEvent(ToolkitTilesEvent.TileRequestFinished(ToolkitTileIds.SOS, outcome))
         }
 
@@ -139,7 +141,7 @@ class ToolkitTilesAnalyticsTest {
             assertTrue(AppGa4ContractValidator.isValidEventName(event.name), event.name)
             assertEquals(
                 emptySet(),
-                AppGa4ContractValidator.missingRequiredParams(event.name, event.params.keys),
+                ToolGa4ContractValidator.missingRequiredParams(event.name, event.params.keys),
                 event.name,
             )
             assertEquals(emptySet(), AppGa4ContractValidator.forbiddenParams(event.params.keys))

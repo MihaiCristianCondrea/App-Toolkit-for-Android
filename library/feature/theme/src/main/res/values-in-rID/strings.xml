@@ -15,11 +15,13 @@
   ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
   -->
 <resources>
-    <string name="holiday_greeting_christmas_title">Selamat berlibur!</string>
-    <string name="holiday_greeting_christmas_message">Tema Natal telah tiba, dengan salju turun di seluruh aplikasi. Ingin memakainya sampai liburan usai?</string>
-    <string name="holiday_greeting_halloween_title">Selamat Halloween!</string>
-    <string name="holiday_greeting_halloween_message">Musim seram telah tiba. Ingin memakai tema Halloween selama musimnya?</string>
-    <string name="holiday_greeting_use_theme">Gunakan tema liburan selama liburan</string>
+    <string name="holiday_greeting_christmas_title">Brrr… Natal sudah tiba!</string>
+    <string name="holiday_greeting_christmas_message">Manusia salju sudah datang, dan tampilan baru yang dingin menanti. Siap membawa sedikit keajaiban musim dingin ke aplikasi?</string>
+    <string name="holiday_greeting_christmas_accept">Turunkan saljunya!</string>
+    <string name="holiday_greeting_halloween_title">Labu-labu sudah bangun!</string>
+    <string name="holiday_greeting_halloween_message">Bulan bersinar, labu-labu menyeringai, dan tampilan baru yang seram menanti. Siap untuk tampilan Halloween?</string>
+    <string name="holiday_greeting_halloween_accept">Ayo seram!</string>
+    <string name="holiday_greeting_keep_theme">Pertahankan tema saya</string>
     <string name="dark_theme">Tema gelap</string>
     <string name="weather_effect">Efek cuaca</string>
     <string name="weather_effect_automatic">Otomatis</string>

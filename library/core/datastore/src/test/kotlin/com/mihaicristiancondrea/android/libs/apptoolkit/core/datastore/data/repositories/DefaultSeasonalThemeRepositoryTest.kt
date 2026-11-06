@@ -112,14 +112,31 @@ class DefaultSeasonalThemeRepositoryTest {
     }
 
     @Test
-    fun `accepting while already wearing the holiday palette saves nothing to restore`() = runTest {
+    fun `accepting while already wearing the holiday palette enables dark mode`() = runTest {
         theme.saveDynamicColors(false)
         theme.saveStaticPaletteId(StaticPaletteIds.HALLOWEEN)
 
         repository.answerHolidayGreeting(HolidaySeason.HALLOWEEN, halloween, useHolidayTheme = true)
 
-        assertNull(repository.state.first().holidayThemeInUse)
+        assertEquals(HolidaySeason.HALLOWEEN, repository.state.first().holidayThemeInUse)
         assertEquals(StaticPaletteIds.HALLOWEEN, theme.staticPaletteId.first())
+        assertEquals(DataStoreNamesConstants.THEME_MODE_DARK, theme.themeMode.first())
+        repository.restoreThemeAfterHoliday(LocalDate.parse("2026-11-03"))
+        assertEquals(DataStoreNamesConstants.THEME_MODE_FOLLOW_SYSTEM, theme.themeMode.first())
+    }
+
+    @Test
+    fun `halloween restores the prior mode unless the user changes it`() = runTest {
+        theme.saveThemeMode(DataStoreNamesConstants.THEME_MODE_LIGHT)
+        repository.answerHolidayGreeting(HolidaySeason.HALLOWEEN, halloween, true)
+        assertEquals(DataStoreNamesConstants.THEME_MODE_DARK, theme.themeMode.first())
+        repository.restoreThemeAfterHoliday(LocalDate.parse("2026-11-03"))
+        assertEquals(DataStoreNamesConstants.THEME_MODE_LIGHT, theme.themeMode.first())
+
+        repository.answerHolidayGreeting(HolidaySeason.HALLOWEEN, halloween, true)
+        theme.saveThemeMode(DataStoreNamesConstants.THEME_MODE_FOLLOW_SYSTEM)
+        repository.restoreThemeAfterHoliday(LocalDate.parse("2026-11-03"))
+        assertEquals(DataStoreNamesConstants.THEME_MODE_FOLLOW_SYSTEM, theme.themeMode.first())
     }
 
     @Test

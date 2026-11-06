@@ -2,6 +2,41 @@
 
 ---
 
+# November 06, 2026
+
+**Version:** `3.0.0-pre32`
+
+### Added
+
+- Added `anim_book`, `anim_games`, `anim_home`, `anim_loading`, `anim_offer_tag`,
+  `anim_play_puzzle`, `anim_server` and `anim_star` animated vector drawables to the design system.
+- Onboarding reports each step it settles on as `onboarding_step_view` (step index, page key and
+  direction), Skip and going back as onboarding actions, and how `tutorial_complete` was reached
+  (`method`: `done` or `skip`). `OnboardingEvent.PageSelected` takes the page key and direction,
+  and `OnboardingEvent.CompleteOnboarding` the completion method; `OnboardingEvent.CompleteOnboarding`
+  on its own still means Done.
+
+### Changed
+
+- Standardized bundled animation fills and strokes to white so hosts can apply a consistent tint.
+- `HolidayGreetingDialog` is a seasonal card: the Christmas or Halloween illustration fills it, the
+  title and message sit on a scrim at the top and two dialog buttons at the bottom, in the season's
+  own colours whatever the app's theme. The filled button takes the holiday theme; the outlined one,
+  back and a tap outside keep the current one. The checkbox is gone, and `onAnswer` is unchanged.
+- FAQ telemetry uses GA4's recommended `select_content` for questions, feedback options and Contact
+  us, and the shared action event for buttons and menu items, instead of `preference_view`. Reports
+  built on the FAQ's `preference_view` events need the new names.
+- Accepting the Halloween theme enables dark mode. After the holiday, the previous mode returns
+  if the user has not changed it.
+- Updated the Christmas palette (`christmasPalette`) to pair holly crimson and evergreen pine with
+  icy snow-blue tertiary accents, snowy frost-tinted surfaces in light mode, and winter-night
+  surfaces in dark mode.
+- Updated the Halloween palette (`halloweenPalette`) to pair vivid jack-o'-lantern pumpkin orange
+  with witch violet and toxic potion green, ghostly mist-tinted surfaces in light mode, and midnight
+  graveyard surfaces in dark mode.
+
+---
+
 # November 02, 2026
 
 **Version:** `3.0.0-pre31`

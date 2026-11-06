@@ -15,11 +15,13 @@
   ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
   -->
 <resources>
-    <string name="holiday_greeting_christmas_title">Boldog ünnepeket!</string>
-    <string name="holiday_greeting_christmas_message">Megérkezett a karácsonyi téma, hóeséssel az egész alkalmazásban. Szeretnéd használni az ünnepek végéig?</string>
-    <string name="holiday_greeting_halloween_title">Boldog Halloweent!</string>
-    <string name="holiday_greeting_halloween_message">Itt a borzongós szezon. Szeretnéd használni a Halloween-témát, amíg tart?</string>
-    <string name="holiday_greeting_use_theme">Ünnepi téma használata az ünnepek alatt</string>
+    <string name="holiday_greeting_christmas_title">Brrr… Itt a karácsony!</string>
+    <string name="holiday_greeting_christmas_message">Megérkeztek a hóemberek, és egy fagyos új megjelenés vár. Készen állsz egy kis téli varázsra az alkalmazásban?</string>
+    <string name="holiday_greeting_christmas_accept">Hulljon a hó!</string>
+    <string name="holiday_greeting_halloween_title">Felébredtek a tökök!</string>
+    <string name="holiday_greeting_halloween_message">Ragyog a hold, vigyorognak a tökök, és egy hátborzongató új megjelenés vár. Jöhet a halloweeni átalakulás?</string>
+    <string name="holiday_greeting_halloween_accept">Legyen ijesztő!</string>
+    <string name="holiday_greeting_keep_theme">Saját téma megtartása</string>
     <string name="dark_theme">Sötét téma</string>
     <string name="weather_effect">Időjárás-effektus</string>
     <string name="weather_effect_automatic">Automatikus</string>

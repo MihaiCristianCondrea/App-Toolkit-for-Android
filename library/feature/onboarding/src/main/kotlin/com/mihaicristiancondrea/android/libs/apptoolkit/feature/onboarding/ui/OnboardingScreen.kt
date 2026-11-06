@@ -167,13 +167,16 @@ internal fun OnboardingScreenContent(
         }
     }
 
-    LaunchedEffect(pagerState.currentPage) {
-        val currentPage = pagerState.currentPage
+    // The page the pager settles on, not the one it passes halfway through a swipe, so a swipe given
+    // up reports nothing. The last reported page survives rotation, so coming back to the same page
+    // reports nothing either.
+    LaunchedEffect(pagerState.settledPage) {
+        val currentPage = pagerState.settledPage
+        if (currentPage == lastReportedPage) return@LaunchedEffect
         val direction = when {
             lastReportedPage == -1 -> OnboardingStepDirection.INITIAL
             currentPage > lastReportedPage -> OnboardingStepDirection.FORWARD
-            currentPage < lastReportedPage -> OnboardingStepDirection.BACKWARD
-            else -> OnboardingStepDirection.INITIAL
+            else -> OnboardingStepDirection.BACKWARD
         }
         lastReportedPage = currentPage
         onEvent(

@@ -22,4 +22,5 @@ data class HolidayThemePreferences(
     val paletteId: String,
     val dynamicColors: Boolean,
     val snapshot: HolidayThemeSnapshot?,
+    val themeMode: String = "follow_system",
 )

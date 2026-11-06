@@ -15,11 +15,13 @@
   ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
   -->
 <resources>
-    <string name="holiday_greeting_christmas_title">Joyeuses fêtes !</string>
-    <string name="holiday_greeting_christmas_message">Le thème de Noël est arrivé, avec de la neige dans toute l\'appli. Voulez-vous le garder jusqu\'à la fin des fêtes ?</string>
-    <string name="holiday_greeting_halloween_title">Joyeux Halloween !</string>
-    <string name="holiday_greeting_halloween_message">La saison des frissons est là. Voulez-vous utiliser le thème Halloween tant qu\'elle dure ?</string>
-    <string name="holiday_greeting_use_theme">Utiliser le thème des fêtes pendant les fêtes</string>
+    <string name="holiday_greeting_christmas_title">Brrr… Noël est là !</string>
+    <string name="holiday_greeting_christmas_message">Les bonshommes de neige sont arrivés et un nouveau look givré vous attend. Prêt à apporter un peu de magie hivernale à l’application ?</string>
+    <string name="holiday_greeting_christmas_accept">Qu’il neige !</string>
+    <string name="holiday_greeting_halloween_title">Les citrouilles se réveillent !</string>
+    <string name="holiday_greeting_halloween_message">La lune brille, les citrouilles sourient et un nouveau look effrayant vous attend. Prêt pour une transformation d’Halloween ?</string>
+    <string name="holiday_greeting_halloween_accept">Place à la frousse !</string>
+    <string name="holiday_greeting_keep_theme">Garder mon thème</string>
     <string name="dark_theme">Thème sombre</string>
     <string name="weather_effect">Effet météo</string>
     <string name="weather_effect_automatic">Automatique</string>

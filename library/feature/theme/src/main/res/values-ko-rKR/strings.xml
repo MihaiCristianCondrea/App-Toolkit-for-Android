@@ -15,11 +15,13 @@
   ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
   -->
 <resources>
-    <string name="holiday_greeting_christmas_title">즐거운 연휴 보내세요!</string>
-    <string name="holiday_greeting_christmas_message">크리스마스 테마가 도착했어요. 앱 전체에 눈이 내려요. 연휴가 끝날 때까지 사용할까요?</string>
-    <string name="holiday_greeting_halloween_title">해피 할로윈!</string>
-    <string name="holiday_greeting_halloween_message">으스스한 시즌이 왔어요. 시즌 동안 할로윈 테마를 사용할까요?</string>
-    <string name="holiday_greeting_use_theme">연휴 동안 연휴 테마 사용</string>
+    <string name="holiday_greeting_christmas_title">부르르… 크리스마스가 왔어요!</string>
+    <string name="holiday_greeting_christmas_message">눈사람들이 도착했고, 새로운 겨울 테마가 기다리고 있어요. 앱에 겨울 마법을 더해 볼까요?</string>
+    <string name="holiday_greeting_christmas_accept">눈을 내려 줘!</string>
+    <string name="holiday_greeting_halloween_title">호박들이 깨어났어요!</string>
+    <string name="holiday_greeting_halloween_message">달이 빛나고 호박들이 씩 웃고 있어요. 으스스한 새 테마가 기다리고 있어요. 핼러윈 분위기로 바꿔 볼까요?</string>
+    <string name="holiday_greeting_halloween_accept">으스스하게!</string>
+    <string name="holiday_greeting_keep_theme">내 테마 유지</string>
     <string name="dark_theme">어두운 테마</string>
     <string name="weather_effect">날씨 효과</string>
     <string name="weather_effect_automatic">자동</string>

@@ -12,7 +12,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.telemetry.models.TrackedScreen
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.platform.UiTextHelper
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.UiText
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.Loadable
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.ScreenHost
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.ScreenStateHandler
@@ -93,8 +93,8 @@ private fun XScreenContentPreview() {
             state = XUiState(
                 items = Loadable.Ready(
                     persistentListOf(
-                        XItem(key = "first", title = UiTextHelper.DynamicString("First entry")),
-                        XItem(key = "second", title = UiTextHelper.DynamicString("Second entry")),
+                        XItem(key = "first", title = UiText.DynamicString("First entry")),
+                        XItem(key = "second", title = UiText.DynamicString("Second entry")),
                     )
                 ),
             ),

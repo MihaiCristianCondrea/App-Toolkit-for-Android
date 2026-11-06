@@ -22,7 +22,7 @@ import android.content.Context
 import android.graphics.drawable.Icon
 import android.os.Build
 import android.widget.Toast
-import com.mihaicristiancondrea.android.apps.apptoolkit.core.analytics.contracts.AppGa4Contract.TileRequestOutcome
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.analytics.ToolGa4Contract.TileRequestOutcome
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.R
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.services.getTileServiceRequests
 

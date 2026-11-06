@@ -15,11 +15,13 @@
   ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
   -->
 <resources>
-    <string name="holiday_greeting_christmas_title">Зі святами!</string>
-    <string name="holiday_greeting_christmas_message">Різдвяна тема вже тут, і по всьому застосунку падає сніг. Використовувати її до кінця свят?</string>
-    <string name="holiday_greeting_halloween_title">З Гелловіном!</string>
-    <string name="holiday_greeting_halloween_message">Настав моторошний сезон. Використовувати тему Гелловіну, поки він триває?</string>
-    <string name="holiday_greeting_use_theme">Використовувати святкову тему під час свят</string>
+    <string name="holiday_greeting_christmas_title">Бррр… Різдво вже тут!</string>
+    <string name="holiday_greeting_christmas_message">Сніговики вже прийшли, а на вас чекає новий морозний вигляд. Готові додати в застосунок трохи зимового дива?</string>
+    <string name="holiday_greeting_christmas_accept">Хай іде сніг!</string>
+    <string name="holiday_greeting_halloween_title">Гарбузи прокинулися!</string>
+    <string name="holiday_greeting_halloween_message">Місяць сяє, гарбузи посміхаються, а на вас чекає новий моторошний вигляд. Готові до перевтілення на Гелловін?</string>
+    <string name="holiday_greeting_halloween_accept">Час лякати!</string>
+    <string name="holiday_greeting_keep_theme">Залишити мою тему</string>
     <string name="dark_theme">Темна тема</string>
     <string name="weather_effect">Погодний ефект</string>
     <string name="weather_effect_automatic">Автоматично</string>
