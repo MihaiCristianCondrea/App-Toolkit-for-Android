@@ -32,7 +32,7 @@
                     android:translateY="9.0">
                     <path
                         android:name="bottom_right"
-                        android:fillColor="#ff5f6368"
+                        android:fillColor="@android:color/white"
                         android:pathData=" M6 6 C6,6 9,6 9,6 C9,6 9,9 9,9 C9,9 6,9 6,9 C6,9 6,6 6,6c " />
                 </group>
                 <group
@@ -40,7 +40,7 @@
                     android:translateX="9.0">
                     <path
                         android:name="top_right"
-                        android:fillColor="#ff5f6368"
+                        android:fillColor="@android:color/white"
                         android:pathData=" M6 6 C6,6 9,6 9,6 C9,6 9,9 9,9 C9,9 6,9 6,9 C6,9 6,6 6,6c " />
                 </group>
                 <group
@@ -48,13 +48,13 @@
                     android:translateY="9.0">
                     <path
                         android:name="bottom_left"
-                        android:fillColor="#ff5f6368"
+                        android:fillColor="@android:color/white"
                         android:pathData=" M6 6 C6,6 9,6 9,6 C9,6 9,9 9,9 C9,9 6,9 6,9 C6,9 6,6 6,6c " />
                 </group>
                 <group android:name="top_left_group">
                     <path
                         android:name="top_left"
-                        android:fillColor="#ff5f6368"
+                        android:fillColor="@android:color/white"
                         android:pathData=" M6 6 C6,6 9,6 9,6 C9,6 9,9 9,9 C9,9 6,9 6,9 C6,9 6,6 6,6c " />
                 </group>
             </group>

@@ -15,7 +15,8 @@ theme-selection visuals, and the shared icon slot used by navigation items and b
 - `ToolkitFab`, `FabSize` and `FabColor`, the description of a floating action button. It lives
   here, beside `ToolkitIcon`, so the navigation graph can take it; `:library:core:ui` draws it
   (see its [Floating action buttons](../ui/README.md#floating-action-buttons)).
-- Reusable bundled AVD resources for Check, Clock, Grid, Settings, and Share.
+- Reusable bundled AVD resources, including classic and Material book animations, Check, Clock,
+  Grid, Settings, and Share.
 - `il_wavy_line`, the wavy line the wavy dividers in `:library:core:ui` reproduce.
 
 ## Does not own

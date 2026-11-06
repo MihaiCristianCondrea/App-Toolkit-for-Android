@@ -74,7 +74,7 @@ flowchart TD
 
 ```kotlin
 plugins {
-    id("org.gradle.kotlin.kotlin-dsl") version "6.7.3"
+    id("org.gradle.kotlin.kotlin-dsl") version "6.7.13"
 }
 ```
 
@@ -103,7 +103,7 @@ suggests deleting it.
 
 `kotlin-dsl` is versioned in lockstep with Gradle, and it drags in the Kotlin version that Gradle
 embeds. Applying a version other than the one bundled with the Gradle in
-`gradle/wrapper/gradle-wrapper.properties` produces two warnings on every single task:
+`gradle/wrapper/gradle-wrapper.properties` produces warnings. For example, with an earlier wrapper:
 
 ```text
 This version of Gradle expects version '6.7.3' of the `kotlin-dsl` plugin but version '6.7.6' has
@@ -119,7 +119,7 @@ and standard library into the build-logic classpath than the one Gradle's Kotlin
 against. That is unsupported, not merely noisy.
 
 Note that this is independent of the `kotlin` version in `gradle/libs.versions.toml` (currently
-`2.4.10`), which is the Kotlin the *application and library modules* compile with. Build logic
+`2.4.21`), which is the Kotlin the *application and library modules* compile with. Build logic
 compiles against Gradle's embedded Kotlin; the two do not have to agree and should not be kept in
 sync with each other.
 
@@ -134,6 +134,8 @@ sync with each other.
 | Gradle | `kotlin-dsl` |
 |--------|--------------|
 | 9.7    | 6.7.3        |
+| 9.8.2  | 6.7.6        |
+| 9.9.0  | 6.7.13       |
 
 ## Public contracts
 

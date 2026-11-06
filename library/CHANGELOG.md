@@ -8,6 +8,8 @@
 
 ### Added
 
+- Added `anim_book`, `anim_games`, `anim_home`, `anim_loading`, `anim_offer_tag`,
+  `anim_play_puzzle`, `anim_server` and `anim_star` animated vector drawables to the design system.
 - Onboarding reports each step it settles on as `onboarding_step_view` (step index, page key and
   direction), Skip and going back as onboarding actions, and how `tutorial_complete` was reached
   (`method`: `done` or `skip`). `OnboardingEvent.PageSelected` takes the page key and direction,
@@ -16,6 +18,7 @@
 
 ### Changed
 
+- Standardized bundled animation fills and strokes to white so hosts can apply a consistent tint.
 - `HolidayGreetingDialog` is a seasonal card: the Christmas or Halloween illustration fills it, the
   title and message sit on a scrim at the top and two dialog buttons at the bottom, in the season's
   own colours whatever the app's theme. The filled button takes the holiday theme; the outlined one,

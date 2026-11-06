@@ -18,7 +18,7 @@
             <path
                 android:name="bar_left"
                 android:pathData="M 6,19 L 6,7"
-                android:strokeColor="?android:attr/colorControlNormal"
+                android:strokeColor="@android:color/white"
                 android:strokeWidth="3"
                 android:strokeLineCap="round" />
 
@@ -26,7 +26,7 @@
             <path
                 android:name="bar_center"
                 android:pathData="M 12,19 L 12,4"
-                android:strokeColor="?android:attr/colorControlNormal"
+                android:strokeColor="@android:color/white"
                 android:strokeWidth="3"
                 android:strokeLineCap="round" />
 
@@ -34,7 +34,7 @@
             <path
                 android:name="bar_right"
                 android:pathData="M 18,19 L 18,10"
-                android:strokeColor="?android:attr/colorControlNormal"
+                android:strokeColor="@android:color/white"
                 android:strokeWidth="3"
                 android:strokeLineCap="round" />
         </vector>

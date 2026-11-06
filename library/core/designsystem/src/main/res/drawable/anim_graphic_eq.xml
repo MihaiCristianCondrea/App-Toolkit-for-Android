@@ -29,31 +29,31 @@
             <path
                 android:name="path_1"
                 android:pathData="M 4 11 L 4 13"
-                android:strokeColor="#ffffff"
+                android:strokeColor="@android:color/white"
                 android:strokeWidth="2"
                 android:strokeLineCap="round" />
             <path
                 android:name="path_2"
                 android:pathData="M 8 7 L 8 17"
-                android:strokeColor="#ffffff"
+                android:strokeColor="@android:color/white"
                 android:strokeWidth="2"
                 android:strokeLineCap="round" />
             <path
                 android:name="path_3"
                 android:pathData="M 12 3 L 12 21"
-                android:strokeColor="#ffffff"
+                android:strokeColor="@android:color/white"
                 android:strokeWidth="2"
                 android:strokeLineCap="round" />
             <path
                 android:name="path_4"
                 android:pathData="M 16 7 L 16 17"
-                android:strokeColor="#ffffff"
+                android:strokeColor="@android:color/white"
                 android:strokeWidth="2"
                 android:strokeLineCap="round" />
             <path
                 android:name="path_5"
                 android:pathData="M 20 11 L 20 13"
-                android:strokeColor="#ffffff"
+                android:strokeColor="@android:color/white"
                 android:strokeWidth="2"
                 android:strokeLineCap="round" />
         </vector>

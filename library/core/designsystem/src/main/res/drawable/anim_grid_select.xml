@@ -28,28 +28,28 @@
             android:viewportHeight="24.0">
             <path
                 android:name="outline"
-                android:fillColor="#ff000000"
+                android:fillColor="@android:color/white"
                 android:pathData="M 9 13 L 6 13 C 4.9 13 4 13.9 4 15 L 4 18 C 4 19.1 4.9 20 6 20 L 9 20 C 10.1 20 11 19.1 11 18 L 11 15 C 11 13.9 10.1 13 9 13 Z M 9 18 L 6 18 L 6 15 L 9 15 L 9 18 Z M 18 13 L 15 13 C 13.9 13 13 13.9 13 15 L 13 18 C 13 19.1 13.9 20 15 20 L 18 20 C 19.1 20 20 19.1 20 18 L 20 15 C 20 13.9 19.1 13 18 13 Z M 18 18 L 15 18 L 15 15 L 18 15 L 18 18 Z M 18 4 L 15 4 C 13.9 4 13 4.9 13 6 L 13 9 C 13 10.1 13.9 11 15 11 L 18 11 C 19.1 11 20 10.1 20 9 L 20 6 C 20 4.9 19.1 4 18 4 Z M 18 9 L 15 9 L 15 6 L 18 6 L 18 9 Z M 9 4 L 6 4 C 4.9 4 4 4.9 4 6 L 4 9 C 4 10.1 4.9 11 6 11 L 9 11 C 10.1 11 11 10.1 11 9 L 11 6 C 11 4.9 10.1 4 9 4 Z M 9 9 L 6 9 L 6 6 L 9 6 L 9 9 Z"
                 android:strokeWidth="1.0" />
             <group android:name="group">
                 <path
                     android:name="bottomleft"
-                    android:fillColor="#ff000000"
+                    android:fillColor="@android:color/white"
                     android:pathData="M 11 11.1 L 8.1 11.1 C 7.1 11.1 6.2 11.9 6.2 13 L 6.2 15.8 C 6.2 16.8 7 17.7 8.1 17.7 L 11 17.7 C 12 17.7 12.9 16.9 12.9 15.8 L 12.9 13 C 12.8 12 12 11.1 11 11.1 Z"
                     android:strokeWidth="1.0" />
                 <path
                     android:name="bottomright"
-                    android:fillColor="#ff000000"
+                    android:fillColor="@android:color/white"
                     android:pathData="M 15.9 11.1 L 13 11.1 C 12 11.1 11.1 11.9 11.1 13 L 11.1 15.8 C 11.1 16.8 11.9 17.7 13 17.7 L 15.8 17.7 C 16.8 17.7 17.7 16.9 17.7 15.8 L 17.7 13 C 17.8 12 16.9 11.1 15.9 11.1 Z"
                     android:strokeWidth="1.0" />
                 <path
                     android:name="topright"
-                    android:fillColor="#ff000000"
+                    android:fillColor="@android:color/white"
                     android:pathData="M 15.9 6.2 L 13 6.2 C 12 6.2 11.1 7 11.1 8.1 L 11.1 11 C 11.1 12 11.9 12.9 13 12.9 L 15.8 12.9 C 16.8 12.9 17.7 12.1 17.7 11 L 17.7 8.1 C 17.8 7.1 16.9 6.2 15.9 6.2 Z"
                     android:strokeWidth="1.0" />
                 <path
                     android:name="topleft"
-                    android:fillColor="#ff000000"
+                    android:fillColor="@android:color/white"
                     android:pathData="M 11 6.2 L 8.1 6.2 C 7.1 6.2 6.2 7 6.2 8.1 L 6.2 11 C 6.2 12 7 12.9 8.1 12.9 L 11 12.9 C 12 12.9 12.9 12.1 12.9 11 L 12.9 8.1 C 12.8 7.1 12 6.2 11 6.2 Z"
                     android:strokeWidth="1.0" />
             </group>
