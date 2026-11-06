@@ -33,7 +33,9 @@ packages without a layer above them.
 A shared analytics module holds only the vocabulary several features use: common parameter names,
 the app-wide action event, transport-agnostic helpers. A feature's own events, parameters, builders
 and GA4 contracts live in that feature's `ui/analytics/`, so the shared module does not grow with
-every feature. A name in the shared module that only one feature uses moves to that feature.
+every feature. A name in the shared module that only one feature uses moves to that feature. The app's screen
+identifiers (`TrackedScreen`s) may stay together in one registry there, with a test that keeps their names unique:
+GA4 screen names share one namespace across the app.
 
 Create only the folders that own a real responsibility. Resource-only modules need no placeholder
 Kotlin file.
