@@ -191,7 +191,10 @@ After approval:
 2. Reuse App Toolkit analytics APIs when the project uses App Toolkit.
 3. Keep product-specific event names and schemas owned by the host application.
 4. Reuse Toolkit-owned analytics vocabulary where the Toolkit already defines the behavior.
-5. Prefer a stable event contract rather than scattering raw event strings across features.
+5. Prefer a stable event contract rather than scattering raw event strings across features. Each
+   feature owns its contract in its own `ui/analytics/` package (event names, parameters and
+   builders); the app's shared analytics module keeps only the vocabulary several features use.
+   See `android-ui-layer`.
 6. Emit events at the point where the behavior is known accurately.
 7. Avoid duplicate logging between UI components and ViewModels.
 8. Update or add tests for event names, required parameters, forbidden parameters, screen

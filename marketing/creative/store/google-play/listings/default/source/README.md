@@ -20,14 +20,18 @@ requires the listing to show the app people install, so these go up with the rel
 
 A Remotion project of stills (`src/Root.tsx`), one per graphic, each a pure function of its props (`locale`, `index`):
 
-- `strings/<locale>.json`: every caption and alt text, and the feature graphic's text. A new language is a new
+- `strings/<locale>.json`: every caption (`lines`, the `highlight` drawn on the pill and its Material Symbol `icon`),
+  every alt text, and the feature graphic's text. A new language is a new
   strings file listed in `src/strings.ts`.
 - `src/screens.ts`: which kit screen and state each screenshot mounts.
 - `src/LitScreen.tsx`: mounts a kit screen through `marketing/ui/src/embed.js`, in its device frame and window
   (`phone`, `fold`, `desktop`), and holds the still until Material Web has settled. Ads are off.
 - `src/Phone.tsx`: the 8640 x 1920 phone panorama (one ground, shapes centred on every seam, a seeded scatter clear of
-  the captions, the phones and each other) and `PhoneShot`, which frames one 1080 x 1920 screenshot of it. A caption
-  over 20% of its image fails the render.
+  the captions, the phones and each other) and `PhoneShot`, which frames one 1080 x 1920 screenshot of it. Captions
+  follow the `play-store-media` skill's caption rule (`references/captions.md`): two centred lines, one word on a pill
+  with the screen's own icon, no punctuation. The render fails when a highlight is missing, a caption has punctuation
+  or a dash, leaves its box or covers over 20% of the image, or when two of the fixed shapes overlap each other or a
+  caption.
 - `src/Wide.tsx`: the tablet and desktop strips, laid out at 1920 x 1080 and rendered at 2x.
 - `src/FeatureGraphic.tsx`, `src/Icon.tsx`; `src/theme.ts` holds the toolbox's ambers; `src/Shape.tsx` draws the UI
   kit's own MaterialShapes curves.
@@ -51,6 +55,8 @@ downloads its own.
 
 ## Decisions
 
+- Captions in the style Google uses for Chrome and its other apps (November 6, 2026): centred, the key word on an amber
+  pill with the tab or tool icon the app shows for that screen.
 - One look for the three sets: a warm cream ground with the toolbox's ambers for the shapes and the caption pill, and
   the app's screens in their own colours (the kit's `captured` palette, what the app opens with), so the UI stands
   out from the ground.

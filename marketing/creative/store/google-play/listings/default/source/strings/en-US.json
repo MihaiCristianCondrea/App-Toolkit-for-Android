@@ -1,20 +1,20 @@
 {
   "screenshots": [
-    { "id": "quick-tools", "lines": ["Handy tools,", "one tap away"], "pill": 1,
+    { "id": "quick-tools", "lines": ["Handy tools", "one tap away"], "highlight": "tools", "icon": "grid_view",
       "alt": "Quick Tools with a live compass, bubble level, flashlight and SOS, grouped by sensors and light" },
-    { "id": "measure", "lines": ["Measure, count", "and convert"], "pill": 1,
+    { "id": "measure", "lines": ["Measure and", "convert units"], "highlight": "Measure", "icon": "straighten",
       "alt": "Measure tab with live previews of the ruler, protractor, unit converter, bill splitter and counter" },
-    { "id": "play", "lines": ["Leave it", "to chance"], "pill": 1,
+    { "id": "play", "lines": ["Leave it", "to chance"], "highlight": "chance", "icon": "casino",
       "alt": "Play & Decide tab with the Decision Wheel, a random number, a coin flip and a dice roll" },
-    { "id": "decision-wheel", "lines": ["Let the wheel", "decide"], "pill": 1,
+    { "id": "decision-wheel", "lines": ["Let the wheel", "decide"], "highlight": "wheel", "icon": "rotate_right",
       "alt": "Decision Wheel sheet with four choices typed in and Sushi picked by the wheel" },
-    { "id": "protractor", "lines": ["Measure angles", "on screen"], "pill": 1,
+    { "id": "protractor", "lines": ["Measure angles", "on screen"], "highlight": "angles", "icon": "architecture",
       "alt": "Full-screen protractor reading 60 degrees, with the arm along the screen's edge" },
-    { "id": "bill-splitter", "lines": ["Split the bill,", "tip included"], "pill": 1,
+    { "id": "bill-splitter", "lines": ["Split the bill", "with the tip"], "highlight": "Split", "icon": "calculate",
       "alt": "Tip and Bill Splitter sharing a 100 dollar bill and a 15 percent tip between four people" },
-    { "id": "water-eject", "lines": ["A tone for", "a wet speaker"], "pill": 1,
+    { "id": "water-eject", "lines": ["A tone for", "a wet speaker"], "highlight": "speaker", "icon": "water_drop",
       "alt": "Water Eject sheet ready to play a 30 second 165 Hz tone through the speaker" },
-    { "id": "sos", "lines": ["Signal SOS", "with the torch"], "pill": 1,
+    { "id": "sos", "lines": ["Signal SOS", "with the torch"], "highlight": "SOS", "icon": "emergency",
       "alt": "Morse and SOS sheet ready to flash the SOS pattern with the flashlight" }
   ],
   "tabletScreenshots": [

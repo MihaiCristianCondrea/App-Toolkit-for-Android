@@ -16,8 +16,9 @@ feature/x/
     │   ├── di/
     │   │   └── XModule.kt                # val xModule: repositories and the ViewModel
     │   └── ui/
-    │       ├── analytics/
-    │       │   └── XAnalytics.kt         # the screen's event builders and keys, when it logs its own
+    │       ├── analytics/                # the feature's own analytics, never in the shared analytics module
+    │       │   ├── XAnalytics.kt         # event names, action names, parameter keys and event builders
+    │       │   └── XGa4Contract.kt       # only when the feature has a schema of its own to validate
     │       ├── contracts/
     │       │   └── XEvent.kt             # sealed interface of user events
     │       ├── mappers/
@@ -35,6 +36,8 @@ feature/x/
     │       └── XViewModel.kt
     └── test/kotlin/<base>/feature/x/
         └── ui/
+            ├── analytics/
+            │   └── XAnalyticsTest.kt     # each builder's name and parameters
             ├── mappers/
             │   └── XMappersTest.kt
             ├── XScreenContentTest.kt     # only where the module runs Compose tests

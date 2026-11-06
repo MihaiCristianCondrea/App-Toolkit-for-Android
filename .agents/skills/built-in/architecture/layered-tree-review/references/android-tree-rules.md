@@ -30,6 +30,11 @@ A core or integration module uses the same layer packages when it has layers. A 
 holds a shared vocabulary, such as analytics event names, may keep flat `models/` and `contracts/`
 packages without a layer above them.
 
+A shared analytics module holds only the vocabulary several features use: common parameter names,
+the app-wide action event, transport-agnostic helpers. A feature's own events, parameters, builders
+and GA4 contracts live in that feature's `ui/analytics/`, so the shared module does not grow with
+every feature. A name in the shared module that only one feature uses moves to that feature.
+
 Create only the folders that own a real responsibility. Resource-only modules need no placeholder
 Kotlin file.
 
