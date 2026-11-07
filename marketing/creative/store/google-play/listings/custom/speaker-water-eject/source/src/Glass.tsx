@@ -6,21 +6,31 @@ import React from "react";
  * and white along its length, with a bright rim and a cyan refracting edge. The ribbons are
  * computed across the whole strip, so every seam between two screenshots meets.
  */
+/** The ribbons: centre height, swing and period (in screenshots) as shares, band width in px. */
+const RIBBONS = [
+  { y0: 0.62, amp: 0.2, period: 1.7, phase: 2.4, w: 220, o: 0.9 },
+  { y0: 0.92, amp: 0.1, period: 2.6, phase: 4.1, w: 160, o: 0.8 },
+];
+
+/**
+ * Each ribbon's centreline across a strip, with the half-width its band and rims cover, so other art
+ * can keep clear of it. A slow sweep rising and falling once per screenshot or two.
+ */
+export const ribbonLines = (width: number, height: number, panels: number) => {
+  const panel = width / panels;
+  return RIBBONS.map((r) => ({
+    ...r,
+    half: r.w / 2,
+    pts: Array.from({ length: Math.floor((width + 400) / 20) + 1 }, (_, i) => {
+      const x = -200 + i * 20, y0 = height * r.y0, amp = height * r.amp;
+      return [x, y0 + amp * Math.sin((x / (panel * r.period)) * Math.PI * 2 + r.phase) + amp * 0.35 * Math.sin((x / (panel * r.period * 0.37)) * Math.PI * 2 + r.phase * 2.3)] as [number, number];
+    }),
+  }));
+};
+
 export const Glass: React.FC<{ width: number; height: number; panels: number; id?: string }> = ({ width, height, panels, id = "g" }) => {
   const panel = width / panels;
-  // A ribbon's centreline: a slow sweep across the strip, rising and falling once per screenshot or two.
-  const ribbon = (y0: number, amp: number, period: number, phase: number) => {
-    const pts: string[] = [];
-    for (let x = -200; x <= width + 200; x += 20) {
-      const y = y0 + amp * Math.sin((x / (panel * period)) * Math.PI * 2 + phase) + amp * 0.35 * Math.sin((x / (panel * period * 0.37)) * Math.PI * 2 + phase * 2.3);
-      pts.push(`${x},${y.toFixed(1)}`);
-    }
-    return `M ${pts.join(" L ")}`;
-  };
-  const ribbons = [
-    { d: ribbon(height * 0.62, height * 0.2, 1.7, 2.4), w: 220, o: 0.9 },
-    { d: ribbon(height * 0.92, height * 0.1, 2.6, 4.1), w: 160, o: 0.8 },
-  ];
+  const ribbons = ribbonLines(width, height, panels).map((r) => ({ d: `M ${r.pts.map(([x, y]) => `${x},${y.toFixed(1)}`).join(" L ")}`, w: r.w, o: r.o }));
   return (
     <svg aria-hidden width={width} height={height} viewBox={`0 0 ${width} ${height}`} style={{ position: "absolute", inset: 0, pointerEvents: "none" }}>
       <defs>
@@ -51,64 +61,36 @@ export const Glass: React.FC<{ width: number; height: number; panels: number; id
   );
 };
 
-/** A point on a Catmull-Rom curve through `pts`, at `t` from 0 to 1. */
-const along = (pts: number[][], t: number) => {
-  const n = pts.length - 1, f = Math.min(t * n, n - 1e-6), i = Math.floor(f), u = f - i;
-  const p0 = pts[Math.max(i - 1, 0)], p1 = pts[i], p2 = pts[i + 1], p3 = pts[Math.min(i + 2, n)];
-  return [0, 1].map((k) => 0.5 * (2 * p1[k] + (-p0[k] + p2[k]) * u + (2 * p0[k] - 5 * p1[k] + 4 * p2[k] - p3[k]) * u * u + (-p0[k] + 3 * p1[k] - 3 * p2[k] + p3[k]) * u * u * u));
-};
-const mix = (a: number[], b: number[], t: number) => a.map((v, k) => Math.round(v + (b[k] - v) * t));
-const rgb = (c: number[]) => `rgb(${c.join(",")})`;
-
 /**
- * Water leaving a speaker along `spine` (image coordinates, from the grille outwards): a ribbon of liquid
- * whose half-width follows `halfWidth`, twisting over as it travels so its light face and its deeper
- * underside both show. Built from short lit segments with bright rims; `drops` are [x, y, r]. An
- * illustration of the tone's effect, not a claim.
+ * Sound leaving the speakers and the bubbles it carries: `arcs` are point lists with their ring, 0 nearest, drawn as soft
+ * turquoise lines that fade as they spread; `bubbles` are [x, y, r], clear spheres with
+ * a rim and a highlight. An illustration of the tone, not a claim.
  */
-export const Wave: React.FC<{ spine: number[][]; halfWidth: (t: number) => number; drops: number[][]; width: number; height: number }> = ({ spine, halfWidth, drops, width, height }) => {
-  const N = 160;
-  const light = [214, 251, 250], mid = [64, 210, 218], deep = [8, 128, 144];
-  const segments = Array.from({ length: N }, (_, i) => {
-    const t0 = i / N, t1 = (i + 1) / N;
-    const edge = (t: number) => {
-      const [cx, cy] = along(spine, t), [ax, ay] = along(spine, Math.max(t - 0.004, 0)), [bx, by] = along(spine, Math.min(t + 0.004, 1));
-      const len = Math.hypot(bx - ax, by - ay) || 1, nx = -(by - ay) / len, ny = (bx - ax) / len;
-      const w = halfWidth(t);
-      const twist = Math.cos(Math.PI * 1.35 * t);
-      return { a: [cx + nx * w * twist, cy + ny * w * twist], b: [cx - nx * w * twist, cy - ny * w * twist], twist };
-    };
-    const e0 = edge(t0), e1 = edge(t1);
-    const face = Math.abs(e0.twist), front = e0.twist >= 0;
-    const fill = front ? mix(mix(mid, light, face), deep, t0 * 0.35) : mix(deep, mid, face * 0.5);
-    return { key: i, d: `M ${e0.a} L ${e1.a} L ${e1.b} L ${e0.b} Z`, fill: rgb(fill), a: [e0.a, e1.a], b: [e0.b, e1.b], t: t0 };
-  });
-  const rim = (side: "a" | "b") => `M ${segments.map((s) => s[side][0]).join(" L ")}`;
-  return (
-    <svg aria-hidden width={width} height={height} viewBox={`0 0 ${width} ${height}`} style={{ position: "absolute", inset: 0, pointerEvents: "none" }}>
-      <defs>
-        <radialGradient id="wave-drop" cx=".35" cy=".3" r=".8">
-          <stop offset="0" stopColor="#FFFFFF" />
-          <stop offset=".45" stopColor="#B8F3F4" />
-          <stop offset="1" stopColor="#1FB3C2" />
-        </radialGradient>
-        <filter id="wave-shadow" x="-20%" y="-20%" width="140%" height="150%"><feDropShadow dx="0" dy="28" stdDeviation="24" floodColor="#00444E" floodOpacity=".25" /></filter>
-        <filter id="wave-soft" x="-10%" y="-10%" width="120%" height="120%"><feGaussianBlur stdDeviation="5" /></filter>
-      </defs>
-      <g>
-        <g filter="url(#wave-shadow)" opacity=".94">
-          {segments.map((s) => <path key={s.key} d={s.d} fill={s.fill} stroke={s.fill} strokeWidth="1.2" strokeLinejoin="round" />)}
+export const SoundBubbles: React.FC<{ arcs: { pts: number[][]; ring: number }[]; bubbles: number[][]; width: number; height: number }> = ({ arcs, bubbles, width, height }) => (
+  <svg aria-hidden width={width} height={height} viewBox={`0 0 ${width} ${height}`} style={{ position: "absolute", inset: 0, pointerEvents: "none" }}>
+    <defs>
+      <radialGradient id="sound-bubble" cx=".5" cy=".5" r=".5">
+        <stop offset=".62" stopColor="#FFFFFF" stopOpacity=".08" />
+        <stop offset=".9" stopColor="#7FDDE4" stopOpacity=".6" />
+        <stop offset="1" stopColor="#FFFFFF" stopOpacity=".95" />
+      </radialGradient>
+      <filter id="sound-glow" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="4" /></filter>
+    </defs>
+    {arcs.map(({ pts, ring: i }, key) => {
+      const d = `M ${pts.map((p) => p.map((n) => n.toFixed(1)).join(" ")).join(" L ")}`, fade = 1 - i * 0.15;
+      return (
+        <g key={key} opacity={fade}>
+          <path d={d} fill="none" stroke="#3FC6D3" strokeWidth={7} strokeLinecap="round" opacity=".18" filter="url(#sound-glow)" />
+          <path d={d} fill="none" stroke="#1AA5B5" strokeWidth={Math.max(1.4, 2.6 - i * 0.3)} strokeLinecap="round" opacity=".6" />
         </g>
-        <path d={rim("a")} fill="none" stroke="#FFFFFF" strokeWidth="10" strokeLinecap="round" opacity=".55" filter="url(#wave-soft)" />
-        <path d={rim("a")} fill="none" stroke="#FFFFFF" strokeWidth="3.5" strokeLinecap="round" opacity=".95" />
-        <path d={rim("b")} fill="none" stroke="#E8FFFF" strokeWidth="2.5" strokeLinecap="round" opacity=".8" />
-        {drops.map(([cx, cy, r], i) => (
-          <g key={i}>
-            <circle cx={cx} cy={cy} r={r} fill="url(#wave-drop)" />
-            <ellipse cx={cx - r * 0.3} cy={cy - r * 0.35} rx={r * 0.3} ry={r * 0.2} fill="#FFFFFF" />
-          </g>
-        ))}
+      );
+    })}
+    {bubbles.map(([x, y, r], i) => (
+      <g key={i}>
+        <circle cx={x} cy={y} r={r} fill="url(#sound-bubble)" stroke="#1FA9B8" strokeOpacity=".65" strokeWidth={Math.max(1.5, r * 0.09)} />
+        <ellipse cx={x - r * 0.36} cy={y - r * 0.4} rx={r * 0.26} ry={r * 0.16} fill="#FFFFFF" transform={`rotate(-35 ${x - r * 0.36} ${y - r * 0.4})`} />
+        <path d={`M ${x + r * 0.55} ${y + r * 0.2} A ${r * 0.7} ${r * 0.7} 0 0 1 ${x + r * 0.1} ${y + r * 0.62}`} fill="none" stroke="#FFFFFF" strokeWidth={Math.max(1.2, r * 0.08)} strokeOpacity=".85" strokeLinecap="round" />
       </g>
-    </svg>
-  );
-};
+    ))}
+  </svg>
+);

@@ -1,34 +1,37 @@
 import React from "react";
 import { LitScreen } from "./LitScreen";
 import { SCREENS } from "./screens";
-import { Wave } from "./Glass";
+import { SoundBubbles, ribbonLines } from "./Glass";
+import { Shape } from "./Shape";
 import solved from "./hero-pose.json";
-import { CAPTION_BAND, CAPTION_TOP, FRAME, GOLDEN, H, SAFE_X, SPACE, W, WATER_BAND, measure, violations, waterDrops, waterHalfWidth, waterSpine } from "./heroGeometry";
+import { CAPTION_BAND, CAPTION_TOP, FRAME, GOLDEN, H, SAFE_X, SPACE, W, WATER_BAND, bubbles, heroShapes, measure, soundArcs, violations } from "./heroGeometry";
 import type { Pose, Pt, Ui } from "./heroGeometry";
 
 const pose = solved.pose as Pose;
 const geometry = measure(pose, solved.ui as Ui);
 const problems = violations(geometry);
 if (problems.length) throw new Error(`The hero pose breaks its constraints: ${problems.join("; ")}`);
-const spine = waterSpine(geometry);
-const drops = waterDrops(spine);
+const arcs = soundArcs(geometry);
+const spheres = bubbles(geometry);
+const shapes = heroShapes(geometry, arcs, spheres, ribbonLines(W, H, 1));
 
 /**
  * The first screenshot: the phone in the pose scripts/solve-hero.ts solved for (src/hero-pose.json), the
  * frame's centre at (x, y), turned in 3D by the device frame itself and only scaled and rolled in the
- * picture plane. Water leaves its speaker holes along the spine the geometry defines. `debug` draws the
- * guides and measurements instead of the water.
+ * picture plane. Sound arcs leave both groups of speaker holes, carrying bubbles on their wavefronts. `debug` draws the
+ * guides and measurements, with the arcs and bubbles as outlines.
  */
 export const Hero: React.FC<{ debug?: boolean }> = ({ debug }) => {
   const [id, state] = SCREENS["water-eject"];
   return (
     <>
+      {shapes.map((p, i) => <Shape key={i} {...p} />)}
       <div style={{ position: "absolute", left: pose.x - FRAME.width / 2, top: pose.y - FRAME.height / 2, width: FRAME.width, height: FRAME.height, zIndex: 1, transform: `rotate(${pose.roll}deg) scale(${pose.scale})`, transformOrigin: "50% 50%", filter: "drop-shadow(0 34px 44px rgba(0,40,48,.26))" }}>
         <LitScreen id={id} state={state} pose={{ yaw: pose.yaw, pitch: pose.pitch, perspective: pose.perspective }} style={{ width: FRAME.width }} />
       </div>
       {!debug && (
         <div style={{ position: "absolute", left: 0, top: 0, width: W, height: H, zIndex: 10 }}>
-          <Wave spine={spine} halfWidth={waterHalfWidth} drops={drops} width={W} height={H} />
+          <SoundBubbles arcs={arcs} bubbles={spheres} width={W} height={H} />
         </div>
       )}
       {debug && <Overlay />}
@@ -63,12 +66,13 @@ const Overlay: React.FC = () => {
       <circle cx={g.focal[0]} cy={g.focal[1]} r="9" fill="#FF6D00" />
       <circle cx={g.speaker[0]} cy={g.speaker[1]} r="9" fill="#00838F" />
       <line x1={g.speaker[0]} y1={g.speaker[1]} x2={g.speaker[0] + g.direction[0] * SPACE.xl} y2={g.speaker[1] + g.direction[1] * SPACE.xl} stroke="#00838F" strokeWidth="4" />
-      <polyline points={poly(spine)} fill="none" stroke="#00838F" strokeWidth="3" strokeDasharray="8 6" />
+      {arcs.map((a, i) => <polyline key={i} points={poly(a.pts)} fill="none" stroke="#00838F" strokeWidth="2" strokeDasharray="8 6" />)}
+      {spheres.map(([x, y, r], i) => <circle key={i} cx={x} cy={y} r={r} fill="none" stroke="#00838F" strokeWidth="2" />)}
       {label(c[0] + 30, c[1] - 10, `silhouette centroid ${n(c[0], W)} W, ${n(c[1], H)} H`)}
       {label(g.focal[0] + 16, g.focal[1] + 64, `speaker edge ${n(g.focal[0], W)} W, ${n(g.focal[1], H)} H`, "#E65100")}
       {label(g.speaker[0] - 330, g.speaker[1] - 18, `speaker ${n(g.speaker[0], W)} W, ${n(g.speaker[1], H)} H`, "#00838F")}
       {label(b.left + 8, b.bottom + 30, `box ${n(b.left, W)}–${n(b.right, W)} W, to ${n(b.bottom, H)} H`, "#1565C0")}
-      {label(SAFE_X + 8, WATER_BAND.top + 26, `water band 0.65–0.80 H · edge ${n(g.thickness, W)} W thick, ${g.angle.toFixed(1)}°`, "#00838F")}
+      {label(SAFE_X + 8, WATER_BAND.top + 26, `effect band 0.65 H to caption · edge ${n(g.thickness, W)} W thick, ${g.angle.toFixed(1)}°`, "#00838F")}
       {label(CAPTION_BAND.left + 8, CAPTION_BAND.top - 10, "caption band 0.82–0.954 H", "#6A1B9A")}
     </svg>
   );

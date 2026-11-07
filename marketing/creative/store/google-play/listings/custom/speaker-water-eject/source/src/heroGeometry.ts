@@ -127,6 +127,30 @@ export const widthAt = (poly: Pt[], y: number) => {
   return xs.length ? Math.max(...xs) - Math.min(...xs) : 0;
 };
 
+/** Even–odd point-in-polygon test. */
+export const inside = (poly: Pt[], [x, y]: Pt) => {
+  let c = false;
+  poly.forEach((p, i) => { const q = poly[(i + poly.length - 1) % poly.length]; if ((p[1] > y) !== (q[1] > y) && x < ((q[0] - p[0]) * (y - p[1])) / (q[1] - p[1]) + p[0]) c = !c; });
+  return c;
+};
+
+/** The lowest point of a closed polygon on the vertical line at `x`, or -Infinity if the line misses it. */
+export const floorAt = (poly: Pt[], x: number) => {
+  let y = -Infinity;
+  poly.forEach((p, i) => {
+    const q = poly[(i + 1) % poly.length];
+    if ((p[0] - x) * (q[0] - x) <= 0 && p[0] !== q[0]) y = Math.max(y, p[1] + ((q[1] - p[1]) * (x - p[0])) / (q[0] - p[0]));
+  });
+  return y;
+};
+
+/** The distance from a point to a closed polygon's outline. */
+export const distanceTo = (poly: Pt[], [x, y]: Pt) => Math.min(...poly.map((p, i) => {
+  const q = poly[(i + 1) % poly.length], [dx, dy] = [q[0] - p[0], q[1] - p[1]];
+  const t = Math.max(0, Math.min(1, ((x - p[0]) * dx + (y - p[1]) * dy) / (dx * dx + dy * dy || 1)));
+  return Math.hypot(x - p[0] - t * dx, y - p[1] - t * dy);
+}));
+
 export type Ui = Record<"title" | "visual" | "readout" | "instructions" | "button" | "note", number[]>;
 
 /** Everything the solver scores and the overlay draws, for one pose. */
@@ -144,18 +168,21 @@ export const measure = (pose: Pose, ui: Ui) => {
   const along = [edgeFront[1][0] - edgeFront[0][0], edgeFront[1][1] - edgeFront[0][1]], al = Math.hypot(along[0], along[1]);
   const thickness = ((eb[0] - ef[0]) * -along[1] + (eb[1] - ef[1]) * along[0]) / al;
   const angle = (Math.atan2(edgeFront[1][1] - edgeFront[0][1], edgeFront[1][0] - edgeFront[0][0]) * 180) / Math.PI;
-  const speaker = project(pose, [SPEAKER.left, hh, 0]);
-  // The direction water leaves the grille: the bottom face's outward normal, as the camera sees it.
-  const out = project(pose, [SPEAKER.left, hh + 40, 0]);
-  const len = Math.hypot(out[0] - speaker[0], out[1] - speaker[1]);
-  const direction: Pt = [(out[0] - speaker[0]) / len, (out[1] - speaker[1]) / len];
+  // Each group of speaker holes, and the direction sound leaves it: the bottom face's outward normal,
+  // as the camera sees it.
+  const speakers = [SPEAKER.left, SPEAKER.right].map((sx) => {
+    const at = project(pose, [sx, hh, 0]), out = project(pose, [sx, hh + 40, 0]);
+    const len = Math.hypot(out[0] - at[0], out[1] - at[1]);
+    return { at, direction: [(out[0] - at[0]) / len, (out[1] - at[1]) / len] as Pt };
+  });
+  const [speaker, direction] = [speakers[0].at, speakers[0].direction];
   // Signed the same way: how far the back of the right side shows beyond its front, to the right.
   const [sf, sb] = [project(pose, [FRAME.width / 2, 0, d]), project(pose, [FRAME.width / 2, 0, -d])];
   const side = ((sb[0] - sf[0]) * along[0] + (sb[1] - sf[1]) * along[1]) / al;
   const quads = Object.fromEntries(Object.entries(ui).map(([k, [l, t, r, b]]) => [k, [[l, t], [r, t], [r, b], [l, b]].map((p) => projectScreen(pose, p as Pt))])) as Record<keyof Ui, Pt[]>;
   // How much narrower the phone is where it leaves the top edge than just above its bottom edge.
   const keystone = widthAt(silhouette, 0) / widthAt(silhouette, focal[1] - SPACE.xl);
-  return { keystone, silhouette, visible, area, centroid, box: bbox(visible), full: bbox(silhouette), edgeFront, edgeBack, focal, thickness, angle, speaker, direction, side, quads };
+  return { keystone, silhouette, visible, area, centroid, box: bbox(visible), full: bbox(silhouette), edgeFront, edgeBack, focal, thickness, angle, speaker, direction, speakers, side, quads };
 };
 
 /** The caption's top: its two lines (76 px at a 1.36 line height) stand on CAPTION_BAND.bottom. */
@@ -175,43 +202,78 @@ export const violations = (m: ReturnType<typeof measure>) => {
   return v;
 };
 
-/** A cubic Bézier sampled at `n` + 1 points. */
-export const bezier = ([p0, p1, p2, p3]: Pt[], n: number): Pt[] => Array.from({ length: n + 1 }, (_, i) => {
-  const t = i / n, u = 1 - t;
-  return [0, 1].map((k) => u * u * u * p0[k] + 3 * u * u * t * p1[k] + 3 * u * t * t * p2[k] + t * t * t * p3[k]) as Pt;
-});
+/**
+ * Sound leaving both groups of speaker holes: for each, arcs centred on the projected holes, opening along
+ * the bottom face's projected normal, spanning ±`SPREAD` degrees, with radii from the spacing scale;
+ * the largest stops SPACE.m short of the caption.
+ */
+const SPREAD = 44;
+const RINGS = [SPACE.m, SPACE.l, SPACE.xl, SPACE.xxl, SPACE.xl + SPACE.xxl];
+export type Arc = { pts: Pt[]; ring: number };
+const onArc = (m: ReturnType<typeof measure>, k: number, radius: number, degrees: number): Pt => {
+  const { at: s, direction: d } = m.speakers[k], n: Pt = [-d[1], d[0]], a = rad(degrees);
+  return [s[0] + radius * (d[0] * Math.cos(a) + n[0] * Math.sin(a)), s[1] + radius * (d[1] * Math.cos(a) + n[1] * Math.sin(a))];
+};
+export const soundArcs = (m: ReturnType<typeof measure>): Arc[] =>
+  m.speakers.flatMap((_, k) => RINGS.filter((radius) => onArc(m, k, radius, 0)[1] <= CAPTION_TOP - SPACE.m).map((radius, ring) => ({ ring, pts: Array.from({ length: 41 }, (_, i) => onArc(m, k, radius, -SPREAD + (2 * SPREAD * i) / 40)) })));
 
 /**
- * The water's spine: two cubic Béziers joined smoothly. It leaves the speaker along the bottom face's
- * outward normal, bends through its lowest point on the right golden vertical, and rises into the open
- * space under the phone's right side, ending below it.
+ * Bubbles, [x, y, r], carried by the sound: each sits just outside a wavefront, as if the wave were pushing
+ * it, and grows the further out it rides (radii 8, 13, 21 from the scale). Angles are mirrored between the
+ * two speakers and offset a little so the pattern is not symmetric. A bubble is dropped if it would touch
+ * the phone, come within SPACE.m of the caption or meet another bubble.
  */
-export const waterSpine = (m: ReturnType<typeof measure>): Pt[] => {
-  const s = m.speaker, d = m.direction;
-  // The lowest point sits on the right golden vertical, SPACE.l above the water band's floor, so the
-  // ribbon's width stays clear of the caption; the tip stops SPACE.xl below the phone's silhouette,
-  // short of the right safe margin.
-  const low: Pt = [GOLDEN.x[1], WATER_BAND.bottom - SPACE.l];
-  const tipX = W - SAFE_X - SPACE.xl;
-  const tip: Pt = [tipX, Math.max(...m.silhouette.filter((p) => Math.abs(p[0] - tipX) < SPACE.xl).map((p) => p[1]), m.focal[1]) + SPACE.xl];
-  const first = bezier([s, [s[0] + d[0] * SPACE.xl, s[1] + d[1] * SPACE.xl], [low[0] - SPACE.xxl, low[1]], low], 60);
-  const second = bezier([low, [low[0] + SPACE.xxl, low[1]], [tip[0] + SPACE.xl, tip[1] + SPACE.xl], tip], 60);
-  return [...first, ...second.slice(1)];
+const RIDERS: [number, number, number][] = [[1, 22, 8], [2, -30, 13], [2, 34, 8], [3, -38, 13], [3, 12, 21], [4, -20, 21], [4, 30, 13]];
+export const bubbles = (m: ReturnType<typeof measure>): [number, number, number][] => {
+  const out: [number, number, number][] = [];
+  m.speakers.forEach((_, k) => RIDERS.forEach(([ring, degrees, r]) => {
+    const radius = RINGS[ring] + r * 0.7;
+    const [x, y] = onArc(m, k, radius, (k ? -degrees : degrees) + (k ? 6 : 0));
+    if (y + r > CAPTION_TOP - SPACE.m || x - r < SAFE_X || x + r > W - SAFE_X) return;
+    if (inside(m.visible, [x, y]) || distanceTo(m.visible, [x, y]) < r + SPACE.xs) return;
+    if (out.some(([bx, by, br]) => Math.hypot(bx - x, by - y) < br + r + SPACE.xs)) return;
+    out.push([x, y, r]);
+  }));
+  return out;
 };
 
-/** Droplets leaving the tip along its last direction, and two small ones at the grille. Radii 13, 8, 5. */
-export const waterDrops = (spine: Pt[]): [number, number, number][] => {
-  const [a, b] = [spine[spine.length - 6], spine[spine.length - 1]];
-  const l = Math.hypot(b[0] - a[0], b[1] - a[1]), d = [(b[0] - a[0]) / l, (b[1] - a[1]) / l], n = [-d[1], d[0]];
-  const s = spine[0];
-  return [
-    [b[0] + d[0] * SPACE.m + n[0] * SPACE.xs, b[1] + d[1] * SPACE.m + n[1] * SPACE.xs, 8],
-    [b[0] + d[0] * SPACE.l - n[0] * SPACE.s, b[1] + d[1] * SPACE.l - n[1] * SPACE.s, 5],
-    [b[0] + d[0] * SPACE.s - n[0] * SPACE.m, b[1] + d[1] * SPACE.s - n[1] * SPACE.m, 13],
-    [s[0] - SPACE.m, s[1] + SPACE.s, 5],
-    [s[0] - SPACE.l, s[1] + SPACE.xs, 3],
-  ];
-};
+export type Piece = { name: string; x: number; y: number; size: number; color: string; rotate: number };
 
-/** Half-width of the water along its spine: from a 6 px jet to a broad body, tapering to the tip. */
-export const waterHalfWidth = (t: number) => 3 + (SPACE.xl * 0.75) * Math.pow(Math.sin(Math.PI * Math.min(t * 1.1, 1)), 1.1);
+/** The MaterialShapes the other listings scatter, in the campaign's aqua tones only. */
+const SHAPE_NAMES = ["cookie_9sided", "flower", "clover_4leaf", "soft_burst", "gem", "pill", "sunny", "cookie_6sided"];
+const SHAPE_COLORS = ["#A6EDEA", "#7DDDE1", "#C2F0F0"];
+
+/**
+ * Shapes for the hero: one large shape behind the phone, showing beside its right edge above the
+ * the sound, and smaller ones from a seeded generator in the open space. Every shape keeps SPACE.s
+ * clear of the background's glass ribbons; a small one also keeps SPACE.s from the phone's visible
+ * silhouette, SPACE.m from the caption's text, the sound arcs, the bubbles and the other shapes, and may
+ * run off the image's edge.
+ */
+export type Ribbon = { pts: Pt[]; half: number };
+export const heroShapes = (m: ReturnType<typeof measure>, arcs: Arc[], spheres: [number, number, number][], ribbons: Ribbon[]): Piece[] => {
+  const clearOfRibbons = (cx: number, cy: number, r: number) => ribbons.every((b) => b.pts.every((p) => Math.hypot(p[0] - cx, p[1] - cy) > r + b.half + SPACE.s));
+  // The large shape: centred SPACE.xxl in from the right edge, on the upper golden line divided by φ,
+  // as large as it can be (up to the image's width) while it stays clear of the ribbons.
+  const [bx, by] = [W - SPACE.xxl, GOLDEN.y[0] / PHI];
+  let big = W;
+  while (big > SPACE.xxl && !clearOfRibbons(bx, by, big / 2)) big -= SPACE.xs;
+  const pieces: Piece[] = [{ name: "cookie_12sided", x: bx - big / 2, y: by - big / 2, size: big, color: "#BDEFEF", rotate: 12 }];
+  let seed = 11;
+  const rand = () => ((seed = (Math.imul(seed, 1664525) + 1013904223) >>> 0) / 4294967296);
+  const effect = [...arcs.flatMap((a) => a.pts).map((p) => [p[0], p[1], 6]), ...spheres] as number[][];
+  const caption = { left: W / 2 - 330, right: W / 2 + 330, top: CAPTION_TOP, bottom: CAPTION_BAND.bottom };
+  const clearOfPhone = (cx: number, cy: number, r: number) => !inside(m.visible, [cx, cy]) && distanceTo(m.visible, [cx, cy]) > r + SPACE.s;
+  const small: Piece[] = [];
+  for (let k = 0; small.length < 5 && k < 6000; k++) {
+    const size = SPACE.xl + rand() * (SPACE.xxl + SPACE.l), r = size / 2;
+    const cx = -r * 0.4 + rand() * (W + r * 0.8), cy = -r * 0.4 + rand() * (H + r * 0.8);
+    if (!clearOfPhone(cx, cy, r) || !clearOfRibbons(cx, cy, r)) continue;
+    if (Math.hypot(cx - bx, cy - by) < r + big / 2 + SPACE.m) continue;
+    if (cx + r > caption.left - SPACE.m && cx - r < caption.right + SPACE.m && cy + r > caption.top - SPACE.m && cy - r < caption.bottom + SPACE.m) continue;
+    if (effect.some(([x, y, er]) => Math.hypot(x - cx, y - cy) < r + er + SPACE.m)) continue;
+    if (small.some((p) => Math.hypot(p.x + p.size / 2 - cx, p.y + p.size / 2 - cy) < (p.size + size) / 2 + SPACE.m)) continue;
+    small.push({ name: SHAPE_NAMES[small.length % SHAPE_NAMES.length], x: cx - r, y: cy - r, size, color: SHAPE_COLORS[small.length % SHAPE_COLORS.length], rotate: rand() * 360 });
+  }
+  return [...pieces, ...small];
+};
