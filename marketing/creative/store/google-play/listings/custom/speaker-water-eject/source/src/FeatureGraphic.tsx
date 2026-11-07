@@ -4,7 +4,7 @@ import { LitScreen, useFonts } from "./LitScreen";
 import { SCREENS } from "./screens";
 import { Glass, SoundBubbles } from "./Glass";
 import { STRINGS } from "./strings";
-import { FONT, INK, SHEET_BLUE, SHEET_BLUE_BRIGHT, SHEET_BLUE_CONTAINER } from "./theme";
+import { FIELD_DEEP, FONT, INK, RIBBON_STOPS, SHEET_BLUE, SHEET_BLUE_BRIGHT } from "./theme";
 
 const W = 1024, H = 500;
 /** Play may crop the edges: essential content stays inside the middle, 10% in from each side. */
@@ -40,10 +40,10 @@ const Ribbon: React.FC<{ d: string }> = ({ d }) => (
   <svg aria-hidden width={W} height={H} style={{ position: "absolute", inset: 0, pointerEvents: "none" }}>
     <defs>
       <linearGradient id="fg-ribbon" x1="0" y1="0" x2={W} y2="0" gradientUnits="userSpaceOnUse">
-        <stop offset="0" stopColor="#8FE6EC" />
-        <stop offset=".45" stopColor="#F4FFFF" />
-        <stop offset=".8" stopColor={SHEET_BLUE_CONTAINER} />
-        <stop offset="1" stopColor="#9DBDF0" />
+        <stop offset="0" stopColor={RIBBON_STOPS[0]} />
+        <stop offset=".45" stopColor={RIBBON_STOPS[1]} />
+        <stop offset=".8" stopColor={RIBBON_STOPS[2]} />
+        <stop offset="1" stopColor={RIBBON_STOPS[3]} />
       </linearGradient>
     </defs>
     <path d={d} fill="none" stroke="url(#fg-ribbon)" strokeWidth="150" strokeLinecap="round" opacity=".85" />
@@ -89,8 +89,8 @@ export const FeatureGraphic: React.FC<{ locale: string; concept?: Concept }> = (
     const textBox = { left: 230, top: 150, right: 794, bottom: 352 };
     return (
       <AbsoluteFill ref={ref} style={{ fontFamily: FONT, overflow: "hidden" }}>
-        {/* One aqua step deeper than the screenshots' ground, so the graphic holds its edge on a white page. */}
-        <Glass id="feature" width={W} height={H} panels={1} ribbons={false} field={["#D3F0F3", "#B5E4EA"]} />
+        {/* One step deeper than the screenshots' ground, so the graphic holds its edge on a white page. */}
+        <Glass id="feature" width={W} height={H} panels={1} ribbons={false} field={FIELD_DEEP} />
         <div style={{ position: "absolute", inset: 0, WebkitMaskImage: `radial-gradient(ellipse 330px 150px at 512px 250px, rgba(0,0,0,.12) 60%, #000 100%)`, maskImage: `radial-gradient(ellipse 330px 150px at 512px 250px, rgba(0,0,0,.12) 60%, #000 100%)` }}>
           <Ribbon d={ribbon} />
         </div>
@@ -107,8 +107,8 @@ export const FeatureGraphic: React.FC<{ locale: string; concept?: Concept }> = (
   const c = { x: 318, y: 250 }, d = 196;
   return (
     <AbsoluteFill ref={ref} style={{ fontFamily: FONT, overflow: "hidden" }}>
-      {/* One aqua step deeper than the screenshots' ground, so the graphic holds its edge on a white page. */}
-      <Glass id="feature" width={W} height={H} panels={1} text={[{ left: 476, top: 150, right: 900, bottom: 350 }]} field={["#D3F0F3", "#B5E4EA"]} />
+      {/* One step deeper than the screenshots' ground, so the graphic holds its edge on a white page. */}
+      <Glass id="feature" width={W} height={H} panels={1} text={[{ left: 476, top: 150, right: 900, bottom: 350 }]} field={FIELD_DEEP} />
       <div style={{ position: "absolute", inset: 0, zIndex: 1 }}>
         <SoundBubbles arcs={arcs(c.x, c.y, 180, [d / 2 + SPACE.s, d / 2 + SPACE.l, d / 2 + SPACE.xl], 46)} bubbles={[[c.x - 205, c.y - 92, 10], [c.x - 172, c.y + 118, 6], [c.x - 232, c.y + 34, 5], [c.x + 40, c.y - 150, 7]]} width={W} height={H} />
       </div>

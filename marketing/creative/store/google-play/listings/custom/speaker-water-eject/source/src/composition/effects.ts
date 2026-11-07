@@ -5,6 +5,7 @@
 import { GOLDEN, PHI, SAFE_X, SPACE, TEXT_CLEARANCE, W, H, distanceTo, grow, inside } from "./geometry.ts";
 import type { Box, Measured, Pt } from "./geometry.ts";
 import type { Ribbon } from "./ribbons.ts";
+import { SHAPE_BEHIND, SHAPE_TONES } from "../theme.ts";
 
 const rad = (d: number) => (d * Math.PI) / 180;
 
@@ -62,7 +63,7 @@ export type Piece = { name: string; x: number; y: number; size: number; color: s
 
 /** The MaterialShapes the other listings scatter, in tones of the Water Eject sheet's blues. */
 const SHAPE_NAMES = ["cookie_9sided", "flower", "clover_4leaf", "soft_burst", "gem", "pill", "sunny", "cookie_6sided"];
-const SHAPE_COLORS = ["#C7D8EE", "#B8CDE3", "#A7C2E8"];
+const SHAPE_COLORS = SHAPE_TONES;
 
 /**
  * How a screenshot's shapes are placed. `big` puts one shape behind the phones, centred at `at` but moved
@@ -92,7 +93,7 @@ export const placeShapes = (plan: ShapePlan, phones: Obstacle[], caption: Box | 
     for (let size = plan.big.max; size >= plan.big.min; size -= SPACE.xs) {
       const r = size / 2, cx = Math.min(Math.max(ax, edges.left ? -Infinity : r), edges.right ? Infinity : W_ - r);
       if (clearOfRibbons(cx, ay, r) && clearOfText(cx, ay, r)) {
-        pieces.push({ name: "cookie_12sided", x: cx - r, y: ay - r, size, color: "#D3E1F3", rotate: 12, behind: true });
+        pieces.push({ name: "cookie_12sided", x: cx - r, y: ay - r, size, color: SHAPE_BEHIND, rotate: 12, behind: true });
         break;
       }
     }

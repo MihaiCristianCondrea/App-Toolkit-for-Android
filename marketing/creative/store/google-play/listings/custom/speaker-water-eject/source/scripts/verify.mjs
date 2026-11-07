@@ -18,7 +18,7 @@ import { readPng, sheet, shrink, writePng } from "./png.mjs";
 import { composeShot } from "../src/composition/compose.ts";
 import { CAPTION, H, TEXT_CLEARANCE, W, grow } from "../src/composition/geometry.ts";
 import { SHOTS } from "../src/composition/shots.ts";
-import { INK, ON_PILL, PILL } from "../src/theme.ts";
+import { FIELD, INK, ON_PILL, PILL } from "../src/theme.ts";
 import { CANVAS, WIDE_SETS, composeWide } from "../src/composition/wide.ts";
 
 const root = fileURLToPath(new URL("../", import.meta.url));
@@ -38,7 +38,7 @@ const lum = ([r, g, b]) => { const f = (c) => { c /= 255; return c <= 0.04045 ? 
 const ratio = (a, b) => { const [x, y] = [lum(a), lum(b)].sort((p, q) => q - p); return (x + 0.05) / (y + 0.05); };
 const dist = (a, b) => Math.hypot(a[0] - b[0], a[1] - b[1], a[2] - b[2]);
 const at = (img, x, y) => { const i = (y * img.width + x) * 4; return [img.data[i], img.data[i + 1], img.data[i + 2]]; };
-const [ink, pill, onPill, top, bottom] = [hex(INK), hex(PILL), hex(ON_PILL), hex("#EAF9FA"), hex("#CDEFF2")];
+const [ink, pill, onPill, top, bottom] = [hex(INK), hex(PILL), hex(ON_PILL), hex(FIELD[0]), hex(FIELD[1])];
 const field = (y) => top.map((c, k) => c + (bottom[k] - c) * (y / H));
 
 const serveUrl = await bundle({ entryPoint: path.join(root, "src/index.ts"), publicDir: path.join(root, "public"), enableCaching: false });

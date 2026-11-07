@@ -27,6 +27,11 @@
       "date": "2026-11-07",
       "status": "planned",
       "note": "Final ASO pass: title Water Eject: App Toolkit, a plainer short description, a verified full description, 280 search keywords (6 rejected, see keyword-review.md) and a new Ripple feature graphic without 165 Hz. Screenshots solved and verified on all three device types. Not uploaded; Play Console keyword availability and production rollout of 26.11.02 remain to be confirmed."
+    },
+    {
+      "date": "2026-11-07",
+      "status": "planned",
+      "note": "Moved the whole campaign palette, ground and ribbons included, to the Water Eject sheet's blues; re-rendered and re-verified every graphic."
     }
   ]
 }

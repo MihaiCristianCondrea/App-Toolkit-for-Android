@@ -1,17 +1,18 @@
 import React from "react";
 import { FADE, ribbonLines } from "./composition/ribbons";
+import { BUBBLE_TINT, FIELD, RIBBON_EDGE, RIBBON_STOPS, SHEET_BLUE, SHEET_BLUE_BRIGHT } from "./theme";
 export { ribbonLines };
 
 /** A box the ribbons fade behind, in the strip's coordinates. */
 export type TextBox = { left: number; top: number; right: number; bottom: number };
 
 /**
- * The campaign's ground: a light aqua field crossed by ribbons of liquid glass, the way Material 3's
- * own hero art draws them. Each ribbon is a wide translucent band whose colour shifts between aqua
- * and white along its length, with a bright rim and a cyan refracting edge. The ribbons are
+ * The campaign's ground: a light field in the Water Eject sheet's blues crossed by ribbons of liquid glass,
+ * the way Material 3's own hero art draws them. Each ribbon is a wide translucent band whose colour shifts
+ * between blue and white along its length, with a bright rim and a blue refracting edge. The ribbons are
  * computed across the whole strip, so every seam between two screenshots meets.
  */
-export const Glass: React.FC<{ width: number; height: number; panels: number; id?: string; text?: TextBox[]; ribbons?: boolean; field?: [string, string] }> = ({ width, height, panels, id = "g", text = [], ribbons: withRibbons = true, field = ["#EAF9FA", "#CDEFF2"] }) => {
+export const Glass: React.FC<{ width: number; height: number; panels: number; id?: string; text?: TextBox[]; ribbons?: boolean; field?: [string, string] }> = ({ width, height, panels, id = "g", text = [], ribbons: withRibbons = true, field = FIELD }) => {
   const panel = width / panels;
   const ribbons = (withRibbons ? ribbonLines(width, height, panels) : []).map((r) => ({ d: `M ${r.pts.map(([x, y]) => `${x},${y.toFixed(1)}`).join(" L ")}`, w: r.w, o: r.o }));
   return (
@@ -22,10 +23,10 @@ export const Glass: React.FC<{ width: number; height: number; panels: number; id
           <stop offset="1" stopColor={field[1]} />
         </linearGradient>
         <linearGradient id={`${id}-iris`} x1="0" y1="0" x2={panel * 1.4} y2="0" gradientUnits="userSpaceOnUse" spreadMethod="reflect">
-          <stop offset="0" stopColor="#8FE6EC" />
-          <stop offset=".45" stopColor="#F4FFFF" />
-          <stop offset=".75" stopColor="#B9EEF2" />
-          <stop offset="1" stopColor="#6FD3DE" />
+          <stop offset="0" stopColor={RIBBON_STOPS[0]} />
+          <stop offset=".45" stopColor={RIBBON_STOPS[1]} />
+          <stop offset=".75" stopColor={RIBBON_STOPS[2]} />
+          <stop offset="1" stopColor={RIBBON_STOPS[3]} />
         </linearGradient>
         <filter id={`${id}-soft`}><feGaussianBlur stdDeviation="3" /></filter>
         {text.length > 0 && (
@@ -44,9 +45,9 @@ export const Glass: React.FC<{ width: number; height: number; panels: number; id
       <g mask={text.length ? `url(#${id}-text)` : undefined}>
       {ribbons.map((r, i) => (
         <g key={i} opacity={r.o}>
-          {/* The glass band, a cyan edge where it refracts, a broad soft sheen and two sharp white rims. */}
+          {/* The glass band, a blue edge where it refracts, a broad soft sheen and two sharp white rims. */}
           <path d={r.d} fill="none" stroke={`url(#${id}-iris)`} strokeWidth={r.w} strokeLinecap="round" opacity=".8" />
-          <path d={r.d} fill="none" stroke="#3FC6D3" strokeWidth={r.w * 0.12} transform={`translate(0 ${r.w * 0.36})`} opacity=".45" />
+          <path d={r.d} fill="none" stroke={RIBBON_EDGE} strokeWidth={r.w * 0.12} transform={`translate(0 ${r.w * 0.36})`} opacity=".45" />
           <path d={r.d} fill="none" stroke="#FFFFFF" strokeWidth={r.w * 0.34} strokeLinecap="round" transform={`translate(0 ${-r.w * 0.12})`} opacity=".35" filter={`url(#${id}-soft)`} />
           <path d={r.d} fill="none" stroke="#FFFFFF" strokeWidth="6" transform={`translate(0 ${-r.w * 0.45})`} opacity=".95" />
           <path d={r.d} fill="none" stroke="#FFFFFF" strokeWidth="3" transform={`translate(0 ${r.w * 0.47})`} opacity=".8" />
@@ -67,7 +68,7 @@ export const SoundBubbles: React.FC<{ arcs: { pts: number[][]; ring: number }[];
     <defs>
       <radialGradient id="sound-bubble" cx=".5" cy=".5" r=".5">
         <stop offset=".62" stopColor="#FFFFFF" stopOpacity=".08" />
-        <stop offset=".9" stopColor="#9DBDF0" stopOpacity=".6" />
+        <stop offset=".9" stopColor={BUBBLE_TINT} stopOpacity=".6" />
         <stop offset="1" stopColor="#FFFFFF" stopOpacity=".95" />
       </radialGradient>
       <filter id="sound-glow" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="4" /></filter>
@@ -76,14 +77,14 @@ export const SoundBubbles: React.FC<{ arcs: { pts: number[][]; ring: number }[];
       const d = `M ${pts.map((p) => p.map((n) => n.toFixed(1)).join(" ")).join(" L ")}`, fade = 1 - i * 0.15;
       return (
         <g key={key} opacity={fade}>
-          <path d={d} fill="none" stroke="#2D7DF6" strokeWidth={7} strokeLinecap="round" opacity=".16" filter="url(#sound-glow)" />
-          <path d={d} fill="none" stroke="#0B4FA8" strokeWidth={Math.max(1.4, 2.6 - i * 0.3)} strokeLinecap="round" opacity=".5" />
+          <path d={d} fill="none" stroke={SHEET_BLUE_BRIGHT} strokeWidth={7} strokeLinecap="round" opacity=".16" filter="url(#sound-glow)" />
+          <path d={d} fill="none" stroke={SHEET_BLUE} strokeWidth={Math.max(1.4, 2.6 - i * 0.3)} strokeLinecap="round" opacity=".5" />
         </g>
       );
     })}
     {bubbles.map(([x, y, r], i) => (
       <g key={i}>
-        <circle cx={x} cy={y} r={r} fill="url(#sound-bubble)" stroke="#2D7DF6" strokeOpacity=".65" strokeWidth={Math.max(1.5, r * 0.09)} />
+        <circle cx={x} cy={y} r={r} fill="url(#sound-bubble)" stroke={SHEET_BLUE_BRIGHT} strokeOpacity=".65" strokeWidth={Math.max(1.5, r * 0.09)} />
         <ellipse cx={x - r * 0.36} cy={y - r * 0.4} rx={r * 0.26} ry={r * 0.16} fill="#FFFFFF" transform={`rotate(-35 ${x - r * 0.36} ${y - r * 0.4})`} />
         <path d={`M ${x + r * 0.55} ${y + r * 0.2} A ${r * 0.7} ${r * 0.7} 0 0 1 ${x + r * 0.1} ${y + r * 0.62}`} fill="none" stroke="#FFFFFF" strokeWidth={Math.max(1.2, r * 0.08)} strokeOpacity=".85" strokeLinecap="round" />
       </g>
