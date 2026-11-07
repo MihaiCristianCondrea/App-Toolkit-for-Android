@@ -16,16 +16,16 @@ The keywords describe intent, not measured demand. The prior Play reports did no
 
 One idea carries the set: the tone leaves the speaker as rings on calm water. The ground is a quiet tonal aqua surface, light at the top and a little deeper at the bottom, so the UI keeps the Material surface it was designed on. Thin ripple rings spread from each phone's speaker, widening and fading as they travel; a soft pool of light sits under each set. The rings are strongest at the hero and the tone, cross into neighbouring screenshots so the strip reads as one, and fade out as the story widens into the toolbox. There is no texture, glow or caustic noise behind the UI. Captions keep App Toolkit's Material pill.
 
-The phones are Material-Next's porcelain 3D Pixel 9 Pro XL, turned the way a person shows a phone, never rolled:
+The phones are Material-Next's porcelain 3D Pixel 9 Pro XL, one phone and one screen per image, turned the way a person shows a phone, never rolled. The set varies through framing: a whole hero, closer views that run off the bottom or a side with their key control in full view, and whole phones again for the toolbox.
 
-1. Hero: the ready sheet, straight on.
-2. The tone: the phone turned to its edge, set right so the rings travel on the left.
-3. Up to 30 seconds: a close view, larger and lower, running off the bottom edge.
-4. Control: two phones, the cycle at 20 seconds behind and at 8 seconds in front with Stop.
-5. Guidance: the phone at rest, its guidance lifted out at reading size.
-6. The toolbox: two tabs of the same app, Measure behind and Quick Tools in front.
-7. Unit Converter, turned the other way.
-8. Bubble Level, straight on: a bookend to the hero.
+1. Hero: the ready sheet, whole and straight on.
+2. The tone: turned to its edge, the rings travelling on the left.
+3. Up to 30 seconds: close and centred, the countdown at the heart of the image.
+4. Control: turned and running off the left edge, Stop in full view.
+5. Guidance: running off the right edge, the guidance at reading size.
+6. The toolbox: Quick Tools, whole.
+7. Unit Converter, close and running off the left edge.
+8. Bubble Level, whole and straight on: a bookend to the hero.
 
 Tablet, desktop and feature artwork share the surface and the rings. No image promises a repair or shows a successful water-removal result.
 

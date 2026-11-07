@@ -18,7 +18,7 @@
       ],
       "highlight": "165 Hz",
       "icon": "water_drop",
-      "alt": "A phone turned to its edge showing Water Eject and its fixed 165 Hz tone"
+      "alt": "Water Eject on a phone turned to its edge, showing the fixed 165 Hz tone"
     },
     {
       "id": "water-running",
@@ -38,7 +38,7 @@
       ],
       "highlight": "stop",
       "icon": "water_drop",
-      "alt": "Two phones: Water Eject at 20 seconds behind and at 8 seconds in front with Stop cycle"
+      "alt": "Water Eject with 8 seconds left and a full-width Stop cycle button"
     },
     {
       "id": "water-guidance",
@@ -48,7 +48,7 @@
       ],
       "highlight": "guidance",
       "icon": "water_drop",
-      "alt": "Water Eject guidance at reading size: speaker down, a comfortable volume, and a note that it does not repair water damage"
+      "alt": "Water Eject guidance: speaker down, a comfortable volume, and a note that it does not repair water damage"
     },
     {
       "id": "quick-tools",
@@ -58,7 +58,7 @@
       ],
       "highlight": "toolbox",
       "icon": "grid_view",
-      "alt": "Two App Toolkit tabs: Measure tools behind and Quick Tools with compass, level, flashlight and SOS in front"
+      "alt": "Quick Tools with live compass, level, flashlight and SOS widgets"
     },
     {
       "id": "unit-converter",

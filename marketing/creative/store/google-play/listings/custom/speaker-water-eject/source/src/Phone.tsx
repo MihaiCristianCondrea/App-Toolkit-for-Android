@@ -11,34 +11,35 @@ const CAPTION={left:120,right:960,top:72,bottom:312};
 const ICON_DROP="-.1em";
 // Local CSS pixels, before the renderer's 2x output scale. Every visible subject is checked after layout.
 const SAFE={left:40,right:1040,top:360,bottom:1880};
-// A phone may run off the bottom edge on purpose (a close view); nothing may enter the caption band.
-const BLEED={...SAFE,bottom:2400};
+// A phone may run off the bottom or a side on purpose (a close view); nothing may enter the caption band.
+const BLEED={left:-1200,right:2280,top:360,bottom:3000};
 const FRAME_W=465.23;
 
-/** One device in a shot: its screen (a key of SCREENS), where it stands, its turn, and whether it is the close-up card. */
-type Device={screen?:string;x:number;top:number;scale:number;yaw?:number;pitch?:number;detail?:"sheet"|"guidance";bleed?:boolean};
-type Shot={devices:Device[];ripples:Ripple[]};
+/** The one phone in a shot: where it stands, how large, its turn, and whether it may run off the edge. */
+type Device={x:number;top:number;scale:number;yaw?:number;pitch?:number;bleed?:boolean};
+type Shot={device:Device;ripples:Ripple[]};
 
-// The set reads as one strip. The Water Eject story (1 to 5) carries the ripples, strongest at the hero and the tone,
-// each set spilling into its neighbours; the toolbox (6 to 8) keeps only their last, faint rings. Poses are turns a
-// person would make to show a phone, never a roll.
+// One phone and one screen per image. The set varies through framing, the way a designer sequences a story: a whole
+// hero, then closer and closer views that run off the bottom or a side, each with its rings in a new place. The Water
+// Eject story (1 to 5) carries the ripples, each set spilling into its neighbours; the toolbox (6 to 8) keeps only the
+// last faint rings. Poses are turns a person would make to show a phone, never a roll.
 const SHOTS:Shot[]=[
- // 1 Hero: the ready sheet, straight on, the rings rising from its speaker.
- {devices:[{x:540,top:420,scale:1.36}],ripples:[{x:540,y:1780,reach:1250,strength:1}]},
- // 2 The tone: turned to show its edge, set right so the rings have room to travel on the left.
- {devices:[{x:640,top:440,scale:1.32,yaw:-22,pitch:3}],ripples:[{x:470,y:1300,reach:1150,strength:.95}]},
- // 3 The countdown, close: larger and lower, running off the bottom edge.
- {devices:[{x:540,top:470,scale:1.62,bleed:true}],ripples:[]},
- // 4 Control: the cycle at 20 s behind, at 8 s in front with Stop under the thumb.
- {devices:[{screen:"water-running",x:300,top:640,scale:1.0,yaw:20},{x:700,top:470,scale:1.24,yaw:-8}],ripples:[{x:520,y:1880,reach:1100,strength:.8}]},
- // 5 Guidance: the phone at rest on the left, its guidance lifted out at reading size.
- {devices:[{x:330,top:470,scale:1.06,yaw:18},{detail:"guidance",x:660,top:1180,scale:1.72}],ripples:[{x:330,y:1700,reach:900,strength:.6}]},
- // 6 The toolbox: two tabs of the same app, side by side.
- {devices:[{screen:"measure",x:300,top:640,scale:1.0,yaw:20},{x:700,top:470,scale:1.24,yaw:-8}],ripples:[{x:-60,y:1820,reach:900,strength:.45}]},
- // 7 One everyday tool, turned the other way.
- {devices:[{x:520,top:450,scale:1.32,yaw:14,pitch:2}],ripples:[]},
- // 8 Bookend: straight on again, the last faint rings.
- {devices:[{x:540,top:430,scale:1.34}],ripples:[{x:540,y:1880,reach:900,strength:.4}]},
+ // 1 Hero: the whole phone, straight on, rings rising from its speaker.
+ {device:{x:540,top:420,scale:1.36},ripples:[{x:540,y:1780,reach:1250,strength:1}]},
+ // 2 The tone: turned to its edge, set right so the rings travel on the left.
+ {device:{x:600,top:440,scale:1.4,yaw:-24,pitch:3},ripples:[{x:280,y:1380,reach:1150,strength:.95}]},
+ // 3 Up to 30 seconds: close and centred, the bezel running off the bottom, the countdown at the heart of the image.
+ {device:{x:540,top:400,scale:1.55,bleed:true},ripples:[{x:540,y:1560,reach:900,strength:.55}]},
+ // 4 Control: turned the other way and running off the left edge, Stop in full view.
+ {device:{x:280,top:440,scale:1.5,yaw:16,pitch:2,bleed:true},ripples:[{x:900,y:1700,reach:1000,strength:.8}]},
+ // 5 Guidance: running off the right edge, its guidance in full view at reading size.
+ {device:{x:800,top:400,scale:1.5,yaw:-10,bleed:true},ripples:[{x:150,y:1850,reach:900,strength:.6}]},
+ // 6 The toolbox: the whole phone again, a breath after the close views.
+ {device:{x:540,top:430,scale:1.34,yaw:-10},ripples:[{x:-40,y:1820,reach:900,strength:.4}]},
+ // 7 One everyday tool, close and running off the left edge.
+ {device:{x:280,top:440,scale:1.5,yaw:14,pitch:2,bleed:true},ripples:[]},
+ // 8 Bookend: whole and straight on, the last faint rings.
+ {device:{x:540,top:430,scale:1.34},ripples:[{x:540,y:1880,reach:900,strength:.4}]},
 ];
 export const PhonePanorama:React.FC<{locale:string;only?:number}>=({locale,only})=>{
  useFonts();
@@ -50,12 +51,12 @@ export const PhonePanorama:React.FC<{locale:string;only?:number}>=({locale,only}
   {strings.screenshots.map((s,i)=>(
    <div key={s.id} data-shot={i} style={{position:"absolute",left:i*WIDTH,top:0,width:WIDTH,height:HEIGHT}}>
     <Caption lines={s.lines} highlight={s.highlight} icon={s.icon} check={only===i}/>
-    {(only===undefined||only===i)&&SHOTS[i].devices.map((d,k)=>{
-     const w=d.detail?430:FRAME_W,id=d.screen??s.id;
-     return <div key={k} style={{position:"absolute",left:d.x,top:d.top,width:w,zIndex:k+1,transform:`translateX(-50%) scale(${d.scale})`,transformOrigin:"50% 0",filter:d.detail?"drop-shadow(0 18px 30px rgba(0,66,77,.14))":"drop-shadow(0 26px 30px rgba(0,66,77,.12))"}}>
-      <LitScreen id={SCREENS[id][0]} state={SCREENS[id][1]} frame={!d.detail} detail={d.detail} safeBounds={d.bleed?BLEED:SAFE} pose={{yaw:d.yaw??0,pitch:d.pitch??0}} style={{width:w}}/>
+    {(only===undefined||only===i)&&(()=>{
+     const d=SHOTS[i].device;
+     return <div style={{position:"absolute",left:d.x,top:d.top,width:FRAME_W,zIndex:1,transform:`translateX(-50%) scale(${d.scale})`,transformOrigin:"50% 0",filter:"drop-shadow(0 26px 30px rgba(0,66,77,.12))"}}>
+      <LitScreen id={SCREENS[s.id][0]} state={SCREENS[s.id][1]} safeBounds={d.bleed?BLEED:SAFE} pose={{yaw:d.yaw??0,pitch:d.pitch??0}} style={{width:FRAME_W}}/>
      </div>;
-    })}
+    })()}
    </div>
   ))}
  </AbsoluteFill>;
