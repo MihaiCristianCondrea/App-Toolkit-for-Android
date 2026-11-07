@@ -14,16 +14,16 @@ The keywords describe intent, not measured demand. The prior Play reports did no
 
 ## Creative direction
 
-Five screenshots read as one panorama in the language of Material 3's own hero art: a light aqua field crossed by ribbons of liquid glass, iridescent from aqua through white and lemon to lilac, with sharp white rims. The ribbons are computed across the whole strip, so every seam meets. Headlines are dark on the light field, with App Toolkit's aqua caption pill. Phones are Material-Next's porcelain 3D Pixel 9 Pro XL, leaning back the way a phone resting in a hand does. Every image shows a different screen or state: the ready 165 Hz screen appears once, in the hero.
+Five screenshots read as one panorama in the language of Material 3's own hero art: a light aqua field crossed by ribbons of liquid glass in aqua and white, with sharp white rims. The ribbons are computed across the whole strip, so every seam meets. No phone crosses a divider: each screenshot stands on its own, and the render fails if a phone's visible part enters the next image. Headlines are dark on the light field, with App Toolkit's aqua caption pill. Phones are Material-Next's porcelain 3D Pixel 9 Pro XL. Every image shows a different screen or state, with its own composition: the ready 165 Hz screen appears once, in the hero.
 
-1. Hero: Water Eject ready at 165 Hz, a clear stream of water leaving the speaker and breaking into droplets. The water is a metaphor for the tone, not a promise of what the app does to a phone.
-2. Up to 30 seconds: the cycle running at 20 seconds, leaning the other way.
-3. You choose when to stop: larger and straight on 8 seconds and the Stop button, running off the bottom.
-4. The toolbox: Quick Tools behind and Unit Converter in front.
+1. Hero: the whole phone leans back so its bottom edge, with the speaker grille and USB-C port, faces the viewer. A twisting turquoise wave of water leaves the grille and curls over, and the Start button is in view. The water is an illustration of the tone, not a promise of what the app does to a phone.
+2. Up to 30 seconds: a close crop on the running cycle and its 20 second countdown.
+3. You choose when to stop: the whole phone turned to show its side, at 8 seconds with the Stop button in view.
+4. The toolbox: Unit Converter and Quick Tools side by side, tilted apart.
 5. Bubble Level.
 
 The guidance and its limits are on every Water Eject screen and in the description. Tablet, desktop and feature artwork share the glass ribbons. No image promises a repair or shows a successful water-removal result.
 
 ## Verification and limits
 
-The renderer, TypeScript check, targeted Water Eject browser check, listing validator and metadata injection/readback were run. All 18 image files are present. See source/README.md for commands and full check outcomes. Web screenshots were compared against Compose source and resources; a connected-device visual comparison and production rollout confirmation remain outstanding. Search targeting still needs to be selected from the terms Play Console makes available.
+The renderer, TypeScript check, targeted Water Eject browser check, listing validator and metadata injection/readback were run. All 15 image files are present. See source/README.md for commands and full check outcomes. Web screenshots were compared against Compose source and resources; a connected-device visual comparison and production rollout confirmation remain outstanding. Search targeting still needs to be selected from the terms Play Console makes available.

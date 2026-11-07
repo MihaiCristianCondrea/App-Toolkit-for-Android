@@ -1,11 +1,8 @@
-phone-screenshots/1-water-eject.png	Water Eject ready with its 165 Hz tone and Start 30-second cycle button
-phone-screenshots/2-water-frequency.png	Water Eject showing its fixed 165 Hz tone and guidance
-phone-screenshots/3-water-running.png	Water Eject running with 20 seconds remaining and Stop cycle visible
-phone-screenshots/4-water-stop.png	Water Eject with 8 seconds remaining and a full-width Stop cycle control
-phone-screenshots/5-water-guidance.png	Water Eject with speaker-down guidance and the note about water damage
-phone-screenshots/6-quick-tools.png	Quick Tools with live compass, level and flashlight widgets
-phone-screenshots/7-unit-converter.png	Unit Converter converting one metre to centimetres
-phone-screenshots/8-level.png	Bubble Level with roll and pitch readings
+phone-screenshots/1-water-eject.png	A Pixel with Water Eject ready at 165 Hz, an illustrated wave of water leaving its speaker grille
+phone-screenshots/2-water-running.png	A close view of Water Eject running with 20 seconds left in its cycle
+phone-screenshots/3-water-stop.png	A whole Pixel turned to show its side, Water Eject at 8 seconds with the Stop cycle button
+phone-screenshots/4-quick-tools.png	Two App Toolkit tools side by side: Unit Converter turning metres into centimetres, and Quick Tools with compass, level and flashlight
+phone-screenshots/5-level.png	Bubble Level with roll and pitch readings
 tablet-screenshots/1-water-eject.png	Water Eject ready on a foldable with the adaptive navigation rail
 tablet-screenshots/2-water-running.png	Water Eject running on a foldable with 20 seconds remaining
 tablet-screenshots/3-quick-tools.png	Quick Tools in the wide foldable layout

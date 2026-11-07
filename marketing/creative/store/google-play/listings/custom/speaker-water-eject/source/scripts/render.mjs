@@ -5,7 +5,7 @@
 import { bundle } from "@remotion/bundler";
 import { renderStill, selectComposition } from "@remotion/renderer";
 import { execFileSync } from "node:child_process";
-import { mkdir, readFile, readdir, rm, writeFile } from "node:fs/promises";
+import { mkdir, readFile, readdir, rename, rm, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { createHash } from "node:crypto";
 import { fileURLToPath } from "node:url";
@@ -30,8 +30,10 @@ const still = async (id, inputProps, file, scale = 1) => {
 await mkdir(output, { recursive: true });
 for (const locale of locales) {
   const strings = JSON.parse(await readFile(path.join(root, "strings", `${locale}.json`), "utf8"));
-  const out = path.join(listing, locale, "graphics");
-  for (const dir of ["phone-screenshots", "tablet-screenshots", "desktop-screenshots", "feature-graphic", "icon"]) await rm(path.join(out, dir), { recursive: true, force: true });
+  // Render into a staging folder; the published graphics are replaced only once every image succeeded.
+  const graphics = path.join(listing, locale, "graphics");
+  const out = path.join(output, `graphics-${locale}`);
+  await rm(out, { recursive: true, force: true });
   const flatten = [];
   const repeatability = [];
 
@@ -75,6 +77,8 @@ for (const locale of locales) {
   // One line per screenshot: its path under graphics/, a tab, its alt text (Play allows 140 characters).
   const alt = [["phone", strings.screenshots], ["tablet", strings.tabletScreenshots], ["desktop", strings.desktopScreenshots]]
     .flatMap(([kind, list]) => list.map((s, i) => `${kind}-screenshots/${i + 1}-${s.id}.png\t${s.alt}`));
+  await rm(graphics, { recursive: true, force: true });
+  await rename(out, graphics);
   await writeFile(path.join(listing, locale, "alt-text.txt"), alt.join("\n") + "\n");
   console.log(`${locale}: ${strings.screenshots.length} phone, ${strings.tabletScreenshots.length} tablet and ${strings.desktopScreenshots.length} desktop screenshots, feature graphic, icon.`);
 }

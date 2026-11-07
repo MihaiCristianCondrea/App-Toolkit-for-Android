@@ -8,7 +8,7 @@
       ],
       "highlight": "Water Eject",
       "icon": "water_drop",
-      "alt": "A Pixel with Water Eject ready at 165 Hz, an illustrated stream of water leaving its speaker"
+      "alt": "A Pixel with Water Eject ready at 165 Hz, an illustrated wave of water leaving its speaker grille"
     },
     {
       "id": "water-running",
@@ -18,7 +18,7 @@
       ],
       "highlight": "30 seconds",
       "icon": "timer",
-      "alt": "Water Eject running with 20 seconds left in its cycle"
+      "alt": "A close view of Water Eject running with 20 seconds left in its cycle"
     },
     {
       "id": "water-stop",
@@ -28,7 +28,7 @@
       ],
       "highlight": "stop",
       "icon": "stop_circle",
-      "alt": "A close view of Water Eject with 8 seconds left and the Stop cycle button"
+      "alt": "A whole Pixel turned to show its side, Water Eject at 8 seconds with the Stop cycle button"
     },
     {
       "id": "quick-tools",
@@ -38,7 +38,7 @@
       ],
       "highlight": "toolbox",
       "icon": "grid_view",
-      "alt": "Two App Toolkit tools: Quick Tools with compass, level and flashlight, and Unit Converter turning metres into centimetres"
+      "alt": "Two App Toolkit tools side by side: Unit Converter turning metres into centimetres, and Quick Tools with compass, level and flashlight"
     },
     {
       "id": "level",
