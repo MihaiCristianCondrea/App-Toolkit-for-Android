@@ -6,6 +6,9 @@
   "scripts": {
     "assets": "node scripts/sync-assets.mjs",
     "dev": "npm run assets && remotion studio",
+    "probe": "npm run assets && node scripts/probe-ui.mjs",
+    "solve": "node scripts/solve-layout.ts",
+    "verify": "npm run assets && node scripts/verify.mjs",
     "render": "npm run assets && node scripts/render.mjs",
     "lint": "tsc",
     "metadata": "node scripts/metadata.mjs"

@@ -1,0 +1,152 @@
+{
+ "shots": [
+  {
+   "id": "water-eject",
+   "screens": [
+    "water-eject"
+   ],
+   "poses": [
+    {
+     "pitch": 28,
+     "yaw": -13,
+     "roll": 0,
+     "perspective": 3000,
+     "scale": 1.709,
+     "x": 538.74,
+     "y": 543.279
+    }
+   ],
+   "score": 0.3249,
+   "terms": {
+    "thickness": 0.0894,
+    "angle": 0.0107,
+    "roll": 0,
+    "side": 0.0072,
+    "focal": 0.0004,
+    "perspective": 0.2,
+    "keystone": 0.0168
+   },
+   "searched": 128625,
+   "rejected": 101616
+  },
+  {
+   "id": "water-running",
+   "screens": [
+    "water-running"
+   ],
+   "poses": [
+    {
+     "pitch": 2,
+     "yaw": 8,
+     "roll": 6,
+     "perspective": 3000,
+     "scale": 1.692,
+     "x": 542.452,
+     "y": 1231.006
+    }
+   ],
+   "score": 5.3705,
+   "terms": {
+    "size": 0.9841,
+    "countdown": 3.3125,
+    "yaw": 0,
+    "roll": 1,
+    "pitch": 0.0625
+   },
+   "searched": 1568,
+   "rejected": 309
+  },
+  {
+   "id": "water-stop",
+   "screens": [
+    "water-stop"
+   ],
+   "poses": [
+    {
+     "pitch": 0,
+     "yaw": -22,
+     "roll": 3,
+     "perspective": 3000,
+     "scale": 1.3,
+     "x": 531.818,
+     "y": 1012.645
+    }
+   ],
+   "score": 0.0955,
+   "terms": {
+    "size": 0.0651,
+    "stop": 0.0323,
+    "yaw": 0,
+    "roll": 0,
+    "pitch": 0
+   },
+   "searched": 2205,
+   "rejected": 53
+  },
+  {
+   "id": "quick-tools",
+   "screens": [
+    "unit-converter",
+    "quick-tools"
+   ],
+   "poses": [
+    {
+     "pitch": 0,
+     "yaw": 0,
+     "roll": 9,
+     "perspective": 3000,
+     "scale": 0.911,
+     "x": 324,
+     "y": 924.977
+    },
+    {
+     "pitch": 0,
+     "yaw": 0,
+     "roll": -9,
+     "perspective": 3000,
+     "scale": 0.911,
+     "x": 756,
+     "y": 979.977
+    }
+   ],
+   "score": 0.2246,
+   "terms": {
+    "balance": 0,
+    "overlap": 0.0005,
+    "stagger": 0.002,
+    "lean": 0.2222,
+    "turn": 0,
+    "size": 0
+   },
+   "searched": 46464,
+   "rejected": 46396
+  },
+  {
+   "id": "level",
+   "screens": [
+    "level"
+   ],
+   "poses": [
+    {
+     "pitch": 2,
+     "yaw": 0,
+     "roll": -7,
+     "perspective": 3000,
+     "scale": 1.491,
+     "x": 539.489,
+     "y": 1125.16
+    }
+   ],
+   "score": 1.8931,
+   "terms": {
+    "size": 0.2453,
+    "level": 1.137,
+    "roll": 0.4444,
+    "yaw": 0,
+    "pitch": 0.0625
+   },
+   "searched": 2695,
+   "rejected": 0
+  }
+ ]
+}

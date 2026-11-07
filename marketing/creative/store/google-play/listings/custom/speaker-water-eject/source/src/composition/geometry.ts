@@ -1,5 +1,6 @@
 /**
- * The hero's geometry, shared by the solver (scripts/solve-hero.ts), the render and its debug overlay.
+ * The screenshots' geometry, shared by the solver (scripts/solve-layout.ts), the validator, the render and
+ * its debug overlay.
  *
  * The 3D Pixel is projected exactly as Material-Next's device frame draws it: the phone turns about
  * its centre (yaw about the vertical axis, then pitch about the horizontal one, in CSS's axes with y
@@ -26,10 +27,22 @@ export const SPACE = { xs: 13, s: 21, m: 34, l: 55, xl: 89, xxl: 144 };
 /** Minimum side margin for visible critical content: 0.05 W, which is the scale's 55. */
 export const SAFE_X = SPACE.l;
 
-/** The caption sits SPACE.xl above the bottom edge; its band is allowed from 0.82 H to that line. */
-export const CAPTION_BAND = { left: 120, right: 960, top: 0.82 * H, bottom: H - SPACE.xl };
-/** Where the water may play, between the phone and the caption. */
-export const WATER_BAND = { top: 0.65 * H, bottom: 0.8 * H };
+export type Box = { left: number; top: number; right: number; bottom: number };
+
+/**
+ * Captions are two lines of 76 px type at a 1.36 line height. A top caption stands 72 px below the top
+ * edge; a bottom caption stands SPACE.xl above the bottom edge. `band` is where the caption's measured
+ * box must fit; `block` is the box its two lines fill across the band, used for clearances.
+ */
+export type CaptionAt = "top" | "bottom";
+const LINES = 2 * 76 * 1.36;
+export const CAPTION = {
+  top: { band: { left: 120, right: 960, top: 72, bottom: 312 }, block: { left: 120, right: 960, top: 72, bottom: 72 + LINES } },
+  bottom: { band: { left: 120, right: 960, top: 0.82 * H, bottom: H - SPACE.xl }, block: { left: 120, right: 960, top: H - SPACE.xl - LINES, bottom: H - SPACE.xl } },
+} satisfies Record<CaptionAt, { band: Box; block: Box }>;
+/** Nothing in the foreground comes within this of a caption's text block; the background fades there. */
+export const TEXT_CLEARANCE = SPACE.m;
+export const grow = (b: Box, d: number): Box => ({ left: b.left - d, top: b.top - d, right: b.right + d, bottom: b.bottom + d });
 
 // The Pixel 9 Pro XL as the device frame draws it: 430 px of display is 70.8 mm.
 const MM = 430 / 70.8;
@@ -112,7 +125,7 @@ export const areaCentroid = (poly: Pt[]) => {
   return { area: Math.abs(a), centroid: (a ? [cx / (6 * a), cy / (6 * a)] : [0, 0]) as Pt };
 };
 
-export const bbox = (pts: Pt[]) => {
+export const bbox = (pts: Pt[]): Box => {
   const xs = pts.map((p) => p[0]), ys = pts.map((p) => p[1]);
   return { left: Math.min(...xs), top: Math.min(...ys), right: Math.max(...xs), bottom: Math.max(...ys) };
 };
@@ -151,10 +164,47 @@ export const distanceTo = (poly: Pt[], [x, y]: Pt) => Math.min(...poly.map((p, i
   return Math.hypot(x - p[0] - t * dx, y - p[1] - t * dy);
 }));
 
-export type Ui = Record<"title" | "visual" | "readout" | "instructions" | "button" | "note", number[]>;
+/** A screen's measured UI (src/composition/ui.json), in the frame's CSS px: [left, top, right, bottom]. */
+export type ScreenUi = { critical: Record<string, number[]>; secondary: Record<string, number[]> };
 
-/** Everything the solver scores and the overlay draws, for one pose. */
-export const measure = (pose: Pose, ui: Ui) => {
+/** Signed area; positive for a clockwise outline in image coordinates (y down). */
+const signedArea = (poly: Pt[]) => poly.reduce((a, p, i) => { const q = poly[(i + 1) % poly.length]; return a + p[0] * q[1] - q[0] * p[1]; }, 0) / 2;
+
+/** The part of `subject` inside the convex polygon `clip` (Sutherland–Hodgman). */
+export const clipConvex = (subject: Pt[], clip: Pt[]): Pt[] => {
+  const sign = Math.sign(signedArea(clip)) || 1;
+  let out = subject;
+  clip.forEach((a, i) => {
+    const b = clip[(i + 1) % clip.length];
+    const inner = (p: Pt) => sign * ((b[0] - a[0]) * (p[1] - a[1]) - (b[1] - a[1]) * (p[0] - a[0])) >= 0;
+    const cut = (p: Pt, q: Pt): Pt => {
+      const [dx, dy, ex, ey] = [q[0] - p[0], q[1] - p[1], b[0] - a[0], b[1] - a[1]];
+      const t = (ex * (a[1] - p[1]) - ey * (a[0] - p[0])) / (ex * dy - ey * dx);
+      return [p[0] + t * dx, p[1] + t * dy];
+    };
+    const src = out; out = [];
+    src.forEach((cur, k) => {
+      const prev = src[(k + src.length - 1) % src.length];
+      if (inner(cur)) { if (!inner(prev)) out.push(cut(prev, cur)); out.push(cur); }
+      else if (inner(prev)) out.push(cut(prev, cur));
+    });
+  });
+  return out;
+};
+/** The area two polygons share, the second convex. */
+export const overlapArea = (a: Pt[], convex: Pt[]) => { const c = clipConvex(a, convex); return c.length > 2 ? areaCentroid(c).area : 0; };
+
+export const rectPoly = (b: Box): Pt[] => [[b.left, b.top], [b.right, b.top], [b.right, b.bottom], [b.left, b.bottom]];
+/** The gap between a polygon and a box; 0 when they touch or overlap. */
+export const gapToBox = (poly: Pt[], b: Box) => {
+  if (poly.length < 3) return Infinity;
+  if (overlapArea(rectPoly(b), poly) > 0 || poly.some(([x, y]) => x >= b.left && x <= b.right && y >= b.top && y <= b.bottom)) return 0;
+  const toBox = ([x, y]: Pt) => Math.hypot(Math.max(b.left - x, 0, x - b.right), Math.max(b.top - y, 0, y - b.bottom));
+  return Math.min(...poly.map(toBox), ...rectPoly(b).map((p) => distanceTo(poly, p)));
+};
+
+/** Everything the solver scores, the validator checks and the overlay draws, for one phone in one pose. */
+export const measure = (pose: Pose, ui: ScreenUi) => {
   const silhouette = hull([...outline(FRAME.depth / 2), ...outline(-FRAME.depth / 2)].map((p) => project(pose, p)));
   const visible = clipToImage(silhouette);
   const { area, centroid } = areaCentroid(visible);
@@ -179,101 +229,34 @@ export const measure = (pose: Pose, ui: Ui) => {
   // Signed the same way: how far the back of the right side shows beyond its front, to the right.
   const [sf, sb] = [project(pose, [FRAME.width / 2, 0, d]), project(pose, [FRAME.width / 2, 0, -d])];
   const side = ((sb[0] - sf[0]) * along[0] + (sb[1] - sf[1]) * along[1]) / al;
-  const quads = Object.fromEntries(Object.entries(ui).map(([k, [l, t, r, b]]) => [k, [[l, t], [r, t], [r, b], [l, b]].map((p) => projectScreen(pose, p as Pt))])) as Record<keyof Ui, Pt[]>;
+  const quads = (boxes: Record<string, number[]>) => Object.fromEntries(Object.entries(boxes).map(([k, [l, t, r, b]]) => [k, [[l, t], [r, t], [r, b], [l, b]].map((p) => projectScreen(pose, p as Pt))])) as Record<string, Pt[]>;
+  const [critical, secondary] = [quads(ui.critical), quads(ui.secondary)];
   // How much narrower the phone is where it leaves the top edge than just above its bottom edge.
   const keystone = widthAt(silhouette, 0) / widthAt(silhouette, focal[1] - SPACE.xl);
-  return { keystone, silhouette, visible, area, centroid, box: bbox(visible), full: bbox(silhouette), edgeFront, edgeBack, focal, thickness, angle, speaker, direction, speakers, side, quads };
+  return { keystone, silhouette, visible, area, centroid, box: bbox(visible), full: bbox(silhouette), edgeFront, edgeBack, focal, thickness, angle, speaker, direction, speakers, side, critical, secondary, pose };
 };
+export type Measured = ReturnType<typeof measure>;
 
-/** The caption's top: its two lines (76 px at a 1.36 line height) stand on CAPTION_BAND.bottom. */
-export const CAPTION_TOP = CAPTION_BAND.bottom - 2 * 76 * 1.36;
+/** The centre of a projected UI box. */
+export const centre = (q: Pt[]): Pt => [q.reduce((a, p) => a + p[0], 0) / q.length, q.reduce((a, p) => a + p[1], 0) / q.length];
 
-/** The hard constraints; a pose that breaks any of them is rejected by the solver and fails the render. */
-export const violations = (m: ReturnType<typeof measure>) => {
-  const v: string[] = [];
-  for (const [k, q] of Object.entries(m.quads)) {
-    if (q.some(([x]) => x < SAFE_X || x > W - SAFE_X)) v.push(`${k} must stay inside the side margins`);
-    if (q.some(([, y]) => y < SPACE.xl)) v.push(`${k} must stay below the top edge`);
+/**
+ * Fits a pose's scale and position: scales until the visible silhouette is `width` wide, then moves it so
+ * `x(m)` and `y(m)` meet their targets, repeating while clipping at the image edges settles. `minTop` then
+ * lowers the phone, if needed, so its top stays at or below that line (a phone under a top caption).
+ */
+export type Fit = { width: number; x: (m: Measured) => number; xTarget: number; y: (m: Measured) => number; yTarget: number; minTop?: number };
+export const fitPose = (shape: { pitch: number; yaw: number; roll: number; perspective: number }, ui: ScreenUi, f: Fit): Pose => {
+  let p: Pose = { ...shape, scale: 1, x: W / 2, y: H / 2 };
+  for (let i = 0; i < 6; i++) {
+    let m = measure(p, ui);
+    p = { ...p, scale: p.scale * (f.width / (m.box.right - m.box.left)) };
+    m = measure(p, ui);
+    p = { ...p, x: p.x + f.xTarget - f.x(m), y: p.y + f.yTarget - f.y(m) };
   }
-  if (m.full.top > -SPACE.xl) v.push("the phone must run beyond the top edge");
-  if (m.box.bottom > CAPTION_TOP - SPACE.xl) v.push("the phone must stay clear of the caption");
-  if (m.thickness <= 0) v.push("the bottom edge must face the camera");
-  if (Math.abs(m.focal[0] - W / 2) > 0.04 * W) v.push("the speaker edge must be centred");
-  return v;
-};
-
-/**
- * Sound leaving both groups of speaker holes: for each, arcs centred on the projected holes, opening along
- * the bottom face's projected normal, spanning ±`SPREAD` degrees, with radii from the spacing scale;
- * the largest stops SPACE.m short of the caption.
- */
-const SPREAD = 44;
-const RINGS = [SPACE.m, SPACE.l, SPACE.xl, SPACE.xxl, SPACE.xl + SPACE.xxl];
-export type Arc = { pts: Pt[]; ring: number };
-const onArc = (m: ReturnType<typeof measure>, k: number, radius: number, degrees: number): Pt => {
-  const { at: s, direction: d } = m.speakers[k], n: Pt = [-d[1], d[0]], a = rad(degrees);
-  return [s[0] + radius * (d[0] * Math.cos(a) + n[0] * Math.sin(a)), s[1] + radius * (d[1] * Math.cos(a) + n[1] * Math.sin(a))];
-};
-export const soundArcs = (m: ReturnType<typeof measure>): Arc[] =>
-  m.speakers.flatMap((_, k) => RINGS.filter((radius) => onArc(m, k, radius, 0)[1] <= CAPTION_TOP - SPACE.m).map((radius, ring) => ({ ring, pts: Array.from({ length: 41 }, (_, i) => onArc(m, k, radius, -SPREAD + (2 * SPREAD * i) / 40)) })));
-
-/**
- * Bubbles, [x, y, r], carried by the sound: each sits just outside a wavefront, as if the wave were pushing
- * it, and grows the further out it rides (radii 8, 13, 21 from the scale). Angles are mirrored between the
- * two speakers and offset a little so the pattern is not symmetric. A bubble is dropped if it would touch
- * the phone, come within SPACE.m of the caption or meet another bubble.
- */
-const RIDERS: [number, number, number][] = [[1, 22, 8], [2, -30, 13], [2, 34, 8], [3, -38, 13], [3, 12, 21], [4, -20, 21], [4, 30, 13]];
-export const bubbles = (m: ReturnType<typeof measure>): [number, number, number][] => {
-  const out: [number, number, number][] = [];
-  m.speakers.forEach((_, k) => RIDERS.forEach(([ring, degrees, r]) => {
-    const radius = RINGS[ring] + r * 0.7;
-    const [x, y] = onArc(m, k, radius, (k ? -degrees : degrees) + (k ? 6 : 0));
-    if (y + r > CAPTION_TOP - SPACE.m || x - r < SAFE_X || x + r > W - SAFE_X) return;
-    if (inside(m.visible, [x, y]) || distanceTo(m.visible, [x, y]) < r + SPACE.xs) return;
-    if (out.some(([bx, by, br]) => Math.hypot(bx - x, by - y) < br + r + SPACE.xs)) return;
-    out.push([x, y, r]);
-  }));
-  return out;
-};
-
-export type Piece = { name: string; x: number; y: number; size: number; color: string; rotate: number };
-
-/** The MaterialShapes the other listings scatter, in the campaign's aqua tones only. */
-const SHAPE_NAMES = ["cookie_9sided", "flower", "clover_4leaf", "soft_burst", "gem", "pill", "sunny", "cookie_6sided"];
-const SHAPE_COLORS = ["#A6EDEA", "#7DDDE1", "#C2F0F0"];
-
-/**
- * Shapes for the hero: one large shape behind the phone, showing beside its right edge above the
- * the sound, and smaller ones from a seeded generator in the open space. Every shape keeps SPACE.s
- * clear of the background's glass ribbons; a small one also keeps SPACE.s from the phone's visible
- * silhouette, SPACE.m from the caption's text, the sound arcs, the bubbles and the other shapes, and may
- * run off the image's edge.
- */
-export type Ribbon = { pts: Pt[]; half: number };
-export const heroShapes = (m: ReturnType<typeof measure>, arcs: Arc[], spheres: [number, number, number][], ribbons: Ribbon[]): Piece[] => {
-  const clearOfRibbons = (cx: number, cy: number, r: number) => ribbons.every((b) => b.pts.every((p) => Math.hypot(p[0] - cx, p[1] - cy) > r + b.half + SPACE.s));
-  // The large shape: centred SPACE.xxl in from the right edge, on the upper golden line divided by φ,
-  // as large as it can be (up to the image's width) while it stays clear of the ribbons.
-  const [bx, by] = [W - SPACE.xxl, GOLDEN.y[0] / PHI];
-  let big = W;
-  while (big > SPACE.xxl && !clearOfRibbons(bx, by, big / 2)) big -= SPACE.xs;
-  const pieces: Piece[] = [{ name: "cookie_12sided", x: bx - big / 2, y: by - big / 2, size: big, color: "#BDEFEF", rotate: 12 }];
-  let seed = 11;
-  const rand = () => ((seed = (Math.imul(seed, 1664525) + 1013904223) >>> 0) / 4294967296);
-  const effect = [...arcs.flatMap((a) => a.pts).map((p) => [p[0], p[1], 6]), ...spheres] as number[][];
-  const caption = { left: W / 2 - 330, right: W / 2 + 330, top: CAPTION_TOP, bottom: CAPTION_BAND.bottom };
-  const clearOfPhone = (cx: number, cy: number, r: number) => !inside(m.visible, [cx, cy]) && distanceTo(m.visible, [cx, cy]) > r + SPACE.s;
-  const small: Piece[] = [];
-  for (let k = 0; small.length < 5 && k < 6000; k++) {
-    const size = SPACE.xl + rand() * (SPACE.xxl + SPACE.l), r = size / 2;
-    const cx = -r * 0.4 + rand() * (W + r * 0.8), cy = -r * 0.4 + rand() * (H + r * 0.8);
-    if (!clearOfPhone(cx, cy, r) || !clearOfRibbons(cx, cy, r)) continue;
-    if (Math.hypot(cx - bx, cy - by) < r + big / 2 + SPACE.m) continue;
-    if (cx + r > caption.left - SPACE.m && cx - r < caption.right + SPACE.m && cy + r > caption.top - SPACE.m && cy - r < caption.bottom + SPACE.m) continue;
-    if (effect.some(([x, y, er]) => Math.hypot(x - cx, y - cy) < r + er + SPACE.m)) continue;
-    if (small.some((p) => Math.hypot(p.x + p.size / 2 - cx, p.y + p.size / 2 - cy) < (p.size + size) / 2 + SPACE.m)) continue;
-    small.push({ name: SHAPE_NAMES[small.length % SHAPE_NAMES.length], x: cx - r, y: cy - r, size, color: SHAPE_COLORS[small.length % SHAPE_COLORS.length], rotate: rand() * 360 });
+  if (f.minTop !== undefined) {
+    const top = measure(p, ui).full.top;
+    if (top < f.minTop) p = { ...p, y: p.y + f.minTop - top };
   }
-  return [...pieces, ...small];
+  return p;
 };

@@ -1,4 +1,9 @@
 import React from "react";
+import { FADE, ribbonLines } from "./composition/ribbons";
+export { ribbonLines };
+
+/** A box the ribbons fade behind, in the strip's coordinates. */
+export type TextBox = { left: number; top: number; right: number; bottom: number };
 
 /**
  * The campaign's ground: a light aqua field crossed by ribbons of liquid glass, the way Material 3's
@@ -6,29 +11,7 @@ import React from "react";
  * and white along its length, with a bright rim and a cyan refracting edge. The ribbons are
  * computed across the whole strip, so every seam between two screenshots meets.
  */
-/** The ribbons: centre height, swing and period (in screenshots) as shares, band width in px. */
-const RIBBONS = [
-  { y0: 0.62, amp: 0.2, period: 1.7, phase: 2.4, w: 220, o: 0.9 },
-  { y0: 0.92, amp: 0.1, period: 2.6, phase: 4.1, w: 160, o: 0.8 },
-];
-
-/**
- * Each ribbon's centreline across a strip, with the half-width its band and rims cover, so other art
- * can keep clear of it. A slow sweep rising and falling once per screenshot or two.
- */
-export const ribbonLines = (width: number, height: number, panels: number) => {
-  const panel = width / panels;
-  return RIBBONS.map((r) => ({
-    ...r,
-    half: r.w / 2,
-    pts: Array.from({ length: Math.floor((width + 400) / 20) + 1 }, (_, i) => {
-      const x = -200 + i * 20, y0 = height * r.y0, amp = height * r.amp;
-      return [x, y0 + amp * Math.sin((x / (panel * r.period)) * Math.PI * 2 + r.phase) + amp * 0.35 * Math.sin((x / (panel * r.period * 0.37)) * Math.PI * 2 + r.phase * 2.3)] as [number, number];
-    }),
-  }));
-};
-
-export const Glass: React.FC<{ width: number; height: number; panels: number; id?: string }> = ({ width, height, panels, id = "g" }) => {
+export const Glass: React.FC<{ width: number; height: number; panels: number; id?: string; text?: TextBox[] }> = ({ width, height, panels, id = "g", text = [] }) => {
   const panel = width / panels;
   const ribbons = ribbonLines(width, height, panels).map((r) => ({ d: `M ${r.pts.map(([x, y]) => `${x},${y.toFixed(1)}`).join(" L ")}`, w: r.w, o: r.o }));
   return (
@@ -45,8 +28,20 @@ export const Glass: React.FC<{ width: number; height: number; panels: number; id
           <stop offset="1" stopColor="#6FD3DE" />
         </linearGradient>
         <filter id={`${id}-soft`}><feGaussianBlur stdDeviation="3" /></filter>
+        {text.length > 0 && (
+          <mask id={`${id}-text`} maskUnits="userSpaceOnUse" x={0} y={0} width={width} height={height}>
+            <rect width={width} height={height} fill="#fff" />
+            {/* Stacked rounded boxes, each a little smaller, darken the mask towards each caption's core. */}
+            {text.flatMap((b, k) => Array.from({ length: FADE.steps }, (_, s) => {
+              const grow = FADE.core + FADE.feather * (1 - s / (FADE.steps - 1));
+              const step = 1 - Math.pow(FADE.floor, 1 / FADE.steps);
+              return <rect key={`${k}-${s}`} x={b.left - grow} y={b.top - grow} width={b.right - b.left + 2 * grow} height={b.bottom - b.top + 2 * grow} rx={grow + 21} fill="#000" fillOpacity={step} />;
+            }))}
+          </mask>
+        )}
       </defs>
       <rect width={width} height={height} fill={`url(#${id}-field)`} />
+      <g mask={text.length ? `url(#${id}-text)` : undefined}>
       {ribbons.map((r, i) => (
         <g key={i} opacity={r.o}>
           {/* The glass band, a cyan edge where it refracts, a broad soft sheen and two sharp white rims. */}
@@ -57,6 +52,7 @@ export const Glass: React.FC<{ width: number; height: number; panels: number; id
           <path d={r.d} fill="none" stroke="#FFFFFF" strokeWidth="3" transform={`translate(0 ${r.w * 0.47})`} opacity=".8" />
         </g>
       ))}
+      </g>
     </svg>
   );
 };

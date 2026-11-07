@@ -26,33 +26,21 @@
   "files": {
     "../listing/en-US/graphics/phone-screenshots/1-water-eject.png": {
       "title": "App Toolkit: Water Eject for wet speakers",
-      "altText": "Water Eject ready with its 165 Hz tone and Start 30-second cycle button"
+      "altText": "A Pixel with Water Eject ready at 165 Hz, an illustrated wave of water leaving its speaker grille"
     },
-    "../listing/en-US/graphics/phone-screenshots/2-water-frequency.png": {
-      "title": "App Toolkit: One simple 165 Hz tone",
-      "altText": "Water Eject showing its fixed 165 Hz tone and guidance"
-    },
-    "../listing/en-US/graphics/phone-screenshots/3-water-running.png": {
+    "../listing/en-US/graphics/phone-screenshots/2-water-running.png": {
       "title": "App Toolkit: Up to 30 seconds",
-      "altText": "Water Eject running with 20 seconds remaining and Stop cycle visible"
+      "altText": "A close view of Water Eject running with 20 seconds left in its cycle"
     },
-    "../listing/en-US/graphics/phone-screenshots/4-water-stop.png": {
+    "../listing/en-US/graphics/phone-screenshots/3-water-stop.png": {
       "title": "App Toolkit: You choose when to stop",
-      "altText": "Water Eject with 8 seconds remaining and a full-width Stop cycle control"
+      "altText": "A whole Pixel turned to show its side, Water Eject at 8 seconds with the Stop cycle button"
     },
-    "../listing/en-US/graphics/phone-screenshots/5-water-guidance.png": {
-      "title": "App Toolkit: Read the guidance before you start",
-      "altText": "Water Eject with speaker-down guidance and the note about water damage"
-    },
-    "../listing/en-US/graphics/phone-screenshots/6-quick-tools.png": {
+    "../listing/en-US/graphics/phone-screenshots/4-quick-tools.png": {
       "title": "App Toolkit: A useful little toolbox too",
-      "altText": "Quick Tools with live compass, level and flashlight widgets"
+      "altText": "Two App Toolkit tools side by side: Unit Converter turning metres into centimetres, and Quick Tools with compass, level and flashlight"
     },
-    "../listing/en-US/graphics/phone-screenshots/7-unit-converter.png": {
-      "title": "App Toolkit: Metres to centimetres",
-      "altText": "Unit Converter converting one metre to centimetres"
-    },
-    "../listing/en-US/graphics/phone-screenshots/8-level.png": {
+    "../listing/en-US/graphics/phone-screenshots/5-level.png": {
       "title": "App Toolkit: Find your level",
       "altText": "Bubble Level with roll and pitch readings"
     },

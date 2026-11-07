@@ -1,0 +1,325 @@
+[
+ {
+  "index": 1,
+  "id": "water-eject",
+  "hard": [],
+  "preferences": [],
+  "intentional": [
+   "shape cookie_12sided sits behind the phone",
+   "water-eject: cropped at the top edge"
+  ],
+  "caption": {
+   "glyphPixels": 20179,
+   "minContrast": 12.24,
+   "contrastP1": 12.26,
+   "pillText": 9.37,
+   "pillPixels": 30160,
+   "interference": 0
+  },
+  "balance": {
+   "geometric": [
+    0.5,
+    0.386
+   ],
+   "pixels": [
+    0.493,
+    0.413
+   ]
+  },
+  "phones": [
+   {
+    "screen": "water-eject",
+    "pose": {
+     "pitch": 28,
+     "yaw": -13,
+     "roll": 0,
+     "perspective": 3000,
+     "scale": 1.709,
+     "x": 538.74,
+     "y": 543.279
+    },
+    "centroid": [
+     0.5,
+     0.359
+    ],
+    "area": 0.519,
+    "box": {
+     "left": 0.112,
+     "top": 0,
+     "right": 0.892,
+     "bottom": 0.719
+    }
+   }
+  ],
+  "terms": {
+   "thickness": 0.08936779955078782,
+   "angle": 0.010704432603818152,
+   "roll": 0,
+   "side": 0.007209132705017059,
+   "focal": 0.00042534722222221607,
+   "perspective": 0.2,
+   "keystone": 0.016757567535505682
+  }
+ },
+ {
+  "index": 2,
+  "id": "water-running",
+  "hard": [],
+  "preferences": [
+   "countdown outside its tolerance (3.31)"
+  ],
+  "intentional": [
+   "water-running: cropped at the bottom edge",
+   "water-running: note (secondary) cropped"
+  ],
+  "caption": {
+   "glyphPixels": 12631,
+   "minContrast": 13.45,
+   "contrastP1": 13.46,
+   "pillText": 9.37,
+   "pillPixels": 30564,
+   "interference": 0
+  },
+  "balance": {
+   "geometric": [
+    0.503,
+    0.585
+   ],
+   "pixels": [
+    0.507,
+    0.536
+   ]
+  },
+  "phones": [
+   {
+    "screen": "water-running",
+    "pose": {
+     "pitch": 2,
+     "yaw": 8,
+     "roll": 6,
+     "perspective": 3000,
+     "scale": 1.692,
+     "x": 542.452,
+     "y": 1231.006
+    },
+    "centroid": [
+     0.504,
+     0.608
+    ],
+    "area": 0.574,
+    "box": {
+     "left": 0.069,
+     "top": 0.191,
+     "right": 0.929,
+     "bottom": 1
+    }
+   }
+  ],
+  "terms": {
+   "size": 0.9841210831730576,
+   "countdown": 3.312542133535602,
+   "yaw": 0,
+   "roll": 1,
+   "pitch": 0.0625
+  }
+ },
+ {
+  "index": 3,
+  "id": "water-stop",
+  "hard": [],
+  "preferences": [],
+  "intentional": [],
+  "caption": {
+   "glyphPixels": 16598,
+   "minContrast": 13.54,
+   "contrastP1": 13.58,
+   "pillText": 9.37,
+   "pillPixels": 15034,
+   "interference": 0
+  },
+  "balance": {
+   "geometric": [
+    0.5,
+    0.499
+   ],
+   "pixels": [
+    0.514,
+    0.49
+   ]
+  },
+  "phones": [
+   {
+    "screen": "water-stop",
+    "pose": {
+     "pitch": 0,
+     "yaw": -22,
+     "roll": 3,
+     "perspective": 3000,
+     "scale": 1.3,
+     "x": 531.818,
+     "y": 1012.645
+    },
+    "centroid": [
+     0.5,
+     0.528
+    ],
+    "area": 0.356,
+    "box": {
+     "left": 0.204,
+     "top": 0.192,
+     "right": 0.793,
+     "bottom": 0.873
+    }
+   }
+  ],
+  "terms": {
+   "size": 0.06514400673512095,
+   "stop": 0.03231277730669495,
+   "yaw": 0,
+   "roll": 0,
+   "pitch": 0
+  }
+ },
+ {
+  "index": 4,
+  "id": "quick-tools",
+  "hard": [],
+  "preferences": [],
+  "intentional": [
+   "quick-tools overlaps unit-converter by 5.9% of its visible area, clear of its critical UI"
+  ],
+  "caption": {
+   "glyphPixels": 17717,
+   "minContrast": 13.69,
+   "contrastP1": 13.7,
+   "pillText": 9.37,
+   "pillPixels": 21731,
+   "interference": 0
+  },
+  "balance": {
+   "geometric": [
+    0.504,
+    0.479
+   ],
+   "pixels": [
+    0.495,
+    0.486
+   ]
+  },
+  "phones": [
+   {
+    "screen": "unit-converter",
+    "pose": {
+     "pitch": 0,
+     "yaw": 0,
+     "roll": 9,
+     "perspective": 3000,
+     "scale": 0.911,
+     "x": 324,
+     "y": 924.977
+    },
+    "centroid": [
+     0.3,
+     0.482
+    ],
+    "area": 0.182,
+    "box": {
+     "left": 0.05,
+     "top": 0.238,
+     "right": 0.55,
+     "bottom": 0.726
+    }
+   },
+   {
+    "screen": "quick-tools",
+    "pose": {
+     "pitch": 0,
+     "yaw": 0,
+     "roll": -9,
+     "perspective": 3000,
+     "scale": 0.911,
+     "x": 756,
+     "y": 979.977
+    },
+    "centroid": [
+     0.7,
+     0.51
+    ],
+    "area": 0.182,
+    "box": {
+     "left": 0.45,
+     "top": 0.267,
+     "right": 0.95,
+     "bottom": 0.754
+    }
+   }
+  ],
+  "terms": {
+   "balance": 2.7702111349324964e-29,
+   "overlap": 0.0004999644627043229,
+   "stagger": 0.002037519290123457,
+   "lean": 0.2222222222222222,
+   "turn": 0,
+   "size": 0.000038585331985659074
+  }
+ },
+ {
+  "index": 5,
+  "id": "level",
+  "hard": [],
+  "preferences": [
+   "level outside its tolerance (1.14)"
+  ],
+  "intentional": [],
+  "caption": {
+   "glyphPixels": 10142,
+   "minContrast": 13.57,
+   "contrastP1": 13.58,
+   "pillText": 9.37,
+   "pillPixels": 15325,
+   "interference": 0
+  },
+  "balance": {
+   "geometric": [
+    0.508,
+    0.561
+   ],
+   "pixels": [
+    0.494,
+    0.521
+   ]
+  },
+  "phones": [
+   {
+    "screen": "level",
+    "pose": {
+     "pitch": 2,
+     "yaw": 0,
+     "roll": -7,
+     "perspective": 3000,
+     "scale": 1.491,
+     "x": 539.489,
+     "y": 1125.16
+    },
+    "centroid": [
+     0.5,
+     0.588
+    ],
+    "area": 0.488,
+    "box": {
+     "left": 0.111,
+     "top": 0.191,
+     "right": 0.891,
+     "bottom": 0.984
+    }
+   }
+  ],
+  "terms": {
+   "size": 0.24530756133967266,
+   "level": 1.1370300479106485,
+   "roll": 0.4444444444444444,
+   "yaw": 0,
+   "pitch": 0.0625
+  }
+ }
+]
