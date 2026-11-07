@@ -88,7 +88,8 @@
     }
   ],
   "featureGraphic": {
-    "title": "App Toolkit",
-    "tagline": "Water Eject\nA simple 165 Hz speaker tone"
+    "brand": "App Toolkit",
+    "title": "Water Eject",
+    "tagline": "A short tone for wet speakers"
   }
 }

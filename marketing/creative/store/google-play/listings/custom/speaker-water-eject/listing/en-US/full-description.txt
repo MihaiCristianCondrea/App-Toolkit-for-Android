@@ -1,35 +1,23 @@
-Water in your phone's speaker after a splash? App Toolkit's Water Eject plays a 165 Hz tone that may help dislodge droplets. Start a short cycle, watch the countdown and stop whenever you need.
+Water in your phone's speaker after a splash? App Toolkit includes Water Eject, a simple tool that plays a fixed 165 Hz speaker tone that may help dislodge droplets. Start a cycle lasting up to 30 seconds, follow the countdown and stop whenever you want.
 
-Water Eject is part of App Toolkit, a collection of everyday Android tools. After using the speaker tone, explore a compass, bubble level, ruler, unit converter and more in the same app.
+Water Eject
+• Fixed speaker tone: Play a 165 Hz sound through your phone's speaker.
+• Timed cycle: See the time remaining during a cycle of up to 30 seconds.
+• Stop anytime: Start and stop the tone using simple controls.
+• On-screen guidance: Point the speaker downward and begin at a comfortable volume.
 
-Features
+How to use
+Open Quick Tools, select Water Eject and follow the on-screen guidance. Tap Start 30-second cycle to play the tone, or Stop cycle to end it early.
 
-Water Eject for wet speakers
-• 165 Hz tone: Play a fixed speaker tone that may help move water droplets.
-• Timed cycle: Run the tone for up to 30 seconds and follow the countdown.
-• Start and stop controls: Start when you are ready and stop the cycle at any time.
-• Guidance: Point the speaker downwards and use a comfortable volume.
+More than Water Eject
+App Toolkit also includes:
+• Compass and Bubble Level for direction and surface tilt.
+• Ruler and Protractor for on-screen length and angle tools.
+• Unit Converter and Tip & Bill Splitter for everyday calculations.
+• Flash Dimmer and Morse/SOS light signals on supported hardware.
+• Decision Wheel, Random Number, Coin Flip and Dice Roll.
+• Counter, Reaction Test and a short guided Breathe pause.
+Coin Flip, Counter, Dice Roll and Flash Dimmer can also be added as Android Quick Settings tiles. App Toolkit adapts its layout to phones, foldables and larger screens.
 
-More everyday tools
-• Compass and Bubble Level: Check your direction or a surface's tilt using your phone's sensors.
-• Flash Dimmer and SOS: Control the flashlight and use light signals. Brightness adjustment depends on your device.
-• Ruler and Protractor: Measure lengths on screen and check angles.
-• Unit Converter and Tip & Bill Splitter: Convert units, calculate tips and split a bill.
-• Play & Decide: Use a decision wheel, random number picker, coin flip or dice roll.
-
-Benefits
-
-• Simple controls: Open Water Eject, start the tone and stop when you want.
-• Useful beyond a wet speaker: Keep measuring, calculation and decision tools together.
-• Quick access: Use interactive widgets and add supported tools to Android Quick Settings.
-• Adaptive design: Use App Toolkit on phones and larger screens.
-
-How it works
-
-Open Quick Tools and select Water Eject. Point your phone's speaker downwards, choose a comfortable volume and tap Start 30-second cycle. The countdown shows the remaining time; tap Stop cycle to end it early.
-
-Water Eject may help dislodge droplets, but it cannot guarantee water removal, repair water damage or make your phone waterproof. Follow your device manufacturer's guidance after water exposure.
-
-Feedback
-
-If you have a suggestion or encounter a problem, leave a Google Play review or use Help & feedback in the app. Describe what happened so the issue can be investigated.
+Important
+The tone may help dislodge droplets near the speaker, but results vary by device and water exposure. It does not guarantee water removal, clean dust or debris, repair water damage or make your phone waterproof. Follow your device manufacturer's guidance after liquid exposure.

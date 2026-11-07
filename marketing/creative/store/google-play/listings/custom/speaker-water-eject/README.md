@@ -14,7 +14,7 @@ The keywords describe intent, not measured demand. The prior Play reports did no
 
 ## Creative direction
 
-Five screenshots read as one panorama in the language of Material 3's own hero art: a light aqua field crossed by ribbons of liquid glass in aqua and white, computed across the whole strip so every seam meets, and fading behind each caption so the letters sit on a quiet field. Headlines are dark on the light field, with App Toolkit's aqua caption pill. Phones are Material-Next's porcelain 3D Pixel 9 Pro XL; MaterialShapes in the campaign's aqua tones sit where the ribbons leave room. Every image shows a different screen or state, with its own composition, and stands on its own: no phone crosses a divider.
+Five screenshots read as one panorama in the language of Material 3's own hero art: a light aqua field crossed by ribbons of liquid glass in aqua and white, computed across the whole strip so every seam meets, and fading behind each caption so the letters sit on a quiet field. Accents take the Water Eject sheet's own blues (ToolkitTileVisuals.kt's blue tool): the caption pill, the MaterialShapes, the sound arcs and the bubbles. Headlines are dark on the light field. Phones are Material-Next's porcelain 3D Pixel 9 Pro XL. On every water screen, phone and large screen alike, Quick Tools is scrolled to the Water Eject card that opens the sheet, so the card shows above it instead of Compass and Bubble Level, which have their own screenshot. Every image shows a different screen or state, with its own composition, and stands on its own: no phone crosses a divider.
 
 Each composition is solved from its own targets by source/scripts/solve-layout.ts and checked by source/scripts/verify.mjs; see source/README.md for the system, its hard rules and its preferences, and review/ for the contact sheets and the verification report.
 
@@ -23,6 +23,10 @@ Each composition is solved from its own targets by source/scripts/solve-layout.t
 3. You choose when to stop: the whole phone turned to show its side (yaw -22°), the Stop button near the lower golden line.
 4. The toolbox: Unit Converter and Quick Tools leaning together, solved as a pair at the largest size their UI allows; Quick Tools overlaps the top of Unit Converter by about 6%, clear of its title and fields.
 5. Bubble Level, large and tilted, with its target and readings in view.
+
+Tablet and desktop screenshots show the app's own large-screen layouts on the Pixel 9 Pro Fold and the Pixelbook Go, each centred at true size with no captions, as Play asks, and MaterialShapes placed by the same system clear of the device and the ribbons.
+
+The feature graphic names the feature and says what it is, "Water Eject" over "A short tone for wet speakers", with App Toolkit small above, centred on a deeper aqua field with a glass ribbon in the sheet's blues flowing through it and a little sound rising off its crest. It has no device frame, no icon, no 165 Hz or 30 seconds and no claims. A second concept (the real drop visual with sound spreading from it) stays in source/src/FeatureGraphic.tsx as `ripple`; `node scripts/preview-feature.mjs` renders both, at half size on light and dark backgrounds.
 
 The guidance and its limits are on every Water Eject screen and in the description. Tablet, desktop and feature artwork share the glass ribbons. No image promises a repair or shows a successful water-removal result.
 

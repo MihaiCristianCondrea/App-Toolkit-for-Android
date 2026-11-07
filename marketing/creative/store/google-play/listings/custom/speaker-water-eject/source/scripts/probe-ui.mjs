@@ -11,17 +11,19 @@ const screens = process.argv.slice(2).filter((a) => !a.startsWith("--"));
 const serveUrl = await bundle({ entryPoint: path.join(root, "src/index.ts"), publicDir: path.join(root, "public"), enableCaching: false });
 const file = path.join(root, "src", "composition", "ui.json");
 const all = JSON.parse(await readFile(file, "utf8").catch(() => "{}"));
-for (const screen of screens) {
-  const inputProps = { screen, discover };
+for (const key of screens) {
+  // `screen@fold` or `screen@desktop` measures a wide window.
+  const [screen, window = "phone"] = key.split("@");
+  const inputProps = { screen, window, discover };
   const composition = await selectComposition({ serveUrl, id: "UiProbe", inputProps });
   let found;
   await renderStill({
-    composition, serveUrl, inputProps, output: path.join(root, "output", `probe-${screen}.png`), timeoutInMilliseconds: 300000,
-    onBrowserLog: ({ text }) => { if (text.startsWith(`UI ${screen} `)) found = JSON.parse(text.slice(4 + screen.length)); },
+    composition, serveUrl, inputProps, output: path.join(root, "output", `probe-${key}.png`), timeoutInMilliseconds: 300000,
+    onBrowserLog: ({ text }) => { if (text.startsWith(`UI ${key} `)) found = JSON.parse(text.slice(4 + key.length)); },
   });
-  if (!found) throw new Error(`The probe logged nothing for ${screen}`);
-  if (discover) console.log(screen, JSON.stringify(found.elements));
-  all[screen] = { screen: found.screen, critical: found.critical, secondary: found.secondary };
+  if (!found) throw new Error(`The probe logged nothing for ${key}`);
+  if (discover) console.log(key, JSON.stringify(found.elements));
+  all[key] = { screen: found.screen, critical: found.critical, secondary: found.secondary };
 }
 await writeFile(file, JSON.stringify(all, null, 1) + "\n");
 console.log(JSON.stringify(all));

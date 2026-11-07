@@ -32,7 +32,9 @@ export const LitScreen: React.FC<{
   style?: React.CSSProperties;
   /** Called with the mounted screen once it has settled, before the still is taken; used to measure the UI. */
   measure?: (host: HTMLElement) => void;
-}> = ({ id, state = {}, frame = true, window = "phone", pose = { yaw: 0, pitch: 0 }, detail, safeBounds, style, measure }) => {
+  /** Scrolls the screen's content by this many CSS px before the still, as a person would. */
+  scroll?: number;
+}> = ({ id, state = {}, frame = true, window = "phone", pose = { yaw: 0, pitch: 0 }, detail, safeBounds, style, measure, scroll }) => {
   const ref = useRef<HTMLDivElement>(null);
   const key = JSON.stringify(state);
   useLayoutEffect(() => {
@@ -44,6 +46,16 @@ export const LitScreen: React.FC<{
       .then(() => Promise.all([...ref.current!.querySelectorAll("img")].map((img) => img.decode())))
       .then(async () => {
         const host=ref.current!;
+        if(scroll){
+          // The nearest scrolling ancestor of the screen's content, across slots and shadow roots.
+          let el:Element|null=host.querySelector(".tk-screen-pad");
+          const up=(e:Element):Element|null=>(e as HTMLElement).assignedSlot??e.parentElement??((e.getRootNode() as ShadowRoot).host??null);
+          while(el&&!(["auto","scroll"].includes(getComputedStyle(el).overflowY)&&el.scrollHeight>el.clientHeight))el=up(el);
+          if(!el)throw new Error(`${id}: nothing scrolls, so the screen cannot be scrolled by ${scroll} px.`);
+          el.scrollTop=scroll;
+          if(Math.abs(el.scrollTop-scroll)>0.5)throw new Error(`${id}: the content scrolls only ${el.scrollTop} px of ${scroll}.`);
+          await new Promise<void>(resolve=>requestAnimationFrame(()=>requestAnimationFrame(()=>resolve())));
+        }
         if(detail){
           const screen=host.querySelector("mnw-android-screen") as HTMLElement;
           const first=host.querySelector(detail==="sheet"?".tk-sheet-content":".water-eject p") as HTMLElement;
@@ -74,6 +86,6 @@ export const LitScreen: React.FC<{
         }
       })
       .then(() => continueRender(handle), cancelRender);
-  }, [id, key, frame, window, pose.yaw, pose.pitch, pose.perspective, detail]);
+  }, [id, key, frame, window, pose.yaw, pose.pitch, pose.perspective, detail, scroll]);
   return <div ref={ref} style={style} />;
 };

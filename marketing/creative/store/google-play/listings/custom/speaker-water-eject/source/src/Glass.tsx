@@ -11,15 +11,15 @@ export type TextBox = { left: number; top: number; right: number; bottom: number
  * and white along its length, with a bright rim and a cyan refracting edge. The ribbons are
  * computed across the whole strip, so every seam between two screenshots meets.
  */
-export const Glass: React.FC<{ width: number; height: number; panels: number; id?: string; text?: TextBox[] }> = ({ width, height, panels, id = "g", text = [] }) => {
+export const Glass: React.FC<{ width: number; height: number; panels: number; id?: string; text?: TextBox[]; ribbons?: boolean; field?: [string, string] }> = ({ width, height, panels, id = "g", text = [], ribbons: withRibbons = true, field = ["#EAF9FA", "#CDEFF2"] }) => {
   const panel = width / panels;
-  const ribbons = ribbonLines(width, height, panels).map((r) => ({ d: `M ${r.pts.map(([x, y]) => `${x},${y.toFixed(1)}`).join(" L ")}`, w: r.w, o: r.o }));
+  const ribbons = (withRibbons ? ribbonLines(width, height, panels) : []).map((r) => ({ d: `M ${r.pts.map(([x, y]) => `${x},${y.toFixed(1)}`).join(" L ")}`, w: r.w, o: r.o }));
   return (
     <svg aria-hidden width={width} height={height} viewBox={`0 0 ${width} ${height}`} style={{ position: "absolute", inset: 0, pointerEvents: "none" }}>
       <defs>
         <linearGradient id={`${id}-field`} x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0" stopColor="#EAF9FA" />
-          <stop offset="1" stopColor="#CDEFF2" />
+          <stop offset="0" stopColor={field[0]} />
+          <stop offset="1" stopColor={field[1]} />
         </linearGradient>
         <linearGradient id={`${id}-iris`} x1="0" y1="0" x2={panel * 1.4} y2="0" gradientUnits="userSpaceOnUse" spreadMethod="reflect">
           <stop offset="0" stopColor="#8FE6EC" />
@@ -59,7 +59,7 @@ export const Glass: React.FC<{ width: number; height: number; panels: number; id
 
 /**
  * Sound leaving the speakers and the bubbles it carries: `arcs` are point lists with their ring, 0 nearest, drawn as soft
- * turquoise lines that fade as they spread; `bubbles` are [x, y, r], clear spheres with
+ * lines in the sheet's blue that fade as they spread; `bubbles` are [x, y, r], clear spheres with
  * a rim and a highlight. An illustration of the tone, not a claim.
  */
 export const SoundBubbles: React.FC<{ arcs: { pts: number[][]; ring: number }[]; bubbles: number[][]; width: number; height: number }> = ({ arcs, bubbles, width, height }) => (
@@ -67,7 +67,7 @@ export const SoundBubbles: React.FC<{ arcs: { pts: number[][]; ring: number }[];
     <defs>
       <radialGradient id="sound-bubble" cx=".5" cy=".5" r=".5">
         <stop offset=".62" stopColor="#FFFFFF" stopOpacity=".08" />
-        <stop offset=".9" stopColor="#7FDDE4" stopOpacity=".6" />
+        <stop offset=".9" stopColor="#9DBDF0" stopOpacity=".6" />
         <stop offset="1" stopColor="#FFFFFF" stopOpacity=".95" />
       </radialGradient>
       <filter id="sound-glow" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="4" /></filter>
@@ -76,14 +76,14 @@ export const SoundBubbles: React.FC<{ arcs: { pts: number[][]; ring: number }[];
       const d = `M ${pts.map((p) => p.map((n) => n.toFixed(1)).join(" ")).join(" L ")}`, fade = 1 - i * 0.15;
       return (
         <g key={key} opacity={fade}>
-          <path d={d} fill="none" stroke="#3FC6D3" strokeWidth={7} strokeLinecap="round" opacity=".18" filter="url(#sound-glow)" />
-          <path d={d} fill="none" stroke="#1AA5B5" strokeWidth={Math.max(1.4, 2.6 - i * 0.3)} strokeLinecap="round" opacity=".6" />
+          <path d={d} fill="none" stroke="#2D7DF6" strokeWidth={7} strokeLinecap="round" opacity=".16" filter="url(#sound-glow)" />
+          <path d={d} fill="none" stroke="#0B4FA8" strokeWidth={Math.max(1.4, 2.6 - i * 0.3)} strokeLinecap="round" opacity=".5" />
         </g>
       );
     })}
     {bubbles.map(([x, y, r], i) => (
       <g key={i}>
-        <circle cx={x} cy={y} r={r} fill="url(#sound-bubble)" stroke="#1FA9B8" strokeOpacity=".65" strokeWidth={Math.max(1.5, r * 0.09)} />
+        <circle cx={x} cy={y} r={r} fill="url(#sound-bubble)" stroke="#2D7DF6" strokeOpacity=".65" strokeWidth={Math.max(1.5, r * 0.09)} />
         <ellipse cx={x - r * 0.36} cy={y - r * 0.4} rx={r * 0.26} ry={r * 0.16} fill="#FFFFFF" transform={`rotate(-35 ${x - r * 0.36} ${y - r * 0.4})`} />
         <path d={`M ${x + r * 0.55} ${y + r * 0.2} A ${r * 0.7} ${r * 0.7} 0 0 1 ${x + r * 0.1} ${y + r * 0.62}`} fill="none" stroke="#FFFFFF" strokeWidth={Math.max(1.2, r * 0.08)} strokeOpacity=".85" strokeLinecap="round" />
       </g>

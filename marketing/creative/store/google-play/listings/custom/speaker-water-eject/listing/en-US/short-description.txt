@@ -1,1 +1,1 @@
-Water eject for wet speakers: a 165 Hz tone, 30-second cycle and stop control.
+Water Eject for wet speakers: play a timed tone and stop when you want.

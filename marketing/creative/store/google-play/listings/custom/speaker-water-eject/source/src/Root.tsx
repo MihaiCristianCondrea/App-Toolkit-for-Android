@@ -14,12 +14,12 @@ export const RemotionRoot: React.FC = () => (
   <>
     <Still id="PhoneShot" component={PhoneShot} width={WIDTH} height={HEIGHT} defaultProps={{ locale: "en-US", index: 0 }} />
     <Still id="PhonePanorama" component={PhonePanorama} width={WIDTH * en.screenshots.length} height={HEIGHT} defaultProps={{ locale: "en-US" }} />
-    <Still id="TabletShot" component={WideShot} width={CANVAS.w} height={CANVAS.h} defaultProps={{ locale: "en-US", kind: "tablet" as const, index: 0 }} />
+    <Still id="TabletShot" component={WideShot} width={CANVAS.w} height={CANVAS.h} defaultProps={{ locale: "en-US", kind: "tablet" as const, index: 0, debug: false }} />
     <Still id="TabletStrip" component={WideStrip} width={CANVAS.w * en.tabletScreenshots.length} height={CANVAS.h} defaultProps={{ locale: "en-US", kind: "tablet" as const }} />
-    <Still id="DesktopShot" component={WideShot} width={CANVAS.w} height={CANVAS.h} defaultProps={{ locale: "en-US", kind: "desktop" as const, index: 0 }} />
+    <Still id="DesktopShot" component={WideShot} width={CANVAS.w} height={CANVAS.h} defaultProps={{ locale: "en-US", kind: "desktop" as const, index: 0, debug: false }} />
     <Still id="DesktopStrip" component={WideStrip} width={CANVAS.w * en.desktopScreenshots.length} height={CANVAS.h} defaultProps={{ locale: "en-US", kind: "desktop" as const }} />
-    <Still id="FeatureGraphic" component={FeatureGraphic} width={1024} height={500} defaultProps={{ locale: "en-US" }} />
+    <Still id="FeatureGraphic" component={FeatureGraphic} width={1024} height={500} defaultProps={{ locale: "en-US", concept: "ribbon" as const }} />
     <Still id="Icon" component={Icon} width={512} height={512} />
-    <Still id="UiProbe" component={UiProbe} width={600} height={1100} defaultProps={{ screen: "water-eject", discover: false }} />
+    <Still id="UiProbe" component={UiProbe} width={1600} height={1100} defaultProps={{ screen: "water-eject", window: "phone", discover: false }} />
   </>
 );

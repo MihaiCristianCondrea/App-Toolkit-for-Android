@@ -11,3 +11,10 @@ export const SCREENS: Record<string, [string, Record<string, unknown>]> = {
  level: ["quick-tools", { activeToolId: "bubble_level" }],
  measure: ["numbers", { activeSheet: "none" }],
 };
+
+/**
+ * Screens shown scrolled, in CSS px, at every window. The Water Eject sheet opens from the Water Eject card
+ * in Quick Tools, so the water screenshots scroll the list until that card sits where Compass and Bubble
+ * Level would (they have their own screenshot): the card that opened the sheet shows above it.
+ */
+export const SCROLL: Record<string, number> = { "water-eject": 672, "water-running": 672, "water-stop": 672 };

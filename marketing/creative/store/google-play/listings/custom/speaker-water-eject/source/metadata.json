@@ -6,9 +6,9 @@
   },
   "software": "Android Studio",
   "copy": {
-    "title": "App Toolkit: Water Eject",
+    "title": "Water Eject: App Toolkit",
     "headline": "Water Eject for wet speakers",
-    "description": "Water Eject in App Toolkit plays a timed 165 Hz speaker tone that may help dislodge droplets, with clear start and stop controls and useful everyday tools.",
+    "description": "Water Eject for wet speakers: play a timed tone and stop when you want.",
     "keywords": [
       "App Toolkit",
       "Android",
@@ -77,8 +77,8 @@
       "altText": "Unit Converter in a desktop window"
     },
     "../listing/en-US/graphics/feature-graphic/feature-graphic.png": {
-      "title": "App Toolkit: Water Eject",
-      "altText": "App Toolkit Water Eject with its 165 Hz tone screen, a cyan droplet and water ripples"
+      "title": "Water Eject: App Toolkit",
+      "altText": "Water Eject in App Toolkit, a short tone for wet speakers, over a flowing aqua glass ribbon"
     },
     "../listing/en-US/graphics/icon/icon.png": {
       "title": "App Toolkit icon",

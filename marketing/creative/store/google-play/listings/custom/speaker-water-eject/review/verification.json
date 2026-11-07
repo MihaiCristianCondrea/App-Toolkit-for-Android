@@ -9,11 +9,11 @@
    "water-eject: cropped at the top edge"
   ],
   "caption": {
-   "glyphPixels": 20179,
+   "glyphPixels": 10546,
    "minContrast": 12.24,
    "contrastP1": 12.26,
-   "pillText": 9.37,
-   "pillPixels": 30160,
+   "pillText": 4.77,
+   "pillPixels": 471,
    "interference": 0
   },
   "balance": {
@@ -22,8 +22,8 @@
     0.386
    ],
    "pixels": [
-    0.493,
-    0.413
+    0.491,
+    0.409
    ]
   },
   "phones": [
@@ -73,11 +73,11 @@
    "water-running: note (secondary) cropped"
   ],
   "caption": {
-   "glyphPixels": 12631,
-   "minContrast": 13.45,
-   "contrastP1": 13.46,
-   "pillText": 9.37,
-   "pillPixels": 30564,
+   "glyphPixels": 3450,
+   "minContrast": 13.81,
+   "contrastP1": 13.81,
+   "pillText": 4.77,
+   "pillPixels": 30669,
    "interference": 0
   },
   "balance": {
@@ -86,8 +86,8 @@
     0.585
    ],
    "pixels": [
-    0.507,
-    0.536
+    0.506,
+    0.538
    ]
   },
   "phones": [
@@ -130,11 +130,11 @@
   "preferences": [],
   "intentional": [],
   "caption": {
-   "glyphPixels": 16598,
-   "minContrast": 13.54,
+   "glyphPixels": 12004,
+   "minContrast": 13.57,
    "contrastP1": 13.58,
-   "pillText": 9.37,
-   "pillPixels": 15034,
+   "pillText": 4.77,
+   "pillPixels": 15362,
    "interference": 0
   },
   "balance": {
@@ -143,7 +143,7 @@
     0.499
    ],
    "pixels": [
-    0.514,
+    0.512,
     0.49
    ]
   },
@@ -189,11 +189,11 @@
    "quick-tools overlaps unit-converter by 5.9% of its visible area, clear of its critical UI"
   ],
   "caption": {
-   "glyphPixels": 17717,
+   "glyphPixels": 10797,
    "minContrast": 13.69,
    "contrastP1": 13.7,
-   "pillText": 9.37,
-   "pillPixels": 21731,
+   "pillText": 4.77,
+   "pillPixels": 22086,
    "interference": 0
   },
   "balance": {
@@ -202,8 +202,8 @@
     0.479
    ],
    "pixels": [
-    0.495,
-    0.486
+    0.49,
+    0.487
    ]
   },
   "phones": [
@@ -272,11 +272,11 @@
   ],
   "intentional": [],
   "caption": {
-   "glyphPixels": 10142,
-   "minContrast": 13.57,
-   "contrastP1": 13.58,
-   "pillText": 9.37,
-   "pillPixels": 15325,
+   "glyphPixels": 5748,
+   "minContrast": 13.81,
+   "contrastP1": 13.81,
+   "pillText": 4.77,
+   "pillPixels": 15422,
    "interference": 0
   },
   "balance": {
@@ -321,5 +321,189 @@
    "yaw": 0,
    "pitch": 0.0625
   }
+ },
+ {
+  "index": "tablet 1",
+  "id": "water-eject",
+  "hard": [],
+  "preferences": [],
+  "intentional": [],
+  "caption": null,
+  "balance": {
+   "geometric": [
+    0.5
+   ],
+   "pixels": [
+    0.488
+   ]
+  },
+  "device": {
+   "left": 507.735,
+   "top": 73.36500000000001,
+   "right": 1412.2649999999999,
+   "bottom": 1006.635
+  },
+  "shapes": 4
+ },
+ {
+  "index": "tablet 2",
+  "id": "water-running",
+  "hard": [],
+  "preferences": [],
+  "intentional": [],
+  "caption": null,
+  "balance": {
+   "geometric": [
+    0.5
+   ],
+   "pixels": [
+    0.486
+   ]
+  },
+  "device": {
+   "left": 507.735,
+   "top": 73.36500000000001,
+   "right": 1412.2649999999999,
+   "bottom": 1006.635
+  },
+  "shapes": 4
+ },
+ {
+  "index": "tablet 3",
+  "id": "quick-tools",
+  "hard": [],
+  "preferences": [],
+  "intentional": [],
+  "caption": null,
+  "balance": {
+   "geometric": [
+    0.5
+   ],
+   "pixels": [
+    0.507
+   ]
+  },
+  "device": {
+   "left": 507.735,
+   "top": 73.36500000000001,
+   "right": 1412.2649999999999,
+   "bottom": 1006.635
+  },
+  "shapes": 4
+ },
+ {
+  "index": "tablet 4",
+  "id": "unit-converter",
+  "hard": [],
+  "preferences": [],
+  "intentional": [],
+  "caption": null,
+  "balance": {
+   "geometric": [
+    0.498
+   ],
+   "pixels": [
+    0.499
+   ]
+  },
+  "device": {
+   "left": 507.735,
+   "top": 73.36500000000001,
+   "right": 1412.2649999999999,
+   "bottom": 1006.635
+  },
+  "shapes": 4
+ },
+ {
+  "index": "desktop 1",
+  "id": "water-eject",
+  "hard": [],
+  "preferences": [],
+  "intentional": [],
+  "caption": null,
+  "balance": {
+   "geometric": [
+    0.499
+   ],
+   "pixels": [
+    0.498
+   ]
+  },
+  "device": {
+   "left": 230.265,
+   "top": 53.39999999999998,
+   "right": 1689.7350000000001,
+   "bottom": 1026.6
+  },
+  "shapes": 4
+ },
+ {
+  "index": "desktop 2",
+  "id": "water-running",
+  "hard": [],
+  "preferences": [],
+  "intentional": [],
+  "caption": null,
+  "balance": {
+   "geometric": [
+    0.499
+   ],
+   "pixels": [
+    0.498
+   ]
+  },
+  "device": {
+   "left": 230.265,
+   "top": 53.39999999999998,
+   "right": 1689.7350000000001,
+   "bottom": 1026.6
+  },
+  "shapes": 4
+ },
+ {
+  "index": "desktop 3",
+  "id": "quick-tools",
+  "hard": [],
+  "preferences": [],
+  "intentional": [],
+  "caption": null,
+  "balance": {
+   "geometric": [
+    0.499
+   ],
+   "pixels": [
+    0.511
+   ]
+  },
+  "device": {
+   "left": 230.265,
+   "top": 53.39999999999998,
+   "right": 1689.7350000000001,
+   "bottom": 1026.6
+  },
+  "shapes": 4
+ },
+ {
+  "index": "desktop 4",
+  "id": "unit-converter",
+  "hard": [],
+  "preferences": [],
+  "intentional": [],
+  "caption": null,
+  "balance": {
+   "geometric": [
+    0.499
+   ],
+   "pixels": [
+    0.505
+   ]
+  },
+  "device": {
+   "left": 230.265,
+   "top": 53.39999999999998,
+   "right": 1689.7350000000001,
+   "bottom": 1026.6
+  },
+  "shapes": 4
  }
 ]

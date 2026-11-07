@@ -1,12 +1,13 @@
-// A calm aqua surface for the Water Eject campaign. The app's UI keeps its own colours; the campaign
-// only owns the ground, the ripple ink and the caption pill.
-export const SURFACE_TOP = "#F4FBFA";
-export const SURFACE_DEEP = "#D7F0EE";
-export const RIPPLE = "#0B7F8C";
-export const GROUND = SURFACE_TOP;
+// The Water Eject campaign: a light aqua glass ground (src/Glass.tsx) with accents in the Water Eject sheet's
+// own blues. The app's UI keeps its own colours; the campaign owns the ground, the ink, the caption pill
+// and the decoration.
 export const INK = "#0B2A31";
-export const PILL = "#8BEAE6";
-export const ON_PILL = "#003640";
-export const SHAPE_COLORS = ["#19BECE", "#73E1D4", "#B5EFE1"];
+// The sheet's blues, from ToolkitTileVisuals.kt's blue tool as the kit draws it: its content blue (the
+// Start button and icon), the brighter container blue, and the water visual's container fill.
+export const SHEET_BLUE = "#0B4FA8";
+export const SHEET_BLUE_BRIGHT = "#2D7DF6";
+export const SHEET_BLUE_CONTAINER = "#B8CDE3";
+export const PILL = SHEET_BLUE_CONTAINER;
+export const ON_PILL = SHEET_BLUE;
 export const FONT = "'Google Sans Flex', sans-serif";
 export const PALETTE = "captured";

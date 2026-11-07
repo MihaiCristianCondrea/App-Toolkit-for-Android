@@ -60,9 +60,9 @@ export const bubbles = (m: Measured, caption: Box): Bubble[] => {
 /** A MaterialShape, as the kit names it, with its box; `behind` marks one drawn behind the phones on purpose. */
 export type Piece = { name: string; x: number; y: number; size: number; color: string; rotate: number; behind?: boolean };
 
-/** The MaterialShapes the other listings scatter, in the campaign's aqua tones only. */
+/** The MaterialShapes the other listings scatter, in tones of the Water Eject sheet's blues. */
 const SHAPE_NAMES = ["cookie_9sided", "flower", "clover_4leaf", "soft_burst", "gem", "pill", "sunny", "cookie_6sided"];
-const SHAPE_COLORS = ["#A6EDEA", "#7DDDE1", "#C2F0F0"];
+const SHAPE_COLORS = ["#C7D8EE", "#B8CDE3", "#A7C2E8"];
 
 /**
  * How a screenshot's shapes are placed. `big` puts one shape behind the phones, centred at `at` but moved
@@ -78,31 +78,34 @@ export type ShapePlan = { seed: number; offset?: number; small: number; big?: { 
  * strip (`edges`); any may run off the top or bottom, but at least half of each small shape shows. Small shapes also keep SPACE.s from every phone's
  * visible silhouette and SPACE.m from the effects and each other.
  */
-export const placeShapes = (plan: ShapePlan, phones: Measured[], caption: Box, effects: Bubble[], ribbons: Ribbon[], edges: { left: boolean; right: boolean }): Piece[] => {
+/** Anything shapes keep clear of: its visible outline, as a measured phone or a device box gives it. */
+export type Obstacle = { visible: Pt[] };
+export const placeShapes = (plan: ShapePlan, phones: Obstacle[], caption: Box | null, effects: Bubble[], ribbons: Ribbon[], edges: { left: boolean; right: boolean }, area = { w: W, h: H }): Piece[] => {
+  const [W_, H_] = [area.w, area.h];
   const clearOfRibbons = (cx: number, cy: number, r: number) => ribbons.every((b) => b.pts.every((p) => Math.hypot(p[0] - cx, p[1] - cy) > r + b.half + SPACE.s));
-  const text = grow(caption, TEXT_CLEARANCE);
-  const clearOfText = (cx: number, cy: number, r: number) => Math.hypot(Math.max(text.left - cx, 0, cx - text.right), Math.max(text.top - cy, 0, cy - text.bottom)) > r;
-  const inPanel = (cx: number, r: number) => (edges.left || cx - r >= 0) && (edges.right || cx + r <= W);
+  const text = caption && grow(caption, TEXT_CLEARANCE);
+  const clearOfText = (cx: number, cy: number, r: number) => !text || Math.hypot(Math.max(text.left - cx, 0, cx - text.right), Math.max(text.top - cy, 0, cy - text.bottom)) > r;
+  const inPanel = (cx: number, r: number) => (edges.left || cx - r >= 0) && (edges.right || cx + r <= W_);
   const pieces: Piece[] = [];
   if (plan.big) {
-    const [ax, ay] = plan.big.at(phones);
+    const [ax, ay] = plan.big.at(phones as Measured[]);
     for (let size = plan.big.max; size >= plan.big.min; size -= SPACE.xs) {
-      const r = size / 2, cx = Math.min(Math.max(ax, edges.left ? -Infinity : r), edges.right ? Infinity : W - r);
+      const r = size / 2, cx = Math.min(Math.max(ax, edges.left ? -Infinity : r), edges.right ? Infinity : W_ - r);
       if (clearOfRibbons(cx, ay, r) && clearOfText(cx, ay, r)) {
-        pieces.push({ name: "cookie_12sided", x: cx - r, y: ay - r, size, color: "#BDEFEF", rotate: 12, behind: true });
+        pieces.push({ name: "cookie_12sided", x: cx - r, y: ay - r, size, color: "#D3E1F3", rotate: 12, behind: true });
         break;
       }
     }
   }
   let seed = plan.seed;
   const rand = () => ((seed = (Math.imul(seed, 1664525) + 1013904223) >>> 0) / 4294967296);
-  const clearOfPhones = (cx: number, cy: number, r: number) => phones.every((m) => !inside(m.visible, [cx, cy]) && distanceTo(m.visible, [cx, cy]) > r + SPACE.s);
+  const clearOfPhones = (cx: number, cy: number, r: number) => phones.every((m: Obstacle) => !inside(m.visible, [cx, cy]) && distanceTo(m.visible, [cx, cy]) > r + SPACE.s);
   const small: Piece[] = [];
   for (let k = 0; small.length < plan.small && k < 8000; k++) {
     const size = SPACE.xl + rand() * (SPACE.xxl + SPACE.l), r = size / 2;
-    const cx = -r * 0.4 + rand() * (W + r * 0.8), cy = -r * 0.4 + rand() * (H + r * 0.8);
+    const cx = -r * 0.4 + rand() * (W_ + r * 0.8), cy = -r * 0.4 + rand() * (H_ + r * 0.8);
     // At least half of a shape shows; a sliver at an edge reads as a mistake.
-    if (cx < r * 0.2 || cx > W - r * 0.2 || cy < r * 0.2 || cy > H - r * 0.2) continue;
+    if (cx < r * 0.2 || cx > W_ - r * 0.2 || cy < r * 0.2 || cy > H_ - r * 0.2) continue;
     if (!inPanel(cx, r) || !clearOfPhones(cx, cy, r) || !clearOfRibbons(cx, cy, r) || !clearOfText(cx, cy, r)) continue;
     if (pieces.some((p) => Math.hypot(p.x + p.size / 2 - cx, p.y + p.size / 2 - cy) < r + p.size / 2 + SPACE.m)) continue;
     if (effects.some(([x, y, er]) => Math.hypot(x - cx, y - cy) < r + er + SPACE.m)) continue;

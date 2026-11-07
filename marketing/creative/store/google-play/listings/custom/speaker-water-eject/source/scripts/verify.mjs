@@ -6,8 +6,9 @@
 //   - interference: the share of the text zone (caption block + 34 px) where the background departs from
 //     the plain field, i.e. ribbons, shapes or anything else behind the letters;
 //   - visual balance: the contrast-weighted centroid of the finished image.
-// It writes report.json and two contact sheets (clean and debug), prints a summary and exits 1 on any hard
-// failure.
+// The tablet and desktop sets (no captions) are rendered clean and with their overlay, checked by the same
+// geometry and measured for balance. It writes report.json and contact sheets (clean and debug, for phones,
+// tablets and desktops), prints a summary and exits 1 on any hard failure.
 import { bundle } from "@remotion/bundler";
 import { renderStill, selectComposition } from "@remotion/renderer";
 import { mkdir, readFile, writeFile } from "node:fs/promises";
@@ -18,6 +19,7 @@ import { composeShot } from "../src/composition/compose.ts";
 import { CAPTION, H, TEXT_CLEARANCE, W, grow } from "../src/composition/geometry.ts";
 import { SHOTS } from "../src/composition/shots.ts";
 import { INK, ON_PILL, PILL } from "../src/theme.ts";
+import { CANVAS, WIDE_SETS, composeWide } from "../src/composition/wide.ts";
 
 const root = fileURLToPath(new URL("../", import.meta.url));
 const locale = process.argv[2] ?? "en-US";
@@ -93,12 +95,37 @@ for (let index = 0; index < SHOTS.length; index++) {
   });
 }
 
-const sheets = async (name) => writePng(path.join(out, `contact-${name}.png`), sheet(await Promise.all(SHOTS.map(async (_, i) => shrink(await readPng(path.join(out, `${name}-${i + 1}.png`)), 3))), 24));
+const sheets = async (name, count = SHOTS.length, k = 3) => writePng(path.join(out, `contact-${name}.png`), sheet(await Promise.all(Array.from({ length: count }, async (_, i) => shrink(await readPng(path.join(out, `${name}-${i + 1}.png`)), k))), 24));
 await sheets("clean");
 await sheets("debug");
+
+// The tablet and desktop sets: no captions; geometry, and pixel balance.
+const strings = JSON.parse(await readFile(path.join(root, "strings", `${locale}.json`), "utf8"));
+for (const kind of Object.keys(WIDE_SETS)) {
+  const screens = strings[WIDE_SETS[kind].key].map((s) => s.id), id = kind === "tablet" ? "TabletShot" : "DesktopShot";
+  for (let index = 0; index < screens.length; index++) {
+    const g = composeWide(kind, index, screens, ui);
+    for (const debug of [false, true]) {
+      const inputProps = { locale, kind, index, debug };
+      const composition = await selectComposition({ serveUrl, id, inputProps });
+      await renderStill({ composition, serveUrl, inputProps, output: path.join(out, `${kind}-${debug ? "debug" : "clean"}-${index + 1}.png`), imageFormat: "png", scale: 1, timeoutInMilliseconds: 300000 });
+    }
+    const clean = await readPng(path.join(out, `${kind}-clean-${index + 1}.png`)), k = clean.width / CANVAS.w;
+    const fieldWide = (y) => top.map((c, j) => c + (bottom[j] - c) * (y / CANVAS.h));
+    let sw = 0, sx = 0;
+    for (let y = 0; y < clean.height; y += 2) for (let x = 0; x < clean.width; x += 2) { const d = dist(at(clean, x, y), fieldWide(y / k)); if (d < 18) continue; sw += d; sx += d * x; }
+    const preferences = [...g.report.preferences], pixels = sx / sw / clean.width;
+    if (Math.abs(pixels - 0.5) > LIMIT.balance) preferences.push(`pixel balance at ${pixels.toFixed(3)} W`);
+    results.push({ index: `${kind} ${index + 1}`, id: g.screen, hard: g.report.hard, preferences, intentional: g.report.intentional, caption: null, balance: { geometric: [+(g.report.balance[0] / CANVAS.w).toFixed(3)], pixels: [+pixels.toFixed(3)] }, device: g.box, shapes: g.shapes.length });
+  }
+  await sheets(`${kind}-clean`, screens.length, 4);
+  await sheets(`${kind}-debug`, screens.length, 4);
+}
 await writeFile(path.join(out, "report.json"), JSON.stringify(results, null, 1) + "\n");
 for (const r of results) {
-  console.log(`${r.index} ${r.id}: contrast ≥ ${r.caption.contrastP1}:1 (min ${r.caption.minContrast}), pill ${r.caption.pillText}:1, interference ${(100 * r.caption.interference).toFixed(2)}%, balance ${r.balance.pixels[0]} W (pixels) / ${r.balance.geometric[0]} W (geometry)`);
+  console.log(r.caption
+    ? `${r.index} ${r.id}: contrast ≥ ${r.caption.contrastP1}:1 (min ${r.caption.minContrast}), pill ${r.caption.pillText}:1, interference ${(100 * r.caption.interference).toFixed(2)}%, balance ${r.balance.pixels[0]} W (pixels) / ${r.balance.geometric[0]} W (geometry)`
+    : `${r.index} ${r.id}: ${r.shapes} shapes, balance ${r.balance.pixels[0]} W (pixels) / ${r.balance.geometric[0]} W (geometry)`);
   for (const t of r.hard) console.log(`  HARD ${t}`);
   for (const t of r.preferences) console.log(`  PREF ${t}`);
   for (const t of r.intentional) console.log(`  OK   ${t}`);
