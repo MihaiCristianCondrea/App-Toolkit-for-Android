@@ -14,15 +14,15 @@ The keywords describe intent, not measured demand. The prior Play reports did no
 
 ## Creative direction
 
-Five screenshots, each with its own job, read as one campaign: a calm tonal aqua surface, App Toolkit's Material caption pill, Material-Next's porcelain 3D Pixel 9 Pro XL, and water that encodes the feature. Variety comes from the art direction (camera angle, device size, framing, one or two phones, the water itself), never from repeating a screen: no composition shows the same screen or state twice.
+Five screenshots read as one panorama. A single ocean runs the whole strip, its waves computed across the full width so every seam meets: it surges at the hero and settles towards the toolbox. The ground is deep ocean teal brightening towards the water, the headlines are white, and the caption pill is aqua, so the set has the contrast of an ad without leaving App Toolkit's Material caption style. Every phone is Material-Next's porcelain 3D Pixel 9 Pro XL, upright and straight, floating with its bezel just under the surface: the movement is the water's, not tilted devices. Two phones appear only with two different screens; no state repeats.
 
-1. Hero: a large Pixel turned to its edge, standing in an illustrated wave that rises from its speaker and curls beside it, with foam, spray and light on the surface. The wave is a metaphor for the tone, not a promise of what the app does to a phone.
-2. The tone: the 165 Hz screen close and straight, ripple rings spreading from the speaker.
-3. The cycle: two phones, Water Eject ready behind and running at 20 seconds in front with Stop.
-4. Guidance: the guidance card lifted out at reading size, with no phone.
-5. The toolbox: two tools side by side, Quick Tools behind and Unit Converter in front.
+1. Hero: Water Eject ready at 165 Hz, centred in the swell, spray thrown out on either side of the phone. The water is a metaphor for the tone, not a promise of what the app does to a phone.
+2. The tone: close on the 165 Hz control, the phone running under the waterline.
+3. The cycle: two phones, 20 seconds left behind and 8 seconds left in front with Stop.
+4. Guidance: the guidance card itself, floating above the water at reading size.
+5. The toolbox: Quick Tools behind and Unit Converter in front, on calmer water.
 
-Ripple rings cross into neighbouring screenshots so the strip reads as one. Poses are turns a person would make to show a phone, never a roll. Tablet, desktop and feature artwork share the surface and the rings. No image promises a repair or shows a successful water-removal result.
+Tablet, desktop and feature artwork share the same ocean. No image promises a repair or shows a successful water-removal result.
 
 ## Verification and limits
 

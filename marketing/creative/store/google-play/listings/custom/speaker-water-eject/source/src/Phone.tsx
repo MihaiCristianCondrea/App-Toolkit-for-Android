@@ -3,8 +3,8 @@ import { AbsoluteFill, cancelRender, continueRender, delayRender } from "remotio
 import { LitScreen, useFonts } from "./LitScreen";
 import { SCREENS } from "./screens";
 import { STRINGS } from "./strings";
-import { WaterArt, type Ripple } from "./WaterArt";
-import { Wave } from "./Wave";
+import { type Ripple } from "./WaterArt";
+import { Ocean } from "./Ocean";
 import { FONT, INK, ON_PILL, PILL } from "./theme";
 
 export const WIDTH=1080,HEIGHT=1920;
@@ -19,43 +19,44 @@ const FRAME_W=465.23;
 /** A device in a shot: its screen (a key of SCREENS, the shot's own by default), where it stands, how large, its turn. */
 type Device={screen?:string;x:number;top:number;scale:number;yaw?:number;pitch?:number;bleed?:boolean;detail?:"guidance"};
 /** A shot: one or two devices, never the same screen twice, its ripples, and an illustrated wave from a speaker. */
-type Shot={devices:Device[];ripples:Ripple[];wave?:{x:number;y:number}};
+type Shot={devices:Device[];ripples:Ripple[]};
 
-// Five shots, each with its own job. The hero sells the metaphor (a wave rising from the speaker); the product shot
-// shows the 165 Hz screen up close; two phones show the cycle ready and running; the guidance sits at reading size;
-// two tools show the rest of the toolbox. Ripples link neighbouring shots. Poses are turns, never a roll.
+// Five shots read as one panorama: a single ocean runs the whole strip, surging at the hero and settling towards the
+// toolbox, and every phone floats upright in it, its bezel just under the surface. Phones are never turned or rolled;
+// the movement is the water's. Two phones appear only with two different screens.
 const SHOTS:Shot[]=[
- // 1 Hero: a large turned phone, the wave rising from its speaker.
- {devices:[{x:560,top:410,scale:1.2,yaw:-22,pitch:4}],ripples:[{x:1020,y:1500,reach:900,strength:.5}],wave:{x:540,y:1590}},
- // 2 Product: close and straight, the 165 Hz screen at the heart of the image, rings from the speaker.
- {devices:[{x:540,top:400,scale:1.55,bleed:true}],ripples:[{x:540,y:1940,reach:1300,strength:1}]},
- // 3 The cycle: ready behind on the left, running in front with Stop under the thumb.
- {devices:[{screen:"water-eject",x:330,top:620,scale:1.0,yaw:20},{screen:"water-running",x:690,top:450,scale:1.24,yaw:-8}],ripples:[{x:500,y:1880,reach:1050,strength:.8}]},
- // 4 Guidance: the guidance card itself, lifted out of the screen at reading size.
- {devices:[{detail:"guidance",x:560,top:900,scale:2.15}],ripples:[{x:150,y:1850,reach:1000,strength:.7}]},
- // 5 The toolbox: Quick Tools behind, Unit Converter in front, a breath after the Water Eject story.
- {devices:[{screen:"quick-tools",x:330,top:600,scale:1.02,yaw:18},{screen:"unit-converter",x:690,top:450,scale:1.24,yaw:-8}],ripples:[{x:-60,y:1820,reach:900,strength:.4}]},
+ // 1 Hero: the ready sheet, centred in the swell, spray thrown up around its speaker.
+ {devices:[{x:540,top:440,scale:1.3}],ripples:[]},
+ // 2 The tone: close on the 165 Hz control, the phone running under the waterline.
+ {devices:[{x:560,top:380,scale:1.62,bleed:true}],ripples:[]},
+ // 3 The cycle: 20 seconds left behind, 8 seconds left in front with Stop.
+ {devices:[{screen:"water-running",x:330,top:560,scale:1.08},{screen:"water-stop",x:700,top:440,scale:1.26}],ripples:[]},
+ // 4 Guidance: the card itself, floating above the water at reading size.
+ {devices:[{detail:"guidance",x:540,top:760,scale:2.05}],ripples:[]},
+ // 5 The toolbox: Quick Tools behind, Unit Converter in front, on calmer water.
+ {devices:[{screen:"quick-tools",x:330,top:560,scale:1.08},{screen:"unit-converter",x:700,top:440,scale:1.26}],ripples:[]},
 ];
 export const PhonePanorama:React.FC<{locale:string;only?:number}>=({locale,only})=>{
  useFonts();
  const strings=STRINGS[locale],n=strings.screenshots.length;
  if(SHOTS.length!==n) throw new Error(`${n} captions for ${SHOTS.length} compositions`);
- const ripples=SHOTS.flatMap((shot,i)=>shot.ripples.map(r=>({...r,x:r.x+i*WIDTH})));
  return <AbsoluteFill style={{width:n*WIDTH,fontFamily:FONT,overflow:"hidden"}}>
-  <WaterArt width={n*WIDTH} height={HEIGHT} ripples={ripples}/>
+  <Ocean width={n*WIDTH} height={HEIGHT} peak={540}/>
   {strings.screenshots.map((s,i)=>(
    <div key={s.id} data-shot={i} style={{position:"absolute",left:i*WIDTH,top:0,width:WIDTH,height:HEIGHT}}>
     <Caption lines={s.lines} highlight={s.highlight} icon={s.icon} check={only===i}/>
-    {(only===undefined||only===i)&&SHOTS[i].wave&&<Wave id={`wave-${i}`} x={SHOTS[i].wave!.x} y={SHOTS[i].wave!.y} width={WIDTH} height={HEIGHT}/>}
     {(only===undefined||only===i)&&SHOTS[i].devices.map((d,k)=>{
      const id=d.screen??s.id;
      const w=d.detail?430:FRAME_W;
-     return <div key={k} style={{position:"absolute",left:d.x,top:d.top,width:w,zIndex:k+1,transform:`translateX(-50%) scale(${d.scale})`,transformOrigin:"50% 0",filter:"drop-shadow(0 26px 30px rgba(0,66,77,.14))"}}>
+     return <div key={k} style={{position:"absolute",left:d.x,top:d.top,width:w,zIndex:k+1,transform:`translateX(-50%) scale(${d.scale})`,transformOrigin:"50% 0",filter:"drop-shadow(0 30px 40px rgba(0,30,38,.35))"}}>
       <LitScreen id={SCREENS[id][0]} state={SCREENS[id][1]} frame={!d.detail} detail={d.detail} safeBounds={d.bleed?BLEED:SAFE} pose={{yaw:d.yaw??0,pitch:d.pitch??0}} style={{width:w}}/>
      </div>;
     })}
    </div>
   ))}
+  <div style={{position:"absolute",inset:0,zIndex:5,pointerEvents:"none"}}>
+   <Ocean front width={n*WIDTH} height={HEIGHT} peak={540} spray={{x:540,y:1700}}/>
+  </div>
  </AbsoluteFill>;
 };
 

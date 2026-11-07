@@ -18,7 +18,7 @@
       ],
       "highlight": "165 Hz",
       "icon": "water_drop",
-      "alt": "A close view of Water Eject showing its fixed 165 Hz tone and Start 30-second cycle"
+      "alt": "A close view of the Water Eject screen and its fixed 165 Hz tone"
     },
     {
       "id": "water-cycle",
@@ -28,7 +28,7 @@
       ],
       "highlight": "30 seconds",
       "icon": "timer",
-      "alt": "Two phones: Water Eject ready to start, and running with 20 seconds left and a Stop cycle button"
+      "alt": "Two phones running Water Eject: 20 seconds left, and 8 seconds left with a Stop cycle button"
     },
     {
       "id": "water-guidance",
