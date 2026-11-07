@@ -11,8 +11,8 @@ import { FONT, GROUND, INK, ON_PILL, PILL, SHAPE_COLORS } from "./theme";
 // one picture.
 export const WIDTH = 1080;
 export const HEIGHT = 1920;
-// The kit's Pixel 9 Pro XL frame, 469 x 992 CSS px, scaled and centred, running off the bottom edge.
-const FRAME = { w: 469, h: 992, scale: 1.48, top: 404 };
+// Material-Next's 3D Pixel 9 Pro XL frame, 465.23 x 988.76 CSS px, scaled and centred, running off the bottom edge.
+const FRAME = { w: 465.23, h: 988.76, scale: 1.48, top: 404 };
 const PHONE = { x0: WIDTH / 2 - (FRAME.w * FRAME.scale) / 2, x1: WIDTH / 2 + (FRAME.w * FRAME.scale) / 2, y0: FRAME.top };
 
 // The caption's box in every image: centred in the top band. Nothing else is drawn in it, and the caption must fit

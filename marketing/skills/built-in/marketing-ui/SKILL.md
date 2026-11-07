@@ -32,6 +32,11 @@ The hub itself (gallery, prototype page, preview settings, device frames, captur
 on npm). The repository writes only what is the app's: its theme, its screens and their state controls. Do not build a
 gallery, a prototype page or device frames by hand.
 
+What is personal to the author stays in the app, never in Material Next: a hub that shows `<mnw-product-launcher>`
+passes its own `catalog` (its products, admin consoles and links, built with `createLauncherCatalog()`, spreading
+`DEFAULT_LAUNCHER_ITEMS` to keep the public consoles), and a page that wants the Google mark on the phone's back passes
+it as the frame's `logo`. The library's defaults name no one's products and carry no logo.
+
 ```bash
 mkdir -p marketing/ui && cd marketing/ui
 npm init -y
@@ -157,7 +162,7 @@ Rules:
 - **Edge to edge.** Status bar 24 dp and gesture bar over the content, as Android draws them.
 - **Every screen renders from state.** No timers or random values inside a screen; videos set the state per frame.
 - **Large screens come from the Android code, not from guesses.** Tablets, foldables and desktop windows take the app's own adaptive rules, so port them, constant for constant, into one module (`kit/layout.js`) with a comment naming each source file: the window size breakpoints and navigation mode (bottom bar, rail, expanded rail, permanent drawer; App Toolkit apps: `ShellLayoutPolicy` in `ShellLayout.kt`, widths in `NavigationSurfaces.kt`), list and detail panes (`ListDetailScene.kt`: list fraction, separator), and the feed grid (the app's `listingLayout()`-style function: minimum cell width, column cap, when a banner stacks). Screens read the layout from a `window` in their state (`{ width, height, system }`, with presets such as `phone`, `fold` and `desktop`); `mount()`, the host and the capture script pass it. Also port how the wide shell is painted, not only where things go (for App Toolkit: the navigation and app bar share surface-container, and a tab's content is a surface card with a 24 dp top-start corner). When the app's library is a dependency, read its source at the exact version the app uses (clone the library at that tag, or disassemble the cached AAR with `javap -c` for the constants) before writing CSS.
-- **Device frames per window.** The phone frame for phone windows; for a tablet window the Pixel 9 Pro Fold open (Material Next's `device-frames/pixel_9_pro_fold`, copied with `npx mnw-marketing-assets`; its `layout` stays in `assets/device-frames/pixel_9_pro_fold/default`: a 2204 x 2274 frame around a 2076 x 2152 display at 62, 62, which is 852 x 883 dp at 2.4375). Size the frame so its display is exactly the window in CSS px, measure the display's corner radius from `mask.webp`, and keep the status icons clear of the camera cutout. For a desktop window, Google's device art for the Pixelbook Go (from the Android Developers Device Art Generator, `device-art-resources/pixelbook_go/land_back.png`, `land_shadow.png`, `land_fore.png`): find the screen as the transparent rectangle in `land_back.png` (1826 x 1079 px at 181, 159), and size the desktop window to it (1218 x 720 dp at 1.5). A desktop window has no system bars.
+- **Device frames per window.** For phone windows, Material Next's 3D Pixel 9 Pro XL (`<mnw-device-frame>`, 465.23 x 988.76 around the 430 x 957 window; `finish`, `yaw` and `pitch` pick its colour and angle); for a tablet window the Pixel 9 Pro Fold open (Material Next's `device-frames/pixel_9_pro_fold`, copied with `npx mnw-marketing-assets`; its `layout` stays in `assets/device-frames/pixel_9_pro_fold/default`: a 2204 x 2274 frame around a 2076 x 2152 display at 62, 62, which is 852 x 883 dp at 2.4375). Size the frame so its display is exactly the window in CSS px, measure the display's corner radius from `mask.webp`, and keep the status icons clear of the camera cutout. For a desktop window, Google's device art for the Pixelbook Go (from the Android Developers Device Art Generator, `device-art-resources/pixelbook_go/land_back.png`, `land_shadow.png`, `land_fore.png`): find the screen as the transparent rectangle in `land_back.png` (1826 x 1079 px at 181, 159), and size the desktop window to it (1218 x 720 dp at 1.5). A desktop window has no system bars.
 - **Check every window.** After a change, capture each screen at every window (`npm run capture -- <id> --window=fold`) and look: wide layouts break differently (a flex row without `min-width: 0` lets a pane overflow; content capped at 800 dp needs centring; long lists need an end).
 - **The served layout, not a guess at it.** Snapshot what the API serves for each screen, not only the items: for a composed feed, every group (featured, curated, topics, latest) with each article's style in its group and its ad positions. The kit draws that composition the way the app does, styles on every group the contract allows. When the kit, the app and an admin preview disagree, the contract decides; fix all three, then refresh the snapshot.
 - **One look for every mock.** Where a backend console previews the app (a feed preview, an ad stand-in), it draws the kit's components with the same structure and copy, so the console, the kit and the app agree. Change the kit first, then the console.
@@ -189,39 +194,37 @@ A screen that fails parity is not used in a campaign until it is fixed.
 
 ## 3D device
 
-The Pixel 9 Pro XL model lives in this repository at
-[`marketing/assets/device-models/pixel-9-pro-xl/`](../../../assets/device-models/pixel-9-pro-xl/README.md)
-(read its licence: it is never committed to a public repository). Use it where a flat frame cannot
-explain the moment: the phone arriving, turning, or the UI assembling into it. The screens stay HTML.
+The phone is our own Pixel 9 Pro XL, built in three.js from Google's published measurements and
+product photos, shipped by Material Next (0.2.0 and later). No third-party model or file is needed.
 
-The phone on a web page is this model, with the live screen on its display. First used on the
-Smart Cleaner presentation (`profile`, `#smart-cleaner-for-android`):
-
-1. **The live screen rides the 3D phone.** WebGL cannot paint a live page into a texture, so render
-   the model with three.js and add a `CSS3DRenderer` layer over the canvas, drawn with the same
-   camera, holding the real screen element (a frameless `ScreenHost`, 430 × 957). Place it on the
-   display plane just above the glass, inset by the bezel (about 2.4 mm) with the panel's corner
-   radius (about 8 mm) converted to pixels, and set `backface-visibility: hidden` so it disappears
-   when the phone turns away. It stays interactive: taps reach the screen. Draw the front camera over
-   it, since the layer covers the model's. Keep the model's `GP9XL_Screen` material as dark glass.
-2. **Work in millimetres.** CSS3D maps world units to CSS pixels: scale the model ×1000 so its
-   matrices stay well conditioned.
-3. **Load it lazily and only when it can play.** Import three.js and the model on demand, render on
-   demand (only when the pose or size changes), and skip it entirely with reduced motion or without
-   WebGL: the screens keep Material Next's flat frame, so a failure shows a complete page.
-4. **Draco.** The meshes are Draco-compressed. Ship three.js's decoder
-   (`three/examples/jsm/libs/draco/gltf/`) next to the model and give `DRACOLoader` that path.
-5. **Keep layers honest.** Fetch the bytes in the data layer and parse them with
-   `GLTFLoader.parseAsync()` in presentation code.
-6. **Own the lifecycle.** Keep the model and decoder outside any folder a sync script rebuilds, and
-   make the build fail when either is missing. Create every phone or none: if one fails, dispose the
-   ones already built. `dispose()` must free every geometry, material and texture in the model, plus
-   any material it swapped out, not only the renderer.
+1. **A phone with a live screen: `<mnw-device-frame>`.** It draws the phone and lays the real screen
+   over its display, head on or turned (`yaw`, `pitch`), in any finish (`obsidian`, `porcelain`,
+   `hazel`, `rose-quartz`). Head on, the screen is not transformed, so screenshots stay sharp. Every
+   frame on a page shares one WebGL context and one picture per pose; without WebGL it draws the
+   phone's outline in CSS, so a page is always complete. Await `frame.updateComplete` before a capture.
+2. **The back mark is the host's.** The model carries no logo. Pass `logo` (the URL of a
+   white-on-transparent mask) only on your own pages; the mark is drawn polished, in the back's colour.
+3. **A phone that turns on scroll: still the frame.** Set the frame's `yaw` and `pitch` from scroll
+   progress. While the pose keeps changing, the frame draws straight into a canvas once per animation
+   frame at one device pixel per CSS pixel, with no picture encoded, and swaps in the sharp picture
+   280 ms after it settles; off screen it draws nothing. Move one phone at a time; still phones cost
+   nothing after their first picture.
+4. **A scene of your own: the model itself.** For a film or a scene with more than a phone, import
+   `createPixelModel()`, `createStudio()` and `disposePixelModel()` from
+   `material-next-web-components/marketing/ui/pixel-model.js` and render it in your own three.js
+   scene, with the light `createStudio()` gives as the environment. The model is in millimetres,
+   display towards +Z. Lay the live screen over it with a `CSS3DRenderer` layer drawn with the same
+   camera: place a frameless `ScreenHost` (430 x 957) on the display plane, 0.1 mm above the glass,
+   inset 2.9 mm from the sides and 2.6 mm from the top and bottom, its corners 8.2 mm round
+   (`PIXEL_9_PRO_XL` has every number), with `backface-visibility: hidden`.
+5. **Performance in your own scene.** Import three.js on demand; render only when the pose or the
+   size changes, never in an idle loop; cap the pixel ratio at 2 and lower it to 1 while the phone
+   moves; stop while the canvas is off screen; keep one WebGL context per page. With reduced motion
+   or without WebGL show `<mnw-device-frame>` head on.
+6. **Own the lifecycle.** `disposePixelModel(phone)` frees every geometry, material and texture the
+   model made (the logo texture stays yours); dispose the renderer and the environment with it.
 7. **Motion.** Turn the phone in as it arrives (from edge-on through three quarters to the front,
    with a tilt that settles), driven by scroll progress so it reverses cleanly.
-
-App Toolkit's hub ships the renderer as `src/kit/pixel-3d.js` (`createPixel3D(canvas, { modelUrl })`, then
-`attachScreen(element)`).
 
 ### Scroll-built pages
 

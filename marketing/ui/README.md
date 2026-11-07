@@ -89,16 +89,11 @@ checks the web migration; Android screenshot parity remains a separate campaign 
 
 ## 3D device
 
-`src/kit/pixel-3d.js` renders the Pixel 9 Pro XL in 3D with three.js (`createPixel3D(canvas)`, then
-`pose(turn)` from 0, the back, to 1, the front). `attachScreen(element)` puts a live screen (a
-frameless `ScreenHost`, 430 × 957) on its display through a CSS3D layer drawn with the same camera,
-so the real UI turns with the phone and stays interactive.
-
-The model is a BlenderKit Royalty Free asset, usable in our work but not redistributable, so this
-public repository never contains it. `npm run assets` copies it from a sibling `android-skills`
-checkout (or `ANDROID_SKILLS=/path/to/android-skills`) into ignored `public/models/`, with three.js's
-Draco decoder in `public/draco/`. Without it, keep the flat frame. The `marketing-ui` skill covers the
-technique and the scroll-built presentation rules.
+The phone is Material-Next's own Pixel 9 Pro XL, drawn in 3D by `<mnw-device-frame>` (Material-Next
+0.2.0 and later): every framed screen in the gallery, the prototype page, captures and the store
+listing uses it, with the live screen on its display. It needs no model file. For a phone that turns
+on scroll, set the frame's `yaw` and `pitch`; for a scene of your own, use `createPixelModel()` from
+`material-next-web-components/marketing/ui/pixel-model.js`. The `marketing-ui` skill covers both.
 
 ## Translated Screens (`src/screens/`)
 

@@ -4,12 +4,9 @@
 
 # Unreleased
 
-### Added
-
-- `src/kit/pixel-3d.js` renders the Pixel 9 Pro XL in 3D with three.js, with the live screen on its display (`attachScreen`, a CSS3D layer drawn with the same camera). The model stays in the private android-skills repository (BlenderKit Royalty Free, not redistributable); `npm run assets` copies it and the Draco decoder into ignored `public/`.
-
 ### Changed
 
+- Use Material-Next 0.2.0 from npm: every framed phone, in the gallery, the prototype page, captures and the store listing, is Material-Next's own 3D Pixel 9 Pro XL. The BlenderKit model, its Draco decoder and `src/kit/pixel-3d.js` are gone, and three.js comes with Material-Next.
 - Use Material Next `0.0.7` from npm for launcher Edit-mode and drag animations and compact drawer alignment.
 - Use Material Next 0.0.6 from npm. The gallery and each screen's prototype are one page (`mountMarketingHub`): opening a screen no longer reloads, and All screens or Back return where the gallery was scrolled. The gallery and the reference pages have no drawer, menu button or footer; the reference pages get a back button. The device fills the stage height, and the palette menu no longer makes the settings panel scroll.
 - Used Material Next 0.0.4 from npm for the simplified gallery, automatic detail frames, the shared copyright footer, a drawer whose footer stays put while its destinations scroll, and a launcher without App Toolkit.
