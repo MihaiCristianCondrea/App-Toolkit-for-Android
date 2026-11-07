@@ -1,0 +1,86 @@
+{
+  "schemaVersion": "3.0",
+  "campaign": {
+    "slug": "ruler-and-protractor",
+    "title": "App Toolkit Ruler and Protractor"
+  },
+  "software": "Android Studio",
+  "copy": {
+    "title": "App Toolkit: Ruler and Protractor",
+    "headline": "Lengths and angles on screen",
+    "description": "Explore a screen ruler and touch protractor in App Toolkit.",
+    "keywords": [
+      "App Toolkit",
+      "Android",
+      "screen ruler",
+      "protractor",
+      "measurement",
+      "angle",
+      "metric ruler",
+      "inch ruler"
+    ],
+    "hashtags": []
+  },
+  "files": {
+    "../listing/en-US/graphics/phone-screenshots/1-ruler.png": {
+      "title": "App Toolkit: ruler",
+      "altText": "Surface Ruler with centimetre and inch scales and a movable reading line"
+    },
+    "../listing/en-US/graphics/phone-screenshots/2-protractor.png": {
+      "title": "App Toolkit: protractor",
+      "altText": "Protractor displaying a 45 degree angle with its slider and presets"
+    },
+    "../listing/en-US/graphics/phone-screenshots/3-advanced.png": {
+      "title": "App Toolkit: advanced",
+      "altText": "Surface Ruler in Advanced mode with measurement settings"
+    },
+    "../listing/en-US/graphics/phone-screenshots/4-converter.png": {
+      "title": "App Toolkit: converter",
+      "altText": "Unit Converter showing a length conversion"
+    },
+    "../listing/en-US/graphics/phone-screenshots/5-measure.png": {
+      "title": "App Toolkit: measure",
+      "altText": "Measure workspace with ruler and protractor tools"
+    },
+    "../listing/en-US/graphics/tablet-screenshots/1-ruler.png": {
+      "title": "App Toolkit: ruler",
+      "altText": "Surface Ruler on a foldable"
+    },
+    "../listing/en-US/graphics/tablet-screenshots/2-protractor.png": {
+      "title": "App Toolkit: protractor",
+      "altText": "Protractor on a foldable"
+    },
+    "../listing/en-US/graphics/tablet-screenshots/3-advanced.png": {
+      "title": "App Toolkit: advanced",
+      "altText": "Advanced Surface Ruler settings on a foldable"
+    },
+    "../listing/en-US/graphics/tablet-screenshots/4-measure.png": {
+      "title": "App Toolkit: measure",
+      "altText": "Measure workspace on a foldable"
+    },
+    "../listing/en-US/graphics/desktop-screenshots/1-ruler.png": {
+      "title": "App Toolkit: ruler",
+      "altText": "Surface Ruler in a desktop window"
+    },
+    "../listing/en-US/graphics/desktop-screenshots/2-protractor.png": {
+      "title": "App Toolkit: protractor",
+      "altText": "Protractor in a desktop window"
+    },
+    "../listing/en-US/graphics/desktop-screenshots/3-advanced.png": {
+      "title": "App Toolkit: advanced",
+      "altText": "Advanced Surface Ruler settings in a desktop window"
+    },
+    "../listing/en-US/graphics/desktop-screenshots/4-measure.png": {
+      "title": "App Toolkit: measure",
+      "altText": "Measure workspace in a desktop window"
+    },
+    "../listing/en-US/graphics/feature-graphic/feature-graphic.png": {
+      "title": "App Toolkit: Ruler & Protractor",
+      "altText": "Ruler and Protractor, lengths and angles on screen, with measurement guides"
+    },
+    "../listing/en-US/graphics/icon/icon.png": {
+      "title": "App Toolkit icon",
+      "altText": "A cream toolbox with an amber handle, a wrench and a screwdriver"
+    }
+  }
+}

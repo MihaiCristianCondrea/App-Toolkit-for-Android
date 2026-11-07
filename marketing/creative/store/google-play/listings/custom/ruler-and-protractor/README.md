@@ -1,6 +1,6 @@
 # Ruler and Protractor custom listing
 
-Status: planned, incomplete. The English text and keyword candidates are drafts. The creative source, screenshots, feature graphic, icon and alt text have not yet been produced. Do not upload this listing.
+Status: planned, incomplete. A first creative render, alt text and metadata are present, but the composition and typography still need review. Do not upload this listing.
 
 ## Audience and positioning
 
@@ -14,4 +14,4 @@ The keyword list contains candidates, not measured search demand. Google Play Co
 
 ## Remaining work
 
-Verify the Marketing UI ruler and protractor against Android on each target window. Adapt the Water Eject composition, probing, verification and staged rendering workflow for a distinct measurement campaign. Produce and visually inspect all graphics and alternatives, add alt text and image metadata, then run the full marketing checks. Confirm production availability of the advertised app version before upload.
+Improve the phone sequence's visual variety and include Bubble Level. Investigate intermittent font-loading failures, inspect the revised graphics and run the full verification again. Confirm production availability of the advertised app version before upload.

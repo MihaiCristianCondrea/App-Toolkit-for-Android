@@ -1,0 +1,95 @@
+{
+  "screenshots": [
+    {
+      "id": "ruler",
+      "lines": [
+        "A ruler on",
+        "your screen"
+      ],
+      "highlight": "ruler",
+      "icon": "straighten",
+      "alt": "Surface Ruler with centimetre and inch scales and a movable reading line"
+    },
+    {
+      "id": "protractor",
+      "lines": [
+        "Measure angles",
+        "by touch"
+      ],
+      "highlight": "angles",
+      "icon": "architecture",
+      "alt": "Protractor displaying a 45 degree angle with its slider and presets"
+    },
+    {
+      "id": "advanced",
+      "lines": [
+        "Adjust your",
+        "ruler"
+      ],
+      "highlight": "ruler",
+      "icon": "tune",
+      "alt": "Surface Ruler in Advanced mode with measurement settings"
+    },
+    {
+      "id": "converter",
+      "lines": [
+        "Convert units",
+        "with ease"
+      ],
+      "highlight": "units",
+      "icon": "swap_horiz",
+      "alt": "Unit Converter showing a length conversion"
+    },
+    {
+      "id": "measure",
+      "lines": [
+        "Tools together",
+        "in App Toolkit"
+      ],
+      "highlight": "App Toolkit",
+      "icon": "grid_view",
+      "alt": "Measure workspace with ruler and protractor tools"
+    }
+  ],
+  "tabletScreenshots": [
+    {
+      "id": "ruler",
+      "alt": "Surface Ruler on a foldable"
+    },
+    {
+      "id": "protractor",
+      "alt": "Protractor on a foldable"
+    },
+    {
+      "id": "advanced",
+      "alt": "Advanced Surface Ruler settings on a foldable"
+    },
+    {
+      "id": "measure",
+      "alt": "Measure workspace on a foldable"
+    }
+  ],
+  "desktopScreenshots": [
+    {
+      "id": "ruler",
+      "alt": "Surface Ruler in a desktop window"
+    },
+    {
+      "id": "protractor",
+      "alt": "Protractor in a desktop window"
+    },
+    {
+      "id": "advanced",
+      "alt": "Advanced Surface Ruler settings in a desktop window"
+    },
+    {
+      "id": "measure",
+      "alt": "Measure workspace in a desktop window"
+    }
+  ],
+  "featureGraphic": {
+    "brand": "App Toolkit",
+    "title": "Ruler & Protractor",
+    "tagline": "Lengths and angles on screen"
+  }
+}
