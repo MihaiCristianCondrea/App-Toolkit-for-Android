@@ -1,0 +1,124 @@
+{
+  "screenshots": [
+    {
+      "id": "water-eject",
+      "lines": [
+        "A tone for",
+        "a wet speaker"
+      ],
+      "highlight": "speaker",
+      "icon": "water_drop",
+      "alt": "Water Eject ready to play a 165 Hz speaker tone"
+    },
+    {
+      "id": "water-running",
+      "lines": [
+        "Start the tone",
+        "stop when needed"
+      ],
+      "highlight": "stop",
+      "icon": "stop_circle",
+      "alt": "Water Eject playing a timed speaker tone with a stop control"
+    },
+    {
+      "id": "quick-tools",
+      "lines": [
+        "Everyday tools",
+        "close at hand"
+      ],
+      "highlight": "tools",
+      "icon": "grid_view",
+      "alt": "Quick Tools with a compass, bubble level and flashlight"
+    },
+    {
+      "id": "sos",
+      "lines": [
+        "Signal with",
+        "your flashlight"
+      ],
+      "highlight": "flashlight",
+      "icon": "flashlight_on",
+      "alt": "Morse and SOS controls for the flashlight"
+    },
+    {
+      "id": "measure",
+      "lines": [
+        "Measure and",
+        "convert units"
+      ],
+      "highlight": "Measure",
+      "icon": "straighten",
+      "alt": "Measure workspace with ruler, protractor and unit converter"
+    },
+    {
+      "id": "unit-converter",
+      "lines": [
+        "Convert units",
+        "on the go"
+      ],
+      "highlight": "Convert",
+      "icon": "swap_horiz",
+      "alt": "Unit Converter converting metres to centimetres"
+    },
+    {
+      "id": "play",
+      "lines": [
+        "Leave it",
+        "to chance"
+      ],
+      "highlight": "chance",
+      "icon": "casino",
+      "alt": "Play and Decide workspace with a wheel, coin and dice"
+    },
+    {
+      "id": "decision-wheel",
+      "lines": [
+        "Let the wheel",
+        "help you decide"
+      ],
+      "highlight": "wheel",
+      "icon": "rotate_right",
+      "alt": "Decision Wheel with four choices and Sushi selected"
+    }
+  ],
+  "tabletScreenshots": [
+    {
+      "id": "water-eject",
+      "alt": "Water Eject on a foldable"
+    },
+    {
+      "id": "quick-tools",
+      "alt": "Quick Tools on a foldable"
+    },
+    {
+      "id": "measure",
+      "alt": "Measure workspace on a foldable"
+    },
+    {
+      "id": "unit-converter",
+      "alt": "Unit Converter on a foldable"
+    }
+  ],
+  "desktopScreenshots": [
+    {
+      "id": "water-eject",
+      "alt": "Water Eject in a desktop window"
+    },
+    {
+      "id": "quick-tools",
+      "alt": "Quick Tools in a desktop window"
+    },
+    {
+      "id": "measure",
+      "alt": "Measure workspace in a desktop window"
+    },
+    {
+      "id": "unit-converter",
+      "alt": "Unit Converter in a desktop window"
+    }
+  ],
+  "featureGraphic": {
+    "title": "App Toolkit",
+    "tagline": "A speaker tone and everyday tools"
+  }
+}

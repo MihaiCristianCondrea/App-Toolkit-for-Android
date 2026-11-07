@@ -1,0 +1,17 @@
+{
+  "id": "speaker-water-eject",
+  "audience": "People looking for a simple speaker tone after their phone speaker gets wet",
+  "targeting": {
+    "url": true,
+    "countries": [],
+    "keywords": "keywords.txt",
+    "googleAds": false
+  },
+  "status": "planned",
+  "log": [
+    {
+      "date": "2026-11-07",
+      "note": "Drafted the English listing and aquatic creative. Graphics await a faithful Water Eject screen and production version verification."
+    }
+  ]
+}

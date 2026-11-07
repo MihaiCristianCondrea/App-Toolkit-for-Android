@@ -1,0 +1,100 @@
+{
+  "schemaVersion": "3.0",
+  "campaign": {
+    "slug": "speaker-water-eject",
+    "title": "App Toolkit speaker water eject listing"
+  },
+  "software": "Android Studio",
+  "copy": {
+    "title": "App Toolkit: Water Eject",
+    "headline": "A tone for a wet speaker",
+    "description": "App Toolkit offers a timed 165 Hz speaker tone that may help dislodge droplets, alongside everyday tools for measuring, signaling and deciding.",
+    "keywords": [
+      "App Toolkit",
+      "Android",
+      "water eject",
+      "speaker cleaner",
+      "wet speaker",
+      "speaker tone",
+      "water in phone speaker",
+      "phone utilities",
+      "compass",
+      "bubble level"
+    ],
+    "hashtags": []
+  },
+  "files": {
+    "../listing/en-US/graphics/phone-screenshots/1-water-eject.png": {
+      "title": "App Toolkit: water eject",
+      "altText": "Water Eject ready to play a 165 Hz speaker tone"
+    },
+    "../listing/en-US/graphics/phone-screenshots/2-water-running.png": {
+      "title": "App Toolkit: water running",
+      "altText": "Water Eject playing a timed speaker tone with a stop control"
+    },
+    "../listing/en-US/graphics/phone-screenshots/3-quick-tools.png": {
+      "title": "App Toolkit: quick tools",
+      "altText": "Quick Tools with a compass, bubble level and flashlight"
+    },
+    "../listing/en-US/graphics/phone-screenshots/4-sos.png": {
+      "title": "App Toolkit: sos",
+      "altText": "Morse and SOS controls for the flashlight"
+    },
+    "../listing/en-US/graphics/phone-screenshots/5-measure.png": {
+      "title": "App Toolkit: measure",
+      "altText": "Measure workspace with ruler, protractor and unit converter"
+    },
+    "../listing/en-US/graphics/phone-screenshots/6-unit-converter.png": {
+      "title": "App Toolkit: unit converter",
+      "altText": "Unit Converter converting metres to centimetres"
+    },
+    "../listing/en-US/graphics/phone-screenshots/7-play.png": {
+      "title": "App Toolkit: play",
+      "altText": "Play and Decide workspace with a wheel, coin and dice"
+    },
+    "../listing/en-US/graphics/phone-screenshots/8-decision-wheel.png": {
+      "title": "App Toolkit: decision wheel",
+      "altText": "Decision Wheel with four choices and Sushi selected"
+    },
+    "../listing/en-US/graphics/tablet-screenshots/1-water-eject.png": {
+      "title": "App Toolkit: water eject",
+      "altText": "Water Eject on a foldable"
+    },
+    "../listing/en-US/graphics/tablet-screenshots/2-quick-tools.png": {
+      "title": "App Toolkit: quick tools",
+      "altText": "Quick Tools on a foldable"
+    },
+    "../listing/en-US/graphics/tablet-screenshots/3-measure.png": {
+      "title": "App Toolkit: measure",
+      "altText": "Measure workspace on a foldable"
+    },
+    "../listing/en-US/graphics/tablet-screenshots/4-unit-converter.png": {
+      "title": "App Toolkit: unit converter",
+      "altText": "Unit Converter on a foldable"
+    },
+    "../listing/en-US/graphics/desktop-screenshots/1-water-eject.png": {
+      "title": "App Toolkit: water eject",
+      "altText": "Water Eject in a desktop window"
+    },
+    "../listing/en-US/graphics/desktop-screenshots/2-quick-tools.png": {
+      "title": "App Toolkit: quick tools",
+      "altText": "Quick Tools in a desktop window"
+    },
+    "../listing/en-US/graphics/desktop-screenshots/3-measure.png": {
+      "title": "App Toolkit: measure",
+      "altText": "Measure workspace in a desktop window"
+    },
+    "../listing/en-US/graphics/desktop-screenshots/4-unit-converter.png": {
+      "title": "App Toolkit: unit converter",
+      "altText": "Unit Converter in a desktop window"
+    },
+    "../listing/en-US/graphics/feature-graphic/feature-graphic.png": {
+      "title": "App Toolkit: Water Eject and everyday tools",
+      "altText": "App Toolkit with Water Eject and the Measure workspace"
+    },
+    "../listing/en-US/graphics/icon/icon.png": {
+      "title": "App Toolkit icon",
+      "altText": "A cream toolbox with an amber handle, a wrench and a screwdriver"
+    }
+  }
+}
