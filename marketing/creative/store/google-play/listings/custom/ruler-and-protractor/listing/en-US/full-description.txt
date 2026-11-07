@@ -1,0 +1,23 @@
+App Toolkit brings a screen ruler and an interactive protractor together for everyday measurements. Measure a small object against your phone's screen or set an angle by touch.
+
+Surface Ruler
+
+Use centimetre and millimetre or inch scales, or show both together. In Simple mode, drag the marker to read a length from zero. Advanced mode adds a two-point measurement range and settings for the scale edge, zero position and inch subdivisions.
+
+Adjust the display scale against a physical ruler using the calibration control. Ruler layouts adapt to portrait and landscape screens.
+
+Protractor
+
+Set an angle from 0° to 180° by touching or dragging on the screen. The full-screen display shows the angle and its classification. Use the slider or the 0°, 45°, 90° and 180° presets to select an angle.
+
+More measurement tools
+
+Use Bubble Level to check your phone's tilt, or Unit Converter to convert between supported units of length and other quantities.
+
+How to use
+
+Open the Measure workspace and select Surface Ruler or Protractor. Place a small object against the ruler's screen edge, or use the protractor display to set an angle.
+
+Accuracy and limitations
+
+The ruler is limited to the size of your screen. Display characteristics vary by device, so compare its scale with a physical ruler and adjust calibration when needed. These tools are for everyday reference and do not guarantee measurement accuracy. The protractor is an on-screen tool and does not measure angles with the camera.

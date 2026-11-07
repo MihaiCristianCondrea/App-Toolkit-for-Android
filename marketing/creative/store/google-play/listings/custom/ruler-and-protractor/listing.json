@@ -1,0 +1,18 @@
+{
+  "id": "ruler-and-protractor",
+  "audience": "People who need an on-screen ruler and an interactive protractor for everyday measurements",
+  "targeting": {
+    "url": true,
+    "countries": [],
+    "keywords": "keywords.txt",
+    "googleAds": false
+  },
+  "status": "planned",
+  "log": [
+    {
+      "date": "2026-11-07",
+      "status": "planned",
+      "note": "Drafted English measurement listing and search candidates; artwork, native fidelity review and production rollout confirmation remain outstanding."
+    }
+  ]
+}
