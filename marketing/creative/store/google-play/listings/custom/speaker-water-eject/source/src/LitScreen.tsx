@@ -12,7 +12,8 @@ export const ready = setup({ assetBase, marketingAssetBase: `${assetBase}materia
 export const useFonts = () => {
   useLayoutEffect(() => {
     const handle = delayRender("Loading fonts");
-    ready.then(() => continueRender(handle), cancelRender);
+    ready.then(() => new Promise<void>(resolve => requestAnimationFrame(() => requestAnimationFrame(() => resolve()))))
+      .then(() => continueRender(handle), cancelRender);
   }, []);
 };
 
@@ -33,7 +34,8 @@ export const LitScreen: React.FC<{
     const handle = delayRender(`Rendering ${id}`);
     ready
       // No-op navigation: a still never follows a tap. Screenshots never show ads.
-      .then(() => mount(ref.current!, id, { go: () => {}, set: () => {}, ...JSON.parse(key) }, { frame, window, showAds: false }))
+      .then(() => mount(ref.current!, id, { go: () => {}, set: () => {}, ...JSON.parse(key), waterCapture: true }, { frame, window, showAds: false }))
+      .then(async () => { ref.current!.querySelectorAll("mnw-android-screen").forEach(screen => screen.removeAttribute("interactive")); await document.fonts.ready; await Promise.all([...ref.current!.querySelectorAll("mnw-device-frame")].map((frame: any) => frame.updateComplete)); })
       .then(() => Promise.all([...ref.current!.querySelectorAll("img")].map((img) => img.decode())))
       .then(() => continueRender(handle), cancelRender);
   }, [id, key, frame, window]);

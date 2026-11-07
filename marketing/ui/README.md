@@ -149,3 +149,7 @@ Decision Wheel no longer has preset chips. SOS uses separate SOS and Morse-messa
 ## Native ad previews
 
 The prototype's Show ads switch reveals one shared sponsored-content layout on each overview: Quick Tools after Sensors, Measure between Convert & split and Count & time, and Play & Decide below Chance. Search hides these previews. They are static layout samples, not live ad requests, and are absent when Show ads is off.
+
+## Water Eject captures
+
+`waterCapture: true` holds an explicit `waterRunning` / `waterSeconds` state without starting audio, creating a timer or resetting the running preview. Use it for stills and deterministic checks. The idle and running readouts, 200dp visual, button labels, guidance and note follow `WaterEjectTool.kt` and the sample's English resources. `scripts/check-water-eject.mjs` checks ready and running copy, a stable countdown and silent capture behavior.

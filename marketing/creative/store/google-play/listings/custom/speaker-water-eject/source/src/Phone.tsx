@@ -90,6 +90,9 @@ export const PhonePanorama: React.FC<{ locale: string; only?: number }> = ({ loc
   const { seams, scatter, waves, dots } = layout(n);
   return (
     <AbsoluteFill style={{ background: GROUND, width: n * WIDTH, fontFamily: FONT, overflow: "hidden" }}>
+      <svg width={n * WIDTH} height={HEIGHT} style={{position:"absolute",left:0,top:0}} aria-hidden>
+        <path d={`M0 1720 Q540 1510 1080 1720 T2160 1720 T3240 1720 T4320 1720 T5400 1720 T6480 1720 T7560 1720 T8640 1720 V1920 H0Z`} fill="#BFEAF5"/>
+      </svg>
       {scatter.map((p, i) => <Shape key={`s${i}`} {...p} />)}
       {waves.map(([x, y, w, r], i) => <Wave key={`w${i}`} x={x} y={y} width={w} rotate={r} color="#4B9ECA" />)}
       {dots.map(([x, y], i) => <Dots key={`d${i}`} x={x} y={y} color="#3B87B1" />)}

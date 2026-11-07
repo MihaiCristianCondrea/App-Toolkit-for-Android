@@ -7,7 +7,8 @@
     "assets": "node scripts/sync-assets.mjs",
     "dev": "npm run assets && remotion studio",
     "render": "npm run assets && node scripts/render.mjs",
-    "lint": "tsc"
+    "lint": "tsc",
+    "metadata": "node scripts/metadata.mjs"
   },
   "dependencies": {
     "@remotion/bundler": "4.0.529",

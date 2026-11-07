@@ -17,6 +17,8 @@
 
 ### Fixed
 
+- Water Eject previews match the Android readout, visual size, button labels and guidance. Stills can hold a running countdown without starting audio or resetting the preview.
+
 - Keep Open random app 16px above navigation in phone, fold and desktop previews, including three-button navigation and RTL. Browser checks use fixture data to verify its bounds.
 
 - The marketing launchers refresh dependencies after updates even when `node_modules` already exists. Startup stops on installation errors, and the Windows launcher keeps the error visible.

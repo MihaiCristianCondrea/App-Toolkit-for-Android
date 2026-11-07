@@ -1,9 +1,10 @@
-Water in your phone speaker? App Toolkit includes Water Eject, a simple speaker tone that may help dislodge droplets after a splash.
+Wet speaker after a splash? Water Eject in App Toolkit plays a 165 Hz speaker tone that may help dislodge droplets. Start a short cycle, watch the timer and stop whenever you need.
 
-Open Water Eject, point the speaker downwards and start at a comfortable volume. The app plays a 165 Hz tone for up to 30 seconds. You can stop the cycle whenever you want.
+A simple speaker tone
+Open Water Eject from Quick Tools. Point the speaker downwards and start at a comfortable volume. Tap Start 30-second cycle to play the tone. The cycle lasts up to 30 seconds, with a Stop cycle button available while it runs.
 
-A sound cannot guarantee water removal, repair water damage or make your phone waterproof. Follow your device manufacturer's guidance if your phone gets wet.
+Know what it can do
+Water Eject uses sound through your phone's speaker. It cannot guarantee water removal, repair water damage or make your phone waterproof. Follow your device manufacturer's guidance after water exposure.
 
-More tools for everyday use
-
-App Toolkit also brings together a compass, bubble level, flashlight controls, ruler, unit converter and decision wheel. Find practical tools in one app, with layouts that adapt to your screen.
+Useful beyond the splash
+App Toolkit also includes a compass, bubble level, flashlight controls, ruler and unit converter. Keep practical tools together in an app with layouts that adapt to phones and larger screens.

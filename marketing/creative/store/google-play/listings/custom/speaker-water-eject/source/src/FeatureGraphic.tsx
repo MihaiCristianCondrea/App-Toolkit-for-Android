@@ -7,7 +7,7 @@ import { STRINGS } from "./strings";
 import { FONT } from "./theme";
 
 // 1024 x 500. The name and one line, centred (the part Play never crops); real screens at the sides, without a device
-// frame; a strong amber ground; no icon, badge or device.
+// frame; an aquatic ground; no icon, badge or device.
 const SIDE: React.CSSProperties = { position: "absolute", width: 430, height: 957, transformOrigin: "0 0", borderRadius: 28, overflow: "hidden", zIndex: 1, boxShadow: "0 30px 50px rgba(58, 38, 0, .32)" };
 
 export const FeatureGraphic: React.FC<{ locale: string }> = ({ locale }) => {
@@ -22,11 +22,11 @@ export const FeatureGraphic: React.FC<{ locale: string }> = ({ locale }) => {
         <LitScreen id={SCREENS["water-eject"][0]} state={SCREENS["water-eject"][1]} frame={false} style={{ width: 430, height: 957 }} />
       </div>
       <div style={{ ...SIDE, left: 806, top: 44, transform: "scale(.6) rotate(6deg)" }}>
-        <LitScreen id={SCREENS.measure[0]} state={SCREENS.measure[1]} frame={false} style={{ width: 430, height: 957 }} />
+        <LitScreen id={SCREENS["water-running"][0]} state={SCREENS["water-running"][1]} frame={false} style={{ width: 430, height: 957 }} />
       </div>
       <div style={{ position: "absolute", left: "50%", top: "50%", transform: "translate(-50%, -50%)", width: 520, textAlign: "center", zIndex: 2 }}>
         <h1 style={{ margin: 0, fontSize: 72, lineHeight: 1, letterSpacing: -2, fontWeight: 700 }}>{title}</h1>
-        <p style={{ margin: "18px auto 0", maxWidth: 400, textWrap: "balance", fontSize: 26, lineHeight: 1.3, fontWeight: 500 }}>{tagline}</p>
+        <p style={{ margin: "18px auto 0", maxWidth: 400, textWrap: "balance", fontSize: 26, whiteSpace: "pre-line", lineHeight: 1.3, fontWeight: 500 }}>{tagline}</p>
       </div>
     </AbsoluteFill>
   );

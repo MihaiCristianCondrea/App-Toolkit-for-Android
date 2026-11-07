@@ -1,5 +1,5 @@
 import React from "react";
-import { shapeUrl } from "../../../../../../../ui/src/kit/assets.js";
+import { shapeUrl } from "../../../../../../../../ui/src/kit/assets.js";
 
 /** A MaterialShape from the UI kit (the same curves its tool badges use), filled with one colour. */
 export const Shape: React.FC<{ name: string; x: number; y: number; size: number; color: string; rotate?: number }> = ({ name, x, y, size, color, rotate = 0 }) => {
@@ -9,13 +9,15 @@ export const Shape: React.FC<{ name: string; x: number; y: number; size: number;
 
 export const Wave: React.FC<{ x: number; y: number; width: number; rotate: number; color: string }> = ({ x, y, width, rotate, color }) => (
   <svg style={{ position: "absolute", left: x, top: y, width, transform: `rotate(${rotate}deg)` }} viewBox="0 0 400 60" fill="none">
-    <path d="M6 30 q25 -30 50 0 t50 0 t50 0 t50 0 t50 0 t50 0 t50 0" stroke={color} strokeWidth="9" strokeLinecap="round" />
+    <rect x="80" y="8" width="160" height="44" rx="22" stroke={color} strokeWidth="5"/>
+    {[110,140,170,200].map(x=><path key={x} d={`M${x} 22v16`} stroke={color} strokeWidth="5" strokeLinecap="round"/>)}
+    <path d="M55 15q-18 15 0 30M30 5q-30 25 0 50M267 15q18 15 0 30M292 5q30 25 0 50" stroke={color} strokeWidth="5" strokeLinecap="round"/>
   </svg>
 );
 
 export const Dots: React.FC<{ x: number; y: number; color: string }> = ({ x, y, color }) => (
   <svg style={{ position: "absolute", left: x, top: y }} width="96" height="96" viewBox="0 0 96 96">
-    {[0, 1, 2].flatMap((r) => [0, 1, 2].map((c) => <circle key={`${r}${c}`} cx={16 + c * 32} cy={16 + r * 32} r="9" fill={color} />))}
+    <path d="M48 8C40 24 20 43 20 60a28 28 0 0 0 56 0C76 43 56 24 48 8Z" fill={color}/><path d="M32 60q0 16 16 16" stroke="#E5F7FC" strokeWidth="5" fill="none" strokeLinecap="round"/>
   </svg>
 );
 

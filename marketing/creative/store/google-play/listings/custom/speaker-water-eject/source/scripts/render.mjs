@@ -9,8 +9,6 @@ import { mkdir, readFile, readdir, rm, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
-// Remove this guard only after the Water Eject preview matches the Android screen and running state.
-throw new Error("Water Eject preview does not yet match the Android app. See source/README.md.");
 
 const root = fileURLToPath(new URL("../", import.meta.url));
 const listing = path.resolve(root, "..", "listing");

@@ -1,6 +1,6 @@
 # Speaker Water Eject custom listing
 
-Status: planned. English copy and a listing-local visual source are drafted. Graphics are not upload-ready; see [source/README.md](source/README.md) for the fidelity and production-availability checks.
+Status: planned, not published. The English creative package contains 8 phone, 4 tablet and 4 desktop screenshots, a feature graphic and the official icon. Upload remains conditional on confirming production availability of version 26.11.02 in Play Console. The public Play page retrieved on November 7 still showed October 3 information and did not verify the rollout.
 
 ## Audience and positioning
 
@@ -14,4 +14,10 @@ The keywords describe intent, not measured demand. The prior Play reports did no
 
 ## Creative direction
 
-A pale aquatic blue background, blue Material shapes and the existing centered caption style distinguish the listing while retaining the App Toolkit look. The planned first screen shows Water Eject, followed by its running state and useful related tools. The existing Material-Next Pixel frame is used where the app UI remains readable. See `source/` for the planned sequence and the blocker.
+A pale aquatic blue ground, rounded Material shapes, original speaker-grille and droplet illustrations and a low water contour carry the sequence across its seams. The official amber icon and centered caption pills retain the App Toolkit identity. Material-Next 0.2.0 supplies the Pixel 9 Pro XL, Fold and desktop device frames.
+
+The first five phone images address the immediate need: Water Eject, the fixed frequency, the timed cycle, the stop control and the guidance. Quick Tools, Unit Converter and Bubble Level follow as secondary value. The large-screen sets lead with ready and running Water Eject. No image promises a repair or shows a successful water-removal result.
+
+## Verification and limits
+
+The renderer, TypeScript check, targeted Water Eject browser check, listing validator and metadata injection/readback were run. All 18 image files are present. See source/README.md for commands and full check outcomes. Web screenshots were compared against Compose source and resources; a connected-device visual comparison and production rollout confirmation remain outstanding. Search targeting still needs to be selected from the terms Play Console makes available.

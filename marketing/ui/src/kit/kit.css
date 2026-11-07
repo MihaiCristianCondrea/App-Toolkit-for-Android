@@ -1999,3 +1999,10 @@ mnw-android-screen,
 @container (min-width:600px) { .qt-app-card { width:calc((100cqw - 12px) / 2); } }
 @container (min-width:804px) { .qt-app-card { width:calc((100cqw - 24px) / 3); } }
 @container (min-width:1076px) { .qt-app-card { width:calc((100cqw - 36px) / 4); } }
+
+/* WaterEjectTool.kt: 200dp visual, displayMedium readout and full-width medium button. */
+.water-eject { padding:0; }
+.water-visual { flex:none; }
+.water-readout strong { font:400 45px/52px var(--md-ref-typeface-brand); }
+.water-eject md-filled-button { width:100%; --md-filled-button-container-height:56px; }
+.water-eject .water-note { font-size:12px; line-height:16px; }

@@ -1,13 +1,41 @@
 # Speaker Water Eject listing source
 
-This listing uses the default listing's Remotion renderer as a local starting point, with an aquatic palette and a Water Eject first screen. It uses the shared Marketing UI and Material-Next device frame, not a separate device model. Its outputs belong only to this listing.
+The English package has eight 1080 x 1920 phone screenshots, four 3840 x 2160 tablet screenshots, four 3840 x 2160 desktop screenshots, a 1024 x 500 feature graphic and a 512 x 512 official icon. Rendered files are in ../listing/en-US. Review strips are in ignored output/.
 
-## Blocked before rendering
+## Render and verify
 
-The Marketing UI Water Eject panel does not match the Android implementation: it shows a 30-second readout and extra playing text when idle, while Android shows 165 Hz; its guidance and note also differ. Its running preview resets itself unless an audio session has started. No Android device was connected to compare a rendered capture. Do not render or upload these planned graphics until the Water Eject UI and running state match the app and have been visually checked against it.
+From this folder:
 
-The Play page did not establish that version 26.11.02 is available to the intended audience. Confirm rollout in Play Console before publishing images of its features.
+```text
+npm ci
+npm run lint
+npm run render -- en-US
+npm run metadata
+```
 
-After resolving those issues, remove the guard in `scripts/render.mjs`. From this folder run `npm install`, `npm run lint` and `npm run render -- en-US`. Inspect every image, review the per-file `metadata.json`, run the metadata skill's injector and check, and run the Play listing validator. Rendering overwrites this listing's graphics folders.
+Run the Play validator from marketing/creative/store/google-play with `node scripts/validate.mjs`. Run the focused browser check from marketing/ui with `node scripts/check-water-eject.mjs`; set CHROMIUM_PATH to an installed Chromium executable. The broad check is `npm run qa` there.
 
-The first two planned images show the ready and running Water Eject states. The remaining images introduce the surrounding toolbox. Captions and alt text are in `strings/en-US.json`; layouts are in `src/`.
+Rendering overwrites only this listing's graphics folders. Metadata tagging runs after rendering and verifies decoded pixels are unchanged. Its file manifest requires all 18 outputs. The Play validator alone does not require graphics for custom listings.
+
+## Design and fidelity
+
+The first five phone screenshots explain one feature, rather than switching to unrelated tools after the opening image. Captions retain the two-line pill treatment. Original vector speaker grilles and droplets, a low water contour and rounded MaterialShapes form the aquatic strip. The app keeps its captured palette. The existing amber toolbox icon retains the brand.
+
+Water Eject follows WaterEjectTool.kt: a 200dp visual, 165 Hz when idle, remaining seconds while running, native guidance and note, full-width Start 30-second cycle or Stop cycle. Capture state uses waterCapture to hold the countdown without audio. The frame's updateComplete is awaited and the preview's entrance animation is disabled for still captures, so its note is not cropped mid-transition.
+
+The shared Marketing UI owns UI parity and state rendering. Listing copy, composition, artwork and metadata remain local. With only two visual sources, keep the small renderer explicit; a future shared runner can take the source/output paths and strings as inputs when another listing demonstrates the same needs. Do not couple custom artwork to the default listing or introduce a configuration framework now.
+
+## Publication gate
+
+The creative package targets application version 26.11.02. The public Play page retrieved November 7 showed older content and did not establish that version's availability. Confirm its production rollout for the intended audience in Play Console before upload. No device was connected for a side-by-side native capture; fidelity was checked against Compose and Android strings.
+
+## Validation results
+
+- All 18 final graphics rendered and were visually inspected.
+- TypeScript and the Google Play listing validator passed.
+- All 147 existing Marketing UI browser checks passed.
+- The focused Water Eject check passed for idle/running copy, silent capture and countdown stability.
+- Metadata tagging and readback passed for all 18 files; decoded pixels were preserved.
+- git diff --check passed.
+
+The renderer logged nonfatal local font-request warnings. The final images were inspected for visible text and icon rendering. No connected Android device comparison was performed.

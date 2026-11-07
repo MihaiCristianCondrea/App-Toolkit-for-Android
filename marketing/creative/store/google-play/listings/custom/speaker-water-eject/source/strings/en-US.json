@@ -3,96 +3,96 @@
     {
       "id": "water-eject",
       "lines": [
-        "A tone for",
-        "a wet speaker"
+        "Water Eject",
+        "for wet speakers"
       ],
-      "highlight": "speaker",
+      "highlight": "Water Eject",
       "icon": "water_drop",
-      "alt": "Water Eject ready to play a 165 Hz speaker tone"
+      "alt": "Water Eject ready with its 165 Hz tone and Start 30-second cycle button"
+    },
+    {
+      "id": "water-frequency",
+      "lines": [
+        "One simple",
+        "165 Hz tone"
+      ],
+      "highlight": "165 Hz",
+      "icon": "water_drop",
+      "alt": "Water Eject showing its fixed 165 Hz tone and guidance"
     },
     {
       "id": "water-running",
       "lines": [
-        "Start the tone",
-        "stop when needed"
+        "A short cycle",
+        "with a timer"
       ],
-      "highlight": "stop",
-      "icon": "stop_circle",
-      "alt": "Water Eject playing a timed speaker tone with a stop control"
+      "highlight": "timer",
+      "icon": "water_drop",
+      "alt": "Water Eject running with 20 seconds remaining and Stop cycle visible"
+    },
+    {
+      "id": "water-stop",
+      "lines": [
+        "Stop the tone",
+        "when you need"
+      ],
+      "highlight": "Stop",
+      "icon": "water_drop",
+      "alt": "Water Eject with 8 seconds remaining and a full-width Stop cycle control"
+    },
+    {
+      "id": "water-guidance",
+      "lines": [
+        "Clear guidance",
+        "before you start"
+      ],
+      "highlight": "guidance",
+      "icon": "water_drop",
+      "alt": "Water Eject with speaker-down guidance and the note about water damage"
     },
     {
       "id": "quick-tools",
       "lines": [
-        "Everyday tools",
+        "More tools",
         "close at hand"
       ],
       "highlight": "tools",
       "icon": "grid_view",
-      "alt": "Quick Tools with a compass, bubble level and flashlight"
-    },
-    {
-      "id": "sos",
-      "lines": [
-        "Signal with",
-        "your flashlight"
-      ],
-      "highlight": "flashlight",
-      "icon": "flashlight_on",
-      "alt": "Morse and SOS controls for the flashlight"
-    },
-    {
-      "id": "measure",
-      "lines": [
-        "Measure and",
-        "convert units"
-      ],
-      "highlight": "Measure",
-      "icon": "straighten",
-      "alt": "Measure workspace with ruler, protractor and unit converter"
+      "alt": "Quick Tools with live compass, level and flashlight widgets"
     },
     {
       "id": "unit-converter",
       "lines": [
         "Convert units",
-        "on the go"
+        "in a moment"
       ],
       "highlight": "Convert",
-      "icon": "swap_horiz",
-      "alt": "Unit Converter converting metres to centimetres"
+      "icon": "straighten",
+      "alt": "Unit Converter converting one metre to centimetres"
     },
     {
-      "id": "play",
+      "id": "level",
       "lines": [
-        "Leave it",
-        "to chance"
+        "Check a surface",
+        "with the level"
       ],
-      "highlight": "chance",
-      "icon": "casino",
-      "alt": "Play and Decide workspace with a wheel, coin and dice"
-    },
-    {
-      "id": "decision-wheel",
-      "lines": [
-        "Let the wheel",
-        "help you decide"
-      ],
-      "highlight": "wheel",
-      "icon": "rotate_right",
-      "alt": "Decision Wheel with four choices and Sushi selected"
+      "highlight": "level",
+      "icon": "straighten",
+      "alt": "Bubble Level with roll and pitch readings"
     }
   ],
   "tabletScreenshots": [
     {
       "id": "water-eject",
-      "alt": "Water Eject on a foldable"
+      "alt": "Water Eject ready on a foldable with the adaptive navigation rail"
+    },
+    {
+      "id": "water-running",
+      "alt": "Water Eject running on a foldable with 20 seconds remaining"
     },
     {
       "id": "quick-tools",
-      "alt": "Quick Tools on a foldable"
-    },
-    {
-      "id": "measure",
-      "alt": "Measure workspace on a foldable"
+      "alt": "Quick Tools in the wide foldable layout"
     },
     {
       "id": "unit-converter",
@@ -102,15 +102,15 @@
   "desktopScreenshots": [
     {
       "id": "water-eject",
-      "alt": "Water Eject in a desktop window"
+      "alt": "Water Eject ready in the desktop layout"
+    },
+    {
+      "id": "water-running",
+      "alt": "Water Eject running in the desktop layout"
     },
     {
       "id": "quick-tools",
-      "alt": "Quick Tools in a desktop window"
-    },
-    {
-      "id": "measure",
-      "alt": "Measure workspace in a desktop window"
+      "alt": "Quick Tools with the desktop navigation drawer"
     },
     {
       "id": "unit-converter",
@@ -119,6 +119,6 @@
   ],
   "featureGraphic": {
     "title": "App Toolkit",
-    "tagline": "A speaker tone and everyday tools"
+    "tagline": "Water Eject\nA simple 165 Hz speaker tone"
   }
 }

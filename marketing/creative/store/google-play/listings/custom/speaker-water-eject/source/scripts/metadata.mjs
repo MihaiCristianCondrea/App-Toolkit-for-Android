@@ -1,0 +1,13 @@
+import {readFile, access} from 'node:fs/promises';
+import {execFileSync} from 'node:child_process';
+import {fileURLToPath} from 'node:url';
+import path from 'node:path';
+const root=fileURLToPath(new URL('../',import.meta.url));
+const manifest=path.join(root,'metadata.json');
+const data=JSON.parse(await readFile(manifest,'utf8'));
+const files=Object.keys(data.files).map(file=>path.resolve(root,file));
+if(files.length!==18) throw Error('Expected 8 phone, 4 tablet, 4 desktop, feature graphic and icon.');
+await Promise.all(files.map(file=>access(file)));
+const injector=fileURLToPath(new URL('../../../../../../../../skills/built-in/metadata/scripts/inject_metadata.py',import.meta.url));
+const python=process.platform==='win32'?'python':'python3';
+for(const extra of [[],['--check']]) execFileSync(python,[injector,'--manifest',manifest,...extra,...files],{stdio:'inherit'});
