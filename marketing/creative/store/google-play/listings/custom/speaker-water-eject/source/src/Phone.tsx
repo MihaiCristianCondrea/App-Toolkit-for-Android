@@ -4,6 +4,7 @@ import { LitScreen, useFonts } from "./LitScreen";
 import { SCREENS } from "./screens";
 import { STRINGS } from "./strings";
 import { WaterArt, type Ripple } from "./WaterArt";
+import { Wave } from "./Wave";
 import { FONT, INK, ON_PILL, PILL } from "./theme";
 
 export const WIDTH=1080,HEIGHT=1920;
@@ -15,31 +16,25 @@ const SAFE={left:40,right:1040,top:360,bottom:1880};
 const BLEED={left:-1200,right:2280,top:360,bottom:3000};
 const FRAME_W=465.23;
 
-/** The one phone in a shot: where it stands, how large, its turn, and whether it may run off the edge. */
-type Device={x:number;top:number;scale:number;yaw?:number;pitch?:number;bleed?:boolean};
-type Shot={device:Device;ripples:Ripple[]};
+/** A device in a shot: its screen (a key of SCREENS, the shot's own by default), where it stands, how large, its turn. */
+type Device={screen?:string;x:number;top:number;scale:number;yaw?:number;pitch?:number;bleed?:boolean;detail?:"guidance"};
+/** A shot: one or two devices, never the same screen twice, its ripples, and an illustrated wave from a speaker. */
+type Shot={devices:Device[];ripples:Ripple[];wave?:{x:number;y:number}};
 
-// One phone and one screen per image. The set varies through framing, the way a designer sequences a story: a whole
-// hero, then closer and closer views that run off the bottom or a side, each with its rings in a new place. The Water
-// Eject story (1 to 5) carries the ripples, each set spilling into its neighbours; the toolbox (6 to 8) keeps only the
-// last faint rings. Poses are turns a person would make to show a phone, never a roll.
+// Five shots, each with its own job. The hero sells the metaphor (a wave rising from the speaker); the product shot
+// shows the 165 Hz screen up close; two phones show the cycle ready and running; the guidance sits at reading size;
+// two tools show the rest of the toolbox. Ripples link neighbouring shots. Poses are turns, never a roll.
 const SHOTS:Shot[]=[
- // 1 Hero: the whole phone, straight on, rings rising from its speaker.
- {device:{x:540,top:420,scale:1.36},ripples:[{x:540,y:1780,reach:1250,strength:1}]},
- // 2 The tone: turned to its edge, set right so the rings travel on the left.
- {device:{x:600,top:440,scale:1.4,yaw:-24,pitch:3},ripples:[{x:280,y:1380,reach:1150,strength:.95}]},
- // 3 Up to 30 seconds: close and centred, the bezel running off the bottom, the countdown at the heart of the image.
- {device:{x:540,top:400,scale:1.55,bleed:true},ripples:[{x:540,y:1560,reach:900,strength:.55}]},
- // 4 Control: turned the other way and running off the left edge, Stop in full view.
- {device:{x:280,top:440,scale:1.5,yaw:16,pitch:2,bleed:true},ripples:[{x:900,y:1700,reach:1000,strength:.8}]},
- // 5 Guidance: running off the right edge, its guidance in full view at reading size.
- {device:{x:800,top:400,scale:1.5,yaw:-10,bleed:true},ripples:[{x:150,y:1850,reach:900,strength:.6}]},
- // 6 The toolbox: the whole phone again, a breath after the close views.
- {device:{x:540,top:430,scale:1.34,yaw:-10},ripples:[{x:-40,y:1820,reach:900,strength:.4}]},
- // 7 One everyday tool, close and running off the left edge.
- {device:{x:280,top:440,scale:1.5,yaw:14,pitch:2,bleed:true},ripples:[]},
- // 8 Bookend: whole and straight on, the last faint rings.
- {device:{x:540,top:430,scale:1.34},ripples:[{x:540,y:1880,reach:900,strength:.4}]},
+ // 1 Hero: a large turned phone, the wave rising from its speaker.
+ {devices:[{x:560,top:410,scale:1.2,yaw:-22,pitch:4}],ripples:[{x:1020,y:1500,reach:900,strength:.5}],wave:{x:540,y:1590}},
+ // 2 Product: close and straight, the 165 Hz screen at the heart of the image, rings from the speaker.
+ {devices:[{x:540,top:400,scale:1.55,bleed:true}],ripples:[{x:540,y:1940,reach:1300,strength:1}]},
+ // 3 The cycle: ready behind on the left, running in front with Stop under the thumb.
+ {devices:[{screen:"water-eject",x:330,top:620,scale:1.0,yaw:20},{screen:"water-running",x:690,top:450,scale:1.24,yaw:-8}],ripples:[{x:500,y:1880,reach:1050,strength:.8}]},
+ // 4 Guidance: the guidance card itself, lifted out of the screen at reading size.
+ {devices:[{detail:"guidance",x:560,top:900,scale:2.15}],ripples:[{x:150,y:1850,reach:1000,strength:.7}]},
+ // 5 The toolbox: Quick Tools behind, Unit Converter in front, a breath after the Water Eject story.
+ {devices:[{screen:"quick-tools",x:330,top:600,scale:1.02,yaw:18},{screen:"unit-converter",x:690,top:450,scale:1.24,yaw:-8}],ripples:[{x:-60,y:1820,reach:900,strength:.4}]},
 ];
 export const PhonePanorama:React.FC<{locale:string;only?:number}>=({locale,only})=>{
  useFonts();
@@ -51,12 +46,14 @@ export const PhonePanorama:React.FC<{locale:string;only?:number}>=({locale,only}
   {strings.screenshots.map((s,i)=>(
    <div key={s.id} data-shot={i} style={{position:"absolute",left:i*WIDTH,top:0,width:WIDTH,height:HEIGHT}}>
     <Caption lines={s.lines} highlight={s.highlight} icon={s.icon} check={only===i}/>
-    {(only===undefined||only===i)&&(()=>{
-     const d=SHOTS[i].device;
-     return <div style={{position:"absolute",left:d.x,top:d.top,width:FRAME_W,zIndex:1,transform:`translateX(-50%) scale(${d.scale})`,transformOrigin:"50% 0",filter:"drop-shadow(0 26px 30px rgba(0,66,77,.12))"}}>
-      <LitScreen id={SCREENS[s.id][0]} state={SCREENS[s.id][1]} safeBounds={d.bleed?BLEED:SAFE} pose={{yaw:d.yaw??0,pitch:d.pitch??0}} style={{width:FRAME_W}}/>
+    {(only===undefined||only===i)&&SHOTS[i].wave&&<Wave id={`wave-${i}`} x={SHOTS[i].wave!.x} y={SHOTS[i].wave!.y} width={WIDTH} height={HEIGHT}/>}
+    {(only===undefined||only===i)&&SHOTS[i].devices.map((d,k)=>{
+     const id=d.screen??s.id;
+     const w=d.detail?430:FRAME_W;
+     return <div key={k} style={{position:"absolute",left:d.x,top:d.top,width:w,zIndex:k+1,transform:`translateX(-50%) scale(${d.scale})`,transformOrigin:"50% 0",filter:"drop-shadow(0 26px 30px rgba(0,66,77,.14))"}}>
+      <LitScreen id={SCREENS[id][0]} state={SCREENS[id][1]} frame={!d.detail} detail={d.detail} safeBounds={d.bleed?BLEED:SAFE} pose={{yaw:d.yaw??0,pitch:d.pitch??0}} style={{width:w}}/>
      </div>;
-    })()}
+    })}
    </div>
   ))}
  </AbsoluteFill>;

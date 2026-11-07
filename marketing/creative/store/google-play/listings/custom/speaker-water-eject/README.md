@@ -1,6 +1,6 @@
 # Speaker Water Eject custom listing
 
-Status: planned, not published. The English creative package contains 8 phone, 4 tablet and 4 desktop screenshots, a feature graphic and the official icon. Upload remains conditional on confirming production availability of version 26.11.02 in Play Console. The public Play page retrieved on November 7 still showed October 3 information and did not verify the rollout.
+Status: planned, not published. The English creative package contains 5 phone, 4 tablet and 4 desktop screenshots, a feature graphic and the official icon. Upload remains conditional on confirming production availability of version 26.11.02 in Play Console. The public Play page retrieved on November 7 still showed October 3 information and did not verify the rollout.
 
 ## Audience and positioning
 
@@ -14,20 +14,15 @@ The keywords describe intent, not measured demand. The prior Play reports did no
 
 ## Creative direction
 
-One idea carries the set: the tone leaves the speaker as rings on calm water. The ground is a quiet tonal aqua surface, light at the top and a little deeper at the bottom, so the UI keeps the Material surface it was designed on. Thin ripple rings spread from each phone's speaker, widening and fading as they travel; a soft pool of light sits under each set. The rings are strongest at the hero and the tone, cross into neighbouring screenshots so the strip reads as one, and fade out as the story widens into the toolbox. There is no texture, glow or caustic noise behind the UI. Captions keep App Toolkit's Material pill.
+Five screenshots, each with its own job, read as one campaign: a calm tonal aqua surface, App Toolkit's Material caption pill, Material-Next's porcelain 3D Pixel 9 Pro XL, and water that encodes the feature. Variety comes from the art direction (camera angle, device size, framing, one or two phones, the water itself), never from repeating a screen: no composition shows the same screen or state twice.
 
-The phones are Material-Next's porcelain 3D Pixel 9 Pro XL, one phone and one screen per image, turned the way a person shows a phone, never rolled. The set varies through framing: a whole hero, closer views that run off the bottom or a side with their key control in full view, and whole phones again for the toolbox.
+1. Hero: a large Pixel turned to its edge, standing in an illustrated wave that rises from its speaker and curls beside it, with foam, spray and light on the surface. The wave is a metaphor for the tone, not a promise of what the app does to a phone.
+2. The tone: the 165 Hz screen close and straight, ripple rings spreading from the speaker.
+3. The cycle: two phones, Water Eject ready behind and running at 20 seconds in front with Stop.
+4. Guidance: the guidance card lifted out at reading size, with no phone.
+5. The toolbox: two tools side by side, Quick Tools behind and Unit Converter in front.
 
-1. Hero: the ready sheet, whole and straight on.
-2. The tone: turned to its edge, the rings travelling on the left.
-3. Up to 30 seconds: close and centred, the countdown at the heart of the image.
-4. Control: turned and running off the left edge, Stop in full view.
-5. Guidance: running off the right edge, the guidance at reading size.
-6. The toolbox: Quick Tools, whole.
-7. Unit Converter, close and running off the left edge.
-8. Bubble Level, whole and straight on: a bookend to the hero.
-
-Tablet, desktop and feature artwork share the surface and the rings. No image promises a repair or shows a successful water-removal result.
+Ripple rings cross into neighbouring screenshots so the strip reads as one. Poses are turns a person would make to show a phone, never a roll. Tablet, desktop and feature artwork share the surface and the rings. No image promises a repair or shows a successful water-removal result.
 
 ## Verification and limits
 

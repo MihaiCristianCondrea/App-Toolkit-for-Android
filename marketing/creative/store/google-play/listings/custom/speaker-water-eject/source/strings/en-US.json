@@ -8,7 +8,7 @@
       ],
       "highlight": "Water Eject",
       "icon": "water_drop",
-      "alt": "Water Eject ready with its 165 Hz tone and Start 30-second cycle button, ripples rising from the speaker"
+      "alt": "A Pixel with Water Eject ready at 165 Hz, an illustrated wave of water rising from its speaker"
     },
     {
       "id": "water-frequency",
@@ -18,27 +18,17 @@
       ],
       "highlight": "165 Hz",
       "icon": "water_drop",
-      "alt": "Water Eject on a phone turned to its edge, showing the fixed 165 Hz tone"
+      "alt": "A close view of Water Eject showing its fixed 165 Hz tone and Start 30-second cycle"
     },
     {
-      "id": "water-running",
+      "id": "water-cycle",
       "lines": [
-        "Up to",
-        "30 seconds"
+        "Up to 30 seconds",
+        "stop anytime"
       ],
       "highlight": "30 seconds",
-      "icon": "water_drop",
-      "alt": "A close view of Water Eject running with 20 seconds left and Stop cycle below"
-    },
-    {
-      "id": "water-stop",
-      "lines": [
-        "You choose",
-        "when to stop"
-      ],
-      "highlight": "stop",
-      "icon": "water_drop",
-      "alt": "Water Eject with 8 seconds left and a full-width Stop cycle button"
+      "icon": "timer",
+      "alt": "Two phones: Water Eject ready to start, and running with 20 seconds left and a Stop cycle button"
     },
     {
       "id": "water-guidance",
@@ -58,27 +48,7 @@
       ],
       "highlight": "toolbox",
       "icon": "grid_view",
-      "alt": "Quick Tools with live compass, level, flashlight and SOS widgets"
-    },
-    {
-      "id": "unit-converter",
-      "lines": [
-        "Metres to",
-        "centimetres"
-      ],
-      "highlight": "centimetres",
-      "icon": "straighten",
-      "alt": "Unit Converter converting one metre to centimetres"
-    },
-    {
-      "id": "level",
-      "lines": [
-        "Find your",
-        "level"
-      ],
-      "highlight": "level",
-      "icon": "straighten",
-      "alt": "Bubble Level with roll and pitch readings"
+      "alt": "Two App Toolkit tools: Quick Tools with compass, level and flashlight, and Unit Converter turning metres into centimetres"
     }
   ],
   "tabletScreenshots": [

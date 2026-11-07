@@ -3,6 +3,7 @@ export const SCREENS: Record<string, [string, Record<string, unknown>]> = {
  "water-eject": ["quick-tools", water],
  "water-frequency": ["quick-tools", water],
  "water-guidance": ["quick-tools", water],
+ "water-cycle": ["quick-tools", water],
  "water-running": ["quick-tools", { ...water, waterRunning: true, waterSeconds: 20 }],
  "water-stop": ["quick-tools", { ...water, waterRunning: true, waterSeconds: 8 }],
  "quick-tools": ["quick-tools", { activeToolId: "none" }],
