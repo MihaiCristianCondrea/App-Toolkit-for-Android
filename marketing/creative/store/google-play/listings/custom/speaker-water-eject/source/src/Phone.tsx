@@ -3,38 +3,61 @@ import { AbsoluteFill, cancelRender, continueRender, delayRender } from "remotio
 import { LitScreen, useFonts } from "./LitScreen";
 import { SCREENS } from "./screens";
 import { STRINGS } from "./strings";
-import { WaterArt } from "./WaterArt";
+import { WaterArt, type Ripple } from "./WaterArt";
 import { FONT, INK, ON_PILL, PILL } from "./theme";
 
 export const WIDTH=1080,HEIGHT=1920;
 const CAPTION={left:120,right:960,top:72,bottom:312};
 const ICON_DROP="-.1em";
 // Local CSS pixels, before the renderer's 2x output scale. Every visible subject is checked after layout.
-const SAFE={left:48,right:1032,top:360,bottom:1872};
-const SHOTS: {x:number;top:number;scale:number;yaw:number;pitch:number;roll:number;detail?:"sheet"|"guidance"}[]=[
- {x:540,top:410,scale:1.40,yaw:0,pitch:0,roll:0},
- {x:560,top:455,scale:1.34,yaw:-13,pitch:4,roll:3},
- {x:540,top:520,scale:1.78,yaw:0,pitch:0,roll:0,detail:"sheet"},
- {x:495,top:480,scale:1.30,yaw:13,pitch:-4,roll:-4},
- {x:540,top:860,scale:1.95,yaw:0,pitch:0,roll:0,detail:"guidance"},
- {x:560,top:485,scale:1.28,yaw:-19,pitch:6,roll:4},
- {x:535,top:450,scale:1.35,yaw:7,pitch:-3,roll:-2},
- {x:550,top:490,scale:1.28,yaw:-12,pitch:-4,roll:3},
+const SAFE={left:40,right:1040,top:360,bottom:1880};
+// A phone may run off the bottom edge on purpose (a close view); nothing may enter the caption band.
+const BLEED={...SAFE,bottom:2400};
+const FRAME_W=465.23;
+
+/** One device in a shot: its screen (a key of SCREENS), where it stands, its turn, and whether it is the close-up card. */
+type Device={screen?:string;x:number;top:number;scale:number;yaw?:number;pitch?:number;detail?:"sheet"|"guidance";bleed?:boolean};
+type Shot={devices:Device[];ripples:Ripple[]};
+
+// The set reads as one strip. The Water Eject story (1 to 5) carries the ripples, strongest at the hero and the tone,
+// each set spilling into its neighbours; the toolbox (6 to 8) keeps only their last, faint rings. Poses are turns a
+// person would make to show a phone, never a roll.
+const SHOTS:Shot[]=[
+ // 1 Hero: the ready sheet, straight on, the rings rising from its speaker.
+ {devices:[{x:540,top:420,scale:1.36}],ripples:[{x:540,y:1780,reach:1250,strength:1}]},
+ // 2 The tone: turned to show its edge, set right so the rings have room to travel on the left.
+ {devices:[{x:640,top:440,scale:1.32,yaw:-22,pitch:3}],ripples:[{x:470,y:1300,reach:1150,strength:.95}]},
+ // 3 The countdown, close: larger and lower, running off the bottom edge.
+ {devices:[{x:540,top:470,scale:1.62,bleed:true}],ripples:[]},
+ // 4 Control: the cycle at 20 s behind, at 8 s in front with Stop under the thumb.
+ {devices:[{screen:"water-running",x:300,top:640,scale:1.0,yaw:20},{x:700,top:470,scale:1.24,yaw:-8}],ripples:[{x:520,y:1880,reach:1100,strength:.8}]},
+ // 5 Guidance: the phone at rest on the left, its guidance lifted out at reading size.
+ {devices:[{x:330,top:470,scale:1.06,yaw:18},{detail:"guidance",x:660,top:1180,scale:1.72}],ripples:[{x:330,y:1700,reach:900,strength:.6}]},
+ // 6 The toolbox: two tabs of the same app, side by side.
+ {devices:[{screen:"measure",x:300,top:640,scale:1.0,yaw:20},{x:700,top:470,scale:1.24,yaw:-8}],ripples:[{x:-60,y:1820,reach:900,strength:.45}]},
+ // 7 One everyday tool, turned the other way.
+ {devices:[{x:520,top:450,scale:1.32,yaw:14,pitch:2}],ripples:[]},
+ // 8 Bookend: straight on again, the last faint rings.
+ {devices:[{x:540,top:430,scale:1.34}],ripples:[{x:540,y:1880,reach:900,strength:.4}]},
 ];
 export const PhonePanorama:React.FC<{locale:string;only?:number}>=({locale,only})=>{
  useFonts();
  const strings=STRINGS[locale],n=strings.screenshots.length;
+ if(SHOTS.length!==n) throw new Error(`${n} captions for ${SHOTS.length} compositions`);
+ const ripples=SHOTS.flatMap((shot,i)=>shot.ripples.map(r=>({...r,x:r.x+i*WIDTH})));
  return <AbsoluteFill style={{width:n*WIDTH,fontFamily:FONT,overflow:"hidden"}}>
-  <WaterArt width={n*WIDTH} height={HEIGHT} panels={n}/>
-  {strings.screenshots.map((s,i)=>{
-   const shot=SHOTS[i],w=shot.detail?430:465.23;
-   return <div key={s.id} data-shot={i} style={{position:"absolute",left:i*WIDTH,top:0,width:WIDTH,height:HEIGHT}}>
+  <WaterArt width={n*WIDTH} height={HEIGHT} ripples={ripples}/>
+  {strings.screenshots.map((s,i)=>(
+   <div key={s.id} data-shot={i} style={{position:"absolute",left:i*WIDTH,top:0,width:WIDTH,height:HEIGHT}}>
     <Caption lines={s.lines} highlight={s.highlight} icon={s.icon} check={only===i}/>
-    {(only===undefined||only===i)&&<div style={{position:"absolute",left:shot.x,top:shot.top,width:w,transform:`translateX(-50%) scale(${shot.scale}) rotate(${shot.roll}deg)`,transformOrigin:"50% 0",filter:"drop-shadow(0 22px 25px rgba(0,70,82,.16))"}}>
-     <LitScreen id={SCREENS[s.id][0]} state={SCREENS[s.id][1]} frame={!shot.detail} detail={shot.detail} safeBounds={SAFE} pose={{yaw:shot.yaw,pitch:shot.pitch}} style={{width:w}}/>
-    </div>}
-   </div>;
-  })}
+    {(only===undefined||only===i)&&SHOTS[i].devices.map((d,k)=>{
+     const w=d.detail?430:FRAME_W,id=d.screen??s.id;
+     return <div key={k} style={{position:"absolute",left:d.x,top:d.top,width:w,zIndex:k+1,transform:`translateX(-50%) scale(${d.scale})`,transformOrigin:"50% 0",filter:d.detail?"drop-shadow(0 18px 30px rgba(0,66,77,.14))":"drop-shadow(0 26px 30px rgba(0,66,77,.12))"}}>
+      <LitScreen id={SCREENS[id][0]} state={SCREENS[id][1]} frame={!d.detail} detail={d.detail} safeBounds={d.bleed?BLEED:SAFE} pose={{yaw:d.yaw??0,pitch:d.pitch??0}} style={{width:w}}/>
+     </div>;
+    })}
+   </div>
+  ))}
  </AbsoluteFill>;
 };
 

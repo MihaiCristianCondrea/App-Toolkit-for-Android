@@ -1,8 +1,12 @@
-// Clear shallow water, cyan ripples and a small sunlit accent. App UI colours remain native.
-export const GROUND = "#DDF9F2";
-export const INK = "#004A57";
-export const PILL = "#007C8F";
-export const ON_PILL = "#F2FFFA";
-export const SHAPE_COLORS = ["#19BECE", "#73E1D4", "#B5EFE1", "#2ACAD2", "#A5E7E2", "#FFE7AE"];
+// A calm aqua surface for the Water Eject campaign. The app's UI keeps its own colours; the campaign
+// only owns the ground, the ripple ink and the caption pill.
+export const SURFACE_TOP = "#F4FBFA";
+export const SURFACE_DEEP = "#D7F0EE";
+export const RIPPLE = "#0B7F8C";
+export const GROUND = SURFACE_TOP;
+export const INK = "#00424D";
+export const PILL = "#00707E";
+export const ON_PILL = "#F2FFFC";
+export const SHAPE_COLORS = ["#19BECE", "#73E1D4", "#B5EFE1"];
 export const FONT = "'Google Sans Flex', sans-serif";
 export const PALETTE = "captured";

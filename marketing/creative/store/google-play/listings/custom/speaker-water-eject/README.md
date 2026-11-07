@@ -14,9 +14,20 @@ The keywords describe intent, not measured demand. The prior Play reports did no
 
 ## Creative direction
 
-The campaign uses shallow-water aqua, cyan contours, mint highlights and a small sunlit accent. Sparse smooth MaterialShapes, original droplets and elliptical ripples replace the earlier star-like scatter. The official amber icon and centered caption pills retain the App Toolkit identity. Material-Next 0.2.0 supplies the porcelain 3D Pixel 9 Pro XL, Fold and desktop device frames. The phone set alternates a straight hero, modest perspective poses and two close crops of the actual sheet. It renders at 2160 x 3840 to preserve text quality.
+One idea carries the set: the tone leaves the speaker as rings on calm water. The ground is a quiet tonal aqua surface, light at the top and a little deeper at the bottom, so the UI keeps the Material surface it was designed on. Thin ripple rings spread from each phone's speaker, widening and fading as they travel; a soft pool of light sits under each set. The rings are strongest at the hero and the tone, cross into neighbouring screenshots so the strip reads as one, and fade out as the story widens into the toolbox. There is no texture, glow or caustic noise behind the UI. Captions keep App Toolkit's Material pill.
 
-The first five phone images address the immediate need: Water Eject, the fixed frequency, the timed cycle, the stop control and the guidance. Quick Tools, Unit Converter and Bubble Level follow as secondary value. Tablet, desktop and feature artwork share the same water contours. The large-screen sets lead with ready and running Water Eject. No image promises a repair or shows a successful water-removal result.
+The phones are Material-Next's porcelain 3D Pixel 9 Pro XL, turned the way a person shows a phone, never rolled:
+
+1. Hero: the ready sheet, straight on.
+2. The tone: the phone turned to its edge, set right so the rings travel on the left.
+3. Up to 30 seconds: a close view, larger and lower, running off the bottom edge.
+4. Control: two phones, the cycle at 20 seconds behind and at 8 seconds in front with Stop.
+5. Guidance: the phone at rest, its guidance lifted out at reading size.
+6. The toolbox: two tabs of the same app, Measure behind and Quick Tools in front.
+7. Unit Converter, turned the other way.
+8. Bubble Level, straight on: a bookend to the hero.
+
+Tablet, desktop and feature artwork share the surface and the rings. No image promises a repair or shows a successful water-removal result.
 
 ## Verification and limits
 

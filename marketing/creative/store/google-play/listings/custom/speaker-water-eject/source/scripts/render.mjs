@@ -20,7 +20,6 @@ const locales = (await readdir(path.join(root, "strings"))).filter((f) => f.ends
   .filter((l) => !wanted.length || wanted.includes(l));
 const browserExecutable = process.env.REMOTION_BROWSER ?? process.env.CHROME_PATH ?? null;
 
-execFileSync(process.execPath, [path.join(root, "scripts/generate-water.mjs")], {stdio:"inherit"});
 const serveUrl = await bundle({ entryPoint: path.join(root, "src/index.ts"), publicDir: path.join(root, "public") });
 const still = async (id, inputProps, file, scale = 1) => {
   const composition = await selectComposition({ serveUrl, id, inputProps, browserExecutable });

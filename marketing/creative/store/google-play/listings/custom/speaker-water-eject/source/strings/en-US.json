@@ -8,7 +8,7 @@
       ],
       "highlight": "Water Eject",
       "icon": "water_drop",
-      "alt": "Water Eject ready with its 165 Hz tone and Start 30-second cycle button"
+      "alt": "Water Eject ready with its 165 Hz tone and Start 30-second cycle button, ripples rising from the speaker"
     },
     {
       "id": "water-frequency",
@@ -18,7 +18,7 @@
       ],
       "highlight": "165 Hz",
       "icon": "water_drop",
-      "alt": "Water Eject showing its fixed 165 Hz tone and guidance"
+      "alt": "A phone turned to its edge showing Water Eject and its fixed 165 Hz tone"
     },
     {
       "id": "water-running",
@@ -28,7 +28,7 @@
       ],
       "highlight": "30 seconds",
       "icon": "water_drop",
-      "alt": "Water Eject running with 20 seconds remaining and Stop cycle visible"
+      "alt": "A close view of Water Eject running with 20 seconds left and Stop cycle below"
     },
     {
       "id": "water-stop",
@@ -38,7 +38,7 @@
       ],
       "highlight": "stop",
       "icon": "water_drop",
-      "alt": "Water Eject with 8 seconds remaining and a full-width Stop cycle control"
+      "alt": "Two phones: Water Eject at 20 seconds behind and at 8 seconds in front with Stop cycle"
     },
     {
       "id": "water-guidance",
@@ -48,7 +48,7 @@
       ],
       "highlight": "guidance",
       "icon": "water_drop",
-      "alt": "Water Eject with speaker-down guidance and the note about water damage"
+      "alt": "Water Eject guidance at reading size: speaker down, a comfortable volume, and a note that it does not repair water damage"
     },
     {
       "id": "quick-tools",
@@ -58,7 +58,7 @@
       ],
       "highlight": "toolbox",
       "icon": "grid_view",
-      "alt": "Quick Tools with live compass, level and flashlight widgets"
+      "alt": "Two App Toolkit tabs: Measure tools behind and Quick Tools with compass, level, flashlight and SOS in front"
     },
     {
       "id": "unit-converter",
