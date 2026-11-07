@@ -23,7 +23,7 @@ const FRAME_W=465.23;
 type Device={screen:string;x:number;top:number;scale:number;roll?:number;yaw?:number;pitch?:number;speaker?:boolean};
 
 // One strip, five images, each with its own composition: the hero shows the whole phone leaning back so
-// its speaker grille faces the viewer, with water thrown out of it; a close crop on the countdown; the
+// the speaker holes on its bottom edge face the viewer, with water thrown out of it; a close crop on the countdown; the
 // whole phone turned to show its side, the Stop button in view; two toolbox phones tilted apart; the level.
 const DEVICES:Device[]=[
  {screen:"water-eject",x:640,top:385,scale:1.16,roll:-6,pitch:26,speaker:true},
@@ -35,14 +35,14 @@ const DEVICES:Device[]=[
 ];
 
 /** The Pixel 9 Pro XL frame, in CSS px: 430 px of display is 70.8 mm. */
-const MM=430/70.8,FRAME_H=162.8*MM,DEPTH=8.5*MM,FACE=(8.5/2+0.1)*MM,PERSPECTIVE=2400;
+const MM=430/70.8,FRAME_H=162.8*MM,FACE=(8.5/2+0.1)*MM,PERSPECTIVE=2400;
 /** A point on the phone's bottom edge, `px` across from the centre and `pz` towards the screen, as drawn at `pitch`. */
 const bottomEdge=(px:number,pz:number,pitch:number)=>{
  const p=pitch*Math.PI/180,y=(FRAME_H/2)*Math.cos(p)-pz*Math.sin(p),z=(FRAME_H/2)*Math.sin(p)+pz*Math.cos(p)-FACE,k=PERSPECTIVE/(PERSPECTIVE-z);
  return [FRAME_W/2+px*k,FRAME_H/2+y*k];
 };
-/** The speaker grille's centre, left of the USB-C port as on the phone. */
-const SPEAKER_X=-108;
+/** The centre of the 3D Pixel's own speaker holes, left of its USB-C port, 10.8 to 18 mm from the centre. */
+const SPEAKER_X=-14.4*MM;
 /** Where a point of a phone's frame lands in the strip: the phone's box is scaled and rolled about its top centre. */
 const place=(d:Device,[lx,ly]:number[])=>{
  const r=(d.roll??0)*Math.PI/180,u=(lx-FRAME_W/2)*d.scale,v=ly*d.scale;
@@ -60,18 +60,6 @@ const inOwnImage=(d:Device)=>{
 };
 DEVICES.forEach(inOwnImage);
 
-/** The bottom edge's openings, drawn on the phone's own edge: the speaker grille, the USB-C port and a microphone. */
-const SpeakerEdge:React.FC<{pitch:number}>=({pitch})=>{
- const slot=(cx:number,w:number,h:number)=>[[cx-w/2,-h/2],[cx+w/2,-h/2],[cx+w/2,h/2],[cx-w/2,h/2]].map(([x,z])=>bottomEdge(x,z,pitch).map(n=>n.toFixed(2)).join(",")).join(" ");
- const holes=Array.from({length:8},(_,i)=>SPEAKER_X-38+i*10.8);
- return <svg aria-hidden width={FRAME_W} height={FRAME_H} style={{position:"absolute",left:0,top:0,overflow:"visible",pointerEvents:"none"}}>
-  {holes.map(x=><polygon key={x} points={slot(x,3.2,DEPTH*0.22)} fill="#1B2B30" stroke="#1B2B30" strokeWidth="2.2" strokeLinejoin="round"/>)}
-  <polygon points={slot(0,50,DEPTH*0.32)} fill="#1F3035" stroke="#2C3E43" strokeWidth="3" strokeLinejoin="round"/>
-  <polygon points={slot(0,36,DEPTH*0.1)} fill="#4B5C61"/>
-  <polygon points={slot(96,6,DEPTH*0.14)} fill="#16262B" stroke="#16262B" strokeWidth="2" strokeLinejoin="round"/>
- </svg>;
-};
-
 export const PhonePanorama:React.FC<{locale:string;only?:number}>=({locale,only})=>{
  useFonts();
  const strings=STRINGS[locale],n=strings.screenshots.length;
@@ -87,7 +75,6 @@ export const PhonePanorama:React.FC<{locale:string;only?:number}>=({locale,only}
    {visible.map((d,k)=>(
     <div key={d.screen} style={{position:"absolute",left:d.x,top:d.top,width:FRAME_W,zIndex:k+1,transform:`translateX(-50%) rotate(${d.roll??0}deg) scale(${d.scale})`,transformOrigin:"50% 0",filter:"drop-shadow(0 34px 44px rgba(0,40,48,.26))"}}>
      <LitScreen id={SCREENS[d.screen][0]} state={SCREENS[d.screen][1]} safeBounds={CLEAR} pose={{yaw:d.yaw??0,pitch:d.pitch??0}} style={{width:FRAME_W}}/>
-     {d.speaker&&<SpeakerEdge pitch={d.pitch??0}/>}
     </div>
    ))}
   </div>
