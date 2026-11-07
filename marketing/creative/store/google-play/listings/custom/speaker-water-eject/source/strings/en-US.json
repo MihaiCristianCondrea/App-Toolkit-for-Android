@@ -8,37 +8,27 @@
       ],
       "highlight": "Water Eject",
       "icon": "water_drop",
-      "alt": "A Pixel with Water Eject ready at 165 Hz, an illustrated wave of water rising from its speaker"
+      "alt": "A Pixel with Water Eject ready at 165 Hz, an illustrated stream of water leaving its speaker"
     },
     {
-      "id": "water-frequency",
+      "id": "water-running",
       "lines": [
-        "One simple",
-        "165 Hz tone"
-      ],
-      "highlight": "165 Hz",
-      "icon": "water_drop",
-      "alt": "A close view of the Water Eject screen and its fixed 165 Hz tone"
-    },
-    {
-      "id": "water-cycle",
-      "lines": [
-        "Up to 30 seconds",
-        "stop anytime"
+        "Up to",
+        "30 seconds"
       ],
       "highlight": "30 seconds",
       "icon": "timer",
-      "alt": "Two phones running Water Eject: 20 seconds left, and 8 seconds left with a Stop cycle button"
+      "alt": "Water Eject running with 20 seconds left in its cycle"
     },
     {
-      "id": "water-guidance",
+      "id": "water-stop",
       "lines": [
-        "Read the guidance",
-        "before you start"
+        "You choose",
+        "when to stop"
       ],
-      "highlight": "guidance",
-      "icon": "water_drop",
-      "alt": "Water Eject guidance: speaker down, a comfortable volume, and a note that it does not repair water damage"
+      "highlight": "stop",
+      "icon": "stop_circle",
+      "alt": "A close view of Water Eject with 8 seconds left and the Stop cycle button"
     },
     {
       "id": "quick-tools",
@@ -49,6 +39,16 @@
       "highlight": "toolbox",
       "icon": "grid_view",
       "alt": "Two App Toolkit tools: Quick Tools with compass, level and flashlight, and Unit Converter turning metres into centimetres"
+    },
+    {
+      "id": "level",
+      "lines": [
+        "Find your",
+        "level"
+      ],
+      "highlight": "level",
+      "icon": "straighten",
+      "alt": "Bubble Level with roll and pitch readings"
     }
   ],
   "tabletScreenshots": [

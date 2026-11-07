@@ -14,15 +14,15 @@ The keywords describe intent, not measured demand. The prior Play reports did no
 
 ## Creative direction
 
-Five screenshots read as one panorama. A single ocean runs the whole strip, its waves computed across the full width so every seam meets: it surges at the hero and settles towards the toolbox. The ground is deep ocean teal brightening towards the water, the headlines are white, and the caption pill is aqua, so the set has the contrast of an ad without leaving App Toolkit's Material caption style. Every phone is Material-Next's porcelain 3D Pixel 9 Pro XL, upright and straight, floating with its bezel just under the surface: the movement is the water's, not tilted devices. Two phones appear only with two different screens; no state repeats.
+Five screenshots read as one panorama in the language of Material 3's own hero art: a light aqua field crossed by ribbons of liquid glass, iridescent from aqua through white and lemon to lilac, with sharp white rims. The ribbons are computed across the whole strip, so every seam meets. Headlines are dark on the light field, with App Toolkit's aqua caption pill. Phones are Material-Next's porcelain 3D Pixel 9 Pro XL, leaning back the way a phone resting in a hand does. Every image shows a different screen or state: the ready 165 Hz screen appears once, in the hero.
 
-1. Hero: Water Eject ready at 165 Hz, centred in the swell, spray thrown out on either side of the phone. The water is a metaphor for the tone, not a promise of what the app does to a phone.
-2. The tone: close on the 165 Hz control, the phone running under the waterline.
-3. The cycle: two phones, 20 seconds left behind and 8 seconds left in front with Stop.
-4. Guidance: the guidance card itself, floating above the water at reading size.
-5. The toolbox: Quick Tools behind and Unit Converter in front, on calmer water.
+1. Hero: Water Eject ready at 165 Hz, a clear stream of water leaving the speaker and breaking into droplets. The water is a metaphor for the tone, not a promise of what the app does to a phone.
+2. Up to 30 seconds: the cycle running at 20 seconds, leaning the other way.
+3. You choose when to stop: larger and straight on 8 seconds and the Stop button, running off the bottom.
+4. The toolbox: Quick Tools behind and Unit Converter in front.
+5. Bubble Level.
 
-Tablet, desktop and feature artwork share the same ocean. No image promises a repair or shows a successful water-removal result.
+The guidance and its limits are on every Water Eject screen and in the description. Tablet, desktop and feature artwork share the ocean surface from the earlier pass. No image promises a repair or shows a successful water-removal result.
 
 ## Verification and limits
 
