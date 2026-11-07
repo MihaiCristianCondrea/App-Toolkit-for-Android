@@ -22,7 +22,7 @@ Five screenshots read as one panorama in the language of Material 3's own hero a
 4. The toolbox: Quick Tools behind and Unit Converter in front.
 5. Bubble Level.
 
-The guidance and its limits are on every Water Eject screen and in the description. Tablet, desktop and feature artwork share the ocean surface from the earlier pass. No image promises a repair or shows a successful water-removal result.
+The guidance and its limits are on every Water Eject screen and in the description. Tablet, desktop and feature artwork share the glass ribbons. No image promises a repair or shows a successful water-removal result.
 
 ## Verification and limits
 

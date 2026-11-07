@@ -3,7 +3,7 @@ import { AbsoluteFill } from "remotion";
 import { LitScreen } from "./LitScreen";
 import { SCREENS } from "./screens";
 import { STRINGS } from "./strings";
-import { Ocean } from "./Ocean";
+import { Glass } from "./Glass";
 
 export const CANVAS = { w:1920,h:1080 };
 export const SETS = {
@@ -15,7 +15,7 @@ export const WideStrip: React.FC<{locale:string;kind:Kind;only?:number}> = ({loc
  const set=SETS[kind],list=STRINGS[locale][set.key];
  const [w,h]=set.device;
  return <AbsoluteFill style={{width:list.length*CANVAS.w,overflow:"hidden"}}>
-  <Ocean width={list.length*CANVAS.w} height={CANVAS.h} peak={CANVAS.w/2}/>
+  <Glass id="wide" width={list.length*CANVAS.w} height={CANVAS.h} panels={list.length}/>
   {list.map((s,i)=>(only===undefined||only===i)&&<div key={s.id} style={{position:"absolute",left:i*CANVAS.w+(CANVAS.w-w)/2,top:(CANVAS.h-h)/2}}>
    <LitScreen id={SCREENS[s.id][0]} state={SCREENS[s.id][1]} window={set.window}/>
   </div>)}
