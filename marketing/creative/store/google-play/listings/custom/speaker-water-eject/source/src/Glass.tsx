@@ -106,22 +106,22 @@ export const Bubbles: React.FC<{ x: number; y: number; width: number; height: nu
   const rand = () => ((seed = (Math.imul(seed, 1664525) + 1013904223) >>> 0) / 4294967296);
   const bubbles = Array.from({ length: 34 }, (_, i) => {
     const rise = Math.pow(rand(), 0.8);
-    const r = 34 - rise * 26 + rand() * 10;
+    const r = 40 - rise * 26 + rand() * 12;
     const side = rand() < 0.5 ? -1 : 1;
-    return { key: i, cx: x + side * (60 + rand() * 300 + rise * 160), cy: y - 60 - rise * 1150, r };
+    return { key: i, cx: x + side * (420 + rand() * 120 + rise * 60), cy: y - 60 - rise * 1150, r };
   });
   return (
-    <svg aria-hidden width={width} height={height} viewBox={`0 0 ${width} ${height}`} style={{ position: "absolute", inset: 0, pointerEvents: "none", zIndex: 10 }}>
+    <svg aria-hidden width={width} height={height} viewBox={`0 0 ${width} ${height}`} style={{ position: "absolute", inset: 0, pointerEvents: "none" }}>
       <defs>
         <radialGradient id="bubble" cx=".5" cy=".5" r=".5">
           <stop offset=".7" stopColor="#FFFFFF" stopOpacity=".05" />
-          <stop offset=".92" stopColor="#BFF4F6" stopOpacity=".55" />
+          <stop offset=".9" stopColor="#9DE9EE" stopOpacity=".75" />
           <stop offset="1" stopColor="#FFFFFF" stopOpacity=".95" />
         </radialGradient>
       </defs>
       {bubbles.map((b) => (
         <g key={b.key}>
-          <circle cx={b.cx} cy={b.cy} r={b.r} fill="url(#bubble)" stroke="#5FCAD6" strokeOpacity=".35" strokeWidth="1.2" />
+          <circle cx={b.cx} cy={b.cy} r={b.r} fill="url(#bubble)" stroke="#2FAFBE" strokeOpacity=".6" strokeWidth="2" />
           <ellipse cx={b.cx - b.r * 0.38} cy={b.cy - b.r * 0.42} rx={b.r * 0.26} ry={b.r * 0.16} fill="#FFFFFF" transform={`rotate(-35 ${b.cx - b.r * 0.38} ${b.cy - b.r * 0.42})`} />
           <path d={`M ${b.cx + b.r * 0.55} ${b.cy + b.r * 0.2} A ${b.r * 0.7} ${b.r * 0.7} 0 0 1 ${b.cx + b.r * 0.1} ${b.cy + b.r * 0.62}`} fill="none" stroke="#FFFFFF" strokeWidth={Math.max(1.5, b.r * 0.08)} strokeOpacity=".8" strokeLinecap="round" />
         </g>
