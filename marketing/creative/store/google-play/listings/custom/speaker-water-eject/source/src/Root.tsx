@@ -1,6 +1,7 @@
 import React from "react";
 import { Still } from "remotion";
 import { FeatureGraphic } from "./FeatureGraphic";
+import { HeroProbe } from "./HeroProbe";
 import { Icon } from "./Icon";
 import { HEIGHT, PhonePanorama, PhoneShot, WIDTH } from "./Phone";
 import { STRINGS } from "./strings";
@@ -19,5 +20,6 @@ export const RemotionRoot: React.FC = () => (
     <Still id="DesktopStrip" component={WideStrip} width={CANVAS.w * en.desktopScreenshots.length} height={CANVAS.h} defaultProps={{ locale: "en-US", kind: "desktop" as const }} />
     <Still id="FeatureGraphic" component={FeatureGraphic} width={1024} height={500} defaultProps={{ locale: "en-US" }} />
     <Still id="Icon" component={Icon} width={512} height={512} />
+    <Still id="HeroProbe" component={HeroProbe} width={600} height={1100} />
   </>
 );

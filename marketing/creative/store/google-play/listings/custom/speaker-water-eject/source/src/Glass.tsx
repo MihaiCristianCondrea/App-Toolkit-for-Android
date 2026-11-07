@@ -61,13 +61,12 @@ const mix = (a: number[], b: number[], t: number) => a.map((v, k) => Math.round(
 const rgb = (c: number[]) => `rgb(${c.join(",")})`;
 
 /**
- * A wave of water thrown out of a speaker grille at (x, y), turned by `angle`: a ribbon of liquid that
- * leaves the grille narrow, widens as it sweeps down and away, and twists over into a curl, so its light
- * face and its deeper underside both show. `flip` sends it to the right. Built from short lit segments with bright rims; a handful of
- * drops leave the crest. An illustration of the tone's effect, not a claim.
+ * Water leaving a speaker along `spine` (image coordinates, from the grille outwards): a ribbon of liquid
+ * whose half-width follows `halfWidth`, twisting over as it travels so its light face and its deeper
+ * underside both show. Built from short lit segments with bright rims; `drops` are [x, y, r]. An
+ * illustration of the tone's effect, not a claim.
  */
-export const Wave: React.FC<{ x: number; y: number; angle: number; size: number; flip?: boolean; width: number; height: number }> = ({ x, y, angle, size, flip, width, height }) => {
-  const spine = [[0, 10], [-6, 90], [-60, 190], [-190, 270], [-360, 290], [-510, 240], [-600, 150], [-590, 60], [-520, 30], [-460, 70]].map(([px, py]) => [px * 0.8, py]);
+export const Wave: React.FC<{ spine: number[][]; halfWidth: (t: number) => number; drops: number[][]; width: number; height: number }> = ({ spine, halfWidth, drops, width, height }) => {
   const N = 160;
   const light = [214, 251, 250], mid = [64, 210, 218], deep = [8, 128, 144];
   const segments = Array.from({ length: N }, (_, i) => {
@@ -75,7 +74,7 @@ export const Wave: React.FC<{ x: number; y: number; angle: number; size: number;
     const edge = (t: number) => {
       const [cx, cy] = along(spine, t), [ax, ay] = along(spine, Math.max(t - 0.004, 0)), [bx, by] = along(spine, Math.min(t + 0.004, 1));
       const len = Math.hypot(bx - ax, by - ay) || 1, nx = -(by - ay) / len, ny = (bx - ax) / len;
-      const w = (8 + 230 * Math.pow(Math.sin(Math.PI * Math.min(t * 1.15, 1)), 0.9)) / 2;
+      const w = halfWidth(t);
       const twist = Math.cos(Math.PI * 1.35 * t);
       return { a: [cx + nx * w * twist, cy + ny * w * twist], b: [cx - nx * w * twist, cy - ny * w * twist], twist };
     };
@@ -85,7 +84,6 @@ export const Wave: React.FC<{ x: number; y: number; angle: number; size: number;
     return { key: i, d: `M ${e0.a} L ${e1.a} L ${e1.b} L ${e0.b} Z`, fill: rgb(fill), a: [e0.a, e1.a], b: [e0.b, e1.b], t: t0 };
   });
   const rim = (side: "a" | "b") => `M ${segments.map((s) => s[side][0]).join(" L ")}`;
-  const drops = [[-400, -40, 10], [-450, -75, 6], [-350, -60, 5], [-490, -30, 7], [-300, -20, 4], [36, 50, 6], [52, 22, 4]];
   return (
     <svg aria-hidden width={width} height={height} viewBox={`0 0 ${width} ${height}`} style={{ position: "absolute", inset: 0, pointerEvents: "none" }}>
       <defs>
@@ -97,7 +95,7 @@ export const Wave: React.FC<{ x: number; y: number; angle: number; size: number;
         <filter id="wave-shadow" x="-20%" y="-20%" width="140%" height="150%"><feDropShadow dx="0" dy="28" stdDeviation="24" floodColor="#00444E" floodOpacity=".25" /></filter>
         <filter id="wave-soft" x="-10%" y="-10%" width="120%" height="120%"><feGaussianBlur stdDeviation="5" /></filter>
       </defs>
-      <g transform={`translate(${x} ${y}) rotate(${angle}) scale(${flip ? -size : size} ${size})`}>
+      <g>
         <g filter="url(#wave-shadow)" opacity=".94">
           {segments.map((s) => <path key={s.key} d={s.d} fill={s.fill} stroke={s.fill} strokeWidth="1.2" strokeLinejoin="round" />)}
         </g>

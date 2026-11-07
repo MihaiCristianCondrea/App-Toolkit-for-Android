@@ -26,11 +26,13 @@ export const LitScreen: React.FC<{
   state?: Record<string, unknown>;
   frame?: boolean;
   window?: string;
-  pose?: { yaw: number; pitch: number };
+  pose?: { yaw: number; pitch: number; perspective?: number };
   detail?: "sheet" | "guidance";
   safeBounds?: {left:number;right:number;top:number;bottom:number};
   style?: React.CSSProperties;
-}> = ({ id, state = {}, frame = true, window = "phone", pose = { yaw: 0, pitch: 0 }, detail, safeBounds, style }) => {
+  /** Called with the mounted screen once it has settled, before the still is taken; used to measure the UI. */
+  measure?: (host: HTMLElement) => void;
+}> = ({ id, state = {}, frame = true, window = "phone", pose = { yaw: 0, pitch: 0 }, detail, safeBounds, style, measure }) => {
   const ref = useRef<HTMLDivElement>(null);
   const key = JSON.stringify(state);
   useLayoutEffect(() => {
@@ -38,7 +40,7 @@ export const LitScreen: React.FC<{
     ready
       // No-op navigation: a still never follows a tap. Screenshots never show ads.
       .then(() => mount(ref.current!, id, { go: () => {}, set: () => {}, ...JSON.parse(key), waterCapture: true }, { frame, window, showAds: false }))
-      .then(async () => { ref.current!.querySelectorAll("mnw-android-screen").forEach(screen => screen.removeAttribute("interactive")); await document.fonts.ready; await Promise.all([...ref.current!.querySelectorAll("mnw-device-frame")].map(async (frame: any) => { frame.yaw = pose.yaw; frame.pitch = pose.pitch; frame.finish = "porcelain"; await frame.updateComplete; if (frame.device === "pixel_9_pro_xl" && !frame.shadowRoot?.querySelector("img.phone")) throw new Error("The 3D Pixel picture is unavailable; refusing a fallback capture."); })); })
+      .then(async () => { ref.current!.querySelectorAll("mnw-android-screen").forEach(screen => screen.removeAttribute("interactive")); await document.fonts.ready; await Promise.all([...ref.current!.querySelectorAll("mnw-device-frame")].map(async (frame: any) => { frame.yaw = pose.yaw; frame.pitch = pose.pitch; frame.perspective = pose.perspective ?? 2400; frame.finish = "porcelain"; await frame.updateComplete; if (frame.device === "pixel_9_pro_xl" && !frame.shadowRoot?.querySelector("img.phone")) throw new Error("The 3D Pixel picture is unavailable; refusing a fallback capture."); })); })
       .then(() => Promise.all([...ref.current!.querySelectorAll("img")].map((img) => img.decode())))
       .then(async () => {
         const host=ref.current!;
@@ -59,6 +61,7 @@ export const LitScreen: React.FC<{
           screen.style.transform=`translateY(${-top}px)`;
           await new Promise<void>(resolve=>requestAnimationFrame(()=>requestAnimationFrame(()=>resolve())));
         }
+        measure?.(host);
         if(safeBounds){
           const root=host.closest("[data-shot]")!.getBoundingClientRect();
           const model=host.querySelector("mnw-device-frame");
@@ -71,6 +74,6 @@ export const LitScreen: React.FC<{
         }
       })
       .then(() => continueRender(handle), cancelRender);
-  }, [id, key, frame, window, pose.yaw, pose.pitch, detail]);
+  }, [id, key, frame, window, pose.yaw, pose.pitch, pose.perspective, detail]);
   return <div ref={ref} style={style} />;
 };

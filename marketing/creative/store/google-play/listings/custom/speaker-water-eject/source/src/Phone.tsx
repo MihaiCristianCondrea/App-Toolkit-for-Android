@@ -3,39 +3,36 @@ import { AbsoluteFill, cancelRender, continueRender, delayRender } from "remotio
 import { LitScreen, useFonts } from "./LitScreen";
 import { SCREENS } from "./screens";
 import { STRINGS } from "./strings";
-import { Glass, Wave } from "./Glass";
+import { Glass } from "./Glass";
+import { Hero } from "./Hero";
+import { CAPTION_BAND } from "./heroGeometry";
 import { FONT, INK, ON_PILL, PILL } from "./theme";
 
 export const WIDTH=1080,HEIGHT=1920;
 const CAPTION={left:120,right:960,top:72,bottom:312};
-/** A caption at the foot of its image fills the same band measured up from the bottom edge. */
-const CAPTION_LOW={...CAPTION,top:HEIGHT-CAPTION.bottom,bottom:HEIGHT-CAPTION.top};
+/** The hero's caption stands at the foot of its image, in the band its geometry defines. */
+const CAPTION_LOW=CAPTION_BAND;
+/** The image whose phone is solved (src/Hero.tsx) rather than placed, with its caption at the foot. */
+const HERO=0;
 const ICON_DROP="-.1em";
 // Local CSS pixels, before the renderer's 2x output scale. Every visible subject is checked after layout.
-/**
- * Nothing may enter the caption band. A phone under a top caption may run off the bottom; a phone over a
- * bottom caption may run off the top. `inOwnImage` keeps every phone off the dividers.
- */
+/** Nothing may enter the caption band; phones may run off the bottom. `inOwnImage` keeps them off the dividers. */
 const CLEAR={left:-1e5,right:1e5,top:340,bottom:1e5};
-const CLEAR_LOW={left:-1e5,right:1e5,top:-1e5,bottom:HEIGHT-340};
 const FRAME_W=465.23;
 
 /**
  * A phone placed in one image: `x` and `top` place the middle of its top edge in the strip, inside a
  * single screenshot, so every image stands on its own. `roll` tilts it about that point, the way phones
  * lie on a table in a product shot, so a rolled phone's `x` is set off to keep its middle on the image's
- * centre line; `yaw` turns it to show its side; `pitch` leans the top away to show the bottom edge. A
- * phone runs off one edge only, away from its caption: the bottom under a top caption, the top over a
- * bottom caption (`captionLow`).
+ * centre line; `yaw` turns it to show its side; `pitch` leans the top away. Phones run off the bottom
+ * edge only, away from the caption. The hero is not placed here: src/Hero.tsx draws it in a solved pose.
  */
-type Device={screen:string;x:number;top:number;scale:number;roll?:number;yaw?:number;pitch?:number;speaker?:boolean;captionLow?:boolean};
+type Device={screen:string;x:number;top:number;scale:number;roll?:number;yaw?:number;pitch?:number};
 
-// One strip, five images, each with its own composition: the hero is a large phone centred and running
-// off the top, leaning back so the speaker holes on its bottom edge face the viewer, water thrown out of
-// them and the caption below; a close crop on the countdown; the whole phone turned to show its side, the
-// Stop button in view; two toolbox phones tilted apart; the level.
+// One strip, five images, each with its own composition: the solved hero (src/Hero.tsx); a close crop on
+// the countdown; the whole phone turned to show its side, the Stop button in view; two toolbox phones
+// tilted apart; the level.
 const DEVICES:Device[]=[
- {screen:"water-eject",x:410,top:-330,scale:1.7,roll:-8,pitch:24,speaker:true,captionLow:true},
  {screen:"water-running",x:1080+580,top:420,scale:1.8,roll:3,yaw:8},
  {screen:"water-stop",x:2160+560,top:400,scale:1.3,roll:3,yaw:-22},
  {screen:"unit-converter",x:3240+300,top:560,scale:1.08,roll:-7},
@@ -43,15 +40,8 @@ const DEVICES:Device[]=[
  {screen:"level",x:4320+560,top:500,scale:1.5,roll:-5},
 ];
 
-/** The Pixel 9 Pro XL frame, in CSS px: 430 px of display is 70.8 mm. */
-const MM=430/70.8,FRAME_H=162.8*MM,FACE=(8.5/2+0.1)*MM,PERSPECTIVE=2400;
-/** A point on the phone's bottom edge, `px` across from the centre and `pz` towards the screen, as drawn at `pitch`. */
-const bottomEdge=(px:number,pz:number,pitch:number)=>{
- const p=pitch*Math.PI/180,y=(FRAME_H/2)*Math.cos(p)-pz*Math.sin(p),z=(FRAME_H/2)*Math.sin(p)+pz*Math.cos(p)-FACE,k=PERSPECTIVE/(PERSPECTIVE-z);
- return [FRAME_W/2+px*k,FRAME_H/2+y*k];
-};
-/** The centre of the 3D Pixel's own speaker holes, left of its USB-C port, 10.8 to 18 mm from the centre. */
-const SPEAKER_X=-14.4*MM;
+/** The Pixel 9 Pro XL frame's height, in CSS px: 430 px of display is 70.8 mm. */
+const FRAME_H=162.8*430/70.8;
 /** Where a point of a phone's frame lands in the strip: the phone's box is scaled and rolled about its top centre. */
 const place=(d:Device,[lx,ly]:number[])=>{
  const r=(d.roll??0)*Math.PI/180,u=(lx-FRAME_W/2)*d.scale,v=ly*d.scale;
@@ -69,7 +59,7 @@ const inOwnImage=(d:Device)=>{
 };
 DEVICES.forEach(inOwnImage);
 
-export const PhonePanorama:React.FC<{locale:string;only?:number}>=({locale,only})=>{
+export const PhonePanorama:React.FC<{locale:string;only?:number;debug?:boolean}>=({locale,only,debug})=>{
  useFonts();
  const strings=STRINGS[locale],n=strings.screenshots.length;
  // Draw only the phones that fall in the image being rendered.
@@ -80,20 +70,17 @@ export const PhonePanorama:React.FC<{locale:string;only?:number}>=({locale,only}
  });
  return <AbsoluteFill style={{width:n*WIDTH,fontFamily:FONT,overflow:"hidden"}}>
   <Glass width={n*WIDTH} height={HEIGHT} panels={n}/>
+  {(only===undefined||only===HERO)&&<div style={{position:"absolute",left:HERO*WIDTH,top:0,width:WIDTH,height:HEIGHT}}><Hero debug={debug}/></div>}
   <div data-shot="strip" style={{position:"absolute",inset:0}}>
    {visible.map((d,k)=>(
     <div key={d.screen} style={{position:"absolute",left:d.x,top:d.top,width:FRAME_W,zIndex:k+1,transform:`translateX(-50%) rotate(${d.roll??0}deg) scale(${d.scale})`,transformOrigin:"50% 0",filter:"drop-shadow(0 34px 44px rgba(0,40,48,.26))"}}>
-     <LitScreen id={SCREENS[d.screen][0]} state={SCREENS[d.screen][1]} safeBounds={d.captionLow?CLEAR_LOW:CLEAR} pose={{yaw:d.yaw??0,pitch:d.pitch??0}} style={{width:FRAME_W}}/>
+     <LitScreen id={SCREENS[d.screen][0]} state={SCREENS[d.screen][1]} safeBounds={CLEAR} pose={{yaw:d.yaw??0,pitch:d.pitch??0}} style={{width:FRAME_W}}/>
     </div>
    ))}
   </div>
-  {visible.filter(d=>d.speaker).map(d=>{
-   const [x,y]=place(d,bottomEdge(SPEAKER_X,0,d.pitch??0));
-   return <div key={`wave-${d.screen}`} style={{position:"absolute",inset:0,zIndex:10}}><Wave x={x} y={y} angle={d.roll??0} size={1} flip width={n*WIDTH} height={HEIGHT}/></div>;
-  })}
   {strings.screenshots.map((s,i)=>(
    <div key={s.id} style={{position:"absolute",left:i*WIDTH,top:0,width:WIDTH,height:HEIGHT,pointerEvents:"none",zIndex:20}}>
-    <Caption lines={s.lines} highlight={s.highlight} icon={s.icon} low={DEVICES.some(d=>d.captionLow&&Math.floor(d.x/WIDTH)===i)} check={only===i}/>
+    <Caption lines={s.lines} highlight={s.highlight} icon={s.icon} low={i===HERO} check={only===i}/>
    </div>
   ))}
  </AbsoluteFill>;
@@ -150,11 +137,11 @@ const Caption: React.FC<{ lines: string[]; highlight: string; icon: string; low:
   );
 };
 
-/** One phone screenshot: the panorama, moved so screenshot `index` fills the frame. */
-export const PhoneShot: React.FC<{ locale: string; index: number }> = ({ locale, index }) => (
+/** One phone screenshot: the panorama, moved so screenshot `index` fills the frame. `debug` overlays the hero's geometry. */
+export const PhoneShot: React.FC<{ locale: string; index: number; debug?: boolean }> = ({ locale, index, debug }) => (
   <AbsoluteFill style={{ overflow: "hidden" }}>
     <div style={{ position: "absolute", left: -index * WIDTH, top: 0, height: HEIGHT }}>
-      <PhonePanorama locale={locale} only={index} />
+      <PhonePanorama locale={locale} only={index} debug={debug} />
     </div>
   </AbsoluteFill>
 );
