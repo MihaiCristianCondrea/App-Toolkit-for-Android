@@ -63,10 +63,10 @@ const rgb = (c: number[]) => `rgb(${c.join(",")})`;
 /**
  * A wave of water thrown out of a speaker grille at (x, y), turned by `angle`: a ribbon of liquid that
  * leaves the grille narrow, widens as it sweeps down and away, and twists over into a curl, so its light
- * face and its deeper underside both show. Built from short lit segments with bright rims; a handful of
+ * face and its deeper underside both show. `flip` sends it to the right. Built from short lit segments with bright rims; a handful of
  * drops leave the crest. An illustration of the tone's effect, not a claim.
  */
-export const Wave: React.FC<{ x: number; y: number; angle: number; size: number; width: number; height: number }> = ({ x, y, angle, size, width, height }) => {
+export const Wave: React.FC<{ x: number; y: number; angle: number; size: number; flip?: boolean; width: number; height: number }> = ({ x, y, angle, size, flip, width, height }) => {
   const spine = [[0, 10], [-6, 90], [-60, 190], [-190, 270], [-360, 290], [-510, 240], [-600, 150], [-590, 60], [-520, 30], [-460, 70]].map(([px, py]) => [px * 0.8, py]);
   const N = 160;
   const light = [214, 251, 250], mid = [64, 210, 218], deep = [8, 128, 144];
@@ -97,7 +97,7 @@ export const Wave: React.FC<{ x: number; y: number; angle: number; size: number;
         <filter id="wave-shadow" x="-20%" y="-20%" width="140%" height="150%"><feDropShadow dx="0" dy="28" stdDeviation="24" floodColor="#00444E" floodOpacity=".25" /></filter>
         <filter id="wave-soft" x="-10%" y="-10%" width="120%" height="120%"><feGaussianBlur stdDeviation="5" /></filter>
       </defs>
-      <g transform={`translate(${x} ${y}) rotate(${angle}) scale(${size})`}>
+      <g transform={`translate(${x} ${y}) rotate(${angle}) scale(${flip ? -size : size} ${size})`}>
         <g filter="url(#wave-shadow)" opacity=".94">
           {segments.map((s) => <path key={s.key} d={s.d} fill={s.fill} stroke={s.fill} strokeWidth="1.2" strokeLinejoin="round" />)}
         </g>

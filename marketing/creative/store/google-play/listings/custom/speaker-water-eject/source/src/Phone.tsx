@@ -8,25 +8,34 @@ import { FONT, INK, ON_PILL, PILL } from "./theme";
 
 export const WIDTH=1080,HEIGHT=1920;
 const CAPTION={left:120,right:960,top:72,bottom:312};
+/** A caption at the foot of its image fills the same band measured up from the bottom edge. */
+const CAPTION_LOW={...CAPTION,top:HEIGHT-CAPTION.bottom,bottom:HEIGHT-CAPTION.top};
 const ICON_DROP="-.1em";
 // Local CSS pixels, before the renderer's 2x output scale. Every visible subject is checked after layout.
-/** Nothing may enter the caption band. Phones may run off the bottom; `inOwnImage` keeps them off the dividers. */
+/**
+ * Nothing may enter the caption band. A phone under a top caption may run off the bottom; a phone over a
+ * bottom caption may run off the top. `inOwnImage` keeps every phone off the dividers.
+ */
 const CLEAR={left:-1e5,right:1e5,top:340,bottom:1e5};
+const CLEAR_LOW={left:-1e5,right:1e5,top:-1e5,bottom:HEIGHT-340};
 const FRAME_W=465.23;
 
 /**
- * A phone placed in one image: `x` is its centre across the strip, inside a single screenshot, so every
- * image stands on its own. `roll` tilts it in the picture plane, the way phones lie on a table in a
- * product shot; `yaw` turns it to show its side; `pitch` leans the top away to show the bottom edge.
- * Phones may run off the bottom edge, never off the top, so no corner is ever cut.
+ * A phone placed in one image: `x` and `top` place the middle of its top edge in the strip, inside a
+ * single screenshot, so every image stands on its own. `roll` tilts it about that point, the way phones
+ * lie on a table in a product shot, so a rolled phone's `x` is set off to keep its middle on the image's
+ * centre line; `yaw` turns it to show its side; `pitch` leans the top away to show the bottom edge. A
+ * phone runs off one edge only, away from its caption: the bottom under a top caption, the top over a
+ * bottom caption (`captionLow`).
  */
-type Device={screen:string;x:number;top:number;scale:number;roll?:number;yaw?:number;pitch?:number;speaker?:boolean};
+type Device={screen:string;x:number;top:number;scale:number;roll?:number;yaw?:number;pitch?:number;speaker?:boolean;captionLow?:boolean};
 
-// One strip, five images, each with its own composition: the hero shows the whole phone leaning back so
-// the speaker holes on its bottom edge face the viewer, with water thrown out of it; a close crop on the countdown; the
-// whole phone turned to show its side, the Stop button in view; two toolbox phones tilted apart; the level.
+// One strip, five images, each with its own composition: the hero is a large phone centred and running
+// off the top, leaning back so the speaker holes on its bottom edge face the viewer, water thrown out of
+// them and the caption below; a close crop on the countdown; the whole phone turned to show its side, the
+// Stop button in view; two toolbox phones tilted apart; the level.
 const DEVICES:Device[]=[
- {screen:"water-eject",x:640,top:385,scale:1.16,roll:-6,pitch:26,speaker:true},
+ {screen:"water-eject",x:410,top:-330,scale:1.7,roll:-8,pitch:24,speaker:true,captionLow:true},
  {screen:"water-running",x:1080+580,top:420,scale:1.8,roll:3,yaw:8},
  {screen:"water-stop",x:2160+560,top:400,scale:1.3,roll:3,yaw:-22},
  {screen:"unit-converter",x:3240+300,top:560,scale:1.08,roll:-7},
@@ -55,7 +64,7 @@ const place=(d:Device,[lx,ly]:number[])=>{
  */
 const inOwnImage=(d:Device)=>{
  const i=Math.floor(d.x/WIDTH),edges:number[][][]=[[[0,0],[FRAME_W,0]],[[0,FRAME_H],[FRAME_W,FRAME_H]],[[0,0],[0,FRAME_H]],[[FRAME_W,0],[FRAME_W,FRAME_H]]];
- const xs=edges.flatMap(([a,b])=>Array.from({length:41},(_,k)=>place(d,[a[0]+(b[0]-a[0])*k/40,a[1]+(b[1]-a[1])*k/40]))).filter(([,y])=>y<=HEIGHT).map(([x])=>x);
+ const xs=edges.flatMap(([a,b])=>Array.from({length:41},(_,k)=>place(d,[a[0]+(b[0]-a[0])*k/40,a[1]+(b[1]-a[1])*k/40]))).filter(([,y])=>y>=0&&y<=HEIGHT).map(([x])=>x);
  if(Math.min(...xs)<i*WIDTH||Math.max(...xs)>(i+1)*WIDTH)throw new Error(`The ${d.screen} phone crosses the edge of image ${i+1}`);
 };
 DEVICES.forEach(inOwnImage);
@@ -74,17 +83,17 @@ export const PhonePanorama:React.FC<{locale:string;only?:number}>=({locale,only}
   <div data-shot="strip" style={{position:"absolute",inset:0}}>
    {visible.map((d,k)=>(
     <div key={d.screen} style={{position:"absolute",left:d.x,top:d.top,width:FRAME_W,zIndex:k+1,transform:`translateX(-50%) rotate(${d.roll??0}deg) scale(${d.scale})`,transformOrigin:"50% 0",filter:"drop-shadow(0 34px 44px rgba(0,40,48,.26))"}}>
-     <LitScreen id={SCREENS[d.screen][0]} state={SCREENS[d.screen][1]} safeBounds={CLEAR} pose={{yaw:d.yaw??0,pitch:d.pitch??0}} style={{width:FRAME_W}}/>
+     <LitScreen id={SCREENS[d.screen][0]} state={SCREENS[d.screen][1]} safeBounds={d.captionLow?CLEAR_LOW:CLEAR} pose={{yaw:d.yaw??0,pitch:d.pitch??0}} style={{width:FRAME_W}}/>
     </div>
    ))}
   </div>
   {visible.filter(d=>d.speaker).map(d=>{
    const [x,y]=place(d,bottomEdge(SPEAKER_X,0,d.pitch??0));
-   return <div key={`wave-${d.screen}`} style={{position:"absolute",inset:0,zIndex:10}}><Wave x={x} y={y} angle={d.roll??0} size={1.1} width={n*WIDTH} height={HEIGHT}/></div>;
+   return <div key={`wave-${d.screen}`} style={{position:"absolute",inset:0,zIndex:10}}><Wave x={x} y={y} angle={d.roll??0} size={1} flip width={n*WIDTH} height={HEIGHT}/></div>;
   })}
   {strings.screenshots.map((s,i)=>(
    <div key={s.id} style={{position:"absolute",left:i*WIDTH,top:0,width:WIDTH,height:HEIGHT,pointerEvents:"none",zIndex:20}}>
-    <Caption lines={s.lines} highlight={s.highlight} icon={s.icon} check={only===i}/>
+    <Caption lines={s.lines} highlight={s.highlight} icon={s.icon} low={DEVICES.some(d=>d.captionLow&&Math.floor(d.x/WIDTH)===i)} check={only===i}/>
    </div>
   ))}
  </AbsoluteFill>;
@@ -96,7 +105,8 @@ export const PhonePanorama:React.FC<{locale:string;only?:number}>=({locale,only}
  * dashes: the line break carries the pause. The render fails if the highlight is not in the lines exactly once, if a line has
  * punctuation or a dash, if the caption leaves its box, or if it covers over 20% of the image, Play's limit.
  */
-const Caption: React.FC<{ lines: string[]; highlight: string; icon: string; check: boolean }> = ({ lines, highlight, icon, check }) => {
+const Caption: React.FC<{ lines: string[]; highlight: string; icon: string; low: boolean; check: boolean }> = ({ lines, highlight, icon, low, check }) => {
+  const band = low ? CAPTION_LOW : CAPTION;
   const ref = useRef<HTMLHeadingElement>(null);
   const found = lines.flatMap((line, i) => (line.split(highlight).length - 1 === 1 ? [i] : []));
   const total = lines.reduce((sum, line) => sum + line.split(highlight).length - 1, 0);
@@ -115,12 +125,12 @@ const Caption: React.FC<{ lines: string[]; highlight: string; icon: string; chec
       const r = ref.current!.getBoundingClientRect();
       const share = (r.width * r.height) / (WIDTH * HEIGHT);
       const box = ref.current!.parentElement!.getBoundingClientRect();
-      const inside = r.left - box.left >= CAPTION.left && r.right - box.left <= CAPTION.right && r.top - box.top >= CAPTION.top && r.bottom - box.top <= CAPTION.bottom;
+      const inside = r.left - box.left >= band.left && r.right - box.left <= band.right && r.top - box.top >= band.top && r.bottom - box.top <= band.bottom;
       if (share > 0.2) cancelRender(new Error(`Caption covers ${(share * 100).toFixed(1)}% of the image; Play allows 20%`));
       else if (!inside) cancelRender(new Error(`The caption "${lines.join(" ")}" leaves its box; shorten it`));
       else continueRender(handle);
     });
-  }, [check, total, highlight, lines]);
+  }, [check, total, highlight, lines, band]);
   // An inline block shares the line's baseline, so the highlighted word sits level with the words around it; the
   // padding, not an offset, sizes the pill around it.
   const pill = (
@@ -130,7 +140,7 @@ const Caption: React.FC<{ lines: string[]; highlight: string; icon: string; chec
     </b>
   );
   return (
-    <h1 ref={ref} style={{ position: "absolute", left: "50%", top: CAPTION.top, transform: "translateX(-50%)", width: "max-content", maxWidth: CAPTION.right - CAPTION.left, margin: 0, zIndex: 2, color: INK, fontSize: 76, lineHeight: 1.36, letterSpacing: -1.5, fontWeight: 560, textAlign: "center" }}>
+    <h1 ref={ref} style={{ position: "absolute", left: "50%", ...(low ? { bottom: HEIGHT - band.bottom } : { top: band.top }), transform: "translateX(-50%)", width: "max-content", maxWidth: CAPTION.right - CAPTION.left, margin: 0, zIndex: 2, color: INK, fontSize: 76, lineHeight: 1.36, letterSpacing: -1.5, fontWeight: 560, textAlign: "center" }}>
       {lines.map((line, i) => {
         if (i !== found[0]) return <span key={i} style={{ display: "block" }}>{line}</span>;
         const [before, after] = line.split(highlight);

@@ -16,7 +16,7 @@ The keywords describe intent, not measured demand. The prior Play reports did no
 
 Five screenshots read as one panorama in the language of Material 3's own hero art: a light aqua field crossed by ribbons of liquid glass in aqua and white, with sharp white rims. The ribbons are computed across the whole strip, so every seam meets. No phone crosses a divider: each screenshot stands on its own, and the render fails if a phone's visible part enters the next image. Headlines are dark on the light field, with App Toolkit's aqua caption pill. Phones are Material-Next's porcelain 3D Pixel 9 Pro XL. Every image shows a different screen or state, with its own composition: the ready 165 Hz screen appears once, in the hero.
 
-1. Hero: the whole phone leans back so its bottom edge, with the speaker grille and USB-C port, faces the viewer. A twisting turquoise wave of water leaves the grille and curls over, and the Start button is in view. The water is an illustration of the tone, not a promise of what the app does to a phone.
+1. Hero: a large phone centred in the frame, running off the top and leaning back so the speaker holes and USB-C port on its bottom edge face the viewer. A twisting turquoise wave of water leaves the speaker and curls to the right, the Start button is in view, and the caption sits at the foot of the image. The water is an illustration of the tone, not a promise of what the app does to a phone.
 2. Up to 30 seconds: a close crop on the running cycle and its 20 second countdown.
 3. You choose when to stop: the whole phone turned to show its side, at 8 seconds with the Stop button in view.
 4. The toolbox: Unit Converter and Quick Tools side by side, tilted apart.
