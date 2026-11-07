@@ -3,59 +3,60 @@ import { AbsoluteFill, cancelRender, continueRender, delayRender } from "remotio
 import { LitScreen, useFonts } from "./LitScreen";
 import { SCREENS } from "./screens";
 import { STRINGS } from "./strings";
-import { Glass, Stream } from "./Glass";
+import { Bubbles, Glass } from "./Glass";
 import { FONT, INK, ON_PILL, PILL } from "./theme";
 
 export const WIDTH=1080,HEIGHT=1920;
 const CAPTION={left:120,right:960,top:72,bottom:312};
 const ICON_DROP="-.1em";
 // Local CSS pixels, before the renderer's 2x output scale. Every visible subject is checked after layout.
-const SAFE={left:40,right:1040,top:360,bottom:1880};
-// A phone may run off the bottom or a side on purpose (a close view); nothing may enter the caption band.
-const BLEED={left:-1200,right:2280,top:360,bottom:3000};
+/** Phones may run off the bottom and across the dividers; nothing may enter the caption band. */
+const CLEAR={left:-1e5,right:1e5,top:340,bottom:1e5};
 const FRAME_W=465.23;
-/** Where a close view's window starts, under the caption band. */
-const WINDOW_TOP=360;
-const CROPPED={left:-1200,right:2280,top:-3000,bottom:3000};
 
-/** A device in a shot: its screen (a key of SCREENS, the shot's own by default), where it stands, how large, its turn. */
-type Device={screen?:string;x:number;top:number;scale:number;yaw?:number;pitch?:number;bleed?:boolean;detail?:"guidance";crop?:boolean};
-/** A shot: one or two devices, never the same screen twice, its ripples, and an illustrated wave from a speaker. */
-type Shot={devices:Device[];stream?:{x:number;y:number}};
+/**
+ * A phone placed on the whole strip: `x` is its centre across all the screenshots, so a phone may sit
+ * across a divider and appear in both images. `roll` tilts it in the picture plane, the way phones lie
+ * on a table in a product shot; `yaw` adds a little depth. Phones are large and run off the bottom
+ * edge, never off the top, so no corner is ever cut.
+ */
+type Device={screen:string;x:number;top:number;scale:number;roll?:number;yaw?:number;pitch?:number};
 
-// Five shots read as one panorama: ribbons of liquid glass run the whole strip, and each image shows a different
-// screen or state. Phones lean back the way a phone resting in a hand does; the hero pours water from its speaker.
-const SHOTS:Shot[]=[
- // 1 Hero: ready at 165 Hz, leaning back, water leaving the speaker.
- {devices:[{x:600,top:400,scale:1.18,yaw:-12,pitch:14}],stream:{x:650,y:1545}},
- // 2 The cycle running at 20 seconds, leaning the other way.
- {devices:[{x:520,top:440,scale:1.28,yaw:14,pitch:10}]},
- // 3 Larger and straight on 8 seconds and the Stop button, the phone running off the bottom.
- {devices:[{x:540,top:390,scale:1.55,bleed:true}]},
- // 4 The toolbox: Quick Tools behind, Unit Converter in front.
- {devices:[{screen:"quick-tools",x:330,top:580,scale:1.06,yaw:16,pitch:8},{screen:"unit-converter",x:700,top:450,scale:1.24,yaw:-10,pitch:8}]},
- // 5 Bubble Level, leaning back.
- {devices:[{x:540,top:440,scale:1.28,yaw:-10,pitch:12}]},
+// One strip, five images. Each phone shows its own screen; the ready 165 Hz screen appears once. The
+// toolbox phones are side by side, tilted apart, Quick Tools straddling the last divider.
+const DEVICES:Device[]=[
+ {screen:"water-eject",x:540,top:470,scale:1.72,roll:-7,yaw:-6},
+ {screen:"water-running",x:1080+540,top:500,scale:1.72,roll:4,yaw:6},
+ {screen:"water-stop",x:2160+530,top:450,scale:1.6,roll:-3},
+ {screen:"unit-converter",x:3240+360,top:540,scale:1.5,roll:-6},
+ {screen:"quick-tools",x:4320,top:700,scale:1.5,roll:7},
+ {screen:"level",x:4320+700,top:520,scale:1.5,roll:-5},
 ];
+/** Bubbles rising from the hero's speaker, just below the edge of the image. */
+const BUBBLES={x:470,y:1920};
+
 export const PhonePanorama:React.FC<{locale:string;only?:number}>=({locale,only})=>{
  useFonts();
  const strings=STRINGS[locale],n=strings.screenshots.length;
- if(SHOTS.length!==n) throw new Error(`${n} captions for ${SHOTS.length} compositions`);
+ // Draw only the phones that fall in the image being rendered.
+ const visible=DEVICES.filter(d=>{
+  if(only===undefined)return true;
+  const half=FRAME_W*d.scale*0.62;
+  return d.x+half>only*WIDTH&&d.x-half<(only+1)*WIDTH;
+ });
  return <AbsoluteFill style={{width:n*WIDTH,fontFamily:FONT,overflow:"hidden"}}>
   <Glass width={n*WIDTH} height={HEIGHT} panels={n}/>
+  {(only===undefined||only===0)&&<Bubbles x={BUBBLES.x} y={BUBBLES.y} width={n*WIDTH} height={HEIGHT}/>}
+  <div data-shot="strip" style={{position:"absolute",inset:0}}>
+   {visible.map((d,k)=>(
+    <div key={d.screen} style={{position:"absolute",left:d.x,top:d.top,width:FRAME_W,zIndex:k+1,transform:`translateX(-50%) rotate(${d.roll??0}deg) scale(${d.scale})`,transformOrigin:"50% 0",filter:"drop-shadow(0 34px 44px rgba(0,40,48,.26))"}}>
+     <LitScreen id={SCREENS[d.screen][0]} state={SCREENS[d.screen][1]} safeBounds={CLEAR} pose={{yaw:d.yaw??0,pitch:d.pitch??0}} style={{width:FRAME_W}}/>
+    </div>
+   ))}
+  </div>
   {strings.screenshots.map((s,i)=>(
-   <div key={s.id} data-shot={i} style={{position:"absolute",left:i*WIDTH,top:0,width:WIDTH,height:HEIGHT}}>
+   <div key={s.id} style={{position:"absolute",left:i*WIDTH,top:0,width:WIDTH,height:HEIGHT,pointerEvents:"none",zIndex:20}}>
     <Caption lines={s.lines} highlight={s.highlight} icon={s.icon} check={only===i}/>
-    {(only===undefined||only===i)&&SHOTS[i].devices.map((d,k)=>{
-     const id=d.screen??s.id;
-     const w=d.detail?430:FRAME_W;
-     const device=<div key={k} style={{position:"absolute",left:d.x,top:d.crop?d.top-WINDOW_TOP:d.top,width:w,zIndex:k+1,transform:`translateX(-50%) scale(${d.scale})`,transformOrigin:"50% 0",filter:d.crop?undefined:"drop-shadow(0 30px 40px rgba(0,30,38,.28))"}}>
-      <LitScreen id={SCREENS[id][0]} state={SCREENS[id][1]} frame={!d.detail} detail={d.detail} safeBounds={d.crop?CROPPED:d.bleed?BLEED:SAFE} pose={{yaw:d.yaw??0,pitch:d.pitch??0}} style={{width:w}}/>
-     </div>;
-     // A close view sits in a window under the captions, its top fading into the glass.
-     return d.crop?<div key={k} style={{position:"absolute",left:0,top:WINDOW_TOP,width:WIDTH,height:HEIGHT-WINDOW_TOP,overflow:"hidden"}}>{device}</div>:device;
-    })}
-    {(only===undefined||only===i)&&SHOTS[i].stream&&<div style={{position:"absolute",inset:0,zIndex:4,pointerEvents:"none"}}><Stream id={`stream-${i}`} x={SHOTS[i].stream!.x} y={SHOTS[i].stream!.y} width={WIDTH} height={HEIGHT}/></div>}
    </div>
   ))}
  </AbsoluteFill>;

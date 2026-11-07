@@ -18,8 +18,7 @@ export const Glass: React.FC<{ width: number; height: number; panels: number; id
     return `M ${pts.join(" L ")}`;
   };
   const ribbons = [
-    { d: ribbon(height * 0.3, height * 0.15, 2.2, 0.6), w: 130, o: 0.75 },
-    { d: ribbon(height * 0.62, height * 0.2, 1.7, 2.4), w: 220, o: 0.9 },
+        { d: ribbon(height * 0.62, height * 0.2, 1.7, 2.4), w: 220, o: 0.9 },
     { d: ribbon(height * 0.92, height * 0.1, 2.6, 4.1), w: 160, o: 0.8 },
   ];
   return (
@@ -30,11 +29,10 @@ export const Glass: React.FC<{ width: number; height: number; panels: number; id
           <stop offset="1" stopColor="#CDEFF2" />
         </linearGradient>
         <linearGradient id={`${id}-iris`} x1="0" y1="0" x2={panel * 1.4} y2="0" gradientUnits="userSpaceOnUse" spreadMethod="reflect">
-          <stop offset="0" stopColor="#7EE3EC" />
-          <stop offset=".3" stopColor="#FFFFFF" />
-          <stop offset=".5" stopColor="#FFF3A6" />
-          <stop offset=".7" stopColor="#F3C6F0" />
-          <stop offset="1" stopColor="#A9C8FF" />
+          <stop offset="0" stopColor="#8FE6EC" />
+          <stop offset=".45" stopColor="#F4FFFF" />
+          <stop offset=".75" stopColor="#B9EEF2" />
+          <stop offset="1" stopColor="#6FD3DE" />
         </linearGradient>
                 <filter id={`${id}-soft`}><feGaussianBlur stdDeviation="3" /></filter>
       </defs>
@@ -95,6 +93,39 @@ export const Stream: React.FC<{ x: number; y: number; width: number; height: num
         </g>
       ))}
       </g>
+    </svg>
+  );
+};
+
+/**
+ * Bubbles rising from a speaker just below the image's edge at (x, y): clear spheres with a bright
+ * rim and a highlight, larger and denser near the speaker, thinning as they rise.
+ */
+export const Bubbles: React.FC<{ x: number; y: number; width: number; height: number }> = ({ x, y, width, height }) => {
+  let seed = 23;
+  const rand = () => ((seed = (Math.imul(seed, 1664525) + 1013904223) >>> 0) / 4294967296);
+  const bubbles = Array.from({ length: 34 }, (_, i) => {
+    const rise = Math.pow(rand(), 0.8);
+    const r = 34 - rise * 26 + rand() * 10;
+    const side = rand() < 0.5 ? -1 : 1;
+    return { key: i, cx: x + side * (60 + rand() * 300 + rise * 160), cy: y - 60 - rise * 1150, r };
+  });
+  return (
+    <svg aria-hidden width={width} height={height} viewBox={`0 0 ${width} ${height}`} style={{ position: "absolute", inset: 0, pointerEvents: "none", zIndex: 10 }}>
+      <defs>
+        <radialGradient id="bubble" cx=".5" cy=".5" r=".5">
+          <stop offset=".7" stopColor="#FFFFFF" stopOpacity=".05" />
+          <stop offset=".92" stopColor="#BFF4F6" stopOpacity=".55" />
+          <stop offset="1" stopColor="#FFFFFF" stopOpacity=".95" />
+        </radialGradient>
+      </defs>
+      {bubbles.map((b) => (
+        <g key={b.key}>
+          <circle cx={b.cx} cy={b.cy} r={b.r} fill="url(#bubble)" stroke="#5FCAD6" strokeOpacity=".35" strokeWidth="1.2" />
+          <ellipse cx={b.cx - b.r * 0.38} cy={b.cy - b.r * 0.42} rx={b.r * 0.26} ry={b.r * 0.16} fill="#FFFFFF" transform={`rotate(-35 ${b.cx - b.r * 0.38} ${b.cy - b.r * 0.42})`} />
+          <path d={`M ${b.cx + b.r * 0.55} ${b.cy + b.r * 0.2} A ${b.r * 0.7} ${b.r * 0.7} 0 0 1 ${b.cx + b.r * 0.1} ${b.cy + b.r * 0.62}`} fill="none" stroke="#FFFFFF" strokeWidth={Math.max(1.5, b.r * 0.08)} strokeOpacity=".8" strokeLinecap="round" />
+        </g>
+      ))}
     </svg>
   );
 };
