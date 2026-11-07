@@ -23,27 +23,27 @@
     {
       "id": "water-running",
       "lines": [
-        "A short cycle",
-        "with a timer"
+        "Up to",
+        "30 seconds"
       ],
-      "highlight": "timer",
+      "highlight": "30 seconds",
       "icon": "water_drop",
       "alt": "Water Eject running with 20 seconds remaining and Stop cycle visible"
     },
     {
       "id": "water-stop",
       "lines": [
-        "Stop the tone",
-        "when you need"
+        "You choose",
+        "when to stop"
       ],
-      "highlight": "Stop",
+      "highlight": "stop",
       "icon": "water_drop",
       "alt": "Water Eject with 8 seconds remaining and a full-width Stop cycle control"
     },
     {
       "id": "water-guidance",
       "lines": [
-        "Clear guidance",
+        "Read the guidance",
         "before you start"
       ],
       "highlight": "guidance",
@@ -53,28 +53,28 @@
     {
       "id": "quick-tools",
       "lines": [
-        "More tools",
-        "close at hand"
+        "A useful little",
+        "toolbox too"
       ],
-      "highlight": "tools",
+      "highlight": "toolbox",
       "icon": "grid_view",
       "alt": "Quick Tools with live compass, level and flashlight widgets"
     },
     {
       "id": "unit-converter",
       "lines": [
-        "Convert units",
-        "in a moment"
+        "Metres to",
+        "centimetres"
       ],
-      "highlight": "Convert",
+      "highlight": "centimetres",
       "icon": "straighten",
       "alt": "Unit Converter converting one metre to centimetres"
     },
     {
       "id": "level",
       "lines": [
-        "Check a surface",
-        "with the level"
+        "Find your",
+        "level"
       ],
       "highlight": "level",
       "icon": "straighten",

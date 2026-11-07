@@ -7,17 +7,20 @@ import { renderStill, selectComposition } from "@remotion/renderer";
 import { execFileSync } from "node:child_process";
 import { mkdir, readFile, readdir, rm, writeFile } from "node:fs/promises";
 import path from "node:path";
+import { createHash } from "node:crypto";
 import { fileURLToPath } from "node:url";
 
 
 const root = fileURLToPath(new URL("../", import.meta.url));
 const listing = path.resolve(root, "..", "listing");
 const output = path.join(root, "output");
-const wanted = process.argv.slice(2);
+const verifyRepeat = process.argv.includes("--verify-repeat");
+const wanted = process.argv.slice(2).filter(arg => !arg.startsWith("--"));
 const locales = (await readdir(path.join(root, "strings"))).filter((f) => f.endsWith(".json")).map((f) => f.slice(0, -5))
   .filter((l) => !wanted.length || wanted.includes(l));
 const browserExecutable = process.env.REMOTION_BROWSER ?? process.env.CHROME_PATH ?? null;
 
+execFileSync(process.execPath, [path.join(root, "scripts/generate-water.mjs")], {stdio:"inherit"});
 const serveUrl = await bundle({ entryPoint: path.join(root, "src/index.ts"), publicDir: path.join(root, "public") });
 const still = async (id, inputProps, file, scale = 1) => {
   const composition = await selectComposition({ serveUrl, id, inputProps, browserExecutable });
@@ -31,13 +34,23 @@ for (const locale of locales) {
   const out = path.join(listing, locale, "graphics");
   for (const dir of ["phone-screenshots", "tablet-screenshots", "desktop-screenshots", "feature-graphic", "icon"]) await rm(path.join(out, dir), { recursive: true, force: true });
   const flatten = [];
+  const repeatability = [];
 
-  // Phone: 1080 x 1920 each, cut from the panorama. PhoneShot fails the render if a caption covers over 20%.
+  // Phone: 1080 x 1920 layouts rendered at 2x (2160 x 3840) for sharper perspective text. PhoneShot fails the render if a caption covers over 20%.
   for (const [i, s] of strings.screenshots.entries()) {
     const file = path.join(out, "phone-screenshots", `${i + 1}-${s.id}.png`);
-    await still("PhoneShot", { locale, index: i }, file);
+    await still("PhoneShot", { locale, index: i }, file, 2);
+    if (verifyRepeat) {
+      const repeat = path.join(output, `repeat-${i+1}.png`);
+      await still("PhoneShot", {locale,index:i}, repeat, 2);
+      const hash = bytes => createHash("sha256").update(bytes).digest("hex");
+      const firstHash=hash(await readFile(file)),secondHash=hash(await readFile(repeat));
+      if(firstHash!==secondHash) throw new Error(`Non-deterministic phone capture: ${s.id}`);
+      repeatability.push({id:s.id,sha256:firstHash,identical:true});
+    }
     flatten.push(file);
   }
+  if(verifyRepeat) await writeFile(path.join(output,"repeatability.json"),JSON.stringify(repeatability,null,2)+"\n");
   await still("PhonePanorama", { locale }, path.join(output, `panorama-${locale}.png`), 0.5);
 
   // Tablet and desktop: 1920 x 1080 laid out, rendered at 2x (3840 x 2160).

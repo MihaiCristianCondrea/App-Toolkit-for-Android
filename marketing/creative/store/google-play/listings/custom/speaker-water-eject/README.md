@@ -14,9 +14,9 @@ The keywords describe intent, not measured demand. The prior Play reports did no
 
 ## Creative direction
 
-A pale aquatic blue ground, rounded Material shapes, original speaker-grille and droplet illustrations and a low water contour carry the sequence across its seams. The official amber icon and centered caption pills retain the App Toolkit identity. Material-Next 0.2.0 supplies the Pixel 9 Pro XL, Fold and desktop device frames.
+The campaign uses shallow-water aqua, cyan contours, mint highlights and a small sunlit accent. Sparse smooth MaterialShapes, original droplets and elliptical ripples replace the earlier star-like scatter. The official amber icon and centered caption pills retain the App Toolkit identity. Material-Next 0.2.0 supplies the porcelain 3D Pixel 9 Pro XL, Fold and desktop device frames. The phone set alternates a straight hero, modest perspective poses and two close crops of the actual sheet. It renders at 2160 x 3840 to preserve text quality.
 
-The first five phone images address the immediate need: Water Eject, the fixed frequency, the timed cycle, the stop control and the guidance. Quick Tools, Unit Converter and Bubble Level follow as secondary value. The large-screen sets lead with ready and running Water Eject. No image promises a repair or shows a successful water-removal result.
+The first five phone images address the immediate need: Water Eject, the fixed frequency, the timed cycle, the stop control and the guidance. Quick Tools, Unit Converter and Bubble Level follow as secondary value. Tablet, desktop and feature artwork share the same water contours. The large-screen sets lead with ready and running Water Eject. No image promises a repair or shows a successful water-removal result.
 
 ## Verification and limits
 
