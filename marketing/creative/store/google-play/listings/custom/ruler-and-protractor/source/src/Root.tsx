@@ -1,4 +1,5 @@
 import React from "react";
+import {HeroStudy} from "./HeroStudy";
 import { Still } from "remotion";
 import { FeatureGraphic } from "./FeatureGraphic";
 import { UiProbe } from "./UiProbe";
@@ -12,6 +13,7 @@ const en = STRINGS["en-US"];
 // Every Google Play graphic as a still. scripts/render.mjs renders each one per language; Remotion Studio previews them.
 export const RemotionRoot: React.FC = () => (
   <>
+    <Still id="HeroStudy" component={HeroStudy} width={1080} height={1920} defaultProps={{concept:0}} />
     <Still id="PhoneShot" component={PhoneShot} width={WIDTH} height={HEIGHT} defaultProps={{ locale: "en-US", index: 0 }} />
     <Still id="PhonePanorama" component={PhonePanorama} width={WIDTH * en.screenshots.length} height={HEIGHT} defaultProps={{ locale: "en-US" }} />
     <Still id="TabletShot" component={WideShot} width={CANVAS.w} height={CANVAS.h} defaultProps={{ locale: "en-US", kind: "tablet" as const, index: 0, debug: false }} />
