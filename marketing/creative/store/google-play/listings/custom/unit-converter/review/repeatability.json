@@ -1,22 +1,22 @@
 [
   {
     "id": "convert",
-    "sha256": "ad146a4d359b4e8678772b5616336487734cd5bf5056e7f36e1ec733b4034e72",
+    "sha256": "c8fb5de14cfd7acb82325f1b7758c217938cd495ea411c5584e414100a8b6caf",
     "identical": true
   },
   {
     "id": "everyday",
-    "sha256": "b3f051d88dcacb8c1948954dcf75d764bfe8674d1acc2a263474ee43636940f3",
+    "sha256": "33d135a5c2c52f7643ec7dc6b03b61dfef90fb5a3c614adc312e5ae38df7ad33",
     "identical": true
   },
   {
     "id": "temperature-data",
-    "sha256": "baf03eed65a8b3fc3f4017df21d0378393755178546d5daff40ebd90d6805358",
+    "sha256": "9f641a44b54898fa8d892a4080b33c7342c4f7bb8c2e65d99b2649556347ba77",
     "identical": true
   },
   {
     "id": "toolkit",
-    "sha256": "63b3f27727a96e671d37497a9b16adfc6e9276847ef150bb229ce12e07070982",
+    "sha256": "47b0871a0ed93b367a2d9aa3c21768b30535e20e367362fd1d6bd3cfc39ce090",
     "identical": true
   }
 ]

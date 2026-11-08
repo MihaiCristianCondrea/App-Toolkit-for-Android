@@ -1,25 +1,21 @@
 {
   "date": "2026-11-08",
-  "scope": "unit-converter marketing creative and listing text",
+  "scope": "unit-converter phone creative refresh",
   "commands": [
-    {
-      "command": "npm ci",
-      "exitCode": 0
-    },
     {
       "command": "npm run lint",
       "exitCode": 0
     },
     {
-      "command": "npm run probe -- toolkit",
+      "command": "npm run solve -- 2",
       "exitCode": 0
     },
     {
-      "command": "npm run solve -- 1",
+      "command": "node scripts/placement.ts",
       "exitCode": 0
     },
     {
-      "command": "node scripts/preview-campaign.mjs 1",
+      "command": "node scripts/preview-campaign.mjs",
       "exitCode": 0
     },
     {
@@ -36,6 +32,10 @@
     },
     {
       "command": "npm run audit",
+      "exitCode": 0
+    },
+    {
+      "command": "npm run archive",
       "exitCode": 0
     },
     {
@@ -63,14 +63,30 @@
   "phoneCompositions": [
     "Intentional close device crop",
     "Jointly solved mass and volume Pixel pair",
-    "Temperature and data native UI crops",
+    "Jointly solved temperature and data Pixel pair",
     "Measure workspace"
   ],
-  "pair": {
-    "candidates": 972,
-    "rejected": 846,
-    "gapPx": 30.998,
-    "overlapPx2": 0,
-    "staggerPx": 239.998
-  }
+  "pairs": {
+    "massVolume": {
+      "candidates": 972,
+      "rejected": 846,
+      "gapPx": 30.998,
+      "overlapPx2": 0,
+      "staggerPx": 239.998
+    },
+    "temperatureData": {
+      "candidates": 972,
+      "rejected": 792,
+      "gapPx": 29.07,
+      "overlapPx2": 0,
+      "staggerPx": -290.002
+    }
+  },
+  "extraMaterialShapesPerPhoneImage": 5,
+  "totalPhoneShapes": [
+    7,
+    6,
+    7,
+    7
+  ]
 }

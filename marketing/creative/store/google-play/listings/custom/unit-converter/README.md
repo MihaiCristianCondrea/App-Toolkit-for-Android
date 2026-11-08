@@ -31,16 +31,16 @@ Common length, kg/lb and temperature scenarios are positioning hypotheses, not v
 
 ## Creative direction
 
-Everyday numbers, beautifully connected. A warm off-white field, sea-glass cyan, deep teal type and selected butter accents complement the app's unchanged yellow-tonal fields. Pairs of real MaterialShapes suggest From and To, with opposing arrow paths beside the device. Two thin continuous curves connect the panorama. There are no water effects, confetti or formula wallpaper.
+Everyday numbers, beautifully connected. A warm off-white field, sea-glass cyan, deep teal type and selected butter accents complement the app's unchanged yellow-tonal fields. Pairs of real MaterialShapes suggest From and To, with five smaller, seeded accents around each composition. Two thin continuous curves connect the panorama. There are no water effects, confetti or formula wallpaper.
 
 Four compositions replace the earlier six similar phone posters:
 
 1. A large real converter with an intentional crop at the top image boundary. From/To values, selectors, swap and guidance stay fully visible.
 2. Mass and volume together on two full Pixels in complementary poses. The solver searches both devices together, keeps at least 21 px between their projected silhouettes and rejects any covered or unreadable control.
-3. Temperature and decimal storage grouped as larger real UI details. These are live Marketing UI crops, not recreated fields.
+3. Temperature and decimal storage on two whole Pixels, reversing the previous image's stagger. Both full interfaces and the decimal-unit note remain visible.
 4. The actual Measure workspace, introducing the other everyday tools in App Toolkit.
 
-All five conversion categories remain represented. The pair is selected from 972 candidates, with result-area targets near the golden horizontal guides and combined area-weighted centering. The selected geometry has a 30.998 px silhouette gap, no overlap and 239.998 px vertical stagger. Camera yaw is -6 and +6 degrees, roll +2 and -2 degrees. Each composition has its own scale and visual role.
+All five conversion categories remain represented. The pair is selected from 972 candidates, with result-area targets near the golden horizontal guides and combined area-weighted centering. The selected geometry has a 30.998 px silhouette gap, no overlap and 239.998 px vertical stagger. Camera yaw is -6 and +6 degrees, roll +2 and -2 degrees. The Temperature/Data solve searches 972 candidates and rejects 792. It has a 29.07 px gap, no overlap and a reversed 290.002 px stagger. Each composition has its own scale and visual role. All four images have five small MaterialShape accents, placed clear of captions, phones and larger shapes.
 
 The feature graphic and the earlier hero studies are retained from the initial creative exploration. The current campaign is shown in review/contact-clean.png. The selected Connected measurements feature graphic links metre and centimetre notation through MaterialShapes and swap arrows.
 

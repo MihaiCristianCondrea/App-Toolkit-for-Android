@@ -184,51 +184,6 @@
     },
     {
       "asset": "panorama-en-US.png",
-      "category": "Temperature",
-      "from": "Celsius",
-      "to": "Fahrenheit",
-      "values": [
-        "20",
-        "68"
-      ],
-      "fonts": [
-        "Material Symbols Outlined",
-        "Material Symbols Rounded",
-        "\"Google Sans Flex\""
-      ]
-    },
-    {
-      "asset": "panorama-en-US.png",
-      "category": "Data",
-      "from": "Gigabyte",
-      "to": "Megabyte",
-      "values": [
-        "1",
-        "1000"
-      ],
-      "fonts": [
-        "Material Symbols Outlined",
-        "Material Symbols Rounded",
-        "\"Google Sans Flex\""
-      ]
-    },
-    {
-      "asset": "panorama-en-US.png",
-      "category": "Volume",
-      "from": "Litre",
-      "to": "Millilitre",
-      "values": [
-        "1",
-        "1000"
-      ],
-      "fonts": [
-        "Material Symbols Outlined",
-        "Material Symbols Rounded",
-        "\"Google Sans Flex\""
-      ]
-    },
-    {
-      "asset": "panorama-en-US.png",
       "category": "Length",
       "from": "Metre",
       "to": "Centimetre",
@@ -260,12 +215,57 @@
     },
     {
       "asset": "panorama-en-US.png",
+      "category": "Volume",
+      "from": "Litre",
+      "to": "Millilitre",
+      "values": [
+        "1",
+        "1000"
+      ],
+      "fonts": [
+        "Material Symbols Outlined",
+        "Material Symbols Rounded",
+        "\"Google Sans Flex\""
+      ]
+    },
+    {
+      "asset": "panorama-en-US.png",
+      "category": "Temperature",
+      "from": "Celsius",
+      "to": "Fahrenheit",
+      "values": [
+        "20",
+        "68"
+      ],
+      "fonts": [
+        "Material Symbols Outlined",
+        "Material Symbols Rounded",
+        "\"Google Sans Flex\""
+      ]
+    },
+    {
+      "asset": "panorama-en-US.png",
       "category": "Mass",
       "from": "Kilogram",
       "to": "Pound",
       "values": [
         "2.26796185",
         "5"
+      ],
+      "fonts": [
+        "Material Symbols Outlined",
+        "Material Symbols Rounded",
+        "\"Google Sans Flex\""
+      ]
+    },
+    {
+      "asset": "panorama-en-US.png",
+      "category": "Data",
+      "from": "Gigabyte",
+      "to": "Megabyte",
+      "values": [
+        "1",
+        "1000"
       ],
       "fonts": [
         "Material Symbols Outlined",

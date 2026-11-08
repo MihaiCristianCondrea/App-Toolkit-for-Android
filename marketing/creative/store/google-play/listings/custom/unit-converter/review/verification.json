@@ -20,11 +20,11 @@
   "balance": {
    "geometric": [
     0.499,
-    0.395
+    0.397
    ],
    "pixels": [
-    0.495,
-    0.4
+    0.494,
+    0.407
    ]
   },
   "phones": [
@@ -77,12 +77,12 @@
   },
   "balance": {
    "geometric": [
-    0.502,
+    0.504,
     0.524
    ],
    "pixels": [
-    0.5,
-    0.444
+    0.506,
+    0.442
    ]
   },
   "phones": [
@@ -137,8 +137,8 @@
    "size": 0.0000020227576953237744,
    "pairBalance": 1.4573702981041546e-10,
    "stagger": 1.2140109843146364e-9,
-   "massGuide": 0.015508186904150434,
-   "volumeGuide": 0.0014776897912282213,
+   "leftGuide": 0.015508186904150434,
+   "rightGuide": 0.0014776897912282213,
    "pose": 0
   }
  },
@@ -148,8 +148,8 @@
   "hard": [],
   "preferences": [],
   "intentional": [
-   "temperature: real From/To UI detail without a device frame",
-   "data: real From/To UI detail without a device frame"
+   "shape flower sits behind the phone",
+   "shape pill sits behind the phone"
   ],
   "caption": {
    "glyphPixels": 13146,
@@ -161,16 +161,70 @@
   },
   "balance": {
    "geometric": [
-    0.511,
-    0.471
+    0.499,
+    0.451
    ],
    "pixels": [
-    0.472,
-    0.526
+    0.505,
+    0.43
    ]
   },
-  "phones": [],
-  "terms": {}
+  "phones": [
+   {
+    "screen": "temperature",
+    "pose": {
+     "pitch": -2,
+     "yaw": 6,
+     "roll": 2,
+     "perspective": 3000,
+     "scale": 0.974,
+     "x": 285.279,
+     "y": 960.206
+    },
+    "centroid": [
+     0.264,
+     0.499
+    ],
+    "area": 0.207,
+    "box": {
+     "left": 0.043,
+     "top": 0.245,
+     "right": 0.488,
+     "bottom": 0.751
+    }
+   },
+   {
+    "screen": "data",
+    "pose": {
+     "pitch": 2,
+     "yaw": -6,
+     "roll": -2,
+     "perspective": 3000,
+     "scale": 0.974,
+     "x": 794.53,
+     "y": 667.437
+    },
+    "centroid": [
+     0.736,
+     0.349
+    ],
+    "area": 0.207,
+    "box": {
+     "left": 0.514,
+     "top": 0.094,
+     "right": 0.959,
+     "bottom": 0.601
+    }
+   }
+  ],
+  "terms": {
+   "size": 0.0000020227576953302788,
+   "pairBalance": 1.4573702962556487e-10,
+   "stagger": 1.7114319600306458e-9,
+   "leftGuide": 0.24277850747761334,
+   "rightGuide": 0.36793667865271484,
+   "pose": 0
+  }
  },
  {
   "index": 4,
@@ -191,12 +245,12 @@
   },
   "balance": {
    "geometric": [
-    0.531,
-    0.546
+    0.529,
+    0.543
    ],
    "pixels": [
     0.503,
-    0.518
+    0.514
    ]
   },
   "phones": [

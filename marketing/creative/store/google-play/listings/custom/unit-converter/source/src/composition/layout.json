@@ -66,12 +66,41 @@
   },
   {
    "id": "temperature-data",
-   "screens": [],
-   "poses": [],
-   "score": 0,
-   "terms": {},
-   "searched": 1,
-   "rejected": 0
+   "screens": [
+    "temperature",
+    "data"
+   ],
+   "poses": [
+    {
+     "pitch": -2,
+     "yaw": 6,
+     "roll": 2,
+     "perspective": 3000,
+     "scale": 0.974,
+     "x": 285.279,
+     "y": 960.206
+    },
+    {
+     "pitch": 2,
+     "yaw": -6,
+     "roll": -2,
+     "perspective": 3000,
+     "scale": 0.974,
+     "x": 794.53,
+     "y": 667.437
+    }
+   ],
+   "score": 0.6106,
+   "terms": {
+    "size": 0,
+    "pairBalance": 0,
+    "stagger": 0,
+    "leftGuide": 0.2428,
+    "rightGuide": 0.3679,
+    "pose": 0
+   },
+   "searched": 972,
+   "rejected": 792
   },
   {
    "id": "toolkit",

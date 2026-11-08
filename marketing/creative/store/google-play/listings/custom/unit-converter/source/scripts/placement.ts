@@ -10,7 +10,7 @@ const shots=SHOTS.map((spec,i)=>{
   phones:g.phones.map((m,j)=>({screen:spec.screens[j],pose:m.pose,bounds:m.full,centroid:m.centroid.map((n,k)=>round(n/(k?H:W))),area:round(m.area/(W*H)),
    critical:Object.fromEntries(Object.entries(m.critical).map(([key,p])=>[key,{box:bbox(p),centre:centre(p).map((n,k)=>round(n/(k?H:W)))}]))})),
   pair:g.phones.length===2?{horizontalGap:round(g.phones[1].full.left-g.phones[0].full.right),overlap:round(overlapArea(g.phones[0].visible,g.phones[1].visible)),stagger:round(g.phones[1].full.top-g.phones[0].full.top)}:null,
-  details:g.panels.map(p=>({screen:p.screen,bounds:p.box,scale:p.scale})),intentional:g.report.intentional};
+  shapes:g.shapes.map(p=>({name:p.name,x:p.x,y:p.y,size:p.size,behind:!!p.behind})),intentional:g.report.intentional};
 });
 mkdirSync(new URL("../../review/",import.meta.url),{recursive:true});
 writeFileSync(new URL("../../review/placement.json",import.meta.url),JSON.stringify({golden:GOLDEN,shots},null,2)+"\n");

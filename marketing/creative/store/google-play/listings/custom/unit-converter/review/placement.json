@@ -23,7 +23,7 @@
       "hard": [],
       "balance": [
         0.499,
-        0.395
+        0.397
       ],
       "phones": [
         {
@@ -125,7 +125,57 @@
         }
       ],
       "pair": null,
-      "details": [],
+      "shapes": [
+        {
+          "name": "pill",
+          "x": 55,
+          "y": 340,
+          "size": 630,
+          "behind": true
+        },
+        {
+          "name": "gem",
+          "x": 630,
+          "y": 850,
+          "size": 390,
+          "behind": true
+        },
+        {
+          "name": "cookie_9sided",
+          "x": 15.42095195121017,
+          "y": 1304.0624126103085,
+          "size": 86.40913865761831,
+          "behind": false
+        },
+        {
+          "name": "flower",
+          "x": 19.592180807351212,
+          "y": 1437.6627883517053,
+          "size": 130.79732345882803,
+          "behind": false
+        },
+        {
+          "name": "clover_4leaf",
+          "x": 612.2905822731241,
+          "y": 1516.2932437716736,
+          "size": 72.57066118065268,
+          "behind": false
+        },
+        {
+          "name": "soft_burst",
+          "x": 994.8273934517615,
+          "y": 157.42951249704777,
+          "size": 77.83077929867432,
+          "behind": false
+        },
+        {
+          "name": "gem",
+          "x": 935.2546874930168,
+          "y": 1436.911577174702,
+          "size": 123.12551240203902,
+          "behind": false
+        }
+      ],
       "intentional": [
         "shape pill sits behind the phone",
         "shape gem sits behind the phone",
@@ -143,7 +193,7 @@
       },
       "hard": [],
       "balance": [
-        0.502,
+        0.504,
         0.524
       ],
       "phones": [
@@ -347,14 +397,57 @@
         "overlap": 0,
         "stagger": 239.998
       },
-      "details": [],
+      "shapes": [
+        {
+          "name": "clover_4leaf",
+          "x": 200,
+          "y": 590,
+          "size": 780,
+          "behind": true
+        },
+        {
+          "name": "clover_4leaf",
+          "x": 495.69555678313907,
+          "y": 1721.1565557397105,
+          "size": 90.93909021932632,
+          "behind": false
+        },
+        {
+          "name": "soft_burst",
+          "x": 902.5582956336746,
+          "y": 506.92168204430914,
+          "size": 122.19926424324512,
+          "behind": false
+        },
+        {
+          "name": "gem",
+          "x": 616.4994013999967,
+          "y": 336.84859921628555,
+          "size": 147.66414655838162,
+          "behind": false
+        },
+        {
+          "name": "pill",
+          "x": 973.6542062285534,
+          "y": 1682.0979875849835,
+          "size": 90.31785417580977,
+          "behind": false
+        },
+        {
+          "name": "sunny",
+          "x": 165.82689180066768,
+          "y": 1659.329596196865,
+          "size": 108.41033790493384,
+          "behind": false
+        }
+      ],
       "intentional": [
         "shape clover_4leaf sits behind the phone"
       ]
     },
     {
       "id": "temperature-data",
-      "intent": "Related conversion categories grouped as real UI details",
+      "intent": "Temperature and decimal data on two whole Pixels with a reversed stagger and clear native guidance",
       "caption": {
         "left": 120,
         "right": 960,
@@ -363,36 +456,276 @@
       },
       "hard": [],
       "balance": [
-        0.511,
-        0.471
+        0.499,
+        0.451
       ],
-      "phones": [],
-      "pair": null,
-      "details": [
+      "phones": [
         {
           "screen": "temperature",
-          "bounds": {
-            "left": 84,
-            "top": 210,
-            "right": 684,
-            "bottom": 776.8341708542714
+          "pose": {
+            "pitch": -2,
+            "yaw": 6,
+            "roll": 2,
+            "perspective": 3000,
+            "scale": 0.974,
+            "x": 285.279,
+            "y": 960.206
           },
-          "scale": 1.5075376884422111
+          "bounds": {
+            "left": 46.56718822792322,
+            "top": 470.03584851607724,
+            "right": 526.5319071983831,
+            "bottom": 1441.3582449952296
+          },
+          "centroid": [
+            0.264,
+            0.499
+          ],
+          "area": 0.207,
+          "critical": {
+            "title": {
+              "box": {
+                "left": 95.27638058380444,
+                "top": 839.7773603232781,
+                "right": 483.4865962594361,
+                "bottom": 926.9615378232496
+              },
+              "centre": [
+                0.268,
+                0.46
+              ]
+            },
+            "category": {
+              "box": {
+                "left": 205.16275199739763,
+                "top": 933.6320200173624,
+                "right": 339.83658615666684,
+                "bottom": 968.9999749699516
+              },
+              "centre": [
+                0.252,
+                0.495
+              ]
+            },
+            "from": {
+              "box": {
+                "left": 87.2369891980075,
+                "top": 980.9918940625445,
+                "right": 478.3004889542334,
+                "bottom": 1169.916830594452
+              },
+              "centre": [
+                0.262,
+                0.56
+              ]
+            },
+            "to": {
+              "box": {
+                "left": 81.14344589818342,
+                "top": 1168.5387726439055,
+                "right": 471.4124524529477,
+                "bottom": 1354.0805385836795
+              },
+              "centre": [
+                0.256,
+                0.657
+              ]
+            },
+            "swap": {
+              "box": {
+                "left": 409.7457332064197,
+                "top": 1153.0402921279742,
+                "right": 449.38376497907547,
+                "bottom": 1192.4549447932675
+              },
+              "centre": [
+                0.398,
+                0.611
+              ]
+            },
+            "hint": {
+              "box": {
+                "left": 80.0039423488816,
+                "top": 1363.0074244601324,
+                "right": 464.269750849216,
+                "bottom": 1388.5207393780252
+              },
+              "centre": [
+                0.252,
+                0.717
+              ]
+            }
+          }
         },
         {
           "screen": "data",
-          "bounds": {
-            "left": 436,
-            "top": 865,
-            "right": 996,
-            "bottom": 1495.35175879397
+          "pose": {
+            "pitch": 2,
+            "yaw": -6,
+            "roll": -2,
+            "perspective": 3000,
+            "scale": 0.974,
+            "x": 794.53,
+            "y": 667.437
           },
-          "scale": 1.407035175879397
+          "bounds": {
+            "left": 555.6021573261871,
+            "top": 180.0335731959505,
+            "right": 1035.5690883550753,
+            "bottom": 1153.505161341552
+          },
+          "centroid": [
+            0.736,
+            0.349
+          ],
+          "area": 0.207,
+          "critical": {
+            "title": {
+              "box": {
+                "left": 595.7113703463148,
+                "top": 508.97521250988774,
+                "right": 982.9190154487532,
+                "bottom": 599.1222215961045
+              },
+              "centre": [
+                0.731,
+                0.289
+              ]
+            },
+            "category": {
+              "box": {
+                "left": 903.5100583806955,
+                "top": 598.847289789662,
+                "right": 984.9311163899403,
+                "bottom": 633.3411188225094
+              },
+              "centre": [
+                0.874,
+                0.321
+              ]
+            },
+            "from": {
+              "box": {
+                "left": 600.2380798858104,
+                "top": 649.7471358063333,
+                "right": 992.1139600264108,
+                "bottom": 842.8634268563629
+              },
+              "centre": [
+                0.737,
+                0.389
+              ]
+            },
+            "to": {
+              "box": {
+                "left": 606.2971701372061,
+                "top": 838.1833498396671,
+                "right": 999.1562248393496,
+                "bottom": 1029.5276121109864
+              },
+              "centre": [
+                0.743,
+                0.487
+              ]
+            },
+            "swap": {
+              "box": {
+                "left": 928.7331559346887,
+                "top": 815.3621233705383,
+                "right": 969.3988795353623,
+                "bottom": 855.9137878316935
+              },
+              "centre": [
+                0.879,
+                0.435
+              ]
+            },
+            "hint": {
+              "box": {
+                "left": 612.6374316616641,
+                "top": 1035.3764369067706,
+                "right": 1000.4801926843572,
+                "bottom": 1064.619765068378
+              },
+              "centre": [
+                0.747,
+                0.547
+              ]
+            },
+            "decimal": {
+              "box": {
+                "left": 613.7818053312872,
+                "top": 1070.9697987894428,
+                "right": 1001.8052829102619,
+                "bottom": 1099.7412555412886
+              },
+              "centre": [
+                0.748,
+                0.565
+              ]
+            }
+          }
+        }
+      ],
+      "pair": {
+        "horizontalGap": 29.07,
+        "overlap": 0,
+        "stagger": -290.002
+      },
+      "shapes": [
+        {
+          "name": "flower",
+          "x": 40,
+          "y": 700,
+          "size": 600,
+          "behind": true
+        },
+        {
+          "name": "pill",
+          "x": 660,
+          "y": 100,
+          "size": 360,
+          "behind": true
+        },
+        {
+          "name": "gem",
+          "x": 148.20097995044136,
+          "y": 170.75294938484464,
+          "size": 87.39870214601979,
+          "behind": false
+        },
+        {
+          "name": "pill",
+          "x": 819.7832510252472,
+          "y": 1266.7650417091127,
+          "size": 175.57063077110797,
+          "behind": false
+        },
+        {
+          "name": "sunny",
+          "x": 437.81435461841477,
+          "y": 91.13983486090129,
+          "size": 84.08502310980111,
+          "behind": false
+        },
+        {
+          "name": "cookie_6sided",
+          "x": 86.5844923216311,
+          "y": 33.24652228048302,
+          "size": 105.09756220737472,
+          "behind": false
+        },
+        {
+          "name": "cookie_9sided",
+          "x": 523.072848675936,
+          "y": 1335.3574355547125,
+          "size": 155.22769251139835,
+          "behind": false
         }
       ],
       "intentional": [
-        "temperature: real From/To UI detail without a device frame",
-        "data: real From/To UI detail without a device frame"
+        "shape flower sits behind the phone",
+        "shape pill sits behind the phone"
       ]
     },
     {
@@ -406,8 +739,8 @@
       },
       "hard": [],
       "balance": [
-        0.531,
-        0.546
+        0.529,
+        0.543
       ],
       "phones": [
         {
@@ -485,7 +818,57 @@
         }
       ],
       "pair": null,
-      "details": [],
+      "shapes": [
+        {
+          "name": "clover_4leaf",
+          "x": 35,
+          "y": 1050,
+          "size": 590,
+          "behind": true
+        },
+        {
+          "name": "gem",
+          "x": 600,
+          "y": 530,
+          "size": 420,
+          "behind": true
+        },
+        {
+          "name": "cookie_9sided",
+          "x": 973.713313959106,
+          "y": 322.83281828052066,
+          "size": 85.79645609483123,
+          "behind": false
+        },
+        {
+          "name": "flower",
+          "x": 68.91567993434307,
+          "y": 702.0213121548015,
+          "size": 168.7589504290372,
+          "behind": false
+        },
+        {
+          "name": "clover_4leaf",
+          "x": 934.4884138639992,
+          "y": 1156.0859408944361,
+          "size": 97.9503958299756,
+          "behind": false
+        },
+        {
+          "name": "soft_burst",
+          "x": 54.5399954995747,
+          "y": 443.73531537133454,
+          "size": 90.76962236547843,
+          "behind": false
+        },
+        {
+          "name": "gem",
+          "x": 402.3254799472232,
+          "y": 319.90464285303074,
+          "size": 93.46894764574245,
+          "behind": false
+        }
+      ],
       "intentional": [
         "shape clover_4leaf sits behind the phone",
         "shape gem sits behind the phone"

@@ -1,9 +1,8 @@
 import {CAPTION,GOLDEN,H,SPACE,W,centre,fitPose,measure,bbox} from "./geometry.ts";
 import type {CaptionAt,Measured,Pose,ScreenUi} from "./geometry.ts";
 import type {ShapePlan} from "./effects.ts";
-import type {PanelPlan} from "./panels.ts";
 export type Terms=Record<string,number>;
-export type ShotSpec={id:string;intent:string;caption:CaptionAt;screens:string[];panels:PanelPlan[];shapes:ShapePlan;candidates:(ui:Record<string,ScreenUi>)=>Iterable<Pose[]>;hard?:(ms:Measured[])=>string[];score:(ms:Measured[])=>Terms};
+export type ShotSpec={id:string;intent:string;caption:CaptionAt;screens:string[];shapes:ShapePlan;candidates:(ui:Record<string,ScreenUi>)=>Iterable<Pose[]>;hard?:(ms:Measured[])=>string[];score:(ms:Measured[])=>Terms};
 const sq=(n:number)=>n*n;
 export const DIRECTIONS=[
  {id:"convert",screen:"length",caption:"bottom" as CaptionAt,width:900,pitch:3,yaw:-6,roll:-2,focus:"from",cropTop:true,x:540},
@@ -11,15 +10,9 @@ export const DIRECTIONS=[
  {id:"temperature-data",screen:null,caption:"bottom" as CaptionAt},
  {id:"toolkit",screen:"toolkit",caption:"top" as CaptionAt,width:650,pitch:-4,yaw:12,roll:3,focus:"converter",cropTop:false,x:580}
 ];
-const panelPlans:PanelPlan[][]=[
- [],
- [],
- [{screen:"temperature",label:"Temperature",x:84,y:210,width:600},{screen:"data",label:"Data storage",x:436,y:865,width:560}],
- []
-];
 export const SHOTS:ShotSpec[]=DIRECTIONS.map((d,index)=>({
- id:d.id,intent:index===0?"Large real converter with an intentional top crop":index===3?"The broader Measure workspace":"Related conversion categories grouped as real UI details",
- caption:d.caption,screens:d.screen?[d.screen]:[],panels:panelPlans[index],shapes:{seed:11+index*17,small:0},
+ id:d.id,intent:index===0?"Large real converter with an intentional top crop":"The broader Measure workspace",
+ caption:d.caption,screens:d.screen?[d.screen]:[],shapes:{seed:11+index*17,small:5,size:[70,180],contained:true},
  *candidates(ui){
   if(!d.screen){yield [];return;}
   const top=d.caption==="top"?CAPTION.top.block.bottom+SPACE.xl:SPACE.xl;
@@ -44,29 +37,32 @@ export const SHOTS:ShotSpec[]=DIRECTIONS.map((d,index)=>({
   pose:(sq(ms[0].pose.pitch-d.pitch!)+sq(ms[0].pose.yaw-d.yaw!))/9
  }:{}
 }));
-// Search both devices as one composition. Their fields, rather than their anchors, determine fit.
-SHOTS[1]={
- id:"everyday",intent:"Mass and volume on complementary Pixel poses with readable fields and a balanced combined silhouette",
- caption:"top",screens:["mass","volume"],panels:[],shapes:{seed:28,small:0},
+type PairDirection={index:number;screens:[string,string];intent:string;tops:[number[],number[]];stagger:number;guides:[number,number];facing:number};
+// Search both devices together, preserving their measured controls and a real gap between silhouettes.
+const pairedShot=(d:PairDirection):ShotSpec=>({
+ id:DIRECTIONS[d.index].id,intent:d.intent,caption:DIRECTIONS[d.index].caption,screens:d.screens,
+ shapes:{seed:11+d.index*17,offset:d.index*2,small:5,size:[70,180],contained:true},
  *candidates(ui){
   for(const width of [460,480,500])for(const delta of [-13,0,13])
    for(const separation of [490,510,530])
     for(const rolls of [[-2,2],[2,-2]])
      for(const yaw of [6,9])
-      for(const topLeft of [420,455,490])
-       for(const topRight of [640,695,750]){
+      for(const topLeft of d.tops[0])
+       for(const topRight of d.tops[1]){
         const make=(screen:string,w:number,x:number,top:number,roll:number,yaw:number,pitch:number)=>fitPose(
          {pitch,yaw,roll,perspective:3000},ui[screen],
          {width:w,x:m=>m.centroid[0],xTarget:x,y:m=>m.full.top,yTarget:top});
         yield [
-         make("mass",width,540-separation/2,topLeft,rolls[0],-yaw,2),
-         make("volume",width+delta,540+separation/2,topRight,rolls[1],yaw,-2)
+         make(d.screens[0],width,540-separation/2,topLeft,rolls[0],-yaw*d.facing,2*d.facing),
+         make(d.screens[1],width+delta,540+separation/2,topRight,rolls[1],yaw*d.facing,-2*d.facing)
         ];
        }
  },
  hard:ms=>[
   ...ms.flatMap(m=>[
-   ...(m.full.top<400||m.full.bottom>H-SPACE.xl?["Keep both whole devices inside their body safe bounds"]:[]),
+   ...(m.full.top<(DIRECTIONS[d.index].caption==="top"?400:SPACE.xl)||
+       m.full.bottom>(DIRECTIONS[d.index].caption==="bottom"?CAPTION.bottom.block.top-SPACE.xl:H-SPACE.xl)?
+       ["Keep both whole devices inside their body safe bounds"]:[]),
    ...(m.pose.scale<.94?["The conversion fields are too small"]:[]),
    ...(bbox(m.critical.from).right-bbox(m.critical.from).left<350?["The native conversion card is too narrow"]:[])
   ]),
@@ -77,11 +73,13 @@ SHOTS[1]={
   return {
    size:sq(((a.full.right-a.full.left)-480)/34)+sq(((b.full.right-b.full.left)-480)/34),
    pairBalance:2*sq((cx-540)/21),
-   stagger:sq(((b.full.top-a.full.top)-240)/55),
-   massGuide:.12*sq((centre(a.critical.to)[1]-GOLDEN.y[1])/144),
-   volumeGuide:.12*sq((centre(b.critical.to)[1]-GOLDEN.yLow)/144),
-   pose:(sq(a.pose.yaw+6)+sq(b.pose.yaw-6))/36
+   stagger:sq(((b.full.top-a.full.top)-d.stagger)/55),
+   leftGuide:.12*sq((centre(a.critical.to)[1]-d.guides[0])/144),
+   rightGuide:.12*sq((centre(b.critical.to)[1]-d.guides[1])/144),
+   pose:(sq(a.pose.yaw+6*d.facing)+sq(b.pose.yaw-6*d.facing))/36
   };
  }
-};
+});
+SHOTS[1]=pairedShot({index:1,screens:["mass","volume"],intent:"Mass and volume on complementary Pixel poses with readable fields and a balanced combined silhouette",tops:[[420,455,490],[640,695,750]],stagger:240,guides:[GOLDEN.y[1],GOLDEN.yLow],facing:1});
+SHOTS[2]=pairedShot({index:2,screens:["temperature","data"],intent:"Temperature and decimal data on two whole Pixels with a reversed stagger and clear native guidance",tops:[[400,435,470],[110,145,180]],stagger:-290,guides:[GOLDEN.yLow,GOLDEN.y[1]],facing:-1});
 export const measureAll=(poses:Pose[],screens:string[],ui:Record<string,ScreenUi>)=>poses.map((p,i)=>measure(p,ui[screens[i]]));

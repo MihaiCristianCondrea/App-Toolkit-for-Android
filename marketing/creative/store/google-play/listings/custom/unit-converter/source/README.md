@@ -24,17 +24,18 @@ For a phone-only refresh, use npm run render -- en-US --phone-only --verify-repe
 
 ## Campaign and geometry
 
-The four compositions serve different roles: a close converter hero, a two-device mass/volume comparison, grouped temperature/data UI details, and the broader Measure workspace. The earlier six-poster pattern is removed.
+The four compositions serve different roles: a close converter hero, a two-device mass/volume comparison, a reversed two-device temperature/data pair, and the broader Measure workspace. The earlier six-poster pattern is removed.
 
 - geometry.ts uses the actual model projection to measure silhouettes, centroids and critical UI.
 - shots.ts searches the two-phone scene jointly. Of 972 candidates, 846 fail containment, minimum scale, card width, caption clearance or silhouette spacing. The chosen pair has a 30.998 px gap, zero overlap and 239.998 px stagger. Its projected area-weighted horizontal centre is the canvas centre. Result areas use the lower golden guides as preferences, never at the expense of readability.
-- compose.ts validates phone and native-detail geometry, including label regions and all measured fields. The hero's crop is intentional at the top canvas boundary; the other complete devices stay inside their image.
-- NativePanel.tsx crops the actual mounted Marketing UI after it settles. It measures the source From/To region, checks it against the probe, and translates the real screen into the crop. It never reconstructs controls or results.
+- Temperature/Data uses a second joint search, with reversed stagger and camera directions. Of 972 candidates, 792 fail the hard rules. The selected whole phones have a 29.07 px gap, zero overlap and -290.002 px stagger.
+- compose.ts validates all measured controls and phone silhouettes. The hero's crop is intentional at the top canvas boundary; all other devices show whole.
+- Each image adds five small MaterialShapes to its large background shapes. effects.ts uses a fixed seed, whole-shape containment, phone and caption clearances, and fixed pieces as obstacles. compose.ts checks every pair of shapes for a 34 px clearance.
 - LitScreen.tsx verifies each converter's actual values and unit selectors. The toolkit capture requires the real ruler, protractor, converter and bill-splitter cards. Finite shadow-root transitions are finished before capture.
 - scripts/bundle.mjs inlines the installed symbol fonts to avoid interrupted WOFF2 HTTP requests. Every capture requires Google Sans Flex and both Material Symbol fonts to be loaded.
-- The verifier renders clean, caption-free and debug images and checks geometry, caption contrast, interference and pixel-weighted balance. placement.json records every projected control, native UI crop, silhouette and pair measurement.
+- The verifier renders clean, caption-free and debug images and checks geometry, caption contrast, interference and pixel-weighted balance. placement.json records every projected control, shape, silhouette and pair measurement.
 
-Length shows 1 m = 100 cm, mass 2.26796185 kg = 5 lb, volume 1 L = 1000 mL, temperature 20 Celsius = 68 Fahrenheit, and data 1 GB = 1000 MB. The mass pair is exact under UnitConversionRepository's decimal factors. The Data note remains in the native detail.
+Length shows 1 m = 100 cm, mass 2.26796185 kg = 5 lb, volume 1 L = 1000 mL, temperature 20 Celsius = 68 Fahrenheit, and data 1 GB = 1000 MB. The mass pair is exact under UnitConversionRepository's decimal factors. The Data note remains visible inside the whole Pixel.
 
 The feature graphic, icon and large-screen upload assets are preserved. Earlier hero-study images remain as design history; contact-clean.png shows the current campaign.
 
