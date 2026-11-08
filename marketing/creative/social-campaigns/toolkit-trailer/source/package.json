@@ -1,0 +1,26 @@
+{
+  "name": "app-toolkit-trailer",
+  "private": true,
+  "type": "module",
+  "description": "App Toolkit's 29.88-second trailer: each tool's own world from its store listing, cut to the supplied soundtrack",
+  "scripts": {
+    "assets": "node scripts/sync-assets.mjs",
+    "dev": "npm run assets && remotion studio src/index.ts",
+    "lint": "tsc --noEmit",
+    "frames": "npm run assets && node scripts/render.mjs frames",
+    "preview": "npm run assets && node scripts/render.mjs preview",
+    "master": "npm run assets && node scripts/render.mjs master"
+  },
+  "dependencies": {
+    "@remotion/bundler": "4.0.529",
+    "@remotion/cli": "4.0.529",
+    "@remotion/renderer": "4.0.529",
+    "react": "19.2.3",
+    "react-dom": "19.2.3",
+    "remotion": "4.0.529"
+  },
+  "devDependencies": {
+    "@types/react": "19.2.7",
+    "typescript": "5.9.3"
+  }
+}

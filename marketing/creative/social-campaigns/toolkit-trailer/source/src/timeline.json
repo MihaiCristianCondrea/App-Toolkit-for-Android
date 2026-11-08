@@ -1,0 +1,27 @@
+{
+  "durationSeconds": 29.88,
+  "fps": 90,
+  "design": { "width": 1920, "height": 1080 },
+  "wipeSeconds": 0.5,
+  "scenes": [
+    { "id": "intro", "start": 0, "end": 3.32, "title": "Five worlds, one box", "action": "One shape per tool arrives on each motif note in its listing's colour; the App Toolkit icon pops on 1.76, the shapes swing round it and the name lands." },
+    { "id": "water", "start": 3.32, "end": 6.76, "from": [1500, 300], "shape": "cookie_9sided", "title": "Water Eject", "action": "The blue world opens from Water Eject's shape. The phone leans back so its speaker faces the camera; a sound wave leaves the speaker holes on every note and pushes bubbles out." },
+    { "id": "ruler", "start": 6.76, "end": 10.08, "from": [420, 900], "shape": "soft_burst", "title": "Ruler & Protractor", "action": "The yellow world bursts open. The ruler slides in along the bottom, the protractor's arm sweeps to 45 degrees on the beat, matching the phone's Protractor." },
+    { "id": "unit", "start": 10.08, "end": 13.72, "from": [1400, 820], "shape": "cookie_6sided", "title": "Unit Converter", "action": "The mint world opens. 1 m becomes 100 cm, the shapes swap places on the beat and the pair becomes 20 °C and 68 °F." },
+    { "id": "bill", "start": 13.72, "end": 17.14, "from": [700, 300], "shape": "pill", "title": "Tip & Bill Splitter", "action": "The peach world opens. A receipt slides out from behind the phone and prints line by line: the bill, the tip, then each person's share." },
+    { "id": "wheel", "start": 17.14, "end": 21.98, "from": [1520, 260], "shape": "flower", "title": "Decision Wheel", "action": "The lilac world opens. The wheel spins and settles on 19.98; confetti bursts and the phone shows the pick." },
+    { "id": "montage", "start": 21.98, "end": 26.26, "from": [960, 540], "shape": "cookie_12sided", "title": "Everyday tools, one app", "action": "The five worlds return as tiles, one per note, then more tools from the app join as chips." },
+    { "id": "end", "start": 26.26, "end": 29.88, "from": [960, 470], "shape": "sunny", "title": "App Toolkit", "action": "The icon returns; confetti, bubbles and a sound wave leave it together; the name and Available on Google Play land and hold." }
+  ],
+  "beats": {
+    "introShapes": [0.02, 0.32, 0.62, 1.04, 1.46],
+    "icon": 1.76, "swing": 2.32, "title": 2.64, "tagline": 2.9,
+    "waterHeadline": [3.76, 4.04], "waterWaves": [3.76, 4.04, 4.34, 4.58, 4.92, 5.16, 5.74, 6.08, 6.32],
+    "rulerHeadline": [7.06, 7.46], "rulerSlide": 7.06, "protractorSweep": [7.7, 8.02, 8.58, 8.98],
+    "unitHeadline": [10.3, 10.62], "unitCount": [10.62, 11.44], "unitSwap": 12.22, "unitTemperature": 12.92,
+    "billHeadline": [13.96, 14.28], "billReceipt": 13.96, "billLines": [14.28, 14.6, 14.88, 15.18, 15.44],
+    "wheelHeadline": [17.36, 17.7], "wheelSpin": [17.14, 19.98], "wheelBurst": 19.98, "wheelPick": 20.56,
+    "montageTiles": [22.04, 22.26, 22.56, 22.86, 23.14], "montageHeadline": 23.4, "montageChips": [23.76, 24.0, 24.24, 24.54, 25.12, 25.4],
+    "endBurst": 26.26, "endTitle": 26.82, "endPlay": 27.26
+  }
+}

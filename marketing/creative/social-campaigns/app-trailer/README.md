@@ -1,5 +1,7 @@
 # App Toolkit: Your toolkit
 
+Superseded by [toolkit-trailer](../toolkit-trailer/README.md), which gathers the five custom store listings' worlds into one film on the same soundtrack. This campaign stays as a record.
+
 A 16:9 product trailer based on the owner's toolbox sketches. The mark opens, four live widgets leave its mouth and the camera tracks them into close-ups. A connected bento becomes the real screen, then the film travels through large UI fragments before three full-height destinations fan into the closing.
 
 | | |

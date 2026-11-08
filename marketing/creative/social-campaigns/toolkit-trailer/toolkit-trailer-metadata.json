@@ -1,0 +1,22 @@
+{
+  "schemaVersion": "3.0",
+  "campaign": {
+    "slug": "toolkit-trailer",
+    "title": "App Toolkit: Trailer",
+    "status": "draft"
+  },
+  "software": "Android Studio",
+  "copy": {
+    "title": "App Toolkit: Everyday tools in one app",
+    "headline": "Everyday tools, one app",
+    "description": "App Toolkit for Android: Water Eject, Ruler and Protractor, Unit Converter, Tip and Bill Splitter, Decision Wheel and more, in one app.",
+    "longDescription": "Each tool opens its own world from its store listing: sound waves and bubbles leave the speaker for Water Eject, the ruler and protractor measure 45 degrees, 1 m becomes 100 cm, a receipt prints each person's share and the decision wheel lands in confetti, before the tools gather as App Toolkit.",
+    "altText": "App Toolkit's tools each open a coloured world on a Pixel phone: speaker waves, a ruler and protractor, unit shapes, a receipt and a spinning wheel with confetti.",
+    "keywords": ["App Toolkit", "Android", "water eject", "ruler", "protractor", "unit converter", "tip calculator", "bill splitter", "decision wheel", "everyday tools"],
+    "hashtags": ["#AppToolkit", "#Android", "#AndroidApps"]
+  },
+  "files": {
+    "output/video/app-toolkit-trailer-preview.mp4": { "title": "App Toolkit: trailer preview" },
+    "output/video/app-toolkit-trailer-master.mp4": { "title": "App Toolkit: trailer" }
+  }
+}

@@ -1,5 +1,7 @@
 # App Toolkit: Trailer V2
 
+Superseded by [toolkit-trailer](../toolkit-trailer/README.md), which gathers the five custom store listings' worlds into one film on the same soundtrack. This campaign stays as a record.
+
 A 16:9 product trailer for App Toolkit based on the owner's toolbox sketches and the 29.88-second soundtrack.
 The mark opens, four live widgets leave its mouth into a connected 2x2 bento, the screen forms into a Pixel 9 Pro phone, then Measure and Play & Decide open from their tabs before a 3D fan of three devices ends in a golden burst.
 
