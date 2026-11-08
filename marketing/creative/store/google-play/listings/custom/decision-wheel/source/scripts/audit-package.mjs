@@ -31,6 +31,5 @@ const geometry=JSON.parse(await readFile(path.join(source,"output/verify/report.
 assert(geometry.length===14&&geometry.every(g=>g.hard.length===0),"Geometry verification failures");
 const repeat=JSON.parse(await readFile(path.join(source,"output/repeatability.json"),"utf8"));assert(repeat.length===6&&repeat.every(r=>r.identical),"Repeatability");
 const report={listing:"decision-wheel",lengths,keywordCandidates:keywords.length,assetCount:assets.length,officialIconPixelIdentical:true,repeatablePhoneCaptures:6,assets};
-await mkdir(path.join(root,"review"),{recursive:true});
-await writeFile(path.join(root,"review/package-audit.json"),JSON.stringify(report,null,2)+"\n");
+await writeFile(path.join(source,"output/package-audit.json"),JSON.stringify(report,null,2)+"\n");
 console.log(JSON.stringify({lengths,keywords:keywords.length,assets:assets.length,icon:"pixel-identical",repeatable:6}));

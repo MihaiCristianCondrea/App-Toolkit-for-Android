@@ -35,6 +35,5 @@ assert(capture.browserErrors.length===0&&capture.captures.length>=12,"Capture re
 for(const c of capture.captures)for(const family of ["Google Sans Flex","Material Symbols Outlined","Material Symbols Rounded"])
  assert(c.fonts.some(f=>f.replace(/['"]/g,"")===family),"Required font not loaded: "+family);
 const report={captureChecks:capture.captures.length,browserResourceErrors:0,requiredFontsLoaded:true,listing:"unit-converter",lengths,keywordCandidates:keywords.length,assetCount:assets.length,officialIconPixelIdentical:true,repeatablePhoneCaptures:4,assets};
-await mkdir(path.join(root,"review"),{recursive:true});
-await writeFile(path.join(root,"review/package-audit.json"),JSON.stringify(report,null,2)+"\n");
+await writeFile(path.join(source,"output/package-audit.json"),JSON.stringify(report,null,2)+"\n");
 console.log(JSON.stringify({lengths,keywords:keywords.length,assets:assets.length,icon:"pixel-identical",repeatable:4}));

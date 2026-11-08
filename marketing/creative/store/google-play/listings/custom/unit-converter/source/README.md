@@ -1,6 +1,6 @@
 # Unit Converter listing source
 
-Four 2160 x 3840 phone screenshots, four 3840 x 2160 foldable screenshots, four 3840 x 2160 desktop screenshots, a 1024 x 500 feature graphic and the unchanged 512 x 512 official icon. Upload files are in ../listing/en-US; current review sheets and reports are in ../review.
+Four 2160 x 3840 phone screenshots, four 3840 x 2160 foldable screenshots, four 3840 x 2160 desktop screenshots, a 1024 x 500 feature graphic and the unchanged 512 x 512 official icon. Upload files are in ../listing/en-US; review sheets and reports are written to output/ (generated, not committed).
 
 ## Render and verify
 
@@ -16,7 +16,6 @@ npm run verify -- en-US
 npm run render -- en-US --verify-repeat
 npm run metadata
 npm run audit
-npm run archive
 node scripts/placement.ts
 ```
 

@@ -12,6 +12,6 @@ const shots=SHOTS.map((spec,i)=>{
   pair:g.phones.length===2?{horizontalGap:round(g.phones[1].full.left-g.phones[0].full.right),overlap:round(overlapArea(g.phones[0].visible,g.phones[1].visible)),stagger:round(g.phones[1].full.top-g.phones[0].full.top)}:null,
   shapes:g.shapes.map(p=>({name:p.name,x:p.x,y:p.y,size:p.size,behind:!!p.behind})),intentional:g.report.intentional};
 });
-mkdirSync(new URL("../../review/",import.meta.url),{recursive:true});
-writeFileSync(new URL("../../review/placement.json",import.meta.url),JSON.stringify({golden:GOLDEN,shots},null,2)+"\n");
+mkdirSync(new URL("../output/",import.meta.url),{recursive:true});
+writeFileSync(new URL("../output/placement.json",import.meta.url),JSON.stringify({golden:GOLDEN,shots},null,2)+"\n");
 console.log(JSON.stringify(shots.map(s=>({id:s.id,hard:s.hard,pair:s.pair}))));

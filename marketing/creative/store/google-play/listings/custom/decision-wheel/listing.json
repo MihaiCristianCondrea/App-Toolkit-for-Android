@@ -7,7 +7,7 @@
     "keywords": "keywords.txt",
     "googleAds": false
   },
-  "status": "planned",
+  "status": "live",
   "log": [
     {
       "date": "2026-11-08",
@@ -28,6 +28,11 @@
       "date": "2026-11-08",
       "status": "planned",
       "note": "Aligned the full-description section structure with the default and Water Eject listings, retained existing features and limits, and made the package audit count newlines the same way as the Play validator. Artwork unchanged."
+    },
+    {
+      "date": "2026-11-08",
+      "status": "live",
+      "note": "Approved by Google Play review and published."
     }
   ]
 }

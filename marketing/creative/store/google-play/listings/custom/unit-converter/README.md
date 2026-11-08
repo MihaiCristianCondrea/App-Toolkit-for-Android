@@ -1,6 +1,6 @@
 # Unit Converter custom listing
 
-Status: planned, not published. The English package contains 4 phone, 4 tablet and 4 desktop screenshots, a feature graphic and the official icon. Confirm the production release and search targeting in Play Console before upload.
+Status: live. Approved by Google Play review and published on November 8, 2026. The English package contains 4 phone, 4 tablet and 4 desktop screenshots, a feature graphic and the official icon.
 
 ## Audience and positioning
 
@@ -42,12 +42,12 @@ Four compositions replace the earlier six similar phone posters:
 
 All five conversion categories remain represented. The pair is selected from 972 candidates, with result-area targets near the golden horizontal guides and combined area-weighted centering. The selected geometry has a 30.998 px silhouette gap, no overlap and 239.998 px vertical stagger. Camera yaw is -6 and +6 degrees, roll +2 and -2 degrees. The Temperature/Data solve searches 972 candidates and rejects 792. It has a 29.07 px gap, no overlap and a reversed 290.002 px stagger. Each composition has its own scale and visual role. All four images have five small MaterialShape accents, placed clear of captions, phones and larger shapes.
 
-The feature graphic and the earlier hero studies are retained from the initial creative exploration. The current campaign is shown in review/contact-clean.png. The selected Connected measurements feature graphic links metre and centimetre notation through MaterialShapes and swap arrows.
+The feature graphic and the earlier hero studies are retained from the initial creative exploration. The verifier's contact sheets (source/output/verify/, generated) show the current campaign. The selected Connected measurements feature graphic links metre and centimetre notation through MaterialShapes and swap arrows.
 
 Foldable and desktop assets use the app's responsive interface, Pixel 9 Pro Fold and Pixelbook Go, centred at true size with no promotional captions. The launcher icon is copied from the approved Ruler & Protractor package and checked for pixel identity.
 
 ## Verification and limits
 
-See [source/README.md](source/README.md) for commands and [review/](review/) for contact sheets and reports. The screen adapter checks the actual displayed values and units and requires Google Sans Flex plus both Material Symbol fonts to be loaded. Geometry, caption contrast, background interference, repeatability, formats, alt text, metadata readback and official-icon identity are checked separately.
+See [source/README.md](source/README.md) for commands; the verifier writes contact sheets and reports to source/output/ (generated, not committed). The screen adapter checks the actual displayed values and units and requires Google Sans Flex plus both Material Symbol fonts to be loaded. Geometry, caption contrast, background interference, repeatability, formats, alt text, metadata readback and official-icon identity are checked separately.
 
 The campaign targets the redesigned 26.11.02 application. The public Play page retrieved on November 8 contained older content and did not establish production availability. Confirm the intended audience's rollout in Play Console before upload. No connected-device comparison or Play Console targeting review is claimed. Nothing was uploaded or published.

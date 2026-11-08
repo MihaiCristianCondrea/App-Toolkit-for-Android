@@ -1,6 +1,6 @@
 # Tip & Bill Splitter custom listing
 
-Status: planned, not published. English creative package: 5 phone, 4 foldable and 4 desktop screenshots, a feature graphic and the official icon. Confirm the production rollout and search targeting in Play Console before upload.
+Status: live. Approved by Google Play review and published on November 8, 2026. English creative package: 5 phone, 4 foldable and 4 desktop screenshots, a feature graphic and the official icon.
 
 ## Audience and positioning
 
@@ -50,7 +50,7 @@ Foldable and desktop assets use the actual adaptive layouts, Pixel 9 Pro Fold an
 
 ## Validation and publication limits
 
-See [source/README.md](source/README.md) for commands and [review/](review/) for results and contact sheets. The adapter validates bill amounts, currency codes, party size and displayed shares against fixed examples. Geometry, caption contrast, shape clearances, font loading, repeated captures, formats, alt text, metadata readback and icon identity are separate checks.
+See [source/README.md](source/README.md) for commands; the verifier writes results and contact sheets to source/output/ (generated, not committed). The adapter validates bill amounts, currency codes, party size and displayed shares against fixed examples. Geometry, caption contrast, shape clearances, font loading, repeated captures, formats, alt text, metadata readback and icon identity are separate checks.
 
 A preview parity fix changes only the Marketing UI currency selector to the Android code-button and dropdown. The Marketing UI browser suite passed 147 checks. Android application code and other listing assets are untouched.
 

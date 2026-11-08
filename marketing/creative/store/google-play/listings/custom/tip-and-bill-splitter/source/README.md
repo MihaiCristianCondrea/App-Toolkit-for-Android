@@ -1,6 +1,6 @@
 # Tip & Bill Splitter listing source
 
-Five 2160 x 3840 phone images, four 3840 x 2160 foldable images, four 3840 x 2160 desktop images, one 1024 x 500 feature graphic and the unchanged 512 x 512 official icon. Upload files live in ../listing/en-US. Review sheets and reports live in ../review.
+Five 2160 x 3840 phone images, four 3840 x 2160 foldable images, four 3840 x 2160 desktop images, one 1024 x 500 feature graphic and the unchanged 512 x 512 official icon. Upload files live in ../listing/en-US. Review sheets and reports are written to output/ (generated, not committed).
 
 ## Render and verify
 
@@ -20,7 +20,6 @@ npm run verify -- en-US
 npm run render -- en-US --verify-repeat
 npm run metadata
 npm run audit
-npm run archive
 ```
 
 Run node scripts/validate.mjs from marketing/creative/store/google-play. Marketing UI changes also require npm run qa from marketing/ui.

@@ -23,11 +23,11 @@ in English (en-US) only for now.
 | --- | --- | --- |
 | [default](listings/default/source/README.md) | ready, upload with the redesigned release | 8 phone, 4 tablet and 4 desktop screenshots, feature graphic and icon, rendered with Remotion from the UI kit |
 | [default-legacy](listings/default-legacy/README.md) | retired | The listing before the redesign: 4 phone and 4 tablet screenshots, feature graphic and icon, no source |
-| [speaker-water-eject](listings/custom/speaker-water-eject/README.md) | planned, rollout confirmation required | 5 phone, 4 tablet and 4 desktop screenshots, feature graphic and icon |
-| [ruler-and-protractor](listings/custom/ruler-and-protractor/README.md) | planned, rollout confirmation required | 5 phone, 4 tablet and 4 desktop screenshots, feature graphic and icon |
-| [decision-wheel](listings/custom/decision-wheel/README.md) | planned, rollout confirmation required | 6 phone, 4 tablet and 4 desktop screenshots, feature graphic and icon |
-| [unit-converter](listings/custom/unit-converter/README.md) | planned, rollout confirmation required | 4 phone, 4 tablet and 4 desktop screenshots, feature graphic and icon |
-| [tip-and-bill-splitter](listings/custom/tip-and-bill-splitter/README.md) | planned, rollout confirmation required | 5 phone, 4 tablet and 4 desktop screenshots, feature graphic and icon |
+| [speaker-water-eject](listings/custom/speaker-water-eject/README.md) | live | 5 phone, 4 tablet and 4 desktop screenshots, feature graphic and icon |
+| [ruler-and-protractor](listings/custom/ruler-and-protractor/README.md) | live | 5 phone, 4 tablet and 4 desktop screenshots, feature graphic and icon |
+| [decision-wheel](listings/custom/decision-wheel/README.md) | live | 6 phone, 4 tablet and 4 desktop screenshots, feature graphic and icon |
+| [unit-converter](listings/custom/unit-converter/README.md) | live | 4 phone, 4 tablet and 4 desktop screenshots, feature graphic and icon |
+| [tip-and-bill-splitter](listings/custom/tip-and-bill-splitter/README.md) | live | 5 phone, 4 tablet and 4 desktop screenshots, feature graphic and icon |
 
 ## Change a listing
 

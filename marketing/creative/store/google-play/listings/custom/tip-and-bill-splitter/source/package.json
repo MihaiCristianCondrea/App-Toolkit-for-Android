@@ -13,8 +13,7 @@
     "lint": "tsc",
     "metadata": "node scripts/metadata.mjs",
     "concepts": "node scripts/creative-preview.mjs",
-    "audit": "node scripts/audit-package.mjs",
-    "archive": "node scripts/archive-review.mjs"
+    "audit": "node scripts/audit-package.mjs"
   },
   "dependencies": {
     "@remotion/bundler": "4.0.529",

@@ -1,6 +1,6 @@
 # Speaker Water Eject custom listing
 
-Status: planned, not published. The English creative package contains 5 phone, 4 tablet and 4 desktop screenshots, a feature graphic and the official icon. Upload remains conditional on confirming production availability of version 26.11.02 in Play Console. The public Play page retrieved on November 7 still showed October 3 information and did not verify the rollout.
+Status: live. Approved by Google Play review and published on November 8, 2026. The English creative package contains 5 phone, 4 tablet and 4 desktop screenshots, a feature graphic and the official icon.
 
 ## Audience and positioning
 
@@ -16,7 +16,7 @@ The keywords describe intent, not measured demand. The prior Play reports did no
 
 Five screenshots read as one panorama in the language of Material 3's own hero art. The whole palette comes from the Water Eject sheet's own blues (ToolkitTileVisuals.kt's blue tool, src/theme.ts): a light blue field crossed by ribbons of blue and white liquid glass, computed across the whole strip so every seam meets and fading behind each caption so the letters sit on a quiet field; the caption pill, MaterialShapes, sound arcs and bubbles in the same family; headlines in a deep navy. Phones are Material-Next's porcelain 3D Pixel 9 Pro XL. On every water screen, phone and large screen alike, Quick Tools is scrolled to the Water Eject card that opens the sheet, so the card shows above it instead of Compass and Bubble Level, which have their own screenshot. Every image shows a different screen or state, with its own composition, and stands on its own: no phone crosses a divider.
 
-Each composition is solved from its own targets by source/scripts/solve-layout.ts and checked by source/scripts/verify.mjs; see source/README.md for the system, its hard rules and its preferences, and review/ for the contact sheets and the verification report.
+Each composition is solved from its own targets by source/scripts/solve-layout.ts and checked by source/scripts/verify.mjs; see source/README.md for the system, its hard rules and its preferences; the verifier writes the contact sheets and the verification report to source/output/verify/ (generated, not committed).
 
 1. Hero: a large phone centred and running off the top, leaning back (pitch 28°, yaw -13°, a 3000 px camera) so the speaker holes and USB-C port on its bottom edge face the viewer. Fine sound arcs leave both groups of speaker holes, with bubbles riding their wavefronts; the caption stands at the foot of the image. The sound and bubbles illustrate the tone; they are not a promise of what the app does to a phone.
 2. Up to 30 seconds: a close crop on the running cycle, the phone leaning right and running off the bottom, the countdown large in the lower half; the Stop button is cropped on purpose.
@@ -32,4 +32,4 @@ The guidance and its limits are on every Water Eject screen and in the descripti
 
 ## Verification and limits
 
-The layout solver, the verifier (geometry, caption contrast, background interference and balance on the composited pixels), the renderer, TypeScript and metadata injection and readback were run; all 15 image files are present. See source/README.md for commands and results, and review/ for the contact sheets. Web screenshots were compared against Compose source and resources; a connected-device visual comparison and production rollout confirmation remain outstanding. Search targeting still needs to be selected from the terms Play Console makes available.
+The layout solver, the verifier (geometry, caption contrast, background interference and balance on the composited pixels), the renderer, TypeScript and metadata injection and readback were run; all 15 image files are present. See source/README.md for commands and results; the verifier writes the contact sheets to source/output/verify/. Web screenshots were compared against Compose source and resources; a connected-device visual comparison and production rollout confirmation remain outstanding. Search targeting still needs to be selected from the terms Play Console makes available.

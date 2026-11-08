@@ -1,6 +1,6 @@
 # Decision Wheel custom listing
 
-Status: planned, not published. The English creative package contains 6 phone, 4 tablet and 4 desktop screenshots, a feature graphic and the official icon. Upload remains conditional on confirming that the production release includes the Decision Wheel and the other Play & Decide chance tools as shown, and on reviewing the search keywords in Play Console.
+Status: live. Approved by Google Play review and published on November 8, 2026. The English creative package contains 6 phone, 4 tablet and 4 desktop screenshots, a feature graphic and the official icon.
 
 ## Audience and positioning
 
@@ -33,7 +33,7 @@ Six phone screenshots on a soft lilac field with coral and lilac MaterialShapes 
 
 Tablet and desktop screenshots show the app's own large-screen layouts on the Pixel 9 Pro Fold and the Pixelbook Go, centred at true size with no captions, as Play asks. The feature graphic sets "Spin the Wheel" with App Toolkit small above it beside a large drawn wheel in the campaign's colours, running off the right edge, with confetti scattered over the open space; it has no device frame, no icon and no claims.
 
-States, the composition system, its hard rules and preferences are described in source/README.md; review/ holds the contact sheets, the verification report, the package audit and the repeatability check.
+States, the composition system, its hard rules and preferences are described in source/README.md; `npm run verify` and the package audit write the contact sheets, the verification report, the audit and the repeatability check to source/output/ (generated, not committed).
 
 ## Verification and limits
 

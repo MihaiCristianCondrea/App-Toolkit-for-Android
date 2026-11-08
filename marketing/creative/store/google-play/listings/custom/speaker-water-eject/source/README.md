@@ -1,6 +1,6 @@
 # Speaker Water Eject listing source
 
-The English package has five 2160 x 3840 phone screenshots, four 3840 x 2160 tablet screenshots, four 3840 x 2160 desktop screenshots, a 1024 x 500 feature graphic and a 512 x 512 official icon. Rendered files are in ../listing/en-US; the latest contact sheets and verification report are in ../review.
+The English package has five 2160 x 3840 phone screenshots, four 3840 x 2160 tablet screenshots, four 3840 x 2160 desktop screenshots, a 1024 x 500 feature graphic and a 512 x 512 official icon. Rendered files are in ../listing/en-US; `npm run verify` writes contact sheets and a verification report to output/verify/ (generated, not committed).
 
 ## Render and verify
 
@@ -49,7 +49,7 @@ The creative package targets application version 26.11.02. The public Play page 
 
 ## Validation results
 
-See ../review/verification.json. On the final renders: no hard failures on any of the 13 screenshots; phone caption contrast at least 12.2:1 under 99% of glyphs, and the pill's sheet-blue text 4.77:1 on its container (above the 4.5:1 normal-text minimum); background interference 0.00% in every text zone; contrast-weighted balance 0.486 to 0.512 W across phones, tablets and desktops. Two preferences sit outside tolerance on purpose: the close crop's countdown sits about 160 px below the lower golden line, because the larger phone and the caption clearance win; the level's target sits about 95 px below the upper golden line for the same reason. TypeScript, the listing validator, and metadata tagging and readback passed.
+On the final renders (output/verify/report.json): no hard failures on any of the 13 screenshots; phone caption contrast at least 12.2:1 under 99% of glyphs, and the pill's sheet-blue text 4.77:1 on its container (above the 4.5:1 normal-text minimum); background interference 0.00% in every text zone; contrast-weighted balance 0.486 to 0.512 W across phones, tablets and desktops. Two preferences sit outside tolerance on purpose: the close crop's countdown sits about 160 px below the lower golden line, because the larger phone and the caption clearance win; the level's target sits about 95 px below the upper golden line for the same reason. TypeScript, the listing validator, and metadata tagging and readback passed.
 
 ## Local artwork ownership
 

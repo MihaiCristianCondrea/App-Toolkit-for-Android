@@ -1,6 +1,6 @@
 # Ruler and Protractor custom listing
 
-Status: planned. The creative package uses the default listing's warm Material design language with one phone per screenshot. Confirm production availability before upload.
+Status: live. Approved by Google Play review and published on November 8, 2026. The creative package uses the default listing's warm Material design language with one phone per screenshot.
 
 ## Audience and positioning
 

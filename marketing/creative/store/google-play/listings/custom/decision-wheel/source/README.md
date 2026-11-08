@@ -16,7 +16,6 @@ npm run verify -- en-US
 npm run render -- en-US --verify-repeat
 npm run metadata
 node scripts/audit-package.mjs
-node scripts/archive-review.mjs
 ```
 
 Run the shared listing validator from marketing/creative/store/google-play with `node scripts/validate.mjs`.
@@ -25,7 +24,7 @@ Run the shared listing validator from marketing/creative/store/google-play with 
 
 The existing geometry solver projects the Material-Next device silhouette and measured critical UI. Each shot specifies a gentle pose, size and caption location. The projected silhouette is centered horizontally and fitted to the midpoint of the remaining vertical band; a measured UI focus near a golden horizontal guide is a secondary preference. Hard rules protect critical controls, caption clearances and the entire phone silhouette. Lower captions reserve 144 logical px beyond the device body for its shadow; the pixel verifier also checks the actual composited shadow against the text zone. The solver does not choose the art direction. Coin and die selectors are scoped to the open sheet; the probe rejects ambiguous matches rather than silently measuring a widget behind it.
 
-The verifier renders clean, caption-free and debug views. It checks caption contrast and interference on actual pixels, projected UI bounds and visual balance. Reports and contact sheets are archived in ../review. placement.json records the primary silhouette framing target and actual position, framing error, camera angles, and the secondary control's offset from its golden guide. Pixel balance is checked separately.
+The verifier renders clean, caption-free and debug views. It checks caption contrast and interference on actual pixels, projected UI bounds and visual balance. Reports and contact sheets are written to output/ (generated, not committed). placement.json records the primary silhouette framing target and actual position, framing error, camera angles, and the secondary control's offset from its golden guide. Pixel balance is checked separately.
 
 Choice and result states are explicit in src/screens.ts. The hero has four food choices. The result has six activity choices, 1530° settled rotation and winner Music, matching the pointer calculation. The entry example uses four names. Coin and die captures use settled state, not a moving animation. The desktop wheel sheet is scrolled 24 CSS px, as a user can scroll it, so the complete Spin control remains visible. No app behavior is changed.
 
