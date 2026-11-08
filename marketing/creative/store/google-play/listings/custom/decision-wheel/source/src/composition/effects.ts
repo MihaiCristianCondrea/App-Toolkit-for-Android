@@ -121,13 +121,13 @@ export const HERO_BIG_AT = (): Pt => [W - SPACE.xxl, GOLDEN.y[0] / PHI];
 
 
 export type Confetto={x:number;y:number;w:number;h:number;rotate:number;color:string};
-/** Confetti follows an ellipse around the projected phone, clear of its silhouette, shapes and caption. */
+/** Confetti follows elliptical bands around the projected phone, clear of its silhouette, shapes and caption. */
 export const placeConfetti=(phones:Measured[],caption:Box,shapes:Piece[],index:number):Confetto[]=>{
  const m=phones[0],rx=(m.box.right-m.box.left)/2+SPACE.xl,ry=(m.box.bottom-m.box.top)/2+SPACE.l;
- const out:Confetto[]=[],limit=index===1?18:index===0?5:3;
- for(let k=0;k<96&&out.length<limit;k++){
-  const a=(k*137.507764+index*31)*Math.PI/180;
-  const x=m.centroid[0]+rx*Math.cos(a),y=m.centroid[1]+ry*Math.sin(a),w=13+(k%3)*5,h=21+(k%2)*8,r=Math.hypot(w,h)/2;
+ const out:Confetto[]=[],limit=[16,34,12,10,12,14][index]??12;
+ for(let k=0;k<288&&out.length<limit;k++){
+  const a=(k*137.507764+index*31)*Math.PI/180,band=[1,1.12,.92][Math.floor(k/96)];
+  const x=m.centroid[0]+rx*band*Math.cos(a),y=m.centroid[1]+ry*band*Math.sin(a),w=13+(k%3)*5,h=21+(k%2)*8,r=Math.hypot(w,h)/2;
   if(x-r<SPACE.s||x+r>W-SPACE.s||y-r<SPACE.s||y+r>H-SPACE.s)continue;
   if(x+r>caption.left-SPACE.m&&x-r<caption.right+SPACE.m&&y+r>caption.top-SPACE.m&&y-r<caption.bottom+SPACE.m)continue;
   if(phones.some(p=>inside(p.visible,[x,y])||distanceTo(p.visible,[x,y])<r+SPACE.s))continue;
