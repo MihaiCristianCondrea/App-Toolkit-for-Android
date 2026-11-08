@@ -12,9 +12,11 @@ People looking for a simple wheel spinner or a random pick for everyday decision
 | --- | --- | --- |
 | title.txt | Spin the Wheel: App Toolkit | 27 / 30 |
 | short-description.txt | Add your choices, spin the wheel and let a random pick help you decide. | 71 / 80 |
-| full-description.txt | Wheel, everyday examples, the other chance tools, where to find them, limits | 1,126 / 4,000 |
+| full-description.txt | Features, Benefits, How it works, limits and Feedback | 1,513 / 4,000 |
 
 Every claim was checked against the Android source (sample/feature/tiles): the wheel accepts 2 to 12 choices, one per line, up to 1,000 characters, and picks with `Random.nextInt`; Random Number takes any whole-number range, includes both ends and offers 1 to 2, 1 to 6, 1 to 10 and 1 to 100 presets; Coin Flip shows Heads or Tails; Dice Roll rolls one six-sided die; Coin Flip and Dice Roll are Android Quick Settings tiles; all four sit in Play & Decide's Chance section.
+
+## Research
 
 The keywords describe intent, not measured demand; see keyword-review.md for the priority, the rejected terms and what to check in Play Console. See [Google Play custom store listings](https://support.google.com/googleplay/android-developer/answer/9867158).
 

@@ -23,6 +23,11 @@
       "date": "2026-11-08",
       "status": "planned",
       "note": "Confetti now scattered across every image (phone, tablet, desktop and feature graphic) instead of tracing a ring and edge columns; lilac palette kept and centralised. Re-rendered, verified, audited. Not uploaded."
+    },
+    {
+      "date": "2026-11-08",
+      "status": "planned",
+      "note": "Aligned the full-description section structure with the default and Water Eject listings, retained existing features and limits, and made the package audit count newlines the same way as the Play validator. Artwork unchanged."
     }
   ]
 }

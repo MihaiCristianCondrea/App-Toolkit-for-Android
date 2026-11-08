@@ -1,0 +1,23 @@
+{
+  "id": "unit-converter",
+  "audience": "People converting everyday length, mass, temperature, volume and decimal digital storage units",
+  "targeting": {
+    "url": true,
+    "countries": [],
+    "keywords": "keywords.txt",
+    "googleAds": false
+  },
+  "status": "planned",
+  "log": [
+    {
+      "date": "2026-11-08",
+      "status": "planned",
+      "note": "Prepared English metadata and a Material transformation creative campaign. Production availability and search targeting require Play Console confirmation before upload. Not published."
+    },
+    {
+      "date": "2026-11-08",
+      "status": "planned",
+      "note": "Completed 6 phone, 4 foldable and 4 desktop screenshots, selected the Connected measurements feature graphic, and copied the official icon. All 16 assets passed metadata readback and pixel preservation, package audit and Play listing validation. Six phone captures repeat byte-identically. Production rollout and Play Console keyword availability remain unconfirmed. Not uploaded."
+    }
+  ]
+}

@@ -1,0 +1,129 @@
+{
+  "captureChecks": 34,
+  "browserResourceErrors": 0,
+  "requiredFontsLoaded": true,
+  "listing": "unit-converter",
+  "lengths": {
+    "title": 27,
+    "short-description": 67,
+    "full-description": 1538
+  },
+  "keywordCandidates": 213,
+  "assetCount": 16,
+  "officialIconPixelIdentical": true,
+  "repeatablePhoneCaptures": 6,
+  "assets": [
+    {
+      "file": "phone-screenshots/1-length.png",
+      "width": 2160,
+      "height": 3840,
+      "mode": "RGB",
+      "sha256": "2d5d00ebc24ec4d1ae0220769474041dcfb824271720fa5f42c46eca79a71d9d"
+    },
+    {
+      "file": "phone-screenshots/2-temperature.png",
+      "width": 2160,
+      "height": 3840,
+      "mode": "RGB",
+      "sha256": "6bece3cbf185d3c2d0e26d91e0a9c219b40212dbe9e178cf8a8d1f56bfca9f8d"
+    },
+    {
+      "file": "phone-screenshots/3-mass.png",
+      "width": 2160,
+      "height": 3840,
+      "mode": "RGB",
+      "sha256": "29431d8574eda167c0d0ac0ed0a5dc392f452238a2aa9e301e0965e30c926104"
+    },
+    {
+      "file": "phone-screenshots/4-volume.png",
+      "width": 2160,
+      "height": 3840,
+      "mode": "RGB",
+      "sha256": "09f173276929d074dc5f70dd89c15617967de6781a711a62eff6e1caab036329"
+    },
+    {
+      "file": "phone-screenshots/5-data.png",
+      "width": 2160,
+      "height": 3840,
+      "mode": "RGB",
+      "sha256": "aea502f56fd7edf497ec64e736a80e898604ba12cb304746061cce172b215110"
+    },
+    {
+      "file": "phone-screenshots/6-reverse.png",
+      "width": 2160,
+      "height": 3840,
+      "mode": "RGB",
+      "sha256": "3e334ac31cc8954142e9643072b6cf2edc72daef82d87cfa1a9b9a96ed8bfed5"
+    },
+    {
+      "file": "tablet-screenshots/1-length.png",
+      "width": 3840,
+      "height": 2160,
+      "mode": "RGB",
+      "sha256": "f8fb3f53674942dbbff6d03ee63bd00b1a088cb479e6f64a3edde4b7cfeec453"
+    },
+    {
+      "file": "tablet-screenshots/2-temperature.png",
+      "width": 3840,
+      "height": 2160,
+      "mode": "RGB",
+      "sha256": "915063ecb2db060f5e5413cf075aeb15ad205dcabce646dfcddcd6497b064036"
+    },
+    {
+      "file": "tablet-screenshots/3-mass.png",
+      "width": 3840,
+      "height": 2160,
+      "mode": "RGB",
+      "sha256": "71275444c151953928753fb3ee38631c60a40547b12464868de75fbbc4d89bf3"
+    },
+    {
+      "file": "tablet-screenshots/4-data.png",
+      "width": 3840,
+      "height": 2160,
+      "mode": "RGB",
+      "sha256": "bc6815b44f900b5b333e3072e42e6244027f1209bb0b11fe224cb9b7a7ed1e6f"
+    },
+    {
+      "file": "desktop-screenshots/1-length.png",
+      "width": 3840,
+      "height": 2160,
+      "mode": "RGB",
+      "sha256": "0921770aa7afc307cbae68dd265f013e1a70d480ec2cc69e92a1b21632fb5f50"
+    },
+    {
+      "file": "desktop-screenshots/2-temperature.png",
+      "width": 3840,
+      "height": 2160,
+      "mode": "RGB",
+      "sha256": "5bfcb505d23d9e6f49fd24f500bcc6d1f876563c668a3bd9f34448ec61a49d97"
+    },
+    {
+      "file": "desktop-screenshots/3-mass.png",
+      "width": 3840,
+      "height": 2160,
+      "mode": "RGB",
+      "sha256": "574283c479e4204147be4f9942eecb1dbc433f85e1ebdbc5fff65ee9846a9602"
+    },
+    {
+      "file": "desktop-screenshots/4-data.png",
+      "width": 3840,
+      "height": 2160,
+      "mode": "RGB",
+      "sha256": "979543806fb1303dbebfeff4296fc245b843d43cc109779f338a0de58f903dfc"
+    },
+    {
+      "file": "feature-graphic/feature-graphic.png",
+      "width": 1024,
+      "height": 500,
+      "mode": "RGB",
+      "sha256": "93a735fd3f6122289d5c26695ea1f01e1102906c3e9b1a643ab662239711cd67"
+    },
+    {
+      "file": "icon/icon.png",
+      "width": 512,
+      "height": 512,
+      "mode": "RGBA",
+      "sha256": "c8f8aba22e590f41a1d74331f5b2deb9a494f23e9cb9ffce9c78f4aa2642cbf3"
+    }
+  ]
+}

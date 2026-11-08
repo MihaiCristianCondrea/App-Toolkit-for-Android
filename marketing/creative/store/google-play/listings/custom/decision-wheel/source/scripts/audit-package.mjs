@@ -7,7 +7,7 @@ const source=fileURLToPath(new URL("../",import.meta.url)),root=path.resolve(sou
 const assert=(ok,message)=>{if(!ok)throw Error(message);};
 const lengths={};
 for(const [name,max] of [["title",30],["short-description",80],["full-description",4000]]){
- const text=(await readFile(path.join(locale,name+".txt"),"utf8")).trim();
+ const text=(await readFile(path.join(locale,name+".txt"),"utf8")).replace(/\r\n/g,"\n").trim();
  lengths[name]=[...text].length;assert(lengths[name]>0&&lengths[name]<=max,name+" length");
 }
 const keywords=(await readFile(path.join(root,"keywords.txt"),"utf8")).trim().split(/\r?\n/);

@@ -1,0 +1,291 @@
+{
+  "golden": {
+    "x": [
+      412.52329215011355,
+      667.4767078498865
+    ],
+    "y": [
+      733.3747416002019,
+      1186.625258399798
+    ],
+    "yLow": 1466.7494832004036
+  },
+  "shots": [
+    {
+      "id": "length",
+      "primaryAnchor": "Projected phone silhouette",
+      "pose": {
+        "pitch": 0,
+        "yaw": -4,
+        "roll": -1,
+        "perspective": 3000,
+        "scale": 1.4,
+        "x": 540.217,
+        "y": 1101.88
+      },
+      "framingTarget": [
+        540,
+        1099.36
+      ],
+      "framingActual": [
+        540,
+        1099.36
+      ],
+      "framingErrorPx": [
+        0,
+        0
+      ],
+      "focus": "from",
+      "guideY": 1186.625,
+      "focusActual": [
+        541.812,
+        1267.639
+      ],
+      "focusNormalized": [
+        0.502,
+        0.66
+      ],
+      "guideOffsetY": 81.014,
+      "centroid": [
+        0.5,
+        0.574
+      ],
+      "bounds": {
+        "left": 204.50304532247827,
+        "top": 403.6180970206186,
+        "right": 874.5143854025713,
+        "bottom": 1795.1021994204843
+      }
+    },
+    {
+      "id": "temperature",
+      "primaryAnchor": "Projected phone silhouette",
+      "pose": {
+        "pitch": 3,
+        "yaw": 6,
+        "roll": 1,
+        "perspective": 3000,
+        "scale": 1.369,
+        "x": 540.624,
+        "y": 784.299
+      },
+      "framingTarget": [
+        540,
+        784.64
+      ],
+      "framingActual": [
+        540,
+        784.64
+      ],
+      "framingErrorPx": [
+        0,
+        0
+      ],
+      "focus": "to",
+      "guideY": 733.375,
+      "focusActual": [
+        535.108,
+        1209.232
+      ],
+      "focusNormalized": [
+        0.495,
+        0.63
+      ],
+      "guideOffsetY": 475.857,
+      "centroid": [
+        0.5,
+        0.411
+      ],
+      "bounds": {
+        "left": 210.88198588828033,
+        "top": 104.08967338663399,
+        "right": 865.8984776628962,
+        "bottom": 1465.1907651098102
+      }
+    },
+    {
+      "id": "mass",
+      "primaryAnchor": "Projected phone silhouette",
+      "pose": {
+        "pitch": -2,
+        "yaw": 4,
+        "roll": 1,
+        "perspective": 3000,
+        "scale": 1.358,
+        "x": 539.721,
+        "y": 1104.455
+      },
+      "framingTarget": [
+        540,
+        1099.36
+      ],
+      "framingActual": [
+        540,
+        1099.36
+      ],
+      "framingErrorPx": [
+        0,
+        0
+      ],
+      "focus": "to",
+      "guideY": 1186.625,
+      "focusActual": [
+        533.628,
+        1525.279
+      ],
+      "focusNormalized": [
+        0.494,
+        0.794
+      ],
+      "guideOffsetY": 338.653,
+      "centroid": [
+        0.5,
+        0.573
+      ],
+      "bounds": {
+        "left": 217.01251580744292,
+        "top": 425.3875707029273,
+        "right": 866.9399240765451,
+        "bottom": 1773.332834070713
+      }
+    },
+    {
+      "id": "volume",
+      "primaryAnchor": "Projected phone silhouette",
+      "pose": {
+        "pitch": 1,
+        "yaw": -5,
+        "roll": -2,
+        "perspective": 3000,
+        "scale": 1.37,
+        "x": 539.889,
+        "y": 786.33
+      },
+      "framingTarget": [
+        540,
+        784.64
+      ],
+      "framingActual": [
+        540,
+        784.64
+      ],
+      "framingErrorPx": [
+        0,
+        0
+      ],
+      "focus": "from",
+      "guideY": 733.375,
+      "focusActual": [
+        543.946,
+        948.019
+      ],
+      "focusNormalized": [
+        0.504,
+        0.494
+      ],
+      "guideOffsetY": 214.645,
+      "centroid": [
+        0.5,
+        0.411
+      ],
+      "bounds": {
+        "left": 202.6221525513262,
+        "top": 100.13607352024815,
+        "right": 877.5785631128787,
+        "bottom": 1469.1446552838158
+      }
+    },
+    {
+      "id": "data",
+      "primaryAnchor": "Projected phone silhouette",
+      "pose": {
+        "pitch": 0,
+        "yaw": 0,
+        "roll": 0,
+        "perspective": 3000,
+        "scale": 1.376,
+        "x": 540,
+        "y": 1099.36
+      },
+      "framingTarget": [
+        540,
+        1099.36
+      ],
+      "framingActual": [
+        540,
+        1099.36
+      ],
+      "framingErrorPx": [
+        0,
+        0
+      ],
+      "focus": "to",
+      "guideY": 1186.625,
+      "focusActual": [
+        539.996,
+        1476.936
+      ],
+      "focusNormalized": [
+        0.5,
+        0.769
+      ],
+      "guideOffsetY": 290.311,
+      "centroid": [
+        0.5,
+        0.573
+      ],
+      "bounds": {
+        "left": 219.98930536661607,
+        "top": 419.2328317713457,
+        "right": 860.010694633384,
+        "bottom": 1779.4871682286541
+      }
+    },
+    {
+      "id": "reverse",
+      "primaryAnchor": "Projected phone silhouette",
+      "pose": {
+        "pitch": 4,
+        "yaw": 5,
+        "roll": -1,
+        "perspective": 3000,
+        "scale": 1.39,
+        "x": 539.897,
+        "y": 776.746
+      },
+      "framingTarget": [
+        540,
+        784.64
+      ],
+      "framingActual": [
+        540,
+        784.639
+      ],
+      "framingErrorPx": [
+        0,
+        -0.001
+      ],
+      "focus": "swap",
+      "guideY": 733.375,
+      "focusActual": [
+        762.939,
+        1069.091
+      ],
+      "focusNormalized": [
+        0.706,
+        0.557
+      ],
+      "guideOffsetY": 335.716,
+      "centroid": [
+        0.5,
+        0.409
+      ],
+      "bounds": {
+        "left": 211.25659528980387,
+        "top": 96.15346168458393,
+        "right": 876.1708936292227,
+        "bottom": 1473.123725504188
+      }
+    }
+  ]
+}

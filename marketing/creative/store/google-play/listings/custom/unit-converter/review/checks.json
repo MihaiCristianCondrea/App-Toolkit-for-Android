@@ -1,0 +1,63 @@
+{
+  "date": "2026-11-08",
+  "scope": "unit-converter marketing creative and listing text",
+  "commands": [
+    {
+      "command": "npm ci",
+      "exitCode": 0
+    },
+    {
+      "command": "npm run lint",
+      "exitCode": 0
+    },
+    {
+      "command": "npm run probe -- length temperature mass volume data reverse length@fold temperature@fold mass@fold data@fold length@desktop temperature@desktop mass@desktop data@desktop",
+      "exitCode": 0
+    },
+    {
+      "command": "npm run solve",
+      "exitCode": 0
+    },
+    {
+      "command": "npm run concepts",
+      "exitCode": 0
+    },
+    {
+      "command": "node scripts/verify.mjs en-US",
+      "exitCode": 0
+    },
+    {
+      "command": "npm run render -- en-US --verify-repeat",
+      "exitCode": 0
+    },
+    {
+      "command": "npm run metadata",
+      "exitCode": 0
+    },
+    {
+      "command": "node scripts/audit-package.mjs",
+      "exitCode": 0
+    },
+    {
+      "command": "node scripts/validate.mjs (Google Play directory)",
+      "exitCode": 0
+    }
+  ],
+  "assetCount": 16,
+  "metadataReadback": 16,
+  "metadataPreservedDecodedPixels": true,
+  "officialIconPixelIdentical": true,
+  "exactRepeatedPhoneCaptures": 6,
+  "requiredFontsLoaded": [
+    "Google Sans Flex",
+    "Material Symbols Outlined",
+    "Material Symbols Rounded"
+  ],
+  "browserResourceErrors": 0,
+  "hardLayoutFailures": 0,
+  "productionAvailability": "unconfirmed",
+  "playConsoleTargeting": "not reviewed",
+  "published": false,
+  "androidCodeChanged": false,
+  "nativeDeviceComparison": "not performed"
+}

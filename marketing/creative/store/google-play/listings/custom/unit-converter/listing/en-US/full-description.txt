@@ -1,0 +1,24 @@
+Everyday unit conversions in one place. App Toolkit's Unit Converter brings length, mass, temperature, volume and digital storage together in a clear interface. Choose two units, enter a value and read the conversion.
+
+Length
+Switch between metric and imperial lengths: millimetres, centimetres, metres, kilometres, inches, feet, yards and miles. Check familiar pairs such as metres and centimetres, or miles and kilometres.
+
+Mass
+Convert grams, kilograms, ounces, pounds and stone. Use the same two fields whether you start with a weight in kilograms or pounds.
+
+Temperature
+Convert Celsius, Fahrenheit and Kelvin. For example, 20 degrees Celsius is 68 degrees Fahrenheit. Values below absolute zero are not accepted.
+
+Volume
+Work with millilitres, litres, cubic metres and US gallons. The gallon unit is US gallon, not imperial gallon.
+
+Data
+Convert bytes, kilobytes, megabytes, gigabytes and terabytes. These use decimal multiples: 1 GB equals 1000 MB. Binary units such as MiB and GiB are not included.
+
+How it works
+Open Measure in App Toolkit and select Unit Converter. Pick a category, then choose the From and To units. Edit either value to convert in the other direction, or tap the swap button to exchange the units.
+
+More everyday tools
+App Toolkit also includes Surface Ruler for on-screen lengths, Protractor for interactive angles and Tip & Bill Splitter for everyday calculations.
+
+Five categories and 25 units cover everyday conversions. Results are a practical reference, not a promise of certified measurement precision.

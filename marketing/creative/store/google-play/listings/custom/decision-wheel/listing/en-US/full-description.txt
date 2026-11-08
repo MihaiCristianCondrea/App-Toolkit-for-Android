@@ -2,8 +2,11 @@ Enter your choices. Spin the wheel. See what gets picked.
 
 Decision Wheel in App Toolkit helps you make a small everyday choice when several options sound good. Add between 2 and 12 choices, one per line, then tap Spin the wheel. After the spin, the selected option appears below the wheel.
 
-Your choices, your wheel
-Choose a meal, pick an activity or decide who goes first. Try Pizza, Pasta, Sushi and Salad, or enter the names of a small group. You supply the options; the wheel makes a random pick.
+Features
+
+Decision Wheel
+• Your choices: Enter 2 to 12 options, one per line.
+• Spin and see the pick: The selected option appears below the wheel.
 
 More ways to choose
 • Random Number: Set a whole-number range, or pick 1 to 2, 1 to 6, 1 to 10 or 1 to 100, and generate a result. Both ends are included.
@@ -11,7 +14,18 @@ More ways to choose
 • Dice Roll: Roll a virtual six-sided die.
 Coin Flip and Dice Roll can also be added as Android Quick Settings tiles.
 
-Find the tools
+Benefits
+
+• Everyday choices: Choose a meal, pick an activity or decide who goes first.
+• Your own options: Try Pizza, Pasta, Sushi and Salad, or enter the names of a small group.
+• More ways to decide: Keep a wheel, number picker, coin and die together in App Toolkit.
+
+How it works
+
 Open App Toolkit and choose Play & Decide. Tap Decision Wheel to enter your options, or open one of the other chance tools.
 
 The wheel supports 2 to 12 choices. These tools are for playful everyday decisions, not prize drawings or decisions that need a verified random process.
+
+Feedback
+
+If you have a suggestion or encounter a problem, leave a Google Play review or use Help & feedback in the app. Describe what happened so the issue can be investigated.
