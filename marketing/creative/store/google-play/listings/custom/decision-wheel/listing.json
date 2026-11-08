@@ -18,6 +18,11 @@
       "date": "2026-11-08",
       "status": "planned",
       "note": "Final pass: description checked against the Android source (range presets and Quick Settings tiles added), keywords 157 to 229 with 5 rejected (see keyword-review.md), metadata copy aligned with the title, listing README added. Creative unchanged. Not uploaded."
+    },
+    {
+      "date": "2026-11-08",
+      "status": "planned",
+      "note": "Confetti now scattered across every image (phone, tablet, desktop and feature graphic) instead of tracing a ring and edge columns; lilac palette kept and centralised. Re-rendered, verified, audited. Not uploaded."
     }
   ]
 }

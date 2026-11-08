@@ -8,11 +8,11 @@
    "shape flower sits behind the phone"
   ],
   "caption": {
-   "glyphPixels": 16755,
+   "glyphPixels": 17142,
    "minContrast": 12.83,
    "contrastP1": 12.83,
    "pillText": 7.48,
-   "pillPixels": 19482,
+   "pillPixels": 19617,
    "interference": 0
   },
   "balance": {
@@ -21,7 +21,7 @@
     0.552
    ],
    "pixels": [
-    0.508,
+    0.509,
     0.534
    ]
   },
@@ -67,11 +67,11 @@
    "shape sunny sits behind the phone"
   ],
   "caption": {
-   "glyphPixels": 8539,
+   "glyphPixels": 8714,
    "minContrast": 12.61,
    "contrastP1": 12.61,
    "pillText": 7.48,
-   "pillPixels": 34032,
+   "pillPixels": 34444,
    "interference": 0
   },
   "balance": {
@@ -80,8 +80,8 @@
     0.44
    ],
    "pixels": [
-    0.484,
-    0.464
+    0.482,
+    0.465
    ]
   },
   "phones": [
@@ -124,21 +124,21 @@
   "preferences": [],
   "intentional": [],
   "caption": {
-   "glyphPixels": 9328,
+   "glyphPixels": 9647,
    "minContrast": 12.95,
    "contrastP1": 12.95,
    "pillText": 7.48,
-   "pillPixels": 23262,
+   "pillPixels": 23653,
    "interference": 0
   },
   "balance": {
    "geometric": [
-    0.501,
+    0.5,
     0.547
    ],
    "pixels": [
-    0.507,
-    0.539
+    0.506,
+    0.538
    ]
   },
   "phones": [
@@ -181,11 +181,11 @@
   "preferences": [],
   "intentional": [],
   "caption": {
-   "glyphPixels": 8713,
+   "glyphPixels": 9025,
    "minContrast": 12.95,
    "contrastP1": 12.95,
    "pillText": 7.48,
-   "pillPixels": 23626,
+   "pillPixels": 23872,
    "interference": 0
   },
   "balance": {
@@ -240,21 +240,21 @@
    "shape pill sits behind the phone"
   ],
   "caption": {
-   "glyphPixels": 5415,
+   "glyphPixels": 5665,
    "minContrast": 12.95,
    "contrastP1": 12.95,
    "pillText": 7.48,
-   "pillPixels": 34756,
+   "pillPixels": 35233,
    "interference": 0
   },
   "balance": {
    "geometric": [
-    0.495,
+    0.496,
     0.546
    ],
    "pixels": [
-    0.487,
-    0.484
+    0.488,
+    0.483
    ]
   },
   "phones": [
@@ -297,11 +297,11 @@
   "preferences": [],
   "intentional": [],
   "caption": {
-   "glyphPixels": 14230,
+   "glyphPixels": 14729,
    "minContrast": 12.83,
    "contrastP1": 12.83,
    "pillText": 7.48,
-   "pillPixels": 14545,
+   "pillPixels": 14655,
    "interference": 0
   },
   "balance": {
@@ -311,7 +311,7 @@
    ],
    "pixels": [
     0.502,
-    0.419
+    0.42
    ]
   },
   "phones": [
@@ -382,7 +382,7 @@
     0.498
    ],
    "pixels": [
-    0.489
+    0.49
    ]
   },
   "device": {
@@ -428,7 +428,7 @@
     0.502
    ],
    "pixels": [
-    0.509
+    0.508
    ]
   },
   "device": {
@@ -451,7 +451,7 @@
     0.492
    ],
    "pixels": [
-    0.488
+    0.489
    ]
   },
   "device": {
@@ -497,7 +497,7 @@
     0.502
    ],
    "pixels": [
-    0.504
+    0.503
    ]
   },
   "device": {
@@ -520,7 +520,7 @@
     0.504
    ],
    "pixels": [
-    0.512
+    0.511
    ]
   },
   "device": {

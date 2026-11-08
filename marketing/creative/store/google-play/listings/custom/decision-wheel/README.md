@@ -20,7 +20,7 @@ The keywords describe intent, not measured demand; see keyword-review.md for the
 
 ## Creative direction
 
-Six phone screenshots on a soft lilac field with coral and lilac MaterialShapes and rounded confetti, captions in a deep plum with a lilac pill. The app keeps its own captured colours. Phones are Material-Next's porcelain 3D Pixel 9 Pro XL, each in a gentle solved pose, centred, with the caption above or below as the composition needs. Every image shows a different screen or state:
+Six phone screenshots on a soft lilac field with coral and lilac MaterialShapes and confetti scattered across each image, captions in a deep plum with a lilac pill. The app keeps its own captured colours. Phones are Material-Next's porcelain 3D Pixel 9 Pro XL, each in a gentle solved pose, centred, with the caption above or below as the composition needs. Every image shows a different screen or state:
 
 1. Spin the wheel, let chance decide: the wheel ready with four food choices.
 2. One spin, one random pick: six activities, settled on Music.
@@ -29,7 +29,7 @@ Six phone screenshots on a soft lilac field with coral and lilac MaterialShapes 
 5. Heads or tails, let it flip: Coin Flip settled on Tails.
 6. Roll the dice, make a choice: Dice Roll showing five.
 
-Tablet and desktop screenshots show the app's own large-screen layouts on the Pixel 9 Pro Fold and the Pixelbook Go, centred at true size with no captions, as Play asks. The feature graphic sets "Spin the Wheel" with App Toolkit small above it beside a large drawn wheel in the campaign's colours, running off the right edge; it has no device frame, no icon and no claims.
+Tablet and desktop screenshots show the app's own large-screen layouts on the Pixel 9 Pro Fold and the Pixelbook Go, centred at true size with no captions, as Play asks. The feature graphic sets "Spin the Wheel" with App Toolkit small above it beside a large drawn wheel in the campaign's colours, running off the right edge, with confetti scattered over the open space; it has no device frame, no icon and no claims.
 
 States, the composition system, its hard rules and preferences are described in source/README.md; review/ holds the contact sheets, the verification report, the package audit and the repeatability check.
 

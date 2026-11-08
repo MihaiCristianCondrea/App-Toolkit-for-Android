@@ -1,16 +1,17 @@
 import {CAPTION,GOLDEN,H,SPACE,W,centre,fitPose,measure} from "./geometry.ts";
 import type {CaptionAt,Measured,Pose,ScreenUi} from "./geometry.ts";
 import type {ShapePlan} from "./effects.ts";
+import { BEHIND } from "../theme.ts";
 export type Terms=Record<string,number>;
 export type ShotSpec={id:string;intent:string;caption:CaptionAt;screens:string[];effects?:"sound";shapes:ShapePlan;candidates:(ui:Record<string,ScreenUi>)=>Iterable<Pose[]>;hard?:(ms:Measured[])=>string[];score:(ms:Measured[])=>Terms};
 const sq=(n:number)=>n*n;
 type Direction={id:string;caption:CaptionAt;width:number;pitch:number;yaw:number;roll:number;focus:string;guideY:number;shapes:ShapePlan};
 export const DIRECTIONS:Direction[]=[
- {id:"wheel",caption:"top",width:690,pitch:0,yaw:-6,roll:-1,focus:"wheel",guideY:GOLDEN.y[1],shapes:{seed:11,small:1,big:{at:()=>[660,1140],max:900,min:700,name:"flower",rotate:-12,color:"#E3C4DF"}}},
- {id:"result",caption:"bottom",width:690,pitch:6,yaw:14,roll:2,focus:"result",guideY:GOLDEN.y[1],shapes:{seed:23,offset:3,small:2,big:{at:()=>[310,GOLDEN.y[0]],max:620,min:500,name:"sunny",rotate:18,color:"#DDA795"}}},
+ {id:"wheel",caption:"top",width:690,pitch:0,yaw:-6,roll:-1,focus:"wheel",guideY:GOLDEN.y[1],shapes:{seed:11,small:1,big:{at:()=>[660,1140],max:900,min:700,name:"flower",rotate:-12,color:BEHIND.wheel}}},
+ {id:"result",caption:"bottom",width:690,pitch:6,yaw:14,roll:2,focus:"result",guideY:GOLDEN.y[1],shapes:{seed:23,offset:3,small:2,big:{at:()=>[310,GOLDEN.y[0]],max:620,min:500,name:"sunny",rotate:18,color:BEHIND.result}}},
  {id:"choices",caption:"top",width:650,pitch:0,yaw:0,roll:0,focus:"wheel",guideY:GOLDEN.y[1],shapes:{seed:37,offset:2,small:2}},
  {id:"number",caption:"top",width:640,pitch:-2,yaw:-10,roll:-1,focus:"result",guideY:GOLDEN.y[1],shapes:{seed:47,offset:4,small:2}},
- {id:"coin",caption:"top",width:660,pitch:3,yaw:12,roll:-2,focus:"coin",guideY:GOLDEN.y[1],shapes:{seed:59,offset:5,small:1,big:{at:()=>[430,1230],max:700,min:550,name:"pill",rotate:-20,color:"#E7D9EF"}}},
+ {id:"coin",caption:"top",width:660,pitch:3,yaw:12,roll:-2,focus:"coin",guideY:GOLDEN.y[1],shapes:{seed:59,offset:5,small:1,big:{at:()=>[430,1230],max:700,min:550,name:"pill",rotate:-20,color:BEHIND.coin}}},
  {id:"dice",caption:"bottom",width:640,pitch:6,yaw:-8,roll:1,focus:"dice",guideY:GOLDEN.y[0],shapes:{seed:71,offset:6,small:3}}
 ];
 export const SHOTS:ShotSpec[]=DIRECTIONS.map(d=>({

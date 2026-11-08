@@ -15,105 +15,105 @@
       "width": 2160,
       "height": 3840,
       "mode": "RGB",
-      "sha256": "b89bec1bd9820c194866407a284e0cea859b276ddc5126a6edd9ae615168d6ef"
+      "sha256": "396dc954e511c43a676584d355667dacd7776a289130950866fdbd6826bdce69"
     },
     {
       "file": "phone-screenshots/2-result.png",
       "width": 2160,
       "height": 3840,
       "mode": "RGB",
-      "sha256": "f6b9d386bb172f52b598a511522937ebda0e299a321a54cb41c5e53e57de0fde"
+      "sha256": "e68cbec487f551cb0a4b321c0adfa5399ecef065fea68f330d2f0d07d59912f5"
     },
     {
       "file": "phone-screenshots/3-choices.png",
       "width": 2160,
       "height": 3840,
       "mode": "RGB",
-      "sha256": "93e0addc6cebb1dcc606f6763582c62221606438b3f2fdb632580ffc114f092a"
+      "sha256": "dfd50ed42b26ada7a999dd1dbb345a05571e0db1ce8a730d29c46b6fe12f29b5"
     },
     {
       "file": "phone-screenshots/4-number.png",
       "width": 2160,
       "height": 3840,
       "mode": "RGB",
-      "sha256": "9aaa89dc902a07ec0889b1f5788fa34037e19263dad41c02a88c50835f20503b"
+      "sha256": "f7d2966e19e2189f0e9e025a7f5ccec9b4eb811ccaa2da978a274af07bb05c45"
     },
     {
       "file": "phone-screenshots/5-coin.png",
       "width": 2160,
       "height": 3840,
       "mode": "RGB",
-      "sha256": "92c2f1fa0662ad248f79e78f99319ca396d79f58cf69c49490678f041739c7f9"
+      "sha256": "19f64139d0df10c59cebaf946189c26f6f068ccdda7a33a5b331d493af004cc4"
     },
     {
       "file": "phone-screenshots/6-dice.png",
       "width": 2160,
       "height": 3840,
       "mode": "RGB",
-      "sha256": "e7006d4286497787973ec9172c61016de3b4585fa98682cab3ce7fb906a6b8e1"
+      "sha256": "089faf498aa58623124f1a24f56e124986f7551aaa2ede6f579e11ef2aeaa4c3"
     },
     {
       "file": "tablet-screenshots/1-wheel.png",
       "width": 3840,
       "height": 2160,
       "mode": "RGB",
-      "sha256": "d3a69b733dd318100e4bec7096583099e9bc3586a3e3179d6bba3af2272fbaf9"
+      "sha256": "6c350bdfad3a65f7858bc2b496505c92b308ae6cdc7b5ce8f8d73ceaa9a2649d"
     },
     {
       "file": "tablet-screenshots/2-result.png",
       "width": 3840,
       "height": 2160,
       "mode": "RGB",
-      "sha256": "8d6ee0e43cae5c91360ecf10cc0838de88f2a353421695908d48a4ead88f25b7"
+      "sha256": "c48c07440ad539323dfe86197569cdab9567a57979b4a70a40471c2318665383"
     },
     {
       "file": "tablet-screenshots/3-number.png",
       "width": 3840,
       "height": 2160,
       "mode": "RGB",
-      "sha256": "6923d398e143b56f7797f7fa3aaa373ea4a62b680262a9f0bd3ef540fa942050"
+      "sha256": "51fd70798b86fa4bc79164de0ceaef737fc0d2a5b7c16016be256a37ad8bf273"
     },
     {
       "file": "tablet-screenshots/4-dice.png",
       "width": 3840,
       "height": 2160,
       "mode": "RGB",
-      "sha256": "f34cf6a1404d236ab6d314bd21e179a4f6160709521b0baf3e77415b617d43af"
+      "sha256": "bd66c1b22458397f977127dc38f9c6c970bcdf91132c03b787126d8fb44b9f04"
     },
     {
       "file": "desktop-screenshots/1-wheel.png",
       "width": 3840,
       "height": 2160,
       "mode": "RGB",
-      "sha256": "a8b857ca806eca02b251b07341b807619b29fc82902ccd162c69fdbef8d79c46"
+      "sha256": "d36c283354558c362eda4b3defaf14081d87c1f9949a10ecc138d570a34b3980"
     },
     {
       "file": "desktop-screenshots/2-result.png",
       "width": 3840,
       "height": 2160,
       "mode": "RGB",
-      "sha256": "ecdf333bcc78756547c09458712bc361a6c83af5b623cccba22f6f6e2b34abfa"
+      "sha256": "ec527601d401d036bff35a602fa6d711078e6f575d768c65f93f54b88a18eded"
     },
     {
       "file": "desktop-screenshots/3-number.png",
       "width": 3840,
       "height": 2160,
       "mode": "RGB",
-      "sha256": "4935d6ebf3c78c4ab865b7a0cf86652134684172e18fc897e340898be812b96b"
+      "sha256": "1bf13929236548d0e2dc38c784eafca890225daa6ff0afd174c8f224d13a75e6"
     },
     {
       "file": "desktop-screenshots/4-dice.png",
       "width": 3840,
       "height": 2160,
       "mode": "RGB",
-      "sha256": "ac2e28cb640b23803709ff1c514b40f2e64031092f8e23539ea8da9efd25b9cc"
+      "sha256": "774f5f9a95d366aa7a3bda3a4d07d6159fa63d335231689c15fe7396b14cba83"
     },
     {
       "file": "feature-graphic/feature-graphic.png",
       "width": 1024,
       "height": 500,
       "mode": "RGB",
-      "sha256": "d19070e42d64315a1ec81f9aa4cac3b61c4a25450da9bbc658aedeb809992c7c"
+      "sha256": "07edcd496d2f11549fbb74c06920a07d0a63b91a19d1d1a173049504f56099cd"
     },
     {
       "file": "icon/icon.png",

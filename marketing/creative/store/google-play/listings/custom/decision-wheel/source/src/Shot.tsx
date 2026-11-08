@@ -1,4 +1,5 @@
 import React from "react";
+import { Confetti } from "./Confetti";
 import { LitScreen } from "./LitScreen";
 import { SCROLL, SCREENS } from "./screens";
 import { SoundBubbles } from "./Glass";
@@ -24,7 +25,7 @@ export const Shot: React.FC<{ index: number; panels: number; debug?: boolean }> 
   return (
     <>
       {g.shapes.map((p, i) => <Shape key={i} name={p.name} x={p.x} y={p.y} size={p.size} color={p.color} rotate={p.rotate} />)}
-      <svg width={W} height={H} style={{position:"absolute",inset:0}} aria-hidden>{g.confetti.map((p,i)=><rect key={i} x={p.x-p.w/2} y={p.y-p.h/2} width={p.w} height={p.h} rx="5" fill={p.color} transform={`rotate(${p.rotate} ${p.x} ${p.y})`}/>)}</svg>
+      <Confetti pieces={g.confetti} width={W} height={H} />
       {g.poses.map((pose, i) => {
         const [id, state] = SCREENS[g.spec.screens[i]];
         return (

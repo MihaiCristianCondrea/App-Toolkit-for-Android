@@ -4,6 +4,7 @@ import { LitScreen } from "./LitScreen";
 import { SCREENS, SCROLL } from "./screens";
 import { STRINGS } from "./strings";
 import { Glass } from "./Glass";
+import { Confetti } from "./Confetti";
 import { Shape } from "./Shape";
 import ui from "./composition/ui.json";
 import type { Pt, ScreenUi } from "./composition/geometry";
@@ -29,6 +30,7 @@ export const WideStrip: React.FC<{ locale: string; kind: Kind; only?: number; de
         return (
           <div key={s.id} style={{ position: "absolute", left: i * CANVAS.w, top: 0, width: CANVAS.w, height: CANVAS.h }}>
             {g.shapes.map((p, k) => <Shape key={k} name={p.name} x={p.x} y={p.y} size={p.size} color={p.color} rotate={p.rotate} />)}
+            <Confetti pieces={g.confetti} width={CANVAS.w} height={CANVAS.h} />
             <div style={{ position: "absolute", left: g.box.left, top: g.box.top, zIndex: 1 }}>
               <LitScreen id={SCREENS[s.id][0]} state={SCREENS[s.id][1]} window={set.window} scroll={SCROLL[s.id]} />
             </div>

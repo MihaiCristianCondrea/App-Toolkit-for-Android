@@ -7,6 +7,7 @@
 import { SPACE, areaCentroid, bbox, inside, rectPoly } from "./geometry.ts";
 import type { Box, Pt, ScreenUi } from "./geometry.ts";
 import { placeShapes } from "./effects.ts";
+import { scatterConfetti } from "./confetti.ts";
 import type { Piece, ShapePlan } from "./effects.ts";
 import { ribbonLines } from "./ribbons.ts";
 import type { Report } from "./validate.ts";
@@ -33,8 +34,13 @@ export const composeWide = (kind: Kind, index: number, screens: string[], ui: Re
   const ribbons = ribbonLines(panels * CANVAS.w, CANVAS.h, panels).map((r) => ({ ...r, pts: r.pts.map(([x, y]) => [x - index * CANVAS.w, y] as [number, number]) }));
   const edges = { left: index === 0, right: index === panels - 1 };
   const shapes = placeShapes(set.shapes, [{ visible: device }], null, [], ribbons, edges, CANVAS);
+  const confetti = scatterConfetti({
+    width: CANVAS.w, height: CANVAS.h, seed: 104729 * (index + 1) + (kind === "desktop" ? 17 : 0), count: kind === "desktop" ? 22 : 30, focus: box,
+    free: (x, y, r) => !(x + r + SPACE.s > box.left && x - r - SPACE.s < box.right && y + r + SPACE.s > box.top && y - r - SPACE.s < box.bottom) &&
+      shapes.every((p) => Math.hypot(p.x + p.size / 2 - x, p.y + p.size / 2 - y) > p.size / 2 + r + SPACE.xs),
+  });
   const report = validateWide(device, critical, shapes, ribbons, edges);
-  return { kind, screen, box, device, critical, secondary, shapes, report };
+  return { kind, screen, box, device, critical, secondary, shapes, confetti, report };
 };
 
 /**
