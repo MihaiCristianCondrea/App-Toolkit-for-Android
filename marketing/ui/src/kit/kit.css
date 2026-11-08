@@ -1815,8 +1815,10 @@ mnw-android-screen,
 .mw-reaction span { font: 400 12px/18px var(--md-ref-typeface-plain); color: var(--md-sys-color-on-surface-variant); }
 @media (prefers-reduced-motion: reduce) { .mw-widget { transition: none; } }
 
-.bill-input-row { display: grid; grid-template-columns: minmax(0,1fr) 140px; gap: 12px; }
-.bill-input-row > * { min-width: 0; width: 100%; }
+.bill-input-row { display: flex; align-items: center; gap: 8px; }
+.bill-input-row > md-outlined-text-field { min-width: 0; flex: 1; }
+.bill-currency-wrap { position: relative; }
+.bill-currency { min-width: 64px; }
 .bill-tip-toggle { display: flex; align-items: center; gap: 12px; min-height: 48px; cursor: pointer; font: 500 16px/24px var(--md-ref-typeface-plain); }
 .bill-tip-expansion { display: grid; grid-template-rows: 0fr; opacity: 0; transition: grid-template-rows 250ms ease, opacity 200ms ease; margin-top: -12px; }
 .bill-tip-expansion[data-expanded] { grid-template-rows: 1fr; opacity: 1; }
