@@ -7,21 +7,24 @@
    ],
    "poses": [
     {
-     "pitch": 0,
-     "yaw": -4,
-     "roll": -3,
+     "pitch": -6,
+     "yaw": -10,
+     "roll": -5,
      "perspective": 3000,
-     "scale": 1.301,
-     "x": 505.202,
-     "y": 1045.266
+     "scale": 1.31,
+     "x": 455.169,
+     "y": 1037.282
     }
    ],
-   "score": 0,
+   "score": 1.0335,
    "terms": {
     "size": 0,
-    "pose": 0
+    "goldenX": 0,
+    "goldenY": 0.0929,
+    "pose": 0.01,
+    "balance": 0.9306
    },
-   "searched": 81,
+   "searched": 108,
    "rejected": 0
   },
   {
@@ -31,21 +34,24 @@
    ],
    "poses": [
     {
-     "pitch": 0,
-     "yaw": 2,
-     "roll": 3,
+     "pitch": 14,
+     "yaw": 24,
+     "roll": 5,
      "perspective": 3000,
-     "scale": 1.24,
-     "x": 564.906,
-     "y": 713.299
+     "scale": 1.235,
+     "x": 639.716,
+     "y": 790.023
     }
    ],
-   "score": 0,
+   "score": 1.0707,
    "terms": {
     "size": 0,
-    "pose": 0
+    "goldenX": 0,
+    "goldenY": 0,
+    "pose": 0.01,
+    "balance": 1.0607
    },
-   "searched": 81,
+   "searched": 108,
    "rejected": 0
   },
   {
@@ -55,21 +61,24 @@
    ],
    "poses": [
     {
-     "pitch": 0,
-     "yaw": 0,
-     "roll": -1,
+     "pitch": 4,
+     "yaw": -16,
+     "roll": -3,
      "perspective": 3000,
-     "scale": 1.355,
-     "x": 520,
-     "y": 1088.361
+     "scale": 1.299,
+     "x": 535.873,
+     "y": 1025.976
     }
    ],
-   "score": 0,
+   "score": 0.0298,
    "terms": {
     "size": 0,
-    "pose": 0
+    "goldenX": 0,
+    "goldenY": 0.0193,
+    "pose": 0.01,
+    "balance": 0.0004
    },
-   "searched": 81,
+   "searched": 108,
    "rejected": 0
   },
   {
@@ -79,21 +88,24 @@
    ],
    "poses": [
     {
-     "pitch": 0,
-     "yaw": -6,
-     "roll": 4,
+     "pitch": -10,
+     "yaw": 18,
+     "roll": 3,
      "perspective": 3000,
-     "scale": 1.151,
-     "x": 564.556,
-     "y": 997.268
+     "scale": 1.246,
+     "x": 572.601,
+     "y": 1110.022
     }
    ],
-   "score": 0,
+   "score": 0.1108,
    "terms": {
     "size": 0,
-    "pose": 0
+    "goldenX": 0,
+    "goldenY": 0,
+    "pose": 0.01,
+    "balance": 0.1008
    },
-   "searched": 81,
+   "searched": 108,
    "rejected": 0
   },
   {
@@ -103,21 +115,24 @@
    ],
    "poses": [
     {
-     "pitch": 0,
-     "yaw": 6,
-     "roll": -4,
+     "pitch": 10,
+     "yaw": -22,
+     "roll": -5,
      "perspective": 3000,
-     "scale": 1.228,
-     "x": 510.473,
-     "y": 1015.753
+     "scale": 1.24,
+     "x": 505.114,
+     "y": 1099.826
     }
    ],
-   "score": 0,
+   "score": 0.0876,
    "terms": {
     "size": 0,
-    "pose": 0
+    "goldenX": 0,
+    "goldenY": 0,
+    "pose": 0,
+    "balance": 0.0876
    },
-   "searched": 81,
+   "searched": 108,
    "rejected": 0
   },
   {
@@ -127,21 +142,24 @@
    ],
    "poses": [
     {
-     "pitch": 0,
-     "yaw": -4,
-     "roll": 3,
+     "pitch": 16,
+     "yaw": 16,
+     "roll": 4,
      "perspective": 3000,
-     "scale": 1.183,
-     "x": 555.183,
-     "y": 721.468
+     "scale": 1.249,
+     "x": 574.862,
+     "y": 665.432
     }
    ],
-   "score": 0,
+   "score": 0.1387,
    "terms": {
     "size": 0,
-    "pose": 0
+    "goldenX": 0,
+    "goldenY": 0.0269,
+    "pose": 0.01,
+    "balance": 0.1018
    },
-   "searched": 81,
+   "searched": 108,
    "rejected": 0
   }
  ]

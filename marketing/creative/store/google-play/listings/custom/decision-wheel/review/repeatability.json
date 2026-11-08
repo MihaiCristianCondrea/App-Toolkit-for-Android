@@ -1,32 +1,32 @@
 [
   {
     "id": "wheel",
-    "sha256": "38f66d0b6c250fbc615747eb654acb014f3b28112d45f8d5de8798a9362c25fb",
+    "sha256": "41b72964064154b2365a42dbd4a404e272776e36a709c65aa53b41c958782dcb",
     "identical": true
   },
   {
     "id": "result",
-    "sha256": "97d2e35b53d8c4418d3b26c7f1ada0f79f771eca06f45242f744cf54765f61f0",
+    "sha256": "c4b16081cab33eef0de6c5e122fdde221caf1e27ffa62495baf9c19e8f8e89cf",
     "identical": true
   },
   {
     "id": "choices",
-    "sha256": "f2301ce9c6f82f25fbd352cecd986d4859565b59143f4d1643f207e8021fed7c",
+    "sha256": "3737a6059a525c2f4afaeec1c4971362e7a954ce0bdc88c14a6e65fa4489ac69",
     "identical": true
   },
   {
     "id": "number",
-    "sha256": "c339d7af501f17b6857fce28f8ad2fc65242b4d3f745ab5ece3c88a210003b6d",
+    "sha256": "0bbc05a4ef860bcab79fa14da2f38b31cefc65fa6724c8c3d108c06d96e2ed33",
     "identical": true
   },
   {
     "id": "coin",
-    "sha256": "e4dbde4dbbe1df66bf1de4026a98e9f781dd6e3409c46c893df999ce0e5ba90b",
+    "sha256": "3b473d4a27eef33328322e8e884c23b986a311be6a35460df9ad5004115c4537",
     "identical": true
   },
   {
     "id": "dice",
-    "sha256": "ac764e01a12fb3ecf224189afdd52e46a5d266fe0fe38fa12452744eac2ee2db",
+    "sha256": "004fc15bd61df0655b2ea2fe8a6091b5c7deb4f4037d27d4656fb791aa466a98",
     "identical": true
   }
 ]

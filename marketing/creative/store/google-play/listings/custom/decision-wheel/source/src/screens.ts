@@ -12,16 +12,16 @@ export const SCREENS:Record<string,[string,Record<string,unknown>]>={
     "play",
     {
       "activeToolId": "decision_wheel",
-      "wheelText": "Pizza\nPasta\nSushi\nSalad",
-      "wheelRotation": 1575,
-      "wheelWinner": "Sushi"
+      "wheelText": "Walk\nRead\nCook\nDraw\nMusic\nRest",
+      "wheelRotation": 1530,
+      "wheelWinner": "Music"
     }
   ],
   "choices": [
     "play",
     {
       "activeToolId": "decision_wheel",
-      "wheelText": "Walk\nRead\nCook\nDraw",
+      "wheelText": "Ava\nLeo\nMia\nNoah",
       "wheelRotation": 0,
       "wheelWinner": ""
     }

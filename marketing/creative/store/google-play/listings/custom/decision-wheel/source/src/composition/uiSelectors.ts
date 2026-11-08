@@ -37,7 +37,7 @@ export const UI_SELECTORS: Record<string, {critical: Record<string, string>; sec
   "coin": {
     "critical": {
       "title": ".tk-sheet-title-row",
-      "coin": ".chance-coin-stage",
+      "coin": ".chance-body .chance-coin-stage",
       "result": ".chance-side",
       "button": ".chance-body md-filled-button"
     }
@@ -45,7 +45,7 @@ export const UI_SELECTORS: Record<string, {critical: Record<string, string>; sec
   "dice": {
     "critical": {
       "title": ".tk-sheet-title-row",
-      "dice": ".chance-dice-stage",
+      "dice": ".chance-body .chance-dice-stage",
       "button": ".chance-body md-filled-button"
     }
   }

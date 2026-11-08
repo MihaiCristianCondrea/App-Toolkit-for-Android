@@ -18,7 +18,7 @@
       ],
       "highlight": "random pick",
       "icon": "check",
-      "alt": "Decision Wheel settled on Sushi, with the pointer aligned to its segment"
+      "alt": "Decision Wheel with six activity choices, settled on Music"
     },
     {
       "id": "choices",
@@ -28,7 +28,7 @@
       ],
       "highlight": "choices",
       "icon": "edit",
-      "alt": "Decision Wheel choice entry with Walk, Read, Cook and Draw"
+      "alt": "Decision Wheel choice entry with Ava, Leo, Mia and Noah"
     },
     {
       "id": "number",
@@ -68,7 +68,7 @@
     },
     {
       "id": "result",
-      "alt": "Decision Wheel settled on Sushi, with the pointer aligned to its segment on a foldable"
+      "alt": "Decision Wheel with six activity choices, settled on Music on a foldable"
     },
     {
       "id": "number",
@@ -86,7 +86,7 @@
     },
     {
       "id": "result",
-      "alt": "Decision Wheel settled on Sushi, with the pointer aligned to its segment in a desktop window"
+      "alt": "Decision Wheel with six activity choices, settled on Music in a desktop window"
     },
     {
       "id": "number",

@@ -26,7 +26,9 @@ export const UiProbe: React.FC<{ screen: string; window?: string; discover?: boo
         return [...host.querySelectorAll(tag)].find((el) => (el.textContent ?? "").trim().startsWith(text)) ?? null;
       }
       const [css, n] = selector.split("@");
-      return [...host.querySelectorAll(css)].filter((el) => (el as HTMLElement).offsetParent !== null || el.getClientRects().length)[Number(n ?? 0)] ?? null;
+      const matches = [...host.querySelectorAll(css)].filter((el) => (el as HTMLElement).offsetParent !== null || el.getClientRects().length);
+      if (n === undefined && matches.length > 1) throw new Error(`UI probe: ambiguous selector "${css}" on ${screen}; scope it to the intended surface`);
+      return matches[Number(n ?? 0)] ?? null;
     };
     const box = (name: string, selector: string) => {
       const boxes = selector.split(" + ").map((part) => {

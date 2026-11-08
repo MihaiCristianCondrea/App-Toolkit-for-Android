@@ -15,42 +15,42 @@
       "width": 2160,
       "height": 3840,
       "mode": "RGB",
-      "sha256": "77cf88ac808349bd799a2547ac1ae394f262db8b52592c43f57d1ea8ecddb47c"
+      "sha256": "4ac12b6c3879f43ed45d11392bb2b650e5d68b14e63b6de10c2ccc78804c124e"
     },
     {
       "file": "phone-screenshots/2-result.png",
       "width": 2160,
       "height": 3840,
       "mode": "RGB",
-      "sha256": "28b28ec76a7913ac94b81a95419810e1c08c59d134b63d2c2e8ab618854345ab"
+      "sha256": "69bd53d8a2ddacbb3805cd08da96431dc2e1f2e2eb967fa073ec8d17b5149c5e"
     },
     {
       "file": "phone-screenshots/3-choices.png",
       "width": 2160,
       "height": 3840,
       "mode": "RGB",
-      "sha256": "85067afde5ae789f0e50ed99be5dfdc23710f48823501b579a20b2dcedd0cd5f"
+      "sha256": "0c22fec5891be80d2b02aebf91f7cb234e8fa5af28438a1ae142ee2d5ea0e950"
     },
     {
       "file": "phone-screenshots/4-number.png",
       "width": 2160,
       "height": 3840,
       "mode": "RGB",
-      "sha256": "db6d3214465cece7e6610e481f75048aa80741607ab76c81ed1c74ffb48edbf1"
+      "sha256": "0ffcdfb62e7673a5d5c9f6f6e48547e0b9edc0f4e66d4fa6184d809927f67258"
     },
     {
       "file": "phone-screenshots/5-coin.png",
       "width": 2160,
       "height": 3840,
       "mode": "RGB",
-      "sha256": "0cd6f961369551ad4bca67c539164eeac50c67a686cf19e706fc2d57a661fd80"
+      "sha256": "163ee8c6580e8dcbb96033d64bf134e3ccc919ccdab7d31da67d9758c6bc3e67"
     },
     {
       "file": "phone-screenshots/6-dice.png",
       "width": 2160,
       "height": 3840,
       "mode": "RGB",
-      "sha256": "8c07c685fa2ab185a9fbb9b577d87d3e8ab6fa1625c94a195ce06fd2b1a44754"
+      "sha256": "6386507259070bcb8fa2001e436ef895d40595dc2bc3901ee54f26f07c4c49bc"
     },
     {
       "file": "tablet-screenshots/1-wheel.png",
@@ -64,7 +64,7 @@
       "width": 3840,
       "height": 2160,
       "mode": "RGB",
-      "sha256": "404dc9d9a94488c8e76e84b9af9f9b3c59f3da0eef9b4c991b2cb091528c76b0"
+      "sha256": "aac7af9ae9a54db8e2ff478d6174f822586925fe1051b39cd72a47a47dd3aa94"
     },
     {
       "file": "tablet-screenshots/3-number.png",
@@ -92,7 +92,7 @@
       "width": 3840,
       "height": 2160,
       "mode": "RGB",
-      "sha256": "ab035285617e87a3988fd39f3a581d6037b7f45c618205776c47e5287f5dcbbd"
+      "sha256": "73b994c84a328b671138d02fc6ec154d9c9f5435d0c26e84208cc5c3e10d51af"
     },
     {
       "file": "desktop-screenshots/3-number.png",

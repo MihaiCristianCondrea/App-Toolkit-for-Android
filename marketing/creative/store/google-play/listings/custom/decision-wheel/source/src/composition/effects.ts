@@ -61,7 +61,7 @@ export const bubbles = (m: Measured, caption: Box): Bubble[] => {
 /** A MaterialShape, as the kit names it, with its box; `behind` marks one drawn behind the phones on purpose. */
 export type Piece = { name: string; x: number; y: number; size: number; color: string; rotate: number; behind?: boolean };
 
-/** The MaterialShapes the other listings scatter, in tones of the Water Eject sheet's blues. */
+/** MaterialShapes in the campaign palette. */
 const SHAPE_NAMES = ["cookie_9sided", "flower", "clover_4leaf", "soft_burst", "gem", "pill", "sunny", "cookie_6sided"];
 const SHAPE_COLORS = SHAPE_TONES;
 
@@ -71,7 +71,7 @@ const SHAPE_COLORS = SHAPE_TONES;
  * ribbons; it is dropped below `min`. `small` scatters that many smaller shapes; `seed` varies the scatter
  * and `offset` the first shape's name.
  */
-export type ShapePlan = { seed: number; offset?: number; small: number; big?: { at: (phones: Measured[]) => Pt; max: number; min: number } };
+export type ShapePlan = { seed: number; offset?: number; small: number; big?: { at: (phones: Measured[]) => Pt; max: number; min: number; name?: string; color?: string; rotate?: number } };
 
 /**
  * Every shape keeps SPACE.s clear of the background's glass ribbons and TEXT_CLEARANCE clear of the
@@ -93,7 +93,7 @@ export const placeShapes = (plan: ShapePlan, phones: Obstacle[], caption: Box | 
     for (let size = plan.big.max; size >= plan.big.min; size -= SPACE.xs) {
       const r = size / 2, cx = Math.min(Math.max(ax, edges.left ? -Infinity : r), edges.right ? Infinity : W_ - r);
       if (clearOfRibbons(cx, ay, r) && clearOfText(cx, ay, r)) {
-        pieces.push({ name: "cookie_12sided", x: cx - r, y: ay - r, size, color: SHAPE_BEHIND, rotate: 12, behind: true });
+        pieces.push({ name: plan.big.name ?? "cookie_12sided", x: cx - r, y: ay - r, size, color: plan.big.color ?? SHAPE_BEHIND, rotate: plan.big.rotate ?? 12, behind: true });
         break;
       }
     }
@@ -118,3 +118,22 @@ export const placeShapes = (plan: ShapePlan, phones: Obstacle[], caption: Box | 
 
 /** The hero's big shape sat SPACE.xxl in from its right edge, on the upper golden line divided by φ. */
 export const HERO_BIG_AT = (): Pt => [W - SPACE.xxl, GOLDEN.y[0] / PHI];
+
+
+export type Confetto={x:number;y:number;w:number;h:number;rotate:number;color:string};
+/** Confetti follows an ellipse around the projected phone, clear of its silhouette, shapes and caption. */
+export const placeConfetti=(phones:Measured[],caption:Box,shapes:Piece[],index:number):Confetto[]=>{
+ const m=phones[0],rx=(m.box.right-m.box.left)/2+SPACE.xl,ry=(m.box.bottom-m.box.top)/2+SPACE.l;
+ const out:Confetto[]=[],limit=index===1?18:index===0?5:3;
+ for(let k=0;k<96&&out.length<limit;k++){
+  const a=(k*137.507764+index*31)*Math.PI/180;
+  const x=m.centroid[0]+rx*Math.cos(a),y=m.centroid[1]+ry*Math.sin(a),w=13+(k%3)*5,h=21+(k%2)*8,r=Math.hypot(w,h)/2;
+  if(x-r<SPACE.s||x+r>W-SPACE.s||y-r<SPACE.s||y+r>H-SPACE.s)continue;
+  if(x+r>caption.left-SPACE.m&&x-r<caption.right+SPACE.m&&y+r>caption.top-SPACE.m&&y-r<caption.bottom+SPACE.m)continue;
+  if(phones.some(p=>inside(p.visible,[x,y])||distanceTo(p.visible,[x,y])<r+SPACE.s))continue;
+  if(shapes.some(p=>Math.hypot(p.x+p.size/2-x,p.y+p.size/2-y)<p.size/2+r+SPACE.s))continue;
+  if(out.some(p=>Math.hypot(p.x-x,p.y-y)<SPACE.l))continue;
+  out.push({x,y,w,h,rotate:a*180/Math.PI+90,color:["#BFA0D0","#DDA795","#D9C67D","#9ABDA9"][k%4]});
+ }
+ return out;
+};
