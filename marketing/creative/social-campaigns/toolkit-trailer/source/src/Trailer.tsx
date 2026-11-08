@@ -7,7 +7,7 @@ import icon from "./assets/icon.png";
 import { B, FPS, clamp, drift, enter, leave, mix, pop, ramp } from "./lib/anim";
 import { CONFETTI, FONT, NEUTRAL, WORLDS } from "./theme";
 import type { World } from "./theme";
-import { ConfettiBurst, Headline, Phone, Protractor, Receipt, Ruler, ShapeWipe, SoundWaves, UnitPair, Wheel, burstPieces, speakers } from "./motifs";
+import { Bubble, ConfettiBurst, ELEVATION, Headline, Phone, Protractor, Receipt, Ripples, Ruler, ShapeWipe, SoundWaves, UnitPair, Wheel, burstPieces, speakers } from "./motifs";
 import type { PhonePose, Screen } from "./motifs";
 
 // The real screens, in the states the store listings show.
@@ -61,16 +61,18 @@ const Intro: React.FC<{ t: number }> = ({ t }) => {
 };
 
 // ------------------------------------------------------------------------------------------------- water
-const WATER_POSE: PhonePose = { x: 1330, y: 320, scale: 0.84, pitch: 26, yaw: -12 };
+const WATER_POSE: PhonePose = { x: 1330, y: 350, scale: 0.84, pitch: 26, yaw: -12 };
 const Water: React.FC<{ t: number; start: number }> = ({ t, start }) => {
   const w = WORLDS.water, m = enterPhone(t, start, WATER_POSE, 1);
-  const from = speakers(WATER_POSE).map((s) => ({ at: [s.at[0] + m.dx, s.at[1] + m.dy] as [number, number], direction: s.direction }));
+  // One wave set from the middle of the speaker edge (between the two hole groups), so the fronts never cross.
+  const sp = speakers(WATER_POSE), dir = sp.reduce((a, s) => [a[0] + s.direction[0], a[1] + s.direction[1]], [0, 0]), len = Math.hypot(dir[0], dir[1]);
+  const from = [{ at: [sp.reduce((a, s) => a + s.at[0], 0) / sp.length + m.dx, sp.reduce((a, s) => a + s.at[1], 0) / sp.length + m.dy] as [number, number], direction: [dir[0] / len, dir[1] / len] as [number, number] }];
   return (
     <AbsoluteFill>
       <Ground color={w.field} />
       <Behind t={t} name="cookie_12sided" x={1330} y={360} size={880} color={w.shape} seed={1} start={start} />
       <Phone screen={SCREENS.water} scroll={WATER_SCROLL} pose={WATER_POSE} dx={m.dx} dy={m.dy} />
-      <SoundWaves t={t} onsets={B.waterWaves} from={from} color={w.accent} tint={w.tones[0]} reach={330} />
+      <SoundWaves t={t} onsets={B.waterWaves} from={from} tones={[w.tones[2], w.tones[1], w.bright]} rim={w.bright} bubble="#FFFFFF" reach={320} spread={52} />
       <Headline t={t} at={B.waterHeadline} title="Water Eject" sub={"A short tone\nfor wet speakers"} x={140} y={330} color={w.ink} subColor={w.accent} />
     </AbsoluteFill>
   );
@@ -140,7 +142,7 @@ const WHEEL_POSE: PhonePose = { x: 1480, y: 560, scale: 0.8, yaw: -12, roll: 2 }
 const WheelScene: React.FC<{ t: number; start: number }> = ({ t, start }) => {
   const w = WORLDS.wheel, m = enterPhone(t, start, WHEEL_POSE, 6);
   const [s0, s1] = B.wheelSpin, spin = 1 - (1 - clamp((t - s0) / (s1 - s0))) ** 3, rot = spin * 1530 + 15;
-  const pieces = useMemo(() => burstPieces({ seed: 41, count: 70, from: [600, 360], colors: w.tones.concat(["#D9C67D", "#9ABDA9"]), avoid: [{ x: 600, y: 700, r: 330 }, { x: 1480, y: 560, r: 300 }, { x: 420, y: 170, r: 260 }] }), []);
+  const pieces = useMemo(() => burstPieces({ seed: 41, count: 46, from: [600, 360], colors: w.tones.concat(["#D9C67D", "#9ABDA9"]), avoid: [{ x: 600, y: 700, r: 330 }, { x: 1480, y: 560, r: 300 }, { x: 420, y: 170, r: 260 }] }), []);
   const pick = clamp((t - B.wheelPick) / 0.3), bump = pop(t, B.wheelPick, 9, 220);
   return (
     <AbsoluteFill>
@@ -157,7 +159,7 @@ const WheelScene: React.FC<{ t: number; start: number }> = ({ t, start }) => {
 
 // ------------------------------------------------------------------------------------------------- montage
 const TILES: { key: keyof typeof WORLDS; draw: (c: World) => React.ReactNode }[] = [
-  { key: "water", draw: (c) => <g fill="none" stroke={c.accent} strokeLinecap="round">{[40, 70, 100].map((r, i) => <path key={i} d={`M ${150 - r * 0.7} ${110 + r * 0.7} A ${r} ${r} 0 0 0 ${150 + r * 0.7} ${110 + r * 0.7}`} strokeWidth={8 - i * 2} opacity={1 - i * 0.25} />)}<circle cx="215" cy="215" r="13" fill="#FFFFFF" stroke={c.accent} strokeWidth="3" /><circle cx="92" cy="232" r="8" fill="#FFFFFF" stroke={c.accent} strokeWidth="3" /></g> },
+  { key: "water", draw: (c) => <g>{[44, 78, 112].map((r, i) => <path key={i} d={`M ${150 - r * 0.8} ${96 + r * 0.6} A ${r} ${r} 0 0 0 ${150 + r * 0.8} ${96 + r * 0.6}`} fill="none" stroke={[c.bright, c.tones[2], c.tones[1]][i]} strokeWidth={22 - i * 4} strokeLinecap="round" />)}<Bubble x={226} y={206} r={17} fill="#FFFFFF" rim={c.bright} /><Bubble x={84} y={236} r={11} fill="#FFFFFF" rim={c.bright} /></g> },
   { key: "ruler", draw: (c) => <g transform="translate(36 140) rotate(-10)"><rect width="230" height="70" rx="20" fill="#F6B91D" />{Array.from({ length: 17 }, (_, i) => <line key={i} x1={20 + i * 12} x2={20 + i * 12} y1="0" y2={i % 5 ? 18 : 34} stroke="#654000" strokeWidth="2.2" />)}</g> },
   { key: "unit", draw: (c) => <g fontFamily={FONT} fontWeight={650} fill={c.ink} textAnchor="middle"><circle cx="90" cy="160" r="62" fill={c.tones[0]} /><circle cx="210" cy="160" r="62" fill={c.tones[1]} /><text x="90" y="178" fontSize="52">m</text><text x="210" y="176" fontSize="46">cm</text></g> },
   { key: "bill", draw: (c) => <g fontFamily={FONT}><rect x="70" y="60" width="160" height="200" rx="22" fill="#FFFBF5" /><rect x="94" y="96" width="112" height="10" rx="5" fill={c.tones[2]} /><rect x="94" y="122" width="80" height="10" rx="5" fill={c.tones[2]} /><text x="150" y="214" fontSize="40" fontWeight={650} fill={c.ink} textAnchor="middle">€28.60</text></g> },
@@ -172,7 +174,7 @@ const Montage: React.FC<{ t: number }> = ({ t }) => {
       {TILES.map((tile, i) => {
         const c = WORLDS[tile.key], p = pop(t, B.montageTiles[i], 12, 190), x = 960 + (i - 2) * 350 - 160, y = 170 - rise * 70;
         return (
-          <div key={tile.key} style={{ position: "absolute", left: x, top: y, width: 320, height: 380, borderRadius: 48, background: c.field, boxShadow: "0 20px 36px rgba(40,30,20,.12)", transform: `scale(${p}) rotate(${(i - 2) * 2.5 * (1 - rise)}deg)`, transformOrigin: "50% 60%", overflow: "hidden", zIndex: 3 }}>
+          <div key={tile.key} style={{ position: "absolute", left: x, top: y, width: 320, height: 380, borderRadius: 48, background: c.field, boxShadow: ELEVATION[2], transform: `scale(${p}) rotate(${(i - 2) * 2.5 * (1 - rise)}deg)`, transformOrigin: "50% 60%", overflow: "hidden", zIndex: 3 }}>
             <svg width="320" height="300" viewBox="0 0 300 300" style={{ position: "absolute", left: 10, top: 6 }}>{tile.draw(c)}</svg>
             <div style={{ position: "absolute", left: 0, right: 0, bottom: 34, textAlign: "center", fontFamily: FONT, fontSize: 30, fontWeight: 600, color: c.ink }}>{c.name}</div>
           </div>
@@ -193,12 +195,11 @@ const Montage: React.FC<{ t: number }> = ({ t }) => {
 // ------------------------------------------------------------------------------------------------- end
 const End: React.FC<{ t: number }> = ({ t }) => {
   const iconP = pop(t, B.endBurst, 10, 190);
-  const pieces = useMemo(() => burstPieces({ seed: 7, count: 90, from: [960, 380], colors: CONFETTI, avoid: [{ x: 960, y: 380, r: 190 }, { x: 960, y: 700, r: 330 }] }), []);
-  const ring = [B.endBurst, B.endBurst + 0.3, B.endBurst + 0.56];
+  const pieces = useMemo(() => burstPieces({ seed: 7, count: 56, from: [960, 380], colors: CONFETTI, avoid: [{ x: 960, y: 380, r: 190 }, { x: 960, y: 700, r: 330 }] }), []);
   return (
     <AbsoluteFill>
       <Ground color={NEUTRAL.field} />
-      <SoundWaves t={t} onsets={ring} from={[{ at: [960, 470], direction: [0, 1] }, { at: [960, 290], direction: [0, -1] }]} color={WORLDS.water.accent} tint={WORLDS.water.tones[0]} reach={520} />
+      <Ripples t={t} onsets={B.endRings} at={[960, 380]} colors={[WORLDS.water.container, WORLDS.ruler.container, WORLDS.unit.container, WORLDS.bill.container, WORLDS.wheel.container]} from={160} reach={720} />
       <ConfettiBurst t={t} at={B.endBurst} from={[960, 380]} pieces={pieces} z={3} />
       <Img src={icon} style={{ position: "absolute", left: 960 - 160, top: 380 - 160, width: 320, height: 320, transform: `scale(${iconP})`, zIndex: 5 }} />
       <Headline t={t} at={[B.endTitle, B.endPlay]} title="App Toolkit" sub="Available on Google Play" x={960} y={590} width={1300} align="center" color={NEUTRAL.ink} subColor={NEUTRAL.accent} size={124} />
@@ -213,7 +214,7 @@ const SCENES: Record<string, React.FC<{ t: number; start: number }>> = {
 
 /**
  * The film: one scene per world, each opening out of a MaterialShape on its first beat (the previous world
- * stays underneath until it is covered), over the supplied soundtrack. Every time comes from timeline.json.
+ * stays underneath until it is covered), over the soundtrack scripts/compose.mjs writes from the same timeline. Every time comes from timeline.json.
  */
 export const Trailer: React.FC = () => {
   useFonts();

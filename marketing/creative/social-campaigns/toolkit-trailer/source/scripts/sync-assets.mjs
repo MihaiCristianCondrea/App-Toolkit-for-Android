@@ -11,5 +11,5 @@ if (!existsSync(`${src}material-next/device-frames`)) {
 }
 cpSync(src, dest, { recursive: true });
 console.log("synced marketing/ui/public -> public/");
-// The supplied soundtrack, served to the film as public/soundtrack.mp3.
+// The soundtrack (scripts/compose.mjs writes it), served to the film as public/soundtrack.mp3.
 cpSync(fileURLToPath(new URL("../../soundtrack.mp3", import.meta.url)), fileURLToPath(new URL("../public/soundtrack.mp3", import.meta.url)));

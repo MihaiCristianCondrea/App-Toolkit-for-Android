@@ -1,6 +1,6 @@
 // Renders the trailer (node scripts/render.mjs frames [seconds...] | preview | master) into ../output/.
 //   frames:  stills at the given seconds (default: one per scene and beat) and a labelled contact sheet;
-//   preview: 960 x 540 H.264 with the soundtrack;  master: 2560 x 1440 H.264 with the soundtrack.
+//   preview: 960 x 540 H.264 with the composed soundtrack;  master: 2560 x 1440 H.264 with the soundtrack.
 import { bundle } from "@remotion/bundler";
 import { renderMedia, renderStill, selectComposition } from "@remotion/renderer";
 import { mkdir } from "node:fs/promises";
@@ -17,7 +17,7 @@ const composition = await selectComposition({ serveUrl, id: "ToolkitTrailer", in
 const fps = composition.fps;
 
 if (mode === "frames") {
-  const times = rest.length ? rest.map(Number) : [0.9, 2.2, 3.1, 3.6, 4.6, 6.0, 7.2, 8.8, 10.4, 11.6, 12.6, 13.4, 14.2, 15.6, 17.4, 18.6, 20.6, 22.2, 23.0, 25.8, 26.6, 28.4];
+  const times = rest.length ? rest.map(Number) : [0.8, 2.6, 3.4, 4.7, 5.9, 7.3, 8.6, 9.6, 11.0, 12.9, 14.3, 15.4, 16.7, 18.2, 19.4, 20.9, 22.1, 22.8, 23.6, 24.6, 26.2, 27.4, 28.3, 28.9, 29.6, 31.2];
   const files = [];
   for (const s of times) {
     const file = path.join(out, "images", `frame-${s.toFixed(2)}.png`);
