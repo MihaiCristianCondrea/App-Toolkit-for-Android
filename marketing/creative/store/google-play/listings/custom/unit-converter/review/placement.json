@@ -12,280 +12,484 @@
   },
   "shots": [
     {
-      "id": "length",
-      "primaryAnchor": "Projected phone silhouette",
-      "pose": {
-        "pitch": 0,
-        "yaw": -4,
-        "roll": -1,
-        "perspective": 3000,
-        "scale": 1.4,
-        "x": 540.217,
-        "y": 1101.88
+      "id": "convert",
+      "intent": "Large real converter with an intentional top crop",
+      "caption": {
+        "left": 120,
+        "right": 960,
+        "top": 1624.28,
+        "bottom": 1831
       },
-      "framingTarget": [
-        540,
-        1099.36
+      "hard": [],
+      "balance": [
+        0.499,
+        0.395
       ],
-      "framingActual": [
-        540,
-        1099.36
+      "phones": [
+        {
+          "screen": "length",
+          "pose": {
+            "pitch": 3,
+            "yaw": -6,
+            "roll": -2,
+            "perspective": 3000,
+            "scale": 1.84,
+            "x": 534.648,
+            "y": 526.037
+          },
+          "bounds": {
+            "left": 84.38976268098286,
+            "top": -392.76857100476184,
+            "right": 991.0903840158585,
+            "bottom": 1445.933809597046
+          },
+          "centroid": [
+            0.5,
+            0.373
+          ],
+          "area": 0.59,
+          "critical": {
+            "title": {
+              "box": {
+                "left": 161.4446554666282,
+                "top": 291.89531025704855,
+                "right": 892.8696235734009,
+                "bottom": 462.4966528622469
+              },
+              "centre": [
+                0.488,
+                0.197
+              ]
+            },
+            "category": {
+              "box": {
+                "left": 166.7062661480864,
+                "top": 484.32457227739167,
+                "right": 345.55771796999267,
+                "bottom": 549.987363512561
+              },
+              "centre": [
+                0.237,
+                0.269
+              ]
+            },
+            "from": {
+              "box": {
+                "left": 169.68764253360706,
+                "top": 557.689610447022,
+                "right": 910.7932810379857,
+                "bottom": 923.4521551638989
+              },
+              "centre": [
+                0.5,
+                0.386
+              ]
+            },
+            "to": {
+              "box": {
+                "left": 180.74251118172526,
+                "top": 914.1817391990869,
+                "right": 924.5566667796382,
+                "bottom": 1277.3767737118783
+              },
+              "centre": [
+                0.511,
+                0.571
+              ]
+            },
+            "swap": {
+              "box": {
+                "left": 790.8405256321496,
+                "top": 870.9897563375185,
+                "right": 867.8583888881728,
+                "bottom": 947.8321870453549
+              },
+              "centre": [
+                0.768,
+                0.474
+              ]
+            },
+            "hint": {
+              "box": {
+                "left": 192.3367735512854,
+                "top": 1288.1036634839493,
+                "right": 927.1477173175357,
+                "bottom": 1344.0017674470052
+              },
+              "centre": [
+                0.518,
+                0.686
+              ]
+            }
+          }
+        }
       ],
-      "framingErrorPx": [
-        0,
-        0
-      ],
-      "focus": "from",
-      "guideY": 1186.625,
-      "focusActual": [
-        541.812,
-        1267.639
-      ],
-      "focusNormalized": [
+      "pair": null,
+      "details": [],
+      "intentional": [
+        "shape pill sits behind the phone",
+        "shape gem sits behind the phone",
+        "length: cropped at the top edge"
+      ]
+    },
+    {
+      "id": "everyday",
+      "intent": "Mass and volume on complementary Pixel poses with readable fields and a balanced combined silhouette",
+      "caption": {
+        "left": 120,
+        "right": 960,
+        "top": 72,
+        "bottom": 278.72
+      },
+      "hard": [],
+      "balance": [
         0.502,
-        0.66
+        0.524
       ],
-      "guideOffsetY": 81.014,
-      "centroid": [
-        0.5,
-        0.574
+      "phones": [
+        {
+          "screen": "mass",
+          "pose": {
+            "pitch": 2,
+            "yaw": -6,
+            "roll": 2,
+            "perspective": 3000,
+            "scale": 0.974,
+            "x": 284.721,
+            "y": 936.188
+          },
+          "bounds": {
+            "left": 43.46809280161687,
+            "top": 455.0357550047705,
+            "right": 523.4328117720768,
+            "bottom": 1426.3581514839227
+          },
+          "centroid": [
+            0.264,
+            0.489
+          ],
+          "area": 0.207,
+          "critical": {
+            "title": {
+              "box": {
+                "left": 92.24010614497405,
+                "top": 815.7847707592161,
+                "right": 479.80202138346004,
+                "bottom": 900.5266111158494
+              },
+              "centre": [
+                0.265,
+                0.447
+              ]
+            },
+            "category": {
+              "box": {
+                "left": 191.93572164640963,
+                "top": 907.5828527544716,
+                "right": 275.1621404506055,
+                "bottom": 941.1846429678793
+              },
+              "centre": [
+                0.216,
+                0.481
+              ]
+            },
+            "from": {
+              "box": {
+                "left": 83.15624407466565,
+                "top": 954.7405703936062,
+                "right": 475.2039063871769,
+                "bottom": 1147.8772798446919
+              },
+              "centre": [
+                0.259,
+                0.547
+              ]
+            },
+            "to": {
+              "box": {
+                "left": 76.19954038021461,
+                "top": 1140.7359570644167,
+                "right": 469.0488947879091,
+                "bottom": 1337.3197208578151
+              },
+              "centre": [
+                0.253,
+                0.645
+              ]
+            },
+            "swap": {
+              "box": {
+                "left": 405.69702313238093,
+                "top": 1129.7394677627763,
+                "right": 446.2325283997315,
+                "bottom": 1170.5799129467284
+              },
+              "centre": [
+                0.394,
+                0.599
+              ]
+            },
+            "hint": {
+              "box": {
+                "left": 74.89170524772246,
+                "top": 1335.3628030843836,
+                "right": 462.6078393576067,
+                "bottom": 1372.9355336053118
+              },
+              "centre": [
+                0.249,
+                0.705
+              ]
+            }
+          }
+        },
+        {
+          "screen": "volume",
+          "pose": {
+            "pitch": -2,
+            "yaw": 6,
+            "roll": -2,
+            "perspective": 3000,
+            "scale": 0.974,
+            "x": 795.47,
+            "y": 1181.102
+          },
+          "bounds": {
+            "left": 554.4309116449245,
+            "top": 695.0338386584481,
+            "right": 1034.3978426738129,
+            "bottom": 1668.5054268040496
+          },
+          "centroid": [
+            0.736,
+            0.614
+          ],
+          "area": 0.207,
+          "critical": {
+            "title": {
+              "box": {
+                "left": 599.9575179679582,
+                "top": 1060.741168056994,
+                "right": 988.143165356937,
+                "bottom": 1148.6282226247058
+              },
+              "centre": [
+                0.735,
+                0.575
+              ]
+            },
+            "category": {
+              "box": {
+                "left": 804.866557980676,
+                "top": 1153.019145991949,
+                "right": 903.6691391621225,
+                "bottom": 1187.8341933076472
+              },
+              "centre": [
+                0.791,
+                0.61
+              ]
+            },
+            "from": {
+              "box": {
+                "left": 605.2114301214167,
+                "top": 1200.012661637269,
+                "right": 996.0644240600167,
+                "bottom": 1394.9633394804275
+              },
+              "centre": [
+                0.742,
+                0.675
+              ]
+            },
+            "to": {
+              "box": {
+                "left": 612.1891455068683,
+                "top": 1384.9889983989722,
+                "right": 1002.0688554023495,
+                "bottom": 1581.675694781286
+              },
+              "centre": [
+                0.748,
+                0.772
+              ]
+            },
+            "swap": {
+              "box": {
+                "left": 934.4884547008002,
+                "top": 1362.9506663213808,
+                "right": 973.9567526033071,
+                "bottom": 1403.2248603393
+              },
+              "centre": [
+                0.884,
+                0.72
+              ]
+            },
+            "hint": {
+              "box": {
+                "left": 619.4243867117889,
+                "top": 1576.804296850661,
+                "right": 1003.1917358186034,
+                "bottom": 1616.5912408101397
+              },
+              "centre": [
+                0.751,
+                0.832
+              ]
+            }
+          }
+        }
       ],
-      "bounds": {
-        "left": 204.50304532247827,
-        "top": 403.6180970206186,
-        "right": 874.5143854025713,
-        "bottom": 1795.1021994204843
-      }
+      "pair": {
+        "horizontalGap": 30.998,
+        "overlap": 0,
+        "stagger": 239.998
+      },
+      "details": [],
+      "intentional": [
+        "shape clover_4leaf sits behind the phone"
+      ]
     },
     {
-      "id": "temperature",
-      "primaryAnchor": "Projected phone silhouette",
-      "pose": {
-        "pitch": 3,
-        "yaw": 6,
-        "roll": 1,
-        "perspective": 3000,
-        "scale": 1.369,
-        "x": 540.624,
-        "y": 784.299
+      "id": "temperature-data",
+      "intent": "Related conversion categories grouped as real UI details",
+      "caption": {
+        "left": 120,
+        "right": 960,
+        "top": 1624.28,
+        "bottom": 1831
       },
-      "framingTarget": [
-        540,
-        784.64
+      "hard": [],
+      "balance": [
+        0.511,
+        0.471
       ],
-      "framingActual": [
-        540,
-        784.64
+      "phones": [],
+      "pair": null,
+      "details": [
+        {
+          "screen": "temperature",
+          "bounds": {
+            "left": 84,
+            "top": 210,
+            "right": 684,
+            "bottom": 776.8341708542714
+          },
+          "scale": 1.5075376884422111
+        },
+        {
+          "screen": "data",
+          "bounds": {
+            "left": 436,
+            "top": 865,
+            "right": 996,
+            "bottom": 1495.35175879397
+          },
+          "scale": 1.407035175879397
+        }
       ],
-      "framingErrorPx": [
-        0,
-        0
-      ],
-      "focus": "to",
-      "guideY": 733.375,
-      "focusActual": [
-        535.108,
-        1209.232
-      ],
-      "focusNormalized": [
-        0.495,
-        0.63
-      ],
-      "guideOffsetY": 475.857,
-      "centroid": [
-        0.5,
-        0.411
-      ],
-      "bounds": {
-        "left": 210.88198588828033,
-        "top": 104.08967338663399,
-        "right": 865.8984776628962,
-        "bottom": 1465.1907651098102
-      }
+      "intentional": [
+        "temperature: real From/To UI detail without a device frame",
+        "data: real From/To UI detail without a device frame"
+      ]
     },
     {
-      "id": "mass",
-      "primaryAnchor": "Projected phone silhouette",
-      "pose": {
-        "pitch": -2,
-        "yaw": 4,
-        "roll": 1,
-        "perspective": 3000,
-        "scale": 1.358,
-        "x": 539.721,
-        "y": 1104.455
+      "id": "toolkit",
+      "intent": "The broader Measure workspace",
+      "caption": {
+        "left": 120,
+        "right": 960,
+        "top": 72,
+        "bottom": 278.72
       },
-      "framingTarget": [
-        540,
-        1099.36
+      "hard": [],
+      "balance": [
+        0.531,
+        0.546
       ],
-      "framingActual": [
-        540,
-        1099.36
+      "phones": [
+        {
+          "screen": "toolkit",
+          "pose": {
+            "pitch": -4,
+            "yaw": 12,
+            "roll": 3,
+            "perspective": 3000,
+            "scale": 1.288,
+            "x": 583.001,
+            "y": 1111.22
+          },
+          "bounds": {
+            "left": 258.6046212353459,
+            "top": 457.44040378546606,
+            "right": 908.7862028308533,
+            "bottom": 1741.2734324867743
+          },
+          "centroid": [
+            0.537,
+            0.575
+          ],
+          "area": 0.36,
+          "critical": {
+            "ruler": {
+              "box": {
+                "left": 340.3176897115448,
+                "top": 692.0950852915945,
+                "right": 608.7642440593253,
+                "bottom": 1025.6652679678277
+              },
+              "centre": [
+                0.439,
+                0.448
+              ]
+            },
+            "protractor": {
+              "box": {
+                "left": 597.0895063662609,
+                "top": 707.53030723941,
+                "right": 859.8153746718448,
+                "bottom": 1036.226951952152
+              },
+              "centre": [
+                0.674,
+                0.455
+              ]
+            },
+            "converter": {
+              "box": {
+                "left": 323.16605019589315,
+                "top": 1093.2196216048812,
+                "right": 588.0015201502108,
+                "bottom": 1378.6217777306256
+              },
+              "centre": [
+                0.422,
+                0.644
+              ]
+            },
+            "bill": {
+              "box": {
+                "left": 578.5356062606846,
+                "top": 1102.971793923388,
+                "right": 837.5752491926777,
+                "bottom": 1384.3026721484523
+              },
+              "centre": [
+                0.655,
+                0.648
+              ]
+            }
+          }
+        }
       ],
-      "framingErrorPx": [
-        0,
-        0
-      ],
-      "focus": "to",
-      "guideY": 1186.625,
-      "focusActual": [
-        533.628,
-        1525.279
-      ],
-      "focusNormalized": [
-        0.494,
-        0.794
-      ],
-      "guideOffsetY": 338.653,
-      "centroid": [
-        0.5,
-        0.573
-      ],
-      "bounds": {
-        "left": 217.01251580744292,
-        "top": 425.3875707029273,
-        "right": 866.9399240765451,
-        "bottom": 1773.332834070713
-      }
-    },
-    {
-      "id": "volume",
-      "primaryAnchor": "Projected phone silhouette",
-      "pose": {
-        "pitch": 1,
-        "yaw": -5,
-        "roll": -2,
-        "perspective": 3000,
-        "scale": 1.37,
-        "x": 539.889,
-        "y": 786.33
-      },
-      "framingTarget": [
-        540,
-        784.64
-      ],
-      "framingActual": [
-        540,
-        784.64
-      ],
-      "framingErrorPx": [
-        0,
-        0
-      ],
-      "focus": "from",
-      "guideY": 733.375,
-      "focusActual": [
-        543.946,
-        948.019
-      ],
-      "focusNormalized": [
-        0.504,
-        0.494
-      ],
-      "guideOffsetY": 214.645,
-      "centroid": [
-        0.5,
-        0.411
-      ],
-      "bounds": {
-        "left": 202.6221525513262,
-        "top": 100.13607352024815,
-        "right": 877.5785631128787,
-        "bottom": 1469.1446552838158
-      }
-    },
-    {
-      "id": "data",
-      "primaryAnchor": "Projected phone silhouette",
-      "pose": {
-        "pitch": 0,
-        "yaw": 0,
-        "roll": 0,
-        "perspective": 3000,
-        "scale": 1.376,
-        "x": 540,
-        "y": 1099.36
-      },
-      "framingTarget": [
-        540,
-        1099.36
-      ],
-      "framingActual": [
-        540,
-        1099.36
-      ],
-      "framingErrorPx": [
-        0,
-        0
-      ],
-      "focus": "to",
-      "guideY": 1186.625,
-      "focusActual": [
-        539.996,
-        1476.936
-      ],
-      "focusNormalized": [
-        0.5,
-        0.769
-      ],
-      "guideOffsetY": 290.311,
-      "centroid": [
-        0.5,
-        0.573
-      ],
-      "bounds": {
-        "left": 219.98930536661607,
-        "top": 419.2328317713457,
-        "right": 860.010694633384,
-        "bottom": 1779.4871682286541
-      }
-    },
-    {
-      "id": "reverse",
-      "primaryAnchor": "Projected phone silhouette",
-      "pose": {
-        "pitch": 4,
-        "yaw": 5,
-        "roll": -1,
-        "perspective": 3000,
-        "scale": 1.39,
-        "x": 539.897,
-        "y": 776.746
-      },
-      "framingTarget": [
-        540,
-        784.64
-      ],
-      "framingActual": [
-        540,
-        784.639
-      ],
-      "framingErrorPx": [
-        0,
-        -0.001
-      ],
-      "focus": "swap",
-      "guideY": 733.375,
-      "focusActual": [
-        762.939,
-        1069.091
-      ],
-      "focusNormalized": [
-        0.706,
-        0.557
-      ],
-      "guideOffsetY": 335.716,
-      "centroid": [
-        0.5,
-        0.409
-      ],
-      "bounds": {
-        "left": 211.25659528980387,
-        "top": 96.15346168458393,
-        "right": 876.1708936292227,
-        "bottom": 1473.123725504188
-      }
+      "pair": null,
+      "details": [],
+      "intentional": [
+        "shape clover_4leaf sits behind the phone",
+        "shape gem sits behind the phone"
+      ]
     }
   ]
 }

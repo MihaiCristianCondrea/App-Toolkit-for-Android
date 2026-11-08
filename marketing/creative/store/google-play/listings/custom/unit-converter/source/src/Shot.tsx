@@ -1,5 +1,7 @@
 import React from "react";
 import { ConversionArrows } from "./ConversionArt";
+import {NativePanel} from "./NativePanel";
+import {FONT,INK} from "./theme";
 import { LitScreen } from "./LitScreen";
 import { SCROLL, SCREENS } from "./screens";
 import { Shape } from "./Shape";
@@ -25,6 +27,10 @@ export const Shot: React.FC<{ index: number; panels: number; debug?: boolean; ex
     <>
       {g.shapes.map((p, i) => <Shape key={i} name={p.name} x={p.x} y={p.y} size={exploration?p.size*.85:p.size} color={p.color} rotate={exploration?p.rotate+65:p.rotate} />)}
       <ConversionArrows arcs={g.arcs} />
+      {g.panels.map((p,i)=><React.Fragment key={i}>
+       <div style={{position:"absolute",left:p.box.left,top:p.box.top-70,width:p.width,height:56,fontFamily:FONT,fontSize:44,fontWeight:590,color:INK,lineHeight:"56px",zIndex:3}}>{p.label}</div>
+       <NativePanel panel={p}/>
+      </React.Fragment>)}
       {g.poses.map((pose, i) => {
         const [id, state] = SCREENS[g.spec.screens[i]];
         return (
@@ -68,6 +74,7 @@ const Overlay: React.FC<{ g: ReturnType<typeof shotGeometry> }> = ({ g }) => {
       {g.shapes.map((p, i) => <circle key={i} cx={p.x + p.size / 2} cy={p.y + p.size / 2} r={p.size / 2} fill="none" stroke="#00897B" strokeWidth="2" strokeDasharray={p.behind ? "4 6" : undefined} />)}
       {g.arcs.map((a, i) => <polyline key={i} points={poly(a.pts)} fill="none" stroke="#00838F" strokeWidth="2" strokeDasharray="8 6" />)}
       {g.spheres.map(([x, y, r], i) => <circle key={i} cx={x} cy={y} r={r} fill="none" stroke="#00838F" strokeWidth="2" />)}
+      {g.panels.map((p,i)=><g key={"detail-"+i}><rect x={p.box.left} y={p.box.top} width={p.width} height={p.height} fill="none" stroke="#1565C0" strokeWidth="3"/>{Object.values(p.critical).map((q,k)=><polygon key={k} points={poly(q)} fill="none" stroke="#1565C0" strokeWidth="2"/>)}</g>)}
       {g.phones.map((m, i) => {
         const c = m.centroid, col = COLOURS[i % COLOURS.length];
         return (

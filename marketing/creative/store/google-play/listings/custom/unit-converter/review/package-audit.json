@@ -1,5 +1,5 @@
 {
-  "captureChecks": 34,
+  "captureChecks": 18,
   "browserResourceErrors": 0,
   "requiredFontsLoaded": true,
   "listing": "unit-converter",
@@ -9,51 +9,37 @@
     "full-description": 1538
   },
   "keywordCandidates": 213,
-  "assetCount": 16,
+  "assetCount": 14,
   "officialIconPixelIdentical": true,
-  "repeatablePhoneCaptures": 6,
+  "repeatablePhoneCaptures": 4,
   "assets": [
     {
-      "file": "phone-screenshots/1-length.png",
+      "file": "phone-screenshots/1-convert.png",
       "width": 2160,
       "height": 3840,
       "mode": "RGB",
-      "sha256": "2d5d00ebc24ec4d1ae0220769474041dcfb824271720fa5f42c46eca79a71d9d"
+      "sha256": "7c187b8a666be0db661f85d917a9e254482e7c9774bce22d8a78702a89c72e85"
     },
     {
-      "file": "phone-screenshots/2-temperature.png",
+      "file": "phone-screenshots/2-everyday.png",
       "width": 2160,
       "height": 3840,
       "mode": "RGB",
-      "sha256": "6bece3cbf185d3c2d0e26d91e0a9c219b40212dbe9e178cf8a8d1f56bfca9f8d"
+      "sha256": "d4559d13ed79c69b376f1d304e34d125f24ba88c87fce863327c8797da631991"
     },
     {
-      "file": "phone-screenshots/3-mass.png",
+      "file": "phone-screenshots/3-temperature-data.png",
       "width": 2160,
       "height": 3840,
       "mode": "RGB",
-      "sha256": "29431d8574eda167c0d0ac0ed0a5dc392f452238a2aa9e301e0965e30c926104"
+      "sha256": "a2f6f2f7de37949f738294b60391c8444f95aa8041085fb77123e625489b5e72"
     },
     {
-      "file": "phone-screenshots/4-volume.png",
+      "file": "phone-screenshots/4-toolkit.png",
       "width": 2160,
       "height": 3840,
       "mode": "RGB",
-      "sha256": "09f173276929d074dc5f70dd89c15617967de6781a711a62eff6e1caab036329"
-    },
-    {
-      "file": "phone-screenshots/5-data.png",
-      "width": 2160,
-      "height": 3840,
-      "mode": "RGB",
-      "sha256": "aea502f56fd7edf497ec64e736a80e898604ba12cb304746061cce172b215110"
-    },
-    {
-      "file": "phone-screenshots/6-reverse.png",
-      "width": 2160,
-      "height": 3840,
-      "mode": "RGB",
-      "sha256": "3e334ac31cc8954142e9643072b6cf2edc72daef82d87cfa1a9b9a96ed8bfed5"
+      "sha256": "af41ff181c6969c9ba1e9df61d662a429922e9c2035c7196880181f54c86c126"
     },
     {
       "file": "tablet-screenshots/1-length.png",

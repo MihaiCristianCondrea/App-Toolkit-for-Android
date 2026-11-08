@@ -1,4 +1,5 @@
 export const UI_SELECTORS: Record<string, {critical: Record<string,string>; secondary?:Record<string,string>}> = {
+ "toolkit":{critical:{ruler:".numbers-card[data-tool=ruler]",protractor:".numbers-card[data-tool=protractor]",converter:".numbers-card[data-tool=unit_converter]",bill:".numbers-card[data-tool=bill_splitter]"}},
   "length": {
     "critical": {
       "title": ".tk-sheet-title-row",

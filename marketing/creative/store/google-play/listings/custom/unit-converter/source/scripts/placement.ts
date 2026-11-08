@@ -1,15 +1,17 @@
 import {readFileSync,writeFileSync,mkdirSync} from "node:fs";
-import {DIRECTIONS} from "../src/composition/shots.ts";
-import {centre,measure,W,H,GOLDEN,CAPTION,SPACE} from "../src/composition/geometry.ts";
+import {SHOTS} from "../src/composition/shots.ts";
+import {composeShot} from "../src/composition/compose.ts";
+import {W,H,GOLDEN,CAPTION,bbox,overlapArea,centre} from "../src/composition/geometry.ts";
 const read=(name:string)=>JSON.parse(readFileSync(new URL("../src/composition/"+name,import.meta.url),"utf8"));
-const ui=read("ui.json"),layout=read("layout.json");
-const round=(n:number)=>Math.round(n*1000)/1000;
-const shots=DIRECTIONS.map((d,i)=>{
- const m=measure(layout.shots[i].poses[0],ui[d.id]),point=centre(m.critical[d.focus]);
- const top=d.caption==="top"?CAPTION.top.block.bottom+SPACE.xl:SPACE.xl;
- const bottom=d.caption==="bottom"?CAPTION.bottom.block.top-SPACE.xxl:H-SPACE.xl;
- return {id:d.id,primaryAnchor:"Projected phone silhouette",pose:m.pose,framingTarget:[W/2,round((top+bottom)/2)],framingActual:[round(m.centroid[0]),round((m.full.top+m.full.bottom)/2)],framingErrorPx:[round(m.centroid[0]-W/2),round((m.full.top+m.full.bottom-top-bottom)/2)],focus:d.focus,guideY:round(d.guideY),focusActual:point.map(round),focusNormalized:point.map((n,k)=>round(n/(k?H:W))),guideOffsetY:round(point[1]-d.guideY),centroid:m.centroid.map((n,k)=>round(n/(k?H:W))),bounds:m.full};
+const ui=read("ui.json"),layout=read("layout.json"),round=(n:number)=>Math.round(n*1000)/1000;
+const shots=SHOTS.map((spec,i)=>{
+ const g=composeShot(i,SHOTS.length,layout,ui);
+ return {id:spec.id,intent:spec.intent,caption:CAPTION[spec.caption].block,hard:g.report.hard,balance:g.report.balance.map((n,k)=>round(n/(k?H:W))),
+  phones:g.phones.map((m,j)=>({screen:spec.screens[j],pose:m.pose,bounds:m.full,centroid:m.centroid.map((n,k)=>round(n/(k?H:W))),area:round(m.area/(W*H)),
+   critical:Object.fromEntries(Object.entries(m.critical).map(([key,p])=>[key,{box:bbox(p),centre:centre(p).map((n,k)=>round(n/(k?H:W)))}]))})),
+  pair:g.phones.length===2?{horizontalGap:round(g.phones[1].full.left-g.phones[0].full.right),overlap:round(overlapArea(g.phones[0].visible,g.phones[1].visible)),stagger:round(g.phones[1].full.top-g.phones[0].full.top)}:null,
+  details:g.panels.map(p=>({screen:p.screen,bounds:p.box,scale:p.scale})),intentional:g.report.intentional};
 });
 mkdirSync(new URL("../../review/",import.meta.url),{recursive:true});
 writeFileSync(new URL("../../review/placement.json",import.meta.url),JSON.stringify({golden:GOLDEN,shots},null,2)+"\n");
-console.log(JSON.stringify(shots.map(({id,pose,centroid,framingErrorPx})=>({id,pitch:pose.pitch,yaw:pose.yaw,centroid,framingErrorPx})),null,2));
+console.log(JSON.stringify(shots.map(s=>({id:s.id,hard:s.hard,pair:s.pair}))));

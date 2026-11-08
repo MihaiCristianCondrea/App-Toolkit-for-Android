@@ -1,9 +1,7 @@
-phone-screenshots/1-length.png	Unit Converter showing 1 metre as 100 centimetres, with editable From and To fields
-phone-screenshots/2-temperature.png	Temperature conversion from 20 degrees Celsius to 68 degrees Fahrenheit
-phone-screenshots/3-mass.png	Mass conversion from 2.26796185 kilograms to 5 pounds
-phone-screenshots/4-volume.png	Volume conversion from 1 litre to 1000 millilitres
-phone-screenshots/5-data.png	Decimal data conversion from 1 gigabyte to 1000 megabytes, with the decimal units note
-phone-screenshots/6-reverse.png	Unit Converter with 200 centimetres and 2 metres, calculated by editing the To value
+phone-screenshots/1-convert.png	Large close view of the real converter showing 1 metre and 100 centimetres; the phone extends beyond the top edge
+phone-screenshots/2-everyday.png	Two Pixels in complementary poses: mass conversion from 2.26796185 kg to 5 lb and volume from 1 L to 1000 mL
+phone-screenshots/3-temperature-data.png	Real UI close-ups showing 20 Celsius to 68 Fahrenheit and 1 GB to 1000 MB with the decimal units note
+phone-screenshots/4-toolkit.png	The real Measure workspace with Surface Ruler, Protractor, Unit Converter and Tip & Bill Splitter
 tablet-screenshots/1-length.png	Length conversion from 1 metre to 100 centimetres on the foldable layout
 tablet-screenshots/2-temperature.png	Temperature conversion from 20 Celsius to 68 Fahrenheit on the foldable layout
 tablet-screenshots/3-mass.png	Mass conversion from 2.26796185 kilograms to 5 pounds on the foldable layout

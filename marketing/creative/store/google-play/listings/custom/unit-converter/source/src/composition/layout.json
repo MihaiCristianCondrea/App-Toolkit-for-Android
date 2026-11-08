@@ -1,112 +1,103 @@
 {
  "shots": [
   {
-   "id": "length",
+   "id": "convert",
    "screens": [
     "length"
    ],
    "poses": [
     {
-     "pitch": 0,
-     "yaw": -4,
-     "roll": -1,
-     "perspective": 3000,
-     "scale": 1.4,
-     "x": 540.217,
-     "y": 1101.88
-    }
-   ],
-   "score": 0.0475,
-   "terms": {
-    "size": 0,
-    "framing": 0,
-    "goldenY": 0.0475,
-    "pose": 0,
-    "balance": 0
-   },
-   "searched": 243,
-   "rejected": 0
-  },
-  {
-   "id": "temperature",
-   "screens": [
-    "temperature"
-   ],
-   "poses": [
-    {
      "pitch": 3,
-     "yaw": 6,
-     "roll": 1,
+     "yaw": -6,
+     "roll": -2,
      "perspective": 3000,
-     "scale": 1.369,
-     "x": 540.624,
-     "y": 784.299
+     "scale": 1.84,
+     "x": 534.648,
+     "y": 526.037
     }
    ],
-   "score": 1.6379,
+   "score": 0.4772,
    "terms": {
     "size": 0,
     "framing": 0,
-    "goldenY": 1.638,
-    "pose": 0,
-    "balance": 0
+    "goldenY": 0.4773,
+    "pose": 0
    },
-   "searched": 243,
-   "rejected": 76
-  },
-  {
-   "id": "mass",
-   "screens": [
-    "mass"
-   ],
-   "poses": [
-    {
-     "pitch": -2,
-     "yaw": 4,
-     "roll": 1,
-     "perspective": 3000,
-     "scale": 1.358,
-     "x": 539.721,
-     "y": 1104.455
-    }
-   ],
-   "score": 0.8298,
-   "terms": {
-    "size": 0,
-    "framing": 0,
-    "goldenY": 0.8296,
-    "pose": 0,
-    "balance": 0
-   },
-   "searched": 243,
+   "searched": 27,
    "rejected": 0
   },
   {
-   "id": "volume",
+   "id": "everyday",
    "screens": [
+    "mass",
     "volume"
    ],
    "poses": [
     {
-     "pitch": 1,
-     "yaw": -5,
+     "pitch": 2,
+     "yaw": -6,
+     "roll": 2,
+     "perspective": 3000,
+     "scale": 0.974,
+     "x": 284.721,
+     "y": 936.188
+    },
+    {
+     "pitch": -2,
+     "yaw": 6,
      "roll": -2,
      "perspective": 3000,
-     "scale": 1.37,
-     "x": 539.889,
-     "y": 786.33
+     "scale": 0.974,
+     "x": 795.47,
+     "y": 1181.102
     }
    ],
-   "score": 0.4444,
+   "score": 0.017,
+   "terms": {
+    "size": 0,
+    "pairBalance": 0,
+    "stagger": 0,
+    "massGuide": 0.0155,
+    "volumeGuide": 0.0015,
+    "pose": 0
+   },
+   "searched": 972,
+   "rejected": 846
+  },
+  {
+   "id": "temperature-data",
+   "screens": [],
+   "poses": [],
+   "score": 0,
+   "terms": {},
+   "searched": 1,
+   "rejected": 0
+  },
+  {
+   "id": "toolkit",
+   "screens": [
+    "toolkit"
+   ],
+   "poses": [
+    {
+     "pitch": -4,
+     "yaw": 12,
+     "roll": 3,
+     "perspective": 3000,
+     "scale": 1.288,
+     "x": 583.001,
+     "y": 1111.22
+    }
+   ],
+   "score": 0.0061,
    "terms": {
     "size": 0,
     "framing": 0,
-    "goldenY": 0.3333,
-    "pose": 0.1111,
-    "balance": 0
+    "goldenY": 0.0061,
+    "pose": 0
    },
-   "searched": 243,
-   "rejected": 148
+   "searched": 27,
+   "rejected": 0
   },
   {
    "id": "data",

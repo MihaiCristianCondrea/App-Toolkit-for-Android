@@ -38,7 +38,7 @@ export const LitScreen:React.FC<{id:string;state?:Record<string,unknown>;frame?:
     let content:Element|null=host.querySelector(".measure-overview");
     while(content&&!((["auto","scroll"].includes(getComputedStyle(content).overflowY))&&content.scrollHeight>content.clientHeight))
      content=(content as HTMLElement).assignedSlot??content.parentElement??((content.getRootNode() as ShadowRoot).host??null);
-    if(content)content.scrollTop=window==="phone"?300:200;
+    if(content&&state.activeSheet==="unit_converter")content.scrollTop=window==="phone"?300:200;
     await new Promise<void>(r=>requestAnimationFrame(()=>requestAnimationFrame(()=>r())));
     // Scrolling starts the app bar's real colour transition inside its shadow root.
     // Finish finite animations at their end state before capture rather than sampling wall-clock time.
@@ -50,13 +50,20 @@ export const LitScreen:React.FC<{id:string;state?:Record<string,unknown>;frame?:
      if(duration!==Infinity)animation.finish();
     }
     await new Promise<void>(r=>requestAnimationFrame(()=>requestAnimationFrame(()=>r())));
-    const fields=[...host.querySelectorAll(".converter-card md-outlined-text-field")] as any[];
-    const expected=EXPECTED_VALUES[[state.converterFrom,state.converterTo,state.converterInput,state.converterEditingLeft===false?"right":"left"].join(":")];
-    const units=[...host.querySelectorAll(".converter-card md-outlined-select")] as any[];
-    if(!expected||fields.length!==2||fields.some((f,i)=>String(f.value)!==expected[i])||
-     units[0]?.value!==state.converterFrom||units[1]?.value!==state.converterTo)
-     throw Error("The captured conversion does not match the verified example");
-    console.log("CONVERSION "+JSON.stringify({category:state.converterCategory,from:state.converterFrom,to:state.converterTo,values:fields.map(f=>String(f.value)),fonts:[...document.fonts].filter(f=>f.status==="loaded").map(f=>f.family)}));
+    const fonts=[...document.fonts].filter(f=>f.status==="loaded").map(f=>f.family);
+    if(state.activeSheet==="unit_converter"){
+     const fields=[...host.querySelectorAll(".converter-card md-outlined-text-field")] as any[];
+     const expected=EXPECTED_VALUES[[state.converterFrom,state.converterTo,state.converterInput,state.converterEditingLeft===false?"right":"left"].join(":")];
+     const units=[...host.querySelectorAll(".converter-card md-outlined-select")] as any[];
+     if(!expected||fields.length!==2||fields.some((f,i)=>String(f.value)!==expected[i])||
+      units[0]?.value!==state.converterFrom||units[1]?.value!==state.converterTo)
+      throw Error("The captured conversion does not match the verified example");
+     console.log("CONVERSION "+JSON.stringify({category:state.converterCategory,from:state.converterFrom,to:state.converterTo,values:fields.map(f=>String(f.value)),fonts}));
+    }else{
+     const tools=[...host.querySelectorAll(".numbers-card")].map(e=>e.getAttribute("data-tool"));
+     if(!["ruler","protractor","unit_converter","bill_splitter"].every(t=>tools.includes(t)))throw Error("The Measure workspace is incomplete");
+     console.log("TOOLKIT "+JSON.stringify({tools,fonts}));
+    }
     measure?.(host);
    }).then(()=>continueRender(h),cancelRender);
  },[id,key,frame,window,pose.yaw,pose.pitch,pose.perspective]);

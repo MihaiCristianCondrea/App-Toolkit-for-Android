@@ -1,7 +1,180 @@
 [
  {
   "index": 1,
-  "id": "length",
+  "id": "convert",
+  "hard": [],
+  "preferences": [],
+  "intentional": [
+   "shape pill sits behind the phone",
+   "shape gem sits behind the phone",
+   "length: cropped at the top edge"
+  ],
+  "caption": {
+   "glyphPixels": 6517,
+   "minContrast": 10.77,
+   "contrastP1": 10.77,
+   "pillText": 6.62,
+   "pillPixels": 35524,
+   "interference": 0
+  },
+  "balance": {
+   "geometric": [
+    0.499,
+    0.395
+   ],
+   "pixels": [
+    0.495,
+    0.4
+   ]
+  },
+  "phones": [
+   {
+    "screen": "length",
+    "pose": {
+     "pitch": 3,
+     "yaw": -6,
+     "roll": -2,
+     "perspective": 3000,
+     "scale": 1.84,
+     "x": 534.648,
+     "y": 526.037
+    },
+    "centroid": [
+     0.5,
+     0.373
+    ],
+    "area": 0.59,
+    "box": {
+     "left": 0.084,
+     "top": 0,
+     "right": 0.918,
+     "bottom": 0.753
+    }
+   }
+  ],
+  "terms": {
+   "size": 0.0000034540124216285733,
+   "framing": 1.4348761862350824e-9,
+   "goldenY": 0.4772734500509852,
+   "pose": 0
+  }
+ },
+ {
+  "index": 2,
+  "id": "everyday",
+  "hard": [],
+  "preferences": [],
+  "intentional": [
+   "shape clover_4leaf sits behind the phone"
+  ],
+  "caption": {
+   "glyphPixels": 7601,
+   "minContrast": 10.87,
+   "contrastP1": 10.87,
+   "pillText": 6.62,
+   "pillPixels": 44629,
+   "interference": 0
+  },
+  "balance": {
+   "geometric": [
+    0.502,
+    0.524
+   ],
+   "pixels": [
+    0.5,
+    0.444
+   ]
+  },
+  "phones": [
+   {
+    "screen": "mass",
+    "pose": {
+     "pitch": 2,
+     "yaw": -6,
+     "roll": 2,
+     "perspective": 3000,
+     "scale": 0.974,
+     "x": 284.721,
+     "y": 936.188
+    },
+    "centroid": [
+     0.264,
+     0.489
+    ],
+    "area": 0.207,
+    "box": {
+     "left": 0.04,
+     "top": 0.237,
+     "right": 0.485,
+     "bottom": 0.743
+    }
+   },
+   {
+    "screen": "volume",
+    "pose": {
+     "pitch": -2,
+     "yaw": 6,
+     "roll": -2,
+     "perspective": 3000,
+     "scale": 0.974,
+     "x": 795.47,
+     "y": 1181.102
+    },
+    "centroid": [
+     0.736,
+     0.614
+    ],
+    "area": 0.207,
+    "box": {
+     "left": 0.513,
+     "top": 0.362,
+     "right": 0.958,
+     "bottom": 0.869
+    }
+   }
+  ],
+  "terms": {
+   "size": 0.0000020227576953237744,
+   "pairBalance": 1.4573702981041546e-10,
+   "stagger": 1.2140109843146364e-9,
+   "massGuide": 0.015508186904150434,
+   "volumeGuide": 0.0014776897912282213,
+   "pose": 0
+  }
+ },
+ {
+  "index": 3,
+  "id": "temperature-data",
+  "hard": [],
+  "preferences": [],
+  "intentional": [
+   "temperature: real From/To UI detail without a device frame",
+   "data: real From/To UI detail without a device frame"
+  ],
+  "caption": {
+   "glyphPixels": 13146,
+   "minContrast": 10.87,
+   "contrastP1": 10.87,
+   "pillText": 6.62,
+   "pillPixels": 15053,
+   "interference": 0
+  },
+  "balance": {
+   "geometric": [
+    0.511,
+    0.471
+   ],
+   "pixels": [
+    0.472,
+    0.526
+   ]
+  },
+  "phones": [],
+  "terms": {}
+ },
+ {
+  "index": 4,
+  "id": "toolkit",
   "hard": [],
   "preferences": [],
   "intentional": [
@@ -9,356 +182,53 @@
    "shape gem sits behind the phone"
   ],
   "caption": {
-   "glyphPixels": 7273,
+   "glyphPixels": 3676,
    "minContrast": 10.87,
    "contrastP1": 10.87,
    "pillText": 6.62,
-   "pillPixels": 36027,
+   "pillPixels": 36458,
    "interference": 0
   },
   "balance": {
    "geometric": [
-    0.499,
-    0.548
+    0.531,
+    0.546
    ],
    "pixels": [
-    0.504,
-    0.465
+    0.503,
+    0.518
    ]
   },
   "phones": [
    {
-    "screen": "length",
+    "screen": "toolkit",
     "pose": {
-     "pitch": 0,
-     "yaw": -4,
-     "roll": -1,
+     "pitch": -4,
+     "yaw": 12,
+     "roll": 3,
      "perspective": 3000,
-     "scale": 1.4,
-     "x": 540.217,
-     "y": 1101.88
+     "scale": 1.288,
+     "x": 583.001,
+     "y": 1111.22
     },
     "centroid": [
-     0.5,
-     0.574
+     0.537,
+     0.575
     ],
-    "area": 0.429,
+    "area": 0.36,
     "box": {
-     "left": 0.189,
-     "top": 0.21,
-     "right": 0.81,
-     "bottom": 0.935
+     "left": 0.239,
+     "top": 0.238,
+     "right": 0.841,
+     "bottom": 0.907
     }
    }
   ],
   "terms": {
-   "size": 1.112434398939581e-7,
-   "framing": 1.4525178089325658e-11,
-   "goldenY": 0.04747757028897066,
-   "pose": 0,
-   "balance": 7.649087385925836e-10
-  }
- },
- {
-  "index": 2,
-  "id": "temperature",
-  "hard": [],
-  "preferences": [
-   "goldenY outside its tolerance (1.64)"
-  ],
-  "intentional": [
-   "shape pill sits behind the phone",
-   "shape cookie_6sided sits behind the phone"
-  ],
-  "caption": {
-   "glyphPixels": 6048,
-   "minContrast": 10.59,
-   "contrastP1": 10.68,
-   "pillText": 6.62,
-   "pillPixels": 28618,
-   "interference": 0
-  },
-  "balance": {
-   "geometric": [
-    0.499,
-    0.437
-   ],
-   "pixels": [
-    0.478,
-    0.4
-   ]
-  },
-  "phones": [
-   {
-    "screen": "temperature",
-    "pose": {
-     "pitch": 3,
-     "yaw": 6,
-     "roll": 1,
-     "perspective": 3000,
-     "scale": 1.369,
-     "x": 540.624,
-     "y": 784.299
-    },
-    "centroid": [
-     0.5,
-     0.411
-    ],
-    "area": 0.41,
-    "box": {
-     "left": 0.195,
-     "top": 0.054,
-     "right": 0.802,
-     "bottom": 0.763
-    }
-   }
-  ],
-  "terms": {
-   "size": 2.352756314695934e-7,
-   "framing": 3.178167465565443e-11,
-   "goldenY": 1.6380215546099917,
-   "pose": 0,
-   "balance": 1.661387538893726e-10
-  }
- },
- {
-  "index": 3,
-  "id": "mass",
-  "hard": [],
-  "preferences": [],
-  "intentional": [
-   "shape cookie_9sided sits behind the phone",
-   "shape pill sits behind the phone"
-  ],
-  "caption": {
-   "glyphPixels": 6413,
-   "minContrast": 10.87,
-   "contrastP1": 10.87,
-   "pillText": 6.62,
-   "pillPixels": 27293,
-   "interference": 0
-  },
-  "balance": {
-   "geometric": [
-    0.499,
-    0.545
-   ],
-   "pixels": [
-    0.51,
-    0.476
-   ]
-  },
-  "phones": [
-   {
-    "screen": "mass",
-    "pose": {
-     "pitch": -2,
-     "yaw": 4,
-     "roll": 1,
-     "perspective": 3000,
-     "scale": 1.358,
-     "x": 539.721,
-     "y": 1104.455
-    },
-    "centroid": [
-     0.5,
-     0.573
-    ],
-    "area": 0.403,
-    "box": {
-     "left": 0.201,
-     "top": 0.222,
-     "right": 0.803,
-     "bottom": 0.924
-    }
-   }
-  ],
-  "terms": {
-   "size": 0.000004558442382989887,
-   "framing": 2.7081272692256982e-11,
-   "goldenY": 0.8296157057633874,
-   "pose": 0,
-   "balance": 3.411740890091846e-11
-  }
- },
- {
-  "index": 4,
-  "id": "volume",
-  "hard": [],
-  "preferences": [],
-  "intentional": [
-   "shape clover_4leaf sits behind the phone",
-   "shape cookie_6sided sits behind the phone"
-  ],
-  "caption": {
-   "glyphPixels": 8815,
-   "minContrast": 10.68,
-   "contrastP1": 10.68,
-   "pillText": 6.62,
-   "pillPixels": 17692,
-   "interference": 0
-  },
-  "balance": {
-   "geometric": [
-    0.499,
-    0.436
-   ],
-   "pixels": [
-    0.491,
-    0.391
-   ]
-  },
-  "phones": [
-   {
-    "screen": "volume",
-    "pose": {
-     "pitch": 1,
-     "yaw": -5,
-     "roll": -2,
-     "perspective": 3000,
-     "scale": 1.37,
-     "x": 539.889,
-     "y": 786.33
-    },
-    "centroid": [
-     0.5,
-     0.411
-    ],
-    "area": 0.411,
-    "box": {
-     "left": 0.188,
-     "top": 0.052,
-     "right": 0.813,
-     "bottom": 0.765
-    }
-   }
-  ],
-  "terms": {
-   "size": 0.0000016436324776541474,
-   "framing": 8.779427499475846e-11,
-   "goldenY": 0.3332774095440458,
-   "pose": 0.1111111111111111,
-   "balance": 1.637020040451599e-10
-  }
- },
- {
-  "index": 5,
-  "id": "data",
-  "hard": [],
-  "preferences": [],
-  "intentional": [
-   "shape gem sits behind the phone",
-   "shape soft_burst sits behind the phone"
-  ],
-  "caption": {
-   "glyphPixels": 4968,
-   "minContrast": 10.87,
-   "contrastP1": 10.87,
-   "pillText": 6.62,
-   "pillPixels": 26662,
-   "interference": 0
-  },
-  "balance": {
-   "geometric": [
-    0.499,
-    0.545
-   ],
-   "pixels": [
-    0.506,
-    0.479
-   ]
-  },
-  "phones": [
-   {
-    "screen": "data",
-    "pose": {
-     "pitch": 0,
-     "yaw": 0,
-     "roll": 0,
-     "perspective": 3000,
-     "scale": 1.376,
-     "x": 540,
-     "y": 1099.36
-    },
-    "centroid": [
-     0.5,
-     0.573
-    ],
-    "area": 0.416,
-    "box": {
-     "left": 0.204,
-     "top": 0.218,
-     "right": 0.796,
-     "bottom": 0.927
-    }
-   }
-  ],
-  "terms": {
-   "size": 3.957618796470055e-7,
-   "framing": 3.418101704764577e-29,
-   "goldenY": 0.6096684843123265,
-   "pose": 0,
-   "balance": 4.4722135194259716e-29
-  }
- },
- {
-  "index": 6,
-  "id": "reverse",
-  "hard": [],
-  "preferences": [],
-  "intentional": [
-   "shape pill sits behind the phone",
-   "shape clover_4leaf sits behind the phone"
-  ],
-  "caption": {
-   "glyphPixels": 16558,
-   "minContrast": 10.59,
-   "contrastP1": 10.59,
-   "pillText": 6.62,
-   "pillPixels": 17921,
-   "interference": 0
-  },
-  "balance": {
-   "geometric": [
-    0.499,
-    0.434
-   ],
-   "pixels": [
-    0.476,
-    0.4
-   ]
-  },
-  "phones": [
-   {
-    "screen": "reverse",
-    "pose": {
-     "pitch": 4,
-     "yaw": 5,
-     "roll": -1,
-     "perspective": 3000,
-     "scale": 1.39,
-     "x": 539.897,
-     "y": 776.746
-    },
-    "centroid": [
-     0.5,
-     0.409
-    ],
-    "area": 0.422,
-    "box": {
-     "left": 0.196,
-     "top": 0.05,
-     "right": 0.811,
-     "bottom": 0.767
-    }
-   }
-  ],
-  "terms": {
-   "size": 0.0000063536112684749604,
-   "framing": 1.3077532237137273e-9,
-   "goldenY": 0.8152866232339062,
-   "pose": 0,
-   "balance": 7.123090305597325e-10
+   "size": 0.000028522383933400963,
+   "framing": 4.858007524126382e-10,
+   "goldenY": 0.006089814586584855,
+   "pose": 0
   }
  },
  {

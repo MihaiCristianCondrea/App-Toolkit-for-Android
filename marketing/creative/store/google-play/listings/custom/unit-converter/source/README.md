@@ -1,17 +1,17 @@
 # Unit Converter listing source
 
-Reproducible English creative for the unit-converter custom listing. Output is six 2160 x 3840 phone PNGs, four 3840 x 2160 foldable PNGs, four 3840 x 2160 desktop PNGs, a 1024 x 500 feature graphic and the existing 512 x 512 icon. Upload files are in ../listing/en-US; review sheets and reports are in ../review.
+Four 2160 x 3840 phone screenshots, four 3840 x 2160 foldable screenshots, four 3840 x 2160 desktop screenshots, a 1024 x 500 feature graphic and the unchanged 512 x 512 official icon. Upload files are in ../listing/en-US; current review sheets and reports are in ../review.
 
 ## Render and verify
 
-Run these commands from this directory with Node.js, npm and Python with Pillow installed. On Windows use npm.cmd if PowerShell blocks npm.ps1.
+The existing Marketing UI dependencies and public assets must be installed and synced. Material-Next Web Components 0.2.0 supplies the real 3D Pixel. Use npm.cmd on Windows when PowerShell blocks npm.ps1.
 
 ```sh
 npm ci
 npm run lint
-npm run probe -- length temperature mass volume data reverse length@fold temperature@fold mass@fold data@fold length@desktop temperature@desktop mass@desktop data@desktop
+npm run probe -- length temperature mass volume data reverse toolkit length@fold temperature@fold mass@fold data@fold length@desktop temperature@desktop mass@desktop data@desktop
 npm run solve
-npm run concepts
+node scripts/preview-campaign.mjs
 npm run verify -- en-US
 npm run render -- en-US --verify-repeat
 npm run metadata
@@ -20,40 +20,26 @@ npm run archive
 node scripts/placement.ts
 ```
 
-Run node scripts/validate.mjs from marketing/creative/store/google-play. The UI kit dependencies and its public assets must already be installed and synced. The checked installed Material-Next Web Components version is 0.2.0.
+For a phone-only refresh, use npm run render -- en-US --phone-only --verify-repeat, followed by npm run metadata -- --phone-only. Staging copies the existing wide graphics, feature graphic and icon unchanged, replaces only the staged phone set, and publishes the folder only after every new image succeeds. Metadata readback checks all 14 assets. Run node scripts/validate.mjs from marketing/creative/store/google-play.
 
-Rendering stages every output before replacing this listing's graphics. The icon is copied, never rendered or redrawn. Metadata tagging runs after rendering, checks readback and verifies unchanged decoded pixels. The audit requires all 16 outputs, 14 alt-text rows and six exact repeat captures.
+## Campaign and geometry
 
-## Composition and fidelity
+The four compositions serve different roles: a close converter hero, a two-device mass/volume comparison, grouped temperature/data UI details, and the broader Measure workspace. The earlier six-poster pattern is removed.
 
-The production pipeline is adapted from Decision Wheel and Water Eject. It remains local so existing approved listings and their assets do not change. No dependency or shared rendering framework was added.
+- geometry.ts uses the actual model projection to measure silhouettes, centroids and critical UI.
+- shots.ts searches the two-phone scene jointly. Of 972 candidates, 846 fail containment, minimum scale, card width, caption clearance or silhouette spacing. The chosen pair has a 30.998 px gap, zero overlap and 239.998 px stagger. Its projected area-weighted horizontal centre is the canvas centre. Result areas use the lower golden guides as preferences, never at the expense of readability.
+- compose.ts validates phone and native-detail geometry, including label regions and all measured fields. The hero's crop is intentional at the top canvas boundary; the other complete devices stay inside their image.
+- NativePanel.tsx crops the actual mounted Marketing UI after it settles. It measures the source From/To region, checks it against the probe, and translates the real screen into the crop. It never reconstructs controls or results.
+- LitScreen.tsx verifies each converter's actual values and unit selectors. The toolkit capture requires the real ruler, protractor, converter and bill-splitter cards. Finite shadow-root transitions are finished before capture.
+- scripts/bundle.mjs inlines the installed symbol fonts to avoid interrupted WOFF2 HTTP requests. Every capture requires Google Sans Flex and both Material Symbol fonts to be loaded.
+- The verifier renders clean, caption-free and debug images and checks geometry, caption contrast, interference and pixel-weighted balance. placement.json records every projected control, native UI crop, silhouette and pair measurement.
 
-- src/screens.ts declares six real converter states and their expected values, checked from UnitConversionRepository's decimal factors.
-- LitScreen.tsx mounts the authoritative Marketing UI. It scrolls the real category strip to reveal its selection and the underlying Measure content towards Convert & split. After scrolling it finishes finite shadow-root animations at their final state, including the app bar's 0.2-second tint transition. UI structure, colours and behaviour are unchanged.
-- scripts/bundle.mjs inlines the installed local symbol fonts. This removes the interrupted WOFF2 HTTP requests seen in the initial render, while the capture still requires every font to be loaded.
-- composition/geometry.ts projects the actual Pixel camera pose and measures silhouette, centroid and critical UI. uiSelectors.ts and the probe record title, category, both fields, swap, hint and the Data note.
-- composition/shots.ts provides gentle camera directions and separate caption/focus targets. The solver enforces device containment and critical-UI visibility before scoring framing and golden guides.
-- composition/compose.ts places the paired MaterialShapes and arrow paths outside the projected phone. Glass.tsx draws the continuous connecting curves, with caption exclusion masks.
-- scripts/verify.mjs checks geometry and composited pixels and writes clean/debug contact sheets for all three device sets.
-- FeatureGraphic.tsx contains three compositions: Material transformation, Connected measurements and Editorial utility. The middle concept is selected after full-size and thumbnail review.
-- scripts/render.mjs records actual displayed conversions, loaded fonts and browser resource failures in capture-checks.json. The capture fails if values or selected units differ from the expected example.
+Length shows 1 m = 100 cm, mass 2.26796185 kg = 5 lb, volume 1 L = 1000 mL, temperature 20 Celsius = 68 Fahrenheit, and data 1 GB = 1000 MB. The mass pair is exact under UnitConversionRepository's decimal factors. The Data note remains in the native detail.
 
-The real UI supplies all values. The mass example is exactly 2.26796185 kg = 5 lb. Data uses powers of 1000, not binary units. The last shot edits the destination value after swapping the units, showing the same supported category in reverse.
+The feature graphic, icon and large-screen upload assets are preserved. Earlier hero-study images remain as design history; contact-clean.png shows the current campaign.
 
-## Validation
+## Checks and publication gate
 
-The review reports separate hard constraints, visual preferences and intentional behind-phone shapes. Whole devices and critical UI stay inside their safe areas. Captions use the project's two-line Material pill treatment and stay below 20% of the image. Shapes and arrows keep clear of caption text; effects never cover app UI.
+The audit requires four exact repeated phone captures, 12 screenshot alt-text rows, 14 correctly sized graphics, a pixel-identical official icon, loaded fonts, no browser resource errors and successful metadata readback with unchanged decoded pixels. Review reports separate hard failures, preferences and intentional crops.
 
-Final checks passed for all 16 assets and 14 screenshot layouts. Caption contrast is at least 10.59:1 under 99% of glyphs, pill text is 6.62:1, and caption-zone interference is 0.00%. All six phone source PNGs repeat byte-identically. All 34 captured screen instances report the required fonts loaded, with no browser resource errors. The official icon is pixel-identical and metadata readback preserves every decoded pixel.
-
-One soft target remains intentionally off the golden guide in the temperature composition. Keeping the whole device and readable fields takes priority. No hard rule is relaxed.
-
-The final render checks exact repeated source PNGs for all six phone shots. The package audit checks RGB screenshots and feature graphic, the RGBA official icon, dimensions, copy limits, keyword uniqueness, alt text, fonts and resource failures. Embedded metadata is read back and must preserve every decoded pixel.
-
-## Publication gate
-
-Status stays planned. Confirm production availability of the redesigned app (26.11.02) and review the candidate keywords in Play Console before upload. Public listing content did not establish the rollout. No connected-device visual comparison was performed.
-
-## Artwork ownership
-
-Backgrounds use actual MaterialShape masks from the existing kit and original deterministic SVG curves and arrows. No third-party textures, models or competitor artwork are included. Existing app screens and the official icon retain their identity.
+Production availability of the redesigned 26.11.02 app and candidate keyword availability still require Play Console confirmation. No connected-device comparison or publication is claimed. Android code and other custom listings are unchanged by this redesign.

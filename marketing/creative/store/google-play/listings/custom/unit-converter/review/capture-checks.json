@@ -1,7 +1,7 @@
 {
   "captures": [
     {
-      "asset": "1-length.png",
+      "asset": "1-convert.png",
       "category": "Length",
       "from": "Metre",
       "to": "Centimetre",
@@ -31,13 +31,28 @@
       ]
     },
     {
-      "asset": "2-temperature.png",
-      "category": "Temperature",
-      "from": "Celsius",
-      "to": "Fahrenheit",
+      "asset": "2-everyday.png",
+      "category": "Mass",
+      "from": "Kilogram",
+      "to": "Pound",
       "values": [
-        "20",
-        "68"
+        "2.26796185",
+        "5"
+      ],
+      "fonts": [
+        "Material Symbols Outlined",
+        "Material Symbols Rounded",
+        "\"Google Sans Flex\""
+      ]
+    },
+    {
+      "asset": "2-everyday.png",
+      "category": "Volume",
+      "from": "Litre",
+      "to": "Millilitre",
+      "values": [
+        "1",
+        "1000"
       ],
       "fonts": [
         "Material Symbols Outlined",
@@ -47,6 +62,36 @@
     },
     {
       "asset": "repeat-2.png",
+      "category": "Mass",
+      "from": "Kilogram",
+      "to": "Pound",
+      "values": [
+        "2.26796185",
+        "5"
+      ],
+      "fonts": [
+        "Material Symbols Outlined",
+        "Material Symbols Rounded",
+        "\"Google Sans Flex\""
+      ]
+    },
+    {
+      "asset": "repeat-2.png",
+      "category": "Volume",
+      "from": "Litre",
+      "to": "Millilitre",
+      "values": [
+        "1",
+        "1000"
+      ],
+      "fonts": [
+        "Material Symbols Outlined",
+        "Material Symbols Rounded",
+        "\"Google Sans Flex\""
+      ]
+    },
+    {
+      "asset": "3-temperature-data.png",
       "category": "Temperature",
       "from": "Celsius",
       "to": "Fahrenheit",
@@ -61,13 +106,13 @@
       ]
     },
     {
-      "asset": "3-mass.png",
-      "category": "Mass",
-      "from": "Kilogram",
-      "to": "Pound",
+      "asset": "3-temperature-data.png",
+      "category": "Data",
+      "from": "Gigabyte",
+      "to": "Megabyte",
       "values": [
-        "2.26796185",
-        "5"
+        "1",
+        "1000"
       ],
       "fonts": [
         "Material Symbols Outlined",
@@ -77,12 +122,12 @@
     },
     {
       "asset": "repeat-3.png",
-      "category": "Mass",
-      "from": "Kilogram",
-      "to": "Pound",
+      "category": "Temperature",
+      "from": "Celsius",
+      "to": "Fahrenheit",
       "values": [
-        "2.26796185",
-        "5"
+        "20",
+        "68"
       ],
       "fonts": [
         "Material Symbols Outlined",
@@ -91,13 +136,29 @@
       ]
     },
     {
-      "asset": "4-volume.png",
-      "category": "Volume",
-      "from": "Litre",
-      "to": "Millilitre",
+      "asset": "repeat-3.png",
+      "category": "Data",
+      "from": "Gigabyte",
+      "to": "Megabyte",
       "values": [
         "1",
         "1000"
+      ],
+      "fonts": [
+        "Material Symbols Outlined",
+        "Material Symbols Rounded",
+        "\"Google Sans Flex\""
+      ]
+    },
+    {
+      "asset": "4-toolkit.png",
+      "tools": [
+        "ruler",
+        "protractor",
+        "unit_converter",
+        "bill_splitter",
+        "counter",
+        "reaction_test"
       ],
       "fonts": [
         "Material Symbols Outlined",
@@ -107,102 +168,13 @@
     },
     {
       "asset": "repeat-4.png",
-      "category": "Volume",
-      "from": "Litre",
-      "to": "Millilitre",
-      "values": [
-        "1",
-        "1000"
-      ],
-      "fonts": [
-        "Material Symbols Outlined",
-        "Material Symbols Rounded",
-        "\"Google Sans Flex\""
-      ]
-    },
-    {
-      "asset": "5-data.png",
-      "category": "Data",
-      "from": "Gigabyte",
-      "to": "Megabyte",
-      "values": [
-        "1",
-        "1000"
-      ],
-      "fonts": [
-        "Material Symbols Outlined",
-        "Material Symbols Rounded",
-        "\"Google Sans Flex\""
-      ]
-    },
-    {
-      "asset": "repeat-5.png",
-      "category": "Data",
-      "from": "Gigabyte",
-      "to": "Megabyte",
-      "values": [
-        "1",
-        "1000"
-      ],
-      "fonts": [
-        "Material Symbols Outlined",
-        "Material Symbols Rounded",
-        "\"Google Sans Flex\""
-      ]
-    },
-    {
-      "asset": "6-reverse.png",
-      "category": "Length",
-      "from": "Centimetre",
-      "to": "Metre",
-      "values": [
-        "200",
-        "2"
-      ],
-      "fonts": [
-        "Material Symbols Outlined",
-        "Material Symbols Rounded",
-        "\"Google Sans Flex\""
-      ]
-    },
-    {
-      "asset": "repeat-6.png",
-      "category": "Length",
-      "from": "Centimetre",
-      "to": "Metre",
-      "values": [
-        "200",
-        "2"
-      ],
-      "fonts": [
-        "Material Symbols Outlined",
-        "Material Symbols Rounded",
-        "\"Google Sans Flex\""
-      ]
-    },
-    {
-      "asset": "panorama-en-US.png",
-      "category": "Data",
-      "from": "Gigabyte",
-      "to": "Megabyte",
-      "values": [
-        "1",
-        "1000"
-      ],
-      "fonts": [
-        "Material Symbols Outlined",
-        "Material Symbols Rounded",
-        "\"Google Sans Flex\""
-      ]
-    },
-    {
-      "asset": "panorama-en-US.png",
-      "category": "Length",
-      "from": "Metre",
-      "to": "Centimetre",
-      "values": [
-        "1",
-        "100"
+      "tools": [
+        "ruler",
+        "protractor",
+        "unit_converter",
+        "bill_splitter",
+        "counter",
+        "reaction_test"
       ],
       "fonts": [
         "Material Symbols Outlined",
@@ -227,27 +199,12 @@
     },
     {
       "asset": "panorama-en-US.png",
-      "category": "Mass",
-      "from": "Kilogram",
-      "to": "Pound",
+      "category": "Data",
+      "from": "Gigabyte",
+      "to": "Megabyte",
       "values": [
-        "2.26796185",
-        "5"
-      ],
-      "fonts": [
-        "Material Symbols Outlined",
-        "Material Symbols Rounded",
-        "\"Google Sans Flex\""
-      ]
-    },
-    {
-      "asset": "panorama-en-US.png",
-      "category": "Length",
-      "from": "Centimetre",
-      "to": "Metre",
-      "values": [
-        "200",
-        "2"
+        "1",
+        "1000"
       ],
       "fonts": [
         "Material Symbols Outlined",
@@ -271,7 +228,7 @@
       ]
     },
     {
-      "asset": "1-length.png",
+      "asset": "panorama-en-US.png",
       "category": "Length",
       "from": "Metre",
       "to": "Centimetre",
@@ -286,13 +243,14 @@
       ]
     },
     {
-      "asset": "2-temperature.png",
-      "category": "Temperature",
-      "from": "Celsius",
-      "to": "Fahrenheit",
-      "values": [
-        "20",
-        "68"
+      "asset": "panorama-en-US.png",
+      "tools": [
+        "ruler",
+        "protractor",
+        "unit_converter",
+        "bill_splitter",
+        "counter",
+        "reaction_test"
       ],
       "fonts": [
         "Material Symbols Outlined",
@@ -301,208 +259,13 @@
       ]
     },
     {
-      "asset": "3-mass.png",
+      "asset": "panorama-en-US.png",
       "category": "Mass",
       "from": "Kilogram",
       "to": "Pound",
       "values": [
         "2.26796185",
         "5"
-      ],
-      "fonts": [
-        "Material Symbols Outlined",
-        "Material Symbols Rounded",
-        "\"Google Sans Flex\""
-      ]
-    },
-    {
-      "asset": "4-data.png",
-      "category": "Data",
-      "from": "Gigabyte",
-      "to": "Megabyte",
-      "values": [
-        "1",
-        "1000"
-      ],
-      "fonts": [
-        "Material Symbols Outlined",
-        "Material Symbols Rounded",
-        "\"Google Sans Flex\""
-      ]
-    },
-    {
-      "asset": "tablet-strip-en-US.png",
-      "category": "Length",
-      "from": "Metre",
-      "to": "Centimetre",
-      "values": [
-        "1",
-        "100"
-      ],
-      "fonts": [
-        "Material Symbols Outlined",
-        "Material Symbols Rounded",
-        "\"Google Sans Flex\""
-      ]
-    },
-    {
-      "asset": "tablet-strip-en-US.png",
-      "category": "Temperature",
-      "from": "Celsius",
-      "to": "Fahrenheit",
-      "values": [
-        "20",
-        "68"
-      ],
-      "fonts": [
-        "Material Symbols Outlined",
-        "Material Symbols Rounded",
-        "\"Google Sans Flex\""
-      ]
-    },
-    {
-      "asset": "tablet-strip-en-US.png",
-      "category": "Mass",
-      "from": "Kilogram",
-      "to": "Pound",
-      "values": [
-        "2.26796185",
-        "5"
-      ],
-      "fonts": [
-        "Material Symbols Outlined",
-        "Material Symbols Rounded",
-        "\"Google Sans Flex\""
-      ]
-    },
-    {
-      "asset": "tablet-strip-en-US.png",
-      "category": "Data",
-      "from": "Gigabyte",
-      "to": "Megabyte",
-      "values": [
-        "1",
-        "1000"
-      ],
-      "fonts": [
-        "Material Symbols Outlined",
-        "Material Symbols Rounded",
-        "\"Google Sans Flex\""
-      ]
-    },
-    {
-      "asset": "1-length.png",
-      "category": "Length",
-      "from": "Metre",
-      "to": "Centimetre",
-      "values": [
-        "1",
-        "100"
-      ],
-      "fonts": [
-        "Material Symbols Outlined",
-        "Material Symbols Rounded",
-        "\"Google Sans Flex\""
-      ]
-    },
-    {
-      "asset": "2-temperature.png",
-      "category": "Temperature",
-      "from": "Celsius",
-      "to": "Fahrenheit",
-      "values": [
-        "20",
-        "68"
-      ],
-      "fonts": [
-        "Material Symbols Outlined",
-        "Material Symbols Rounded",
-        "\"Google Sans Flex\""
-      ]
-    },
-    {
-      "asset": "3-mass.png",
-      "category": "Mass",
-      "from": "Kilogram",
-      "to": "Pound",
-      "values": [
-        "2.26796185",
-        "5"
-      ],
-      "fonts": [
-        "Material Symbols Outlined",
-        "Material Symbols Rounded",
-        "\"Google Sans Flex\""
-      ]
-    },
-    {
-      "asset": "4-data.png",
-      "category": "Data",
-      "from": "Gigabyte",
-      "to": "Megabyte",
-      "values": [
-        "1",
-        "1000"
-      ],
-      "fonts": [
-        "Material Symbols Outlined",
-        "Material Symbols Rounded",
-        "\"Google Sans Flex\""
-      ]
-    },
-    {
-      "asset": "desktop-strip-en-US.png",
-      "category": "Length",
-      "from": "Metre",
-      "to": "Centimetre",
-      "values": [
-        "1",
-        "100"
-      ],
-      "fonts": [
-        "Material Symbols Outlined",
-        "Material Symbols Rounded",
-        "\"Google Sans Flex\""
-      ]
-    },
-    {
-      "asset": "desktop-strip-en-US.png",
-      "category": "Temperature",
-      "from": "Celsius",
-      "to": "Fahrenheit",
-      "values": [
-        "20",
-        "68"
-      ],
-      "fonts": [
-        "Material Symbols Outlined",
-        "Material Symbols Rounded",
-        "\"Google Sans Flex\""
-      ]
-    },
-    {
-      "asset": "desktop-strip-en-US.png",
-      "category": "Mass",
-      "from": "Kilogram",
-      "to": "Pound",
-      "values": [
-        "2.26796185",
-        "5"
-      ],
-      "fonts": [
-        "Material Symbols Outlined",
-        "Material Symbols Rounded",
-        "\"Google Sans Flex\""
-      ]
-    },
-    {
-      "asset": "desktop-strip-en-US.png",
-      "category": "Data",
-      "from": "Gigabyte",
-      "to": "Megabyte",
-      "values": [
-        "1",
-        "1000"
       ],
       "fonts": [
         "Material Symbols Outlined",
