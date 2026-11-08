@@ -45,12 +45,13 @@ export const Headline: React.FC<{ t: number; at: number[]; title: string; sub?: 
 };
 
 // ---------------------------------------------------------------------------------------------------
-// Water: on every note a sound wave leaves both groups of speaker holes. Material's expressive style, not
-// hairlines: each wave is a thick rounded band in one of the world's tones that thins as it travels, and the
-// bubbles it pushes are flat tonal circles with one highlight, which drift up, wobble and pop.
+// Water, as the Water Eject listing draws it: on every note a set of three thin arcs with a soft glow leaves
+// the speaker edge, glass bubbles (a clear centre, a tinted rim, a highlight and a crescent) rise off the
+// fronts, and on the strong notes droplets are thrown out of the grille and fall.
 
-/** Material elevation, used by every lifted surface in the film (phones, receipt, tiles). */
+/** Material elevation, used by every lifted surface in the film (phones, receipt, tiles, chips). */
 export const ELEVATION = {
+  1: "0 1px 2px rgba(30,24,16,.10), 0 4px 10px rgba(30,24,16,.08)",
   2: "0 1px 3px rgba(30,24,16,.10), 0 10px 24px rgba(30,24,16,.10)",
   3: "0 2px 6px rgba(30,24,16,.10), 0 22px 44px rgba(30,24,16,.14)",
 };
@@ -64,37 +65,113 @@ const arcPath = (at: [number, number], d: [number, number], r: number, spread: n
   return `M ${pts.map((q) => q.map((v) => v.toFixed(1)).join(" ")).join(" L ")}`;
 };
 
-export const Bubble: React.FC<{ x: number; y: number; r: number; fill: string; rim: string; opacity?: number }> = ({ x, y, r, fill, rim, opacity = 1 }) => (
+/** The listing's glass bubble; `id` names the shared gradient in the enclosing svg. */
+export const Bubble: React.FC<{ x: number; y: number; r: number; rim: string; id?: string; opacity?: number }> = ({ x, y, r, rim, id = "tt-glass", opacity = 1 }) => (
   <g opacity={opacity}>
-    <circle cx={x} cy={y} r={r} fill={fill} />
-    <circle cx={x} cy={y} r={r - Math.max(2, r * 0.12) / 2} fill="none" stroke={rim} strokeWidth={Math.max(2, r * 0.12)} opacity=".55" />
-    <circle cx={x - r * 0.34} cy={y - r * 0.34} r={r * 0.2} fill="#FFFFFF" />
+    <circle cx={x} cy={y} r={r} fill={`url(#${id})`} stroke={rim} strokeOpacity=".65" strokeWidth={Math.max(1.6, r * 0.09)} />
+    <ellipse cx={x - r * 0.36} cy={y - r * 0.4} rx={r * 0.26} ry={r * 0.16} fill="#FFFFFF" transform={`rotate(-35 ${x - r * 0.36} ${y - r * 0.4})`} />
+    <path d={`M ${x + r * 0.55} ${y + r * 0.2} A ${r * 0.7} ${r * 0.7} 0 0 1 ${x + r * 0.1} ${y + r * 0.62}`} fill="none" stroke="#FFFFFF" strokeWidth={Math.max(1.2, r * 0.08)} strokeOpacity=".85" strokeLinecap="round" />
   </g>
 );
+export const GlassDefs: React.FC<{ tint: string; id?: string }> = ({ tint, id = "tt-glass" }) => (
+  <defs>
+    <radialGradient id={id} cx=".5" cy=".5" r=".5">
+      <stop offset=".62" stopColor="#FFFFFF" stopOpacity=".18" />
+      <stop offset=".9" stopColor={tint} stopOpacity=".6" />
+      <stop offset="1" stopColor="#FFFFFF" stopOpacity=".95" />
+    </radialGradient>
+    <filter id={`${id}-glow`} x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur stdDeviation="7" /></filter>
+  </defs>
+);
 
-export const SoundWaves: React.FC<{ t: number; onsets: number[]; from: { at: [number, number]; direction: [number, number] }[]; tones: string[]; rim: string; bubble: string; reach?: number; spread?: number }> = ({ t, onsets, from, tones, rim, bubble, reach = 420, spread = 58 }) => (
-  <svg aria-hidden width={1920} height={1080} style={{ position: "absolute", inset: 0, zIndex: 5, pointerEvents: "none", overflow: "visible" }}>
-    {onsets.flatMap((o, k) => {
-      if (t < o || t > o + 2.2) return [];
-      const p = enter(clamp((t - o) / 1.3)), r = 24 + p * reach, fade = 1 - clamp((t - o - 0.55) / 0.75), tone = tones[k % tones.length];
-      return from.flatMap(({ at, direction: d }, s) => {
-        const n = [-d[1], d[0]];
-        // Two bubbles per side ride the front out, then rise on their own and pop.
-        const bubbles = [-22, 26].map((deg, b) => {
-          const a = ((deg + (s ? -10 : 10) + ((k * 23) % 14)) * Math.PI) / 180, rise = clamp((t - o - 0.35) / 1.6), rr = r * 0.92 + b * 14;
-          const out = 46 + enter(clamp((t - o) / 0.9)) * reach * 0.85 + b * 18;
-          const x = at[0] + out * (d[0] * Math.cos(a) + n[0] * Math.sin(a)) + Math.sin((t - o) * 5 + k + b) * 8 * rise;
-          const y = at[1] + out * (d[1] * Math.cos(a) + n[1] * Math.sin(a)) - rise * rise * 220;
-          const popAt = 1.55 + b * 0.2, popP = clamp((t - o - popAt) / 0.18), size = (b ? 16 : 24) * (0.5 + 0.5 * pop(t, o + 0.05, 10, 200)) * (1 + popP * 0.5);
-          return { x, y, size, opacity: 1 - popP, key: `${rr}` };
+const hash = (n: number) => { const x = Math.sin(n * 127.1 + 311.7) * 43758.5453; return x - Math.floor(x); };
+
+export const SoundWaves: React.FC<{ t: number; onsets: number[]; from: { at: [number, number]; direction: [number, number] }; line: string; glow: string; tint: string; reach?: number; spread?: number; drops?: number[] }> = ({ t, onsets, from, line, glow, tint, reach = 520, spread = 42, drops = [] }) => {
+  const { at, direction: d } = from, n: [number, number] = [-d[1], d[0]];
+  const along = (r: number, deg: number): [number, number] => { const a = (deg * Math.PI) / 180; return [at[0] + r * (d[0] * Math.cos(a) + n[0] * Math.sin(a)), at[1] + r * (d[1] * Math.cos(a) + n[1] * Math.sin(a))]; };
+  return (
+    <svg aria-hidden width={1920} height={1080} style={{ position: "absolute", inset: 0, zIndex: 5, pointerEvents: "none", overflow: "visible" }}>
+      <GlassDefs tint={tint} />
+      {onsets.flatMap((o, k) => {
+        if (t < o || t > o + 3) return [];
+        const p = enter(clamp((t - o) / 1.4)), fade = 1 - clamp((t - o - 0.5) / 0.9);
+        // Three rings per note, on the listing's spacing.
+        const rings = fade > 0 ? [0, 34, 68].map((gap, i) => {
+          const r = 30 + gap * (0.4 + 0.6 * p) + p * reach * 0.8, path = arcPath(at, d, r, spread - i * 4);
+          return (
+            <g key={`w${k}-${i}`} opacity={fade * (1 - i * 0.18)}>
+              <path d={path} fill="none" stroke={glow} strokeWidth={16} strokeLinecap="round" opacity=".28" filter="url(#tt-glass-glow)" />
+              <path d={path} fill="none" stroke={line} strokeWidth={Math.max(2.5, 5 - i)} strokeLinecap="round" opacity=".75" />
+            </g>
+          );
+        }) : [];
+        // Bubbles leave the front and rise on their own, wobbling, then pop.
+        const bubbles = [0, 1, 2].map((b) => {
+          const deg = (hash(k * 3 + b) * 2 - 1) * spread * 0.9, out = 40 + enter(clamp((t - o) / 1.1)) * reach * (0.35 + 0.45 * hash(k * 7 + b));
+          const life = t - o, rise = clamp((life - 0.3) / 2.2), popAt = 1.7 + hash(k + b * 5) * 0.9, popP = clamp((life - popAt) / 0.16);
+          if (popP >= 1) return null;
+          const [x0, y0] = along(out, deg), r = (8 + hash(k * 11 + b) * 18) * (0.4 + 0.6 * pop(t, o + 0.04 * b, 11, 180)) * (1 + popP * 0.6);
+          return <Bubble key={`b${k}-${b}`} x={x0 + Math.sin(life * 4.2 + k + b) * 10 * rise} y={y0 - rise * rise * 260} r={r} rim={glow} opacity={1 - popP} />;
         });
-        return [
-          fade > 0 && <path key={`w${k}-${s}`} d={arcPath(at, d, r, spread)} fill="none" stroke={tone} strokeWidth={mix(34, 10, p)} strokeLinecap="round" opacity={fade} />,
-          ...bubbles.map((q, b) => q.opacity > 0 && <Bubble key={`b${k}-${s}-${b}`} x={q.x} y={q.y} r={q.size} fill={bubble} rim={rim} opacity={q.opacity} />),
-        ];
-      });
+        return [...rings, ...bubbles];
+      })}
+      {drops.flatMap((o, k) => {
+        if (t < o || t > o + 1.6) return [];
+        return [0, 1, 2, 3, 4].map((j) => {
+          const life = t - o, deg = (hash(k * 13 + j) * 2 - 1) * spread, v = 700 + hash(j * 3 + k) * 600;
+          const [ux, uy] = along(1, deg).map((c, i) => c - at[i]) as [number, number];
+          const x = at[0] + ux * v * life, y = at[1] + uy * v * life + 900 * life * life, size = 9 + hash(k + j * 17) * 9;
+          const vx = ux * v, vy = uy * v + 1800 * life, angle = (Math.atan2(vy, vx) * 180) / Math.PI - 90, fade = 1 - clamp((life - 0.9) / 0.6);
+          return <path key={`d${k}-${j}`} d={`M 0 ${-size * 1.5} C ${size * 0.55} ${-size * 0.4} ${size} 0 ${size} ${size * 0.35} A ${size} ${size} 0 0 1 ${-size} ${size * 0.35} C ${-size} 0 ${-size * 0.55} ${-size * 0.4} 0 ${-size * 1.5} Z`} fill={line} opacity={0.85 * fade} transform={`translate(${x.toFixed(1)} ${y.toFixed(1)}) rotate(${(angle + 180).toFixed(1)})`} />;
+        });
+      })}
+    </svg>
+  );
+};
+
+// ---------------------------------------------------------------------------------------------------
+// Decoration, as every listing screenshot has it: small MaterialShapes in the world's tones scattered over
+// the open ground, each popping in on its own spring, then turning and floating slowly.
+
+const DECOR_SHAPES = ["sunny", "flower", "gem", "clover_4leaf", "soft_burst", "cookie_6sided", "very_sunny", "clover_8leaf", "pill", "cookie_4sided", "burst", "bun"];
+export type Box = { left: number; top: number; right: number; bottom: number };
+export const decorPieces = (seed: number, count: number, avoid: Box[], colors: string[]) => {
+  let s = seed >>> 0 || 1;
+  const rand = () => ((s = (Math.imul(s, 1664525) + 1013904223) >>> 0) / 4294967296);
+  const out: { x: number; y: number; size: number; name: string; color: string; spin: number; delay: number }[] = [];
+  for (let tries = 0; out.length < count && tries < count * 60; tries++) {
+    const big = out.length < 3, size = big ? 110 + rand() * 70 : 40 + rand() * 46, r = size / 2;
+    let best: { x: number; y: number; d: number } | undefined;
+    for (let c = 0; c < 16; c++) {
+      const x = 40 + r + rand() * (1920 - 80 - 2 * r), y = 40 + r + rand() * (1080 - 80 - 2 * r);
+      if (avoid.some((a) => x + r > a.left && x - r < a.right && y + r > a.top && y - r < a.bottom)) continue;
+      const d = Math.min(Infinity, ...out.map((p) => Math.hypot(p.x - x, p.y - y) - p.size / 2 - r));
+      if (!best || d > best.d) best = { x, y, d };
+    }
+    if (!best || best.d < 40) continue;
+    out.push({ x: best.x, y: best.y, size, name: DECOR_SHAPES[Math.floor(rand() * DECOR_SHAPES.length)], color: colors[Math.floor(rand() * colors.length)], spin: (rand() * 2 - 1) * 14, delay: rand() * 0.5 });
+  }
+  return out;
+};
+export const Decor: React.FC<{ t: number; start: number; pieces: ReturnType<typeof decorPieces>; z?: number }> = ({ t, start, pieces, z = 1 }) => (
+  <div style={{ position: "absolute", inset: 0, zIndex: z, pointerEvents: "none" }}>
+    {pieces.map((q, i) => {
+      const p = pop(t, start + 0.15 + q.delay, 10, 170), size = q.size * p;
+      if (size <= 0.5) return null;
+      const fy = Math.sin((t + i) * 1.3) * 6, fx = Math.cos((t + i * 2) * 0.9) * 4;
+      return <Shape key={i} name={q.name} x={q.x - size / 2 + fx} y={q.y - size / 2 + fy} size={size} color={q.color} rotate={i * 37 + (t - start) * q.spin + (1 - p) * -90} />;
     })}
-  </svg>
+  </div>
+);
+
+// ---------------------------------------------------------------------------------------------------
+// Material chips: filter chips (selected shows a check) and assist chips, drawn as the app draws them.
+
+export const Chip: React.FC<{ label: string; selected?: boolean; color: string; container: string; outline: string; size?: number; style?: React.CSSProperties }> = ({ label, selected, color, container, outline, size = 30, style }) => (
+  <div style={{ display: "inline-flex", alignItems: "center", gap: size * 0.3, height: size * 1.9, padding: `0 ${size * 0.62}px 0 ${selected ? size * 0.42 : size * 0.62}px`, borderRadius: size * 0.5, boxSizing: "border-box", background: selected ? container : "transparent", border: selected ? "none" : `2px solid ${outline}`, color, fontFamily: FONT, fontSize: size, fontWeight: 560, whiteSpace: "nowrap", ...style }}>
+    {selected && <svg width={size * 0.9} height={size * 0.9} viewBox="0 0 24 24"><path d="M5 12.5 l4.5 4.5 L19 7.5" fill="none" stroke={color} strokeWidth="2.6" strokeLinecap="round" strokeLinejoin="round" /></svg>}
+    {label}
+  </div>
 );
 
 /**
@@ -114,56 +191,48 @@ export const Ripples: React.FC<{ t: number; onsets: number[]; at: [number, numbe
 // ---------------------------------------------------------------------------------------------------
 // Ruler and Protractor: the listing's artwork, with a slide and a live arm.
 
-export const Ruler: React.FC<{ x: number; y: number; width: number; angle: number; ticks?: number }> = ({ x, y, width, angle, ticks = 1 }) => {
-  const n = Math.floor((width - 48) / 12), shown = Math.floor(n * clamp(ticks));
+export const Ruler: React.FC<{ x: number; y: number; width: number; angle: number; ticks?: number; band?: number; accent?: string }> = ({ x, y, width, angle, ticks = 1, band = 0, accent = "#8F5700" }) => {
+  const n = Math.floor((width - 56) / 12), shown = Math.floor((n + 1) * clamp(ticks));
   return (
     <g transform={`translate(${x} ${y}) rotate(${angle})`}>
-      <rect x="0" y="10" width={width} height="128" rx="34" fill="#B56D00" opacity=".16" />
-      <rect width={width} height="128" rx="34" fill="#F6B91D" />
-      <path d={`M 30 98 H ${width - 30}`} stroke="#8F5700" opacity=".25" />
-      {Array.from({ length: shown }, (_, i) => <line key={i} x1={28 + i * 12} x2={28 + i * 12} y1="0" y2={i % 10 === 0 ? 64 : i % 5 === 0 ? 44 : 24} stroke="#654000" strokeWidth={i % 5 ? 1.6 : 2.8} />)}
-    </g>
-  );
-};
-
-export const Protractor: React.FC<{ x: number; y: number; r: number; tilt?: number; arm: number }> = ({ x, y, r, tilt = 0, arm }) => {
-  const a = (-arm * Math.PI) / 180;
-  return (
-    <g transform={`translate(${x} ${y}) rotate(${tilt})`}>
-      <path d={`M ${-r} 0 A ${r} ${r} 0 0 1 ${r} 0 Z`} transform="translate(0 10)" fill="#8F5700" opacity=".12" />
-      <path d={`M ${-r} 0 A ${r} ${r} 0 0 1 ${r} 0 Z`} fill="#FDE7A2" />
-      <path d={`M ${-r * 0.65} 0 A ${r * 0.65} ${r * 0.65} 0 0 1 ${r * 0.65} 0`} stroke="#C48B24" strokeWidth="2" fill="none" />
-      {Array.from({ length: 37 }, (_, i) => { const t = Math.PI + (i * Math.PI) / 36, o = r - 14, n = o - (i % 3 ? 12 : 28); return <line key={i} x1={Math.cos(t) * o} y1={Math.sin(t) * o} x2={Math.cos(t) * n} y2={Math.sin(t) * n} stroke="#8F5700" strokeWidth={i % 3 ? 1.6 : 2.8} />; })}
-      <path d={`M ${r * 0.8} 0 H 0 L ${r * 0.8 * Math.cos(a)} ${r * 0.8 * Math.sin(a)}`} fill="none" stroke="#8F5700" strokeWidth="6" strokeLinecap="round" strokeLinejoin="round" />
-      <path d={`M ${r * 0.3} 0 A ${r * 0.3} ${r * 0.3} 0 0 0 ${r * 0.3 * Math.cos(a)} ${r * 0.3 * Math.sin(a)}`} fill="none" stroke="#F6A800" strokeWidth="5" />
-      <circle r="11" fill="#8F5700" />
-      <text x={r * 0.36 * Math.cos(a / 2)} y={r * 0.36 * Math.sin(a / 2) - 12} fill="#8F5700" fontFamily={FONT} fontWeight={650} fontSize={r * 0.16}>{Math.round(arm)}°</text>
+      <rect x="0" y="12" width={width} height="136" rx="36" fill="#B56D00" opacity=".16" />
+      <rect width={width} height="136" rx="36" fill="#F6B91D" />
+      {band > 0 && <rect x="28" y="0" width={band * (width - 56)} height="136" fill={accent} opacity=".16" />}
+      {band > 0 && <rect x={28 + band * (width - 56) - 3} y="-14" width="6" height="164" rx="3" fill={accent} />}
+      {Array.from({ length: shown }, (_, i) => <line key={i} x1={28 + i * 12} x2={28 + i * 12} y1="0" y2={i % 10 === 0 ? 66 : i % 5 === 0 ? 46 : 26} stroke="#654000" strokeWidth={i % 5 ? 1.8 : 3} strokeLinecap="round" />)}
+      {Array.from({ length: Math.floor(shown / 10) + 1 }, (_, k) => k > 0 && <text key={k} x={28 + k * 120} y="98" textAnchor="middle" fontFamily={FONT} fontWeight={600} fontSize="26" fill="#654000">{k}</text>)}
     </g>
   );
 };
 
 // ---------------------------------------------------------------------------------------------------
-// Unit Converter: two units on MaterialShapes with swap arrows between them.
+// Unit Converter: two units on MaterialShapes with the swap arrows between them; on each category change both
+// cards flip over (the content changes at the edge-on moment) and take the next pair's shapes.
 
-export const UnitPair: React.FC<{ a: { x: number; y: number; label: string; value: string; color: string; shape: string }; b: { x: number; y: number; label: string; value: string; color: string; shape: string }; ink: string; arrows: string; turn: number; size?: number }> = ({ a, b, ink, arrows, turn, size = 300 }) => {
-  const unit = (u: typeof a, k: string) => (
-    <div key={k} style={{ position: "absolute", left: u.x - size / 2, top: u.y - size / 2, width: size, height: size, zIndex: 4 }}>
-      <Shape name={u.shape} x={0} y={0} size={size} color={u.color} rotate={12} />
-      <div style={{ position: "absolute", inset: 0, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", fontFamily: FONT, color: ink }}>
-        <div style={{ fontSize: size * 0.26, fontWeight: 650, letterSpacing: -2, lineHeight: 1 }}>{u.value}</div>
-        <div style={{ fontSize: size * 0.15, fontWeight: 560, marginTop: 8 }}>{u.label}</div>
+export type Unit = { value: string; label: string; shape: string; color: string };
+export const UnitPair: React.FC<{ cx: number; cy: number; gap: number; a: Unit; b: Unit; flip: number; ink: string; arrows: string; turn: number; size?: number }> = ({ cx, cy, gap, a, b, flip, ink, arrows, turn, size = 300 }) => {
+  const unit = (u: Unit, x: number, k: string, lag: number) => {
+    const f = clamp(flip - lag), sx = Math.abs(Math.cos(f * Math.PI));
+    return (
+      <div key={k} style={{ position: "absolute", left: x - size / 2, top: cy - size / 2, width: size, height: size, zIndex: 4, transform: `scaleX(${Math.max(0.02, sx).toFixed(3)}) rotate(${(f * 30).toFixed(1)}deg)` }}>
+        <Shape name={u.shape} x={0} y={0} size={size} color={u.color} rotate={12} />
+        <div style={{ position: "absolute", inset: 0, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", fontFamily: FONT, color: ink }}>
+          <div style={{ fontSize: size * (u.value.length > 4 ? 0.2 : 0.26), fontWeight: 650, letterSpacing: -2, lineHeight: 1 }}>{u.value}</div>
+          <div style={{ fontSize: size * 0.14, fontWeight: 560, marginTop: 8 }}>{u.label}</div>
+        </div>
       </div>
-    </div>
-  );
-  const cx = (a.x + b.x) / 2, cy = (a.y + b.y) / 2;
+    );
+  };
   return (
     <>
-      {unit(a, "a")}
-      {unit(b, "b")}
-      <svg aria-hidden width={1920} height={1080} style={{ position: "absolute", inset: 0, zIndex: 3 }}>
-        <g transform={`translate(${cx} ${cy}) rotate(${turn})`} fill="none" stroke={arrows} strokeWidth="14" strokeLinecap="round" strokeLinejoin="round">
-          <path d="M -110 -26 C -60 -78 60 -78 110 -26" /><path d="M 110 -26 l -40 -6 M 110 -26 l 4 -40" />
-          <path d="M 110 26 C 60 78 -60 78 -110 26" /><path d="M -110 26 l 40 6 M -110 26 l -4 40" />
+      {unit(a, cx - gap / 2, "a", 0)}
+      {unit(b, cx + gap / 2, "b", 0.12)}
+      <svg aria-hidden width={1920} height={1080} style={{ position: "absolute", inset: 0, zIndex: 5 }}>
+        <g transform={`translate(${cx} ${cy}) rotate(${turn})`}>
+          <circle r="62" fill="#FFFFFF" />
+          <g fill="none" stroke={arrows} strokeWidth="9" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M -30 -12 H 28 l -14 -14" /><path d="M 30 12 H -28 l 14 14" />
+          </g>
         </g>
       </svg>
     </>
@@ -191,19 +260,34 @@ export const Receipt: React.FC<{ x: number; y: number; angle: number; t: number;
 // ---------------------------------------------------------------------------------------------------
 // Decision Wheel: the listing's drawn wheel, turning.
 
-export const Wheel: React.FC<{ cx: number; cy: number; r: number; rotation: number; colors: string[]; ground: string; accent: string }> = ({ cx, cy, r, rotation, colors, ground, accent }) => (
-  <svg aria-hidden width={1920} height={1080} style={{ position: "absolute", inset: 0, zIndex: 3 }}>
-    <g transform={`translate(${cx} ${cy}) rotate(${rotation})`}>
-      {Array.from({ length: 6 }, (_, i) => {
-        const a = ((i * 60 - 90) * Math.PI) / 180, b = (((i + 1) * 60 - 90) * Math.PI) / 180;
-        return <path key={i} d={`M 0 0 L ${r * Math.cos(a)} ${r * Math.sin(a)} A ${r} ${r} 0 0 1 ${r * Math.cos(b)} ${r * Math.sin(b)} Z`} fill={colors[i % colors.length]} stroke={ground} strokeWidth="6" />;
-      })}
-      <circle r={r * 0.14} fill={ground} />
-      <circle r={r * 0.045} fill={accent} />
-    </g>
-    <path d={`M ${cx - 30} ${cy - r - 26} h 60 l -30 56 Z`} fill={accent} stroke={accent} strokeWidth="14" strokeLinejoin="round" />
-  </svg>
-);
+/**
+ * The Decision Wheel with its choices: each segment fills and takes its label on its own beat (`shown`, 0..1
+ * per segment); once it settles, the winning segment lifts out and the others step back.
+ */
+export const Wheel: React.FC<{ cx: number; cy: number; r: number; rotation: number; choices: string[]; shown: number[]; colors: string[]; ground: string; ink: string; accent: string; winner?: number; lift?: number }> = ({ cx, cy, r, rotation, choices, shown, colors, ground, ink, accent, winner = -1, lift = 0 }) => {
+  const n = choices.length, seg = 360 / n;
+  return (
+    <svg aria-hidden width={1920} height={1080} style={{ position: "absolute", inset: 0, zIndex: 3, overflow: "visible" }}>
+      <circle cx={cx} cy={cy + 14} r={r + 18} fill="#3A2240" opacity=".08" />
+      <circle cx={cx} cy={cy} r={r + 18} fill={ground} />
+      <g transform={`translate(${cx} ${cy}) rotate(${rotation})`}>
+        {choices.map((label, i) => {
+          const a = ((i * seg - 90) * Math.PI) / 180, b = (((i + 1) * seg - 90) * Math.PI) / 180, mid = (i + 0.5) * seg - 90, m = (mid * Math.PI) / 180;
+          const p = clamp(shown[i] ?? 1), win = i === winner, out = win ? lift * 26 : 0, rr = r * (0.55 + 0.45 * p) + (win ? lift * 14 : 0);
+          return (
+            <g key={i} transform={`translate(${(Math.cos(m) * out).toFixed(1)} ${(Math.sin(m) * out).toFixed(1)})`} opacity={winner >= 0 && !win ? 1 - lift * 0.45 : 1}>
+              <path d={`M 0 0 L ${rr * Math.cos(a)} ${rr * Math.sin(a)} A ${rr} ${rr} 0 0 1 ${rr * Math.cos(b)} ${rr * Math.sin(b)} Z`} fill={win && lift > 0 ? accent : colors[i % colors.length]} opacity={0.25 + 0.75 * p} stroke={ground} strokeWidth="8" strokeLinejoin="round" />
+              <text transform={`rotate(${mid}) translate(${r * 0.62} 0)`} textAnchor="middle" dominantBaseline="central" fontFamily={FONT} fontWeight={650} fontSize={r * 0.13} fill={win && lift > 0 ? "#FFFFFF" : ink} opacity={clamp(p * 2 - 1)}>{label}</text>
+            </g>
+          );
+        })}
+        <circle r={r * 0.15} fill={ground} />
+        <circle r={r * 0.06} fill={accent} />
+      </g>
+      <path d={`M ${cx - 30} ${cy - r - 34} h 60 l -30 58 Z`} fill={accent} stroke={accent} strokeWidth="16" strokeLinejoin="round" />
+    </svg>
+  );
+};
 
 // ---------------------------------------------------------------------------------------------------
 // Confetti: the Decision Wheel listing's blue-noise scatter, thrown out from a point and settling.

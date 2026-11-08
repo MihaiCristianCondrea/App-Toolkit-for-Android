@@ -36,7 +36,7 @@
       ],
       "shape": "soft_burst",
       "title": "Ruler & Protractor",
-      "action": "The yellow world bursts open. The ruler slides in along the bottom, the protractor's arm sweeps to 45 degrees on the beat, matching the phone's Protractor."
+      "action": "The yellow world bursts open. Two phones turn in: the Surface Ruler measures as the drawn ruler's band grows, and the Protractor sweeps to 45 degrees on four beats."
     },
     {
       "id": "unit",
@@ -48,7 +48,7 @@
       ],
       "shape": "cookie_6sided",
       "title": "Unit Converter",
-      "action": "The mint world opens. 1 m becomes 100 cm, the shapes swap places on 14.0 and the pair becomes 20 °C and 68 °F."
+      "action": "The mint world opens. Five categories, one per beat: the chip selects it, the unit cards flip to its pair (1 m = 100 cm, 500 g = 0.5 kg, 20 °C = 68 °F, 2 L = 2000 mL, 1 GB = 1000 MB) and the phone shows the same conversion."
     },
     {
       "id": "bill",
@@ -72,7 +72,7 @@
       ],
       "shape": "flower",
       "title": "Decision Wheel",
-      "action": "The lilac world opens. The wheel spins and settles on 22.5; confetti bursts and the phone shows the pick."
+      "action": "The lilac world opens. The six choices arrive on the wheel one by one, it spins and settles on Music on 22.5, the pick lifts out, confetti bursts and the phone shows the pick."
     },
     {
       "id": "montage",
@@ -132,21 +132,15 @@
     ],
     "rulerSlide": 8.25,
     "protractorSweep": [
-      8.75,
-      9.25,
       9.75,
-      10.25
+      10.25,
+      10.75,
+      11.25
     ],
     "unitHeadline": [
       12.25,
       12.5
     ],
-    "unitCount": [
-      12.5,
-      13.5
-    ],
-    "unitSwap": 14.0,
-    "unitTemperature": 15.0,
     "billHeadline": [
       16.25,
       16.5
@@ -164,11 +158,11 @@
       20.5
     ],
     "wheelSpin": [
-      20.0,
+      21.0,
       22.5
     ],
     "wheelBurst": 22.5,
-    "wheelPick": 23.0,
+    "wheelPick": 22.75,
     "montageTiles": [
       24.0,
       24.25,
@@ -194,7 +188,33 @@
       29.0
     ],
     "endTitle": 28.5,
-    "endPlay": 29.0
+    "endPlay": 29.0,
+    "waterDrops": [
+      4.5,
+      5.5,
+      6.5,
+      7.5
+    ],
+    "rulerMeasure": [
+      8.75,
+      9.75
+    ],
+    "unitCategories": [
+      12.5,
+      13.25,
+      14.0,
+      14.75,
+      15.5
+    ],
+    "wheelChoices": [
+      20.25,
+      20.375,
+      20.5,
+      20.625,
+      20.75,
+      20.875
+    ]
   },
-  "tempo": 120
+  "tempo": 120,
+  "wheelTurn": 1538
 }

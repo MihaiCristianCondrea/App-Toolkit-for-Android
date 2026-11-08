@@ -150,20 +150,21 @@ B.waterWaves.forEach((t, i) => drop(t, 380 + (i % 3) * 90, 1300 + (i % 4) * 160,
 
 // Ruler and Protractor: ticks as the ruler draws its scale, a click on each sweep of the arm.
 for (let k = 0; k < 14; k++) tick(B.rulerSlide + 0.2 + k * 0.065, 0.05, 3000, -0.5 + k / 14);
+for (let k = 0; k < 12; k++) tick(B.rulerMeasure[0] + (k * (B.rulerMeasure[1] - B.rulerMeasure[0])) / 12, 0.04, 2600, -0.4);
 B.protractorSweep.forEach((t, i) => { tick(t, 0.16, 1800 + i * 200); mallet(t, [72, 74, 77, 81][i], 0.1, 0.2); });
 
 // Unit Converter: the count runs up in ticks, the swap whooshes, the temperature lands on a mallet pair.
-for (let k = 0; k < 10; k++) tick(B.unitCount[0] + (k * (B.unitCount[1] - B.unitCount[0])) / 10, 0.05, 2400 + k * 120, 0.3);
-riser(B.unitSwap + 0.3, 0.45, 0.08); mallet(B.unitSwap + 0.3, 81, 0.12, -0.3);
-mallet(B.unitTemperature, 77, 0.12, -0.2); mallet(B.unitTemperature + 0.12, 84, 0.1, 0.2);
+for (let k = 0; k < 10; k++) tick(B.unitCategories[0] + k * 0.05, 0.05, 2400 + k * 120, 0.3);
+B.unitCategories.forEach((t, i) => { if (i) riser(t + 0.2, 0.3, 0.05); mallet(t, [72, 74, 77, 79, 81][i], 0.12, (i - 2) * 0.3); mallet(t + 0.2, [79, 81, 84, 86, 89][i], 0.07, -(i - 2) * 0.3, 8); });
 
 // Tip and Bill Splitter: the receipt prints each line; the share lands on a bell.
 B.billLines.forEach((t, i) => { for (let k = 0; k < 4; k++) tick(t + k * 0.035, 0.05, 1400, 0.4); if (i === 3) bell(t, 81, 0.1, 0.2, 2); });
 
 // Decision Wheel: a ratchet click each time a segment passes the pointer, following the wheel's own easing
-// (Trailer.tsx: spin = 1 - (1 - p)^3 over 1530 degrees), a snare build, then the confetti.
+// (Trailer.tsx: spin = 1 - (1 - p)^3 over timeline.wheelTurn degrees), a snare build, then the confetti. Each choice lands
+// on the wheel with a mallet note first.
 {
-  const [s0, s1] = B.wheelSpin, rot = (t) => (1 - (1 - Math.min(1, Math.max(0, (t - s0) / (s1 - s0)))) ** 3) * 1530 + 15;
+  const [s0, s1] = B.wheelSpin, rot = (t) => (1 - (1 - Math.min(1, Math.max(0, (t - s0) / (s1 - s0)))) ** 3) * tl.wheelTurn;
   let last = Math.floor(rot(s0) / 60);
   for (let t = s0; t < s1; t += 1 / RATE * 48) { const seg = Math.floor(rot(t) / 60); if (seg !== last) { tick(t, 0.13, 1600, -0.2); last = seg; } }
   for (let k = 0; k < 16; k++) { const t = s0 + BAR / 2 + (k * (s1 - s0 - BAR / 2)) / 16; clap(t, 0.04 + k * 0.012); }
@@ -174,6 +175,7 @@ B.billLines.forEach((t, i) => { for (let k = 0; k < 4; k++) tick(t + k * 0.035, 
   // Confetti: a sparkle of mallets falling through the pentatonic.
   [96, 93, 91, 89, 86, 84, 81, 79, 77].forEach((m, i) => mallet(s1 + 0.03 + i * 0.05 + rand() * 0.02, m, 0.07, rand() * 1.4 - 0.7, 9));
   bell(B.wheelPick, 77, 0.12, -0.2, 2.5);
+  B.wheelChoices.forEach((t, i) => mallet(t, [65, 69, 72, 74, 77, 81][i], 0.12, (i - 2.5) * 0.3));
 }
 
 // Montage: a mallet per returning tile, a pop per chip.

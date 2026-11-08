@@ -15,29 +15,29 @@ It replaces the earlier trailers in `app-trailer/` and `trailer-v2/`, which stay
 
 ## Concept and motion rules
 
-**Every tool brings its own world.** The worlds and their objects come from the listings: Water Eject's sound waves and bubbles, the Ruler and Protractor's yellow ruler and protractor, the Unit Converter's m and cm shapes, the Tip and Bill Splitter's receipt and the Decision Wheel's wheel and confetti.
+**Every tool brings its own world.** The worlds and their objects come from the listings: Water Eject's sound waves and bubbles, the Ruler and Protractor's yellow ruler, the Unit Converter's unit shapes and category chips, the Tip and Bill Splitter's receipt and the Decision Wheel's wheel and confetti.
 
 1. Picture and music share one clock: 120 BPM, every scene two bars. The beats are in `src/timeline.json`, and `scripts/compose.mjs` reads the same file, so every motif has its own sound on its own frame: a water drop per wave, a tick per protractor sweep, a print per receipt line, a ratchet click each time a wheel segment passes the pointer, and a mallet sparkle for the confetti.
 2. Each world opens out of a MaterialShape in its colour, growing from a point until it fills the frame; the previous world stays underneath until covered.
 3. The UI is real and truthful: each phone mounts the app's screen from the UI kit in the state its listing shows, in Material-Next's 3D Pixel. The motifs leave the phone: the waves leave the actual speaker holes of the posed phone, the receipt slides out from behind it.
 4. Type rises out of a mask, title then line, on consecutive beats.
-5. Entrances use Material's emphasised decelerate curve; pops use springs; everything else drifts slowly.
-6. Material, not illustration: shapes are MaterialShapes, colours are each world's tonal palette, strokes are thick and rounded, lifted surfaces share two elevation levels (`ELEVATION`), and the sound is drawn as Material draws it: waves are tonal bands that thin as they travel, bubbles are flat tonal circles with one highlight, and the end card's rings are state-layer ripples in each world's container colour.
+5. Phones enter by flying in and turning in 3D on a Material spring (the real 3D Pixel is redrawn for each pose of the turn), then float. Other entrances use Material's emphasised decelerate curve; pops use springs; everything else drifts slowly.
+6. Material, not illustration: shapes are MaterialShapes, colours are each world's tonal palette, strokes are thick and rounded, lifted surfaces share two elevation levels (`ELEVATION`), every world is decorated as its listing is, with small MaterialShapes in its tones that pop in and drift, and the end card's rings are state-layer ripples in each world's container colour. The water keeps the Water Eject listing's own drawing: thin arcs with a soft glow and glass bubbles.
 
 ## Beat sheet
 
 | Time | Picture | Sound |
 | --- | --- | --- |
 | 0 to 4 | One shape per tool arrives on each beat in its listing's colour; the App Toolkit icon pops on 2.5, the shapes swing round it and "App Toolkit, Everyday tools in one app" lands. | Pad and a rising mallet note per shape; a bell for the icon. |
-| 4 to 8 | Water Eject's blue world. The phone leans back so its speaker edge faces the camera; on every note a tonal sound wave leaves the speaker edge and pushes bubbles out, which rise and pop. | The groove starts; a water drop per wave. |
-| 8 to 12 | Ruler and Protractor's yellow world. The ruler slides in and draws its ticks; the protractor arm sweeps to 45 degrees on four beats, matching the phone's Protractor at 45 degrees. | Ticks as the scale draws, a click and a mallet note per sweep. |
-| 12 to 16 | Unit Converter's mint world. 1 m counts up to 100 cm, the shapes swap places on 14.0 and become 20 °C and 68 °F on 15.0; the phone shows 1 metre as 100 centimetres. | Ticks for the count, a whoosh for the swap. |
+| 4 to 8 | Water Eject's blue world. The phone turns in on a spring and lies on its side so the speaker faces the open frame; on every note three glowing arcs leave the speaker edge, glass bubbles rise off them and pop, and on the strong notes droplets are thrown out and fall, as in the listing. | The groove starts; a water drop per wave. |
+| 8 to 12 | Ruler and Protractor's yellow world, with two phones turning in from either side. The drawn ruler slides in and its band grows while the Surface Ruler phone measures the same; then the Protractor phone sweeps live to 45 degrees on four beats. | Ticks as the scale draws and measures, a click and a mallet note per sweep. |
+| 12 to 16 | Unit Converter's mint world. Five categories, one per beat: the filter chip selects it, both unit cards flip to its pair (1 m = 100 cm, 500 g = 0.5 kg, 20 °C = 68 °F, 2 L = 2000 mL, 1 GB = 1000 MB) and the phone shows the same conversion. | A mallet pair per category. |
 | 16 to 20 | Tip and Bill Splitter's peach world. A receipt slides out from behind the phone and prints the bill, the 10% tip and €28.60 per person; the phone shows the same split. | A print per line, a bell for the share. |
-| 20 to 24 | Decision Wheel's lilac world. The wheel spins and settles on 22.5; confetti bursts and flutters, and the phone changes to the pick, Music. | The kick drops out; a ratchet follows the wheel, the build lands on the confetti. |
+| 20 to 24 | Decision Wheel's lilac world. The six choices (Walk, Read, Cook, Draw, Music, Rest) land on the wheel one by one; it spins and settles on Music on 22.5, the winning segment lifts out, a Music chip pops, confetti bursts and the phone shows the pick. | A mallet per choice; the kick drops out, a ratchet follows the wheel, the build lands on the confetti. |
 | 24 to 28 | The five worlds return as tiles, one per beat; "Everyday tools, one app"; more of the app's tools join as chips. | The groove returns; a mallet per tile, a pop per chip. |
 | 28 to 32 | The icon returns; a ripple in each world's colour and confetti leave it; "App Toolkit, Available on Google Play" lands and holds. | The groove stops on F major in bells and fades out. |
 
-Every number and tool name on screen is in the app: the 165 Hz Water Eject sheet, the 45-degree Protractor, the 1 m conversion, the €52.00 bill with a 10% tip split two ways, and the wheel's six choices settled on Music. The chips name tools the app ships (Compass, Bubble Level, Flash Dimmer, Morse and SOS, Counter, Coin Flip, Dice Roll, Random number, Reaction Test, Breathe).
+Every number and tool name on screen is in the app: the 165 Hz Water Eject sheet, the Surface Ruler, the 45-degree Protractor, the five conversions above, the €52.00 bill with a 10% tip split two ways, and the wheel's six choices settled on Music. The chips name tools the app ships (Compass, Bubble Level, Flash Dimmer, Morse and SOS, Counter, Coin Flip, Dice Roll, Random number, Reaction Test, Breathe).
 
 ## Build
 
@@ -63,7 +63,7 @@ npm run master             # 2560 x 1440, after approval
 | `src/timeline.json` | Scenes, hand-off shapes and points, and every beat |
 | `src/theme.ts` | Each world's palette, from its listing's theme |
 | `src/Trailer.tsx` | The eight scenes and the film |
-| `src/motifs/` | Phone, headline, elevation, sound waves, bubbles and ripples, ruler, protractor, unit pair, receipt, wheel, confetti and the shape wipe; `geometry.ts` projects the 3D Pixel (from the Water Eject listing) and `confetti.ts` is the Decision Wheel listing's scatter |
+| `src/motifs/` | Phone, headline, elevation, decoration, chips, sound waves, glass bubbles, droplets and ripples, ruler, unit pair, receipt, wheel, confetti and the shape wipe; `geometry.ts` projects the 3D Pixel (from the Water Eject listing) and `confetti.ts` is the Decision Wheel listing's scatter |
 | `src/LitScreen.tsx`, `src/Shape.tsx` | The UI kit's screens and MaterialShapes, as the listings use them |
 | `scripts/compose.mjs` | The soundtrack, synthesised from the timeline |
 | `scripts/render.mjs` | Frames, preview and master |
