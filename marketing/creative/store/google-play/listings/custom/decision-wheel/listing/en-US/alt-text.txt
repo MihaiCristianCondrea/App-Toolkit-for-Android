@@ -1,0 +1,14 @@
+phone-screenshots/1-wheel.png	Decision Wheel with Pizza, Pasta, Sushi and Salad as four choices
+phone-screenshots/2-result.png	Decision Wheel settled on Sushi, with the pointer aligned to its segment
+phone-screenshots/3-choices.png	Decision Wheel choice entry with Walk, Read, Cook and Draw
+phone-screenshots/4-number.png	Random Number displaying 37 within the range 1 to 100
+phone-screenshots/5-coin.png	Coin Flip settled on Tails
+phone-screenshots/6-dice.png	Dice Roll showing five
+tablet-screenshots/1-wheel.png	Decision Wheel with Pizza, Pasta, Sushi and Salad as four choices on a foldable
+tablet-screenshots/2-result.png	Decision Wheel settled on Sushi, with the pointer aligned to its segment on a foldable
+tablet-screenshots/3-number.png	Random Number displaying 37 within the range 1 to 100 on a foldable
+tablet-screenshots/4-dice.png	Dice Roll showing five on a foldable
+desktop-screenshots/1-wheel.png	Decision Wheel with Pizza, Pasta, Sushi and Salad as four choices in a desktop window
+desktop-screenshots/2-result.png	Decision Wheel settled on Sushi, with the pointer aligned to its segment in a desktop window
+desktop-screenshots/3-number.png	Random Number displaying 37 within the range 1 to 100 in a desktop window
+desktop-screenshots/4-dice.png	Dice Roll showing five in a desktop window

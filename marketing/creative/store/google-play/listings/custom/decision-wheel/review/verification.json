@@ -1,0 +1,522 @@
+[
+ {
+  "index": 1,
+  "id": "wheel",
+  "hard": [],
+  "preferences": [],
+  "intentional": [
+   "shape cookie_12sided sits behind the phone"
+  ],
+  "caption": {
+   "glyphPixels": 16755,
+   "minContrast": 12.95,
+   "contrastP1": 12.95,
+   "pillText": 7.48,
+   "pillPixels": 19481,
+   "interference": 0
+  },
+  "balance": {
+   "geometric": [
+    0.473,
+    0.527
+   ],
+   "pixels": [
+    0.484,
+    0.512
+   ]
+  },
+  "phones": [
+   {
+    "screen": "wheel",
+    "pose": {
+     "pitch": 0,
+     "yaw": -4,
+     "roll": -3,
+     "perspective": 3000,
+     "scale": 1.301,
+     "x": 505.202,
+     "y": 1045.266
+    },
+    "centroid": [
+     0.468,
+     0.544
+    ],
+    "area": 0.371,
+    "box": {
+     "left": 0.162,
+     "top": 0.203,
+     "right": 0.773,
+     "bottom": 0.883
+    }
+   }
+  ],
+  "terms": {
+   "size": 0.0000015217288438009051,
+   "pose": 0
+  }
+ },
+ {
+  "index": 2,
+  "id": "result",
+  "hard": [],
+  "preferences": [],
+  "intentional": [
+   "shape cookie_12sided sits behind the phone"
+  ],
+  "caption": {
+   "glyphPixels": 8539,
+   "minContrast": 12.95,
+   "contrastP1": 12.95,
+   "pillText": 7.48,
+   "pillPixels": 34032,
+   "interference": 0
+  },
+  "balance": {
+   "geometric": [
+    0.519,
+    0.411
+   ],
+   "pixels": [
+    0.523,
+    0.446
+   ]
+  },
+  "phones": [
+   {
+    "screen": "result",
+    "pose": {
+     "pitch": 0,
+     "yaw": 2,
+     "roll": 3,
+     "perspective": 3000,
+     "scale": 1.24,
+     "x": 564.906,
+     "y": 713.299
+    },
+    "centroid": [
+     0.523,
+     0.372
+    ],
+    "area": 0.337,
+    "box": {
+     "left": 0.232,
+     "top": 0.047,
+     "right": 0.815,
+     "bottom": 0.695
+    }
+   }
+  ],
+  "terms": {
+   "size": 0.000027106207242949667,
+   "pose": 0
+  }
+ },
+ {
+  "index": 3,
+  "id": "choices",
+  "hard": [],
+  "preferences": [],
+  "intentional": [
+   "shape cookie_12sided sits behind the phone"
+  ],
+  "caption": {
+   "glyphPixels": 9328,
+   "minContrast": 12.95,
+   "contrastP1": 12.95,
+   "pillText": 7.48,
+   "pillPixels": 23262,
+   "interference": 0
+  },
+  "balance": {
+   "geometric": [
+    0.488,
+    0.548
+   ],
+   "pixels": [
+    0.495,
+    0.545
+   ]
+  },
+  "phones": [
+   {
+    "screen": "choices",
+    "pose": {
+     "pitch": 0,
+     "yaw": 0,
+     "roll": -1,
+     "perspective": 3000,
+     "scale": 1.355,
+     "x": 520,
+     "y": 1088.361
+    },
+    "centroid": [
+     0.481,
+     0.567
+    ],
+    "area": 0.403,
+    "box": {
+     "left": 0.181,
+     "top": 0.216,
+     "right": 0.782,
+     "bottom": 0.918
+    }
+   }
+  ],
+  "terms": {
+   "size": 0.000001088291896329762,
+   "pose": 0
+  }
+ },
+ {
+  "index": 4,
+  "id": "number",
+  "hard": [],
+  "preferences": [],
+  "intentional": [
+   "shape cookie_12sided sits behind the phone"
+  ],
+  "caption": {
+   "glyphPixels": 8713,
+   "minContrast": 12.95,
+   "contrastP1": 12.95,
+   "pillText": 7.48,
+   "pillPixels": 23626,
+   "interference": 0
+  },
+  "balance": {
+   "geometric": [
+    0.512,
+    0.503
+   ],
+   "pixels": [
+    0.515,
+    0.482
+   ]
+  },
+  "phones": [
+   {
+    "screen": "number",
+    "pose": {
+     "pitch": 0,
+     "yaw": -6,
+     "roll": 4,
+     "perspective": 3000,
+     "scale": 1.151,
+     "x": 564.556,
+     "y": 997.268
+    },
+    "centroid": [
+     0.523,
+     0.519
+    ],
+    "area": 0.29,
+    "box": {
+     "left": 0.245,
+     "top": 0.219,
+     "right": 0.8,
+     "bottom": 0.823
+    }
+   }
+  ],
+  "terms": {
+   "size": 0.000008171856943027144,
+   "pose": 0
+  }
+ },
+ {
+  "index": 5,
+  "id": "coin",
+  "hard": [],
+  "preferences": [],
+  "intentional": [
+   "shape cookie_12sided sits behind the phone"
+  ],
+  "caption": {
+   "glyphPixels": 5415,
+   "minContrast": 12.95,
+   "contrastP1": 12.95,
+   "pillText": 7.48,
+   "pillPixels": 34756,
+   "interference": 0
+  },
+  "balance": {
+   "geometric": [
+    0.478,
+    0.511
+   ],
+   "pixels": [
+    0.474,
+    0.465
+   ]
+  },
+  "phones": [
+   {
+    "screen": "coin",
+    "pose": {
+     "pitch": 0,
+     "yaw": 6,
+     "roll": -4,
+     "perspective": 3000,
+     "scale": 1.228,
+     "x": 510.473,
+     "y": 1015.753
+    },
+    "centroid": [
+     0.472,
+     0.529
+    ],
+    "area": 0.33,
+    "box": {
+     "left": 0.176,
+     "top": 0.208,
+     "right": 0.769,
+     "bottom": 0.853
+    }
+   }
+  ],
+  "terms": {
+   "size": 0.000002508318544736235,
+   "pose": 0
+  }
+ },
+ {
+  "index": 6,
+  "id": "dice",
+  "hard": [],
+  "preferences": [],
+  "intentional": [
+   "shape cookie_12sided sits behind the phone"
+  ],
+  "caption": {
+   "glyphPixels": 14230,
+   "minContrast": 12.95,
+   "contrastP1": 12.95,
+   "pillText": 7.48,
+   "pillPixels": 14545,
+   "interference": 0
+  },
+  "balance": {
+   "geometric": [
+    0.502,
+    0.413
+   ],
+   "pixels": [
+    0.492,
+    0.398
+   ]
+  },
+  "phones": [
+   {
+    "screen": "dice",
+    "pose": {
+     "pitch": 0,
+     "yaw": -4,
+     "roll": 3,
+     "perspective": 3000,
+     "scale": 1.183,
+     "x": 555.183,
+     "y": 721.468
+    },
+    "centroid": [
+     0.514,
+     0.376
+    ],
+    "area": 0.306,
+    "box": {
+     "left": 0.236,
+     "top": 0.068,
+     "right": 0.791,
+     "bottom": 0.686
+    }
+   }
+  ],
+  "terms": {
+   "size": 0.00003287342826345927,
+   "pose": 0
+  }
+ },
+ {
+  "index": "tablet 1",
+  "id": "wheel",
+  "hard": [],
+  "preferences": [],
+  "intentional": [],
+  "caption": null,
+  "balance": {
+   "geometric": [
+    0.493
+   ],
+   "pixels": [
+    0.482
+   ]
+  },
+  "device": {
+   "left": 507.735,
+   "top": 73.36500000000001,
+   "right": 1412.2649999999999,
+   "bottom": 1006.635
+  },
+  "shapes": 4
+ },
+ {
+  "index": "tablet 2",
+  "id": "result",
+  "hard": [],
+  "preferences": [],
+  "intentional": [],
+  "caption": null,
+  "balance": {
+   "geometric": [
+    0.498
+   ],
+   "pixels": [
+    0.49
+   ]
+  },
+  "device": {
+   "left": 507.735,
+   "top": 73.36500000000001,
+   "right": 1412.2649999999999,
+   "bottom": 1006.635
+  },
+  "shapes": 4
+ },
+ {
+  "index": "tablet 3",
+  "id": "number",
+  "hard": [],
+  "preferences": [],
+  "intentional": [],
+  "caption": null,
+  "balance": {
+   "geometric": [
+    0.498
+   ],
+   "pixels": [
+    0.491
+   ]
+  },
+  "device": {
+   "left": 507.735,
+   "top": 73.36500000000001,
+   "right": 1412.2649999999999,
+   "bottom": 1006.635
+  },
+  "shapes": 4
+ },
+ {
+  "index": "tablet 4",
+  "id": "dice",
+  "hard": [],
+  "preferences": [],
+  "intentional": [],
+  "caption": null,
+  "balance": {
+   "geometric": [
+    0.502
+   ],
+   "pixels": [
+    0.509
+   ]
+  },
+  "device": {
+   "left": 507.735,
+   "top": 73.36500000000001,
+   "right": 1412.2649999999999,
+   "bottom": 1006.635
+  },
+  "shapes": 4
+ },
+ {
+  "index": "desktop 1",
+  "id": "wheel",
+  "hard": [],
+  "preferences": [],
+  "intentional": [],
+  "caption": null,
+  "balance": {
+   "geometric": [
+    0.492
+   ],
+   "pixels": [
+    0.488
+   ]
+  },
+  "device": {
+   "left": 230.265,
+   "top": 53.39999999999998,
+   "right": 1689.7350000000001,
+   "bottom": 1026.6
+  },
+  "shapes": 4
+ },
+ {
+  "index": "desktop 2",
+  "id": "result",
+  "hard": [],
+  "preferences": [],
+  "intentional": [],
+  "caption": null,
+  "balance": {
+   "geometric": [
+    0.502
+   ],
+   "pixels": [
+    0.504
+   ]
+  },
+  "device": {
+   "left": 230.265,
+   "top": 53.39999999999998,
+   "right": 1689.7350000000001,
+   "bottom": 1026.6
+  },
+  "shapes": 4
+ },
+ {
+  "index": "desktop 3",
+  "id": "number",
+  "hard": [],
+  "preferences": [],
+  "intentional": [],
+  "caption": null,
+  "balance": {
+   "geometric": [
+    0.502
+   ],
+   "pixels": [
+    0.504
+   ]
+  },
+  "device": {
+   "left": 230.265,
+   "top": 53.39999999999998,
+   "right": 1689.7350000000001,
+   "bottom": 1026.6
+  },
+  "shapes": 4
+ },
+ {
+  "index": "desktop 4",
+  "id": "dice",
+  "hard": [],
+  "preferences": [],
+  "intentional": [],
+  "caption": null,
+  "balance": {
+   "geometric": [
+    0.504
+   ],
+   "pixels": [
+    0.512
+   ]
+  },
+  "device": {
+   "left": 230.265,
+   "top": 53.39999999999998,
+   "right": 1689.7350000000001,
+   "bottom": 1026.6
+  },
+  "shapes": 4
+ }
+]

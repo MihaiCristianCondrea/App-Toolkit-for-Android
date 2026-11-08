@@ -1,0 +1,148 @@
+{
+ "shots": [
+  {
+   "id": "wheel",
+   "screens": [
+    "wheel"
+   ],
+   "poses": [
+    {
+     "pitch": 0,
+     "yaw": -4,
+     "roll": -3,
+     "perspective": 3000,
+     "scale": 1.301,
+     "x": 505.202,
+     "y": 1045.266
+    }
+   ],
+   "score": 0,
+   "terms": {
+    "size": 0,
+    "pose": 0
+   },
+   "searched": 81,
+   "rejected": 0
+  },
+  {
+   "id": "result",
+   "screens": [
+    "result"
+   ],
+   "poses": [
+    {
+     "pitch": 0,
+     "yaw": 2,
+     "roll": 3,
+     "perspective": 3000,
+     "scale": 1.24,
+     "x": 564.906,
+     "y": 713.299
+    }
+   ],
+   "score": 0,
+   "terms": {
+    "size": 0,
+    "pose": 0
+   },
+   "searched": 81,
+   "rejected": 0
+  },
+  {
+   "id": "choices",
+   "screens": [
+    "choices"
+   ],
+   "poses": [
+    {
+     "pitch": 0,
+     "yaw": 0,
+     "roll": -1,
+     "perspective": 3000,
+     "scale": 1.355,
+     "x": 520,
+     "y": 1088.361
+    }
+   ],
+   "score": 0,
+   "terms": {
+    "size": 0,
+    "pose": 0
+   },
+   "searched": 81,
+   "rejected": 0
+  },
+  {
+   "id": "number",
+   "screens": [
+    "number"
+   ],
+   "poses": [
+    {
+     "pitch": 0,
+     "yaw": -6,
+     "roll": 4,
+     "perspective": 3000,
+     "scale": 1.151,
+     "x": 564.556,
+     "y": 997.268
+    }
+   ],
+   "score": 0,
+   "terms": {
+    "size": 0,
+    "pose": 0
+   },
+   "searched": 81,
+   "rejected": 0
+  },
+  {
+   "id": "coin",
+   "screens": [
+    "coin"
+   ],
+   "poses": [
+    {
+     "pitch": 0,
+     "yaw": 6,
+     "roll": -4,
+     "perspective": 3000,
+     "scale": 1.228,
+     "x": 510.473,
+     "y": 1015.753
+    }
+   ],
+   "score": 0,
+   "terms": {
+    "size": 0,
+    "pose": 0
+   },
+   "searched": 81,
+   "rejected": 0
+  },
+  {
+   "id": "dice",
+   "screens": [
+    "dice"
+   ],
+   "poses": [
+    {
+     "pitch": 0,
+     "yaw": -4,
+     "roll": 3,
+     "perspective": 3000,
+     "scale": 1.183,
+     "x": 555.183,
+     "y": 721.468
+    }
+   ],
+   "score": 0,
+   "terms": {
+    "size": 0,
+    "pose": 0
+   },
+   "searched": 81,
+   "rejected": 0
+  }
+ ]
+}

@@ -1,0 +1,18 @@
+{
+  "id": "decision-wheel",
+  "audience": "People seeking a simple wheel spinner and random-choice tools for everyday decisions",
+  "targeting": {
+    "url": true,
+    "countries": [],
+    "keywords": "keywords.txt",
+    "googleAds": false
+  },
+  "status": "planned",
+  "log": [
+    {
+      "date": "2026-11-08",
+      "status": "planned",
+      "note": "Prepared custom listing; production availability and Play Console search targeting require confirmation before upload."
+    }
+  ]
+}

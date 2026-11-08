@@ -1,0 +1,16 @@
+Enter your choices. Spin the wheel. See what gets picked.
+
+Decision Wheel in App Toolkit helps you make a small everyday choice when several options sound good. Add between 2 and 12 choices, one per line, then tap Spin the wheel. After the spin, the selected option appears below the wheel.
+
+Your choices, your wheel
+Choose a meal, pick an activity or decide who goes first. Try Pizza, Pasta, Sushi and Salad, or enter the names of a small group. You supply the options; the wheel makes a random pick.
+
+More ways to choose
+• Random Number: Set a whole-number range and generate a result within it.
+• Coin Flip: Flip a virtual coin and see Heads or Tails.
+• Dice Roll: Roll a virtual six-sided die.
+
+Find the tools
+Open App Toolkit and choose Play & Decide. Tap Decision Wheel to enter your options, or open one of the other chance tools.
+
+The wheel supports 2 to 12 choices. These tools are for playful everyday decisions, not prize drawings or decisions that need a verified random process.

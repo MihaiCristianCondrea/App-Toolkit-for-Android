@@ -1,0 +1,105 @@
+{
+  "screenshots": [
+    {
+      "id": "wheel",
+      "lines": [
+        "Spin the wheel",
+        "Let chance decide"
+      ],
+      "highlight": "wheel",
+      "icon": "rotate_right",
+      "alt": "Decision Wheel with Pizza, Pasta, Sushi and Salad as four choices"
+    },
+    {
+      "id": "result",
+      "lines": [
+        "One spin",
+        "One random pick"
+      ],
+      "highlight": "random pick",
+      "icon": "check",
+      "alt": "Decision Wheel settled on Sushi, with the pointer aligned to its segment"
+    },
+    {
+      "id": "choices",
+      "lines": [
+        "Your choices",
+        "Your wheel"
+      ],
+      "highlight": "choices",
+      "icon": "edit",
+      "alt": "Decision Wheel choice entry with Walk, Read, Cook and Draw"
+    },
+    {
+      "id": "number",
+      "lines": [
+        "Pick a random",
+        "number"
+      ],
+      "highlight": "number",
+      "icon": "numbers",
+      "alt": "Random Number displaying 37 within the range 1 to 100"
+    },
+    {
+      "id": "coin",
+      "lines": [
+        "Heads or tails",
+        "Let it flip"
+      ],
+      "highlight": "Heads or tails",
+      "icon": "monetization_on",
+      "alt": "Coin Flip settled on Tails"
+    },
+    {
+      "id": "dice",
+      "lines": [
+        "Roll the dice",
+        "Make a choice"
+      ],
+      "highlight": "dice",
+      "icon": "casino",
+      "alt": "Dice Roll showing five"
+    }
+  ],
+  "tabletScreenshots": [
+    {
+      "id": "wheel",
+      "alt": "Decision Wheel with Pizza, Pasta, Sushi and Salad as four choices on a foldable"
+    },
+    {
+      "id": "result",
+      "alt": "Decision Wheel settled on Sushi, with the pointer aligned to its segment on a foldable"
+    },
+    {
+      "id": "number",
+      "alt": "Random Number displaying 37 within the range 1 to 100 on a foldable"
+    },
+    {
+      "id": "dice",
+      "alt": "Dice Roll showing five on a foldable"
+    }
+  ],
+  "desktopScreenshots": [
+    {
+      "id": "wheel",
+      "alt": "Decision Wheel with Pizza, Pasta, Sushi and Salad as four choices in a desktop window"
+    },
+    {
+      "id": "result",
+      "alt": "Decision Wheel settled on Sushi, with the pointer aligned to its segment in a desktop window"
+    },
+    {
+      "id": "number",
+      "alt": "Random Number displaying 37 within the range 1 to 100 in a desktop window"
+    },
+    {
+      "id": "dice",
+      "alt": "Dice Roll showing five in a desktop window"
+    }
+  ],
+  "featureGraphic": {
+    "brand": "App Toolkit",
+    "title": "Spin the Wheel",
+    "tagline": "Make choosing fun"
+  }
+}
