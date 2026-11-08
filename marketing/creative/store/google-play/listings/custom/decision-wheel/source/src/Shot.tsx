@@ -28,7 +28,7 @@ export const Shot: React.FC<{ index: number; panels: number; debug?: boolean }> 
       {g.poses.map((pose, i) => {
         const [id, state] = SCREENS[g.spec.screens[i]];
         return (
-          <div key={i} style={{ position: "absolute", left: pose.x - FRAME.width / 2, top: pose.y - FRAME.height / 2, width: FRAME.width, height: FRAME.height, zIndex: 1 + i, transform: `rotate(${pose.roll}deg) scale(${pose.scale})`, transformOrigin: "50% 50%", filter: "drop-shadow(0 34px 44px rgba(0,40,48,.26))" }}>
+          <div key={i} style={{ position: "absolute", left: pose.x - FRAME.width / 2, top: pose.y - FRAME.height / 2, width: FRAME.width, height: FRAME.height, zIndex: 1 + i, transform: `rotate(${pose.roll}deg) scale(${pose.scale})`, transformOrigin: "50% 50%", filter: "drop-shadow(0 21px 21px rgba(53,35,62,.18))" }}>
             <LitScreen id={id} state={state} pose={{ yaw: pose.yaw, pitch: pose.pitch, perspective: pose.perspective }} style={{ width: FRAME.width }} scroll={SCROLL[g.spec.screens[i]]} />
           </div>
         );

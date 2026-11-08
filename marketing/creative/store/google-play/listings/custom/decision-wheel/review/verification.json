@@ -3,9 +3,7 @@
   "index": 1,
   "id": "wheel",
   "hard": [],
-  "preferences": [
-   "visual centroid at 0.440 W, outside 0.50 ± 0.05"
-  ],
+  "preferences": [],
   "intentional": [
    "shape flower sits behind the phone"
   ],
@@ -14,112 +12,109 @@
    "minContrast": 12.83,
    "contrastP1": 12.83,
    "pillText": 7.48,
-   "pillPixels": 19481,
+   "pillPixels": 19482,
    "interference": 0
   },
   "balance": {
    "geometric": [
-    0.44,
-    0.512
+    0.504,
+    0.552
    ],
    "pixels": [
-    0.459,
-    0.496
+    0.51,
+    0.534
    ]
   },
   "phones": [
    {
     "screen": "wheel",
     "pose": {
-     "pitch": -6,
-     "yaw": -10,
-     "roll": -5,
+     "pitch": 0,
+     "yaw": -6,
+     "roll": -1,
      "perspective": 3000,
-     "scale": 1.31,
-     "x": 455.169,
-     "y": 1037.282
+     "scale": 1.442,
+     "x": 539.443,
+     "y": 1103.249
     },
     "centroid": [
-     0.423,
-     0.534
+     0.5,
+     0.575
     ],
-    "area": 0.373,
+    "area": 0.455,
     "box": {
-     "left": 0.094,
-     "top": 0.192,
-     "right": 0.742,
-     "bottom": 0.875
+     "left": 0.18,
+     "top": 0.199,
+     "right": 0.819,
+     "bottom": 0.946
     }
    }
   ],
   "terms": {
-   "size": 3.3408996865631855e-8,
-   "goldenX": 7.930683341270688e-12,
-   "goldenY": 0.09285614083523208,
-   "pose": 0.01,
-   "balance": 0.9305990668281358
+   "size": 0.00000337210856705196,
+   "framing": 8.40355852163188e-14,
+   "goldenY": 0.08822438425661268,
+   "pose": 0,
+   "balance": 2.5619347514831968e-11
   }
  },
  {
   "index": 2,
   "id": "result",
   "hard": [],
-  "preferences": [
-   "visual centroid at 0.566 W, outside 0.50 ± 0.05",
-   "balance outside its tolerance (1.06)"
-  ],
+  "preferences": [],
   "intentional": [
    "shape sunny sits behind the phone"
   ],
   "caption": {
    "glyphPixels": 8539,
-   "minContrast": 12.83,
-   "contrastP1": 12.83,
+   "minContrast": 12.61,
+   "contrastP1": 12.61,
    "pillText": 7.48,
    "pillPixels": 34032,
    "interference": 0
   },
   "balance": {
    "geometric": [
-    0.566,
-    0.455
+    0.495,
+    0.44
    ],
    "pixels": [
-    0.527,
-    0.48
+    0.483,
+    0.464
    ]
   },
   "phones": [
    {
     "screen": "result",
     "pose": {
-     "pitch": 14,
-     "yaw": 24,
-     "roll": 5,
+     "pitch": 6,
+     "yaw": 14,
+     "roll": 3,
      "perspective": 3000,
-     "scale": 1.235,
-     "x": 639.716,
-     "y": 790.023
+     "scale": 1.373,
+     "x": 545.279,
+     "y": 785.015
     },
     "centroid": [
-     0.582,
-     0.424
+     0.5,
+     0.415
     ],
-    "area": 0.311,
+    "area": 0.407,
     "box": {
-     "left": 0.284,
-     "top": 0.088,
-     "right": 0.867,
-     "bottom": 0.741
+     "left": 0.177,
+     "top": 0.049,
+     "right": 0.816,
+     "bottom": 0.768
     }
    }
   ],
   "terms": {
-   "size": 2.4029244223378724e-7,
-   "goldenX": 6.036225729606454e-11,
-   "goldenY": 1.3499312745215725e-8,
-   "pose": 0.01,
-   "balance": 1.0606823691880751
+   "size": 0.000004426245301039686,
+   "framing": 6.854471959380336e-11,
+   "goldenY": 0.017544021177537162,
+   "pose": 0.1111111111111111,
+   "balance": 9.830147479583687e-10
   }
  },
  {
@@ -130,8 +125,8 @@
   "intentional": [],
   "caption": {
    "glyphPixels": 9328,
-   "minContrast": 12.83,
-   "contrastP1": 12.83,
+   "minContrast": 12.95,
+   "contrastP1": 12.95,
    "pillText": 7.48,
    "pillPixels": 23262,
    "interference": 0
@@ -139,44 +134,44 @@
   "balance": {
    "geometric": [
     0.501,
-    0.514
+    0.547
    ],
    "pixels": [
     0.507,
-    0.515
+    0.539
    ]
   },
   "phones": [
    {
     "screen": "choices",
     "pose": {
-     "pitch": 4,
-     "yaw": -16,
-     "roll": -3,
+     "pitch": 0,
+     "yaw": 0,
+     "roll": 0,
      "perspective": 3000,
-     "scale": 1.299,
-     "x": 535.873,
-     "y": 1025.976
+     "scale": 1.397,
+     "x": 540,
+     "y": 1099.36
     },
     "centroid": [
-     0.502,
-     0.538
+     0.5,
+     0.573
     ],
-    "area": 0.363,
+    "area": 0.428,
     "box": {
-     "left": 0.202,
-     "top": 0.192,
-     "right": 0.804,
-     "bottom": 0.873
+     "left": 0.199,
+     "top": 0.213,
+     "right": 0.801,
+     "bottom": 0.932
     }
    }
   ],
   "terms": {
-   "size": 0.000016949441844457946,
-   "goldenX": 7.02463541132283e-11,
-   "goldenY": 0.01928702874138738,
-   "pose": 0.01,
-   "balance": 0.0003596646956310786
+   "size": 0.00003845547885000437,
+   "framing": 3.418101704764577e-29,
+   "goldenY": 0.07305383660916405,
+   "pose": 0,
+   "balance": 4.4722135194259716e-29
   }
  },
  {
@@ -195,45 +190,45 @@
   },
   "balance": {
    "geometric": [
-    0.52,
-    0.537
+    0.497,
+    0.546
    ],
    "pixels": [
-    0.515,
-    0.514
+    0.498,
+    0.513
    ]
   },
   "phones": [
    {
     "screen": "number",
     "pose": {
-     "pitch": -10,
-     "yaw": 18,
-     "roll": 3,
+     "pitch": -2,
+     "yaw": -10,
+     "roll": -1,
      "perspective": 3000,
-     "scale": 1.246,
-     "x": 572.601,
-     "y": 1110.022
+     "scale": 1.34,
+     "x": 537.565,
+     "y": 1104.316
     },
     "centroid": [
-     0.525,
-     0.569
+     0.5,
+     0.573
     ],
-    "area": 0.328,
+    "area": 0.392,
     "box": {
-     "left": 0.246,
-     "top": 0.251,
-     "right": 0.82,
-     "bottom": 0.893
+     "left": 0.202,
+     "top": 0.225,
+     "right": 0.794,
+     "bottom": 0.92
     }
    }
   ],
   "terms": {
-   "size": 0.000027952162434921277,
-   "goldenX": 1.2377211319867152e-10,
-   "goldenY": 5.966777376266938e-8,
-   "pose": 0.01,
-   "balance": 0.10080394077855737
+   "size": 0.000011648129989980925,
+   "framing": 3.980815955940247e-10,
+   "goldenY": 0.00006592701326694663,
+   "pose": 0,
+   "balance": 2.5465517492299674e-9
   }
  },
  {
@@ -254,45 +249,45 @@
   },
   "balance": {
    "geometric": [
-    0.475,
-    0.55
+    0.495,
+    0.546
    ],
    "pixels": [
-    0.474,
-    0.496
+    0.487,
+    0.483
    ]
   },
   "phones": [
    {
     "screen": "coin",
     "pose": {
-     "pitch": 10,
-     "yaw": -22,
-     "roll": -5,
+     "pitch": 3,
+     "yaw": 12,
+     "roll": -2,
      "perspective": 3000,
-     "scale": 1.24,
-     "x": 505.114,
-     "y": 1099.826
+     "scale": 1.345,
+     "x": 543.334,
+     "y": 1090.538
     },
     "centroid": [
-     0.476,
-     0.582
+     0.5,
+     0.571
     ],
-    "area": 0.32,
+    "area": 0.393,
     "box": {
-     "left": 0.185,
-     "top": 0.245,
-     "right": 0.777,
-     "bottom": 0.902
+     "left": 0.198,
+     "top": 0.223,
+     "right": 0.808,
+     "bottom": 0.922
     }
    }
   ],
   "terms": {
-   "size": 0.00003413907536497207,
-   "goldenX": 6.874923674832721e-11,
-   "goldenY": 9.249276125505025e-8,
+   "size": 0.000029666814534216633,
+   "framing": 3.976818012023963e-9,
+   "goldenY": 0.000036922219524939246,
    "pose": 0,
-   "balance": 0.08758904627693745
+   "balance": 1.7220670983032968e-9
   }
  },
  {
@@ -303,53 +298,53 @@
   "intentional": [],
   "caption": {
    "glyphPixels": 14230,
-   "minContrast": 12.95,
-   "contrastP1": 12.95,
+   "minContrast": 12.83,
+   "contrastP1": 12.83,
    "pillText": 7.48,
    "pillPixels": 14545,
    "interference": 0
   },
   "balance": {
    "geometric": [
-    0.521,
-    0.403
+    0.498,
+    0.441
    ],
    "pixels": [
-    0.52,
-    0.401
+    0.501,
+    0.419
    ]
   },
   "phones": [
    {
     "screen": "dice",
     "pose": {
-     "pitch": 16,
-     "yaw": 16,
-     "roll": 4,
+     "pitch": 6,
+     "yaw": -8,
+     "roll": 1,
      "perspective": 3000,
-     "scale": 1.249,
-     "x": 574.862,
-     "y": 665.432
+     "scale": 1.338,
+     "x": 538.699,
+     "y": 776.246
     },
     "centroid": [
-     0.526,
-     0.362
+     0.5,
+     0.41
     ],
-    "area": 0.326,
+    "area": 0.39,
     "box": {
-     "left": 0.221,
-     "top": 0.029,
-     "right": 0.813,
-     "bottom": 0.679
+     "left": 0.199,
+     "top": 0.064,
+     "right": 0.791,
+     "bottom": 0.754
     }
    }
   ],
   "terms": {
-   "size": 0.000015337580294583547,
-   "goldenX": 7.698783889077486e-11,
-   "goldenY": 0.026879498805624978,
-   "pose": 0.01,
-   "balance": 0.10176682663792803
+   "size": 0.0000023430048357595507,
+   "framing": 4.1506071518755523e-10,
+   "goldenY": 0.13984043899328308,
+   "pose": 0,
+   "balance": 4.5707730269723973e-10
   }
  },
  {

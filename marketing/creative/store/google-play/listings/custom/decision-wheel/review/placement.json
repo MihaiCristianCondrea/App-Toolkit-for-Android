@@ -13,236 +13,278 @@
   "shots": [
     {
       "id": "wheel",
-      "focus": "wheel",
+      "primaryAnchor": "Projected phone silhouette",
       "pose": {
-        "pitch": -6,
-        "yaw": -10,
-        "roll": -5,
+        "pitch": 0,
+        "yaw": -6,
+        "roll": -1,
         "perspective": 3000,
-        "scale": 1.31,
-        "x": 455.169,
-        "y": 1037.282
+        "scale": 1.442,
+        "x": 539.443,
+        "y": 1103.249
       },
-      "target": [
-        467.523,
-        1186.625
+      "framingTarget": [
+        540,
+        1099.36
       ],
-      "actual": [
-        467.523,
-        1213.746
+      "framingActual": [
+        540,
+        1099.36
       ],
-      "normalized": [
-        0.433,
-        0.632
-      ],
-      "errorPx": [
+      "framingErrorPx": [
         0,
-        27.12
+        0
       ],
+      "focus": "wheel",
+      "guideY": 1186.625,
+      "focusActual": [
+        540.818,
+        1297.061
+      ],
+      "focusNormalized": [
+        0.501,
+        0.676
+      ],
+      "guideOffsetY": 110.436,
       "centroid": [
-        0.423,
-        0.534
+        0.5,
+        0.575
       ],
       "bounds": {
-        "left": 101.70404186219179,
-        "top": 367.7259234171273,
-        "right": 801.697827298621,
-        "bottom": 1679.7926459959585
+        "left": 194.3196453268831,
+        "top": 382.76465134109526,
+        "right": 884.2572101004199,
+        "bottom": 1815.9553261108385
       }
     },
     {
       "id": "result",
-      "focus": "result",
+      "primaryAnchor": "Projected phone silhouette",
       "pose": {
-        "pitch": 14,
-        "yaw": 24,
-        "roll": 5,
+        "pitch": 6,
+        "yaw": 14,
+        "roll": 3,
         "perspective": 3000,
-        "scale": 1.235,
-        "x": 639.716,
-        "y": 790.023
+        "scale": 1.373,
+        "x": 545.279,
+        "y": 785.015
       },
-      "target": [
-        612.477,
-        1186.625
+      "framingTarget": [
+        540,
+        784.64
       ],
-      "actual": [
-        612.476,
-        1186.636
+      "framingActual": [
+        539.999,
+        784.64
       ],
-      "normalized": [
-        0.567,
-        0.618
+      "framingErrorPx": [
+        -0.001,
+        0
       ],
-      "errorPx": [
-        0,
-        0.01
+      "focus": "result",
+      "guideY": 1186.625,
+      "focusActual": [
+        526.201,
+        1235.872
       ],
+      "focusNormalized": [
+        0.487,
+        0.644
+      ],
+      "guideOffsetY": 49.247,
       "centroid": [
-        0.582,
-        0.424
+        0.5,
+        0.415
       ],
       "bounds": {
-        "left": 306.7610926771661,
-        "top": 168.89334943408653,
-        "right": 936.7777593523961,
-        "bottom": 1423.038475026197
+        "left": 191.66270424323037,
+        "top": 93.95250909299489,
+        "right": 881.7342356319209,
+        "bottom": 1475.3281348756018
       }
     },
     {
       "id": "choices",
-      "focus": "wheel",
+      "primaryAnchor": "Projected phone silhouette",
       "pose": {
-        "pitch": 4,
-        "yaw": -16,
-        "roll": -3,
+        "pitch": 0,
+        "yaw": 0,
+        "roll": 0,
         "perspective": 3000,
-        "scale": 1.299,
-        "x": 535.873,
-        "y": 1025.976
+        "scale": 1.397,
+        "x": 540,
+        "y": 1099.36
       },
-      "target": [
+      "framingTarget": [
         540,
-        1186.625
+        1099.36
       ],
-      "actual": [
+      "framingActual": [
         540,
-        1198.985
+        1099.36
       ],
-      "normalized": [
-        0.5,
-        0.624
-      ],
-      "errorPx": [
+      "framingErrorPx": [
         0,
-        12.36
+        0
       ],
+      "focus": "wheel",
+      "guideY": 1186.625,
+      "focusActual": [
+        539.996,
+        1287.119
+      ],
+      "focusNormalized": [
+        0.5,
+        0.67
+      ],
+      "guideOffsetY": 100.494,
       "centroid": [
-        0.502,
-        0.538
+        0.5,
+        0.573
       ],
       "bounds": {
-        "left": 218.31623381003453,
-        "top": 367.8617744923429,
-        "right": 868.1762568305979,
-        "bottom": 1675.9497682451965
+        "left": 215.10542121886817,
+        "top": 408.85298400041404,
+        "right": 864.8945787811318,
+        "bottom": 1789.8670159995859
       }
     },
     {
       "id": "number",
-      "focus": "result",
+      "primaryAnchor": "Projected phone silhouette",
       "pose": {
-        "pitch": -10,
-        "yaw": 18,
-        "roll": 3,
+        "pitch": -2,
+        "yaw": -10,
+        "roll": -1,
         "perspective": 3000,
-        "scale": 1.246,
-        "x": 572.601,
-        "y": 1110.022
+        "scale": 1.34,
+        "x": 537.565,
+        "y": 1104.316
       },
-      "target": [
-        574,
-        1186.625
+      "framingTarget": [
+        540,
+        1099.36
       ],
-      "actual": [
-        574.001,
-        1186.647
+      "framingActual": [
+        539.999,
+        1099.361
       ],
-      "normalized": [
-        0.531,
-        0.618
+      "framingErrorPx": [
+        -0.001,
+        0.001
       ],
-      "errorPx": [
-        0.001,
-        0.022
+      "focus": "result",
+      "guideY": 1186.625,
+      "focusActual": [
+        535.82,
+        1183.606
       ],
+      "focusNormalized": [
+        0.496,
+        0.616
+      ],
+      "guideOffsetY": -3.019,
       "centroid": [
-        0.525,
-        0.569
+        0.5,
+        0.573
       ],
       "bounds": {
-        "left": 265.2845749629672,
-        "top": 481.65666390633214,
-        "right": 885.4643322987696,
-        "bottom": 1714.3771500523962
+        "left": 217.65431743106075,
+        "top": 431.470983899262,
+        "right": 857.5382776177706,
+        "bottom": 1767.250568000752
       }
     },
     {
       "id": "coin",
-      "focus": "coin",
+      "primaryAnchor": "Projected phone silhouette",
       "pose": {
-        "pitch": 10,
-        "yaw": -22,
-        "roll": -5,
+        "pitch": 3,
+        "yaw": 12,
+        "roll": -2,
         "perspective": 3000,
-        "scale": 1.24,
-        "x": 505.114,
-        "y": 1099.826
+        "scale": 1.345,
+        "x": 543.334,
+        "y": 1090.538
       },
-      "target": [
-        506,
-        1186.625
+      "framingTarget": [
+        540,
+        1099.36
       ],
-      "actual": [
-        506,
-        1186.652
+      "framingActual": [
+        540.001,
+        1099.358
       ],
-      "normalized": [
-        0.469,
-        0.618
+      "framingErrorPx": [
+        0.001,
+        -0.002
       ],
-      "errorPx": [
-        0,
-        0.027
+      "focus": "coin",
+      "guideY": 1186.625,
+      "focusActual": [
+        550.55,
+        1188.884
       ],
+      "focusNormalized": [
+        0.51,
+        0.619
+      ],
+      "guideOffsetY": 2.259,
       "centroid": [
-        0.476,
-        0.582
+        0.5,
+        0.571
       ],
       "bounds": {
-        "left": 199.4515757706148,
-        "top": 469.97964213644264,
-        "right": 839.6502331921271,
-        "bottom": 1731.207782046151
+        "left": 213.30806786555635,
+        "top": 428.55918794137665,
+        "right": 873.1228792114721,
+        "bottom": 1770.155906984825
       }
     },
     {
       "id": "dice",
-      "focus": "dice",
+      "primaryAnchor": "Projected phone silhouette",
       "pose": {
-        "pitch": 16,
-        "yaw": 16,
-        "roll": 4,
+        "pitch": 6,
+        "yaw": -8,
+        "roll": 1,
         "perspective": 3000,
-        "scale": 1.249,
-        "x": 574.862,
-        "y": 665.432
+        "scale": 1.338,
+        "x": 538.699,
+        "y": 776.246
       },
-      "target": [
-        574,
-        733.375
+      "framingTarget": [
+        540,
+        784.64
       ],
-      "actual": [
-        574,
-        747.966
+      "framingActual": [
+        540,
+        784.639
       ],
-      "normalized": [
-        0.531,
-        0.39
-      ],
-      "errorPx": [
+      "framingErrorPx": [
         0,
-        14.592
+        -0.001
       ],
+      "focus": "dice",
+      "guideY": 733.375,
+      "focusActual": [
+        534.517,
+        872.413
+      ],
+      "focusNormalized": [
+        0.495,
+        0.454
+      ],
+      "guideOffsetY": 139.038,
       "centroid": [
-        0.526,
-        0.362
+        0.5,
+        0.41
       ],
       "bounds": {
-        "left": 238.49852072221898,
-        "top": 55.12664807714543,
-        "right": 878.365365764292,
-        "bottom": 1303.5132408415193
+        "left": 214.79660355944833,
+        "top": 122.11516774378003,
+        "right": 854.7445601776392,
+        "bottom": 1447.163247605682
       }
     }
   ]
