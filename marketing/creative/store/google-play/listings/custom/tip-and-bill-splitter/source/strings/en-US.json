@@ -1,0 +1,95 @@
+{
+  "screenshots": [
+    {
+      "id": "dinner",
+      "lines": [
+        "Tip and split",
+        "in one place"
+      ],
+      "highlight": "Tip and split",
+      "icon": "calculate",
+      "alt": "Tip and Bill Splitter with an 84.50 USD bill, 15 percent tip, three people and a 32.40 USD share"
+    },
+    {
+      "id": "tip",
+      "lines": [
+        "Choose your tip",
+        "See the total"
+      ],
+      "highlight": "tip",
+      "icon": "calculate",
+      "alt": "A 52 euro bill with the 10 percent tip selected, two people and a 28.60 euro share"
+    },
+    {
+      "id": "friends",
+      "lines": [
+        "Dinner for four",
+        "One clear share"
+      ],
+      "highlight": "share",
+      "icon": "calculate",
+      "alt": "A 126 GBP bill, 10 percent tip and four people, showing 34.65 pounds per person"
+    },
+    {
+      "id": "currency",
+      "lines": [
+        "Your bill",
+        "your currency"
+      ],
+      "highlight": "currency",
+      "icon": "calculate",
+      "alt": "JPY selected for a 4800 yen bill, 10 percent tip and two people, showing 2640 yen each"
+    },
+    {
+      "id": "toolkit",
+      "lines": [
+        "Everyday tools",
+        "in one app"
+      ],
+      "highlight": "tools",
+      "icon": "grid_view",
+      "alt": "The real Measure workspace with Tip and Bill Splitter, Unit Converter and Counter"
+    }
+  ],
+  "tabletScreenshots": [
+    {
+      "id": "dinner",
+      "alt": "USD bill, tip and per-person result on the foldable layout"
+    },
+    {
+      "id": "tip",
+      "alt": "Euro bill with a 10 percent tip and two people on the foldable layout"
+    },
+    {
+      "id": "friends",
+      "alt": "A 126 GBP bill split four ways with a 10 percent tip on the foldable layout"
+    },
+    {
+      "id": "currency",
+      "alt": "A yen bill and whole-yen shares on the foldable layout"
+    }
+  ],
+  "desktopScreenshots": [
+    {
+      "id": "dinner",
+      "alt": "USD bill, tip and per-person result on the desktop layout"
+    },
+    {
+      "id": "tip",
+      "alt": "Euro bill with a 10 percent tip and two people on the desktop layout"
+    },
+    {
+      "id": "friends",
+      "alt": "A 126 GBP bill split four ways with a 10 percent tip on the desktop layout"
+    },
+    {
+      "id": "currency",
+      "alt": "A yen bill and whole-yen shares on the desktop layout"
+    }
+  ],
+  "featureGraphic": {
+    "brand": "App Toolkit",
+    "title": "Tip & Bill Splitter",
+    "tagline": "The tip and every share"
+  }
+}

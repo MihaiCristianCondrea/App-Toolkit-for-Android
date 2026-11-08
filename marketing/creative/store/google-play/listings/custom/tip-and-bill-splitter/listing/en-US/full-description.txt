@@ -1,0 +1,22 @@
+Calculate the tip and see what each person pays. App Toolkit's Tip & Bill Splitter adds a selected tip to your bill and divides the total equally between the people at the table.
+
+Tip and split
+• Enter the bill amount.
+• Choose a 10%, 15% or 20% tip, or turn the tip off.
+• Set the number of people with the field or the plus and minus controls.
+• See the tip amount, total including tip and per-person share together.
+Results update as you change the inputs, so you can check another amount or group size without starting again.
+
+Choose your currency
+Select USD, EUR, GBP, RON, JPY or INR for the bill. Currency selection sets the denomination, formatting and decimal places. It does not convert money or use exchange rates. Enter the bill in the currency you selected.
+
+How it works
+Open Measure in App Toolkit and select Tip & Bill Splitter. Enter the bill, choose the tip and set the number of people. For example, a €52 bill with a 10% tip totals €57.20, or €28.60 each for two people.
+
+Rounding and limits
+The tip is rounded to the currency's decimal places. Each person's share rounds up to cover the total, so collected shares may add up to slightly more than the bill. Yen amounts use whole yen.
+
+This is an equal-share calculator. It does not scan receipts, divide individual items, handle payments or provide tipping rules. Check any included service charge before choosing a tip.
+
+More everyday tools
+App Toolkit also includes Unit Converter and Counter, alongside an on-screen Surface Ruler and Protractor in the Measure workspace.

@@ -1,0 +1,122 @@
+{
+  "captureChecks": 47,
+  "browserResourceErrors": 0,
+  "requiredFontsLoaded": true,
+  "listing": "tip-and-bill-splitter",
+  "lengths": {
+    "title": 27,
+    "short-description": 74,
+    "full-description": 1544
+  },
+  "keywordCandidates": 189,
+  "assetCount": 15,
+  "officialIconPixelIdentical": true,
+  "repeatablePhoneCaptures": 5,
+  "assets": [
+    {
+      "file": "phone-screenshots/1-dinner.png",
+      "width": 2160,
+      "height": 3840,
+      "mode": "RGB",
+      "sha256": "32e9639256ba67f68e705bc034e2898b22b0a8221545dc24f23afc2e5cfcbed3"
+    },
+    {
+      "file": "phone-screenshots/2-tip.png",
+      "width": 2160,
+      "height": 3840,
+      "mode": "RGB",
+      "sha256": "8a045383eb635624c3b4052188cafabef6ce3f25366523db6979c28fb339ecc2"
+    },
+    {
+      "file": "phone-screenshots/3-friends.png",
+      "width": 2160,
+      "height": 3840,
+      "mode": "RGB",
+      "sha256": "5f05120d56d4700187b03618b3d357917ca1515f290a4f4af382198ebd74eccd"
+    },
+    {
+      "file": "phone-screenshots/4-currency.png",
+      "width": 2160,
+      "height": 3840,
+      "mode": "RGB",
+      "sha256": "49c6f5a8699876fda30aed5533433588140c12872666be153181874fa2cdc64e"
+    },
+    {
+      "file": "phone-screenshots/5-toolkit.png",
+      "width": 2160,
+      "height": 3840,
+      "mode": "RGB",
+      "sha256": "2ca4eec3fc390ee56d62ab1c23084e5c7cd482229dcab0b1f2d423ff44f2ed27"
+    },
+    {
+      "file": "tablet-screenshots/1-dinner.png",
+      "width": 3840,
+      "height": 2160,
+      "mode": "RGB",
+      "sha256": "2403505166664ad5679bb14e110f99782ec3280388fe8196c3335120a56c445c"
+    },
+    {
+      "file": "tablet-screenshots/2-tip.png",
+      "width": 3840,
+      "height": 2160,
+      "mode": "RGB",
+      "sha256": "3ea448beb654389fb45a80b05903d580e3e2a5a372ab641091e697341ceae387"
+    },
+    {
+      "file": "tablet-screenshots/3-friends.png",
+      "width": 3840,
+      "height": 2160,
+      "mode": "RGB",
+      "sha256": "3ecf875770b40622faba5a18a6dc89e200d510c6847300e584e461a553b9df98"
+    },
+    {
+      "file": "tablet-screenshots/4-currency.png",
+      "width": 3840,
+      "height": 2160,
+      "mode": "RGB",
+      "sha256": "d7b1d24283353f539e7c93a17605aa92aa94470936bad23232fc2ffa623fce2e"
+    },
+    {
+      "file": "desktop-screenshots/1-dinner.png",
+      "width": 3840,
+      "height": 2160,
+      "mode": "RGB",
+      "sha256": "3b6a93227dd7aa329458e338abd809d9c798c35b5bd258193de38d5b92e56651"
+    },
+    {
+      "file": "desktop-screenshots/2-tip.png",
+      "width": 3840,
+      "height": 2160,
+      "mode": "RGB",
+      "sha256": "ed1cf5eb8eff3b56d2050194fbe381b39602992bf5f0529df01f49baaeba09ce"
+    },
+    {
+      "file": "desktop-screenshots/3-friends.png",
+      "width": 3840,
+      "height": 2160,
+      "mode": "RGB",
+      "sha256": "bcdd81fdb08e43dfe744ed789d61dd98305821800e1204b9a7bcdf102dee4783"
+    },
+    {
+      "file": "desktop-screenshots/4-currency.png",
+      "width": 3840,
+      "height": 2160,
+      "mode": "RGB",
+      "sha256": "5a50bc35542c4ea560dce3bf77a2fd16b4bee1595be51720441afec68e9e84e2"
+    },
+    {
+      "file": "feature-graphic/feature-graphic.png",
+      "width": 1024,
+      "height": 500,
+      "mode": "RGB",
+      "sha256": "12394cbb876f763a807e03526783dfe332ac45124fe6495e627b0bb703e8e800"
+    },
+    {
+      "file": "icon/icon.png",
+      "width": 512,
+      "height": 512,
+      "mode": "RGBA",
+      "sha256": "7c13af83e966a36ab27f188319d32ba65be4262351168102ba81478b417025ec"
+    }
+  ]
+}

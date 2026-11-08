@@ -1,0 +1,88 @@
+{
+  "schemaVersion": "3.0",
+  "campaign": {
+    "slug": "tip-and-bill-splitter",
+    "title": "App Toolkit Tip and Bill Splitter"
+  },
+  "software": "Android Studio",
+  "copy": {
+    "title": "Tip Calculator: App Toolkit",
+    "headline": "The tip and every share",
+    "description": "Calculate a restaurant tip and split a bill equally in App Toolkit. See the tip, total and each person's share, using the selected currency denomination.",
+    "keywords": [
+      "App Toolkit",
+      "Android",
+      "tip calculator",
+      "bill splitter",
+      "gratuity",
+      "restaurant bill",
+      "per person",
+      "equal split",
+      "tip percentage",
+      "currency formatting"
+    ],
+    "hashtags": []
+  },
+  "files": {
+    "../listing/en-US/graphics/phone-screenshots/1-dinner.png": {
+      "title": "App Toolkit: Tip and split in one place",
+      "altText": "Tip and Bill Splitter with an 84.50 USD bill, 15 percent tip, three people and a 32.40 USD share"
+    },
+    "../listing/en-US/graphics/phone-screenshots/2-tip.png": {
+      "title": "App Toolkit: Choose your tip See the total",
+      "altText": "A 52 euro bill with the 10 percent tip selected, two people and a 28.60 euro share"
+    },
+    "../listing/en-US/graphics/phone-screenshots/3-friends.png": {
+      "title": "App Toolkit: Dinner for four One clear share",
+      "altText": "A 126 GBP bill, 10 percent tip and four people, showing 34.65 pounds per person"
+    },
+    "../listing/en-US/graphics/phone-screenshots/4-currency.png": {
+      "title": "App Toolkit: Your bill your currency",
+      "altText": "JPY selected for a 4800 yen bill, 10 percent tip and two people, showing 2640 yen each"
+    },
+    "../listing/en-US/graphics/phone-screenshots/5-toolkit.png": {
+      "title": "App Toolkit: Everyday tools in one app",
+      "altText": "The real Measure workspace with Tip and Bill Splitter, Unit Converter and Counter"
+    },
+    "../listing/en-US/graphics/tablet-screenshots/1-dinner.png": {
+      "title": "App Toolkit: Bill splitting on tablet",
+      "altText": "USD bill, tip and per-person result on the foldable layout"
+    },
+    "../listing/en-US/graphics/tablet-screenshots/2-tip.png": {
+      "title": "App Toolkit: Bill splitting on tablet",
+      "altText": "Euro bill with a 10 percent tip and two people on the foldable layout"
+    },
+    "../listing/en-US/graphics/tablet-screenshots/3-friends.png": {
+      "title": "App Toolkit: Bill splitting on tablet",
+      "altText": "A 126 GBP bill split four ways with a 10 percent tip on the foldable layout"
+    },
+    "../listing/en-US/graphics/tablet-screenshots/4-currency.png": {
+      "title": "App Toolkit: Bill splitting on tablet",
+      "altText": "A yen bill and whole-yen shares on the foldable layout"
+    },
+    "../listing/en-US/graphics/desktop-screenshots/1-dinner.png": {
+      "title": "App Toolkit: Bill splitting on desktop",
+      "altText": "USD bill, tip and per-person result on the desktop layout"
+    },
+    "../listing/en-US/graphics/desktop-screenshots/2-tip.png": {
+      "title": "App Toolkit: Bill splitting on desktop",
+      "altText": "Euro bill with a 10 percent tip and two people on the desktop layout"
+    },
+    "../listing/en-US/graphics/desktop-screenshots/3-friends.png": {
+      "title": "App Toolkit: Bill splitting on desktop",
+      "altText": "A 126 GBP bill split four ways with a 10 percent tip on the desktop layout"
+    },
+    "../listing/en-US/graphics/desktop-screenshots/4-currency.png": {
+      "title": "App Toolkit: Bill splitting on desktop",
+      "altText": "A yen bill and whole-yen shares on the desktop layout"
+    },
+    "../listing/en-US/graphics/feature-graphic/feature-graphic.png": {
+      "title": "Tip Calculator: App Toolkit",
+      "altText": "Tip and Bill Splitter with an illustrated euro dinner bill and an equal per-person share in warm coral"
+    },
+    "../listing/en-US/graphics/icon/icon.png": {
+      "title": "App Toolkit icon",
+      "altText": "A cream toolbox with an amber handle, a wrench and a screwdriver"
+    }
+  }
+}

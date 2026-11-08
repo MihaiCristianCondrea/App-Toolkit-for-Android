@@ -27,6 +27,7 @@ in English (en-US) only for now.
 | [ruler-and-protractor](listings/custom/ruler-and-protractor/README.md) | planned, rollout confirmation required | 5 phone, 4 tablet and 4 desktop screenshots, feature graphic and icon |
 | [decision-wheel](listings/custom/decision-wheel/README.md) | planned, rollout confirmation required | 6 phone, 4 tablet and 4 desktop screenshots, feature graphic and icon |
 | [unit-converter](listings/custom/unit-converter/README.md) | planned, rollout confirmation required | 4 phone, 4 tablet and 4 desktop screenshots, feature graphic and icon |
+| [tip-and-bill-splitter](listings/custom/tip-and-bill-splitter/README.md) | planned, rollout confirmation required | 5 phone, 4 tablet and 4 desktop screenshots, feature graphic and icon |
 
 ## Change a listing
 

@@ -6,6 +6,7 @@
 | [Ruler and Protractor](ruler-and-protractor/README.md) | People who need an on-screen ruler and an interactive protractor for everyday measurements | planned |
 | [Decision Wheel](decision-wheel/README.md) | People wanting a wheel spinner or a random pick for everyday decisions | planned |
 | [Unit Converter](unit-converter/README.md) | People converting everyday length, mass, temperature, volume and decimal storage units | planned |
+| [Tip & Bill Splitter](tip-and-bill-splitter/README.md) | People calculating a restaurant tip and splitting a bill equally between friends | planned |
 
 Each has English copy, keywords and graphics prepared. They stay planned until the app's production rollout is confirmed, the keywords are reviewed in Play Console and the listing is published.
 

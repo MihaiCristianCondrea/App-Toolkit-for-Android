@@ -1,0 +1,23 @@
+{
+  "id": "tip-and-bill-splitter",
+  "audience": "People calculating a restaurant tip and splitting a bill equally between friends",
+  "targeting": {
+    "url": true,
+    "countries": [],
+    "keywords": "keywords.txt",
+    "googleAds": false
+  },
+  "status": "planned",
+  "log": [
+    {
+      "date": "2026-11-08",
+      "status": "planned",
+      "note": "Prepared the restaurant tip and equal bill splitting campaign. Currency denomination and formatting only, no exchange or payment features. Production availability and Play Console keyword targeting require confirmation before upload."
+    },
+    {
+      "date": "2026-11-08",
+      "status": "planned",
+      "note": "Completed 5 phone, 4 foldable and 4 desktop screenshots, the illustrated dinner-bill feature graphic and unchanged official icon. All 15 graphics passed metadata readback and pixel preservation. Five repeated phone captures match exactly. Final layout, contrast, package and listing checks pass. Production availability and search targeting remain unconfirmed. Not uploaded."
+    }
+  ]
+}

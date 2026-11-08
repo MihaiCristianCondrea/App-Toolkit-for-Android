@@ -1,0 +1,134 @@
+{
+ "shots": [
+  {
+   "id": "dinner",
+   "screens": [
+    "dinner"
+   ],
+   "poses": [
+    {
+     "pitch": 1,
+     "yaw": -4,
+     "roll": -2,
+     "perspective": 3000,
+     "scale": 1.379,
+     "x": 540.147,
+     "y": 1071.09
+    }
+   ],
+   "score": 0.1146,
+   "terms": {
+    "size": 0,
+    "balance": 0,
+    "focus": 0.1145,
+    "pose": 0
+   },
+   "searched": 81,
+   "rejected": 0
+  },
+  {
+   "id": "tip",
+   "screens": [
+    "tip"
+   ],
+   "poses": [
+    {
+     "pitch": 2,
+     "yaw": 5,
+     "roll": 2,
+     "perspective": 3000,
+     "scale": 1.668,
+     "x": 521.819,
+     "y": 627.099
+    }
+   ],
+   "score": 0.1859,
+   "terms": {
+    "size": 0.0027,
+    "balance": 0,
+    "focus": 0.1835,
+    "pose": 0
+   },
+   "searched": 81,
+   "rejected": 0
+  },
+  {
+   "id": "friends",
+   "screens": [
+    "friends"
+   ],
+   "poses": [
+    {
+     "pitch": -2,
+     "yaw": 6,
+     "roll": 2,
+     "perspective": 3000,
+     "scale": 1.339,
+     "x": 575.383,
+     "y": 1096.2
+    }
+   ],
+   "score": 0.0339,
+   "terms": {
+    "size": 0,
+    "balance": 0,
+    "focus": 0.0339,
+    "pose": 0
+   },
+   "searched": 81,
+   "rejected": 0
+  },
+  {
+   "id": "currency",
+   "screens": [
+    "currency"
+   ],
+   "poses": [
+    {
+     "pitch": 1,
+     "yaw": -6,
+     "roll": -2,
+     "perspective": 3000,
+     "scale": 1.38,
+     "x": 529.4,
+     "y": 777.312
+    }
+   ],
+   "score": 0.0003,
+   "terms": {
+    "size": 0,
+    "balance": 0,
+    "focus": 0.0003,
+    "pose": 0
+   },
+   "searched": 81,
+   "rejected": 0
+  },
+  {
+   "id": "toolkit",
+   "screens": [
+    "toolkit"
+   ],
+   "poses": [
+    {
+     "pitch": -3,
+     "yaw": 8,
+     "roll": 2,
+     "perspective": 3000,
+     "scale": 1.32,
+     "x": 551.276,
+     "y": 1088.554
+    }
+   ],
+   "score": 0.0017,
+   "terms": {
+    "size": 0,
+    "balance": 0,
+    "focus": 0.0017,
+    "pose": 0
+   },
+   "searched": 81,
+   "rejected": 0
+  }
+ ]
+}
