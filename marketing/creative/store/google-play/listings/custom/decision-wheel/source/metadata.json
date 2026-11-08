@@ -6,9 +6,9 @@
   },
   "software": "Android Studio",
   "copy": {
-    "title": "App Toolkit: Spin the Wheel",
+    "title": "Spin the Wheel: App Toolkit",
     "headline": "A little moment of chance",
-    "description": "Enter choices, spin the wheel and see the result in App Toolkit.",
+    "description": "Add your choices, spin the wheel and let a random pick help you decide.",
     "keywords": [
       "App Toolkit",
       "Android",
@@ -81,7 +81,7 @@
       "altText": "Dice Roll showing five in a desktop window"
     },
     "../listing/en-US/graphics/feature-graphic/feature-graphic.png": {
-      "title": "App Toolkit: Spin the Wheel",
+      "title": "Spin the Wheel: App Toolkit",
       "altText": "Spin the Wheel with a segmented wheel illustration, pointer and decorative confetti"
     },
     "../listing/en-US/graphics/icon/icon.png": {

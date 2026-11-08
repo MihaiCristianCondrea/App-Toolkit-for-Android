@@ -5,7 +5,6 @@ random wheel
 wheel spinner
 spin wheel
 choice wheel
-picker wheel
 spinning wheel
 random choice
 random selector
@@ -70,9 +69,6 @@ random chore picker
 small group picker
 small group wheel
 choose someone from a small group
-classroom names picker
-classroom names wheel
-choose a student from my list
 who goes first
 who goes first wheel
 randomly choose who starts
@@ -144,7 +140,6 @@ food decision wheel
 choose lunch
 choose dinner
 random activity picker
-classroom random picker
 choose between names
 spin wheel with options
 type choices into wheel
@@ -155,3 +150,80 @@ random picker android
 random number android
 coin toss android
 dice roller android
+wheel spin
+spin a wheel
+spin the wheel to decide
+spin wheel to choose
+random wheel spinner
+custom wheel spinner
+make your own wheel
+create a choice wheel
+wheel of options
+option wheel
+choice picker
+choice spinner
+decision spinner
+random spinner
+spinner app
+random option generator
+random choice picker
+decide for me
+decide for me app
+help me choose
+cant decide what to do
+what should i eat
+what should i do today
+what to eat today
+dinner decider
+lunch decider
+food decider
+meal picker
+meal wheel
+restaurant picker
+restaurant wheel
+takeout picker
+date night picker
+date night wheel
+board game picker
+which game to play
+random person picker
+who goes next
+turn picker
+who pays wheel
+tie breaker
+tiebreaker wheel
+break a tie
+settle a tie
+this or that picker
+this or that wheel
+decide between two options
+two option picker
+choose between two things
+random choice from list
+randomly pick from list
+random picker from list
+choose randomly from options
+yes no spinner
+yes no decision
+coin flipper
+coin flip simulator
+toss a coin
+heads or tails flip
+roll the dice
+dice simulator
+virtual dice roller
+d6 roller
+d6 dice
+random number between 1 and 100
+random number between 1 and 10
+pick a random number 1 to 100
+number randomizer
+random integer generator
+random number with range
+coin flip quick settings tile
+dice roll quick settings tile
+quick settings coin flip
+quick settings dice
+app toolkit spin the wheel
+app toolkit random picker
+app toolkit chance tools

@@ -13,6 +13,11 @@
       "date": "2026-11-08",
       "status": "planned",
       "note": "Prepared custom listing; production availability and Play Console search targeting require confirmation before upload."
+    },
+    {
+      "date": "2026-11-08",
+      "status": "planned",
+      "note": "Final pass: description checked against the Android source (range presets and Quick Settings tiles added), keywords 157 to 229 with 5 rejected (see keyword-review.md), metadata copy aligned with the title, listing README added. Creative unchanged. Not uploaded."
     }
   ]
 }

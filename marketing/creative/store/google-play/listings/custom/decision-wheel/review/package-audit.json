@@ -3,9 +3,9 @@
   "lengths": {
     "title": 27,
     "short-description": 71,
-    "full-description": 1006
+    "full-description": 1126
   },
-  "keywordCandidates": 157,
+  "keywordCandidates": 229,
   "assetCount": 16,
   "officialIconPixelIdentical": true,
   "repeatablePhoneCaptures": 6,
@@ -15,112 +15,112 @@
       "width": 2160,
       "height": 3840,
       "mode": "RGB",
-      "sha256": "f8835ae45b05a369d5ee8e26d3dba5d3aeddc95566e13fe972f71a5cb4c84b6c"
+      "sha256": "b89bec1bd9820c194866407a284e0cea859b276ddc5126a6edd9ae615168d6ef"
     },
     {
       "file": "phone-screenshots/2-result.png",
       "width": 2160,
       "height": 3840,
       "mode": "RGB",
-      "sha256": "e68dab6a9efde632110baa2657cfe0d314d405e29f9d61f65a2774d1880828df"
+      "sha256": "f6b9d386bb172f52b598a511522937ebda0e299a321a54cb41c5e53e57de0fde"
     },
     {
       "file": "phone-screenshots/3-choices.png",
       "width": 2160,
       "height": 3840,
       "mode": "RGB",
-      "sha256": "23bdc190053c85c8894067aca94dd20a4e5af66d63e726169f596d6d4e923ff7"
+      "sha256": "93e0addc6cebb1dcc606f6763582c62221606438b3f2fdb632580ffc114f092a"
     },
     {
       "file": "phone-screenshots/4-number.png",
       "width": 2160,
       "height": 3840,
       "mode": "RGB",
-      "sha256": "00d23703983612aa822d5f2614f2b2e3f725da07d6fbc3536b09d04c8e568d79"
+      "sha256": "9aaa89dc902a07ec0889b1f5788fa34037e19263dad41c02a88c50835f20503b"
     },
     {
       "file": "phone-screenshots/5-coin.png",
       "width": 2160,
       "height": 3840,
       "mode": "RGB",
-      "sha256": "e3d7f73e3ae6597e40d10e38afde61f23e424072c4b135a774808242beaebb16"
+      "sha256": "92c2f1fa0662ad248f79e78f99319ca396d79f58cf69c49490678f041739c7f9"
     },
     {
       "file": "phone-screenshots/6-dice.png",
       "width": 2160,
       "height": 3840,
       "mode": "RGB",
-      "sha256": "847c711ededc393240b693a1d1459c2fd36ad0848c02df59ad7797f24fce5591"
+      "sha256": "e7006d4286497787973ec9172c61016de3b4585fa98682cab3ce7fb906a6b8e1"
     },
     {
       "file": "tablet-screenshots/1-wheel.png",
       "width": 3840,
       "height": 2160,
       "mode": "RGB",
-      "sha256": "5c3ed14fd43d7a8086c8bd91c03a3928fc6fa244a89a1851ae871f570535e186"
+      "sha256": "d3a69b733dd318100e4bec7096583099e9bc3586a3e3179d6bba3af2272fbaf9"
     },
     {
       "file": "tablet-screenshots/2-result.png",
       "width": 3840,
       "height": 2160,
       "mode": "RGB",
-      "sha256": "aac7af9ae9a54db8e2ff478d6174f822586925fe1051b39cd72a47a47dd3aa94"
+      "sha256": "8d6ee0e43cae5c91360ecf10cc0838de88f2a353421695908d48a4ead88f25b7"
     },
     {
       "file": "tablet-screenshots/3-number.png",
       "width": 3840,
       "height": 2160,
       "mode": "RGB",
-      "sha256": "16c175e5f2499b6aa938360b06a50560598fea894e822e5b7727ad9a076925ce"
+      "sha256": "6923d398e143b56f7797f7fa3aaa373ea4a62b680262a9f0bd3ef540fa942050"
     },
     {
       "file": "tablet-screenshots/4-dice.png",
       "width": 3840,
       "height": 2160,
       "mode": "RGB",
-      "sha256": "5ef5d66e63c2239c94ff35ff989b2293cceeadf4c8f8693aad98f2f11a537ec9"
+      "sha256": "f34cf6a1404d236ab6d314bd21e179a4f6160709521b0baf3e77415b617d43af"
     },
     {
       "file": "desktop-screenshots/1-wheel.png",
       "width": 3840,
       "height": 2160,
       "mode": "RGB",
-      "sha256": "ecb555f63f577bee4307c7bd0b2e6b96de1038a07574bc16e30815d0a4991528"
+      "sha256": "a8b857ca806eca02b251b07341b807619b29fc82902ccd162c69fdbef8d79c46"
     },
     {
       "file": "desktop-screenshots/2-result.png",
       "width": 3840,
       "height": 2160,
       "mode": "RGB",
-      "sha256": "73b994c84a328b671138d02fc6ec154d9c9f5435d0c26e84208cc5c3e10d51af"
+      "sha256": "ecdf333bcc78756547c09458712bc361a6c83af5b623cccba22f6f6e2b34abfa"
     },
     {
       "file": "desktop-screenshots/3-number.png",
       "width": 3840,
       "height": 2160,
       "mode": "RGB",
-      "sha256": "5f1ea392bbd817433de458ee0e8f7268d9c1e9f079541a00184029fa882c4bdb"
+      "sha256": "4935d6ebf3c78c4ab865b7a0cf86652134684172e18fc897e340898be812b96b"
     },
     {
       "file": "desktop-screenshots/4-dice.png",
       "width": 3840,
       "height": 2160,
       "mode": "RGB",
-      "sha256": "9dd923c5c310a1b15683c5cc0fb9cea63b169730423a927d06af98f511908bd3"
+      "sha256": "ac2e28cb640b23803709ff1c514b40f2e64031092f8e23539ea8da9efd25b9cc"
     },
     {
       "file": "feature-graphic/feature-graphic.png",
       "width": 1024,
       "height": 500,
       "mode": "RGB",
-      "sha256": "3b34f2c54f20a5d9dc48d0c8d8737cca5fd77e5620d64a5c80ddf0489ed00314"
+      "sha256": "d19070e42d64315a1ec81f9aa4cac3b61c4a25450da9bbc658aedeb809992c7c"
     },
     {
       "file": "icon/icon.png",
       "width": 512,
       "height": 512,
       "mode": "RGBA",
-      "sha256": "5dece531bc3480a84a756ca3386d4f60f5d39adf0d9c6998894aa76a02bebd55"
+      "sha256": "b06992681db9bcd58aa12372017f1ad0dbd054cace1a0700608beed8c1f92751"
     }
   ]
 }
