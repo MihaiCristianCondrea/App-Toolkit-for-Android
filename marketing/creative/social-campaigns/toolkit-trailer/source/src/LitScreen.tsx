@@ -41,7 +41,9 @@ export const LitScreen: React.FC<{
     const handle = delayRender(`Rendering ${id}`);
     ready
       // No-op navigation: a still never follows a tap. Screenshots never show ads.
-      .then(() => mount(ref.current!, id, { go: () => {}, set: () => {}, ...JSON.parse(key), waterCapture: true }, { frame, window, showAds: false }))
+      // A fresh element per pose: re-rendering into the old one would reuse its 3D frame, which then treats
+      // the new pose as motion and draws a soft canvas instead of the sharp picture a still waits for.
+      .then(() => { const host = document.createElement("div"); ref.current!.replaceChildren(host); return mount(host, id, { go: () => {}, set: () => {}, ...JSON.parse(key), waterCapture: true }, { frame, window, showAds: false }); })
       .then(async () => { ref.current!.querySelectorAll("mnw-android-screen").forEach(screen => screen.removeAttribute("interactive")); await document.fonts.ready; await Promise.all([...ref.current!.querySelectorAll("mnw-device-frame")].map(async (frame: any) => { frame.yaw = pose.yaw; frame.pitch = pose.pitch; frame.perspective = pose.perspective ?? 2400; frame.finish = "porcelain"; await frame.updateComplete; if (frame.device === "pixel_9_pro_xl" && !frame.shadowRoot?.querySelector("img.phone")) throw new Error("The 3D Pixel picture is unavailable; refusing a fallback capture."); })); })
       .then(() => Promise.all([...ref.current!.querySelectorAll("img")].map((img) => img.decode())))
       .then(async () => {
