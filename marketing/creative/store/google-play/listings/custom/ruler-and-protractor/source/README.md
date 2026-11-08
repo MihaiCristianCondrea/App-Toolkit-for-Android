@@ -1,10 +1,16 @@
 # Ruler and Protractor creative source
 
-This is a work in progress. The first render contains five phone, four tablet and four desktop screenshots, a feature graphic and an icon. It is not ready to upload: the phone compositions need more variety and the supporting sequence does not yet show Bubble Level. The renderer also logged intermittent font request failures that require investigation.
+Five phone, four tablet and four desktop screenshots, a feature graphic and the official icon are rendered from the Marketing UI. Each phone screenshot contains exactly one Pixel.
 
-The source adapts the speaker-water-eject composition and verification code. It mounts the Marketing UI's ruler, protractor, converter and Measure states. The background uses a pale blue field and a connected graduation line.
+## Art direction
 
-From this directory, run:
+The default App Toolkit listing supplies the cream ground, warm brown typography and amber caption pills. Large pale-yellow MaterialShapes sit behind the phones; smaller amber shapes and fine ruler or angle ornaments provide balance. The application retains its captured palette.
+
+Surface Ruler leads, followed by Protractor, Advanced Ruler, Unit Converter and the Measure workspace. Phone poses vary in scale, position, yaw and roll while retaining the full device and critical UI. The feature graphic uses the same warm shapes and measurement ornaments without a device.
+
+## Render
+
+From this directory:
 
 ```text
 npm ci
@@ -16,4 +22,10 @@ npm run render -- en-US
 npm run metadata
 ```
 
-The verification output and contact sheets are in ignored `output/verify/`. The first full render completed and metadata readback passed. The Google Play listing validator passed, but does not establish visual quality or production availability.
+The composition solver, renderer and verifier share projected geometry and safe-area rules. Verification writes clean and debug contact sheets plus report.json to output/verify/. Rendering stages all graphics before replacing the upload folder.
+
+## Verification
+
+The warm campaign's 13 screenshot compositions passed all hard checks. Phone caption contrast is at least 13.17:1, pill text 5.62:1, with zero measured interference in the caption zones. The closing image has a soft pixel-balance preference at 0.558 W. Its asymmetric composition was inspected visually.
+
+The renderer continues to report an intermittent local WOFF2 request error. Visible type and icons were inspected, but the request error itself remains unresolved. Production availability must be confirmed before upload.

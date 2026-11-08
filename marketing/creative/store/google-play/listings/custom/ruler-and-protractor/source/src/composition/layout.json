@@ -8,20 +8,20 @@
    "poses": [
     {
      "pitch": 0,
-     "yaw": 0,
-     "roll": 0,
+     "yaw": -4,
+     "roll": -3,
      "perspective": 3000,
-     "scale": 1.419,
-     "x": 540,
-     "y": 1069.078
+     "scale": 1.301,
+     "x": 505.202,
+     "y": 1045.266
     }
    ],
    "score": 0,
    "terms": {
-    "width": 0,
-    "perspective": 0
+    "size": 0,
+    "pose": 0
    },
-   "searched": 135,
+   "searched": 81,
    "rejected": 0
   },
   {
@@ -33,19 +33,19 @@
     {
      "pitch": 0,
      "yaw": 0,
-     "roll": 0,
+     "roll": 2,
      "perspective": 3000,
-     "scale": 1.354,
-     "x": 540,
-     "y": 1037.198
+     "scale": 1.255,
+     "x": 570,
+     "y": 1081.688
     }
    ],
    "score": 0,
    "terms": {
-    "width": 0,
-    "perspective": 0
+    "size": 0,
+    "pose": 0
    },
-   "searched": 135,
+   "searched": 81,
    "rejected": 0
   },
   {
@@ -56,20 +56,20 @@
    "poses": [
     {
      "pitch": 0,
-     "yaw": 0,
-     "roll": 0,
+     "yaw": 3,
+     "roll": -2,
      "perspective": 3000,
-     "scale": 1.419,
-     "x": 540,
-     "y": 1069.078
+     "scale": 1.317,
+     "x": 509.848,
+     "y": 1041.101
     }
    ],
    "score": 0,
    "terms": {
-    "width": 0,
-    "perspective": 0
+    "size": 0,
+    "pose": 0
    },
-   "searched": 135,
+   "searched": 81,
    "rejected": 0
   },
   {
@@ -80,20 +80,20 @@
    "poses": [
     {
      "pitch": 0,
-     "yaw": -4,
-     "roll": -2,
+     "yaw": -8,
+     "roll": 5,
      "perspective": 3000,
-     "scale": 1.156,
-     "x": 540.18,
-     "y": 947.245
+     "scale": 1.102,
+     "x": 563.775,
+     "y": 974.204
     }
    ],
    "score": 0,
    "terms": {
-    "width": 0,
-    "perspective": 0
+    "size": 0.0001,
+    "pose": 0
    },
-   "searched": 135,
+   "searched": 81,
    "rejected": 0
   },
   {
@@ -104,20 +104,20 @@
    "poses": [
     {
      "pitch": 0,
-     "yaw": 4,
-     "roll": 2,
+     "yaw": 6,
+     "roll": -4,
      "perspective": 3000,
-     "scale": 1.217,
-     "x": 539.811,
-     "y": 977.746
+     "scale": 1.209,
+     "x": 525.466,
+     "y": 1006.132
     }
    ],
    "score": 0,
    "terms": {
-    "width": 0,
-    "perspective": 0
+    "size": 0,
+    "pose": 0
    },
-   "searched": 135,
+   "searched": 81,
    "rejected": 0
   }
  ]

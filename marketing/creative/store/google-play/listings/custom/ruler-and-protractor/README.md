@@ -1,6 +1,6 @@
 # Ruler and Protractor custom listing
 
-Status: planned, incomplete. A first creative render, alt text and metadata are present, but the composition and typography still need review. Do not upload this listing.
+Status: planned. The creative package uses the default listing's warm Material design language with one phone per screenshot. Confirm production availability before upload.
 
 ## Audience and positioning
 
@@ -14,4 +14,4 @@ The keyword list contains candidates, not measured search demand. Google Play Co
 
 ## Remaining work
 
-Improve the phone sequence's visual variety and include Bubble Level. Investigate intermittent font-loading failures, inspect the revised graphics and run the full verification again. Confirm production availability of the advertised app version before upload.
+Confirm production availability of the advertised app version before upload. The renderer still reports an intermittent local font-request error; visible typography has been inspected. See source/README.md for render commands and verification scope.
