@@ -6,7 +6,8 @@
 //   approving;  master: 2560 x 1440 H.264 with the soundtrack, only once the review is approved.
 import { bundle } from "@remotion/bundler";
 import { renderMedia, renderStill, selectComposition } from "@remotion/renderer";
-import { mkdir, readFile } from "node:fs/promises";
+import { execFileSync } from "node:child_process";
+import { mkdir, readFile, rm } from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { readPng, sheet, shrink, writePng } from "./png.mjs";
@@ -62,10 +63,15 @@ if (mode === "transitions") {
 } else {
   const master = mode === "master", review = mode === "review";
   const file = path.join(out, "video", `app-toolkit-trailer-${master ? "master" : review ? "review" : "preview"}.mp4`);
+  // The picture first, muted; then ffmpeg adds the soundtrack. Remotion's AAC kept the encoder's 2048 samples of
+  // priming without an edit list, so every sound played 42.7 ms late; ffmpeg's muxer records the priming.
+  const picture = file.replace(/\.mp4$/, ".picture.mp4");
   await renderMedia({
-    composition, serveUrl, codec: "h264", outputLocation: file, scale: master ? 4 / 3 : review ? 1 : 0.5, crf: master ? 16 : review ? 18 : 22,
-    audioCodec: "aac", audioBitrate: "320k", concurrency: master ? 2 : 3, timeoutInMilliseconds: 300000,
+    composition, serveUrl, codec: "h264", outputLocation: picture, scale: master ? 4 / 3 : review ? 1 : 0.5, crf: master ? 16 : review ? 18 : 22,
+    muted: true, concurrency: master ? 2 : 3, timeoutInMilliseconds: 300000,
     onProgress: ({ progress }) => { if (Math.round(progress * 100) % 10 === 0) process.stdout.write(`\r${Math.round(progress * 100)}%`); },
   });
+  execFileSync("ffmpeg", ["-hide_banner", "-loglevel", "error", "-y", "-i", picture, "-i", path.join(root, "public/soundtrack.mp3"), "-map", "0:v", "-map", "1:a", "-c:v", "copy", "-c:a", "aac", "-b:a", "320k", "-shortest", "-movflags", "+faststart", file]);
+  await rm(picture);
   console.log(`\n${file}`);
 }

@@ -6,7 +6,7 @@ import { FRAME, measure } from "./geometry";
 import { scatterConfetti } from "./confetti";
 import { morphPath } from "./morph";
 import type { Confetto } from "./confetti";
-import { clamp, enter, mix, ramp, pop, standard } from "../lib/anim";
+import { clamp, enter, leave, mix, ramp, pop, standard } from "../lib/anim";
 import { FONT } from "../theme";
 
 // ---------------------------------------------------------------------------------------------------
@@ -277,7 +277,9 @@ export const Ripples: React.FC<{ t: number; onsets: number[]; at: [number, numbe
   <svg aria-hidden width={1920} height={1080} style={{ position: "absolute", inset: 0, zIndex: z, pointerEvents: "none" }}>
     {onsets.map((o, k) => {
       if (t < o) return null;
-      const p = enter(clamp((t - o) / 1.1)), fade = 1 - standard(clamp((t - o - 0.15) / 0.95));
+      // The fade lingers, then clears quickly: a disc this large left for long at a few percent opacity steps
+      // visibly as Chrome's 8-bit compositing rounds it.
+      const p = enter(clamp((t - o) / 1.1)), fade = 1 - leave(clamp((t - o - 0.15) / 0.95));
       return fade > 0 && <circle key={k} cx={at[0]} cy={at[1]} r={from + p * reach} fill={colors[k % colors.length]} opacity={0.9 * fade} />;
     })}
   </svg>
@@ -487,6 +489,7 @@ export const ConfettiBurst: React.FC<{ t: number; at: number; from: [number, num
 export const ShapeWipe: React.FC<{ t: number; start: number; dur: number; at: [number, number]; shape: string; children: React.ReactNode }> = ({ t, start, dur, at, shape, children }) => {
   const p = clamp((t - start) / dur);
   if (p >= 1) return <div style={{ position: "absolute", inset: 0 }}>{children}</div>;
-  const size = 20 + enter(p) * 5200, mask = `url("${shapeUrl(shape)}") ${at[0] - size / 2}px ${at[1] - size / 2}px / ${size}px ${size}px no-repeat`;
+  // From rest: an entering curve starts at full speed, which grew the mask by 1600 px in one frame.
+  const size = 20 + standard(p) * 5200, mask = `url("${shapeUrl(shape)}") ${at[0] - size / 2}px ${at[1] - size / 2}px / ${size}px ${size}px no-repeat`;
   return <div style={{ position: "absolute", inset: 0, WebkitMask: mask, mask }}>{children}</div>;
 };

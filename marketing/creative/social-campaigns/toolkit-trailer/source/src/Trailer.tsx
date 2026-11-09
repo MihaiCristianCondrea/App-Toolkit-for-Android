@@ -108,7 +108,7 @@ const WATER_POSE: PhonePose = { x: 960, y: 465, scale: 0.86, pitch: 10, yaw: -10
 /** The water backdrop's size, scaled with the phone. */
 const WATER_BACKDROP = 900;
 const Water: React.FC<{ t: number; part: "back" | "front" }> = ({ t, part }) => {
-  const w = WORLDS.water, rise = pop(t, B.waterPhone, 13, 140), dy = (1 - rise) * 640;
+  const w = WORLDS.water, rise = pop(t, B.waterPhone, 13, 140), dy = (1 - rise) * 1150; // from wholly below the frame
   const decor = useMemo(() => place([[300, 210, 84], [1640, 160, 92], [1790, 860, 60], [150, 900, 58], [1770, 500, 44], [380, 640, 40]], [w.tones[0], w.tones[1], w.tones[2], w.container], 4), []);
   if (part === "back") return (
     <AbsoluteFill>
@@ -281,7 +281,7 @@ const Bill: React.FC<{ t: number }> = ({ t }) => {
       <div style={{ position: "absolute", inset: 0, transform: `scale(${1 + 0.025 * rest})`, transformOrigin: `${RECEIPT.cx}px ${RECEIPT.cy}px` }}>
         <Behind t={t} name="soft_burst" x={1600} y={520} size={640} color={w.shape} seed={4} start={B.billPhone - 0.1} />
         <Decor t={t} start={SCENE.bill.start + 0.2} pieces={decor} />
-        <Phone screen={SCREENS.bill} pose={BILL_POSE} dy={rise * 700} z={3} />
+        <Phone screen={SCREENS.bill} pose={BILL_POSE} dy={rise * 1000} z={3} />
         {[0, 1].map((k) => {
           const p = pop(t, B.billShares[k], 12, 170), side = k ? 1 : -1;
           return p > 0 && <div key={k} style={{ position: "absolute", inset: 0, zIndex: 3, opacity: clamp(p * 2), transform: `translate(${(1 - p) * -side * 200}px, ${(1 - p) * -220}px)` }}><ShareCard x={RECEIPT.cx - 190 + side * 205} y={830} who={String(k + 1)} amount="€28.60" ink={w.ink} container={w.container} avatar={w.tones[k]} shape={k ? "cookie_6sided" : "sunny"} /></div>;

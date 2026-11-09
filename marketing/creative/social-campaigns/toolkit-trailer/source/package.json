@@ -13,6 +13,7 @@
     "preview": "npm run assets && node scripts/render.mjs preview",
     "review": "npm run assets && node scripts/render.mjs review",
     "verify:wheel": "node scripts/verify-wheel.mjs",
+    "playback": "node scripts/playback.mjs",
     "master": "npm run assets && node scripts/render.mjs master"
   },
   "dependencies": {
