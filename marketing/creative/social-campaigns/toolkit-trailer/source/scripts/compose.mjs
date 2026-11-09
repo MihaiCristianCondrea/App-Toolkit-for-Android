@@ -182,12 +182,15 @@ for (let t = tl.barStart; t < scene.end.start - 0.01; t += BEAT / 4) {
 }
 
 // ------------------------------------------------------------------------------------------------ the story's moments
-// Intro: one mallet note per arriving shape, rising through F major; a warm soft chord for the icon; the name and
-// the line each land on a mallet; hats thicken into the water world, which opens on a drop and a low tom.
-[65, 69, 72, 76, 77].forEach((m, i) => mallet(B.introShapes[i], m, 0.14, (i - 2) * 0.3, 4.2));
-[60, 65, 69].forEach((m, i) => mallet(B.icon + i * 0.018, m, 0.075, (i - 1) * 0.25, 4.5));
-mallet(B.title, 72, 0.11); mallet(B.tagline, 74, 0.095);
-for (let t = B.tagline + BEAT; t < scene.water.start - 0.01; t += BEAT / 4) hat(t, 0.02 + 0.05 * ((t - B.tagline) / (scene.water.start - B.tagline)), Math.round(t * 8) % 2 ? 0.3 : -0.3);
+// Intro: one mallet note per arriving shape, rising through a clean F major pentatonic (F4, G4, A4, C5, D5) over a
+// warm low F pedal; the icon lands on the octave F5; "App Toolkit" and "Everyday tools in one app" resolve on A5
+// and C6; gentle eighth-note hats lead into the water world, which opens on a drop and a low tom.
+bass(0.0, 41, scene.water.start - 0.15, 0.2);
+[65, 67, 69, 72, 74].forEach((m, i) => mallet(B.introShapes[i], m, 0.14, (i - 2) * 0.25, 4.0));
+mallet(B.icon, 77, 0.15, 0, 3.8); mallet(B.icon, 65, 0.08, -0.15, 4.2);
+mallet(B.title, 81, 0.12, -0.1, 4.0); mallet(B.title + 0.09, 77, 0.09, 0.15, 4.2);
+mallet(B.tagline, 84, 0.1, 0.1, 4.2);
+for (let t = B.tagline + BEAT / 2; t < scene.water.start - 0.05; t += BEAT / 2) hat(t, 0.025 + 0.03 * ((t - B.tagline) / (scene.water.start - B.tagline)), Math.round(t * 4) % 2 ? 0.25 : -0.25);
 glide(B.waterMorph[0], B.waterMorph[1] - B.waterMorph[0], 260, 700, 0.05);
 drop(scene.water.start, 360, 1400, 0.24); tom(scene.water.start, 0.4);
 

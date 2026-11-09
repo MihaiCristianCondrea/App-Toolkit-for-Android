@@ -105,9 +105,20 @@ const WaterMorph: React.FC<{ t: number }> = ({ t }) => {
 
 // ================================================================================================ 3 to 6.85: Water Eject
 // The phone rises into the blue backdrop with the store listing's dramatic hero orientation (pitch 28, yaw -13),
-// running off the top so its speaker edge faces the camera; below each speaker group, concentric arcs and glass
-// bubbles fan out from small to big.
+// rotating smoothly in 3D from a tilted entry angle as it settles; below each speaker group, concentric arcs and
+// glass bubbles fan out from small to big.
 const WATER_POSE: PhonePose = { x: 945, y: 245, scale: 1.12, pitch: 28, yaw: -13, roll: 0 };
+const waterEntryPose = (t: number): PhonePose => {
+  const p = standard(clamp((t - B.waterPhone) / 0.85));
+  return {
+    x: mix(WATER_POSE.x + 70, WATER_POSE.x, p),
+    y: WATER_POSE.y,
+    scale: mix(0.94, WATER_POSE.scale, p),
+    pitch: mix(6, WATER_POSE.pitch ?? 28, p),
+    yaw: mix(-38, WATER_POSE.yaw ?? -13, p),
+    roll: mix(-9, WATER_POSE.roll ?? 0, p),
+  };
+};
 /** The water backdrop's size, scaled with the phone. */
 const WATER_BACKDROP = 920;
 const Water: React.FC<{ t: number; part: "back" | "front" }> = ({ t, part }) => {
@@ -120,10 +131,11 @@ const Water: React.FC<{ t: number; part: "back" | "front" }> = ({ t, part }) => 
       <Decor t={t} start={B.waterMorph[1] - 0.1} pieces={decor} />
     </AbsoluteFill>
   );
-  const sources = speakers(WATER_POSE).map((s) => ({ at: [s.at[0], s.at[1] + dy] as [number, number], direction: s.direction }));
+  const pose = waterEntryPose(t);
+  const sources = speakers(pose).map((s) => ({ at: [s.at[0], s.at[1] + dy] as [number, number], direction: s.direction }));
   return (
     <AbsoluteFill>
-      {t < B.phoneTurn[0] && <Phone screen={SCREENS.water} scroll={WATER_SCROLL} pose={WATER_POSE} dy={dy} />}
+      {t < B.phoneTurn[0] && <Phone screen={SCREENS.water} scroll={WATER_SCROLL} pose={pose} dy={dy} />}
       <SoftWaves t={t} onsets={B.waterWaves} drops={B.waterDrops} sources={sources} tones={[w.tones[2], w.tones[1], w.tones[0]]} rim={w.bright} tint={w.tones[0]} bubbles={[[3.55, 0], [3.75, 1], [4.05, 0], [4.55, 1], [4.75, 0], [5.05, 1], [5.55, 0], [5.75, 1], [6.0, 0]]} visible={ramp(t, B.waterPhone + 0.25, 0.35) * (1 - clamp((t - B.phoneTurn[0] + 0.2) / 0.3))} />
     </AbsoluteFill>
   );

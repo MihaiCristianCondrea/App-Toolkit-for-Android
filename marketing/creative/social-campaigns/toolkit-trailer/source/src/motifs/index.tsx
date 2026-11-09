@@ -38,8 +38,9 @@ export const speakers = (pose: PhonePose) =>
 export const Headline: React.FC<{ t: number; at: number[]; title: string; sub?: string; x: number; y: number; color: string; subColor?: string; size?: number; subScale?: number; align?: "left" | "center"; width?: number }> = ({ t, at, title, sub, x, y, color, subColor, size = 104, subScale = 0.4, align = "left", width = 900 }) => {
   const line = (text: string, start: number, fontSize: number, weight: number, tone: string, spacing: number, stagger: number) => {
     const words = text.split(" ");
+    const padX = fontSize * 0.08, padBottom = fontSize * 0.16;
     return (
-      <div style={{ display: "flex", flexWrap: "wrap", justifyContent: align === "center" ? "center" : "flex-start", columnGap: fontSize * 0.24, rowGap: fontSize * 0.08, paddingBottom: fontSize * 0.14 }}>
+      <div style={{ display: "flex", flexWrap: "wrap", justifyContent: align === "center" ? "center" : "flex-start", columnGap: fontSize * 0.24, rowGap: fontSize * 0.08, paddingBottom: padBottom }}>
         {words.map((word, i) => {
           const wStart = start + i * stagger;
           const r = ramp(t, wStart, 0.48, enter);
@@ -47,7 +48,7 @@ export const Headline: React.FC<{ t: number; at: number[]; title: string; sub?: 
           const wght = Math.round(mix(weight * 0.72, weight, r));
           const wdth = Math.round(mix(92, 100, r));
           return (
-            <span key={i} style={{ display: "inline-block", overflow: "hidden", paddingBottom: fontSize * 0.14, marginBottom: -fontSize * 0.14 }}>
+            <span key={i} style={{ display: "inline-block", overflow: "hidden", padding: `0 ${padX}px ${padBottom}px`, margin: `0 ${-padX}px ${-padBottom}px` }}>
               <span style={{
                 display: "inline-block",
                 transform: `translateY(${(1 - r) * 95}%) scale(${0.86 + 0.14 * s})`,
