@@ -6,7 +6,7 @@ import timeline from "./timeline.json";
 import icon from "./assets/icon.png";
 // Google's official badge, unaltered (marketing/assets/badges/google-play): moved and scaled whole, never redrawn.
 import badge from "../../../../../assets/badges/google-play/en_badge_web_generic.png";
-import { B, FPS, clamp, drift, enter, leave, mix, pop, ramp, smooth, standard } from "./lib/anim";
+import { B, FPS, clamp, enter, leave, mix, pop, ramp, smooth, standard } from "./lib/anim";
 import { CONFETTI, FONT, NEUTRAL, WORLDS } from "./theme";
 import type { World } from "./theme";
 import { Chip, ConfettiBurst, Decor, ELEVATION, Headline, MorphPair, Phone, Receipt, Ripples, Ruler, ShapeWipe, ShareCard, SoftWaves, AppWheel, APP_WHEEL, burstPieces, confettoAt, morphTurn, speakers } from "./motifs";
@@ -93,9 +93,10 @@ const Intro: React.FC<{ t: number }> = ({ t }) => {
   );
 };
 /** The blue shape's journey: from its place in the intro to the phone's, growing and morphing into the water backdrop. */
+const WATER_BACKDROP_AT = { x: 960, y: 465 };
 const waterMorph = (t: number) => {
   const [m0, m1] = B.waterMorph, p = standard(clamp((t - m0) / (m1 - m0)));
-  return { p, x: mix(1590, WATER_POSE.x, p), y: mix(270, WATER_POSE.y, p), size: mix(240, WATER_BACKDROP, p), turn: mix(introTurn(t, 0), spin(t), p) };
+  return { p, x: mix(1590, WATER_BACKDROP_AT.x, p), y: mix(270, WATER_BACKDROP_AT.y, p), size: mix(240, WATER_BACKDROP, p), turn: mix(introTurn(t, 0), spin(t), p) };
 };
 const WaterMorph: React.FC<{ t: number }> = ({ t }) => {
   const m = waterMorph(t);
@@ -103,18 +104,19 @@ const WaterMorph: React.FC<{ t: number }> = ({ t }) => {
 };
 
 // ================================================================================================ 3 to 6.85: Water Eject
-// The phone rises into the blue backdrop, centred, large and speaker down as the sheet asks; below each group of
-// speaker holes the water stirs softly, as on the listing. Nothing else: the two waves say what the tool does.
-const WATER_POSE: PhonePose = { x: 960, y: 465, scale: 0.86, pitch: 10, yaw: -10, roll: 0 };
+// The phone rises into the blue backdrop with the store listing's dramatic hero orientation (pitch 28, yaw -13),
+// running off the top so its speaker edge faces the camera; below each speaker group, concentric arcs and glass
+// bubbles fan out from small to big.
+const WATER_POSE: PhonePose = { x: 945, y: 245, scale: 1.12, pitch: 28, yaw: -13, roll: 0 };
 /** The water backdrop's size, scaled with the phone. */
-const WATER_BACKDROP = 900;
+const WATER_BACKDROP = 920;
 const Water: React.FC<{ t: number; part: "back" | "front" }> = ({ t, part }) => {
   const w = WORLDS.water, rise = pop(t, B.waterPhone, 13, 140), dy = (1 - rise) * 1150; // from wholly below the frame
   const decor = useMemo(() => place([[300, 210, 84], [1640, 160, 92], [1790, 860, 60], [150, 900, 58], [1770, 500, 44], [380, 640, 40]], [w.tones[0], w.tones[1], w.tones[2], w.container], 4), []);
   if (part === "back") return (
     <AbsoluteFill>
       <Ground color={w.field} />
-      {t >= B.waterMorph[1] && t < B.shapeMorph[0] && <Shape name="cookie_12sided" x={WATER_POSE.x - WATER_BACKDROP / 2} y={WATER_POSE.y - WATER_BACKDROP / 2} size={WATER_BACKDROP} color={w.shape} rotate={spin(t)} />}
+      {t >= B.waterMorph[1] && t < B.shapeMorph[0] && <Shape name="cookie_12sided" x={WATER_BACKDROP_AT.x - WATER_BACKDROP / 2} y={WATER_BACKDROP_AT.y - WATER_BACKDROP / 2} size={WATER_BACKDROP} color={w.shape} rotate={spin(t)} />}
       <Decor t={t} start={B.waterMorph[1] - 0.1} pieces={decor} />
     </AbsoluteFill>
   );
@@ -122,7 +124,7 @@ const Water: React.FC<{ t: number; part: "back" | "front" }> = ({ t, part }) => 
   return (
     <AbsoluteFill>
       {t < B.phoneTurn[0] && <Phone screen={SCREENS.water} scroll={WATER_SCROLL} pose={WATER_POSE} dy={dy} />}
-      <SoftWaves t={t} onsets={B.waterWaves} drops={B.waterDrops} sources={sources} tones={[w.tones[2], w.tones[1], w.tones[0]]} rim={w.bright} tint={w.tones[0]} bubbles={[[3.8, 0], [4.85, 1], [5.7, 0]]} visible={ramp(t, B.waterPhone + 0.3, 0.4) * (1 - clamp((t - B.phoneTurn[0] + 0.2) / 0.3))} />
+      <SoftWaves t={t} onsets={B.waterWaves} drops={B.waterDrops} sources={sources} tones={[w.tones[2], w.tones[1], w.tones[0]]} rim={w.bright} tint={w.tones[0]} bubbles={[[3.55, 0], [3.75, 1], [4.05, 0], [4.55, 1], [4.75, 0], [5.05, 1], [5.55, 0], [5.75, 1], [6.0, 0]]} visible={ramp(t, B.waterPhone + 0.25, 0.35) * (1 - clamp((t - B.phoneTurn[0] + 0.2) / 0.3))} />
     </AbsoluteFill>
   );
 };
@@ -136,10 +138,10 @@ const RULER_Y = 690, RULER_PX = 14;
 const WaveLine: React.FC<{ t: number }> = ({ t }) => {
   const [l0, l1] = B.waveLine, p = standard(clamp((t - l0) / (l1 - l0))), fade = 1 - clamp((t - B.rulerBody[0]) / (B.rulerBody[1] - B.rulerBody[0]));
   if (t < l0 || fade <= 0) return null;
-  const cx = WATER_POSE.x, yb = mix(905, RULER_Y, p), xl = mix(cx - 225, -80, p), xr = mix(cx + 225, 2000, p), sag = mix(130, 0, p);
+  const cx = WATER_BACKDROP_AT.x, yb = mix(915, RULER_Y, p), xl = mix(cx - 210, -80, p), xr = mix(cx + 210, 2000, p), sag = mix(42, 0, p);
   return (
     <svg aria-hidden width={1920} height={1080} style={{ position: "absolute", inset: 0, pointerEvents: "none" }}>
-      <path d={`M ${xl} ${yb} Q ${cx} ${yb + 2 * sag} ${xr} ${yb}`} fill="none" stroke={mixColor(WORLDS.water.accent, "#654000", p)} strokeWidth={mix(6, 3, p)} strokeLinecap="round" opacity={fade} />
+      <path d={`M ${xl} ${yb} Q ${cx} ${yb + 2 * sag} ${xr} ${yb}`} fill="none" stroke={mixColor(WORLDS.water.tones[2], "#654000", p)} strokeWidth={mix(2.4, 3, p)} strokeLinecap="round" opacity={fade} />
     </svg>
   );
 };
@@ -179,7 +181,7 @@ const RulerScene: React.FC<{ t: number; part: "back" | "shape" | "phones" | "fro
   if (part === "shape") {
     // The blue backdrop moves over and morphs into the yellow one; the yellow fills it from the centre out, so the
     // colour never passes through a muddy mix of the two.
-    const [s0, s1] = B.shapeMorph, q = standard(clamp((t - s0) / (s1 - s0))), cx = mix(WATER_POSE.x, BACKDROP.x, q), cy = mix(WATER_POSE.y, BACKDROP.y, q);
+    const [s0, s1] = B.shapeMorph, q = standard(clamp((t - s0) / (s1 - s0))), cx = mix(WATER_BACKDROP_AT.x, BACKDROP.x, q), cy = mix(WATER_BACKDROP_AT.y, BACKDROP.y, q);
     const size = mix(WATER_BACKDROP, BACKDROP.size, q), d = morphPath("cookie_12sided", "soft_burst", q, cx, cy, size * 0.98, spin(t)), fill = size * 0.6 * enter(clamp((t - s0 - 0.1) / (s1 - s0 - 0.15)));
     return (
       <svg aria-hidden width={1920} height={1080} style={{ position: "absolute", inset: 0 }}>
@@ -199,19 +201,38 @@ const RulerScene: React.FC<{ t: number; part: "back" | "shape" | "phones" | "fro
     );
   }
   const ruler = { y: mix(RULER_Y, STRIP.y, pull), width: mix(GRID.right - GRID.left, STRIP.width, pull), px: mix(RULER_PX, STRIP.px, pull) };
-  const pivot = { x: GRID.left + 28, y: ruler.y }, arm = (a: number, r: number) => [pivot.x + r * Math.cos((-a * Math.PI) / 180), pivot.y + r * Math.sin((-a * Math.PI) / 180)];
-  const lift = ramp(t, B.rulerLift[0], B.rulerLift[1] - B.rulerLift[0], standard), markerX = pivot.x + mm * ruler.px, armFade = 1 - clamp(lift * 2);
+  const R_PRO = 210, proPivot = { x: GRID.left + 28 + R_PRO, y: ruler.y };
+  const proArm = (a: number, r: number) => [proPivot.x + r * Math.cos((-a * Math.PI) / 180), proPivot.y + r * Math.sin((-a * Math.PI) / 180)];
+  const proIn = ramp(t, p0 + 0.1, 0.45, standard), proOut = 1 - ramp(t, m0 - 0.15, 0.35, standard), proAlpha = proIn * proOut;
+  const [hx, hy] = proArm(angle, R_PRO), [lx, ly] = proArm(Math.max(22, angle * 0.52), R_PRO * 0.62);
+  const lift = ramp(t, B.rulerLift[0], B.rulerLift[1] - B.rulerLift[0], standard), markerX = GRID.left + 28 + mm * ruler.px;
   // After the lift, the shape under the reading keeps growing until it is the converter's ground.
   const [e0, e1] = B.rulerExpand, grow = leave(clamp((t - e0) / (e1 - e0)));
   const chip = { x: mix(markerX, MATCH.x, lift), y: mix(ruler.y - 110, MATCH.y, lift) }, unit = WORLDS.unit;
   return (
     <AbsoluteFill>
       <svg aria-hidden width={1920} height={1080} style={{ position: "absolute", inset: 0, zIndex: 5, overflow: "visible" }}>
-        {angle > 0.2 && armFade > 0 && <g opacity={armFade}>
-          <path d={`M ${pivot.x} ${pivot.y} L ${arm(0, 230).join(" ")} A 230 230 0 0 0 ${arm(angle, 230).join(" ")} Z`} fill={w.container} opacity=".9" />
-          {Array.from({ length: Math.floor(angle / 5) + 1 }, (_, i) => { const [x1, y1] = arm(i * 5, 230), [x2, y2] = arm(i * 5, i % 3 === 0 ? 198 : 212); return <line key={i} x1={x1} y1={y1} x2={x2} y2={y2} stroke="#8F5700" strokeWidth={i % 3 === 0 ? 3 : 2} strokeLinecap="round" />; })}
-          <line x1={pivot.x} y1={pivot.y} x2={arm(angle, 480)[0]} y2={arm(angle, 480)[1]} stroke="#654000" strokeWidth="8" strokeLinecap="round" />
-          <text x={arm(angle / 2, 290)[0]} y={arm(angle / 2, 290)[1]} fontFamily={FONT} fontWeight={650} fontSize="64" fill="#654000" dominantBaseline="central">{shownAngle}°</text>
+        {proAlpha > 0.01 && <g opacity={proAlpha}>
+          <path d={`M ${proPivot.x - R_PRO} ${proPivot.y} A ${R_PRO} ${R_PRO} 0 0 1 ${proPivot.x + R_PRO} ${proPivot.y} Z`} fill="#FFF8E6" fillOpacity=".95" stroke="#C88200" strokeWidth="2.5" />
+          {angle > 0.2 && <path d={`M ${proPivot.x} ${proPivot.y} L ${proPivot.x + R_PRO} ${proPivot.y} A ${R_PRO} ${R_PRO} 0 0 0 ${hx} ${hy} Z`} fill={w.container} fillOpacity=".92" />}
+          <path d={`M ${proPivot.x - 48} ${proPivot.y} A 48 48 0 0 1 ${proPivot.x + 48} ${proPivot.y} Z`} fill={w.field} fillOpacity=".92" stroke="#E0A82E" strokeWidth="1.5" />
+          {Array.from({ length: 37 }, (_, i) => {
+            const deg = i * 5, major = deg % 15 === 0, len = deg % 30 === 0 ? 18 : major ? 13 : 8;
+            const [x1, y1] = proArm(deg, R_PRO), [x2, y2] = proArm(deg, R_PRO - len), [tx, ty] = proArm(deg, R_PRO - 31);
+            return (
+              <g key={i}>
+                <line x1={x1} y1={y1} x2={x2} y2={y2} stroke="#8F5700" strokeWidth={major ? 2.2 : 1.3} opacity={deg % 10 === 0 ? 0.9 : 0.45} strokeLinecap="round" />
+                {deg > 0 && deg < 180 && deg % 30 === 0 && <text x={tx} y={ty} textAnchor="middle" dominantBaseline="central" fontFamily={FONT} fontWeight={600} fontSize="15" fill="#654000">{deg}</text>}
+              </g>
+            );
+          })}
+          <path d={`M ${proPivot.x + R_PRO} ${proPivot.y} H ${proPivot.x} L ${hx} ${hy}`} fill="none" stroke="#8F5700" strokeWidth="4.5" strokeLinecap="round" strokeLinejoin="round" />
+          <circle cx={proPivot.x} cy={proPivot.y} r="8" fill="#8F5700" />
+          <circle cx={hx} cy={hy} r="8" fill="#8F5700" stroke="#FFF8E6" strokeWidth="3" />
+          {angle > 2 && <g>
+            <rect x={lx - 38} y={ly - 20} width="76" height="40" rx="20" fill="#8F5700" />
+            <text x={lx} y={ly} textAnchor="middle" dominantBaseline="central" fontFamily={FONT} fontWeight={650} fontSize="23" fill="#FFFFFF">{shownAngle}°</text>
+          </g>}
         </g>}
         <Ruler x={GRID.left} y={ruler.y} width={ruler.width} px={ruler.px} ticks={ramp(t, B.waveTicks[0], B.waveTicks[1] - B.waveTicks[0], (x) => x)} body={ramp(t, B.rulerBody[0], B.rulerBody[1] - B.rulerBody[0], standard)} mm={t >= m0 ? mm : 0} accent={w.accent} />
         {lift > 0 && <path d={morphPath("soft_burst", "soft_burst", 1, chip.x, chip.y, MATCH.size * lift * (1 + 13 * grow), morphTurn(t, 0, 0))} fill={mixColor(w.shape, unit.field, grow)} />}
@@ -272,30 +293,53 @@ const Unit: React.FC<{ t: number }> = ({ t }) => {
 
 // ================================================================================================ 13.15 to 17: Tip & Bill Splitter
 // The receipt leads: it prints the bill and the tip, the share lands, and the total divides into two people's
-// cards. The phone rises in beside it as the proof. Then a rest: everything holds while the camera barely moves.
+// cards. The phone rises in beside it as the proof. Then the phone zooms in and glides to the centre, turning
+// into the Decision Wheel phone.
 const BILL_POSE: PhonePose = { x: 1575, y: 540, scale: 0.8, yaw: -10, roll: 2 };
+const BILL_ZOOM: [number, number] = [16.25, 17.0];
+const WHEEL_ENTRY_POSE = wheelState(SCENE.wheel.start).phone;
+const billToWheelPose = (t: number, target3d = false): { pose: PhonePose; grow: number; p: number } => {
+  const [z0, z1] = BILL_ZOOM, p = smooth(clamp((t - z0) / (z1 - z0)));
+  return {
+    p,
+    grow: 1 + 0.14 * Math.sin(p * Math.PI),
+    pose: {
+      x: mix(BILL_POSE.x, WHEEL_ENTRY_POSE.x, p),
+      y: mix(BILL_POSE.y, WHEEL_ENTRY_POSE.y, p),
+      scale: mix(BILL_POSE.scale, WHEEL_ENTRY_POSE.scale, p),
+      yaw: target3d ? WHEEL_ENTRY_POSE.yaw : (BILL_POSE.yaw ?? 0),
+      pitch: target3d ? WHEEL_ENTRY_POSE.pitch : (BILL_POSE.pitch ?? 0),
+      roll: mix(BILL_POSE.roll ?? 0, WHEEL_ENTRY_POSE.roll, p),
+    },
+  };
+};
 const Bill: React.FC<{ t: number }> = ({ t }) => {
-  const w = WORLDS.bill, rise = 1 - ramp(t, B.billPhone, 0.75, enter), [r0, r1] = B.billRest, rest = ramp(t, r0, r1 - r0, (x) => x);
+  const w = WORLDS.bill, rise = 1 - ramp(t, B.billPhone, 0.75, enter);
+  const { pose, grow, p: zP } = billToWheelPose(t), leftFade = 1 - smooth(clamp((t - BILL_ZOOM[0]) / 0.5));
   const decor = useMemo(() => place([[1300, 170, 84], [1830, 130, 92], [1850, 760, 58], [90, 960, 54], [140, 380, 46]], [w.tones[0], w.tones[1], w.tones[2], w.container], 4), []);
   return (
     <AbsoluteFill>
       <Ground color={w.field} />
-      <div style={{ position: "absolute", inset: 0, transform: `scale(${1 + 0.025 * rest})`, transformOrigin: `${RECEIPT.cx}px ${RECEIPT.cy}px` }}>
-        <Behind t={t} name="soft_burst" x={1600} y={520} size={640} color={w.shape} seed={4} start={B.billPhone - 0.1} />
-        <Decor t={t} start={SCENE.bill.start + 0.2} pieces={decor} />
-        <Phone screen={SCREENS.bill} pose={BILL_POSE} dy={rise * 1000} z={3} />
-        {[0, 1].map((k) => {
-          const p = pop(t, B.billShares[k], 12, 170), side = k ? 1 : -1;
-          return p > 0 && <div key={k} style={{ position: "absolute", inset: 0, zIndex: 3, opacity: clamp(p * 2), transform: `translate(${(1 - p) * -side * 200}px, ${(1 - p) * -220}px)` }}><ShareCard x={RECEIPT.cx - 190 + side * 205} y={830} who={String(k + 1)} amount="€28.60" ink={w.ink} container={w.container} avatar={w.tones[k]} shape={k ? "cookie_6sided" : "sunny"} /></div>;
-        })}
-        <Receipt x={RECEIPT.cx - 146} y={RECEIPT.cy - 186} angle={-2 * ramp(t, SCENE.bill.start + 0.4, 0.6)} scale={RECEIPT.scale} t={t} lines={B.billLines} ink={w.ink} accent={w.accent} />
+      <div style={{ position: "absolute", inset: 0 }}>
+        <div style={{ position: "absolute", inset: 0, opacity: 1 - zP * 0.85, transform: `translate(${(pose.x - BILL_POSE.x) * 0.6}px, 0) scale(${1 + 0.25 * zP})`, transformOrigin: `${BILL_POSE.x}px ${BILL_POSE.y}px` }}>
+          <Behind t={t} name="soft_burst" x={1600} y={520} size={640} color={w.shape} seed={4} start={B.billPhone - 0.1} />
+          <Decor t={t} start={SCENE.bill.start + 0.2} pieces={decor} />
+        </div>
+        <Phone screen={SCREENS.bill} pose={pose} dy={rise * 1000} grow={grow} z={3} />
+        <div style={{ position: "absolute", inset: 0, opacity: leftFade, transform: `translate(${-240 * zP}px, 0) scale(${1 - 0.12 * zP})`, transformOrigin: `${RECEIPT.cx}px ${RECEIPT.cy}px`, zIndex: 4 }}>
+          {[0, 1].map((k) => {
+            const p = pop(t, B.billShares[k], 12, 170), side = k ? 1 : -1;
+            return p > 0 && <div key={k} style={{ position: "absolute", inset: 0, opacity: clamp(p * 2), transform: `translate(${(1 - p) * -side * 200}px, ${(1 - p) * -220}px)` }}><ShareCard x={RECEIPT.cx - 190 + side * 205} y={830} who={String(k + 1)} amount="€28.60" ink={w.ink} container={w.container} avatar={w.tones[k]} shape={k ? "cookie_6sided" : "sunny"} /></div>;
+          })}
+          <Receipt x={RECEIPT.cx - 146} y={RECEIPT.cy - 186} angle={-2 * ramp(t, SCENE.bill.start + 0.4, 0.6)} scale={RECEIPT.scale} t={t} lines={B.billLines} ink={w.ink} accent={w.accent} />
+        </div>
       </div>
     </AbsoluteFill>
   );
 };
 
 // ================================================================================================ 17 to 23.5: Decision Wheel
-// One wheel and one camera move (src/wheelMotion.ts). A hard cut to a large phone with the real Decision Wheel
+// One wheel and one camera move (src/wheelMotion.ts). The zoomed phone arrives with the real Decision Wheel
 // sheet, turned a little; the spin starts inside the app; the camera pushes towards the wheel while the phone
 // turns face on, and passes through it, so the phone leaves by framing alone and its sheet is never emptied. The
 // lilac grows from behind the wheel, which settles to fill the scene and slows to Music; the result holds for a
@@ -305,14 +349,29 @@ const HERO_POINTER_TOP = HERO.y - HERO.box / 2 - (2 * HERO.box) / APP_WHEEL.box;
 const CHIP = { x: 1665, y: 320 };
 const WHEEL_CONFETTI = { seed: 41, count: 34, from: [HERO.x, HERO_POINTER_TOP - 20] as [number, number] };
 const wheelPieces = () => burstPieces({ ...WHEEL_CONFETTI, colors: WORLDS.wheel.tones.concat(["#D9C67D", "#9ABDA9"]), avoid: [{ x: HERO.x, y: HERO.y, r: HERO.box / 2 + 34 }], boxes: [{ left: HERO.x - 40, top: HERO_POINTER_TOP - 40, right: HERO.x + 40, bottom: HERO_POINTER_TOP + 40 }, { left: CHIP.x - 170, top: CHIP.y - 60, right: CHIP.x + 170, bottom: CHIP.y + 60 }] });
-const TOOLS = ["Water Eject", "Surface Ruler", "Protractor", "Unit Converter", "Tip & Bill Splitter", "Decision Wheel", "Compass", "Bubble Level", "Flash Dimmer", "Morse & SOS", "Coin Flip", "Dice Roll"];
+const TOOL_SPECS: { name: string; shape: string; bg: string; fg: string; icon: string }[] = [
+  { name: "Water Eject", shape: "cookie_9sided", bg: "#B8CDE3", fg: "#0B4FA8", icon: "water_drop" },
+  { name: "Surface Ruler", shape: "cookie_12sided", bg: "#FDE7A2", fg: "#6B5E00", icon: "square_foot" },
+  { name: "Protractor", shape: "cookie_9sided", bg: "#FDE7A2", fg: "#6B5E00", icon: "architecture" },
+  { name: "Unit Converter", shape: "cookie_9sided", bg: "#B6E5DF", fg: "#153F3C", icon: "straighten" },
+  { name: "Tip & Bill Splitter", shape: "soft_burst", bg: "#F7D8C9", fg: "#91005A", icon: "calculate" },
+  { name: "Decision Wheel", shape: "cookie_12sided", bg: "#E7D9EF", fg: "#684379", icon: "rotate_right" },
+  { name: "Compass", shape: "sunny", bg: "#B6E5DF", fg: "#006A60", icon: "explore" },
+  { name: "Bubble Level", shape: "pill", bg: "#B6E5DF", fg: "#006A60", icon: "straighten" },
+  { name: "Flash Dimmer", shape: "burst", bg: "#FDE7A2", fg: "#6B5E00", icon: "flashlight_on" },
+  { name: "Morse & SOS", shape: "cookie_7sided", bg: "#FFDAD6", fg: "#B10000", icon: "emergency" },
+  { name: "Coin Flip", shape: "cookie_12sided", bg: "#FDE7A2", fg: "#6B5E00", icon: "monetization_on" },
+  { name: "Dice Roll", shape: "cookie_12sided", bg: "#E7D9EF", fg: "#684379", icon: "casino" },
+];
 /**
  * Check renders (scripts/verify-wheel.mjs): "phone" hides the replica and keeps the app's own wheel turning, so the
  * two can be measured against each other on the same frame; any other value is the film.
  */
 const CHECK = (getInputProps() as { check?: string }).check;
 const WheelScene: React.FC<{ t: number }> = ({ t }) => {
-  const w = WORLDS.wheel, m = wheelState(t), [r0, r1] = B.wheelReveal, pieces = useMemo(wheelPieces, []);
+  const w = WORLDS.wheel, m = wheelState(Math.max(t, SCENE.wheel.start)), [, r1] = B.wheelReveal, pieces = useMemo(wheelPieces, []);
+  const entry = t < SCENE.wheel.start ? billToWheelPose(t, true) : { pose: m.phone, grow: 1, p: 1 };
+  const blendIn = t < SCENE.wheel.start ? smooth(clamp((t - 16.45) / 0.55)) : 1;
   const decor = useMemo(() => place([[250, 250, 92], [1720, 170, 64], [1780, 920, 56], [290, 880, 60], [560, 560, 44]], [w.tones[0], w.tones[1], w.tones[2], w.container], 4), []);
   const heroDecor = useMemo(() => place([[230, 220, 92], [1760, 150, 60], [1760, 900, 70], [270, 880, 62], [300, 560, 44], [1610, 1000, 46]], [w.tones[0], w.tones[1], w.tones[2], w.container], 1), []);
   const lift = pop(t, B.wheelPick, 10, 200), chip = pop(t, B.wheelPick + 0.1, 11, 210), check = CHECK === "phone";
@@ -320,11 +379,11 @@ const WheelScene: React.FC<{ t: number }> = ({ t }) => {
   // The lilac grows from behind the wheel once the phone has left the frame: a ring of the container colour, then the ground.
   const [lead, trail] = m.revealSizes;
   return (
-    <AbsoluteFill>
+    <AbsoluteFill style={{ opacity: blendIn }}>
       <Ground color={w.field} />
       {/* The decoration rides the same camera as the phone, so it streams out past the frame's edges. */}
-      {t < r1 && <div style={{ position: "absolute", inset: 0, transformOrigin: "0 0", transform: `translate(${to[0] - zoom * from[0]}px, ${to[1] - zoom * from[1]}px) scale(${zoom})` }}><Decor t={t} start={SCENE.wheel.start} pieces={decor} /></div>}
-      {(t < r1 || check) && <Phone screen={["play", { activeToolId: "decision_wheel", wheelText: CHOICES.join("\n"), wheelRotation: check ? rotation : m.inApp, wheelWinner: "" }]} pose={m.phone} z={3} shadow={m.shadow} />}
+      {t < r1 && <div style={{ position: "absolute", inset: 0, transformOrigin: "0 0", transform: `translate(${to[0] - zoom * from[0]}px, ${to[1] - zoom * from[1]}px) scale(${zoom})` }}><Decor t={t} start={16.5} pieces={decor} /></div>}
+      {(t < r1 || check) && <Phone screen={["play", { activeToolId: "decision_wheel", wheelText: CHOICES.join("\n"), wheelRotation: check ? rotation : m.inApp, wheelWinner: "" }]} pose={entry.pose} grow={entry.grow} z={3} shadow={m.shadow} />}
       {m.reveal > 0 && !check && (
         <svg aria-hidden width={1920} height={1080} style={{ position: "absolute", inset: 0, zIndex: 4 }}>
           <path d={morphPath("cookie_12sided", "cookie_12sided", 1, cx, cy, lead, spin(t))} fill={w.container} />
@@ -346,19 +405,16 @@ const WheelScene: React.FC<{ t: number }> = ({ t }) => {
         <Chip label="Music" selected color="#FFFFFF" container={w.accent} outline={w.accent} size={52} />
       </div>
       {/* The first pieces leave with the montage, which turns them into the app's tools. */}
-      <ConfettiBurst t={t} at={B.wheelBurst} from={WHEEL_CONFETTI.from} pieces={pieces} skip={t >= SCENE.montage.start ? TOOLS.length : 0} />
+      <ConfettiBurst t={t} at={B.wheelBurst} from={WHEEL_CONFETTI.from} pieces={pieces} skip={t >= SCENE.montage.start ? TOOL_SPECS.length : 0} />
     </AbsoluteFill>
   );
 };
 
 // ================================================================================================ 22.75 to 29.1: the toolkit
 // The payoff: twelve pieces of the wheel's confetti fly to a grid and become the app's tools, each a
-// MaterialShape badge with its name, while the lilac gives way to the neutral ground. The named grid holds long
-// enough to read; then the badges rise into a band and the five tools' real screens track in from the right on
-// the beat, and everything gathers into the icon on the final downbeat.
-const TOOL_WORLDS: World[] = [WORLDS.water, WORLDS.ruler, WORLDS.ruler, WORLDS.unit, WORLDS.bill, WORLDS.wheel];
-const BADGE_SHAPES = ["cookie_9sided", "cookie_12sided", "soft_burst", "flower", "pill", "sunny", "clover_4leaf", "gem", "very_sunny", "cookie_6sided", "clover_8leaf", "pentagon"];
-const toolColor = (i: number) => (i < 6 ? TOOL_WORLDS[i].bright : [WORLDS.water.tones[2], WORLDS.ruler.shape, WORLDS.unit.bright, WORLDS.bill.shape, WORLDS.wheel.bright][i % 5]);
+// MaterialShape badge with its icon and name, while the lilac gives way to the neutral ground. The named grid
+// holds long enough to read; then the badges rise into a band and the five tools' real screens track in from
+// the right on the beat, and everything gathers into the icon on the final downbeat.
 const CARDS: { screen: Screen; scroll?: number; world: World }[] = [
   { screen: SCREENS.water, scroll: WATER_SCROLL, world: WORLDS.water }, { screen: SCREENS.protractor, world: WORLDS.ruler },
   { screen: ["numbers", { activeSheet: "unit_converter", converterCategory: "Length", converterFrom: "Millimetre", converterTo: "Centimetre", converterInput: "76.0" }], world: WORLDS.unit },
@@ -387,17 +443,31 @@ const Montage: React.FC<{ t: number }> = ({ t }) => {
     <AbsoluteFill>
       <Ground color={NEUTRAL.field} opacity={ground} />
       <svg aria-hidden width={1920} height={1080} style={{ position: "absolute", inset: 0, zIndex: 5, overflow: "visible" }}>
-        {TOOLS.map((_, i) => {
+        {TOOL_SPECS.map((spec, i) => {
           const q = pieces[i], c = confettoAt(q, i, t, B.wheelBurst, WHEEL_CONFETTI.from), fly = standard(clamp((t - b0 - i * 0.05) / 0.6));
-          const s = slot(i), bs = bandSlot(i), g = gone(0.02 * (TOOLS.length - 1 - i));
+          const s = slot(i), bs = bandSlot(i), g = gone(0.02 * (TOOL_SPECS.length - 1 - i));
           const x = mix(mix(c.x, s.x, fly), bs.x, band), y = mix(mix(c.y, s.y, fly), bs.y, band), size = mix(Math.max(q.w, q.h) * c.k, 120, fly) * mix(1, 0.55, band);
           const fx = mix(x, ICON.x, g), fy = mix(y, ICON.y, g);
-          return <path key={i} d={morphPath("pill", BADGE_SHAPES[i % BADGE_SHAPES.length], fly, fx, fy, size * (1 - 0.85 * g), c.rot * (1 - fly))} fill={mixColor(q.color, toolColor(i), fly)} opacity={1 - clamp((g - 0.85) / 0.15)} />;
+          return <path key={i} d={morphPath("pill", spec.shape, fly, fx, fy, size * (1 - 0.85 * g), c.rot * (1 - fly))} fill={mixColor(q.color, spec.bg, fly)} opacity={1 - clamp((g - 0.85) / 0.15)} />;
         })}
       </svg>
+      <div style={{ position: "absolute", inset: 0, zIndex: 5, pointerEvents: "none" }}>
+        {TOOL_SPECS.map((spec, i) => {
+          const q = pieces[i], c = confettoAt(q, i, t, B.wheelBurst, WHEEL_CONFETTI.from), fly = standard(clamp((t - b0 - i * 0.05) / 0.6));
+          const s = slot(i), bs = bandSlot(i), g = gone(0.02 * (TOOL_SPECS.length - 1 - i));
+          const x = mix(mix(c.x, s.x, fly), bs.x, band), y = mix(mix(c.y, s.y, fly), bs.y, band);
+          const fx = mix(x, ICON.x, g), fy = mix(y, ICON.y, g), scale = mix(1, 0.55, band) * (1 - 0.85 * g);
+          const iconAlpha = clamp((fly - 0.45) / 0.45) * (1 - clamp((g - 0.85) / 0.15));
+          return iconAlpha > 0 && (
+            <span key={spec.name} className="material-symbols-outlined" style={{ position: "absolute", left: fx, top: fy, transform: `translate(-50%, -50%) scale(${scale})`, fontSize: 52, color: spec.fg, opacity: iconAlpha }}>
+              {spec.icon}
+            </span>
+          );
+        })}
+      </div>
       {/* The tools' names, under their badges while they are a grid. */}
       <div style={{ position: "absolute", inset: 0, zIndex: 5, opacity: clamp((t - b0 - 0.55) / 0.3) * (1 - clamp(band * 3)) }}>
-        {TOOLS.map((name, i) => { const s = slot(i); return <div key={name} style={{ position: "absolute", left: s.x - 120, top: s.y + 76, width: 240, textAlign: "center", fontFamily: FONT, fontSize: 29, fontWeight: 560, color: NEUTRAL.ink }}>{name}</div>; })}
+        {TOOL_SPECS.map((spec, i) => { const s = slot(i); return <div key={spec.name} style={{ position: "absolute", left: s.x - 120, top: s.y + 76, width: 240, textAlign: "center", fontFamily: FONT, fontSize: 29, fontWeight: 560, color: NEUTRAL.ink }}>{spec.name}</div>; })}
       </div>
       {CARDS.map((card, i) => {
         const land = B.montageCards[i], p = enter(clamp((t - land + 0.35) / 0.55)), track = -46 * ramp(t, B.montageCards[0], g0 - B.montageCards[0], (x) => x);
@@ -430,9 +500,9 @@ const End: React.FC<{ t: number }> = ({ t }) => {
 // ================================================================================================ the edit
 /**
  * The edit, scene by scene, each with its own way in: the water shape growing out of the intro, a wave
- * flattening into the ruler, a match cut
- * on the reading, the cards folding into the receipt (with a soft burst opening the coral world), a hard cut
- * after a rest, the confetti becoming the tools, and the tools converging into the icon.
+ * flattening into the ruler, a match cut on the reading, the cards folding into the receipt (with a soft burst
+ * opening the coral world), the phone zooming into the Decision Wheel, the confetti becoming the tools, and the
+ * tools converging into the icon.
  */
 export const Trailer: React.FC = () => {
   useFonts();
@@ -458,7 +528,7 @@ export const Trailer: React.FC = () => {
     [t >= SCENE.bill.start && t < SCENE.bill.end, t < B.unitFold[1] ? <ShapeWipe t={t} start={SCENE.bill.start} dur={B.unitFold[1] - SCENE.bill.start + 0.15} at={[RECEIPT.cx, RECEIPT.cy]} shape="soft_burst"><Bill t={t} /></ShapeWipe> : <Bill t={t} />],
     // The fold's surface stays over the opening world until the receipt under it takes its place.
     [t >= SCENE.bill.start && t < B.unitFold[1], <Unit t={t} />],
-    [t >= SCENE.wheel.start && t < SCENE.wheel.end, <WheelScene t={t} />],
+    [t >= 16.45 && t < SCENE.wheel.end, <WheelScene t={t} />],
     [t >= SCENE.montage.start && t < SCENE.montage.end, <Montage t={t} />],
     [t >= SCENE.end.start, <End t={t} />],
   ];

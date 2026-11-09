@@ -22,7 +22,7 @@ const fps = composition.fps;
 
 const still = async (s, name) => {
   const file = path.join(out, "images", `${name}-${s.toFixed(2)}.png`);
-  await renderStill({ composition, serveUrl, output: file, frame: Math.min(composition.durationInFrames - 1, Math.round(s * fps)), scale: 0.5, imageFormat: "png", timeoutInMilliseconds: 300000 });
+  await renderStill({ composition, serveUrl, output: file, frame: Math.min(composition.durationInFrames - 1, Math.round(s * fps)), scale: 0.5, imageFormat: "png", timeoutInMilliseconds: 300000, chromiumOptions: { gl: "angle" } });
   return file;
 };
 const stack = (rows) => {
@@ -68,7 +68,8 @@ if (mode === "transitions") {
   const picture = file.replace(/\.mp4$/, ".picture.mp4");
   await renderMedia({
     composition, serveUrl, codec: "h264", outputLocation: picture, scale: master ? 4 / 3 : review ? 1 : 0.5, crf: master ? 16 : review ? 18 : 22,
-    muted: true, concurrency: master ? 2 : 3, timeoutInMilliseconds: 300000,
+    muted: true, concurrency: master ? 4 : 6, timeoutInMilliseconds: 300000,
+    chromiumOptions: { gl: "angle" },
     onProgress: ({ progress }) => { if (Math.round(progress * 100) % 10 === 0) process.stdout.write(`\r${Math.round(progress * 100)}%`); },
   });
   execFileSync("ffmpeg", ["-hide_banner", "-loglevel", "error", "-y", "-i", picture, "-i", path.join(root, "public/soundtrack.mp3"), "-map", "0:v", "-map", "1:a", "-c:v", "copy", "-c:a", "aac", "-b:a", "320k", "-shortest", "-movflags", "+faststart", file]);

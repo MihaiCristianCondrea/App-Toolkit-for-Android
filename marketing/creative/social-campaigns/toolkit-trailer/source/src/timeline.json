@@ -12,10 +12,10 @@
     {
       "id": "intro",
       "start": 0,
-      "end": 3.5,
+      "end": 3.2,
       "title": "App Toolkit",
       "in": "none",
-      "action": "One shape per tool arrives on each note in its world's colour; the App Toolkit icon pops, the shapes breathe round it and the name and line land."
+      "action": "One shape per tool arrives on each note in its world's colour; the App Toolkit icon pops, the shapes breathe round it and the name and line land with staggered word springs."
     },
     {
       "id": "water",
@@ -23,15 +23,15 @@
       "end": 6.85,
       "title": "Water Eject",
       "in": "morph",
-      "action": "The intro's blue shape travels to the phone's place and morphs into its backdrop while the other shapes swap out and the blue floods in; the phone rises into it, centred and speaker down as the sheet asks, and each speaker sends out its own soft wave, with a few bubbles and droplets."
+      "action": "The intro's blue shape travels to the phone's place and morphs into its backdrop while the other shapes swap out and the blue floods in; the phone rises into it, centred and speaker down as the sheet asks, and each speaker sends out its own thin wave and bubbles downward from the bottom of the device."
     },
     {
       "id": "ruler",
-      "start": 6.5,
-      "end": 10.5,
+      "start": 6.15,
+      "end": 10.95,
       "title": "Ruler & Protractor",
       "in": "morph",
-      "action": "While the last wave flattens into the ruler's line, the blue backdrop morphs and moves into the yellow one and the phone turns, coming round as the Surface Ruler; the Protractor phone joins it. An arm sweeps to 45 degrees with the Protractor and holds, then a marker measures 76.0 mm with the Surface Ruler, so both phones end on their results. The reading lifts onto a shape that expands into the converter's ground."
+      "action": "While the last wave flattens into the ruler's line, the blue backdrop morphs and moves into the yellow one and the phone turns, coming round as the Surface Ruler; the Protractor phone joins it. A semicircular protractor on the ruler sweeps to 45 degrees with the Protractor and holds, then a marker measures 76.0 mm with the Surface Ruler, so both phones end on their results. The reading lifts onto a shape that expands into the converter's ground."
     },
     {
       "id": "unit",
@@ -47,15 +47,15 @@
       "end": 17.0,
       "title": "Tip & Bill Splitter",
       "in": "fold",
-      "action": "The two cards slide together and fold into one surface that becomes the receipt; the receipt prints, the tip appears and the total divides into two shares. Then a rest."
+      "action": "The two cards slide together and fold into one surface that becomes the receipt; the receipt prints, the tip appears and the total divides into two shares."
     },
     {
       "id": "wheel",
       "start": 17.0,
       "end": 23.5,
       "title": "Decision Wheel",
-      "in": "cut",
-      "action": "A hard cut on a strong accent to a large phone with the real Decision Wheel sheet. The spin starts inside the app, and one camera move pushes towards the wheel while the phone turns face on; the camera passes through, so the phone's edges leave the frame by framing alone. The lilac world grows from behind the wheel, which settles to fill the scene and slows to Music in the app's 3 seconds. The result holds for a second, then the confetti bursts."
+      "in": "zoom",
+      "action": "The Bill Splitter phone zooms in and glides to the centre while transitioning into the Decision Wheel sheet. The spin starts inside the app, and one camera move pushes towards the wheel while the phone turns face on; the camera passes through, so the phone's edges leave the frame by framing alone. The lilac world grows from behind the wheel, which settles to fill the scene and slows to Music in the app's 3 seconds. The result holds for a second, then the confetti bursts."
     },
     {
       "id": "montage",
@@ -63,7 +63,7 @@
       "end": 29.1,
       "title": "Everyday tools, one app",
       "in": "confetti",
-      "action": "Twelve confetti pieces fly to a grid and become the app's tools as MaterialShape badges, and the named grid holds; the badges rise into a band while the five tools' real screens track in on the beat."
+      "action": "Twelve confetti pieces fly to a grid and become the app's tools as MaterialShape badges with their icons, and the named grid holds; the badges rise into a band while the five tools' real screens track in on the beat."
     },
     {
       "id": "end",
@@ -82,10 +82,10 @@
       0.75,
       1.0
     ],
-    "icon": 1.25,
-    "swing": 1.5,
-    "title": 1.6,
-    "tagline": 1.85,
+    "icon": 1.15,
+    "swing": 1.35,
+    "title": 1.4,
+    "tagline": 1.7,
     "waterMorph": [
       2.55,
       3.15
@@ -270,11 +270,11 @@
       ]
     },
     {
-      "name": "Bill to Decision Wheel: a rest, then a hard cut on the accent",
+      "name": "Bill to Decision Wheel: the phone zooms in and turns into the wheel",
       "times": [
-        16.6,
-        16.98,
-        17.02
+        16.3,
+        16.7,
+        17.05
       ]
     },
     {

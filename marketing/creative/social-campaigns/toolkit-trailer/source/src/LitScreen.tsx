@@ -3,9 +3,29 @@ import { cancelRender, continueRender, delayRender, staticFile } from "remotion"
 import { mount, setup } from "../../../../../ui/src/embed.js";
 import { PALETTE } from "./theme";
 
-// One-time setup: the kit's fonts, Material Web and the asset base Remotion serves public/ from.
+// One-time setup: strip Webpack's chunked @font-face rules and preload font binaries into document.fonts from
+// staticFile() via ArrayBuffer so headless Chrome never drops .woff2 streams, then run the kit's setup.
+for (const sheet of Array.from(document.styleSheets)) {
+  try {
+    for (let i = sheet.cssRules.length - 1; i >= 0; i--) {
+      if (sheet.cssRules[i] instanceof CSSFontFaceRule) sheet.deleteRule(i);
+    }
+  } catch {}
+}
 const assetBase = staticFile("fonts/GoogleSansFlex.ttf").replace("fonts/GoogleSansFlex.ttf", "");
-export const ready = setup({ assetBase, marketingAssetBase: `${assetBase}material-next/`, palette: PALETTE, theme: "light" })
+const preloadFont = async (family: string, relPath: string, descriptors: FontFaceDescriptors) => {
+  const res = await fetch(`${assetBase}${relPath}`);
+  const buf = await res.arrayBuffer();
+  const face = new FontFace(family, buf, descriptors);
+  await face.load();
+  document.fonts.add(face);
+};
+export const ready = Promise.all([
+  preloadFont("Google Sans Flex", "fonts/GoogleSansFlex.ttf", { weight: "1 1000", stretch: "25% 151%" }),
+  preloadFont("Material Symbols Outlined", "fonts/material-symbols-outlined.woff2", { weight: "100 700" }),
+  preloadFont("Material Symbols Rounded", "fonts/material-symbols-rounded.woff2", { weight: "100 700" }),
+])
+  .then(() => setup({ assetBase, marketingAssetBase: `${assetBase}material-next/`, palette: PALETTE, theme: "light" }))
   .then(() => document.fonts.ready);
 
 /** Holds the still until the kit's fonts are loaded, for compositions that draw text of their own. */

@@ -10,6 +10,12 @@ if (!existsSync(`${src}material-next/device-frames`)) {
   process.exit(1);
 }
 cpSync(src, dest, { recursive: true });
+const symbolsDir = fileURLToPath(new URL("../../../../../ui/node_modules/material-symbols/", import.meta.url));
+for (const file of ["material-symbols-outlined.woff2", "material-symbols-rounded.woff2"]) {
+  if (existsSync(`${symbolsDir}${file}`)) {
+    cpSync(`${symbolsDir}${file}`, `${dest}fonts/${file}`);
+  }
+}
 console.log("synced marketing/ui/public -> public/");
 // The soundtrack (scripts/compose.mjs writes it), served to the film as public/soundtrack.mp3.
 cpSync(fileURLToPath(new URL("../../soundtrack.mp3", import.meta.url)), fileURLToPath(new URL("../public/soundtrack.mp3", import.meta.url)));

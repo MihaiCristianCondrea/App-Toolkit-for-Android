@@ -36,5 +36,3 @@ export const ramp = (t: number, start: number, dur: number, ease = enter) => eas
 /** A Material spring that starts at `start` seconds: 0 before, settling at 1 (with overshoot). */
 export const pop = (t: number, start: number, damping = 11, stiffness = 170) =>
   t < start ? 0 : spring({ frame: (t - start) * FPS, fps: FPS, config: { damping, stiffness, mass: 0.8 } });
-/** Deterministic noise in -1..1 for slow drift. */
-export const drift = (t: number, seed: number, speed = 0.35) => Math.sin(t * speed * 2 * Math.PI + seed * 12.9898) * 0.6 + Math.sin(t * speed * 3.7 + seed * 78.233) * 0.4;

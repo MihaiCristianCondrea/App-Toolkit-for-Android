@@ -94,7 +94,7 @@ export const hull = (pts: Pt[]): Pt[] => {
   return [...lower.slice(0, -1), ...upper.slice(0, -1)];
 };
 
-/** Sutherland–Hodgman against the image rectangle. */
+/** Sutherland-Hodgman against the image rectangle. */
 export const clipToImage = (poly: Pt[]): Pt[] => {
   const edges: [(p: Pt) => boolean, (a: Pt, b: Pt) => Pt][] = [
     [(p) => p[0] >= 0, (a, b) => [0, a[1] + ((b[1] - a[1]) * (0 - a[0])) / (b[0] - a[0])]],
@@ -140,7 +140,7 @@ export const widthAt = (poly: Pt[], y: number) => {
   return xs.length ? Math.max(...xs) - Math.min(...xs) : 0;
 };
 
-/** Even–odd point-in-polygon test. */
+/** Even-odd point-in-polygon test. */
 export const inside = (poly: Pt[], [x, y]: Pt) => {
   let c = false;
   poly.forEach((p, i) => { const q = poly[(i + poly.length - 1) % poly.length]; if ((p[1] > y) !== (q[1] > y) && x < ((q[0] - p[0]) * (y - p[1])) / (q[1] - p[1]) + p[0]) c = !c; });
@@ -170,7 +170,7 @@ export type ScreenUi = { critical: Record<string, number[]>; secondary: Record<s
 /** Signed area; positive for a clockwise outline in image coordinates (y down). */
 const signedArea = (poly: Pt[]) => poly.reduce((a, p, i) => { const q = poly[(i + 1) % poly.length]; return a + p[0] * q[1] - q[0] * p[1]; }, 0) / 2;
 
-/** The part of `subject` inside the convex polygon `clip` (Sutherland–Hodgman). */
+/** The part of `subject` inside the convex polygon `clip` (Sutherland-Hodgman). */
 export const clipConvex = (subject: Pt[], clip: Pt[]): Pt[] => {
   const sign = Math.sign(signedArea(clip)) || 1;
   let out = subject;

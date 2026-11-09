@@ -182,11 +182,11 @@ for (let t = tl.barStart; t < scene.end.start - 0.01; t += BEAT / 4) {
 }
 
 // ------------------------------------------------------------------------------------------------ the story's moments
-// Intro: one mallet note per arriving shape, rising through F major; a bell for the icon; the name and the line
-// each land on a mallet; hats thicken into the water world, which opens on a drop and a low tom.
-[65, 69, 72, 76, 77].forEach((m, i) => mallet(B.introShapes[i], m, 0.2, (i - 2) * 0.3, 3.5));
-bell(B.icon, 77, 0.16); bell(B.icon, 84, 0.07, 0.3);
-mallet(B.title, 72, 0.12); mallet(B.tagline, 74, 0.1);
+// Intro: one mallet note per arriving shape, rising through F major; a warm soft chord for the icon; the name and
+// the line each land on a mallet; hats thicken into the water world, which opens on a drop and a low tom.
+[65, 69, 72, 76, 77].forEach((m, i) => mallet(B.introShapes[i], m, 0.14, (i - 2) * 0.3, 4.2));
+[60, 65, 69].forEach((m, i) => mallet(B.icon + i * 0.018, m, 0.075, (i - 1) * 0.25, 4.5));
+mallet(B.title, 72, 0.11); mallet(B.tagline, 74, 0.095);
 for (let t = B.tagline + BEAT; t < scene.water.start - 0.01; t += BEAT / 4) hat(t, 0.02 + 0.05 * ((t - B.tagline) / (scene.water.start - B.tagline)), Math.round(t * 8) % 2 ? 0.3 : -0.3);
 glide(B.waterMorph[0], B.waterMorph[1] - B.waterMorph[0], 260, 700, 0.05);
 drop(scene.water.start, 360, 1400, 0.24); tom(scene.water.start, 0.4);
@@ -216,19 +216,20 @@ clap(unitIn, 0.4); bass(unitIn, 38, 0.4, 0.34); mallet(unitIn, 74, 0.12); mallet
 B.unitCategories.forEach((t, i) => { if (i) { mallet(t, [72, 74, 77, 79, 81][i], 0.11, (i - 2) * 0.3); mallet(t + 0.125, [79, 81, 84, 86, 89][i], 0.07, -(i - 2) * 0.3, 8); } });
 fwip(B.unitFold[0], 0.32, 0.09); mallet(B.unitFold[0] + 0.2, 77, 0.08); mallet(B.unitFold[0] + 0.32, 72, 0.08, -0.2);
 
-// Tip and Bill Splitter: a print per line, a bell for the share, a chime for each person's card; then the rest,
-// only the pad, and a quiet swell into the cut.
+// Tip and Bill Splitter: a print per line, a bell for the share, a chime for each person's card; then a smooth
+// zoom swell into the Decision Wheel phone.
 B.billLines.forEach((t, i) => { for (let k = 0; k < 4; k++) tick(t + k * 0.035, 0.05, 1400, 0.4); if (i === 3) bell(t, 81, 0.1, 0.2, 2); });
 B.billShares.forEach((t, i) => { bell(t, [84, 88][i], 0.07, i ? 0.4 : -0.4, 1.6); });
-riser(scene.wheel.start, 0.7, 0.05);
+glide(16.25, 0.75, 280, 680, 0.055);
+riser(scene.wheel.start, 0.75, 0.065);
 
-// Decision Wheel: a tom and a bell on the cut; a mallet per choice as the phone settles; a wind-up swell; a
+// Decision Wheel: a soft tom and bell as the zoomed phone settles; a mallet per choice; a wind-up swell; a
 // ratchet click each time a segment passes the pointer, following the wheel's own rotation (src/wheelMotion.ts:
 // it speeds up from rest inside the app, then slows to Music in 3 seconds); an air glide that rises with the
 // camera's push and peaks as it passes through the phone's edges, and a soft tom as the lilac grows; a bass
 // pedal, a snare roll and hats that build through the spin; a bell as Music lands on the downbeat, a held breath
 // over the result with a swell, then the film's only crash with the confetti.
-tom(scene.wheel.start, 0.55, 170, 80); bell(scene.wheel.start, 70, 0.1);
+tom(scene.wheel.start, 0.42, 150, 80); bell(scene.wheel.start, 70, 0.1);
 B.wheelChoices.forEach((t, i) => mallet(t, [65, 69, 72, 74, 77, 81][i], 0.1, (i - 2.5) * 0.3));
 riser(B.wheelWindup[1], B.wheelWindup[1] - B.wheelWindup[0] + 0.1, 0.05);
 {
