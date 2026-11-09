@@ -21,10 +21,10 @@ The previous cut was eight equal four-second scenes, each title-left and phone-r
 
 | Time | Scene | What happens | Shot |
 | --- | --- | --- | --- |
-| 0 to 3 | App Toolkit | One shape per tool arrives on each note in its world's colour, the icon pops, the shapes breathe round it, and "App Toolkit, Everyday tools in one app" lands. | Centred lockup |
-| 3 to 6.85 | Water Eject | The water world grows out of the intro's blue shape. The phone stands with its speaker down, as the sheet asks; the tone pushes waves, glass bubbles and droplets out of it, and the 165 Hz tone pulses beside it. | Phone right of centre, the tone on the left |
-| 6.5 to 10.5 | Ruler & Protractor | The ruler the wave became pulls back to a strip as the Surface Ruler and Protractor phones come in large, side by side. An arm rises from the ruler's zero to 45 degrees while the Protractor sweeps with it and holds; a marker measures 76.0 mm while the Surface Ruler reads the same. Both phones end on their results; the reading lifts to the left. | The two phones lead, the ruler supports |
-| 10.5 to 13.5 | Unit Converter | 76.0 mm beside 7.6 cm, then Mass, Temperature, Volume and Data on syncopated beats; the shapes morph like the loading indicator. | Wide, the pair leads |
+| 0 to 3.2 | App Toolkit | One shape per tool arrives on each note in its world's colour, the icon pops, the shapes breathe round it, and "App Toolkit, Everyday tools in one app" lands. Then the others swap out while the blue shape travels on. | Centred lockup |
+| 3 to 6.85 | Water Eject | The blue shape reaches the phone's place and morphs into its backdrop as the blue floods in; the phone rises into it, speaker down as the sheet asks. Each speaker sends out its own wave on every note, with a bubble on every other note and droplets on two; the 165 Hz tone pulses beside it. | Phone right of centre, the tone on the left |
+| 6.15 to 10.95 | Ruler & Protractor | While the last wave flattens into the ruler's line, the blue backdrop morphs and moves into the yellow one (the yellow fills it from the centre) and the phone turns in 3D: past edge-on it comes round as the Surface Ruler. The Protractor phone joins it and the ruler pulls back to a strip. An arm rises to 45 degrees with the Protractor and holds; a marker measures 76.0 mm while the Surface Ruler reads the same. Both phones end on their results. | The two phones lead, the ruler supports |
+| 10.95 to 13.5 | Unit Converter | The reading's shape has expanded into the converter's ground; under 76.0 mm the first card grows, 7.6 cm beside it, then Mass, Temperature, Volume and Data on syncopated beats; the shapes morph like the loading indicator. | Wide, the pair leads |
 | 13.15 to 17 | Tip & Bill Splitter | The receipt prints the bill and the 10% tip, the share lands at €28.60, and the total divides into two people's cards. Then a rest. | Receipt-led, the phone rises in beside it; an almost still push during the rest |
 | 17 to 21.9 | Decision Wheel | The six choices land, a quiet beat, a wind-up backwards, the spin, Music, one burst of confetti. | Full-frame wheel |
 | 21.3 to 27.1 | The toolkit | Sixteen pieces of confetti fly to a grid and become the app's tools as MaterialShape badges with their names; the badges rise into a band and the five tools' real screens track in from the right on the beat. | Wide, a lateral track |
@@ -34,15 +34,15 @@ The previous cut was eight equal four-second scenes, each title-left and phone-r
 
 | Change | How | Why |
 | --- | --- | --- |
-| App Toolkit to Water Eject | The water world grows out of the intro's blue shape | The name first, kept short; the first tool comes out of the shapes that stand for the tools |
-| Water Eject to Ruler | The last wave keeps travelling, loses its curve into a straight line, grows graduations; the yellow world opens outward from the line, which thickens into the ruler and pulls back as the phones come in | A morph with a physical reason: a wave becomes a measuring line |
-| Ruler to Unit Converter | A match cut: the 76.0 mm reading lifts onto a soft-burst shape the size and place of the converter's first card, which holds 76.0 mm beside 7.6 cm | Brief and quiet; the value carries the viewer, and the conversion is the app's real result |
+| App Toolkit to Water Eject | The other shapes swap out while the blue one travels to the phone's place, grows and morphs into the water backdrop as the blue floods in; the phone rises into it | The name first, kept short; the first tool comes out of the shapes that stand for the tools |
+| Water Eject to Ruler | The last wave loses its curve into a straight line that grows graduations and opens the yellow world; meanwhile the blue backdrop morphs and moves into the yellow one and the phone turns in 3D, coming round as the Surface Ruler; the line thickens into the ruler | A morph with a physical reason (a wave becomes a measuring line), and one phone carried from tool to tool |
+| Ruler to Unit Converter | The 76.0 mm reading lifts onto a soft-burst shape, which keeps growing until it is the converter's off-white ground; under the same text the converter's first card grows, 7.6 cm beside it | A container transform: the value carries the viewer, and the conversion is the app's real result |
 | Unit Converter to Tip & Bill Splitter | The two cards slide together, round into one surface and stretch and whiten into the receipt, while the coral world opens out of it in a soft burst | A physical Material transformation that keeps shape, place and motion; the receipt is artwork, not the app's UI |
 | Tip & Bill Splitter to Decision Wheel | A rest after the shares (the drums stop), then a hard cut on a strong accent | A change of rhythm: stillness before a choice |
 | Decision Wheel to the toolkit | The result's confetti does not settle: sixteen pieces fly on and morph into the app's tools | The payoff, and the most expressive change: a choice reveals the whole collection |
 | The toolkit to the icon | The cards and badges converge into the icon as it pops on the resolution | Everything gathers into one app |
 
-One is a plain cut, one a match cut; no two adjacent changes share a motion, and there is no shared camera.
+One is a plain cut; no two adjacent changes share a motion, and there is no shared camera.
 
 ## Sound
 
@@ -50,9 +50,9 @@ The arrangement follows the story's energy: an F pad under the intro, a rising m
 
 ## Motion and truth
 
-1. One useful form turns into the next (a shape, a wave, a line, a reading, a card, a receipt, a choice, the tools), but not every change is a morph: one is a cut and one a match cut. No per-tool titles: the screens and objects say what each tool is.
+1. One useful form turns into the next (a shape, a wave, a line, a reading, a card, a receipt, a choice, the tools), but not every change is a morph: one is a hard cut and one a rest. No per-tool titles: the screens and objects say what each tool is.
 2. The UI is real and truthful: each phone and card mounts the app's screen from the UI kit in a real state. Every number on screen is the app's own: the 165 Hz Water Eject sheet; the Protractor at 45 degrees and the Surface Ruler's 76.0 mm, both live (the drawn ruler is in millimetres and measures the same); the five conversions (76.0 mm = 7.6 cm, 500 g = 0.5 kg, 20 °C = 68 °F, 2 L = 2000 mL, 1 GB = 1000 MB); the €52.00 bill with a 10% tip, €28.60 each for two; the wheel's six choices settled on Music. The water, the ruler artwork, the receipt, the badges and the confetti are decoration, not app features. The tools named in the montage are tools the app ships.
-3. Material, not illustration: MaterialShapes on the UI kit's own curves, each world's tonal palette, thick rounded strokes, two elevation levels. The end card uses Google's unaltered badge from `marketing/assets/badges/google-play`, moved and scaled whole as its guidelines allow, with the trademark line.
+3. Material, not illustration: MaterialShapes on the UI kit's own curves, drawn as SVG paths so they move and turn at sub-pixel precision (CSS masks snapped to whole pixels and looked shaky); nothing drifts for the sake of it; each world's tonal palette, thick rounded strokes, two elevation levels. The end card uses Google's unaltered badge from `marketing/assets/badges/google-play`, moved and scaled whole as its guidelines allow, with the trademark line.
 4. Every frame is a function of its frame number; picture and sound read the same `src/timeline.json`.
 
 ## Build

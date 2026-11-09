@@ -22,13 +22,8 @@
       "start": 3.0,
       "end": 6.85,
       "title": "Water Eject",
-      "in": "wipe",
-      "action": "The water world grows out of the intro's blue shape. The phone stands with its speaker down, as the sheet asks; the tone pushes waves, glass bubbles and droplets out of it, and the 165 Hz tone pulses beside it.",
-      "from": [
-        1590,
-        270
-      ],
-      "shape": "cookie_9sided"
+      "in": "morph",
+      "action": "The intro's blue shape travels to the phone's place and morphs into its backdrop while the other shapes swap out and the blue floods in; the phone rises into it, speaker down as the sheet asks, and each speaker sends out its own wave, with a few bubbles and droplets; the 165 Hz tone pulses beside it."
     },
     {
       "id": "ruler",
@@ -36,15 +31,15 @@
       "end": 10.5,
       "title": "Ruler & Protractor",
       "in": "morph",
-      "action": "The last wave flattens into a line that grows graduations and opens the yellow world; the line becomes the ruler, which pulls back to a strip as the Surface Ruler and Protractor phones come in. An arm sweeps to 45 degrees with the Protractor and holds, then a marker measures 76.0 mm with the Surface Ruler, so both phones end on their results. The reading lifts to the left."
+      "action": "While the last wave flattens into the ruler's line, the blue backdrop morphs and moves into the yellow one and the phone turns, coming round as the Surface Ruler; the Protractor phone joins it. An arm sweeps to 45 degrees with the Protractor and holds, then a marker measures 76.0 mm with the Surface Ruler, so both phones end on their results. The reading lifts onto a shape that expands into the converter's ground."
     },
     {
       "id": "unit",
-      "start": 10.5,
+      "start": 10.95,
       "end": 13.5,
       "title": "Unit Converter",
-      "in": "match",
-      "action": "Match cut on the reading: 76.0 mm lands where the converter's first card shows 76.0 mm, beside 7.6 cm. Four more categories follow on syncopated beats."
+      "in": "expand",
+      "action": "The reading's shape has expanded into the converter's ground; under 76.0 mm the first card grows, and 7.6 cm beside it. Four more categories follow on syncopated beats."
     },
     {
       "id": "bill",
@@ -91,25 +86,31 @@
     "swing": 1.5,
     "title": 1.6,
     "tagline": 1.85,
-    "waterHeadline": [
-      3.15,
-      3.35
+    "waterMorph": [
+      2.55,
+      3.15
     ],
+    "waterPhone": 3.0,
     "waterHz": 3.55,
     "waterWaves": [
-      3.25,
-      3.75,
-      4.25,
+      3.5,
+      4.0,
       4.5,
-      4.75,
-      5.25,
+      5.0,
       5.5,
-      5.75
+      6.0
     ],
     "waterDrops": [
-      3.25,
-      4.25,
-      5.25
+      4.0,
+      5.0
+    ],
+    "phoneTurn": [
+      6.15,
+      6.9
+    ],
+    "shapeMorph": [
+      6.2,
+      6.9
     ],
     "waveLine": [
       6.15,
@@ -132,9 +133,6 @@
       7.0,
       7.6
     ],
-    "rulerHeadline": [
-      7.15
-    ],
     "protractorSweep": [
       7.5,
       7.75,
@@ -149,15 +147,16 @@
       10.0,
       10.45
     ],
-    "unitHeadline": [
-      10.65
+    "rulerExpand": [
+      10.45,
+      10.95
     ],
-    "unitChips": 10.7,
+    "unitChips": 11.2,
     "unitCategories": [
-      10.5,
-      11.25,
-      11.75,
-      12.125,
+      11.0,
+      11.5,
+      11.875,
+      12.25,
       12.5
     ],
     "unitFold": [
@@ -165,9 +164,6 @@
       13.5
     ],
     "billPhone": 13.4,
-    "billHeadline": [
-      13.6
-    ],
     "billLines": [
       13.6,
       13.95,
@@ -182,9 +178,6 @@
     "billRest": [
       16.1,
       17.0
-    ],
-    "wheelHeadline": [
-      17.1
     ],
     "wheelChoices": [
       17.05,
@@ -219,7 +212,6 @@
       24.5,
       25.0
     ],
-    "montageHeadline": 25.25,
     "converge": [
       26.4,
       27.0
@@ -241,27 +233,27 @@
   },
   "transitions": [
     {
-      "name": "Intro to Water Eject: the water shape grows into its world",
+      "name": "Intro to Water Eject: the blue shape morphs into the water world",
       "times": [
-        2.9,
-        3.2,
-        3.6
+        2.6,
+        2.85,
+        3.3
       ]
     },
     {
-      "name": "Water Eject to Ruler: the last wave flattens into the ruler",
+      "name": "Water Eject to Ruler: the wave flattens, the backdrop morphs, the phone turns",
       "times": [
-        6.2,
-        6.6,
-        7.0
+        6.3,
+        6.55,
+        6.95
       ]
     },
     {
-      "name": "Ruler to Unit Converter: match cut on 76.0 mm",
+      "name": "Ruler to Unit Converter: the 76.0 mm shape expands into the converter",
       "times": [
-        10.3,
-        10.47,
-        10.52
+        10.35,
+        10.7,
+        11.15
       ]
     },
     {

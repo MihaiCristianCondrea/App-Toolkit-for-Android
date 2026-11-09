@@ -9,7 +9,7 @@ import badge from "../../../../../assets/badges/google-play/en_badge_web_generic
 import { B, FPS, clamp, drift, enter, leave, mix, pop, ramp, standard } from "./lib/anim";
 import { CONFETTI, FONT, NEUTRAL, WORLDS } from "./theme";
 import type { World } from "./theme";
-import { Chip, ConfettiBurst, Decor, ELEVATION, Headline, MorphPair, Phone, Receipt, Ripples, Ruler, ShapeWipe, ShareCard, SoundWaves, Waveform, Wheel, burstPieces, confettoAt, morphTurn, speakers } from "./motifs";
+import { Chip, ConfettiBurst, Decor, ELEVATION, Headline, MorphPair, Phone, Receipt, Ripples, Ruler, ShapeWipe, ShareCard, SpeakerWaves, Waveform, Wheel, burstPieces, confettoAt, morphTurn, speakers } from "./motifs";
 import type { PhonePose, Screen, UnitFace } from "./motifs";
 import { morphPath } from "./motifs/morph";
 
@@ -50,16 +50,16 @@ const place = (spots: [number, number, number][], colors: string[], seed: number
 /** A large tonal shape that breathes slowly behind the phone. */
 const Behind: React.FC<{ t: number; name: string; x: number; y: number; size: number; color: string; seed: number; start: number }> = ({ t, name, x, y, size, color, seed, start }) => {
   const p = pop(t, start, 14, 120), s = size * (0.7 + 0.3 * p);
-  return <div style={{ position: "absolute", inset: 0, zIndex: 1 }}><Shape name={name} x={x - s / 2 + drift(t, seed) * 10} y={y - s / 2 + drift(t, seed + 1) * 10} size={s} color={color} rotate={(t - start) * 6 + seed * 20} /></div>;
+  return <div style={{ position: "absolute", inset: 0, zIndex: 1 }}><Shape name={name} x={x - s / 2} y={y - s / 2} size={s} color={color} rotate={(t - start) * 6 + seed * 20} /></div>;
 };
 const Ground: React.FC<{ color: string; opacity?: number }> = ({ color, opacity = 1 }) => <AbsoluteFill style={{ background: color, opacity }} />;
 const Title: React.FC<{ t: number; at: number[]; text: string; x?: number; y?: number; color: string; size?: number; sub?: string; subColor?: string; align?: "left" | "center"; width?: number }> = ({ t, at, text, x = GRID.left, y = GRID.top, color, size = TITLE, sub, subColor, align = "left", width = 1400 }) => (
   <Headline t={t} at={at} title={text} sub={sub} x={x} y={y} color={color} subColor={subColor} size={size} subScale={0.5} align={align} width={width} />
 );
 
-// ================================================================================================ 0 to 3.5: the name
+// ================================================================================================ 0 to 3.2: the name
 // One shape per tool arrives on each note in its world's colour, the icon pops, the shapes breathe round it and
-// the name and line land; the water world then grows out of the blue shape.
+// the name and line land. Then the others swap out while the blue shape travels into the water world.
 const INTRO_SHAPES: { world: World; name: string; x: number; y: number; size: number }[] = [
   { world: WORLDS.water, name: "cookie_9sided", x: 1590, y: 270, size: 240 },
   { world: WORLDS.ruler, name: "soft_burst", x: 330, y: 810, size: 260 },
@@ -67,47 +67,66 @@ const INTRO_SHAPES: { world: World; name: string; x: number; y: number; size: nu
   { world: WORLDS.bill, name: "pill", x: 340, y: 280, size: 230 },
   { world: WORLDS.wheel, name: "flower", x: 960, y: 120, size: 150 },
 ];
+const introTurn = (t: number, i: number) => i * 23 + t * 10 + ramp(t, B.swing, 0.8, enter) * 40;
+/** Every backdrop shape after the intro turns at the same slow rate, so a shape handed from one scene to the next never jumps. */
+const spin = (t: number) => t * 8;
 const Intro: React.FC<{ t: number }> = ({ t }) => {
-  const swing = ramp(t, B.swing, 0.8, enter), iconP = pop(t, B.icon, 10, 190);
+  const swing = ramp(t, B.swing, 0.8, enter), iconP = pop(t, B.icon, 10, 190), [m0] = B.waterMorph;
+  const out = (delay: number) => leave(clamp((t - m0 - delay) / 0.35));
   return (
     <AbsoluteFill>
       <Ground color={NEUTRAL.field} />
       {INTRO_SHAPES.map((s, i) => {
-        const p = pop(t, B.introShapes[i], 12, 200), k = 1 + 0.05 * Math.sin(swing * Math.PI), size = s.size * p * k;
-        const x = s.x + drift(t, i) * 8, y = s.y + drift(t, i + 5) * 8;
-        return <Shape key={i} name={s.name} x={x - size / 2} y={y - size / 2} size={size} color={s.world.shape} rotate={i * 23 + t * 10 + swing * 40} />;
+        if (i === 0 && t >= m0) return null; // the blue one travels on (WaterMorph)
+        const gone = i ? out(0.04 * i) : 0, p = pop(t, B.introShapes[i], 12, 200), size = s.size * p * (1 + 0.05 * Math.sin(swing * Math.PI)) * (1 - gone);
+        return <Shape key={i} name={s.name} x={s.x - size / 2} y={s.y - size / 2} size={size} color={s.world.shape} rotate={introTurn(t, i) + gone * 90} />;
       })}
-      <Img src={icon} style={{ position: "absolute", left: 960 - 150, top: 410 - 150 - (1 - iconP) * 30, width: 300, height: 300, transform: `scale(${iconP})`, zIndex: 4 }} />
-      <Headline t={t} at={[B.title, B.tagline]} title="App Toolkit" sub="Everyday tools in one app" x={960} y={590} width={1200} align="center" color={NEUTRAL.ink} subColor={NEUTRAL.accent} size={150} subScale={0.42} />
+      <div style={{ position: "absolute", inset: 0, opacity: 1 - out(0.02), transform: `scale(${1 - 0.08 * out(0.02)})`, transformOrigin: "960px 540px", zIndex: 4 }}>
+        <Img src={icon} style={{ position: "absolute", left: 960 - 150, top: 410 - 150 - (1 - iconP) * 30, width: 300, height: 300, transform: `scale(${iconP})` }} />
+        <Headline t={t} at={[B.title, B.tagline]} title="App Toolkit" sub="Everyday tools in one app" x={960} y={590} width={1200} align="center" color={NEUTRAL.ink} subColor={NEUTRAL.accent} size={150} subScale={0.42} />
+      </div>
     </AbsoluteFill>
   );
 };
+/** The blue shape's journey: from its place in the intro to the phone's, growing and morphing into the water backdrop. */
+const waterMorph = (t: number) => {
+  const [m0, m1] = B.waterMorph, p = standard(clamp((t - m0) / (m1 - m0)));
+  return { p, x: mix(1590, WATER_POSE.x, p), y: mix(270, WATER_POSE.y, p), size: mix(240, 780, p), turn: mix(introTurn(t, 0), spin(t), p) };
+};
+const WaterMorph: React.FC<{ t: number }> = ({ t }) => {
+  const m = waterMorph(t);
+  return <svg aria-hidden width={1920} height={1080} style={{ position: "absolute", inset: 0 }}><path d={morphPath("cookie_9sided", "cookie_12sided", m.p, m.x, m.y, m.size * 0.98, m.turn)} fill={WORLDS.water.shape} /></svg>;
+};
 
 // ================================================================================================ 3 to 6.85: Water Eject
-// The water world grows out of the intro's blue shape: the phone stands speaker down as the sheet asks, the
-// waves, bubbles and droplets leave below it, and the tone itself, 165 Hz, pulses beside it. No title.
+// The phone rises into the blue backdrop, speaker down as the sheet asks; each speaker sends out its own wave on
+// every note, with a few bubbles and droplets, and the tone itself, 165 Hz, pulses beside it. No title.
 const WATER_POSE: PhonePose = { x: 1100, y: 440, scale: 0.7, pitch: 12, yaw: -10, roll: 0 };
-const Water: React.FC<{ t: number }> = ({ t }) => {
-  const w = WORLDS.water, start = SCENE.water.start, settle = 1 - ramp(t, start, 0.6, enter);
-  const pose = WATER_POSE, dy = settle * 40, dx = drift(t, 2) * 5;
-  const sp = speakers(pose), dir = sp.reduce((a, s) => [a[0] + s.direction[0], a[1] + s.direction[1]], [0, 0]), len = Math.hypot(dir[0], dir[1]) || 1;
-  const from = { at: [sp.reduce((a, s) => a + s.at[0], 0) / sp.length + dx, sp.reduce((a, s) => a + s.at[1], 0) / sp.length + dy] as [number, number], direction: [dir[0] / len, dir[1] / len] as [number, number] };
+const Water: React.FC<{ t: number; part: "back" | "front" }> = ({ t, part }) => {
+  const w = WORLDS.water, rise = pop(t, B.waterPhone, 13, 140), dy = (1 - rise) * 640;
   const decor = useMemo(() => place([[620, 190, 76], [1520, 150, 92], [1830, 860, 58], [110, 930, 56], [1800, 470, 44]], [w.tones[0], w.tones[1], w.tones[2], w.container], 4), []);
-  return (
+  if (part === "back") return (
     <AbsoluteFill>
       <Ground color={w.field} />
-      <Behind t={t} name="cookie_12sided" x={WATER_POSE.x} y={440} size={780} color={w.shape} seed={1} start={start - 0.3} />
-      <Decor t={t} start={start - 0.2} pieces={decor} />
-      <Phone screen={SCREENS.water} scroll={WATER_SCROLL} pose={pose} dx={dx} dy={dy} />
-      <SoundWaves t={t} onsets={B.waterWaves} drops={B.waterDrops} from={from} line={w.accent} glow={w.bright} tint={w.tones[0]} reach={380} spread={62} rise={150} />
+      {t >= B.waterMorph[1] && t < B.shapeMorph[0] && <Shape name="cookie_12sided" x={WATER_POSE.x - 390} y={WATER_POSE.y - 390} size={780} color={w.shape} rotate={spin(t)} />}
+      <Decor t={t} start={B.waterMorph[1] - 0.1} pieces={decor} />
       <Waveform t={t} start={B.waterHz} onsets={B.waterWaves} x={180} y={640} width={560} label="165 Hz" line={w.accent} glow={w.bright} ink={w.accent} />
+    </AbsoluteFill>
+  );
+  const sources = speakers(WATER_POSE).map((s) => ({ at: [s.at[0], s.at[1] + dy] as [number, number], direction: s.direction }));
+  return (
+    <AbsoluteFill>
+      {t < B.phoneTurn[0] && <Phone screen={SCREENS.water} scroll={WATER_SCROLL} pose={WATER_POSE} dy={dy} />}
+      <SpeakerWaves t={t} onsets={B.waterWaves} drops={B.waterDrops} sources={sources} line={w.accent} glow={w.bright} tint={w.tones[0]} />
     </AbsoluteFill>
   );
 };
 
 // ================================================================================================ 6.15 to 7: the wave becomes a ruler
 // The last wave keeps travelling and loses its curve until it is a straight line across the frame; graduations
-// grow out of it, the yellow world opens outward from it, and the line thickens into the ruler.
+// grow out of it, the yellow world opens outward from it, and the line thickens into the ruler. Meanwhile the
+// blue backdrop morphs and moves into the yellow one, and the phone turns: past edge-on it comes round as the
+// Surface Ruler.
 const RULER_Y = 690, RULER_PX = 14;
 const WaveLine: React.FC<{ t: number }> = ({ t }) => {
   const [l0, l1] = B.waveLine, p = standard(clamp((t - l0) / (l1 - l0))), fade = 1 - clamp((t - B.rulerBody[0]) / (B.rulerBody[1] - B.rulerBody[0]));
@@ -120,36 +139,67 @@ const WaveLine: React.FC<{ t: number }> = ({ t }) => {
   );
 };
 
-// ================================================================================================ 6.5 to 10.5: Ruler & Protractor
-// The app leads: the ruler the wave became pulls back to a strip at the lower left as the Surface Ruler and the
-// Protractor come in large, side by side. An arm rises from the ruler's zero to 45 degrees while the Protractor
-// sweeps with it and holds, then a marker measures 76.0 mm while the Surface Ruler reads the same, so both phones
-// end on their results. The arm fades as the reading lifts, growing into a shape the size and place of the next
-// scene's first card.
+// ================================================================================================ 6.15 to 10.95: Ruler & Protractor
+// The app leads: the phone that turned in is the Surface Ruler, the Protractor joins it, and the ruler the wave
+// became pulls back to a strip at the lower left. An arm rises from the ruler's zero to 45 degrees while the
+// Protractor sweeps with it and holds, then a marker measures 76.0 mm while the Surface Ruler reads the same, so
+// both phones end on their results. The reading lifts onto a shape the size of the next scene's first card,
+// which keeps growing until it is the converter's ground.
 const RULER_A: PhonePose = { x: 1130, y: 520, scale: 0.72, yaw: 12, roll: 0 };
 const RULER_B: PhonePose = { x: 1530, y: 520, scale: 0.72, yaw: -12, roll: 0 };
+const BACKDROP = { x: 1330, y: 520, size: 900 };
 const STRIP = { y: 810, width: 760, px: 8 };
 const MATCH = { x: 560, y: 520, size: 330 };
 const rulerArm = (t: number) => {
   const s = B.protractorSweep, up = s.reduce((acc, at, i) => acc + ramp(t, at, 0.3) * [0.3, 0.25, 0.25, 0.2][i], 0);
   return 45 * up;
 };
-const RulerScene: React.FC<{ t: number }> = ({ t }) => {
+/** The water phone's turn into the Surface Ruler: up to edge-on with the Water Eject screen, then round from the other edge with the ruler. */
+const turnPose = (t: number): { pose: PhonePose; ruler: boolean } => {
+  const [a, b] = B.phoneTurn, u = clamp((t - a) / (b - a)), e = standard(u), first = u < 0.5;
+  const yaw = first ? mix(WATER_POSE.yaw ?? 0, 90, leave(u / 0.5)) : mix(-90, RULER_A.yaw ?? 0, enter((u - 0.5) / 0.5));
+  return { pose: { x: mix(WATER_POSE.x, RULER_A.x, e), y: mix(WATER_POSE.y, RULER_A.y, e), scale: mix(WATER_POSE.scale, RULER_A.scale, e), pitch: Math.round(mix(WATER_POSE.pitch ?? 0, 0, e) * 4) / 4, yaw: Math.round(yaw * 4) / 4, roll: 0 }, ruler: !first };
+};
+const RulerScene: React.FC<{ t: number; part: "back" | "shape" | "phones" | "front" }> = ({ t, part }) => {
   const w = WORLDS.ruler, [m0, m1] = B.rulerMeasure, measured = ramp(t, m0, m1 - m0, standard), [p0, p1] = B.rulerPull, pull = standard(clamp((t - p0) / (p1 - p0)));
   const marker = Math.round(0.5 * measured * 200) / 200, mm = rulerMm(marker), angle = rulerArm(t), shownAngle = Math.round(angle);
-  const ruler = { y: mix(RULER_Y, STRIP.y, pull), width: mix(GRID.right - GRID.left, STRIP.width, pull), px: mix(RULER_PX, STRIP.px, pull) };
-  const pivot = { x: GRID.left + 28, y: ruler.y }, inA = 1 - ramp(t, p0, 0.75, enter), inB = 1 - ramp(t, p0 + 0.2, 0.75, enter);
   const decor = useMemo(() => place([[760, 170, 80], [1840, 130, 56], [1860, 960, 62], [1060, 1000, 50], [70, 330, 46]], [w.tones[0], w.tones[1], w.container, "#EE9B00"], 2), []);
-  const arm = (a: number, r: number) => [pivot.x + r * Math.cos((-a * Math.PI) / 180), pivot.y + r * Math.sin((-a * Math.PI) / 180)];
-  const lift = ramp(t, B.rulerLift[0], B.rulerLift[1] - B.rulerLift[0], standard), markerX = pivot.x + mm * ruler.px, armFade = 1 - clamp(lift * 2);
-  const chip = { x: mix(markerX, MATCH.x, lift), y: mix(ruler.y - 110, MATCH.y, lift) };
-  return (
+  if (part === "back") return (
     <AbsoluteFill>
       <Ground color={w.field} />
-      <Behind t={t} name="soft_burst" x={1330} y={520} size={900} color={w.shape} seed={2} start={p0 - 0.1} />
       <Decor t={t} start={p0} pieces={decor} />
-      <Phone screen={["numbers", { activeSheet: "ruler", rulerAdvanced: false, rulerMarker: marker }]} pose={RULER_A} dx={inA * 1150} dy={drift(t, 5) * 4} z={3} />
-      <Phone screen={["numbers", { activeSheet: "protractor", protractorAngle: shownAngle }]} pose={RULER_B} dx={inB * 1150} dy={drift(t, 8) * 4} z={4} />
+    </AbsoluteFill>
+  );
+  if (part === "shape") {
+    // The blue backdrop moves over and morphs into the yellow one; the yellow fills it from the centre out, so the
+    // colour never passes through a muddy mix of the two.
+    const [s0, s1] = B.shapeMorph, q = standard(clamp((t - s0) / (s1 - s0))), cx = mix(WATER_POSE.x, BACKDROP.x, q), cy = mix(WATER_POSE.y, BACKDROP.y, q);
+    const size = mix(780, BACKDROP.size, q), d = morphPath("cookie_12sided", "soft_burst", q, cx, cy, size * 0.98, spin(t)), fill = size * 0.6 * enter(clamp((t - s0 - 0.1) / (s1 - s0 - 0.15)));
+    return (
+      <svg aria-hidden width={1920} height={1080} style={{ position: "absolute", inset: 0 }}>
+        <defs><clipPath id="tt-yellow-fill"><circle cx={cx} cy={cy} r={fill} /></clipPath></defs>
+        {fill < size * 0.6 && <path d={d} fill={WORLDS.water.shape} />}
+        <path d={d} fill={w.shape} clipPath={fill < size * 0.6 ? "url(#tt-yellow-fill)" : undefined} />
+      </svg>
+    );
+  }
+  if (part === "phones") {
+    const turning = t < B.phoneTurn[1], a = turning ? turnPose(t) : { pose: RULER_A, ruler: true }, inB = 1 - ramp(t, p0 + 0.1, 0.75, enter);
+    return (
+      <AbsoluteFill>
+        {a.ruler ? <Phone screen={["numbers", { activeSheet: "ruler", rulerAdvanced: false, rulerMarker: marker }]} pose={a.pose} z={3} /> : <Phone screen={SCREENS.water} scroll={WATER_SCROLL} pose={a.pose} z={3} />}
+        {t >= p0 && <Phone screen={["numbers", { activeSheet: "protractor", protractorAngle: shownAngle }]} pose={RULER_B} dx={inB * 1150} z={4} />}
+      </AbsoluteFill>
+    );
+  }
+  const ruler = { y: mix(RULER_Y, STRIP.y, pull), width: mix(GRID.right - GRID.left, STRIP.width, pull), px: mix(RULER_PX, STRIP.px, pull) };
+  const pivot = { x: GRID.left + 28, y: ruler.y }, arm = (a: number, r: number) => [pivot.x + r * Math.cos((-a * Math.PI) / 180), pivot.y + r * Math.sin((-a * Math.PI) / 180)];
+  const lift = ramp(t, B.rulerLift[0], B.rulerLift[1] - B.rulerLift[0], standard), markerX = pivot.x + mm * ruler.px, armFade = 1 - clamp(lift * 2);
+  // After the lift, the shape under the reading keeps growing until it is the converter's ground.
+  const [e0, e1] = B.rulerExpand, grow = leave(clamp((t - e0) / (e1 - e0)));
+  const chip = { x: mix(markerX, MATCH.x, lift), y: mix(ruler.y - 110, MATCH.y, lift) }, unit = WORLDS.unit;
+  return (
+    <AbsoluteFill>
       <svg aria-hidden width={1920} height={1080} style={{ position: "absolute", inset: 0, zIndex: 5, overflow: "visible" }}>
         {angle > 0.2 && armFade > 0 && <g opacity={armFade}>
           <path d={`M ${pivot.x} ${pivot.y} L ${arm(0, 230).join(" ")} A 230 230 0 0 0 ${arm(angle, 230).join(" ")} Z`} fill={w.container} opacity=".9" />
@@ -158,22 +208,22 @@ const RulerScene: React.FC<{ t: number }> = ({ t }) => {
           <text x={arm(angle / 2, 290)[0]} y={arm(angle / 2, 290)[1]} fontFamily={FONT} fontWeight={650} fontSize="64" fill="#654000" dominantBaseline="central">{shownAngle}°</text>
         </g>}
         <Ruler x={GRID.left} y={ruler.y} width={ruler.width} px={ruler.px} ticks={ramp(t, B.waveTicks[0], B.waveTicks[1] - B.waveTicks[0], (x) => x)} body={ramp(t, B.rulerBody[0], B.rulerBody[1] - B.rulerBody[0], standard)} mm={t >= m0 ? mm : 0} accent={w.accent} />
-        {lift > 0 && <path d={morphPath("soft_burst", "soft_burst", 1, chip.x, chip.y, MATCH.size * lift, morphTurn(t, 0, 0))} fill={w.shape} />}
+        {lift > 0 && <path d={morphPath("soft_burst", "soft_burst", 1, chip.x, chip.y, MATCH.size * lift * (1 + 13 * grow), morphTurn(t, 0, 0))} fill={mixColor(w.shape, unit.field, grow)} />}
       </svg>
       {t >= m0 && (
-        // The reading: a chip over the marker, then the hero of the cut.
-        <div style={{ position: "absolute", left: chip.x, top: chip.y, transform: `translate(-50%, -50%) scale(${1 + 1.05 * lift})`, zIndex: 6, display: "flex", flexDirection: "column", alignItems: "center", fontFamily: FONT, color: lift > 0.5 ? w.ink : "#FFFFFF", background: `rgba(143,87,0,${1 - lift})`, borderRadius: 30, padding: `${10 * (1 - lift)}px ${22 * (1 - lift)}px` }}>
-          <div style={{ fontSize: 36, fontWeight: 650, letterSpacing: -1, lineHeight: 1 }}>{(Math.round(mm * 10) / 10).toFixed(1)}</div>
-          <div style={{ fontSize: 20.5, fontWeight: 560, marginTop: 3 }}>mm</div>
+        // The reading: a chip over the marker, then the hero of the change (sized so it lands exactly on the card's text).
+        <div style={{ position: "absolute", left: chip.x, top: chip.y, transform: `translate(-50%, -50%) scale(${1 + 1.05 * lift})`, zIndex: 6, display: "flex", flexDirection: "column", alignItems: "center", fontFamily: FONT, color: lift > 0.5 ? mixColor(w.ink, unit.ink, grow) : "#FFFFFF", background: `rgba(143,87,0,${1 - lift})`, borderRadius: 30, padding: `${10 * (1 - lift)}px ${22 * (1 - lift)}px` }}>
+          <div style={{ fontSize: 37.02, fontWeight: 650, letterSpacing: -0.976, lineHeight: 1 }}>{(Math.round(mm * 10) / 10).toFixed(1)}</div>
+          <div style={{ fontSize: 20.93, fontWeight: 560, marginTop: 2.93 }}>mm</div>
         </div>
       )}
     </AbsoluteFill>
   );
 };
 
-// ================================================================================================ 10.5 to 13.5: Unit Converter
-// A match cut on the reading: 76.0 mm lands exactly where the converter's first card holds 76.0 mm, beside
-// 7.6 cm. Four more categories follow on syncopated beats. Then the two cards slide together and fold into one
+// ================================================================================================ 10.95 to 13.5: Unit Converter
+// The reading's shape has become the converter's ground: under 76.0 mm the first card grows, then 7.6 cm beside
+// it. Four more categories follow on syncopated beats. Then the two cards slide together and fold into one
 // surface, which the receipt grows out of.
 const CATEGORIES: { name: string; from: string; to: string; input: string; a: UnitFace; b: UnitFace; shapes: [string, string] }[] = [
   { name: "Length", from: "Millimetre", to: "Centimetre", input: "76.0", a: { value: "76.0", label: "mm" }, b: { value: "7.6", label: "cm" }, shapes: ["soft_burst", "cookie_6sided"] },
@@ -187,7 +237,7 @@ const RECEIPT = { cx: PAIR.cx, cy: 540, scale: 1.3 };
 const UNIT_POSE: PhonePose = { x: 1590, y: 540, scale: 0.62, yaw: -10, roll: 0 };
 const Unit: React.FC<{ t: number }> = ({ t }) => {
   const w = WORLDS.unit, at = B.unitCategories, i = Math.max(0, at.filter((c) => t >= c + 0.2).length - 1), shown = Math.max(0, at.filter((c) => t >= c).length - 1), c = CATEGORIES[i];
-  const [f0, f1] = B.unitFold, fold = clamp((t - f0) / (f1 - f0)), folding = t >= f0;
+  const [f0, f1] = B.unitFold, fold = clamp((t - f0) / (f1 - f0)), folding = t >= f0, grown = pop(t, SCENE.unit.start, 13, 150);
   const decor = useMemo(() => place([[1260, 150, 96], [1840, 120, 50], [1800, 980, 60], [96, 990, 54], [1000, 990, 46]], [w.tones[0], w.tones[1], w.tones[2], w.container], 2), []);
   const rest = 1 - clamp((fold - 0.05) / 0.3);
   // The fold: both shapes slide to the middle and round into one surface, which stretches and whitens into the receipt.
@@ -198,12 +248,12 @@ const Unit: React.FC<{ t: number }> = ({ t }) => {
       <Ground color={w.field} opacity={rest} />
       <div style={{ position: "absolute", inset: 0, opacity: rest }}>
         <Decor t={t} start={SCENE.unit.start - 0.3} pieces={decor} />
-        <Phone screen={["numbers", { activeSheet: "unit_converter", converterCategory: c.name, converterFrom: c.from, converterTo: c.to, converterInput: c.input, converterEditingLeft: true }]} pose={UNIT_POSE} dy={drift(t, 4) * 5} />
+        <Phone screen={["numbers", { activeSheet: "unit_converter", converterCategory: c.name, converterFrom: c.from, converterTo: c.to, converterInput: c.input, converterEditingLeft: true }]} pose={UNIT_POSE} dx={(1 - ramp(t, SCENE.unit.start + 0.15, 0.75, enter)) * 900} />
         <div style={{ position: "absolute", left: PAIR.cx - 480, width: 960, top: 760, display: "flex", justifyContent: "center", gap: 10, zIndex: 5 }}>
           {CATEGORIES.map((k, j) => { const p = pop(t, B.unitChips + j * 0.05, 12, 200); return <div key={k.name} style={{ transform: `scale(${p})`, opacity: clamp(p * 2) }}><Chip label={k.name} selected={j === shown} color={w.ink} container={w.container} outline={w.tones[2]} size={28} /></div>; })}
         </div>
       </div>
-      {!folding && <MorphPair t={t} cx={PAIR.cx} cy={PAIR.cy} gap={PAIR.gap} size={PAIR.size} changes={at} shapes={CATEGORIES.map((k) => k.shapes)} colors={[w.tones[0], w.tones[1]]} ink={w.ink} arrows={w.accent} appear={1} faces={CATEGORIES.map((k) => [k.a, k.b])} />}
+      {!folding && <MorphPair t={t} cx={PAIR.cx} cy={PAIR.cy} gap={PAIR.gap} size={PAIR.size} changes={at} shapes={CATEGORIES.map((k) => k.shapes)} colors={[w.tones[0], w.tones[1]]} ink={w.ink} arrows={w.accent} appear={grown} faceIn={[1, clamp(grown * 2)]} faces={CATEGORIES.map((k) => [k.a, k.b])} />}
       {folding && (
         <svg aria-hidden width={1920} height={1080} style={{ position: "absolute", inset: 0, zIndex: 6 }}>
           {merge < 1 && ([0, 1] as const).map((side) => {
@@ -368,13 +418,20 @@ export const Trailer: React.FC = () => {
   useFonts();
   const t = useCurrentFrame() / FPS;
   const [r0, r1] = B.waveReveal, reveal = 900 * enter(clamp((t - r0) / (r1 - r0)));
+  const [m0, m1] = B.waterMorph, flood = 2300 * enter(clamp((t - m0 - 0.2) / (m1 - m0 - 0.1))), wm = waterMorph(t);
+  const rulerEnd = SCENE.unit.start;
   const shots: [boolean, React.ReactNode][] = [
-    [t < SCENE.intro.end, <Intro t={t} />],
-    // The water world grows out of the intro's blue shape.
-    [t >= SCENE.water.start && t < SCENE.water.end, t < SCENE.water.start + timeline.wipeSeconds ? <ShapeWipe t={t} start={SCENE.water.start} dur={timeline.wipeSeconds} at={SCENE.water.from as [number, number]} shape={SCENE.water.shape!}><Water t={t} /></ShapeWipe> : <Water t={t} />],
+    [t < m1 + 0.05, <Intro t={t} />],
+    // The blue floods in from the travelling shape; the shape itself is drawn over it until it is the backdrop.
+    [t >= m0 + 0.15 && t < SCENE.water.end, <div style={{ position: "absolute", inset: 0, clipPath: t < m1 ? `circle(${flood}px at ${wm.x}px ${wm.y}px)` : undefined }}><Water t={t} part="back" /></div>],
+    [t >= m0 && t < m1, <WaterMorph t={t} />],
+    [t >= SCENE.water.start && t < SCENE.water.end, <Water t={t} part="front" />],
     // The yellow world opens outward from the line the wave became.
-    [t >= r0 && t < SCENE.unit.start, <div style={{ position: "absolute", inset: 0, clipPath: reveal < 900 ? `inset(${Math.max(0, RULER_Y - reveal)}px 0 ${Math.max(0, 1080 - RULER_Y - reveal)}px 0)` : undefined }}><RulerScene t={t} /></div>],
+    [t >= r0 && t < rulerEnd, <div style={{ position: "absolute", inset: 0, clipPath: reveal < 900 ? `inset(${Math.max(0, RULER_Y - reveal)}px 0 ${Math.max(0, 1080 - RULER_Y - reveal)}px 0)` : undefined }}><RulerScene t={t} part="back" /></div>],
+    [t >= B.shapeMorph[0] && t < rulerEnd, <RulerScene t={t} part="shape" />],
     [t >= B.waveLine[0] && t < B.rulerBody[1] + 0.05, <WaveLine t={t} />],
+    [t >= B.phoneTurn[0] && t < rulerEnd, <RulerScene t={t} part="phones" />],
+    [t >= r0 && t < rulerEnd, <RulerScene t={t} part="front" />],
     [t >= SCENE.unit.start && t < SCENE.bill.start, <Unit t={t} />],
     // The coral world opens out of the folded surface, a soft burst the shape of the bill's world.
     [t >= SCENE.bill.start && t < SCENE.bill.end, t < B.unitFold[1] ? <ShapeWipe t={t} start={SCENE.bill.start} dur={B.unitFold[1] - SCENE.bill.start + 0.15} at={[RECEIPT.cx, RECEIPT.cy]} shape="soft_burst"><Bill t={t} /></ShapeWipe> : <Bill t={t} />],

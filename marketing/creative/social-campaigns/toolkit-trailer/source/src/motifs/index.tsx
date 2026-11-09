@@ -130,9 +130,53 @@ export const SoundWaves: React.FC<{ t: number; onsets: number[]; from: { at: [nu
   );
 };
 
+/**
+ * Two speakers, two waves: on every note each group of speaker holes sends out one clean wave front, turned a
+ * little outward so the two never cross. A bubble leaves on every other note and rises; on the strong notes a
+ * couple of droplets are thrown out and fall. Less water, more air.
+ */
+export const SpeakerWaves: React.FC<{ t: number; onsets: number[]; sources: { at: [number, number]; direction: [number, number] }[]; line: string; glow: string; tint: string; reach?: number; spread?: number; drops?: number[]; outward?: number }> = ({ t, onsets, sources, line, glow, tint, reach = 380, spread = 34, drops = [], outward = 16 }) => {
+  const turn = (d: [number, number], deg: number): [number, number] => { const a = (deg * Math.PI) / 180; return [d[0] * Math.cos(a) - d[1] * Math.sin(a), d[0] * Math.sin(a) + d[1] * Math.cos(a)]; };
+  const sorted = [...sources].sort((a, b) => a.at[0] - b.at[0]), dirs = sorted.map((s, i) => turn(s.direction, i === 0 ? outward : -outward));
+  const along = (at: [number, number], d: [number, number], r: number, deg: number): [number, number] => { const [x, y] = turn(d, deg); return [at[0] + r * x, at[1] + r * y]; };
+  return (
+    <svg aria-hidden width={1920} height={1080} style={{ position: "absolute", inset: 0, zIndex: 5, pointerEvents: "none", overflow: "visible" }}>
+      <GlassDefs tint={tint} />
+      {onsets.flatMap((o, k) => {
+        if (t < o || t > o + 2.4) return [];
+        const p = 1 - (1 - clamp((t - o) / 1.4)) ** 3, fade = 1 - clamp((t - o - 0.45) / 0.95);
+        return sorted.flatMap(({ at }, side) => {
+          const d = dirs[side], r = 16 + p * reach, path = arcPath(at, d, r, spread);
+          const wave = fade > 0 && (
+            <g key={`w${k}-${side}`} opacity={fade}>
+              <path d={path} fill="none" stroke={glow} strokeWidth={12} strokeLinecap="round" opacity=".25" filter="url(#tt-glass-glow)" />
+              <path d={path} fill="none" stroke={line} strokeWidth={mix(4, 2.2, p)} strokeLinecap="round" opacity=".8" />
+            </g>
+          );
+          if (k % 2) return [wave];
+          // One bubble per speaker on every other note: it leaves with the front, then rises on its own and pops.
+          const life = t - o, rise = clamp((life - 0.35) / 1.8), popAt = 1.6 + hash(k + side) * 0.5, popP = clamp((life - popAt) / 0.16);
+          const out = 30 + (1 - (1 - clamp(life / 1.0)) ** 3) * reach * 0.6, [x0, y0] = along(at, d, out, (side ? 1 : -1) * 14);
+          const rb = (10 + hash(k * 5 + side) * 6) * (0.5 + 0.5 * pop(t, o + 0.05, 11, 180)) * (1 + popP * 0.5);
+          return [wave, popP < 1 && <Bubble key={`b${k}-${side}`} x={x0 + Math.sin(life * 3.4 + side) * 7 * rise} y={y0 - rise * rise * 150} r={rb} rim={glow} opacity={1 - popP} />];
+        });
+      })}
+      {drops.flatMap((o, k) => {
+        if (t < o || t > o + 1.3) return [];
+        return sorted.flatMap(({ at }, side) => [0, 1].map((j) => {
+          const life = t - o, [ux, uy] = turn(dirs[side], (side ? 1 : -1) * (8 + j * 18)), v = 620 + j * 160 + hash(k * 3 + side + j) * 120;
+          const x = at[0] + ux * v * life, y = at[1] + uy * v * life + 1000 * life * life, size = 6 + j * 2;
+          const angle = (Math.atan2(uy * v + 2000 * life, ux * v) * 180) / Math.PI + 90, fade = 1 - clamp((life - 0.75) / 0.5);
+          return <path key={`d${k}-${side}-${j}`} d={`M 0 ${-size * 1.5} C ${size * 0.55} ${-size * 0.4} ${size} 0 ${size} ${size * 0.35} A ${size} ${size} 0 0 1 ${-size} ${size * 0.35} C ${-size} 0 ${-size * 0.55} ${-size * 0.4} 0 ${-size * 1.5} Z`} fill={line} opacity={0.8 * fade} transform={`translate(${x.toFixed(1)} ${y.toFixed(1)}) rotate(${angle.toFixed(1)})`} />;
+        }));
+      })}
+    </svg>
+  );
+};
+
 // ---------------------------------------------------------------------------------------------------
 // Decoration, as every listing screenshot has it: small MaterialShapes in the world's tones scattered over
-// the open ground, each popping in on its own spring, then turning and floating slowly.
+// the open ground, each popping in on its own spring, then turning slowly in place.
 
 const DECOR_SHAPES = ["sunny", "flower", "gem", "clover_4leaf", "soft_burst", "cookie_6sided", "very_sunny", "clover_8leaf", "pill", "cookie_4sided", "burst", "bun"];
 export type Box = { left: number; top: number; right: number; bottom: number };
@@ -160,8 +204,8 @@ export const Decor: React.FC<{ t: number; start: number; pieces: ReturnType<type
     {pieces.map((q, i) => {
       const p = pop(t, start + 0.15 + q.delay, 10, 170), size = q.size * p;
       if (size <= 0.5) return null;
-      const fy = Math.sin((t + i) * 1.3) * 6, fx = Math.cos((t + i * 2) * 0.9) * 4;
-      return <Shape key={i} name={q.name} x={q.x - size / 2 + fx} y={q.y - size / 2 + fy} size={size} color={q.color} rotate={i * 37 + (t - start) * q.spin + (1 - p) * -90} />;
+      // Still in place once they have landed: only a slow turn, so nothing jitters.
+      return <Shape key={i} name={q.name} x={q.x - size / 2} y={q.y - size / 2} size={size} color={q.color} rotate={i * 37 + (t - start) * q.spin * 0.5 + (1 - p) * -90} />;
     })}
   </div>
 );
@@ -258,7 +302,7 @@ export type UnitFace = { value: string; label: string };
 const MORPH = 0.55;
 /** The turn of one of the pair's shapes at time t (side 0 turns clockwise, side 1 the other way). */
 export const morphTurn = (t: number, side: 0 | 1, turns: number) => (side ? -1 : 1) * (t * 36 + turns * 150) + side * 20;
-export const MorphPair: React.FC<{ t: number; cx: number; cy: number; gap: number; size: number; changes: number[]; shapes: [string, string][]; faces: [UnitFace, UnitFace][]; colors: [string, string]; ink: string; arrows: string; appear?: number }> = ({ t, cx, cy, gap, size, changes, shapes, faces, colors, ink, arrows, appear: shown }) => {
+export const MorphPair: React.FC<{ t: number; cx: number; cy: number; gap: number; size: number; changes: number[]; shapes: [string, string][]; faces: [UnitFace, UnitFace][]; colors: [string, string]; ink: string; arrows: string; appear?: number; faceIn?: [number, number] }> = ({ t, cx, cy, gap, size, changes, shapes, faces, colors, ink, arrows, appear: shown, faceIn }) => {
   const idx = Math.max(0, changes.filter((c) => t >= c).length - 1), tc = changes[idx] ?? 0;
   const morphs = changes.map((c, j) => (j === 0 ? 0 : enter(clamp((t - c) / MORPH))));
   const turns = morphs.reduce((a, v) => a + v, 0), p = idx > 0 ? morphs[idx] : 1, appear = shown ?? pop(t, changes[0] - 0.15, 12, 170);
@@ -273,7 +317,7 @@ export const MorphPair: React.FC<{ t: number; cx: number; cy: number; gap: numbe
     return (
       <div key={side} style={{ position: "absolute", left: x - size / 2, top: cy - size / 2, width: size, height: size, zIndex: 5, fontFamily: FONT, color: ink }}>
         {idx > 0 && swapOut < 1 && show(prev, 1 - swapOut, 1 - 0.3 * swapOut)}
-        {show(cur, idx > 0 ? enter(swapIn) : clamp(appear * 2), idx > 0 ? 0.7 + 0.3 * enter(swapIn) : 1)}
+        {show(cur, idx > 0 ? enter(swapIn) : faceIn ? faceIn[side] : clamp(appear * 2), idx > 0 ? 0.7 + 0.3 * enter(swapIn) : 1)}
       </div>
     );
   };

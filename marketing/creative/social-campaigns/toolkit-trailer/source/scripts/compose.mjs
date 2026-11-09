@@ -185,6 +185,7 @@ for (let t = tl.barStart; t < scene.end.start - 0.01; t += BEAT / 4) {
 bell(B.icon, 77, 0.16); bell(B.icon, 84, 0.07, 0.3);
 mallet(B.title, 72, 0.12); mallet(B.tagline, 74, 0.1);
 for (let t = B.tagline + BEAT; t < scene.water.start - 0.01; t += BEAT / 4) hat(t, 0.02 + 0.05 * ((t - B.tagline) / (scene.water.start - B.tagline)), Math.round(t * 8) % 2 ? 0.3 : -0.3);
+glide(B.waterMorph[0], B.waterMorph[1] - B.waterMorph[0], 260, 700, 0.05);
 drop(scene.water.start, 360, 1400, 0.24); tom(scene.water.start, 0.4);
 
 // Water Eject: a drop on every wave (the ones that throw droplets are brighter).
@@ -193,6 +194,8 @@ B.waterWaves.forEach((t, i) => drop(t, 380 + (i % 3) * 90, 1300 + (i % 4) * 160,
 // The wave becomes the ruler: a rising glide as it straightens, a run of ticks along it for the graduations,
 // and a soft knock as it thickens into the ruler on the downbeat.
 glide(B.waveLine[0], B.waveLine[1] - B.waveLine[0] + 0.1, 320, 1250, 0.07);
+// The phone's turn: a soft sweep through edge-on.
+fwip(B.phoneTurn[0] + 0.15, 0.4, 0.07);
 for (let k = 0; k < 16; k++) tick(B.waveTicks[0] + (k * (B.waveTicks[1] - B.waveTicks[0])) / 16, 0.045, 3200 + k * 40, -0.8 + k / 10);
 tom(B.rulerBody[1], 0.3, 120, 90);
 
@@ -200,8 +203,10 @@ tom(B.rulerBody[1], 0.3, 120, 90);
 B.protractorSweep.forEach((t, i) => { tick(t, 0.15, 1800 + i * 200); mallet(t, [72, 74, 77, 81][i], 0.1, 0.2); });
 for (let k = 0; k < 12; k++) tick(B.rulerMeasure[0] + (k * (B.rulerMeasure[1] - B.rulerMeasure[0])) / 12, 0.05, 2600, -0.4);
 bell(B.rulerMeasure[1], 81, 0.09, 0.2, 2);
-riser(scene.unit.start, B.rulerLift[1] - B.rulerLift[0] + 0.1, 0.08);
-clap(scene.unit.start, 0.4); bass(scene.unit.start, 38, 0.4, 0.34); mallet(scene.unit.start, 74, 0.12); mallet(scene.unit.start + 0.08, 81, 0.08, 0.3);
+// The reading's shape expands into the converter's ground: a swell into the downbeat its first card grows on.
+const unitIn = B.unitCategories[0];
+riser(unitIn, unitIn - B.rulerLift[0], 0.08);
+clap(unitIn, 0.4); bass(unitIn, 38, 0.4, 0.34); mallet(unitIn, 74, 0.12); mallet(unitIn + 0.08, 81, 0.08, 0.3);
 
 // Unit Converter: a mallet pair per category, a step higher each time; then the fold, a paper sweep and a
 // falling pair as the two cards become one surface.

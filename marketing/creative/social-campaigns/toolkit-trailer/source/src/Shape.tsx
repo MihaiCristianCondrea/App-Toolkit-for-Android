@@ -1,8 +1,14 @@
 import React from "react";
-import { shapeUrl } from "../../../../../ui/src/kit/assets.js";
+import { morphPath } from "./motifs/morph";
 
-/** A MaterialShape from the UI kit (the same curves its tool badges use), filled with one colour. */
-export const Shape: React.FC<{ name: string; x: number; y: number; size: number; color: string; rotate?: number }> = ({ name, x, y, size, color, rotate = 0 }) => {
-  const mask = `url("${shapeUrl(name)}") center / contain no-repeat`;
-  return <i style={{ position: "absolute", left: x, top: y, width: size, height: size, background: color, WebkitMask: mask, mask, transform: `rotate(${rotate}deg)` }} />;
-};
+/**
+ * A MaterialShape (the UI kit's curves) filled with one colour, at (x, y) with its box `size` across. Drawn as an
+ * SVG path with the turn built into the path, so it moves and turns at sub-pixel precision; a CSS mask snapped
+ * to whole pixels and made slow motion look like shaking.
+ */
+export const Shape: React.FC<{ name: string; x: number; y: number; size: number; color: string; rotate?: number; opacity?: number }> = ({ name, x, y, size, color, rotate = 0, opacity = 1 }) =>
+  size <= 0 ? null : (
+    <svg aria-hidden width="1" height="1" style={{ position: "absolute", left: 0, top: 0, overflow: "visible", pointerEvents: "none" }}>
+      <path d={morphPath(name, name, 1, x + size / 2, y + size / 2, size * 0.98, rotate)} fill={color} opacity={opacity} />
+    </svg>
+  );

@@ -22,6 +22,9 @@ const CURVES: Record<string, (t: number) => number> = {
   clover_4leaf: (t) => 0.62 + 0.38 * Math.pow(Math.abs(Math.cos(2 * t)), 0.8),
   clover_8leaf: (t) => 0.7 + 0.3 * Math.pow(Math.abs(Math.cos(4 * t)), 0.8),
   bun: (t) => 0.88 + 0.12 * Math.cos(2 * t),
+  arch: (t) => 1 / Math.pow(Math.pow(Math.abs(Math.cos(t)), 4) + Math.pow(Math.abs(Math.sin(t)), 4), 1 / 4),
+  burst: (t) => 0.74 + 0.26 * Math.pow(Math.abs(Math.cos(6 * t)), 0.7),
+  soft_boom: (t) => 0.84 + 0.16 * Math.cos(7 * t),
 };
 const curve = (name: string) => { const c = /^cookie_(\d+)sided$/.exec(name); return c ? cookie(Number(c[1])) : CURVES[name] ?? cookie(9); };
 
