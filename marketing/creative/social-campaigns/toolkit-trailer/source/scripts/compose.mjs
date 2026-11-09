@@ -219,24 +219,30 @@ B.billLines.forEach((t, i) => { for (let k = 0; k < 4; k++) tick(t + k * 0.035, 
 B.billShares.forEach((t, i) => { bell(t, [84, 88][i], 0.07, i ? 0.4 : -0.4, 1.6); });
 riser(scene.wheel.start, 0.7, 0.05);
 
-// Decision Wheel: a tom and a bell on the cut; a mallet per choice; a wind-up swell; a ratchet click each time
-// a segment passes the pointer, following the wheel's own rotation (Trailer.tsx wheelRotation); a bass pedal,
-// a snare roll and hats that build through the spin; the result is the film's only crash, with a sparkle.
+// Decision Wheel: a tom and a bell on the cut; a mallet per choice as the phone settles; a wind-up swell; a
+// ratchet click each time a segment passes the pointer, following the wheel's own rotation (the same curve as
+// Trailer.tsx wheelRotation: it speeds up from rest inside the app, then slows to Music); a soft sweep as the
+// phone tumbles and a lift as the wheel leaves the sheet; a bass pedal, a snare roll and hats that build through
+// the spin; a bell as the pick is marked, then the film's only crash with the confetti on the downbeat.
 tom(scene.wheel.start, 0.55, 170, 80); bell(scene.wheel.start, 70, 0.1);
-B.wheelChoices.forEach((t, i) => mallet(t, [65, 69, 72, 74, 77, 81][i], 0.11, (i - 2.5) * 0.3));
-riser(B.wheelWindup[1], B.wheelWindup[1] - B.wheelWindup[0] + 0.1, 0.06);
+B.wheelChoices.forEach((t, i) => mallet(t, [65, 69, 72, 74, 77, 81][i], 0.1, (i - 2.5) * 0.3));
+riser(B.wheelWindup[1], B.wheelWindup[1] - B.wheelWindup[0] + 0.1, 0.05);
 {
   const [w0, w1] = B.wheelWindup, [s0, s1] = B.wheelSpin, back = tl.wheel.windup, clamp01 = (x) => Math.min(1, Math.max(0, x));
-  const rot = (t) => t < w0 ? 0 : t < s0 ? -back * clamp01((t - w0) / (w1 - w0)) : -back + (tl.wheel.turn + back) * (1 - (1 - clamp01((t - s0) / (s1 - s0))) ** 3);
+  const spinCurve = (u) => { const a = 0.15, g = (u < a ? (u * u) / (2 * a) : u - a / 2) / (1 - a / 2); return 1 - (1 - g) ** 3; };
+  const smooth01 = (x) => x * x * (3 - 2 * x);
+  const rot = (t) => t < w0 ? 0 : t < s0 ? -back * smooth01(clamp01((t - w0) / (w1 - w0))) : -back + (tl.wheel.turn + back) * spinCurve(clamp01((t - s0) / (s1 - s0)));
   let last = Math.floor((rot(s0) + 1000 * 60) / 60);
-  for (let t = s0; t < s1; t += 48 / RATE) { const seg = Math.floor((rot(t) + 1000 * 60) / 60); if (seg !== last) { tick(t, 0.13, 1600, -0.2); last = seg; } }
+  for (let t = s0; t < s1; t += 48 / RATE) { const seg = Math.floor((rot(t) + 1000 * 60) / 60); if (seg !== last) { tick(t, 0.12, 1600, -0.2); last = seg; } }
+  fwip(B.wheelTumble[0] + 0.2, 0.5, 0.05);
+  glide(B.wheelExtract[0] - 0.05, 0.45, 420, 980, 0.05); tom(B.wheelExtract[0], 0.18, 140, 90);
   bass(s0, 36, s1 - s0, 0.2);
-  for (let k = 0; k < 20; k++) { const t = s0 + 1.0 + ((s1 - s0 - 1.0) * (1 - (1 - k / 20) ** 1.6)); clap(t, 0.03 + k * 0.012); }
+  for (let k = 0; k < 20; k++) { const t = s0 + 1.6 + ((s1 - s0 - 1.6) * (1 - (1 - k / 20) ** 1.6)); clap(t, 0.03 + k * 0.012); }
   for (let t = s0 + 0.5; t < s1; t += BEAT / 4) hat(t, 0.02 + 0.06 * ((t - s0) / (s1 - s0)), Math.round(t * 8) % 2 ? 0.35 : -0.35);
-  riser(s1, 1.5, 0.12);
-  kick(s1, 1); crash(s1, 0.15); tom(s1, 0.35, 120, 60);
-  [96, 93, 91, 89, 86, 84, 81, 79, 77].forEach((m, i) => mallet(s1 + 0.03 + i * 0.05 + rand() * 0.02, m, 0.065, rand() * 1.4 - 0.7, 9));
-  bell(B.wheelPick, 77, 0.12, -0.2, 2.5);
+  riser(B.wheelBurst, 1.6, 0.12);
+  bell(B.wheelPick, 77, 0.12, -0.2, 2.5); mallet(B.wheelPick, 81, 0.08, 0.2);
+  kick(B.wheelBurst, 1); crash(B.wheelBurst, 0.15); tom(B.wheelBurst, 0.35, 120, 60);
+  [96, 93, 91, 89, 86, 84, 81, 79, 77].forEach((m, i) => mallet(B.wheelBurst + 0.03 + i * 0.05 + rand() * 0.02, m, 0.065, rand() * 1.4 - 0.7, 9));
 }
 
 // Montage: a pluck as each confetto becomes a tool, climbing the scale; each card lands with its own tool's

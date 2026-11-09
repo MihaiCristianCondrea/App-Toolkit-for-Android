@@ -9,9 +9,10 @@ import badge from "../../../../../assets/badges/google-play/en_badge_web_generic
 import { B, FPS, clamp, drift, enter, leave, mix, pop, ramp, smooth, standard } from "./lib/anim";
 import { CONFETTI, FONT, NEUTRAL, WORLDS } from "./theme";
 import type { World } from "./theme";
-import { Chip, ConfettiBurst, Decor, ELEVATION, Headline, MorphPair, Phone, Receipt, Ripples, Ruler, ShapeWipe, ShareCard, SpeakerWaves, Waveform, Wheel, burstPieces, confettoAt, morphTurn, speakers } from "./motifs";
+import { Chip, ConfettiBurst, Decor, ELEVATION, Headline, MorphPair, Phone, Receipt, Ripples, Ruler, ShapeWipe, ShareCard, SoftWaves, Waveform, AppWheel, APP_WHEEL, burstPieces, confettoAt, morphTurn, speakers } from "./motifs";
 import type { PhonePose, Screen, UnitFace } from "./motifs";
 import { morphPath } from "./motifs/morph";
+import { FRAME } from "./motifs/geometry";
 
 /**
  * "One app. Many everyday moments." The app's name, then a story in which one useful form turns into the next:
@@ -92,7 +93,7 @@ const Intro: React.FC<{ t: number }> = ({ t }) => {
 /** The blue shape's journey: from its place in the intro to the phone's, growing and morphing into the water backdrop. */
 const waterMorph = (t: number) => {
   const [m0, m1] = B.waterMorph, p = standard(clamp((t - m0) / (m1 - m0)));
-  return { p, x: mix(1590, WATER_POSE.x, p), y: mix(270, WATER_POSE.y, p), size: mix(240, 780, p), turn: mix(introTurn(t, 0), spin(t), p) };
+  return { p, x: mix(1590, WATER_POSE.x, p), y: mix(270, WATER_POSE.y, p), size: mix(240, WATER_BACKDROP, p), turn: mix(introTurn(t, 0), spin(t), p) };
 };
 const WaterMorph: React.FC<{ t: number }> = ({ t }) => {
   const m = waterMorph(t);
@@ -100,16 +101,18 @@ const WaterMorph: React.FC<{ t: number }> = ({ t }) => {
 };
 
 // ================================================================================================ 3 to 6.85: Water Eject
-// The phone rises into the blue backdrop, speaker down as the sheet asks; each speaker sends out its own wave on
-// every note, with a few bubbles and droplets, and the tone itself, 165 Hz, pulses beside it. No title.
-const WATER_POSE: PhonePose = { x: 1100, y: 440, scale: 0.7, pitch: 12, yaw: -10, roll: 0 };
+// The phone rises into the blue backdrop, large and speaker down as the sheet asks; below each group of speaker
+// holes the water stirs softly, as on the listing, and the tone itself, 165 Hz, pulses beside it. No title.
+const WATER_POSE: PhonePose = { x: 1110, y: 470, scale: 0.82, pitch: 10, yaw: -10, roll: 0 };
+/** The water backdrop's size, scaled with the phone. */
+const WATER_BACKDROP = 880;
 const Water: React.FC<{ t: number; part: "back" | "front" }> = ({ t, part }) => {
   const w = WORLDS.water, rise = pop(t, B.waterPhone, 13, 140), dy = (1 - rise) * 640;
   const decor = useMemo(() => place([[620, 190, 76], [1520, 150, 92], [1830, 860, 58], [110, 930, 56], [1800, 470, 44]], [w.tones[0], w.tones[1], w.tones[2], w.container], 4), []);
   if (part === "back") return (
     <AbsoluteFill>
       <Ground color={w.field} />
-      {t >= B.waterMorph[1] && t < B.shapeMorph[0] && <Shape name="cookie_12sided" x={WATER_POSE.x - 390} y={WATER_POSE.y - 390} size={780} color={w.shape} rotate={spin(t)} />}
+      {t >= B.waterMorph[1] && t < B.shapeMorph[0] && <Shape name="cookie_12sided" x={WATER_POSE.x - WATER_BACKDROP / 2} y={WATER_POSE.y - WATER_BACKDROP / 2} size={WATER_BACKDROP} color={w.shape} rotate={spin(t)} />}
       <Decor t={t} start={B.waterMorph[1] - 0.1} pieces={decor} />
       <Waveform t={t} start={B.waterHz} onsets={B.waterWaves} x={180} y={640} width={560} label="165 Hz" line={w.accent} glow={w.bright} ink={w.accent} />
     </AbsoluteFill>
@@ -118,7 +121,7 @@ const Water: React.FC<{ t: number; part: "back" | "front" }> = ({ t, part }) => 
   return (
     <AbsoluteFill>
       {t < B.phoneTurn[0] && <Phone screen={SCREENS.water} scroll={WATER_SCROLL} pose={WATER_POSE} dy={dy} />}
-      <SpeakerWaves t={t} onsets={B.waterWaves} drops={B.waterDrops} sources={sources} line={w.accent} glow={w.bright} tint={w.tones[0]} />
+      <SoftWaves t={t} onsets={B.waterWaves} drops={B.waterDrops} sources={sources} tones={[w.tones[2], w.tones[1], w.tones[0]]} rim={w.bright} tint={w.tones[0]} bubbles={[[3.8, 0], [4.85, 1], [5.7, 0]]} visible={ramp(t, B.waterPhone + 0.3, 0.4) * (1 - clamp((t - B.phoneTurn[0] + 0.2) / 0.3))} />
     </AbsoluteFill>
   );
 };
@@ -146,9 +149,11 @@ const WaveLine: React.FC<{ t: number }> = ({ t }) => {
 // Protractor sweeps with it and holds, then a marker measures 76.0 mm while the Surface Ruler reads the same, so
 // both phones end on their results. The reading lifts onto a shape the size of the next scene's first card,
 // which keeps growing until it is the converter's ground.
-const RULER_A: PhonePose = { x: 1130, y: 520, scale: 0.72, yaw: 12, roll: 0 };
-const RULER_B: PhonePose = { x: 1530, y: 520, scale: 0.72, yaw: -12, roll: 0 };
-const BACKDROP = { x: 1330, y: 520, size: 900 };
+const RULER_A: PhonePose = { x: 1090, y: 520, scale: 0.8, yaw: 12, roll: 0 };
+const RULER_B: PhonePose = { x: 1565, y: 520, scale: 0.8, yaw: -12, roll: 0 };
+/** Which phone leads: the Protractor while the arm sweeps, the Surface Ruler while it measures (0 = Ruler, 1 = Protractor). */
+const rulerFocus = (t: number) => ramp(t, B.protractorSweep[0] - 0.3, 0.45, standard) * (1 - ramp(t, B.rulerMeasure[0] - 0.35, 0.45, standard));
+const BACKDROP = { x: 1325, y: 520, size: 980 };
 const STRIP = { y: 810, width: 760, px: 8 };
 const MATCH = { x: 560, y: 520, size: 330 };
 const rulerArm = (t: number) => {
@@ -175,7 +180,7 @@ const RulerScene: React.FC<{ t: number; part: "back" | "shape" | "phones" | "fro
     // The blue backdrop moves over and morphs into the yellow one; the yellow fills it from the centre out, so the
     // colour never passes through a muddy mix of the two.
     const [s0, s1] = B.shapeMorph, q = standard(clamp((t - s0) / (s1 - s0))), cx = mix(WATER_POSE.x, BACKDROP.x, q), cy = mix(WATER_POSE.y, BACKDROP.y, q);
-    const size = mix(780, BACKDROP.size, q), d = morphPath("cookie_12sided", "soft_burst", q, cx, cy, size * 0.98, spin(t)), fill = size * 0.6 * enter(clamp((t - s0 - 0.1) / (s1 - s0 - 0.15)));
+    const size = mix(WATER_BACKDROP, BACKDROP.size, q), d = morphPath("cookie_12sided", "soft_burst", q, cx, cy, size * 0.98, spin(t)), fill = size * 0.6 * enter(clamp((t - s0 - 0.1) / (s1 - s0 - 0.15)));
     return (
       <svg aria-hidden width={1920} height={1080} style={{ position: "absolute", inset: 0 }}>
         <defs><clipPath id="tt-yellow-fill"><circle cx={cx} cy={cy} r={fill} /></clipPath></defs>
@@ -185,11 +190,11 @@ const RulerScene: React.FC<{ t: number; part: "back" | "shape" | "phones" | "fro
     );
   }
   if (part === "phones") {
-    const turning = t < B.phoneTurn[1], a = turning ? turnPose(t) : { pose: RULER_A, ruler: true }, inB = 1 - ramp(t, p0 + 0.1, 0.75, enter);
+    const turning = t < B.phoneTurn[1], a = turning ? turnPose(t) : { pose: RULER_A, ruler: true }, inB = 1 - ramp(t, p0 + 0.1, 0.75, enter), f = rulerFocus(t);
     return (
       <AbsoluteFill>
-        {a.ruler ? <Phone screen={["numbers", { activeSheet: "ruler", rulerAdvanced: false, rulerMarker: marker }]} pose={a.pose} z={3} /> : <Phone screen={SCREENS.water} scroll={WATER_SCROLL} pose={a.pose} z={3} />}
-        {t >= p0 && <Phone screen={["numbers", { activeSheet: "protractor", protractorAngle: shownAngle }]} pose={RULER_B} dx={inB * 1150} z={4} />}
+        {a.ruler ? <Phone screen={["numbers", { activeSheet: "ruler", rulerAdvanced: false, rulerMarker: marker }]} pose={a.pose} grow={mix(1, 0.86, f)} z={3} /> : <Phone screen={SCREENS.water} scroll={WATER_SCROLL} pose={a.pose} z={3} />}
+        {t >= p0 && <Phone screen={["numbers", { activeSheet: "protractor", protractorAngle: shownAngle }]} pose={RULER_B} dx={inB * 1150} grow={mix(0.86, 1, f)} z={4} />}
       </AbsoluteFill>
     );
   }
@@ -235,7 +240,7 @@ const CATEGORIES: { name: string; from: string; to: string; input: string; a: Un
 ];
 const PAIR = { cx: MATCH.x + 230, cy: MATCH.y, gap: 460, size: MATCH.size };
 const RECEIPT = { cx: PAIR.cx, cy: 540, scale: 1.3 };
-const UNIT_POSE: PhonePose = { x: 1590, y: 540, scale: 0.62, yaw: -10, roll: 0 };
+const UNIT_POSE: PhonePose = { x: 1580, y: 540, scale: 0.8, yaw: -10, roll: 0 };
 const Unit: React.FC<{ t: number }> = ({ t }) => {
   const w = WORLDS.unit, at = B.unitCategories, i = Math.max(0, at.filter((c) => t >= c + 0.2).length - 1), shown = Math.max(0, at.filter((c) => t >= c).length - 1), c = CATEGORIES[i];
   const [f0, f1] = B.unitFold, fold = clamp((t - f0) / (f1 - f0)), folding = t >= f0, grown = pop(t, SCENE.unit.start, 13, 150);
@@ -273,7 +278,7 @@ const Unit: React.FC<{ t: number }> = ({ t }) => {
 // ================================================================================================ 13.15 to 17: Tip & Bill Splitter
 // The receipt leads: it prints the bill and the tip, the share lands, and the total divides into two people's
 // cards. The phone rises in beside it as the proof. Then a rest: everything holds while the camera barely moves.
-const BILL_POSE: PhonePose = { x: 1600, y: 540, scale: 0.6, yaw: -10, roll: 2 };
+const BILL_POSE: PhonePose = { x: 1575, y: 540, scale: 0.8, yaw: -10, roll: 2 };
 const Bill: React.FC<{ t: number }> = ({ t }) => {
   const w = WORLDS.bill, rise = 1 - ramp(t, B.billPhone, 0.75, enter), [r0, r1] = B.billRest, rest = ramp(t, r0, r1 - r0, (x) => x);
   const decor = useMemo(() => place([[1300, 170, 84], [1830, 130, 92], [1850, 760, 58], [90, 960, 54], [140, 380, 46]], [w.tones[0], w.tones[1], w.tones[2], w.container], 4), []);
@@ -294,36 +299,80 @@ const Bill: React.FC<{ t: number }> = ({ t }) => {
   );
 };
 
-// ================================================================================================ 17 to 21.9: Decision Wheel
-// A hard cut on a strong accent into a frame the wheel fills. The choices land, a quiet beat, a small wind-up
-// backwards, the spin, Music, and one restrained burst of confetti.
+// ================================================================================================ 17 to 23.9: Decision Wheel
+// One wheel, from the app outwards. A hard cut to a large phone with the real Decision Wheel sheet; the spin starts
+// inside the app; the phone tumbles in 3D while the camera closes in on the wheel; face on again, the wheel leaves
+// the sheet (the replica takes over exactly where the app drew it, and the sheet's spot is left empty) and the
+// phone leaves the frame; the wheel slows to Music, the pick is marked, then the confetti.
 const CHOICES = ["Walk", "Read", "Cook", "Draw", "Music", "Rest"];
-const WHEEL = { cx: 860, cy: 560, r: 360 };
-const WHEEL_POSE: PhonePose = { x: 1640, y: 560, scale: 0.55, yaw: -10, roll: 0 };
+/** The sheet's wheel in the phone frame's pixels, measured from the rendered Play screen: its disc's centre and size, and the pointer's top edge. */
+const SHEET_WHEEL = { cx: 232.61, cy: 642.78, box: 248, pointer: { x: 222.61, y: 516.78 } };
+const WHEEL_A: PhonePose = { x: 1010, y: 540, scale: 0.92, yaw: -8, pitch: 4, roll: 0 };
+/** The handoff: the phone face on at 1.5 times, its wheel's centre at HAND. */
+const HAND_S = 1.5, HAND = { x: 880, y: 600 };
+const HAND_POSE: PhonePose = { x: HAND.x - (SHEET_WHEEL.cx - FRAME.width / 2) * HAND_S, y: HAND.y - (SHEET_WHEEL.cy - FRAME.height / 2) * HAND_S, scale: HAND_S, yaw: 0, pitch: 0, roll: 0 };
+const HERO = { x: 960, y: 575, box: 700 };
+/** The spin: it speeds up from rest (inside the app), then slows to a stop; scripts/compose.mjs follows the same curve for the ratchet. */
+const spinCurve = (u: number) => { const a = 0.15, g = (u < a ? (u * u) / (2 * a) : u - a / 2) / (1 - a / 2); return 1 - (1 - g) ** 3; };
+const smooth01 = (x: number) => x * x * (3 - 2 * x);
 const wheelRotation = (t: number) => {
   const [w0, w1] = B.wheelWindup, [s0, s1] = B.wheelSpin, back = timeline.wheel.windup;
   if (t < w0) return 0;
-  if (t < s0) return -back * standard(clamp((t - w0) / (w1 - w0)));
-  return -back + (timeline.wheel.turn + back) * (1 - (1 - clamp((t - s0) / (s1 - s0))) ** 3);
+  if (t < s0) return -back * smooth01(clamp((t - w0) / (w1 - w0)));
+  return -back + (timeline.wheel.turn + back) * spinCurve(clamp((t - s0) / (s1 - s0)));
 };
-const WHEEL_CONFETTI = { seed: 41, count: 34, from: [WHEEL.cx, 190] as [number, number] };
-const wheelPieces = () => burstPieces({ ...WHEEL_CONFETTI, colors: WORLDS.wheel.tones.concat(["#D9C67D", "#9ABDA9"]), avoid: [{ x: WHEEL.cx, y: WHEEL.cy, r: WHEEL.r + 30 }], boxes: [{ left: 1480, top: 260, right: 1800, bottom: 860 }, { left: 1180, top: 220, right: 1440, bottom: 320 }] });
+/** A smooth path through key values (Catmull-Rom), for the tumble. */
+const through = (keys: [number, number][], u: number) => {
+  let i = 0;
+  while (i < keys.length - 2 && u > keys[i + 1][0]) i++;
+  const p0 = keys[Math.max(0, i - 1)][1], [t1, p1] = keys[i], [t2, p2] = keys[i + 1], p3 = keys[Math.min(keys.length - 1, i + 2)][1], x = clamp((u - t1) / (t2 - t1));
+  return 0.5 * (2 * p1 + (-p0 + p2) * x + (2 * p0 - 5 * p1 + 4 * p2 - p3) * x * x + (-p0 + 3 * p1 - 3 * p2 + p3) * x * x * x);
+};
+const TUMBLE = { yaw: [[0, -8], [0.3, 30], [0.62, -14], [0.85, 3], [1, 0]] as [number, number][], pitch: [[0, 4], [0.3, -24], [0.62, 12], [0.85, -2], [1, 0]] as [number, number][], roll: [[0, 0], [0.3, -10], [0.62, 6], [0.85, -1.5], [1, 0]] as [number, number][] };
+const q4 = (v: number) => Math.round(v * 4) / 4;
+/** The phone's pose: settled, then the tumble and the camera closing in, then leaving the frame. */
+const wheelPhone = (t: number): PhonePose => {
+  const [u0, u1] = B.wheelTumble, [o0, o1] = B.wheelPhoneOut;
+  if (t < u0) return { ...WHEEL_A, scale: mix(0.9, WHEEL_A.scale, ramp(t, SCENE.wheel.start, 1.2, standard)) };
+  if (t < u1) {
+    const u = (t - u0) / (u1 - u0), e = smooth01(u);
+    return { x: mix(WHEEL_A.x, HAND_POSE.x, e), y: mix(WHEEL_A.y, HAND_POSE.y, e), scale: mix(WHEEL_A.scale, HAND_S, e), yaw: q4(through(TUMBLE.yaw, u)), pitch: q4(through(TUMBLE.pitch, u)), roll: through(TUMBLE.roll, u) };
+  }
+  const u = clamp((t - o0) / (o1 - o0));
+  return { x: mix(HAND_POSE.x, 2350, leave(u)), y: mix(HAND_POSE.y, HAND_POSE.y + 120, standard(u)), scale: mix(HAND_S, 1.05, standard(u)), yaw: 0, pitch: 0, roll: 10 * standard(u) };
+};
+const HERO_POINTER_TOP = HERO.y - HERO.box / 2;
+const WHEEL_CONFETTI = { seed: 41, count: 34, from: [HERO.x, HERO_POINTER_TOP - 20] as [number, number] };
+const wheelPieces = () => burstPieces({ ...WHEEL_CONFETTI, colors: WORLDS.wheel.tones.concat(["#D9C67D", "#9ABDA9"]), avoid: [{ x: HERO.x, y: HERO.y, r: HERO.box / 2 + 34 }], boxes: [{ left: HERO.x - 40, top: HERO_POINTER_TOP - 40, right: HERO.x + 40, bottom: HERO_POINTER_TOP + 40 }, { left: 1170, top: 200, right: 1460, bottom: 310 }] });
 const TOOLS = ["Water Eject", "Surface Ruler", "Protractor", "Unit Converter", "Tip & Bill Splitter", "Decision Wheel", "Compass", "Bubble Level", "Flash Dimmer", "Morse & SOS", "Counter", "Coin Flip", "Dice Roll", "Random number", "Reaction Test", "Breathe"];
 const WheelScene: React.FC<{ t: number }> = ({ t }) => {
-  const w = WORLDS.wheel, rot = wheelRotation(t), breathe = t > B.wheelChoices[5] && t < B.wheelWindup[0] ? 0.008 * Math.sin((t - B.wheelChoices[5]) * 6) : 0;
+  const w = WORLDS.wheel, rot = wheelRotation(t), pose = wheelPhone(t), handed = t >= B.wheelTumble[1], [x0, x1] = B.wheelExtract;
   const pieces = useMemo(wheelPieces, []);
-  const decor = useMemo(() => place([[230, 300, 92], [1840, 160, 64], [1860, 960, 56], [300, 900, 60], [1380, 940, 48]], [w.tones[0], w.tones[1], w.tones[2], w.container], 4), []);
-  const pick = clamp((t - B.wheelPick) / 0.3), lift = pop(t, B.wheelBurst, 9, 200), chip = pop(t, B.wheelPick, 10, 210);
+  const decor = useMemo(() => place([[250, 250, 92], [1720, 170, 64], [1780, 920, 56], [290, 880, 60], [560, 560, 44]], [w.tones[0], w.tones[1], w.tones[2], w.container], 4), []);
+  // Inside the app until the handoff; after it the phone keeps the frame it had and its wheel's spot is covered.
+  const inApp = Math.round(wheelRotation(Math.min(t, B.wheelTumble[1])) * 4) / 4;
+  const e = standard(clamp((t - x0) / (x1 - x0))), lift = pop(t, B.wheelPick, 10, 200), chip = pop(t, B.wheelPick + 0.08, 11, 210);
+  const box = mix(APP_WHEEL.box * HAND_S, HERO.box, e);
   return (
     <AbsoluteFill>
       <Ground color={w.field} />
       <Decor t={t} start={SCENE.wheel.start} pieces={decor} />
-      <div style={{ position: "absolute", inset: 0, transform: `scale(${1 + breathe})`, transformOrigin: `${WHEEL.cx}px ${WHEEL.cy}px`, zIndex: 3 }}>
-        <Wheel cx={WHEEL.cx} cy={WHEEL.cy} r={WHEEL.r} rotation={rot} choices={CHOICES} shown={B.wheelChoices.map((c) => pop(t, c, 11, 200))} colors={w.tones} ground={w.field} ink={w.ink} accent={w.accent} winner={t >= B.wheelBurst ? 4 : -1} lift={lift} />
-      </div>
-      <Phone screen={SCREENS.wheel} pose={WHEEL_POSE} opacity={1 - pick} />
-      <Phone screen={SCREENS.result} pose={WHEEL_POSE} opacity={pick} z={3} />
-      <div style={{ position: "absolute", left: 1310, top: 270, transform: `translate(-50%, -50%) scale(${chip})`, opacity: clamp(chip * 2), zIndex: 6, boxShadow: ELEVATION[2], borderRadius: 32 }}>
+      {e > 0 && <Behind t={t} name="flower" x={HERO.x} y={HERO.y} size={HERO.box + 150} color={w.container} seed={6} start={x1 - 0.2} />}
+      {pose.x < 2300 && (
+        <Phone screen={["play", { activeToolId: "decision_wheel", wheelText: CHOICES.join("\n"), wheelRotation: inApp, wheelWinner: "" }]} pose={pose} z={3}>
+          {handed && <>
+            {/* The wheel has left the sheet: its spot is the plate's own colour now, pointer and all. */}
+            <circle cx={SHEET_WHEEL.cx} cy={SHEET_WHEEL.cy} r={SHEET_WHEEL.box / 2} fill={APP_WHEEL.surface} />
+            <rect x={SHEET_WHEEL.pointer.x} y={SHEET_WHEEL.pointer.y} width={20} height={2.5} fill={APP_WHEEL.card} />
+          </>}
+        </Phone>
+      )}
+      {handed && (
+        <div style={{ position: "absolute", inset: 0, zIndex: 5 }}>
+          <AppWheel cx={mix(HAND.x, HERO.x, e)} cy={mix(HAND.y, HERO.y, e)} box={box} rotation={rot} items={CHOICES} winner={t >= B.wheelPick ? 4 : -1} lift={lift} shadow={e} />
+        </div>
+      )}
+      <div style={{ position: "absolute", left: 1315, top: 255, transform: `translate(-50%, -50%) scale(${chip})`, opacity: clamp(chip * 2), zIndex: 6, boxShadow: ELEVATION[2], borderRadius: 32 }}>
         <Chip label="Music" selected color="#FFFFFF" container={w.accent} outline={w.accent} size={40} />
       </div>
       {/* The first pieces leave with the montage, which turns them into the app's tools. */}
@@ -332,7 +381,7 @@ const WheelScene: React.FC<{ t: number }> = ({ t }) => {
   );
 };
 
-// ================================================================================================ 21.3 to 27.1: the toolkit
+// ================================================================================================ 23.3 to 29.1: the toolkit
 // The payoff: sixteen pieces of the wheel's confetti fly to a grid and become the app's tools, each a
 // MaterialShape badge with its name, while the lilac gives way to the neutral ground. The badges rise into a
 // band and the five tools' real screens track in from the right on the beat; the line lands; then everything
@@ -389,7 +438,7 @@ const Montage: React.FC<{ t: number }> = ({ t }) => {
   );
 };
 
-// ================================================================================================ 26.95 to 30: the icon
+// ================================================================================================ 28.95 to 32: the icon
 // The tools land in the icon on the final downbeat: it pops with a ripple in each world's colour and a little
 // confetti; the name rises and the official badge comes in whole, then everything holds.
 const End: React.FC<{ t: number }> = ({ t }) => {

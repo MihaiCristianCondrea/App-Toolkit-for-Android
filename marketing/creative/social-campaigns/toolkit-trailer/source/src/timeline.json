@@ -1,5 +1,5 @@
 {
-  "durationSeconds": 30,
+  "durationSeconds": 32,
   "fps": 90,
   "tempo": 120,
   "barStart": 3.0,
@@ -52,23 +52,23 @@
     {
       "id": "wheel",
       "start": 17.0,
-      "end": 21.9,
+      "end": 23.9,
       "title": "Decision Wheel",
       "in": "cut",
-      "action": "Hard cut on a strong accent. The choices land, a quiet beat, a wind-up, the spin, Music, and one burst of confetti."
+      "action": "A hard cut on a strong accent to a large phone with the real Decision Wheel sheet. The spin starts inside the app; the phone tumbles in 3D while the camera closes in on the wheel; face on again, the wheel leaves the sheet as one continuous object and the phone leaves the frame. The wheel decelerates to Music, the pick is marked, and confetti bursts."
     },
     {
       "id": "montage",
-      "start": 21.3,
-      "end": 27.1,
+      "start": 23.3,
+      "end": 29.1,
       "title": "Everyday tools, one app",
       "in": "confetti",
       "action": "Confetti pieces fly to a grid and become the app's tools as MaterialShape badges; the badges rise into a band while the five tools' real screens track in on the beat."
     },
     {
       "id": "end",
-      "start": 26.95,
-      "end": 30.0,
+      "start": 28.95,
+      "end": 32,
       "title": "App Toolkit",
       "in": "converge",
       "action": "Everything converges into the icon on the final downbeat; the name and the Get it on Google Play badge settle and hold."
@@ -94,15 +94,11 @@
     "waterHz": 3.55,
     "waterWaves": [
       3.5,
-      4.0,
       4.5,
-      5.0,
-      5.5,
-      6.0
+      5.5
     ],
     "waterDrops": [
-      4.0,
-      5.0
+      4.5
     ],
     "phoneTurn": [
       6.15,
@@ -180,55 +176,67 @@
       17.0
     ],
     "wheelChoices": [
-      17.05,
-      17.15,
-      17.25,
-      17.35,
-      17.45,
-      17.55
+      17.1,
+      17.18,
+      17.26,
+      17.34,
+      17.42,
+      17.5
     ],
     "wheelWindup": [
-      18.2,
-      18.5
+      17.75,
+      18.0
     ],
     "wheelSpin": [
-      18.5,
-      21.0
+      18.0,
+      22.85
     ],
-    "wheelBurst": 21.0,
-    "wheelPick": 21.15,
+    "wheelTumble": [
+      18.4,
+      19.6
+    ],
+    "wheelExtract": [
+      19.6,
+      20.6
+    ],
+    "wheelPhoneOut": [
+      19.6,
+      20.9
+    ],
+    "wheelPick": 22.85,
+    "wheelBurst": 23.0,
     "montageBadges": [
-      21.5,
-      22.3
+      23.5,
+      24.3
     ],
     "montageBand": [
-      22.5,
-      23.0
-    ],
-    "montageCards": [
-      23.0,
-      23.5,
-      24.0,
       24.5,
       25.0
     ],
-    "converge": [
-      26.4,
+    "montageCards": [
+      25.0,
+      25.5,
+      26.0,
+      26.5,
       27.0
     ],
-    "endBurst": 27.0,
-    "endRings": [
-      27.0,
-      27.25,
-      27.5,
-      27.75,
-      28.0
+    "converge": [
+      28.4,
+      29.0
     ],
-    "endTitle": 27.4,
-    "endPlay": 27.9
+    "endBurst": 29.0,
+    "endRings": [
+      29.0,
+      29.25,
+      29.5,
+      29.75,
+      30.0
+    ],
+    "endTitle": 29.4,
+    "endPlay": 29.9
   },
   "wheel": {
-    "turn": 1538,
+    "turn": 2250,
     "windup": 12
   },
   "transitions": [
@@ -275,17 +283,17 @@
     {
       "name": "Decision Wheel to the toolkit: confetti becomes the tools",
       "times": [
-        21.2,
-        21.7,
-        22.3
+        23.2,
+        23.7,
+        24.3
       ]
     },
     {
       "name": "Toolkit to the icon: everything converges",
       "times": [
-        26.5,
-        26.92,
-        27.3
+        28.5,
+        28.92,
+        29.3
       ]
     }
   ],
