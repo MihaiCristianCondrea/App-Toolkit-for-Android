@@ -4,6 +4,7 @@ import { Shape } from "../Shape";
 import { shapeUrl } from "../../../../../../ui/src/kit/assets.js";
 import { FRAME, measure } from "./geometry";
 import { scatterConfetti } from "./confetti";
+import { morphPath } from "./morph";
 import type { Confetto } from "./confetti";
 import { clamp, enter, mix, ramp, pop, standard } from "../lib/anim";
 import { FONT } from "../theme";
@@ -249,35 +250,49 @@ export const ShareCard: React.FC<{ x: number; y: number; who: string; amount: st
 );
 
 // ---------------------------------------------------------------------------------------------------
-// Unit Converter: two units on MaterialShapes with the swap arrows between them; on each category change both
-// cards flip over (the content changes at the edge-on moment) and take the next pair's shapes.
+// Unit Converter: the pair as two Material 3 Expressive loading-indicator shapes. They turn all the time, in
+// opposite directions; on each category change both spin on and their outlines flow into the next pair's
+// shapes while the values swap, and the swap arrows between them turn over.
 
-export type Unit = { value: string; label: string; shape: string; color: string };
-export const UnitPair: React.FC<{ cx: number; cy: number; gap: number; a: Unit; b: Unit; flip: number; ink: string; arrows: string; turn: number; size?: number }> = ({ cx, cy, gap, a, b, flip, ink, arrows, turn, size = 300 }) => {
-  const unit = (u: Unit, x: number, k: string, lag: number) => {
-    const f = clamp(flip - lag), sx = Math.abs(Math.cos(f * Math.PI));
+export type UnitFace = { value: string; label: string };
+const MORPH = 0.55;
+export const MorphPair: React.FC<{ t: number; cx: number; cy: number; gap: number; size: number; changes: number[]; shapes: [string, string][]; faces: [UnitFace, UnitFace][]; colors: [string, string]; ink: string; arrows: string }> = ({ t, cx, cy, gap, size, changes, shapes, faces, colors, ink, arrows }) => {
+  const idx = Math.max(0, changes.filter((c) => t >= c).length - 1), tc = changes[idx] ?? 0;
+  const morphs = changes.map((c, j) => (j === 0 ? 0 : enter(clamp((t - c) / MORPH))));
+  const turns = morphs.reduce((a, v) => a + v, 0), p = idx > 0 ? morphs[idx] : 1, appear = pop(t, changes[0] - 0.15, 12, 170);
+  const swapOut = clamp((t - tc) / 0.18), swapIn = clamp((t - tc - 0.16) / 0.3);
+  const face = (side: 0 | 1, x: number) => {
+    const prev = faces[Math.max(0, idx - 1)][side], cur = faces[idx][side], show = (f: UnitFace, o: number, k: number) => (
+      <div style={{ position: "absolute", inset: 0, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", opacity: o, transform: `scale(${k})` }}>
+        <div style={{ fontSize: size * (f.value.length > 4 ? 0.2 : f.value.length > 3 ? 0.23 : 0.27), fontWeight: 650, letterSpacing: -2, lineHeight: 1 }}>{f.value}</div>
+        <div style={{ fontSize: size * 0.13, fontWeight: 560, marginTop: 6 }}>{f.label}</div>
+      </div>
+    );
     return (
-      <div key={k} style={{ position: "absolute", left: x - size / 2, top: cy - size / 2, width: size, height: size, zIndex: 4, transform: `scaleX(${Math.max(0.02, sx).toFixed(3)}) rotate(${(Math.sin(f * Math.PI) * 12).toFixed(1)}deg)` }}>
-        <Shape name={u.shape} x={0} y={0} size={size} color={u.color} rotate={12} />
-        <div style={{ position: "absolute", inset: 0, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", fontFamily: FONT, color: ink }}>
-          <div style={{ fontSize: size * (u.value.length > 4 ? 0.2 : 0.26), fontWeight: 650, letterSpacing: -2, lineHeight: 1 }}>{u.value}</div>
-          <div style={{ fontSize: size * 0.14, fontWeight: 560, marginTop: 8 }}>{u.label}</div>
-        </div>
+      <div key={side} style={{ position: "absolute", left: x - size / 2, top: cy - size / 2, width: size, height: size, zIndex: 5, fontFamily: FONT, color: ink }}>
+        {idx > 0 && swapOut < 1 && show(prev, 1 - swapOut, 1 - 0.3 * swapOut)}
+        {show(cur, idx > 0 ? enter(swapIn) : clamp(appear * 2), idx > 0 ? 0.7 + 0.3 * enter(swapIn) : 1)}
       </div>
     );
   };
+  const xs = [cx - gap / 2, cx + gap / 2];
   return (
     <>
-      {unit(a, cx - gap / 2, "a", 0)}
-      {unit(b, cx + gap / 2, "b", 0.12)}
-      <svg aria-hidden width={1920} height={1080} style={{ position: "absolute", inset: 0, zIndex: 5 }}>
-        <g transform={`translate(${cx} ${cy}) rotate(${turn})`}>
-          <circle r="62" fill="#FFFFFF" />
+      <svg aria-hidden width={1920} height={1080} style={{ position: "absolute", inset: 0, zIndex: 4, overflow: "visible" }}>
+        {[0, 1].map((side) => {
+          const from = shapes[Math.max(0, idx - 1)][side], to = shapes[idx][side], dir = side ? -1 : 1;
+          const turn = dir * (t * 36 + turns * 150) + side * 20, k = appear * (1 + 0.08 * Math.sin(p * Math.PI));
+          return <path key={side} d={morphPath(from, to, p, xs[side], cy, size * k, turn)} fill={colors[side]} />;
+        })}
+        <g transform={`translate(${cx} ${cy}) rotate(${turns * 180}) scale(${appear})`}>
+          <circle r="56" fill="#FFFFFF" />
           <g fill="none" stroke={arrows} strokeWidth="9" strokeLinecap="round" strokeLinejoin="round">
-            <path d="M -30 -12 H 28 l -14 -14" /><path d="M 30 12 H -28 l 14 14" />
+            <path d="M -28 -11 H 26 l -13 -13" /><path d="M 28 11 H -26 l 13 13" />
           </g>
         </g>
       </svg>
+      {face(0, xs[0])}
+      {face(1, xs[1])}
     </>
   );
 };
@@ -328,7 +343,11 @@ export const Wheel: React.FC<{ cx: number; cy: number; r: number; rotation: numb
         <circle r={r * 0.15} fill={ground} />
         <circle r={r * 0.06} fill={accent} />
       </g>
-      <path d={`M ${cx - 30} ${cy - r - 34} h 60 l -30 58 Z`} fill={accent} stroke={accent} strokeWidth="16" strokeLinejoin="round" />
+      {/* The pointer is white with an ink rim, and steps up as the pick lifts, so it never merges with it. */}
+      <g transform={`translate(0 ${-lift * 22})`} style={{ filter: "drop-shadow(0 3px 4px rgba(53,35,62,.25))" }}>
+        <path d={`M ${cx - 30} ${cy - r - 40} h 60 l -30 58 Z`} fill={ink} stroke={ink} strokeWidth="20" strokeLinejoin="round" />
+        <path d={`M ${cx - 30} ${cy - r - 40} h 60 l -30 58 Z`} fill="#FFFFFF" stroke="#FFFFFF" strokeWidth="6" strokeLinejoin="round" />
+      </g>
     </svg>
   );
 };
