@@ -2,7 +2,7 @@
   "name": "app-toolkit-trailer",
   "private": true,
   "type": "module",
-  "description": "App Toolkit's 28-second trailer, One app. Many everyday moments: one useful form turning into the next across the five tools' worlds, on a soundtrack composed from the same timeline",
+  "description": "App Toolkit's 30-second trailer, One app. Many everyday moments: one useful form turning into the next across the five tools' worlds, on a soundtrack composed from the same timeline",
   "scripts": {
     "assets": "node scripts/sync-assets.mjs",
     "dev": "npm run assets && remotion studio src/index.ts",

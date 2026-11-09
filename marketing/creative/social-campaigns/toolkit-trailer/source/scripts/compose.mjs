@@ -1,11 +1,12 @@
 // Composes the trailer's soundtrack (node scripts/compose.mjs) into ../soundtrack.mp3. Everything is synthesised
 // here, from nothing but sine waves and seeded noise, so the music is ours and can be changed with the film.
 // It reads src/timeline.json: the bars (from barStart) carry the chords, and the beats place each moment's sound
-// on the frame it happens: the drop in the cold open, the waves, the graduations, the protractor's steps, the
+// on the frame it happens: the intro's shapes and icon, the waves, the graduations, the protractor's steps, the
 // categories, the receipt's lines, a ratchet that follows the wheel's real rotation, the badges and the cards.
 //
-// 120 BPM in F major, one chord per bar from 1 s (F C Dm Bb F C Dm Bb C F Dm C F). The arrangement follows the
-// story's energy instead of repeating one block per scene: a muffled cold open; soft half-time pulses for the
+// 120 BPM in F major, one chord per bar from 3 s (F C Dm Bb F C Dm Bb C F Dm C F), over an F pad under the intro.
+// The arrangement follows the story's energy instead of repeating one block per scene: the intro's rising mallets
+// and a bell for the icon; soft half-time pulses for the
 // water; deliberate ticks over a four-on-the-floor for the measuring; a syncopated bass for the converter;
 // prints for the receipt and then a real rest; a sparse wheel that winds up and builds through the spin to the
 // film's only crash on the result; the fullest groove for the montage, where each tool's sound returns with
@@ -51,7 +52,7 @@ const svf = () => {
 const env = (tau, attack, decay) => (tau < attack ? tau / attack : Math.exp(-(tau - attack) * decay));
 
 // The sections, and where the kick plays (it ducks the pad and bass, a light sidechain pump).
-const section = (t) => t < scene.water.start ? "cold" : t < scene.ruler.start + 0.5 ? "water" : t < scene.unit.start ? "ruler" : t < B.unitFold[1] ? "unit" : t < B.billRest[0] ? "bill" : t < scene.wheel.start ? "rest" : t < B.wheelBurst ? "wheel" : t < scene.end.start + 0.05 ? "montage" : "end";
+const section = (t) => t < scene.water.start ? "intro" : t < scene.ruler.start + 0.5 ? "water" : t < scene.unit.start ? "ruler" : t < B.unitFold[1] ? "unit" : t < B.billRest[0] ? "bill" : t < scene.wheel.start ? "rest" : t < B.wheelBurst ? "wheel" : t < scene.end.start + 0.05 ? "montage" : "end";
 const fourOnFloor = (t) => ["ruler", "unit", "bill", "montage"].includes(section(t)) && !(t >= B.rulerLift[0] && t < scene.unit.start);
 const pump = (t) => (fourOnFloor(t) ? 1 - 0.45 * Math.exp(-(((t - tl.barStart) % BEAT + BEAT) % BEAT) / 0.09) : 1);
 
@@ -116,11 +117,6 @@ const tom = (t, gain = 0.5, from = 150, to = 70) => voice(t, 0.6, (u) => {
   const phase = TAU * (to * u + ((from - to) * (1 - Math.exp(-u * 18))) / 18);
   return Math.sin(phase) * Math.exp(-u * 7) + noise() * Math.exp(-u * 80) * 0.15;
 }, { gain, send: 0.3 });
-/** The speaker with water in it: the 165 Hz tone, dull and wavering, through a low-pass. */
-const muffled = (t, len, gain = 0.16) => { const f = svf(); voice(t, len, (u) => {
-  const x = Math.sin(TAU * 165 * u) + 0.6 * Math.sin(TAU * 330 * u) + 0.35 * Math.sin(TAU * 495 * u);
-  return f(x, 420, 0.9).lp * (0.6 + 0.4 * Math.sin(TAU * 7 * u)) * Math.min(1, u / 0.03, (len - u) / 0.05);
-}, { gain }); };
 /** A short paper sweep, for the fold. */
 const fwip = (t, len = 0.3, gain = 0.08) => { const f = svf(); voice(t, len, (u) => f(noise(), 5000 - 4000 * (u / len), 1.5).bp * Math.sin(Math.PI * u / len), { gain, send: 0.2 }); };
 /** A sine glide, for the wave straightening. */
@@ -138,8 +134,9 @@ const barOf = (t) => Math.floor((t - tl.barStart) / BAR);
 const chordAt = (t) => PROG[Math.max(0, Math.min(PROG.length - 1, barOf(t)))];
 const LEAD_RHYTHM = [0, 3, 4, 6, 7]; // in eighths
 
-// Pads, one chord per bar, at the level each section wants.
-const PAD = { water: 0.045, ruler: 0.04, unit: 0.035, bill: 0.035, rest: 0.06, wheel: 0.05, montage: 0.04 };
+// Pads, one chord per bar, at the level each section wants; the intro holds F beneath the name.
+const PAD = { intro: 0.05, water: 0.045, ruler: 0.04, unit: 0.035, bill: 0.035, rest: 0.06, wheel: 0.05, montage: 0.04 };
+pad(0, F.pad, scene.water.start, PAD.intro);
 for (let bar = 0; tl.barStart + bar * BAR < scene.end.start; bar++) {
   const t0 = tl.barStart + bar * BAR, gain = PAD[section(t0 + 0.01)] ?? 0.04;
   pad(t0, chordAt(t0 + 0.01).pad, BAR, gain);
@@ -182,12 +179,13 @@ for (let t = tl.barStart; t < scene.end.start - 0.01; t += BEAT / 4) {
 }
 
 // ------------------------------------------------------------------------------------------------ the story's moments
-// Cold open: a faint whistle as the drop falls, a dull plop on the grille, and the tone gone muffled.
-glide(B.cold.fall, B.cold.hit - B.cold.fall, 1900, 900, 0.025);
-drop(B.cold.hit, 900, 380, 0.3); tom(B.cold.hit, 0.18, 110, 60);
-muffled(B.cold.hit + 0.02, scene.water.start - B.cold.hit - 0.04);
-// The cut to the cure: a low tom and a bell on the first downbeat, no crash.
-tom(scene.water.start, 0.5); bell(scene.water.start, 77, 0.12); bell(scene.water.start, 72, 0.06, -0.3);
+// Intro: one mallet note per arriving shape, rising through F major; a bell for the icon; the name and the line
+// each land on a mallet; hats thicken into the water world, which opens on a drop and a low tom.
+[65, 69, 72, 76, 77].forEach((m, i) => mallet(B.introShapes[i], m, 0.2, (i - 2) * 0.3, 3.5));
+bell(B.icon, 77, 0.16); bell(B.icon, 84, 0.07, 0.3);
+mallet(B.title, 72, 0.12); mallet(B.tagline, 74, 0.1);
+for (let t = B.tagline + BEAT; t < scene.water.start - 0.01; t += BEAT / 4) hat(t, 0.02 + 0.05 * ((t - B.tagline) / (scene.water.start - B.tagline)), Math.round(t * 8) % 2 ? 0.3 : -0.3);
+drop(scene.water.start, 360, 1400, 0.24); tom(scene.water.start, 0.4);
 
 // Water Eject: a drop on every wave (the ones that throw droplets are brighter).
 B.waterWaves.forEach((t, i) => drop(t, 380 + (i % 3) * 90, 1300 + (i % 4) * 160, B.waterDrops.includes(t) ? 0.24 : 0.15, i % 2 ? 0.45 : -0.45));
@@ -198,10 +196,8 @@ glide(B.waveLine[0], B.waveLine[1] - B.waveLine[0] + 0.1, 320, 1250, 0.07);
 for (let k = 0; k < 16; k++) tick(B.waveTicks[0] + (k * (B.waveTicks[1] - B.waveTicks[0])) / 16, 0.045, 3200 + k * 40, -0.8 + k / 10);
 tom(B.rulerBody[1], 0.3, 120, 90);
 
-// Ruler and Protractor: a click and a rising mallet on each step of the arm, a falling pair as it lies down,
-// the marker's run of ticks, then the reading lifts on a short swell and the match cut lands on a clap.
+// Ruler and Protractor: a click and a rising mallet on each step of the arm, the marker's run of ticks, then the reading lifts on a short swell and the match cut lands on a clap.
 B.protractorSweep.forEach((t, i) => { tick(t, 0.15, 1800 + i * 200); mallet(t, [72, 74, 77, 81][i], 0.1, 0.2); });
-mallet(B.armDown[0], 77, 0.07, -0.2); mallet(B.armDown[0] + 0.12, 72, 0.06, -0.3);
 for (let k = 0; k < 12; k++) tick(B.rulerMeasure[0] + (k * (B.rulerMeasure[1] - B.rulerMeasure[0])) / 12, 0.05, 2600, -0.4);
 bell(B.rulerMeasure[1], 81, 0.09, 0.2, 2);
 riser(scene.unit.start, B.rulerLift[1] - B.rulerLift[0] + 0.1, 0.08);

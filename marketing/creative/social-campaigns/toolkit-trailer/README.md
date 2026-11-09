@@ -1,11 +1,11 @@
 # App Toolkit: Trailer
 
-**One app. Many everyday moments.** A 28-second 16:9 trailer that tells one small story through the five custom store listings' worlds: a problem, the tool that fixes it, and one useful form turning into the next, until the app's tools gather into its icon.
+**One app. Many everyday moments.** A 30-second 16:9 trailer: the app's name, then one small story through the five custom store listings' worlds, in which one useful form turns into the next until the app's tools gather into its icon. The tools carry no titles; they show what they are.
 
 | | |
 | --- | --- |
 | Status | Animatic for owner review; master after approval |
-| Sound | Our own score, `soundtrack.mp3`, synthesised by `source/scripts/compose.mjs` from the same timeline: 120 BPM in F major, 28 seconds, about -14 LUFS, peak -1 dBFS |
+| Sound | Our own score, `soundtrack.mp3`, synthesised by `source/scripts/compose.mjs` from the same timeline: 120 BPM in F major, 30 seconds, about -14 LUFS, peak -1 dBFS |
 | Design size | 1920 x 1080, 90 fps |
 | Preview (animatic) | 960 x 540, `output/video/app-toolkit-trailer-preview.mp4` |
 | Master | 2560 x 1440, `output/video/app-toolkit-trailer-master.mp4` |
@@ -21,37 +21,37 @@ The previous cut was eight equal four-second scenes, each title-left and phone-r
 
 | Time | Scene | What happens | Shot |
 | --- | --- | --- | --- |
-| 0 to 1 | Cold open | A drop falls on a speaker grille; the sound goes dull. "Water in the speaker?" | A graphic close-up, a slow push |
-| 1 to 4.85 | Water Eject | The phone stands centred with its speaker down, as the sheet asks; the tone pushes waves, glass bubbles and droplets out of it. The title sits on one side, the 165 Hz tone as a waveform on the other. | Static, symmetrical, phone-led |
-| 4.5 to 8.5 | Ruler & Protractor | The ruler crosses the frame. An arm rises from its zero to 45 degrees while the Protractor phone shows the same, then lies back down; a marker measures 76.0 mm with the Surface Ruler. The reading lifts to the left. | Horizontal, the ruler leads, the phone slides in as support |
-| 8.5 to 11.5 | Unit Converter | 76.0 mm beside 7.6 cm, then Mass, Temperature, Volume and Data on syncopated beats; the shapes morph like the loading indicator. | Wide, the pair leads |
-| 11.15 to 15 | Tip & Bill Splitter | The receipt prints the bill and the 10% tip, the share lands at €28.60, and the total divides into two people's cards. Then a rest. | Receipt-led, the phone rises in beside it; an almost still push during the rest |
-| 15 to 19.9 | Decision Wheel | The six choices land, a quiet beat, a wind-up backwards, the spin, Music, one burst of confetti. | Full-frame wheel |
-| 19.3 to 25.1 | The toolkit | Sixteen pieces of confetti fly to a grid and become the app's tools as MaterialShape badges with their names; the badges rise into a band and the five tools' real screens track in from the right on the beat; "Everyday tools, one app". | Wide, a lateral track |
-| 25 to 28 | App Toolkit | Everything converges into the icon on the final downbeat; the name and the official Get it on Google Play badge settle and hold. | Centred, static hold |
+| 0 to 3 | App Toolkit | One shape per tool arrives on each note in its world's colour, the icon pops, the shapes breathe round it, and "App Toolkit, Everyday tools in one app" lands. | Centred lockup |
+| 3 to 6.85 | Water Eject | The water world grows out of the intro's blue shape. The phone stands with its speaker down, as the sheet asks; the tone pushes waves, glass bubbles and droplets out of it, and the 165 Hz tone pulses beside it. | Phone right of centre, the tone on the left |
+| 6.5 to 10.5 | Ruler & Protractor | The ruler the wave became pulls back to a strip as the Surface Ruler and Protractor phones come in large, side by side. An arm rises from the ruler's zero to 45 degrees while the Protractor sweeps with it and holds; a marker measures 76.0 mm while the Surface Ruler reads the same. Both phones end on their results; the reading lifts to the left. | The two phones lead, the ruler supports |
+| 10.5 to 13.5 | Unit Converter | 76.0 mm beside 7.6 cm, then Mass, Temperature, Volume and Data on syncopated beats; the shapes morph like the loading indicator. | Wide, the pair leads |
+| 13.15 to 17 | Tip & Bill Splitter | The receipt prints the bill and the 10% tip, the share lands at €28.60, and the total divides into two people's cards. Then a rest. | Receipt-led, the phone rises in beside it; an almost still push during the rest |
+| 17 to 21.9 | Decision Wheel | The six choices land, a quiet beat, a wind-up backwards, the spin, Music, one burst of confetti. | Full-frame wheel |
+| 21.3 to 27.1 | The toolkit | Sixteen pieces of confetti fly to a grid and become the app's tools as MaterialShape badges with their names; the badges rise into a band and the five tools' real screens track in from the right on the beat. | Wide, a lateral track |
+| 27 to 30 | App Toolkit | Everything converges into the icon on the final downbeat; the name and the official Get it on Google Play badge settle and hold. | Centred, static hold |
 
 ## Transitions, and why each is different
 
 | Change | How | Why |
 | --- | --- | --- |
-| Cold open to Water Eject | A hard cut on the first downbeat | The problem, then the answer at once: no logo before the viewer sees what the app does |
-| Water Eject to Ruler | The last wave keeps travelling, loses its curve into a straight line, grows graduations; the yellow world opens outward from the line, which thickens into the ruler | A morph with a physical reason: a wave becomes a measuring line |
+| App Toolkit to Water Eject | The water world grows out of the intro's blue shape | The name first, kept short; the first tool comes out of the shapes that stand for the tools |
+| Water Eject to Ruler | The last wave keeps travelling, loses its curve into a straight line, grows graduations; the yellow world opens outward from the line, which thickens into the ruler and pulls back as the phones come in | A morph with a physical reason: a wave becomes a measuring line |
 | Ruler to Unit Converter | A match cut: the 76.0 mm reading lifts onto a soft-burst shape the size and place of the converter's first card, which holds 76.0 mm beside 7.6 cm | Brief and quiet; the value carries the viewer, and the conversion is the app's real result |
 | Unit Converter to Tip & Bill Splitter | The two cards slide together, round into one surface and stretch and whiten into the receipt, while the coral world opens out of it in a soft burst | A physical Material transformation that keeps shape, place and motion; the receipt is artwork, not the app's UI |
 | Tip & Bill Splitter to Decision Wheel | A rest after the shares (the drums stop), then a hard cut on a strong accent | A change of rhythm: stillness before a choice |
 | Decision Wheel to the toolkit | The result's confetti does not settle: sixteen pieces fly on and morph into the app's tools | The payoff, and the most expressive change: a choice reveals the whole collection |
 | The toolkit to the icon | The cards and badges converge into the icon as it pops on the resolution | Everything gathers into one app |
 
-Two are plain cuts, one a match cut; no two adjacent changes share a motion, and there is no shared camera.
+One is a plain cut, one a match cut; no two adjacent changes share a motion, and there is no shared camera.
 
 ## Sound
 
-The arrangement follows the story's energy: a muffled tone and a drop in the cold open; soft half-time pulses and an arpeggio for the water; a four-on-the-floor with ticks on every sixteenth for the measuring, dropping out before the match cut; a syncopated bass for the converter; prints for the receipt, a bell for the share and a chime per person, then only the pad for the rest; a sparse wheel with a mallet per choice, a wind-up swell, a ratchet that follows the wheel's real rotation and a build through the spin to the film's only crash on the result; a breath, then the fullest groove for the montage, where each card lands with its tool's sound; and a held F major on the icon. Accents at the cuts are a low tom and a bell, not crashes. Chords, one per bar from 1 s: F C Dm Bb F C Dm Bb C F Dm C F.
+The arrangement follows the story's energy: an F pad under the intro, a rising mallet note per shape, a bell for the icon, and a drop as the water world opens; soft half-time pulses and an arpeggio for the water; a four-on-the-floor with ticks on every sixteenth for the measuring, dropping out before the match cut; a syncopated bass for the converter; prints for the receipt, a bell for the share and a chime per person, then only the pad for the rest; a sparse wheel with a mallet per choice, a wind-up swell, a ratchet that follows the wheel's real rotation and a build through the spin to the film's only crash on the result; a breath, then the fullest groove for the montage, where each card lands with its tool's sound; and a held F major on the icon. Accents at the cuts are a low tom and a bell, not crashes. Chords, one per bar from 3 s: F C Dm Bb F C Dm Bb C F Dm C F.
 
 ## Motion and truth
 
-1. One useful form turns into the next (a drop, a wave, a line, a reading, a card, a receipt, a choice, the tools), but not every change is a morph: two are cuts.
-2. The UI is real and truthful: each phone and card mounts the app's screen from the UI kit in a real state. Every number on screen is the app's own: the 165 Hz Water Eject sheet; the Protractor at 45 degrees; the Surface Ruler's 76.0 mm (the drawn ruler is in millimetres and measures the same); the five conversions (76.0 mm = 7.6 cm, 500 g = 0.5 kg, 20 °C = 68 °F, 2 L = 2000 mL, 1 GB = 1000 MB); the €52.00 bill with a 10% tip, €28.60 each for two; the wheel's six choices settled on Music. The water, the ruler artwork, the receipt, the badges and the confetti are decoration, not app features. The tools named in the montage are tools the app ships.
+1. One useful form turns into the next (a shape, a wave, a line, a reading, a card, a receipt, a choice, the tools), but not every change is a morph: one is a cut and one a match cut. No per-tool titles: the screens and objects say what each tool is.
+2. The UI is real and truthful: each phone and card mounts the app's screen from the UI kit in a real state. Every number on screen is the app's own: the 165 Hz Water Eject sheet; the Protractor at 45 degrees and the Surface Ruler's 76.0 mm, both live (the drawn ruler is in millimetres and measures the same); the five conversions (76.0 mm = 7.6 cm, 500 g = 0.5 kg, 20 °C = 68 °F, 2 L = 2000 mL, 1 GB = 1000 MB); the €52.00 bill with a 10% tip, €28.60 each for two; the wheel's six choices settled on Music. The water, the ruler artwork, the receipt, the badges and the confetti are decoration, not app features. The tools named in the montage are tools the app ships.
 3. Material, not illustration: MaterialShapes on the UI kit's own curves, each world's tonal palette, thick rounded strokes, two elevation levels. The end card uses Google's unaltered badge from `marketing/assets/badges/google-play`, moved and scaled whole as its guidelines allow, with the trademark line.
 4. Every frame is a function of its frame number; picture and sound read the same `src/timeline.json`.
 

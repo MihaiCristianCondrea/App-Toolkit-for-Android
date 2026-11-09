@@ -14,11 +14,12 @@ import type { PhonePose, Screen, UnitFace } from "./motifs";
 import { morphPath } from "./motifs/morph";
 
 /**
- * "One app. Many everyday moments." A story in which one useful form turns into the next: a drop in a speaker,
- * the tone that pushes it out, the last wave flattening into a ruler, the ruler's reading cut to a conversion,
+ * "One app. Many everyday moments." The app's name, then a story in which one useful form turns into the next:
+ * the tone that pushes water out of a speaker, the last wave flattening into a ruler, the ruler's reading cut to a conversion,
  * the conversion folding into a bill, the bill's rest cut to a choice, the choice's confetti becoming the
  * app's tools, and the tools gathering into the icon. Every scene keeps its own shot and its own way in; there
- * is no shared camera. All times are seconds in timeline.json, read by the soundtrack too.
+ * is no shared camera and no per-tool title: the tools show what they are. All times are seconds in timeline.json,
+ * read by the soundtrack too.
  */
 
 const GRID = { left: 144, right: 1776, top: 108, bottom: 972 };
@@ -56,103 +57,107 @@ const Title: React.FC<{ t: number; at: number[]; text: string; x?: number; y?: n
   <Headline t={t} at={at} title={text} sub={sub} x={x} y={y} color={color} subColor={subColor} size={size} subScale={0.5} align={align} width={width} />
 );
 
-// ================================================================================================ 0 to 1: cold open
-// The problem, before any branding: a drop falls on a speaker grille and the sound goes dull.
-const ColdOpen: React.FC<{ t: number }> = ({ t }) => {
-  const w = WORLDS.water, c = B.cold, fall = clamp((t - c.fall) / (c.hit - c.fall)), hit = t >= c.hit, after = t - c.hit;
-  const grille = { x: 960, y: 470, w: 560, h: 150 };
-  const dropY = mix(-120, grille.y - grille.h / 2 - 34, fall * fall), squash = hit ? 1 + 0.5 * Math.exp(-after * 9) * Math.cos(after * 30) : 1;
-  const push = 1 + 0.04 * clamp(t / 1);
-  const drop = (x: number, y: number, s: number, sy = 1) => <path d={`M 0 ${-s * 1.5} C ${s * 0.55} ${-s * 0.4} ${s} 0 ${s} ${s * 0.35} A ${s} ${s} 0 0 1 ${-s} ${s * 0.35} C ${-s} 0 ${-s * 0.55} ${-s * 0.4} 0 ${-s * 1.5} Z`} fill={w.bright} transform={`translate(${x} ${y}) scale(${1 / sy} ${sy})`} />;
+// ================================================================================================ 0 to 3.5: the name
+// One shape per tool arrives on each note in its world's colour, the icon pops, the shapes breathe round it and
+// the name and line land; the water world then grows out of the blue shape.
+const INTRO_SHAPES: { world: World; name: string; x: number; y: number; size: number }[] = [
+  { world: WORLDS.water, name: "cookie_9sided", x: 1590, y: 270, size: 240 },
+  { world: WORLDS.ruler, name: "soft_burst", x: 330, y: 810, size: 260 },
+  { world: WORLDS.unit, name: "cookie_6sided", x: 1600, y: 820, size: 230 },
+  { world: WORLDS.bill, name: "pill", x: 340, y: 280, size: 230 },
+  { world: WORLDS.wheel, name: "flower", x: 960, y: 120, size: 150 },
+];
+const Intro: React.FC<{ t: number }> = ({ t }) => {
+  const swing = ramp(t, B.swing, 0.8, enter), iconP = pop(t, B.icon, 10, 190);
   return (
-    <AbsoluteFill style={{ background: "#E3E8EF" }}>
-      <AbsoluteFill style={{ transform: `scale(${push})`, transformOrigin: "960px 470px" }}>
-        <svg aria-hidden width={1920} height={1080} style={{ position: "absolute", inset: 0 }}>
-          <rect x={grille.x - grille.w / 2} y={grille.y - grille.h / 2} width={grille.w} height={grille.h} rx={grille.h / 2} fill="#2E3742" />
-          {[-1, 1].flatMap((side) => [0, 1, 2, 3].map((k) => <circle key={`${side}${k}`} cx={grille.x + side * (90 + k * 44)} cy={grille.y} r="13" fill="#5A6573" />))}
-          <rect x={grille.x - 34} y={grille.y - 16} width="68" height="32" rx="16" fill="#46505C" />
-          {!hit && drop(grille.x + 90, dropY, 30)}
-          {hit && drop(grille.x + 90, grille.y - grille.h / 2 - 22 * squash, 26, 1 / squash)}
-          {hit && [[-1, -1.2], [1, -1.4], [-0.6, -2], [0.7, -1.9]].map(([dx, dy], i) => <circle key={i} cx={grille.x + 90 + dx * after * 260} cy={grille.y - grille.h / 2 - 10 + dy * after * 300 + 900 * after * after} r={7 - i} fill={w.bright} opacity={1 - clamp(after / 0.45)} />)}
-          {hit && <ellipse cx={grille.x + 90} cy={grille.y - grille.h / 2} rx={30 + after * 260} ry={8 + after * 50} fill="none" stroke={w.bright} strokeWidth={4} opacity={0.6 * (1 - clamp(after / 0.4))} />}
-        </svg>
-      </AbsoluteFill>
-      <Title t={t} at={[c.caption]} text="Water in the speaker?" x={960} y={640} align="center" width={1600} color={w.ink} size={110} />
+    <AbsoluteFill>
+      <Ground color={NEUTRAL.field} />
+      {INTRO_SHAPES.map((s, i) => {
+        const p = pop(t, B.introShapes[i], 12, 200), k = 1 + 0.05 * Math.sin(swing * Math.PI), size = s.size * p * k;
+        const x = s.x + drift(t, i) * 8, y = s.y + drift(t, i + 5) * 8;
+        return <Shape key={i} name={s.name} x={x - size / 2} y={y - size / 2} size={size} color={s.world.shape} rotate={i * 23 + t * 10 + swing * 40} />;
+      })}
+      <Img src={icon} style={{ position: "absolute", left: 960 - 150, top: 410 - 150 - (1 - iconP) * 30, width: 300, height: 300, transform: `scale(${iconP})`, zIndex: 4 }} />
+      <Headline t={t} at={[B.title, B.tagline]} title="App Toolkit" sub="Everyday tools in one app" x={960} y={590} width={1200} align="center" color={NEUTRAL.ink} subColor={NEUTRAL.accent} size={150} subScale={0.42} />
     </AbsoluteFill>
   );
 };
 
-// ================================================================================================ 1 to 4.85: Water Eject
-// A hard cut on the first downbeat to the cure: the phone stands centred, speaker down as the sheet asks, the
-// title on one side and the tone itself on the other; the waves, bubbles and droplets leave below it.
-const WATER_POSE: PhonePose = { x: 960, y: 440, scale: 0.68, pitch: 12, yaw: -8, roll: 0 };
+// ================================================================================================ 3 to 6.85: Water Eject
+// The water world grows out of the intro's blue shape: the phone stands speaker down as the sheet asks, the
+// waves, bubbles and droplets leave below it, and the tone itself, 165 Hz, pulses beside it. No title.
+const WATER_POSE: PhonePose = { x: 1100, y: 440, scale: 0.7, pitch: 12, yaw: -10, roll: 0 };
 const Water: React.FC<{ t: number }> = ({ t }) => {
   const w = WORLDS.water, start = SCENE.water.start, settle = 1 - ramp(t, start, 0.6, enter);
   const pose = WATER_POSE, dy = settle * 40, dx = drift(t, 2) * 5;
   const sp = speakers(pose), dir = sp.reduce((a, s) => [a[0] + s.direction[0], a[1] + s.direction[1]], [0, 0]), len = Math.hypot(dir[0], dir[1]) || 1;
   const from = { at: [sp.reduce((a, s) => a + s.at[0], 0) / sp.length + dx, sp.reduce((a, s) => a + s.at[1], 0) / sp.length + dy] as [number, number], direction: [dir[0] / len, dir[1] / len] as [number, number] };
-  const decor = useMemo(() => place([[640, 150, 72], [1290, 160, 92], [1820, 860, 58], [110, 930, 56], [1730, 150, 44]], [w.tones[0], w.tones[1], w.tones[2], w.container], 4), []);
+  const decor = useMemo(() => place([[620, 190, 76], [1520, 150, 92], [1830, 860, 58], [110, 930, 56], [1800, 470, 44]], [w.tones[0], w.tones[1], w.tones[2], w.container], 4), []);
   return (
     <AbsoluteFill>
       <Ground color={w.field} />
-      <Behind t={t} name="cookie_12sided" x={960} y={440} size={760} color={w.shape} seed={1} start={start - 0.3} />
+      <Behind t={t} name="cookie_12sided" x={WATER_POSE.x} y={440} size={780} color={w.shape} seed={1} start={start - 0.3} />
       <Decor t={t} start={start - 0.2} pieces={decor} />
       <Phone screen={SCREENS.water} scroll={WATER_SCROLL} pose={pose} dx={dx} dy={dy} />
       <SoundWaves t={t} onsets={B.waterWaves} drops={B.waterDrops} from={from} line={w.accent} glow={w.bright} tint={w.tones[0]} reach={380} spread={62} rise={150} />
-      <Title t={t} at={B.waterHeadline} text={"Water\nEject"} sub={"A short tone\nfor wet speakers"} y={300} color={w.ink} subColor={w.accent} size={120} width={560} />
-      <Waveform t={t} start={B.waterHz} onsets={B.waterWaves} x={1250} y={590} width={526} label="165 Hz" line={w.accent} glow={w.bright} ink={w.accent} />
+      <Waveform t={t} start={B.waterHz} onsets={B.waterWaves} x={180} y={640} width={560} label="165 Hz" line={w.accent} glow={w.bright} ink={w.accent} />
     </AbsoluteFill>
   );
 };
 
-// ================================================================================================ 4.15 to 5: the wave becomes a ruler
+// ================================================================================================ 6.15 to 7: the wave becomes a ruler
 // The last wave keeps travelling and loses its curve until it is a straight line across the frame; graduations
 // grow out of it, the yellow world opens outward from it, and the line thickens into the ruler.
-const RULER_Y = 690, RULER_PX = 14, PIVOT = { x: GRID.left + 28, y: RULER_Y };
+const RULER_Y = 690, RULER_PX = 14;
 const WaveLine: React.FC<{ t: number }> = ({ t }) => {
   const [l0, l1] = B.waveLine, p = standard(clamp((t - l0) / (l1 - l0))), fade = 1 - clamp((t - B.rulerBody[0]) / (B.rulerBody[1] - B.rulerBody[0]));
   if (t < l0 || fade <= 0) return null;
-  const yb = mix(905, RULER_Y, p), xl = mix(735, -80, p), xr = mix(1185, 2000, p), sag = mix(130, 0, p);
+  const cx = WATER_POSE.x, yb = mix(905, RULER_Y, p), xl = mix(cx - 225, -80, p), xr = mix(cx + 225, 2000, p), sag = mix(130, 0, p);
   return (
     <svg aria-hidden width={1920} height={1080} style={{ position: "absolute", inset: 0, pointerEvents: "none" }}>
-      <path d={`M ${xl} ${yb} Q 960 ${yb + 2 * sag} ${xr} ${yb}`} fill="none" stroke={mixColor(WORLDS.water.accent, "#654000", p)} strokeWidth={mix(6, 3, p)} strokeLinecap="round" opacity={fade} />
+      <path d={`M ${xl} ${yb} Q ${cx} ${yb + 2 * sag} ${xr} ${yb}`} fill="none" stroke={mixColor(WORLDS.water.accent, "#654000", p)} strokeWidth={mix(6, 3, p)} strokeLinecap="round" opacity={fade} />
     </svg>
   );
 };
 
-// ================================================================================================ 4.5 to 8.5: Ruler & Protractor
-// A horizontal shot built on the ruler: an arm rises from its zero to 45 degrees while the Protractor shows the
-// same, lies back down, and a marker measures 76.0 mm with the Surface Ruler. The reading lifts to the left,
-// growing into a shape the size of the next scene's first card.
-const RULER_POSE: PhonePose = { x: 1590, y: 390, scale: 0.55, yaw: -10, roll: 0 };
+// ================================================================================================ 6.5 to 10.5: Ruler & Protractor
+// The app leads: the ruler the wave became pulls back to a strip at the lower left as the Surface Ruler and the
+// Protractor come in large, side by side. An arm rises from the ruler's zero to 45 degrees while the Protractor
+// sweeps with it and holds, then a marker measures 76.0 mm while the Surface Ruler reads the same, so both phones
+// end on their results. The arm fades as the reading lifts, growing into a shape the size and place of the next
+// scene's first card.
+const RULER_A: PhonePose = { x: 1130, y: 520, scale: 0.72, yaw: 12, roll: 0 };
+const RULER_B: PhonePose = { x: 1530, y: 520, scale: 0.72, yaw: -12, roll: 0 };
+const STRIP = { y: 810, width: 760, px: 8 };
 const MATCH = { x: 560, y: 520, size: 330 };
 const rulerArm = (t: number) => {
   const s = B.protractorSweep, up = s.reduce((acc, at, i) => acc + ramp(t, at, 0.3) * [0.3, 0.25, 0.25, 0.2][i], 0);
-  return 45 * up * (1 - ramp(t, B.armDown[0], B.armDown[1] - B.armDown[0], leave));
+  return 45 * up;
 };
 const RulerScene: React.FC<{ t: number }> = ({ t }) => {
-  const w = WORLDS.ruler, [m0, m1] = B.rulerMeasure, measured = ramp(t, m0, m1 - m0, standard);
+  const w = WORLDS.ruler, [m0, m1] = B.rulerMeasure, measured = ramp(t, m0, m1 - m0, standard), [p0, p1] = B.rulerPull, pull = standard(clamp((t - p0) / (p1 - p0)));
   const marker = Math.round(0.5 * measured * 200) / 200, mm = rulerMm(marker), angle = rulerArm(t), shownAngle = Math.round(angle);
-  const slideIn = 1 - ramp(t, B.rulerPhone, 0.7, enter), toRuler = clamp((t - B.armDown[0]) / 0.15);
-  const decor = useMemo(() => place([[1000, 150, 80], [1840, 120, 56], [1860, 940, 62], [920, 1000, 50], [80, 1010, 46]], [w.tones[0], w.tones[1], w.container, "#EE9B00"], 2), []);
-  const arm = (a: number, r: number) => [PIVOT.x + r * Math.cos((-a * Math.PI) / 180), PIVOT.y + r * Math.sin((-a * Math.PI) / 180)];
-  const lift = ramp(t, B.rulerLift[0], B.rulerLift[1] - B.rulerLift[0], standard), markerX = PIVOT.x + mm * RULER_PX;
-  const chip = { x: mix(markerX, MATCH.x, lift), y: mix(RULER_Y - 120, MATCH.y, lift) };
+  const ruler = { y: mix(RULER_Y, STRIP.y, pull), width: mix(GRID.right - GRID.left, STRIP.width, pull), px: mix(RULER_PX, STRIP.px, pull) };
+  const pivot = { x: GRID.left + 28, y: ruler.y }, inA = 1 - ramp(t, p0, 0.75, enter), inB = 1 - ramp(t, p0 + 0.2, 0.75, enter);
+  const decor = useMemo(() => place([[760, 170, 80], [1840, 130, 56], [1860, 960, 62], [1060, 1000, 50], [70, 330, 46]], [w.tones[0], w.tones[1], w.container, "#EE9B00"], 2), []);
+  const arm = (a: number, r: number) => [pivot.x + r * Math.cos((-a * Math.PI) / 180), pivot.y + r * Math.sin((-a * Math.PI) / 180)];
+  const lift = ramp(t, B.rulerLift[0], B.rulerLift[1] - B.rulerLift[0], standard), markerX = pivot.x + mm * ruler.px, armFade = 1 - clamp(lift * 2);
+  const chip = { x: mix(markerX, MATCH.x, lift), y: mix(ruler.y - 110, MATCH.y, lift) };
   return (
     <AbsoluteFill>
       <Ground color={w.field} />
-      <Behind t={t} name="soft_burst" x={1590} y={380} size={620} color={w.shape} seed={2} start={B.rulerPhone - 0.2} />
-      <Decor t={t} start={B.rulerPhone} pieces={decor} />
-      <Phone screen={["numbers", { activeSheet: "protractor", protractorAngle: shownAngle }]} pose={RULER_POSE} dx={slideIn * 520} opacity={1 - toRuler} />
-      {toRuler > 0 && <Phone screen={["numbers", { activeSheet: "ruler", rulerAdvanced: false, rulerMarker: marker }]} pose={RULER_POSE} opacity={toRuler} z={3} />}
-      <svg aria-hidden width={1920} height={1080} style={{ position: "absolute", inset: 0, zIndex: 4, overflow: "visible" }}>
-        {angle > 0.2 && <>
-          <path d={`M ${PIVOT.x} ${PIVOT.y} L ${arm(0, 270).join(" ")} A 270 270 0 0 0 ${arm(angle, 270).join(" ")} Z`} fill={w.container} opacity=".9" />
-          {Array.from({ length: Math.floor(angle / 5) + 1 }, (_, i) => { const [x1, y1] = arm(i * 5, 270), [x2, y2] = arm(i * 5, i % 3 === 0 ? 236 : 250); return <line key={i} x1={x1} y1={y1} x2={x2} y2={y2} stroke="#8F5700" strokeWidth={i % 3 === 0 ? 3 : 2} strokeLinecap="round" />; })}
-          <line x1={PIVOT.x} y1={PIVOT.y} x2={arm(angle, 640)[0]} y2={arm(angle, 640)[1]} stroke="#654000" strokeWidth="8" strokeLinecap="round" />
-          <text x={arm(angle / 2, 340)[0]} y={arm(angle / 2, 340)[1]} fontFamily={FONT} fontWeight={650} fontSize="72" fill="#654000" dominantBaseline="central">{shownAngle}°</text>
-        </>}
-        <Ruler x={GRID.left} y={RULER_Y} width={GRID.right - GRID.left} px={RULER_PX} ticks={ramp(t, B.waveTicks[0], B.waveTicks[1] - B.waveTicks[0], (x) => x)} body={ramp(t, B.rulerBody[0], B.rulerBody[1] - B.rulerBody[0], standard)} mm={t >= m0 ? mm : 0} accent={w.accent} />
+      <Behind t={t} name="soft_burst" x={1330} y={520} size={900} color={w.shape} seed={2} start={p0 - 0.1} />
+      <Decor t={t} start={p0} pieces={decor} />
+      <Phone screen={["numbers", { activeSheet: "ruler", rulerAdvanced: false, rulerMarker: marker }]} pose={RULER_A} dx={inA * 1150} dy={drift(t, 5) * 4} z={3} />
+      <Phone screen={["numbers", { activeSheet: "protractor", protractorAngle: shownAngle }]} pose={RULER_B} dx={inB * 1150} dy={drift(t, 8) * 4} z={4} />
+      <svg aria-hidden width={1920} height={1080} style={{ position: "absolute", inset: 0, zIndex: 5, overflow: "visible" }}>
+        {angle > 0.2 && armFade > 0 && <g opacity={armFade}>
+          <path d={`M ${pivot.x} ${pivot.y} L ${arm(0, 230).join(" ")} A 230 230 0 0 0 ${arm(angle, 230).join(" ")} Z`} fill={w.container} opacity=".9" />
+          {Array.from({ length: Math.floor(angle / 5) + 1 }, (_, i) => { const [x1, y1] = arm(i * 5, 230), [x2, y2] = arm(i * 5, i % 3 === 0 ? 198 : 212); return <line key={i} x1={x1} y1={y1} x2={x2} y2={y2} stroke="#8F5700" strokeWidth={i % 3 === 0 ? 3 : 2} strokeLinecap="round" />; })}
+          <line x1={pivot.x} y1={pivot.y} x2={arm(angle, 480)[0]} y2={arm(angle, 480)[1]} stroke="#654000" strokeWidth="8" strokeLinecap="round" />
+          <text x={arm(angle / 2, 290)[0]} y={arm(angle / 2, 290)[1]} fontFamily={FONT} fontWeight={650} fontSize="64" fill="#654000" dominantBaseline="central">{shownAngle}°</text>
+        </g>}
+        <Ruler x={GRID.left} y={ruler.y} width={ruler.width} px={ruler.px} ticks={ramp(t, B.waveTicks[0], B.waveTicks[1] - B.waveTicks[0], (x) => x)} body={ramp(t, B.rulerBody[0], B.rulerBody[1] - B.rulerBody[0], standard)} mm={t >= m0 ? mm : 0} accent={w.accent} />
         {lift > 0 && <path d={morphPath("soft_burst", "soft_burst", 1, chip.x, chip.y, MATCH.size * lift, morphTurn(t, 0, 0))} fill={w.shape} />}
       </svg>
       {t >= m0 && (
@@ -162,12 +167,11 @@ const RulerScene: React.FC<{ t: number }> = ({ t }) => {
           <div style={{ fontSize: 20.5, fontWeight: 560, marginTop: 3 }}>mm</div>
         </div>
       )}
-      <Title t={t} at={B.rulerHeadline} text="Ruler & Protractor" y={860} color={w.ink} size={96} />
     </AbsoluteFill>
   );
 };
 
-// ================================================================================================ 8.5 to 11.5: Unit Converter
+// ================================================================================================ 10.5 to 13.5: Unit Converter
 // A match cut on the reading: 76.0 mm lands exactly where the converter's first card holds 76.0 mm, beside
 // 7.6 cm. Four more categories follow on syncopated beats. Then the two cards slide together and fold into one
 // surface, which the receipt grows out of.
@@ -198,7 +202,6 @@ const Unit: React.FC<{ t: number }> = ({ t }) => {
         <div style={{ position: "absolute", left: PAIR.cx - 480, width: 960, top: 760, display: "flex", justifyContent: "center", gap: 10, zIndex: 5 }}>
           {CATEGORIES.map((k, j) => { const p = pop(t, B.unitChips + j * 0.05, 12, 200); return <div key={k.name} style={{ transform: `scale(${p})`, opacity: clamp(p * 2) }}><Chip label={k.name} selected={j === shown} color={w.ink} container={w.container} outline={w.tones[2]} size={28} /></div>; })}
         </div>
-        <Title t={t} at={B.unitHeadline} text="Unit Converter" color={w.ink} />
       </div>
       {!folding && <MorphPair t={t} cx={PAIR.cx} cy={PAIR.cy} gap={PAIR.gap} size={PAIR.size} changes={at} shapes={CATEGORIES.map((k) => k.shapes)} colors={[w.tones[0], w.tones[1]]} ink={w.ink} arrows={w.accent} appear={1} faces={CATEGORIES.map((k) => [k.a, k.b])} />}
       {folding && (
@@ -216,7 +219,7 @@ const Unit: React.FC<{ t: number }> = ({ t }) => {
   );
 };
 
-// ================================================================================================ 11.15 to 15: Tip & Bill Splitter
+// ================================================================================================ 13.15 to 17: Tip & Bill Splitter
 // The receipt leads: it prints the bill and the tip, the share lands, and the total divides into two people's
 // cards. The phone rises in beside it as the proof. Then a rest: everything holds while the camera barely moves.
 const BILL_POSE: PhonePose = { x: 1600, y: 540, scale: 0.6, yaw: -10, roll: 2 };
@@ -236,16 +239,15 @@ const Bill: React.FC<{ t: number }> = ({ t }) => {
         })}
         <Receipt x={RECEIPT.cx - 146} y={RECEIPT.cy - 186} angle={-2 * ramp(t, SCENE.bill.start + 0.4, 0.6)} scale={RECEIPT.scale} t={t} lines={B.billLines} ink={w.ink} accent={w.accent} />
       </div>
-      <Title t={t} at={B.billHeadline} text="Tip & Bill Splitter" color={w.ink} />
     </AbsoluteFill>
   );
 };
 
-// ================================================================================================ 15 to 19.9: Decision Wheel
+// ================================================================================================ 17 to 21.9: Decision Wheel
 // A hard cut on a strong accent into a frame the wheel fills. The choices land, a quiet beat, a small wind-up
 // backwards, the spin, Music, and one restrained burst of confetti.
 const CHOICES = ["Walk", "Read", "Cook", "Draw", "Music", "Rest"];
-const WHEEL = { cx: 980, cy: 600, r: 340 };
+const WHEEL = { cx: 860, cy: 560, r: 360 };
 const WHEEL_POSE: PhonePose = { x: 1640, y: 560, scale: 0.55, yaw: -10, roll: 0 };
 const wheelRotation = (t: number) => {
   const [w0, w1] = B.wheelWindup, [s0, s1] = B.wheelSpin, back = timeline.wheel.windup;
@@ -253,13 +255,13 @@ const wheelRotation = (t: number) => {
   if (t < s0) return -back * standard(clamp((t - w0) / (w1 - w0)));
   return -back + (timeline.wheel.turn + back) * (1 - (1 - clamp((t - s0) / (s1 - s0))) ** 3);
 };
-const WHEEL_CONFETTI = { seed: 41, count: 34, from: [WHEEL.cx, 250] as [number, number] };
-const wheelPieces = () => burstPieces({ ...WHEEL_CONFETTI, colors: WORLDS.wheel.tones.concat(["#D9C67D", "#9ABDA9"]), avoid: [{ x: WHEEL.cx, y: WHEEL.cy, r: WHEEL.r + 30 }], boxes: [{ left: 0, top: 0, right: 960, bottom: 250 }, { left: 1480, top: 260, right: 1800, bottom: 860 }] });
+const WHEEL_CONFETTI = { seed: 41, count: 34, from: [WHEEL.cx, 190] as [number, number] };
+const wheelPieces = () => burstPieces({ ...WHEEL_CONFETTI, colors: WORLDS.wheel.tones.concat(["#D9C67D", "#9ABDA9"]), avoid: [{ x: WHEEL.cx, y: WHEEL.cy, r: WHEEL.r + 30 }], boxes: [{ left: 1480, top: 260, right: 1800, bottom: 860 }, { left: 1180, top: 220, right: 1440, bottom: 320 }] });
 const TOOLS = ["Water Eject", "Surface Ruler", "Protractor", "Unit Converter", "Tip & Bill Splitter", "Decision Wheel", "Compass", "Bubble Level", "Flash Dimmer", "Morse & SOS", "Counter", "Coin Flip", "Dice Roll", "Random number", "Reaction Test", "Breathe"];
 const WheelScene: React.FC<{ t: number }> = ({ t }) => {
   const w = WORLDS.wheel, rot = wheelRotation(t), breathe = t > B.wheelChoices[5] && t < B.wheelWindup[0] ? 0.008 * Math.sin((t - B.wheelChoices[5]) * 6) : 0;
   const pieces = useMemo(wheelPieces, []);
-  const decor = useMemo(() => place([[300, 520, 92], [1840, 160, 64], [1860, 960, 56], [420, 960, 50]], [w.tones[0], w.tones[1], w.tones[2], w.container], 4), []);
+  const decor = useMemo(() => place([[230, 300, 92], [1840, 160, 64], [1860, 960, 56], [300, 900, 60], [1380, 940, 48]], [w.tones[0], w.tones[1], w.tones[2], w.container], 4), []);
   const pick = clamp((t - B.wheelPick) / 0.3), lift = pop(t, B.wheelBurst, 9, 200), chip = pop(t, B.wheelPick, 10, 210);
   return (
     <AbsoluteFill>
@@ -270,17 +272,16 @@ const WheelScene: React.FC<{ t: number }> = ({ t }) => {
       </div>
       <Phone screen={SCREENS.wheel} pose={WHEEL_POSE} opacity={1 - pick} />
       <Phone screen={SCREENS.result} pose={WHEEL_POSE} opacity={pick} z={3} />
-      <div style={{ position: "absolute", left: 1330, top: 300, transform: `translate(-50%, -50%) scale(${chip})`, opacity: clamp(chip * 2), zIndex: 6, boxShadow: ELEVATION[2], borderRadius: 32 }}>
+      <div style={{ position: "absolute", left: 1310, top: 270, transform: `translate(-50%, -50%) scale(${chip})`, opacity: clamp(chip * 2), zIndex: 6, boxShadow: ELEVATION[2], borderRadius: 32 }}>
         <Chip label="Music" selected color="#FFFFFF" container={w.accent} outline={w.accent} size={40} />
       </div>
       {/* The first pieces leave with the montage, which turns them into the app's tools. */}
       <ConfettiBurst t={t} at={B.wheelBurst} from={WHEEL_CONFETTI.from} pieces={pieces} skip={t >= SCENE.montage.start ? TOOLS.length : 0} />
-      <Title t={t} at={B.wheelHeadline} text="Decision Wheel" color={w.ink} />
     </AbsoluteFill>
   );
 };
 
-// ================================================================================================ 19.3 to 25.1: the toolkit
+// ================================================================================================ 21.3 to 27.1: the toolkit
 // The payoff: sixteen pieces of the wheel's confetti fly to a grid and become the app's tools, each a
 // MaterialShape badge with its name, while the lilac gives way to the neutral ground. The badges rise into a
 // band and the five tools' real screens track in from the right on the beat; the line lands; then everything
@@ -330,17 +331,14 @@ const Montage: React.FC<{ t: number }> = ({ t }) => {
       </div>
       {CARDS.map((card, i) => {
         const land = B.montageCards[i], p = enter(clamp((t - land + 0.35) / 0.55)), track = -46 * ramp(t, B.montageCards[0], g0 - B.montageCards[0], (x) => x);
-        const g = gone(0.03 * i), x = 960 + (i - 2) * 300 + (1 - p) * 1300 + track, y = 540 + Math.sin(clamp((t - land) / 0.4) * Math.PI) * -16;
+        const g = gone(0.03 * i), x = 960 + (i - 2) * 300 + (1 - p) * 1300 + track, y = 590 + Math.sin(clamp((t - land) / 0.4) * Math.PI) * -16;
         return p > 0 && <ScreenCard key={i} {...card} x={mix(x, ICON.x, g)} y={mix(y, ICON.y, g)} scale={1 - 0.88 * g} tilt={(i - 2) * 2 * (1 - g)} opacity={1 - clamp((g - 0.85) / 0.15)} />;
       })}
-      <div style={{ position: "absolute", inset: 0, opacity: 1 - clamp((t - g0) / 0.25), zIndex: 6 }}>
-        <Title t={t} at={[B.montageHeadline]} text="Everyday tools, one app" x={960} y={858} align="center" width={1700} color={NEUTRAL.ink} size={96} />
-      </div>
     </AbsoluteFill>
   );
 };
 
-// ================================================================================================ 24.95 to 28: the icon
+// ================================================================================================ 26.95 to 30: the icon
 // The tools land in the icon on the final downbeat: it pops with a ripple in each world's colour and a little
 // confetti; the name rises and the official badge comes in whole, then everything holds.
 const End: React.FC<{ t: number }> = ({ t }) => {
@@ -361,7 +359,8 @@ const End: React.FC<{ t: number }> = ({ t }) => {
 
 // ================================================================================================ the edit
 /**
- * The edit, scene by scene, each with its own way in: a hard cut, a wave flattening into the ruler, a match cut
+ * The edit, scene by scene, each with its own way in: the water shape growing out of the intro, a wave
+ * flattening into the ruler, a match cut
  * on the reading, the cards folding into the receipt (with a soft burst opening the coral world), a hard cut
  * after a rest, the confetti becoming the tools, and the tools converging into the icon.
  */
@@ -370,8 +369,9 @@ export const Trailer: React.FC = () => {
   const t = useCurrentFrame() / FPS;
   const [r0, r1] = B.waveReveal, reveal = 900 * enter(clamp((t - r0) / (r1 - r0)));
   const shots: [boolean, React.ReactNode][] = [
-    [t < SCENE.water.start, <ColdOpen t={t} />],
-    [t >= SCENE.water.start && t < SCENE.water.end, <Water t={t} />],
+    [t < SCENE.intro.end, <Intro t={t} />],
+    // The water world grows out of the intro's blue shape.
+    [t >= SCENE.water.start && t < SCENE.water.end, t < SCENE.water.start + timeline.wipeSeconds ? <ShapeWipe t={t} start={SCENE.water.start} dur={timeline.wipeSeconds} at={SCENE.water.from as [number, number]} shape={SCENE.water.shape!}><Water t={t} /></ShapeWipe> : <Water t={t} />],
     // The yellow world opens outward from the line the wave became.
     [t >= r0 && t < SCENE.unit.start, <div style={{ position: "absolute", inset: 0, clipPath: reveal < 900 ? `inset(${Math.max(0, RULER_Y - reveal)}px 0 ${Math.max(0, 1080 - RULER_Y - reveal)}px 0)` : undefined }}><RulerScene t={t} /></div>],
     [t >= B.waveLine[0] && t < B.rulerBody[1] + 0.05, <WaveLine t={t} />],
