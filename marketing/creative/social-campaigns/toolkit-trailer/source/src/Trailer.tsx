@@ -6,7 +6,7 @@ import timeline from "./timeline.json";
 import icon from "./assets/icon.png";
 // Google's official badge, unaltered (marketing/assets/badges/google-play): moved and scaled whole, never redrawn.
 import badge from "../../../../../assets/badges/google-play/en_badge_web_generic.png";
-import { B, FPS, clamp, drift, enter, leave, mix, pop, ramp, standard } from "./lib/anim";
+import { B, FPS, clamp, drift, enter, leave, mix, pop, ramp, smooth, standard } from "./lib/anim";
 import { CONFETTI, FONT, NEUTRAL, WORLDS } from "./theme";
 import type { World } from "./theme";
 import { Chip, ConfettiBurst, Decor, ELEVATION, Headline, MorphPair, Phone, Receipt, Ripples, Ruler, ShapeWipe, ShareCard, SpeakerWaves, Waveform, Wheel, burstPieces, confettoAt, morphTurn, speakers } from "./motifs";
@@ -81,7 +81,8 @@ const Intro: React.FC<{ t: number }> = ({ t }) => {
         const gone = i ? out(0.04 * i) : 0, p = pop(t, B.introShapes[i], 12, 200), size = s.size * p * (1 + 0.05 * Math.sin(swing * Math.PI)) * (1 - gone);
         return <Shape key={i} name={s.name} x={s.x - size / 2} y={s.y - size / 2} size={size} color={s.world.shape} rotate={introTurn(t, i) + gone * 90} />;
       })}
-      <div style={{ position: "absolute", inset: 0, opacity: 1 - out(0.02), transform: `scale(${1 - 0.08 * out(0.02)})`, transformOrigin: "960px 540px", zIndex: 4 }}>
+      {/* The name and icon clear first, so the blue shape travels over a clean frame. */}
+      <div style={{ position: "absolute", inset: 0, opacity: 1 - standard(clamp((t - m0) / 0.22)), transform: `scale(${1 - 0.06 * standard(clamp((t - m0) / 0.22))})`, transformOrigin: "960px 540px", zIndex: 4 }}>
         <Img src={icon} style={{ position: "absolute", left: 960 - 150, top: 410 - 150 - (1 - iconP) * 30, width: 300, height: 300, transform: `scale(${iconP})` }} />
         <Headline t={t} at={[B.title, B.tagline]} title="App Toolkit" sub="Everyday tools in one app" x={960} y={590} width={1200} align="center" color={NEUTRAL.ink} subColor={NEUTRAL.accent} size={150} subScale={0.42} />
       </div>
@@ -418,8 +419,8 @@ export const Trailer: React.FC = () => {
   useFonts();
   const t = useCurrentFrame() / FPS;
   const [r0, r1] = B.waveReveal, reveal = 900 * enter(clamp((t - r0) / (r1 - r0)));
-  // The blue grows out of the travelling shape over half a second, on Material's standard curve, so it reads as a morph and not a cut.
-  const [m0, m1] = B.waterMorph, flood = 2300 * standard(clamp((t - m0 - 0.15) / (m1 - m0 - 0.05))), wm = waterMorph(t);
+  // The blue grows out of the travelling shape over half a second, easing in and out, so it is watched growing and reads as a morph, not a cut.
+  const [m0, m1] = B.waterMorph, flood = 1750 * smooth(clamp((t - m0 - 0.1) / (m1 - m0 - 0.1))), wm = waterMorph(t);
   const rulerEnd = SCENE.unit.start;
   const shots: [boolean, React.ReactNode][] = [
     [t < m1 + 0.05, <Intro t={t} />],

@@ -260,6 +260,7 @@ export const Ruler: React.FC<{ x: number; y: number; width: number; angle?: numb
 
 export const Waveform: React.FC<{ t: number; start: number; onsets: number[]; x: number; y: number; width: number; label: string; line: string; glow: string; ink: string }> = ({ t, start, onsets, x, y, width, label, line, glow, ink }) => {
   const draw = ramp(t, start, 0.9), pulse = Math.min(1.4, onsets.reduce((a, o) => (t >= o ? a + Math.exp(-(t - o) * 5) : a), 0));
+  if (draw <= 0) return null;
   const amp = 22 + 40 * pulse, phase = t * 2 * Math.PI * 1.1, n = 140;
   const pts = Array.from({ length: n + 1 }, (_, i) => {
     const u = i / n, px = x + width * draw * u;

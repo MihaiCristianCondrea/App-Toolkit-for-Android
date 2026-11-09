@@ -26,6 +26,8 @@ export const standard = bezier(0.2, 0, 0, 1);
  * The camera's push into a phone and its pull out of the next: the push ends at the speed the pull starts
  * (about 3.4 of zoom per second with the trailer's 0.7 s push and 1 s pull), so the cut reads as one move.
  */
+/** An even ease in and out, for a reveal that should be watched growing rather than snap. */
+export const smooth = bezier(0.4, 0, 0.2, 1);
 export const pushIn = bezier(0.4, 0, 0.75, 0.4);
 export const pullOut = bezier(0.2, 0.68, 0.3, 1);
 
