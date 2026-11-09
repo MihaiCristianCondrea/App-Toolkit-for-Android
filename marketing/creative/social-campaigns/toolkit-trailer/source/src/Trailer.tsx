@@ -6,7 +6,7 @@ import timeline from "./timeline.json";
 import icon from "./assets/icon.png";
 // Google's official badge, unaltered (marketing/assets/badges/google-play): moved and scaled whole, never redrawn.
 import badge from "../../../../../assets/badges/google-play/en_badge_web_generic.png";
-import { B, FPS, clamp, drift, enter, leave, mix, pop, ramp, standard } from "./lib/anim";
+import { B, FPS, clamp, drift, enter, leave, mix, pop, pullOut, pushIn, ramp, standard } from "./lib/anim";
 import { CONFETTI, FONT, NEUTRAL, WORLDS } from "./theme";
 import type { World } from "./theme";
 import { Chip, ConfettiBurst, ShareCard, Waveform, Decor, ELEVATION, Headline, MorphPair, Phone, Receipt, Ripples, Ruler, ShapeWipe, SoundWaves, Wheel, burstPieces, speakers } from "./motifs";
@@ -60,11 +60,11 @@ const Behind: React.FC<{ t: number; name: string; x: number; y: number; size: nu
  * blends to the next world's colour. Both scenes hold the same straight pose at the cut, so the cut is only the
  * screen changing, as if one phone travelled through every world.
  */
-const C = { x: 960, y: 540 }, PEAK = 1.5, PULL = 0.85, PUSH = 0.55, CUT = 0.06;
+const C = { x: 960, y: 540 }, PEAK = 1.5, PULL = 1, PUSH = 0.7, CUT = 0.06;
 type Cam = { k: number; hero: PhonePose; tilt: number; out: boolean };
 const camera = (t: number, start: number, end: number, enterHero: PhonePose, exitHero: PhonePose, tilt: number, exits = true): Cam => {
-  const kout = exits ? ramp(t, end - PUSH, PUSH, leave) : 0;
-  return kout > 0 ? { k: kout, hero: exitHero, tilt, out: true } : { k: 1 - ramp(t, start, PULL, enter), hero: enterHero, tilt: -tilt, out: false };
+  const kout = exits ? ramp(t, end - PUSH, PUSH, pushIn) : 0;
+  return kout > 0 ? { k: kout, hero: exitHero, tilt, out: true } : { k: 1 - ramp(t, start, PULL, pullOut), hero: enterHero, tilt: -tilt, out: false };
 };
 /** The camera as a CSS transform: the hero's point travels to the frame's centre while everything scales round it. */
 const camTransform = (cam: Cam, depth = 1) => {
@@ -278,15 +278,16 @@ const ROW: { screen: Screen; scroll?: number; world: World }[] = [
   { screen: SCREENS.length, world: WORLDS.unit }, { screen: SCREENS.bill, world: WORLDS.bill }, { screen: SCREENS.result, world: WORLDS.wheel },
 ];
 const rowPose = (i: number): PhonePose => ({ x: 960 + (i - 2) * 300, y: 320 + Math.abs(i - 2) * 16, scale: 0.42, roll: (i - 2) * 3 });
-const GATHER = { at: 27.45, x: 960, y: 330 };
+const GATHER = { at: 27.5, land: 28, x: 960, y: 330 };
 const MORE = ["Compass", "Bubble Level", "Flash Dimmer", "Morse & SOS", "Counter", "Coin Flip", "Dice Roll", "Random number", "Reaction Test", "Breathe"];
 const Montage: React.FC<SceneProps> = ({ t, start }) => {
   const hero = rowPose(4), cam = camera(t, start, 0, hero, hero, 3, false);
-  const gone = (i: number) => enter(clamp((t - GATHER.at - (4 - i) * 0.05) / 0.5));
+  // Each phone leaves in turn and they all land in the icon's place on the downbeat it pops.
+  const gone = (i: number) => { const s0 = GATHER.at + (4 - i) * 0.05; return leave(clamp((t - s0) / (GATHER.land - s0))); };
   const phone = (i: number) => {
     const p = rowPose(i), g = gone(i), bob = B.montageTiles.reduce((a, b, j) => (j === i && t >= b ? a + Math.sin(clamp((t - b) / 0.5) * Math.PI) * 22 : a), 0);
     const arrive = i === 4 ? 1 : pop(t, start + 0.25 + (3 - i) * 0.09, 12, 150);
-    return <Phone key={i} screen={ROW[i].screen} scroll={ROW[i].scroll} pose={{ ...p, roll: (p.roll ?? 0) * (i === 4 ? 1 - cam.k : 1) * (1 - g) }} dx={(GATHER.x - p.x) * g + (1 - arrive) * 120 * (i - 4)} dy={(GATHER.y - p.y) * g - bob} grow={(0.85 + 0.15 * arrive) * (1 - g)} opacity={i === 4 ? 1 : clamp(arrive * 1.5)} z={2} />;
+    return <Phone key={i} screen={ROW[i].screen} scroll={ROW[i].scroll} pose={{ ...p, roll: (p.roll ?? 0) * (i === 4 ? 1 - cam.k : 1) * (1 - g) }} dx={(GATHER.x - p.x) * g + (1 - arrive) * 120 * (i - 4)} dy={(GATHER.y - p.y) * g - bob} grow={(0.85 + 0.15 * arrive) * (1 - 0.8 * g)} opacity={(i === 4 ? 1 : clamp(arrive * 1.5)) * (1 - clamp((g - 0.85) / 0.15))} z={2} />;
   };
   const leaveT = clamp((t - GATHER.at) / 0.4);
   return (

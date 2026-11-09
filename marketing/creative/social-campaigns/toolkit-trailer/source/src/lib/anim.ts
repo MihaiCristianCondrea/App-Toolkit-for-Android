@@ -22,6 +22,12 @@ const bezier = (x1: number, y1: number, x2: number, y2: number) => (x: number) =
 export const enter = bezier(0.05, 0.7, 0.1, 1);
 export const leave = bezier(0.3, 0, 0.8, 0.15);
 export const standard = bezier(0.2, 0, 0, 1);
+/**
+ * The camera's push into a phone and its pull out of the next: the push ends at the speed the pull starts
+ * (about 3.4 of zoom per second with the trailer's 0.7 s push and 1 s pull), so the cut reads as one move.
+ */
+export const pushIn = bezier(0.4, 0, 0.75, 0.4);
+export const pullOut = bezier(0.2, 0.68, 0.3, 1);
 
 /** 0 to 1 from `start` over `dur` seconds, eased. */
 export const ramp = (t: number, start: number, dur: number, ease = enter) => ease(clamp((t - start) / dur));
