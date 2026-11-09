@@ -7,7 +7,7 @@ import icon from "./assets/icon.png";
 import { B, FPS, clamp, drift, enter, mix, pop, ramp, standard } from "./lib/anim";
 import { CONFETTI, FONT, NEUTRAL, WORLDS } from "./theme";
 import type { World } from "./theme";
-import { Bubble, Chip, ConfettiBurst, Decor, ELEVATION, GlassDefs, Headline, Phone, Receipt, Ripples, Ruler, ShapeWipe, SoundWaves, UnitPair, Wheel, burstPieces, decorPieces, speakers } from "./motifs";
+import { Bubble, Chip, ConfettiBurst, ShareCard, Waveform, Decor, ELEVATION, GlassDefs, Headline, Phone, Receipt, Ripples, Ruler, ShapeWipe, SoundWaves, UnitPair, Wheel, burstPieces, speakers } from "./motifs";
 import type { PhonePose, Screen } from "./motifs";
 
 /**
@@ -17,6 +17,18 @@ import type { PhonePose, Screen } from "./motifs";
  */
 const GRID = { left: 144, right: 1776, top: 108, bottom: 972, column: 940, phone: 1380, motifTop: 560 };
 const TITLE = { size: 132, sub: 0.45 };
+/** The title block's box, kept clear of decoration and confetti in every tool scene. */
+const TITLE_BOX = { left: GRID.left, top: GRID.top, right: 900, bottom: 500 };
+/** The Surface Ruler's reading for a marker position: the sheet's own sum (window height over 160 dpi in mm). */
+const rulerMm = (marker: number) => (marker * 957) / (160 / 25.4);
+
+/**
+ * Decoration placed by hand, as on the listing screenshots: a few MaterialShapes ([x, y, size]) around the
+ * phone and at the frame's edges, never in a row, never touching the type, the motif or the phone.
+ */
+const DECOR_NAMES = ["sunny", "flower", "gem", "clover_4leaf", "soft_burst", "cookie_6sided", "very_sunny", "clover_8leaf"];
+const place = (spots: [number, number, number][], colors: string[], seed: number) =>
+  spots.map(([x, y, size], i) => ({ x, y, size, name: DECOR_NAMES[(i * 3 + seed) % DECOR_NAMES.length], color: colors[(i + seed) % colors.length], spin: ((i % 2) * 2 - 1) * (8 + i * 2), delay: i * 0.07 }));
 
 // The real screens, in the states the store listings show.
 const SCREENS: Record<string, Screen> = {
@@ -54,11 +66,12 @@ const fly = (t: number, start: number, pose: PhonePose, from: From) => {
 
 // ------------------------------------------------------------------------------------------------- intro
 const INTRO_SHAPES: { world: World; name: string; x: number; y: number; size: number }[] = [
-  { world: WORLDS.water, name: "cookie_9sided", x: 1540, y: 300, size: 250 },
-  { world: WORLDS.ruler, name: "soft_burst", x: 380, y: 790, size: 270 },
-  { world: WORLDS.unit, name: "cookie_6sided", x: 1500, y: 810, size: 230 },
-  { world: WORLDS.bill, name: "pill", x: 400, y: 270, size: 240 },
-  { world: WORLDS.wheel, name: "flower", x: 700, y: 950, size: 220 },
+  // Four corners of the lockup and one above it, all clear of the icon, the name and the line.
+  { world: WORLDS.water, name: "cookie_9sided", x: 1590, y: 270, size: 240 },
+  { world: WORLDS.ruler, name: "soft_burst", x: 330, y: 810, size: 260 },
+  { world: WORLDS.unit, name: "cookie_6sided", x: 1600, y: 820, size: 230 },
+  { world: WORLDS.bill, name: "pill", x: 340, y: 280, size: 230 },
+  { world: WORLDS.wheel, name: "flower", x: 960, y: 120, size: 150 },
 ];
 const Intro: React.FC<{ t: number }> = ({ t }) => {
   const swing = ramp(t, B.swing, 0.8, enter), iconP = pop(t, B.icon, 10, 190);
@@ -66,9 +79,10 @@ const Intro: React.FC<{ t: number }> = ({ t }) => {
     <AbsoluteFill>
       <Ground color={NEUTRAL.field} />
       {INTRO_SHAPES.map((s, i) => {
-        const p = pop(t, B.introShapes[i], 12, 200), a = (swing * 22 * Math.PI) / 180, dx = s.x - 960, dy = s.y - 540, k = 1 - 0.08 * swing;
-        const x = 960 + k * (dx * Math.cos(a) - dy * Math.sin(a)), y = 540 + k * (dx * Math.sin(a) + dy * Math.cos(a)), size = s.size * p;
-        return <Shape key={i} name={s.name} x={x - size / 2} y={y - size / 2} size={size} color={s.world.shape} rotate={i * 23 + t * 10} />;
+        // On the swing beat each shape breathes out and back, turning in place.
+        const p = pop(t, B.introShapes[i], 12, 200), k = 1 + 0.05 * Math.sin(swing * Math.PI), size = s.size * p * k;
+        const x = s.x + drift(t, i) * 8, y = s.y + drift(t, i + 5) * 8;
+        return <Shape key={i} name={s.name} x={x - size / 2} y={y - size / 2} size={size} color={s.world.shape} rotate={i * 23 + t * 10 + swing * 40} />;
       })}
       <Img src={icon} style={{ position: "absolute", left: 960 - 150, top: 410 - 150 - (1 - iconP) * 30, width: 300, height: 300, transform: `scale(${iconP})`, zIndex: 4 }} />
       <Headline t={t} at={[B.title, B.tagline]} title="App Toolkit" sub="Everyday tools in one app" x={960} y={590} width={1200} align="center" color={NEUTRAL.ink} subColor={NEUTRAL.accent} size={150} subScale={0.42} />
@@ -77,20 +91,23 @@ const Intro: React.FC<{ t: number }> = ({ t }) => {
 };
 
 // ------------------------------------------------------------------------------------------------- water
-const WATER_POSE: PhonePose = { x: 1420, y: 560, scale: 0.78, pitch: 8, yaw: -12, roll: 58 };
+// The phone stands upright with its speaker pointing down, as the sheet asks; the waves, bubbles and droplets
+// leave the speaker below it, and the left zone holds the tone itself, 165 Hz, as a live waveform.
+const WATER_POSE: PhonePose = { x: GRID.phone, y: 470, scale: 0.72, pitch: 14, yaw: -12, roll: 5 };
 const Water: React.FC<{ t: number; start: number }> = ({ t, start }) => {
-  const w = WORLDS.water, m = fly(t, start, WATER_POSE, { yaw: 75, pitch: 30, roll: -24, dx: 520, dy: 420 });
+  const w = WORLDS.water, m = fly(t, start, WATER_POSE, { yaw: 75, pitch: 30, roll: -24, dx: 520, dy: -600 });
   // The waves leave the middle of the speaker edge (between the two groups of holes) of the pose as it is now.
   const sp = speakers(m.pose), dir = sp.reduce((a, s) => [a[0] + s.direction[0], a[1] + s.direction[1]], [0, 0]), len = Math.hypot(dir[0], dir[1]) || 1;
   const from = { at: [sp.reduce((a, s) => a + s.at[0], 0) / sp.length + m.dx, sp.reduce((a, s) => a + s.at[1], 0) / sp.length + m.dy] as [number, number], direction: [dir[0] / len, dir[1] / len] as [number, number] };
-  const decor = useMemo(() => decorPieces(11, 14, [{ left: 120, top: 80, right: 760, bottom: 570 }, { left: 1040, top: 150, right: 1880, bottom: 990 }, { left: 200, top: 520, right: 1100, bottom: 1080 }], [w.tones[0], w.tones[1], w.tones[2], w.container]), []);
+  const decor = useMemo(() => place([[1080, 180, 104], [1820, 150, 58], [1800, 560, 46], [975, 110, 40], [96, 1000, 64]], [w.tones[0], w.tones[1], w.tones[2], w.container], 4), []);
   return (
     <AbsoluteFill>
       <Ground color={w.field} />
-      <Behind t={t} name="cookie_12sided" x={1420} y={560} size={880} color={w.shape} seed={1} start={start} />
+      <Behind t={t} name="cookie_12sided" x={GRID.phone} y={470} size={820} color={w.shape} seed={1} start={start} />
       <Decor t={t} start={start} pieces={decor} />
       <Phone screen={SCREENS.water} scroll={WATER_SCROLL} pose={m.pose} dx={m.dx} dy={m.dy} grow={m.grow} />
-      <SoundWaves t={t} onsets={B.waterWaves} drops={B.waterDrops} from={from} line={w.accent} glow={w.bright} tint={w.tones[0]} reach={600} />
+      <SoundWaves t={t} onsets={B.waterWaves} drops={B.waterDrops} from={from} line={w.accent} glow={w.bright} tint={w.tones[0]} reach={420} spread={52} rise={150} />
+      <Waveform t={t} start={B.waterHeadline[1] + 0.25} onsets={B.waterWaves} x={GRID.left} y={850} width={GRID.column - GRID.left} label="165 Hz" line={w.accent} glow={w.bright} ink={w.accent} />
       <Headline t={t} at={B.waterHeadline} title={"Water\nEject"} sub={"A short tone\nfor wet speakers"} x={GRID.left} y={GRID.top} color={w.ink} subColor={w.accent} size={TITLE.size} subScale={TITLE.sub} />
     </AbsoluteFill>
   );
@@ -106,7 +123,7 @@ const RulerScene: React.FC<{ t: number; start: number }> = ({ t, start }) => {
   const [m0, m1] = B.rulerMeasure, measure = ramp(t, m0, m1 - m0, standard);
   const marker = Math.round((0.12 + 0.38 * measure) * 100) / 100;
   const s = B.protractorSweep, angle = Math.round(45 * s.reduce((acc, at, i) => acc + ramp(t, at, 0.35) * [0.3, 0.25, 0.25, 0.2][i], 0));
-  const decor = useMemo(() => decorPieces(23, 12, [{ left: 120, top: 80, right: 820, bottom: 500 }, { left: 110, top: 600, right: 980, bottom: 940 }, { left: 1040, top: 150, right: 1790, bottom: 990 }], [w.tones[0], w.tones[1], w.container, "#EE9B00"]), []);
+  const decor = useMemo(() => place([[975, 130, 84], [1840, 160, 56], [1850, 900, 62], [1000, 990, 70], [90, 990, 50]], [w.tones[0], w.tones[1], w.container, "#EE9B00"], 2), []);
   const slide = ramp(t, B.rulerSlide, 0.7);
   return (
     <AbsoluteFill>
@@ -116,7 +133,7 @@ const RulerScene: React.FC<{ t: number; start: number }> = ({ t, start }) => {
       <Phone screen={["numbers", { activeSheet: "ruler", rulerAdvanced: false, rulerMarker: marker }]} pose={a.pose} dx={a.dx} dy={a.dy} grow={a.grow} z={3} />
       <Phone screen={["numbers", { activeSheet: "protractor", protractorAngle: angle }]} pose={b.pose} dx={b.dx} dy={b.dy} grow={b.grow} z={4} />
       <svg aria-hidden width={1920} height={1080} style={{ position: "absolute", inset: 0, zIndex: 5, overflow: "visible" }}>
-        <Ruler x={mix(-1100, GRID.left, slide)} y={700} width={GRID.column - GRID.left} angle={-4} ticks={ramp(t, B.rulerSlide + 0.15, 0.8)} band={0.12 + 0.38 * measure} accent={w.accent} />
+        <Ruler x={mix(-1100, GRID.left, slide)} y={690} width={GRID.column - GRID.left} angle={-2} ticks={ramp(t, B.rulerSlide + 0.15, 0.8)} mm={t >= m0 ? rulerMm(marker) : 0} accent={w.accent} />
       </svg>
       <Headline t={t} at={B.rulerHeadline} title={"Ruler &\nProtractor"} sub="Measure on your screen" x={GRID.left} y={GRID.top} color={w.ink} subColor={w.accent} size={TITLE.size} subScale={TITLE.sub} />
     </AbsoluteFill>
@@ -139,7 +156,7 @@ const Unit: React.FC<{ t: number; start: number }> = ({ t, start }) => {
   const last = at[shown], flip = shown > 0 ? clamp((t - last) / 0.4) : 0, c = CATEGORIES[i];
   const count = i === 0 ? String(Math.max(1, Math.round(100 * ramp(t, at[0], 0.5, (x) => x)))) : c.b[0];
   const enterP = pop(t, at[0] - 0.2, 13, 160), turn = shown * 180 + (shown > 0 ? enter(clamp((t - last) / 0.5)) * 0 : 0);
-  const decor = useMemo(() => decorPieces(37, 12, [{ left: 120, top: 80, right: 820, bottom: 560 }, { left: 120, top: 560, right: 980, bottom: 960 }, { left: 1150, top: 120, right: 1620, bottom: 990 }], [w.tones[0], w.tones[1], w.tones[2], w.container]), []);
+  const decor = useMemo(() => place([[1060, 170, 120], [1840, 110, 50], [1730, 690, 64], [1790, 1000, 54], [1010, 960, 58]], [w.tones[0], w.tones[1], w.tones[2], w.container], 2), []);
   return (
     <AbsoluteFill>
       <Ground color={w.field} />
@@ -149,8 +166,8 @@ const Unit: React.FC<{ t: number; start: number }> = ({ t, start }) => {
       <div style={{ position: "absolute", left: GRID.left, top: 575, display: "flex", gap: 10, zIndex: 5 }}>
         {CATEGORIES.map((k, j) => { const p = pop(t, start + 0.4 + j * 0.06, 12, 200); return <div key={k.name} style={{ transform: `scale(${p})`, opacity: clamp(p * 2) }}><Chip label={k.name} selected={j === shown} color={w.ink} container={w.container} outline={w.tones[2]} size={28} /></div>; })}
       </div>
-      <div style={{ position: "absolute", inset: 0, transform: `scale(${0.6 + 0.4 * enterP})`, transformOrigin: "540px 820px", opacity: clamp(enterP * 2), zIndex: 4 }}>
-        <UnitPair cx={540} cy={820} gap={390} flip={flip} turn={(shown + flip) * 180} ink={w.ink} arrows={w.accent} size={250}
+      <div style={{ position: "absolute", inset: 0, transform: `scale(${0.6 + 0.4 * enterP})`, transformOrigin: "464px 820px", opacity: clamp(enterP * 2), zIndex: 4 }}>
+        <UnitPair cx={464} cy={820} gap={390} flip={flip} turn={(shown + flip) * 180} ink={w.ink} arrows={w.accent} size={250}
           a={{ value: c.a[0], label: c.a[1], shape: c.shapes[0], color: w.tones[0] }} b={{ value: count, label: c.b[1], shape: c.shapes[1], color: w.tones[1] }} />
       </div>
       <Headline t={t} at={B.unitHeadline} title={"Unit\nConverter"} sub="Convert units both ways" x={GRID.left} y={GRID.top} color={w.ink} subColor={w.accent} size={TITLE.size} subScale={TITLE.sub} />
@@ -162,13 +179,14 @@ const Unit: React.FC<{ t: number; start: number }> = ({ t, start }) => {
 const BILL_POSE: PhonePose = { x: GRID.phone, y: 540, scale: 0.8, yaw: -10, roll: 3 };
 const Bill: React.FC<{ t: number; start: number }> = ({ t, start }) => {
   const w = WORLDS.bill, m = fly(t, start, BILL_POSE, { yaw: 80, pitch: -30, roll: -16, dx: 400, dy: -800 }), out = ramp(t, B.billReceipt, 0.7);
-  const decor = useMemo(() => decorPieces(53, 13, [{ left: 120, top: 80, right: 820, bottom: 560 }, { left: 300, top: 540, right: 800, bottom: 1000 }, { left: 1150, top: 120, right: 1620, bottom: 990 }], [w.tones[0], w.tones[1], w.tones[2], w.container]), []);
+  const decor = useMemo(() => place([[1000, 200, 80], [1790, 120, 92], [1830, 700, 58], [1700, 980, 70], [80, 1000, 54]], [w.tones[0], w.tones[1], w.tones[2], w.container], 4), []);
   return (
     <AbsoluteFill>
       <Ground color={w.field} />
       <Behind t={t} name="soft_burst" x={GRID.phone} y={500} size={860} color={w.shape} seed={4} start={start} />
       <Decor t={t} start={start} pieces={decor} />
-      {t >= B.billReceipt && <Receipt x={mix(1240, 404, out)} y={588} angle={mix(10, -5, out)} scale={1.05} t={t} lines={B.billLines} ink={w.ink} accent={w.accent} />}
+      {t >= B.billReceipt && <Receipt x={mix(1240, 158, out)} y={584} angle={mix(10, -3, out)} scale={1.05} t={t} lines={B.billLines} ink={w.ink} accent={w.accent} />}
+      {[0, 1].map((k) => { const p = pop(t, B.billLines[3] + k * 0.25, 12, 190); return p > 0 && <div key={k} style={{ position: "absolute", inset: 0, zIndex: 4, opacity: clamp(p * 2), transform: `translateX(${(1 - p) * -160}px)` }}><ShareCard x={540} y={640 + k * 160} who={String(k + 1)} amount="€28.60" ink={w.ink} container={w.container} avatar={w.tones[k]} shape={k ? "cookie_6sided" : "sunny"} /></div>; })}
       <Phone screen={SCREENS.bill} pose={m.pose} dx={m.dx} dy={m.dy} grow={m.grow} z={5} />
       <Headline t={t} at={B.billHeadline} title={"Tip & Bill\nSplitter"} sub="The tip and each share" x={GRID.left} y={GRID.top} color={w.ink} subColor={w.accent} size={TITLE.size} subScale={TITLE.sub} />
     </AbsoluteFill>
@@ -182,21 +200,20 @@ const WHEEL_POSE: PhonePose = { x: GRID.phone + 40, y: 540, scale: 0.8, yaw: -12
 const WheelScene: React.FC<{ t: number; start: number }> = ({ t, start }) => {
   const w = WORLDS.wheel, m = fly(t, start, WHEEL_POSE, { yaw: -75, pitch: 35, roll: 20, dx: 500, dy: 600 });
   const [s0, s1] = B.wheelSpin, spin = 1 - (1 - clamp((t - s0) / (s1 - s0))) ** 3, rot = spin * timeline.wheelTurn;
-  const pieces = useMemo(() => burstPieces({ seed: 41, count: 46, from: [520, 540], colors: w.tones.concat(["#D9C67D", "#9ABDA9"]), avoid: [{ x: 520, y: 765, r: 250 }, { x: 1420, y: 540, r: 260 }, { x: 420, y: 300, r: 300 }, { x: 860, y: 640, r: 120 }] }), []);
-  const decor = useMemo(() => decorPieces(67, 12, [{ left: 120, top: 80, right: 820, bottom: 500 }, { left: 280, top: 500, right: 760, bottom: 1000 }, { left: 740, top: 560, right: 1000, bottom: 720 }, { left: 1190, top: 120, right: 1660, bottom: 990 }], [w.tones[0], w.tones[1], w.tones[2], w.container]), []);
+  const pieces = useMemo(() => burstPieces({ seed: 41, count: 40, from: [370, 540], colors: w.tones.concat(["#D9C67D", "#9ABDA9"]), avoid: [{ x: 370, y: 770, r: 235 }], boxes: [{ left: 0, top: 0, right: 920, bottom: 520 }, { left: 1200, top: 90, right: 1650, bottom: 990 }, { left: 750, top: 590, right: 970, bottom: 690 }] }), []);
+  const decor = useMemo(() => place([[1070, 160, 88], [1830, 220, 70], [1810, 840, 56], [760, 980, 62]], [w.tones[0], w.tones[1], w.tones[2], w.container], 4), []);
   const pick = clamp((t - B.wheelPick) / 0.3), lift = pop(t, B.wheelBurst, 9, 200), chip = pop(t, B.wheelPick, 10, 210);
   return (
     <AbsoluteFill>
       <Ground color={w.field} />
-      <Behind t={t} name="flower" x={520} y={765} size={640} color={w.container} seed={6} start={start} />
       <Decor t={t} start={start} pieces={decor} />
-      <Wheel cx={520} cy={765} r={205} rotation={rot} choices={CHOICES} shown={B.wheelChoices.map((c) => pop(t, c, 11, 200))} colors={w.tones} ground={w.field} ink={w.ink} accent={w.accent} winner={t >= B.wheelBurst ? 4 : -1} lift={lift} />
+      <Wheel cx={370} cy={770} r={205} rotation={rot} choices={CHOICES} shown={B.wheelChoices.map((c) => pop(t, c, 11, 200))} colors={w.tones} ground={w.field} ink={w.ink} accent={w.accent} winner={t >= B.wheelBurst ? 4 : -1} lift={lift} />
       <Phone screen={SCREENS.wheel} pose={m.pose} dx={m.dx} dy={m.dy} grow={m.grow} opacity={1 - pick} />
       <Phone screen={SCREENS.result} pose={m.pose} dx={m.dx} dy={m.dy} opacity={pick} grow={m.grow} z={3} />
       <div style={{ position: "absolute", left: 860, top: 640, transform: `translate(-50%, -50%) scale(${chip})`, opacity: clamp(chip * 2), zIndex: 6, boxShadow: ELEVATION[2], borderRadius: 32 }}>
         <Chip label="Music" selected color="#FFFFFF" container={w.accent} outline={w.accent} size={40} />
       </div>
-      <ConfettiBurst t={t} at={B.wheelBurst} from={[520, 540]} pieces={pieces} />
+      <ConfettiBurst t={t} at={B.wheelBurst} from={[370, 540]} pieces={pieces} />
       <Headline t={t} at={B.wheelHeadline} title={"Decision\nWheel"} sub="Let chance decide" x={GRID.left} y={GRID.top} color={w.ink} subColor={w.accent} size={TITLE.size} subScale={TITLE.sub} />
     </AbsoluteFill>
   );

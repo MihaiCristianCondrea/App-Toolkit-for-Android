@@ -86,7 +86,7 @@ export const GlassDefs: React.FC<{ tint: string; id?: string }> = ({ tint, id = 
 
 const hash = (n: number) => { const x = Math.sin(n * 127.1 + 311.7) * 43758.5453; return x - Math.floor(x); };
 
-export const SoundWaves: React.FC<{ t: number; onsets: number[]; from: { at: [number, number]; direction: [number, number] }; line: string; glow: string; tint: string; reach?: number; spread?: number; drops?: number[] }> = ({ t, onsets, from, line, glow, tint, reach = 520, spread = 42, drops = [] }) => {
+export const SoundWaves: React.FC<{ t: number; onsets: number[]; from: { at: [number, number]; direction: [number, number] }; line: string; glow: string; tint: string; reach?: number; spread?: number; drops?: number[]; rise?: number }> = ({ t, onsets, from, line, glow, tint, reach = 520, spread = 42, drops = [], rise: lift = 260 }) => {
   const { at, direction: d } = from, n: [number, number] = [-d[1], d[0]];
   const along = (r: number, deg: number): [number, number] => { const a = (deg * Math.PI) / 180; return [at[0] + r * (d[0] * Math.cos(a) + n[0] * Math.sin(a)), at[1] + r * (d[1] * Math.cos(a) + n[1] * Math.sin(a))]; };
   return (
@@ -111,7 +111,7 @@ export const SoundWaves: React.FC<{ t: number; onsets: number[]; from: { at: [nu
           const life = t - o, rise = clamp((life - 0.3) / 2.2), popAt = 1.7 + hash(k + b * 5) * 0.9, popP = clamp((life - popAt) / 0.16);
           if (popP >= 1) return null;
           const [x0, y0] = along(out, deg), r = (8 + hash(k * 11 + b) * 18) * (0.4 + 0.6 * pop(t, o + 0.04 * b, 11, 180)) * (1 + popP * 0.6);
-          return <Bubble key={`b${k}-${b}`} x={x0 + Math.sin(life * 4.2 + k + b) * 10 * rise} y={y0 - rise * rise * 260} r={r} rim={glow} opacity={1 - popP} />;
+          return <Bubble key={`b${k}-${b}`} x={x0 + Math.sin(life * 4.2 + k + b) * 10 * rise} y={y0 - rise * rise * lift} r={r} rim={glow} opacity={1 - popP} />;
         });
         return [...rings, ...bubbles];
       })}
@@ -140,11 +140,12 @@ export const decorPieces = (seed: number, count: number, avoid: Box[], colors: s
   const rand = () => ((s = (Math.imul(s, 1664525) + 1013904223) >>> 0) / 4294967296);
   const out: { x: number; y: number; size: number; name: string; color: string; spin: number; delay: number }[] = [];
   for (let tries = 0; out.length < count && tries < count * 60; tries++) {
-    const big = out.length < 3, size = big ? 110 + rand() * 70 : 40 + rand() * 46, r = size / 2;
+    const big = out.length < 2, size = big ? 96 + rand() * 50 : 40 + rand() * 40, r = size / 2;
     let best: { x: number; y: number; d: number } | undefined;
     for (let c = 0; c < 16; c++) {
       const x = 40 + r + rand() * (1920 - 80 - 2 * r), y = 40 + r + rand() * (1080 - 80 - 2 * r);
-      if (avoid.some((a) => x + r > a.left && x - r < a.right && y + r > a.top && y - r < a.bottom)) continue;
+      // Kept 36 px clear of every content box, so decoration only fills the gutters between them.
+      if (avoid.some((a) => x + r + 36 > a.left && x - r - 36 < a.right && y + r + 36 > a.top && y - r - 36 < a.bottom)) continue;
       const d = Math.min(Infinity, ...out.map((p) => Math.hypot(p.x - x, p.y - y) - p.size / 2 - r));
       if (!best || d > best.d) best = { x, y, d };
     }
@@ -191,19 +192,61 @@ export const Ripples: React.FC<{ t: number; onsets: number[]; at: [number, numbe
 // ---------------------------------------------------------------------------------------------------
 // Ruler and Protractor: the listing's artwork, with a slide and a live arm.
 
-export const Ruler: React.FC<{ x: number; y: number; width: number; angle: number; ticks?: number; band?: number; accent?: string }> = ({ x, y, width, angle, ticks = 1, band = 0, accent = "#8F5700" }) => {
-  const n = Math.floor((width - 56) / 12), shown = Math.floor((n + 1) * clamp(ticks));
+/**
+ * The listing's yellow ruler at 8 px per millimetre, with centimetre labels; `mm` is the measured length,
+ * shown as a band and a line, the same reading the Surface Ruler phone shows.
+ */
+export const Ruler: React.FC<{ x: number; y: number; width: number; angle: number; ticks?: number; mm?: number; accent?: string }> = ({ x, y, width, angle, ticks = 1, mm = 0, accent = "#8F5700" }) => {
+  const PX = 8, pad = 28, n = Math.floor((width - 2 * pad) / PX), shown = Math.floor((n + 1) * clamp(ticks)), band = Math.min(mm, n) * PX;
   return (
     <g transform={`translate(${x} ${y}) rotate(${angle})`}>
       <rect x="0" y="12" width={width} height="136" rx="36" fill="#B56D00" opacity=".16" />
       <rect width={width} height="136" rx="36" fill="#F6B91D" />
-      {band > 0 && <rect x="28" y="0" width={band * (width - 56)} height="136" fill={accent} opacity=".16" />}
-      {band > 0 && <rect x={28 + band * (width - 56) - 3} y="-14" width="6" height="164" rx="3" fill={accent} />}
-      {Array.from({ length: shown }, (_, i) => <line key={i} x1={28 + i * 12} x2={28 + i * 12} y1="0" y2={i % 10 === 0 ? 66 : i % 5 === 0 ? 46 : 26} stroke="#654000" strokeWidth={i % 5 ? 1.8 : 3} strokeLinecap="round" />)}
-      {Array.from({ length: Math.floor(shown / 10) + 1 }, (_, k) => k > 0 && <text key={k} x={28 + k * 120} y="98" textAnchor="middle" fontFamily={FONT} fontWeight={600} fontSize="26" fill="#654000">{k}</text>)}
+      {mm > 0 && <rect x={pad} y="0" width={band} height="136" fill={accent} opacity=".16" />}
+      {Array.from({ length: shown }, (_, i) => <line key={i} x1={pad + i * PX} x2={pad + i * PX} y1="0" y2={i % 10 === 0 ? 62 : i % 5 === 0 ? 44 : 26} stroke="#654000" strokeWidth={i % 5 ? 1.6 : 2.8} strokeLinecap="round" />)}
+      {Array.from({ length: Math.floor((shown - 1) / 10) + 1 }, (_, k) => k > 0 && <text key={k} x={pad + k * 10 * PX} y="96" textAnchor="middle" fontFamily={FONT} fontWeight={600} fontSize="26" fill="#654000">{k}</text>)}
+      {mm > 0 && <rect x={pad + band - 3} y="-16" width="6" height="168" rx="3" fill={accent} />}
     </g>
   );
 };
+
+// ---------------------------------------------------------------------------------------------------
+// Water Eject's tone: the 165 Hz the sheet plays, as a reading over a live waveform that swells on every note.
+
+export const Waveform: React.FC<{ t: number; start: number; onsets: number[]; x: number; y: number; width: number; label: string; line: string; glow: string; ink: string }> = ({ t, start, onsets, x, y, width, label, line, glow, ink }) => {
+  const draw = ramp(t, start, 0.9), pulse = Math.min(1.4, onsets.reduce((a, o) => (t >= o ? a + Math.exp(-(t - o) * 5) : a), 0));
+  const amp = 22 + 40 * pulse, phase = t * 2 * Math.PI * 1.1, n = 140;
+  const pts = Array.from({ length: n + 1 }, (_, i) => {
+    const u = i / n, px = x + width * draw * u;
+    return `${px.toFixed(1)} ${(y + amp * Math.sqrt(Math.sin(Math.PI * u)) * Math.sin((2 * Math.PI * (px - x)) / 92 - phase)).toFixed(1)}`;
+  });
+  const d = `M ${pts.join(" L ")}`, p = ramp(t, start, 0.55);
+  return (
+    <>
+      <div style={{ position: "absolute", left: x, top: y - 250, zIndex: 5, fontFamily: FONT, fontSize: 92, fontWeight: 600, letterSpacing: -2, color: ink, opacity: p, transform: `translateY(${(1 - p) * 30}px)` }}>{label}</div>
+      <svg aria-hidden width={1920} height={1080} style={{ position: "absolute", inset: 0, zIndex: 5, pointerEvents: "none" }}>
+        <path d={d} fill="none" stroke={glow} strokeWidth="18" strokeLinecap="round" opacity=".25" filter="url(#tt-glass-glow)" />
+        <path d={d} fill="none" stroke={line} strokeWidth="7" strokeLinecap="round" />
+      </svg>
+    </>
+  );
+};
+
+// ---------------------------------------------------------------------------------------------------
+// Tip & Bill Splitter: one card per person, each with the share the app works out.
+
+export const ShareCard: React.FC<{ x: number; y: number; who: string; amount: string; ink: string; container: string; avatar: string; shape: string }> = ({ x, y, who, amount, ink, container, avatar, shape }) => (
+  <div style={{ position: "absolute", left: x, top: y, width: 380, height: 128, borderRadius: 32, background: container, boxShadow: ELEVATION[1], display: "flex", alignItems: "center", gap: 22, padding: "0 30px", boxSizing: "border-box", fontFamily: FONT, color: ink, zIndex: 4 }}>
+    <div style={{ position: "relative", width: 72, height: 72, flex: "none" }}>
+      <Shape name={shape} x={0} y={0} size={72} color={avatar} rotate={0} />
+      <div style={{ position: "absolute", inset: 0, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 32, fontWeight: 650 }}>{who}</div>
+    </div>
+    <div style={{ display: "flex", flexDirection: "column" }}>
+      <div style={{ fontSize: 24, fontWeight: 500, opacity: 0.8 }}>Pays</div>
+      <div style={{ fontSize: 50, fontWeight: 650, letterSpacing: -1.5, lineHeight: 1 }}>{amount}</div>
+    </div>
+  </div>
+);
 
 // ---------------------------------------------------------------------------------------------------
 // Unit Converter: two units on MaterialShapes with the swap arrows between them; on each category change both
@@ -214,7 +257,7 @@ export const UnitPair: React.FC<{ cx: number; cy: number; gap: number; a: Unit; 
   const unit = (u: Unit, x: number, k: string, lag: number) => {
     const f = clamp(flip - lag), sx = Math.abs(Math.cos(f * Math.PI));
     return (
-      <div key={k} style={{ position: "absolute", left: x - size / 2, top: cy - size / 2, width: size, height: size, zIndex: 4, transform: `scaleX(${Math.max(0.02, sx).toFixed(3)}) rotate(${(f * 30).toFixed(1)}deg)` }}>
+      <div key={k} style={{ position: "absolute", left: x - size / 2, top: cy - size / 2, width: size, height: size, zIndex: 4, transform: `scaleX(${Math.max(0.02, sx).toFixed(3)}) rotate(${(Math.sin(f * Math.PI) * 12).toFixed(1)}deg)` }}>
         <Shape name={u.shape} x={0} y={0} size={size} color={u.color} rotate={12} />
         <div style={{ position: "absolute", inset: 0, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", fontFamily: FONT, color: ink }}>
           <div style={{ fontSize: size * (u.value.length > 4 ? 0.2 : 0.26), fontWeight: 650, letterSpacing: -2, lineHeight: 1 }}>{u.value}</div>
@@ -262,7 +305,8 @@ export const Receipt: React.FC<{ x: number; y: number; angle: number; t: number;
 
 /**
  * The Decision Wheel with its choices: each segment fills and takes its label on its own beat (`shown`, 0..1
- * per segment); once it settles, the winning segment lifts out and the others step back.
+ * per segment); once it settles, the winning segment lifts out and the others step back. Labels on the left
+ * half turn over, so every choice reads the right way up.
  */
 export const Wheel: React.FC<{ cx: number; cy: number; r: number; rotation: number; choices: string[]; shown: number[]; colors: string[]; ground: string; ink: string; accent: string; winner?: number; lift?: number }> = ({ cx, cy, r, rotation, choices, shown, colors, ground, ink, accent, winner = -1, lift = 0 }) => {
   const n = choices.length, seg = 360 / n;
@@ -277,7 +321,7 @@ export const Wheel: React.FC<{ cx: number; cy: number; r: number; rotation: numb
           return (
             <g key={i} transform={`translate(${(Math.cos(m) * out).toFixed(1)} ${(Math.sin(m) * out).toFixed(1)})`} opacity={winner >= 0 && !win ? 1 - lift * 0.45 : 1}>
               <path d={`M 0 0 L ${rr * Math.cos(a)} ${rr * Math.sin(a)} A ${rr} ${rr} 0 0 1 ${rr * Math.cos(b)} ${rr * Math.sin(b)} Z`} fill={win && lift > 0 ? accent : colors[i % colors.length]} opacity={0.25 + 0.75 * p} stroke={ground} strokeWidth="8" strokeLinejoin="round" />
-              <text transform={`rotate(${mid}) translate(${r * 0.62} 0)`} textAnchor="middle" dominantBaseline="central" fontFamily={FONT} fontWeight={650} fontSize={r * 0.13} fill={win && lift > 0 ? "#FFFFFF" : ink} opacity={clamp(p * 2 - 1)}>{label}</text>
+              <text transform={`rotate(${mid}) translate(${r * 0.62} 0)${Math.cos(((mid + rotation) * Math.PI) / 180) < 0 ? " rotate(180)" : ""}`} textAnchor="middle" dominantBaseline="central" fontFamily={FONT} fontWeight={650} fontSize={r * 0.13} fill={win && lift > 0 ? "#FFFFFF" : ink} opacity={clamp(p * 2 - 1)}>{label}</text>
             </g>
           );
         })}
@@ -292,11 +336,11 @@ export const Wheel: React.FC<{ cx: number; cy: number; r: number; rotation: numb
 // ---------------------------------------------------------------------------------------------------
 // Confetti: the Decision Wheel listing's blue-noise scatter, thrown out from a point and settling.
 
-export const burstPieces = (o: { seed: number; count: number; from: [number, number]; colors: string[]; avoid?: { x: number; y: number; r: number }[] }): Confetto[] =>
+export const burstPieces = (o: { seed: number; count: number; from: [number, number]; colors: string[]; avoid?: { x: number; y: number; r: number }[]; boxes?: Box[] }): Confetto[] =>
   scatterConfetti({
     width: 1920, height: 1080, seed: o.seed, count: o.count, margin: 30, colors: o.colors,
     focus: { left: o.from[0] - 80, top: o.from[1] - 80, right: o.from[0] + 80, bottom: o.from[1] + 80 },
-    free: (x, y, r) => (o.avoid ?? []).every((a) => Math.hypot(a.x - x, a.y - y) > a.r + r * 1.6),
+    free: (x, y, r) => (o.avoid ?? []).every((a) => Math.hypot(a.x - x, a.y - y) > a.r + r * 1.6) && (o.boxes ?? []).every((b) => x + r * 1.6 < b.left || x - r * 1.6 > b.right || y + r * 1.6 < b.top || y - r * 1.6 > b.bottom),
   }).map((q) => ({ ...q, w: q.w * 1.6, h: q.h * 1.6 }));
 
 export const ConfettiBurst: React.FC<{ t: number; at: number; from: [number, number]; pieces: Confetto[]; z?: number }> = ({ t, at, from, pieces, z = 7 }) => {
