@@ -418,7 +418,8 @@ export const Trailer: React.FC = () => {
   useFonts();
   const t = useCurrentFrame() / FPS;
   const [r0, r1] = B.waveReveal, reveal = 900 * enter(clamp((t - r0) / (r1 - r0)));
-  const [m0, m1] = B.waterMorph, flood = 2300 * enter(clamp((t - m0 - 0.2) / (m1 - m0 - 0.1))), wm = waterMorph(t);
+  // The blue grows out of the travelling shape over half a second, on Material's standard curve, so it reads as a morph and not a cut.
+  const [m0, m1] = B.waterMorph, flood = 2300 * standard(clamp((t - m0 - 0.15) / (m1 - m0 - 0.05))), wm = waterMorph(t);
   const rulerEnd = SCENE.unit.start;
   const shots: [boolean, React.ReactNode][] = [
     [t < m1 + 0.05, <Intro t={t} />],
