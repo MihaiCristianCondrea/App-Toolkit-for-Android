@@ -10,6 +10,14 @@ import type { World } from "./theme";
 import { Bubble, Chip, ConfettiBurst, Decor, ELEVATION, GlassDefs, Headline, Phone, Receipt, Ripples, Ruler, ShapeWipe, SoundWaves, UnitPair, Wheel, burstPieces, decorPieces, speakers } from "./motifs";
 import type { PhonePose, Screen } from "./motifs";
 
+/**
+ * One grid for every tool scene (Remotion's video-layout rules: one thing to notice per zone, key content in a
+ * generous safe area, type sized for a phone screen): the title block top left, the tool's motif in the zone
+ * under it, the phones in the right column, everything inside the safe area.
+ */
+const GRID = { left: 144, right: 1776, top: 108, bottom: 972, column: 940, phone: 1380, motifTop: 560 };
+const TITLE = { size: 132, sub: 0.45 };
+
 // The real screens, in the states the store listings show.
 const SCREENS: Record<string, Screen> = {
   water: ["quick-tools", { activeToolId: "water_eject" }],
@@ -63,54 +71,54 @@ const Intro: React.FC<{ t: number }> = ({ t }) => {
         return <Shape key={i} name={s.name} x={x - size / 2} y={y - size / 2} size={size} color={s.world.shape} rotate={i * 23 + t * 10} />;
       })}
       <Img src={icon} style={{ position: "absolute", left: 960 - 150, top: 410 - 150 - (1 - iconP) * 30, width: 300, height: 300, transform: `scale(${iconP})`, zIndex: 4 }} />
-      <Headline t={t} at={[B.title, B.tagline]} title="App Toolkit" sub="Everyday tools in one app" x={960} y={590} width={1200} align="center" color={NEUTRAL.ink} subColor={NEUTRAL.accent} size={118} />
+      <Headline t={t} at={[B.title, B.tagline]} title="App Toolkit" sub="Everyday tools in one app" x={960} y={590} width={1200} align="center" color={NEUTRAL.ink} subColor={NEUTRAL.accent} size={150} subScale={0.42} />
     </AbsoluteFill>
   );
 };
 
 // ------------------------------------------------------------------------------------------------- water
-const WATER_POSE: PhonePose = { x: 1420, y: 520, scale: 0.8, pitch: 8, yaw: -12, roll: 62 };
+const WATER_POSE: PhonePose = { x: 1420, y: 560, scale: 0.78, pitch: 8, yaw: -12, roll: 58 };
 const Water: React.FC<{ t: number; start: number }> = ({ t, start }) => {
   const w = WORLDS.water, m = fly(t, start, WATER_POSE, { yaw: 75, pitch: 30, roll: -24, dx: 520, dy: 420 });
   // The waves leave the middle of the speaker edge (between the two groups of holes) of the pose as it is now.
   const sp = speakers(m.pose), dir = sp.reduce((a, s) => [a[0] + s.direction[0], a[1] + s.direction[1]], [0, 0]), len = Math.hypot(dir[0], dir[1]) || 1;
   const from = { at: [sp.reduce((a, s) => a + s.at[0], 0) / sp.length + m.dx, sp.reduce((a, s) => a + s.at[1], 0) / sp.length + m.dy] as [number, number], direction: [dir[0] / len, dir[1] / len] as [number, number] };
-  const decor = useMemo(() => decorPieces(11, 16, [{ left: 100, top: 90, right: 760, bottom: 340 }, { left: 1060, top: 120, right: 1880, bottom: 900 }, { left: 260, top: 450, right: 1080, bottom: 1080 }], [w.tones[0], w.tones[1], w.tones[2], w.container]), []);
+  const decor = useMemo(() => decorPieces(11, 14, [{ left: 120, top: 80, right: 760, bottom: 570 }, { left: 1040, top: 150, right: 1880, bottom: 990 }, { left: 200, top: 520, right: 1100, bottom: 1080 }], [w.tones[0], w.tones[1], w.tones[2], w.container]), []);
   return (
     <AbsoluteFill>
       <Ground color={w.field} />
-      <Behind t={t} name="cookie_12sided" x={1420} y={520} size={900} color={w.shape} seed={1} start={start} />
+      <Behind t={t} name="cookie_12sided" x={1420} y={560} size={880} color={w.shape} seed={1} start={start} />
       <Decor t={t} start={start} pieces={decor} />
       <Phone screen={SCREENS.water} scroll={WATER_SCROLL} pose={m.pose} dx={m.dx} dy={m.dy} grow={m.grow} />
       <SoundWaves t={t} onsets={B.waterWaves} drops={B.waterDrops} from={from} line={w.accent} glow={w.bright} tint={w.tones[0]} reach={600} />
-      <Headline t={t} at={B.waterHeadline} title="Water Eject" sub={"A short tone\nfor wet speakers"} x={140} y={130} color={w.ink} subColor={w.accent} />
+      <Headline t={t} at={B.waterHeadline} title={"Water\nEject"} sub={"A short tone\nfor wet speakers"} x={GRID.left} y={GRID.top} color={w.ink} subColor={w.accent} size={TITLE.size} subScale={TITLE.sub} />
     </AbsoluteFill>
   );
 };
 
 // ------------------------------------------------------------------------------------------------- ruler
 // Two phones: the Surface Ruler measuring as the drawn ruler does, and the Protractor sweeping to 45 degrees.
-const RULER_A: PhonePose = { x: 1080, y: 580, scale: 0.7, yaw: 16, roll: -5 };
-const RULER_B: PhonePose = { x: 1560, y: 540, scale: 0.72, yaw: -16, roll: 5 };
+const RULER_A: PhonePose = { x: 1230, y: 545, scale: 0.7, yaw: 16, roll: -5 };
+const RULER_B: PhonePose = { x: 1575, y: 535, scale: 0.72, yaw: -16, roll: 5 };
 const RulerScene: React.FC<{ t: number; start: number }> = ({ t, start }) => {
   const w = WORLDS.ruler;
   const a = fly(t, start, RULER_A, { yaw: -80, pitch: 30, roll: -20, dx: -600, dy: 500 }), b = fly(t, start + 0.5, RULER_B, { yaw: 80, pitch: 30, roll: 20, dx: 600, dy: 500 });
   const [m0, m1] = B.rulerMeasure, measure = ramp(t, m0, m1 - m0, standard);
   const marker = Math.round((0.12 + 0.38 * measure) * 100) / 100;
   const s = B.protractorSweep, angle = Math.round(45 * s.reduce((acc, at, i) => acc + ramp(t, at, 0.35) * [0.3, 0.25, 0.25, 0.2][i], 0));
-  const decor = useMemo(() => decorPieces(23, 12, [{ left: 100, top: 80, right: 860, bottom: 420 }, { left: 60, top: 640, right: 1000, bottom: 960 }, { left: 760, top: 40, right: 1880, bottom: 1080 }], [w.tones[0], w.tones[1], w.container, "#EE9B00"]), []);
+  const decor = useMemo(() => decorPieces(23, 12, [{ left: 120, top: 80, right: 820, bottom: 500 }, { left: 110, top: 600, right: 980, bottom: 940 }, { left: 1040, top: 150, right: 1790, bottom: 990 }], [w.tones[0], w.tones[1], w.container, "#EE9B00"]), []);
   const slide = ramp(t, B.rulerSlide, 0.7);
   return (
     <AbsoluteFill>
       <Ground color={w.field} />
-      <Behind t={t} name="soft_burst" x={1320} y={540} size={980} color={w.shape} seed={2} start={start} />
+      <Behind t={t} name="soft_burst" x={1400} y={540} size={940} color={w.shape} seed={2} start={start} />
       <Decor t={t} start={start} pieces={decor} />
       <Phone screen={["numbers", { activeSheet: "ruler", rulerAdvanced: false, rulerMarker: marker }]} pose={a.pose} dx={a.dx} dy={a.dy} grow={a.grow} z={3} />
       <Phone screen={["numbers", { activeSheet: "protractor", protractorAngle: angle }]} pose={b.pose} dx={b.dx} dy={b.dy} grow={b.grow} z={4} />
       <svg aria-hidden width={1920} height={1080} style={{ position: "absolute", inset: 0, zIndex: 5, overflow: "visible" }}>
-        <Ruler x={mix(-1100, 110, slide)} y={760} width={860} angle={-4} ticks={ramp(t, B.rulerSlide + 0.15, 0.8)} band={0.12 + 0.38 * measure} accent={w.accent} />
+        <Ruler x={mix(-1100, GRID.left, slide)} y={700} width={GRID.column - GRID.left} angle={-4} ticks={ramp(t, B.rulerSlide + 0.15, 0.8)} band={0.12 + 0.38 * measure} accent={w.accent} />
       </svg>
-      <Headline t={t} at={B.rulerHeadline} title={"Ruler &\nProtractor"} sub="Measure on your screen" x={140} y={110} color={w.ink} subColor={w.accent} size={96} />
+      <Headline t={t} at={B.rulerHeadline} title={"Ruler &\nProtractor"} sub="Measure on your screen" x={GRID.left} y={GRID.top} color={w.ink} subColor={w.accent} size={TITLE.size} subScale={TITLE.sub} />
     </AbsoluteFill>
   );
 };
@@ -124,45 +132,45 @@ const CATEGORIES = [
   { name: "Volume", from: "Litre", to: "Millilitre", input: "2", a: ["2", "L"], b: ["2000", "mL"], shapes: ["gem", "pill"] },
   { name: "Data", from: "Gigabyte", to: "Megabyte", input: "1", a: ["1", "GB"], b: ["1000", "MB"], shapes: ["cookie_12sided", "clover_8leaf"] },
 ];
-const UNIT_POSE: PhonePose = { x: 1470, y: 560, scale: 0.8, yaw: -12, roll: -3 };
+const UNIT_POSE: PhonePose = { x: GRID.phone, y: 540, scale: 0.8, yaw: -12, roll: -3 };
 const Unit: React.FC<{ t: number; start: number }> = ({ t, start }) => {
   const w = WORLDS.unit, m = fly(t, start, UNIT_POSE, { yaw: -70, pitch: 40, roll: 18, dx: 300, dy: 700 });
   const at = B.unitCategories, i = Math.max(0, at.filter((c) => t >= c + 0.2).length - 1), shown = Math.max(0, at.filter((c) => t >= c).length - 1);
   const last = at[shown], flip = shown > 0 ? clamp((t - last) / 0.4) : 0, c = CATEGORIES[i];
   const count = i === 0 ? String(Math.max(1, Math.round(100 * ramp(t, at[0], 0.5, (x) => x)))) : c.b[0];
   const enterP = pop(t, at[0] - 0.2, 13, 160), turn = shown * 180 + (shown > 0 ? enter(clamp((t - last) / 0.5)) * 0 : 0);
-  const decor = useMemo(() => decorPieces(37, 12, [{ left: 100, top: 80, right: 1240, bottom: 340 }, { left: 100, top: 360, right: 1120, bottom: 480 }, { left: 160, top: 500, right: 1060, bottom: 900 }, { left: 1150, top: 40, right: 1800, bottom: 1080 }], [w.tones[0], w.tones[1], w.tones[2], w.container]), []);
+  const decor = useMemo(() => decorPieces(37, 12, [{ left: 120, top: 80, right: 820, bottom: 560 }, { left: 120, top: 560, right: 980, bottom: 960 }, { left: 1150, top: 120, right: 1620, bottom: 990 }], [w.tones[0], w.tones[1], w.tones[2], w.container]), []);
   return (
     <AbsoluteFill>
       <Ground color={w.field} />
-      <Behind t={t} name="clover_4leaf" x={1470} y={480} size={860} color={w.tones[2]} seed={3} start={start} />
+      <Behind t={t} name="clover_4leaf" x={GRID.phone} y={500} size={860} color={w.tones[2]} seed={3} start={start} />
       <Decor t={t} start={start} pieces={decor} />
       <Phone screen={["numbers", { activeSheet: "unit_converter", converterCategory: c.name, converterFrom: c.from, converterTo: c.to, converterInput: c.input, converterEditingLeft: true }]} pose={m.pose} dx={m.dx} dy={m.dy} grow={m.grow} />
-      <div style={{ position: "absolute", left: 140, top: 380, display: "flex", gap: 14, zIndex: 5 }}>
+      <div style={{ position: "absolute", left: GRID.left, top: 575, display: "flex", gap: 10, zIndex: 5 }}>
         {CATEGORIES.map((k, j) => { const p = pop(t, start + 0.4 + j * 0.06, 12, 200); return <div key={k.name} style={{ transform: `scale(${p})`, opacity: clamp(p * 2) }}><Chip label={k.name} selected={j === shown} color={w.ink} container={w.container} outline={w.tones[2]} size={28} /></div>; })}
       </div>
-      <div style={{ position: "absolute", inset: 0, transform: `scale(${0.6 + 0.4 * enterP})`, transformOrigin: "600px 700px", opacity: clamp(enterP * 2), zIndex: 4 }}>
-        <UnitPair cx={600} cy={700} gap={400} flip={flip} turn={(shown + flip) * 180} ink={w.ink} arrows={w.accent} size={300}
+      <div style={{ position: "absolute", inset: 0, transform: `scale(${0.6 + 0.4 * enterP})`, transformOrigin: "540px 820px", opacity: clamp(enterP * 2), zIndex: 4 }}>
+        <UnitPair cx={540} cy={820} gap={390} flip={flip} turn={(shown + flip) * 180} ink={w.ink} arrows={w.accent} size={250}
           a={{ value: c.a[0], label: c.a[1], shape: c.shapes[0], color: w.tones[0] }} b={{ value: count, label: c.b[1], shape: c.shapes[1], color: w.tones[1] }} />
       </div>
-      <Headline t={t} at={B.unitHeadline} title="Unit Converter" sub="Length, mass, temperature, volume and data" x={140} y={110} color={w.ink} subColor={w.accent} size={96} width={1200} />
+      <Headline t={t} at={B.unitHeadline} title={"Unit\nConverter"} sub="Convert units both ways" x={GRID.left} y={GRID.top} color={w.ink} subColor={w.accent} size={TITLE.size} subScale={TITLE.sub} />
     </AbsoluteFill>
   );
 };
 
 // ------------------------------------------------------------------------------------------------- bill
-const BILL_POSE: PhonePose = { x: 1480, y: 560, scale: 0.8, yaw: -10, roll: 3 };
+const BILL_POSE: PhonePose = { x: GRID.phone, y: 540, scale: 0.8, yaw: -10, roll: 3 };
 const Bill: React.FC<{ t: number; start: number }> = ({ t, start }) => {
   const w = WORLDS.bill, m = fly(t, start, BILL_POSE, { yaw: 80, pitch: -30, roll: -16, dx: 400, dy: -800 }), out = ramp(t, B.billReceipt, 0.7);
-  const decor = useMemo(() => decorPieces(53, 13, [{ left: 100, top: 80, right: 1000, bottom: 430 }, { left: 680, top: 420, right: 1260, bottom: 1060 }, { left: 1180, top: 40, right: 1800, bottom: 1080 }], [w.tones[0], w.tones[1], w.tones[2], w.container]), []);
+  const decor = useMemo(() => decorPieces(53, 13, [{ left: 120, top: 80, right: 820, bottom: 560 }, { left: 300, top: 540, right: 800, bottom: 1000 }, { left: 1150, top: 120, right: 1620, bottom: 990 }], [w.tones[0], w.tones[1], w.tones[2], w.container]), []);
   return (
     <AbsoluteFill>
       <Ground color={w.field} />
-      <Behind t={t} name="soft_burst" x={1480} y={470} size={860} color={w.shape} seed={4} start={start} />
+      <Behind t={t} name="soft_burst" x={GRID.phone} y={500} size={860} color={w.shape} seed={4} start={start} />
       <Decor t={t} start={start} pieces={decor} />
-      {t >= B.billReceipt && <Receipt x={mix(1330, 780, out)} y={480} angle={mix(10, -5, out)} t={t} lines={B.billLines} ink={w.ink} accent={w.accent} />}
+      {t >= B.billReceipt && <Receipt x={mix(1240, 404, out)} y={588} angle={mix(10, -5, out)} scale={1.05} t={t} lines={B.billLines} ink={w.ink} accent={w.accent} />}
       <Phone screen={SCREENS.bill} pose={m.pose} dx={m.dx} dy={m.dy} grow={m.grow} z={5} />
-      <Headline t={t} at={B.billHeadline} title={"Tip & Bill\nSplitter"} sub="The tip, the total and each share" x={140} y={110} color={w.ink} subColor={w.accent} size={96} width={1000} />
+      <Headline t={t} at={B.billHeadline} title={"Tip & Bill\nSplitter"} sub="The tip and each share" x={GRID.left} y={GRID.top} color={w.ink} subColor={w.accent} size={TITLE.size} subScale={TITLE.sub} />
     </AbsoluteFill>
   );
 };
@@ -170,26 +178,26 @@ const Bill: React.FC<{ t: number; start: number }> = ({ t, start }) => {
 // ------------------------------------------------------------------------------------------------- wheel
 // The choices arrive on the wheel one by one, it spins, settles on Music, and the pick lifts out.
 const CHOICES = ["Walk", "Read", "Cook", "Draw", "Music", "Rest"];
-const WHEEL_POSE: PhonePose = { x: 1500, y: 560, scale: 0.8, yaw: -12, roll: 2 };
+const WHEEL_POSE: PhonePose = { x: GRID.phone + 40, y: 540, scale: 0.8, yaw: -12, roll: 2 };
 const WheelScene: React.FC<{ t: number; start: number }> = ({ t, start }) => {
   const w = WORLDS.wheel, m = fly(t, start, WHEEL_POSE, { yaw: -75, pitch: 35, roll: 20, dx: 500, dy: 600 });
   const [s0, s1] = B.wheelSpin, spin = 1 - (1 - clamp((t - s0) / (s1 - s0))) ** 3, rot = spin * timeline.wheelTurn;
-  const pieces = useMemo(() => burstPieces({ seed: 41, count: 46, from: [600, 360], colors: w.tones.concat(["#D9C67D", "#9ABDA9"]), avoid: [{ x: 600, y: 700, r: 340 }, { x: 1500, y: 560, r: 300 }, { x: 420, y: 170, r: 260 }, { x: 1040, y: 650, r: 120 }] }), []);
-  const decor = useMemo(() => decorPieces(67, 11, [{ left: 100, top: 60, right: 1000, bottom: 300 }, { left: 240, top: 340, right: 960, bottom: 1080 }, { left: 880, top: 560, right: 1200, bottom: 740 }, { left: 1180, top: 40, right: 1820, bottom: 1080 }], [w.tones[0], w.tones[1], w.tones[2], w.container]), []);
+  const pieces = useMemo(() => burstPieces({ seed: 41, count: 46, from: [520, 540], colors: w.tones.concat(["#D9C67D", "#9ABDA9"]), avoid: [{ x: 520, y: 765, r: 250 }, { x: 1420, y: 540, r: 260 }, { x: 420, y: 300, r: 300 }, { x: 860, y: 640, r: 120 }] }), []);
+  const decor = useMemo(() => decorPieces(67, 12, [{ left: 120, top: 80, right: 820, bottom: 500 }, { left: 280, top: 500, right: 760, bottom: 1000 }, { left: 740, top: 560, right: 1000, bottom: 720 }, { left: 1190, top: 120, right: 1660, bottom: 990 }], [w.tones[0], w.tones[1], w.tones[2], w.container]), []);
   const pick = clamp((t - B.wheelPick) / 0.3), lift = pop(t, B.wheelBurst, 9, 200), chip = pop(t, B.wheelPick, 10, 210);
   return (
     <AbsoluteFill>
       <Ground color={w.field} />
-      <Behind t={t} name="flower" x={600} y={700} size={860} color={w.container} seed={6} start={start} />
+      <Behind t={t} name="flower" x={520} y={765} size={640} color={w.container} seed={6} start={start} />
       <Decor t={t} start={start} pieces={decor} />
-      <Wheel cx={600} cy={700} r={300} rotation={rot} choices={CHOICES} shown={B.wheelChoices.map((c) => pop(t, c, 11, 200))} colors={w.tones} ground={w.field} ink={w.ink} accent={w.accent} winner={t >= B.wheelBurst ? 4 : -1} lift={lift} />
+      <Wheel cx={520} cy={765} r={205} rotation={rot} choices={CHOICES} shown={B.wheelChoices.map((c) => pop(t, c, 11, 200))} colors={w.tones} ground={w.field} ink={w.ink} accent={w.accent} winner={t >= B.wheelBurst ? 4 : -1} lift={lift} />
       <Phone screen={SCREENS.wheel} pose={m.pose} dx={m.dx} dy={m.dy} grow={m.grow} opacity={1 - pick} />
       <Phone screen={SCREENS.result} pose={m.pose} dx={m.dx} dy={m.dy} opacity={pick} grow={m.grow} z={3} />
-      <div style={{ position: "absolute", left: 1040, top: 650, transform: `translate(-50%, -50%) scale(${chip})`, opacity: clamp(chip * 2), zIndex: 6, boxShadow: ELEVATION[2], borderRadius: 32 }}>
+      <div style={{ position: "absolute", left: 860, top: 640, transform: `translate(-50%, -50%) scale(${chip})`, opacity: clamp(chip * 2), zIndex: 6, boxShadow: ELEVATION[2], borderRadius: 32 }}>
         <Chip label="Music" selected color="#FFFFFF" container={w.accent} outline={w.accent} size={40} />
       </div>
-      <ConfettiBurst t={t} at={B.wheelBurst} from={[600, 380]} pieces={pieces} />
-      <Headline t={t} at={B.wheelHeadline} title="Decision Wheel" sub="Let chance decide" x={140} y={90} color={w.ink} subColor={w.accent} size={96} width={1100} />
+      <ConfettiBurst t={t} at={B.wheelBurst} from={[520, 540]} pieces={pieces} />
+      <Headline t={t} at={B.wheelHeadline} title={"Decision\nWheel"} sub="Let chance decide" x={GRID.left} y={GRID.top} color={w.ink} subColor={w.accent} size={TITLE.size} subScale={TITLE.sub} />
     </AbsoluteFill>
   );
 };
@@ -217,8 +225,8 @@ const Montage: React.FC<{ t: number }> = ({ t }) => {
           </div>
         );
       })}
-      <Headline t={t} at={[B.montageHeadline]} title="Everyday tools, one app" x={960} y={560} width={1500} align="center" color={NEUTRAL.ink} size={88} />
-      <div style={{ position: "absolute", left: 160, right: 160, top: 740, display: "flex", flexWrap: "wrap", justifyContent: "center", gap: 18, zIndex: 4 }}>
+      <Headline t={t} at={[B.montageHeadline]} title="Everyday tools, one app" x={960} y={590} width={1600} align="center" color={NEUTRAL.ink} size={112} />
+      <div style={{ position: "absolute", left: 160, right: 160, top: 790, display: "flex", flexWrap: "wrap", justifyContent: "center", gap: 18, zIndex: 4 }}>
         {MORE.map((name, i) => {
           const p = pop(t, B.montageChips[Math.min(Math.floor(i / 2), B.montageChips.length - 1)] + (i % 2) * 0.12, 12, 220);
           const c = Object.values(WORLDS)[i % 5];
@@ -239,7 +247,7 @@ const End: React.FC<{ t: number }> = ({ t }) => {
       <Ripples t={t} onsets={B.endRings} at={[960, 380]} colors={[WORLDS.water.container, WORLDS.ruler.container, WORLDS.unit.container, WORLDS.bill.container, WORLDS.wheel.container]} from={160} reach={720} />
       <ConfettiBurst t={t} at={B.endBurst} from={[960, 380]} pieces={pieces} z={3} />
       <Img src={icon} style={{ position: "absolute", left: 960 - 160, top: 380 - 160, width: 320, height: 320, transform: `scale(${iconP})`, zIndex: 5 }} />
-      <Headline t={t} at={[B.endTitle, B.endPlay]} title="App Toolkit" sub="Available on Google Play" x={960} y={590} width={1300} align="center" color={NEUTRAL.ink} subColor={NEUTRAL.accent} size={124} />
+      <Headline t={t} at={[B.endTitle, B.endPlay]} title="App Toolkit" sub="Available on Google Play" x={960} y={590} width={1300} align="center" color={NEUTRAL.ink} subColor={NEUTRAL.accent} size={150} subScale={0.42} />
     </AbsoluteFill>
   );
 };

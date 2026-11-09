@@ -27,7 +27,7 @@ export const speakers = (pose: PhonePose) =>
 // ---------------------------------------------------------------------------------------------------
 // Type: lines rise out of a mask, one per beat.
 
-export const Headline: React.FC<{ t: number; at: number[]; title: string; sub?: string; x: number; y: number; color: string; subColor?: string; size?: number; align?: "left" | "center"; width?: number }> = ({ t, at, title, sub, x, y, color, subColor, size = 104, align = "left", width = 900 }) => {
+export const Headline: React.FC<{ t: number; at: number[]; title: string; sub?: string; x: number; y: number; color: string; subColor?: string; size?: number; subScale?: number; align?: "left" | "center"; width?: number }> = ({ t, at, title, sub, x, y, color, subColor, size = 104, subScale = 0.4, align = "left", width = 900 }) => {
   const line = (text: string, start: number, fontSize: number, weight: number, tone: string, spacing: number) => {
     const p = ramp(t, start, 0.55);
     return (
@@ -39,7 +39,7 @@ export const Headline: React.FC<{ t: number; at: number[]; title: string; sub?: 
   return (
     <div style={{ position: "absolute", left: align === "center" ? x - width / 2 : x, top: y, width, textAlign: align, fontFamily: FONT, zIndex: 6 }}>
       {line(title, at[0], size, 650, color, -size * 0.035)}
-      {sub && <div style={{ marginTop: size * 0.14 }}>{line(sub, at[1] ?? at[0] + 0.3, size * 0.4, 450, subColor ?? color, -0.4)}</div>}
+      {sub && <div style={{ marginTop: size * 0.14 }}>{line(sub, at[1] ?? at[0] + 0.3, size * subScale, 480, subColor ?? color, -0.4)}</div>}
     </div>
   );
 };
