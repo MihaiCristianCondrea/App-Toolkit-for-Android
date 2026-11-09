@@ -197,16 +197,16 @@ export const Ripples: React.FC<{ t: number; onsets: number[]; at: [number, numbe
  * The listing's yellow ruler at 8 px per millimetre, with centimetre labels; `mm` is the measured length,
  * shown as a band and a line, the same reading the Surface Ruler phone shows.
  */
-export const Ruler: React.FC<{ x: number; y: number; width: number; angle: number; ticks?: number; mm?: number; accent?: string }> = ({ x, y, width, angle, ticks = 1, mm = 0, accent = "#8F5700" }) => {
-  const PX = 8, pad = 28, n = Math.floor((width - 2 * pad) / PX), shown = Math.floor((n + 1) * clamp(ticks)), band = Math.min(mm, n) * PX;
+export const Ruler: React.FC<{ x: number; y: number; width: number; angle?: number; ticks?: number; mm?: number; accent?: string; px?: number; body?: number }> = ({ x, y, width, angle = 0, ticks = 1, mm = 0, accent = "#8F5700", px = 8, body = 1 }) => {
+  const pad = 28, n = Math.floor((width - 2 * pad) / px), shown = Math.floor((n + 1) * clamp(ticks)), band = Math.min(mm, n) * px, h = 136 * body;
   return (
     <g transform={`translate(${x} ${y}) rotate(${angle})`}>
-      <rect x="0" y="12" width={width} height="136" rx="36" fill="#B56D00" opacity=".16" />
-      <rect width={width} height="136" rx="36" fill="#F6B91D" />
-      {mm > 0 && <rect x={pad} y="0" width={band} height="136" fill={accent} opacity=".16" />}
-      {Array.from({ length: shown }, (_, i) => <line key={i} x1={pad + i * PX} x2={pad + i * PX} y1="0" y2={i % 10 === 0 ? 62 : i % 5 === 0 ? 44 : 26} stroke="#654000" strokeWidth={i % 5 ? 1.6 : 2.8} strokeLinecap="round" />)}
-      {Array.from({ length: Math.floor((shown - 1) / 10) + 1 }, (_, k) => k > 0 && <text key={k} x={pad + k * 10 * PX} y="96" textAnchor="middle" fontFamily={FONT} fontWeight={600} fontSize="26" fill="#654000">{k}</text>)}
-      {mm > 0 && <rect x={pad + band - 3} y="-16" width="6" height="168" rx="3" fill={accent} />}
+      {body > 0 && <rect x="0" y="12" width={width} height={h} rx={Math.min(36, h / 2)} fill="#B56D00" opacity={0.16 * body} />}
+      {body > 0 && <rect width={width} height={h} rx={Math.min(36, h / 2)} fill="#F6B91D" />}
+      {mm > 0 && <rect x={pad} y="0" width={band} height={h} fill={accent} opacity=".16" />}
+      {Array.from({ length: shown }, (_, i) => <line key={i} x1={pad + i * px} x2={pad + i * px} y1="0" y2={i % 10 === 0 ? 62 : i % 5 === 0 ? 44 : 26} stroke="#654000" strokeWidth={i % 5 ? 1.6 : 2.8} strokeLinecap="round" />)}
+      {body > 0.6 && Array.from({ length: Math.floor((shown - 1) / 10) + 1 }, (_, k) => k > 0 && <text key={k} x={pad + k * 10 * px} y="96" textAnchor="middle" fontFamily={FONT} fontWeight={600} fontSize="26" fill="#654000" opacity={clamp((body - 0.6) / 0.4)}>{k}</text>)}
+      {mm > 0 && <rect x={pad + band - 3} y="-16" width="6" height={h + 32} rx="3" fill={accent} />}
     </g>
   );
 };
@@ -256,10 +256,12 @@ export const ShareCard: React.FC<{ x: number; y: number; who: string; amount: st
 
 export type UnitFace = { value: string; label: string };
 const MORPH = 0.55;
-export const MorphPair: React.FC<{ t: number; cx: number; cy: number; gap: number; size: number; changes: number[]; shapes: [string, string][]; faces: [UnitFace, UnitFace][]; colors: [string, string]; ink: string; arrows: string }> = ({ t, cx, cy, gap, size, changes, shapes, faces, colors, ink, arrows }) => {
+/** The turn of one of the pair's shapes at time t (side 0 turns clockwise, side 1 the other way). */
+export const morphTurn = (t: number, side: 0 | 1, turns: number) => (side ? -1 : 1) * (t * 36 + turns * 150) + side * 20;
+export const MorphPair: React.FC<{ t: number; cx: number; cy: number; gap: number; size: number; changes: number[]; shapes: [string, string][]; faces: [UnitFace, UnitFace][]; colors: [string, string]; ink: string; arrows: string; appear?: number }> = ({ t, cx, cy, gap, size, changes, shapes, faces, colors, ink, arrows, appear: shown }) => {
   const idx = Math.max(0, changes.filter((c) => t >= c).length - 1), tc = changes[idx] ?? 0;
   const morphs = changes.map((c, j) => (j === 0 ? 0 : enter(clamp((t - c) / MORPH))));
-  const turns = morphs.reduce((a, v) => a + v, 0), p = idx > 0 ? morphs[idx] : 1, appear = pop(t, changes[0] - 0.15, 12, 170);
+  const turns = morphs.reduce((a, v) => a + v, 0), p = idx > 0 ? morphs[idx] : 1, appear = shown ?? pop(t, changes[0] - 0.15, 12, 170);
   const swapOut = clamp((t - tc) / 0.18), swapIn = clamp((t - tc - 0.16) / 0.3);
   const face = (side: 0 | 1, x: number) => {
     const prev = faces[Math.max(0, idx - 1)][side], cur = faces[idx][side], show = (f: UnitFace, o: number, k: number) => (
@@ -281,7 +283,7 @@ export const MorphPair: React.FC<{ t: number; cx: number; cy: number; gap: numbe
       <svg aria-hidden width={1920} height={1080} style={{ position: "absolute", inset: 0, zIndex: 4, overflow: "visible" }}>
         {[0, 1].map((side) => {
           const from = shapes[Math.max(0, idx - 1)][side], to = shapes[idx][side], dir = side ? -1 : 1;
-          const turn = dir * (t * 36 + turns * 150) + side * 20, k = appear * (1 + 0.08 * Math.sin(p * Math.PI));
+          const turn = morphTurn(t, side as 0 | 1, turns), k = appear * (1 + 0.08 * Math.sin(p * Math.PI)); void dir;
           return <path key={side} d={morphPath(from, to, p, xs[side], cy, size * k, turn)} fill={colors[side]} />;
         })}
         <g transform={`translate(${cx} ${cy}) rotate(${turns * 180}) scale(${appear})`}>
@@ -362,16 +364,21 @@ export const burstPieces = (o: { seed: number; count: number; from: [number, num
     free: (x, y, r) => (o.avoid ?? []).every((a) => Math.hypot(a.x - x, a.y - y) > a.r + r * 1.6) && (o.boxes ?? []).every((b) => x + r * 1.6 < b.left || x - r * 1.6 > b.right || y + r * 1.6 < b.top || y - r * 1.6 > b.bottom),
   }).map((q) => ({ ...q, w: q.w * 1.6, h: q.h * 1.6 }));
 
-export const ConfettiBurst: React.FC<{ t: number; at: number; from: [number, number]; pieces: Confetto[]; z?: number }> = ({ t, at, from, pieces, z = 7 }) => {
+/** Where confetto `i` is at time t: out on its own spring, then a flutter (a slow fall, a sway, a turn that never stops). */
+export const confettoAt = (q: Confetto, i: number, t: number, at: number, from: [number, number]) => {
+  const delay = (i % 7) * 0.012, p = enter(clamp((t - at - delay) / 0.95)), after = Math.max(0, t - at - 0.7);
+  return {
+    x: mix(from[0], q.x, p) + Math.sin(after * 2.4 + i) * 10 * clamp(after), y: mix(from[1], q.y, p) + after * 22,
+    flip: Math.cos(after * (2 + (i % 5) * 0.4) + i), rot: q.rotate + (1 - p) * 420 + after * 50 * ((i % 2) * 2 - 1), k: 0.35 + 0.65 * p,
+  };
+};
+export const ConfettiBurst: React.FC<{ t: number; at: number; from: [number, number]; pieces: Confetto[]; z?: number; skip?: number; fade?: number }> = ({ t, at, from, pieces, z = 7, skip = 0, fade = 1 }) => {
   if (t < at) return null;
   return (
-    <svg aria-hidden width={1920} height={1080} style={{ position: "absolute", inset: 0, zIndex: z, pointerEvents: "none" }}>
+    <svg aria-hidden width={1920} height={1080} style={{ position: "absolute", inset: 0, zIndex: z, pointerEvents: "none", opacity: fade }}>
       {pieces.map((q, i) => {
-        // Each piece leaves on its own spring, then flutters: a slow fall, a sway and a turn that never stops.
-        const delay = (i % 7) * 0.012, p = enter(clamp((t - at - delay) / 0.95)), after = Math.max(0, t - at - 0.7);
-        const x = mix(from[0], q.x, p) + Math.sin(after * 2.4 + i) * 10 * clamp(after), y = mix(from[1], q.y, p) + after * 22;
-        const flip = Math.cos(after * (2 + (i % 5) * 0.4) + i), rot = q.rotate + (1 - p) * 420 + after * 50 * ((i % 2) * 2 - 1);
-        const k = 0.35 + 0.65 * p;
+        if (i < skip) return null;
+        const { x, y, flip, rot, k } = confettoAt(q, i, t, at, from);
         return q.kind === "dot"
           ? <circle key={i} cx={x} cy={y} r={(q.w / 2) * k} fill={q.color} />
           : <rect key={i} x={x - (q.w * k) / 2} y={y - (q.h * k * (0.45 + 0.55 * Math.abs(flip))) / 2} width={q.w * k} height={q.h * k * (0.45 + 0.55 * Math.abs(flip))} rx={(Math.min(q.w, q.h) * k) / 2} fill={q.color} transform={`rotate(${rot.toFixed(1)} ${x.toFixed(1)} ${y.toFixed(1)})`} />;

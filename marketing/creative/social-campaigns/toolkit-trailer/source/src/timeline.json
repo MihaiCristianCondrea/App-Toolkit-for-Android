@@ -1,220 +1,289 @@
 {
-  "durationSeconds": 32,
+  "durationSeconds": 28,
   "fps": 90,
+  "tempo": 120,
+  "barStart": 1.0,
   "design": {
     "width": 1920,
     "height": 1080
   },
-  "wipeSeconds": 0.5,
+  "story": "One app. Many everyday moments.",
   "scenes": [
     {
-      "id": "intro",
+      "id": "cold",
       "start": 0,
-      "end": 4,
-      "title": "Five worlds, one box",
-      "action": "One shape per tool arrives on each motif note in its listing's colour; the App Toolkit icon pops on 2.5, the shapes swing round it and the name lands."
+      "end": 1.0,
+      "title": "Cold open",
+      "in": "none",
+      "action": "A drop falls on a speaker grille and the sound goes dull: Water in the speaker?"
     },
     {
       "id": "water",
-      "start": 4,
-      "end": 8,
-      "from": [
-        1590,
-        270
-      ],
-      "shape": "cookie_9sided",
+      "start": 1.0,
+      "end": 4.85,
       "title": "Water Eject",
-      "action": "The blue world opens from Water Eject's shape. The phone leans back so its speaker faces the camera; a sound wave leaves the speaker holes on every note and pushes bubbles out."
+      "in": "cut",
+      "action": "Hard cut on the first downbeat. The phone stands centred, speaker down; the tone pushes waves, bubbles and droplets out of it."
     },
     {
       "id": "ruler",
-      "start": 8,
-      "end": 12,
-      "from": [
-        420,
-        900
-      ],
-      "shape": "soft_burst",
+      "start": 4.5,
+      "end": 8.5,
       "title": "Ruler & Protractor",
-      "action": "The yellow world bursts open. Two phones turn in: the Surface Ruler measures as the drawn ruler's band grows, and the Protractor sweeps to 45 degrees on four beats."
+      "in": "morph",
+      "action": "The last wave flattens into a line that grows graduations and opens the yellow world around it; the line becomes the ruler. An arm sweeps up to 45 degrees, lies back down, and a marker measures 76.0 mm."
     },
     {
       "id": "unit",
-      "start": 12,
-      "end": 16,
-      "from": [
-        1400,
-        820
-      ],
-      "shape": "cookie_6sided",
+      "start": 8.5,
+      "end": 11.5,
       "title": "Unit Converter",
-      "action": "The mint world opens. Five categories, one per beat: the chip selects it, the unit cards flip to its pair (1 m = 100 cm, 500 g = 0.5 kg, 20 °C = 68 °F, 2 L = 2000 mL, 1 GB = 1000 MB) and the phone shows the same conversion."
+      "in": "match",
+      "action": "Match cut on the reading: 76.0 mm lands where the converter's first card shows 76.0 mm, beside 7.6 cm. Four more categories follow on syncopated beats."
     },
     {
       "id": "bill",
-      "start": 16,
-      "end": 20,
-      "from": [
-        700,
-        300
-      ],
-      "shape": "pill",
+      "start": 11.15,
+      "end": 15.0,
       "title": "Tip & Bill Splitter",
-      "action": "The peach world opens. A receipt slides out from behind the phone and prints line by line: the bill, the tip, then each person's share."
+      "in": "fold",
+      "action": "The two cards slide together and fold into one surface that becomes the receipt; the receipt prints, the tip appears and the total divides into two shares. Then a rest."
     },
     {
       "id": "wheel",
-      "start": 20,
-      "end": 24,
-      "from": [
-        1520,
-        260
-      ],
-      "shape": "flower",
+      "start": 15.0,
+      "end": 19.9,
       "title": "Decision Wheel",
-      "action": "The lilac world opens. The six choices arrive on the wheel one by one, it spins and settles on Music on 22.5, the pick lifts out, confetti bursts and the phone shows the pick."
+      "in": "cut",
+      "action": "Hard cut on a strong accent. The choices land, a quiet beat, a wind-up, the spin, Music, and one burst of confetti."
     },
     {
       "id": "montage",
-      "start": 24,
-      "end": 28,
-      "from": [
-        960,
-        540
-      ],
-      "shape": "cookie_12sided",
+      "start": 19.3,
+      "end": 25.1,
       "title": "Everyday tools, one app",
-      "action": "The five worlds return as tiles, one per note, then more tools from the app join as chips."
+      "in": "confetti",
+      "action": "Confetti pieces fly to a grid and become the app's tools as MaterialShape badges; the badges rise into a band while the five tools' real screens track in on the beat."
     },
     {
       "id": "end",
-      "start": 28,
-      "end": 32,
-      "from": [
-        960,
-        470
-      ],
-      "shape": "sunny",
+      "start": 24.95,
+      "end": 28,
       "title": "App Toolkit",
-      "action": "The icon returns; confetti, bubbles and a sound wave leave it together; the name and Available on Google Play land and hold."
+      "in": "converge",
+      "action": "Everything converges into the icon on the final downbeat; the name and the Get it on Google Play badge settle and hold."
     }
   ],
   "beats": {
-    "introShapes": [
-      0,
-      0.5,
-      1.0,
-      1.5,
-      2.0
-    ],
-    "icon": 2.5,
-    "swing": 2.75,
-    "title": 3.0,
-    "tagline": 3.25,
+    "cold": {
+      "fall": 0.12,
+      "hit": 0.5,
+      "caption": 0.55
+    },
     "waterHeadline": [
-      4.25,
-      4.5
+      1.15,
+      1.35
     ],
+    "waterHz": 1.55,
     "waterWaves": [
+      1.25,
+      1.75,
+      2.25,
+      2.5,
+      2.75,
+      3.25,
+      3.5,
+      3.75
+    ],
+    "waterDrops": [
+      1.25,
+      2.25,
+      3.25
+    ],
+    "waveLine": [
+      4.15,
+      4.55
+    ],
+    "waveTicks": [
+      4.45,
+      4.9
+    ],
+    "waveReveal": [
       4.5,
-      5.0,
+      4.85
+    ],
+    "rulerBody": [
+      4.7,
+      5.0
+    ],
+    "rulerPhone": 5.0,
+    "rulerHeadline": [
+      5.15
+    ],
+    "protractorSweep": [
       5.5,
       5.75,
       6.0,
-      6.5,
-      7.0,
-      7.25,
-      7.5
+      6.25
     ],
-    "rulerHeadline": [
-      8.25,
-      8.5
-    ],
-    "rulerSlide": 8.25,
-    "protractorSweep": [
-      9.75,
-      10.25,
-      10.75,
-      11.25
-    ],
-    "unitHeadline": [
-      12.25,
-      12.5
-    ],
-    "billHeadline": [
-      16.25,
-      16.5
-    ],
-    "billReceipt": 16.25,
-    "billLines": [
-      16.5,
-      17.0,
-      17.5,
-      18.0,
-      18.5
-    ],
-    "wheelHeadline": [
-      20.25,
-      20.5
-    ],
-    "wheelSpin": [
-      21.0,
-      22.5
-    ],
-    "wheelBurst": 22.5,
-    "wheelPick": 22.75,
-    "montageTiles": [
-      24.0,
-      24.25,
-      24.5,
-      24.75,
-      25.0
-    ],
-    "montageHeadline": 25.5,
-    "montageChips": [
-      26.0,
-      26.25,
-      26.5,
-      26.75,
-      27.0,
-      27.25
-    ],
-    "endBurst": 28.0,
-    "endRings": [
-      28.0,
-      28.25,
-      28.5,
-      28.75,
-      29.0
-    ],
-    "endTitle": 28.5,
-    "endPlay": 29.0,
-    "waterDrops": [
-      4.5,
-      5.5,
-      6.5,
-      7.5
+    "armDown": [
+      6.55,
+      6.8
     ],
     "rulerMeasure": [
-      8.75,
-      9.75
+      6.8,
+      7.6
     ],
+    "rulerLift": [
+      8.0,
+      8.45
+    ],
+    "unitHeadline": [
+      8.65
+    ],
+    "unitChips": 8.7,
     "unitCategories": [
-      12.5,
-      13.0,
+      8.5,
+      9.25,
+      9.75,
+      10.125,
+      10.5
+    ],
+    "unitFold": [
+      11.0,
+      11.5
+    ],
+    "billPhone": 11.4,
+    "billHeadline": [
+      11.6
+    ],
+    "billLines": [
+      11.6,
+      11.95,
+      12.3,
+      12.75,
+      13.1
+    ],
+    "billShares": [
       13.5,
-      14.0,
-      14.5
+      13.75
+    ],
+    "billRest": [
+      14.1,
+      15.0
+    ],
+    "wheelHeadline": [
+      15.1
     ],
     "wheelChoices": [
-      20.25,
-      20.375,
+      15.05,
+      15.15,
+      15.25,
+      15.35,
+      15.45,
+      15.55
+    ],
+    "wheelWindup": [
+      16.2,
+      16.5
+    ],
+    "wheelSpin": [
+      16.5,
+      19.0
+    ],
+    "wheelBurst": 19.0,
+    "wheelPick": 19.15,
+    "montageBadges": [
+      19.5,
+      20.3
+    ],
+    "montageBand": [
       20.5,
-      20.625,
-      20.75,
-      20.875
-    ]
+      21.0
+    ],
+    "montageCards": [
+      21.0,
+      21.5,
+      22.0,
+      22.5,
+      23.0
+    ],
+    "montageHeadline": 23.25,
+    "converge": [
+      24.4,
+      25.0
+    ],
+    "endBurst": 25.0,
+    "endRings": [
+      25.0,
+      25.25,
+      25.5,
+      25.75,
+      26.0
+    ],
+    "endTitle": 25.4,
+    "endPlay": 25.9
   },
-  "tempo": 120,
-  "wheelTurn": 1538
+  "wheel": {
+    "turn": 1538,
+    "windup": 12
+  },
+  "transitions": [
+    {
+      "name": "Cold open to Water Eject: hard cut on the first downbeat",
+      "times": [
+        0.95,
+        1.0,
+        1.1
+      ]
+    },
+    {
+      "name": "Water Eject to Ruler: the last wave flattens into the ruler",
+      "times": [
+        4.2,
+        4.6,
+        5.0
+      ]
+    },
+    {
+      "name": "Ruler to Unit Converter: match cut on 76.0 mm",
+      "times": [
+        8.3,
+        8.47,
+        8.52
+      ]
+    },
+    {
+      "name": "Unit Converter to Bill: the cards fold into the receipt",
+      "times": [
+        11.08,
+        11.3,
+        11.6
+      ]
+    },
+    {
+      "name": "Bill to Decision Wheel: a rest, then a hard cut on the accent",
+      "times": [
+        14.6,
+        14.98,
+        15.02
+      ]
+    },
+    {
+      "name": "Decision Wheel to the toolkit: confetti becomes the tools",
+      "times": [
+        19.2,
+        19.7,
+        20.3
+      ]
+    },
+    {
+      "name": "Toolkit to the icon: everything converges",
+      "times": [
+        24.5,
+        24.92,
+        25.3
+      ]
+    }
+  ]
 }

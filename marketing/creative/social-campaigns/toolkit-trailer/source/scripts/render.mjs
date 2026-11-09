@@ -1,9 +1,11 @@
 // Renders the trailer (node scripts/render.mjs frames [seconds...] | preview | master) into ../output/.
-//   frames:  stills at the given seconds (default: one per scene and beat) and a labelled contact sheet;
+//   frames:  stills at the given seconds (default: one per scene and beat) and a contact sheet;
+//   transitions: before, during and after every scene change (timeline.json transitions), one row each, as
+//            output/images/transitions.png;
 //   preview: 960 x 540 H.264 with the composed soundtrack;  master: 2560 x 1440 H.264 with the soundtrack.
 import { bundle } from "@remotion/bundler";
 import { renderMedia, renderStill, selectComposition } from "@remotion/renderer";
-import { mkdir } from "node:fs/promises";
+import { mkdir, readFile } from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { readPng, sheet, shrink, writePng } from "./png.mjs";
@@ -16,8 +18,31 @@ const serveUrl = await bundle({ entryPoint: path.join(root, "src/index.ts"), pub
 const composition = await selectComposition({ serveUrl, id: "ToolkitTrailer", inputProps: {} });
 const fps = composition.fps;
 
-if (mode === "frames") {
-  const times = rest.length ? rest.map(Number) : [0.8, 2.6, 3.4, 4.7, 5.9, 7.3, 8.6, 9.6, 11.0, 12.9, 14.3, 15.4, 16.7, 18.2, 19.4, 20.9, 22.1, 22.8, 23.6, 24.6, 26.2, 27.4, 28.3, 28.9, 29.6, 31.2];
+const still = async (s, name) => {
+  const file = path.join(out, "images", `${name}-${s.toFixed(2)}.png`);
+  await renderStill({ composition, serveUrl, output: file, frame: Math.min(composition.durationInFrames - 1, Math.round(s * fps)), scale: 0.5, imageFormat: "png", timeoutInMilliseconds: 300000 });
+  return file;
+};
+const stack = (rows) => {
+  const width = Math.max(...rows.map((r) => r.width)), height = rows.reduce((a, r) => a + r.height, 0), data = Buffer.alloc(width * height * 4, 255);
+  let y0 = 0;
+  for (const r of rows) { for (let y = 0; y < r.height; y++) r.data.copy(data, ((y0 + y) * width) * 4, y * r.width * 4, (y + 1) * r.width * 4); y0 += r.height; }
+  return { width, height, data };
+};
+
+if (mode === "transitions") {
+  const { transitions } = JSON.parse(await readFile(path.join(root, "src/timeline.json"), "utf8"));
+  const rows = [];
+  for (const [k, tr] of transitions.entries()) {
+    const imgs = [];
+    for (const s of tr.times) imgs.push(shrink(await readPng(await still(s, `transition-${k + 1}`)), 2));
+    rows.push(sheet(imgs, 12));
+    console.log(`${k + 1}. ${tr.name}: ${tr.times.join(" / ")} s`);
+  }
+  await writePng(path.join(out, "images", "transitions.png"), stack(rows));
+  console.log(path.join(out, "images", "transitions.png"));
+} else if (mode === "frames") {
+  const times = rest.length ? rest.map(Number) : [0.7, 2.6, 4.6, 6.1, 7.4, 8.47, 9.9, 11.3, 12.9, 14.6, 16.0, 17.6, 19.1, 20.1, 23.4, 25.2, 27.5];
   const files = [];
   for (const s of times) {
     const file = path.join(out, "images", `frame-${s.toFixed(2)}.png`);

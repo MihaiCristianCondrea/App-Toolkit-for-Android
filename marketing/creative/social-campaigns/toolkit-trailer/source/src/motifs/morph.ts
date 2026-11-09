@@ -11,6 +11,7 @@ const polygon = (n: number, t: number) => {
 const cookie = (n: number) => (t: number) => 0.9 + 0.1 * Math.cos(n * t);
 const CURVES: Record<string, (t: number) => number> = {
   circle: () => 1,
+  squircle: (t) => 1 / Math.pow(Math.pow(Math.abs(Math.cos(t)), 4) + Math.pow(Math.abs(Math.sin(t)), 4), 1 / 4),
   pill: (t) => 1 / Math.pow(Math.pow(Math.abs(Math.cos(t)), 3.2) + Math.pow(Math.abs(Math.sin(t)), 3.2), 1 / 3.2),
   pentagon: (t) => 0.5 * polygon(5, t - Math.PI / 2) + 0.5,
   gem: (t) => 0.55 * polygon(6, t) + 0.4,

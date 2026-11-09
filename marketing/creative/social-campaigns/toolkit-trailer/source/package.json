@@ -2,13 +2,14 @@
   "name": "app-toolkit-trailer",
   "private": true,
   "type": "module",
-  "description": "App Toolkit's 32-second trailer: each tool's own world from its store listing, on a soundtrack composed from the same timeline",
+  "description": "App Toolkit's 28-second trailer, One app. Many everyday moments: one useful form turning into the next across the five tools' worlds, on a soundtrack composed from the same timeline",
   "scripts": {
     "assets": "node scripts/sync-assets.mjs",
     "dev": "npm run assets && remotion studio src/index.ts",
     "lint": "tsc --noEmit",
     "music": "node scripts/compose.mjs",
     "frames": "npm run assets && node scripts/render.mjs frames",
+    "transitions": "npm run assets && node scripts/render.mjs transitions",
     "preview": "npm run assets && node scripts/render.mjs preview",
     "master": "npm run assets && node scripts/render.mjs master"
   },
