@@ -14,10 +14,13 @@
 import { execFileSync } from "node:child_process";
 import { readFileSync, rmSync, writeFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
+import { loadTs } from "./load-ts.mjs";
 
 const tl = JSON.parse(readFileSync(new URL("../src/timeline.json", import.meta.url), "utf8"));
 const B = tl.beats, RATE = 48000, BEAT = 60 / tl.tempo, BAR = 4 * BEAT, DUR = tl.durationSeconds, N = Math.ceil(DUR * RATE);
 const scene = Object.fromEntries(tl.scenes.map((s) => [s.id, s]));
+// The wheel's own motion, the same module the picture draws it with, so the ratchet clicks on the frame a segment passes.
+const { wheelRotation } = await loadTs("src/wheelMotion.ts");
 const L = new Float32Array(N), R = new Float32Array(N), SL = new Float32Array(N), SR = new Float32Array(N);
 
 // ------------------------------------------------------------------------------------------------ helpers
@@ -167,7 +170,7 @@ for (let t = tl.barStart; t < scene.end.start - 0.01; t += BEAT / 4) {
     if (inBar === 4 || inBar === 12) clap(t, 0.24);
     if (eighth) hat(t, inBar % 4 ? 0.07 : 0.035, inBar % 8 < 4 ? 0.3 : -0.3);
     if (eighth) bass(t, c.root + (inBar % 8 === 6 ? 12 : 0), BEAT / 2 - 0.01, 0.28);
-  } else if (sec === "montage" && t >= B.wheelBurst + BAR - 0.01) {
+  } else if (sec === "montage" && t >= B.montageBadges[0] - 0.01) {
     // The fullest groove: everything at once, with the lead motif over it.
     if (onBeat) kick(t);
     if (inBar === 4 || inBar === 12) clap(t, 0.32);
@@ -220,44 +223,44 @@ B.billShares.forEach((t, i) => { bell(t, [84, 88][i], 0.07, i ? 0.4 : -0.4, 1.6)
 riser(scene.wheel.start, 0.7, 0.05);
 
 // Decision Wheel: a tom and a bell on the cut; a mallet per choice as the phone settles; a wind-up swell; a
-// ratchet click each time a segment passes the pointer, following the wheel's own rotation (the same curve as
-// Trailer.tsx wheelRotation: it speeds up from rest inside the app, then slows to Music); a soft sweep as the
-// phone tumbles and a lift as the wheel leaves the sheet; a bass pedal, a snare roll and hats that build through
-// the spin; a bell as the pick is marked, then the film's only crash with the confetti on the downbeat.
+// ratchet click each time a segment passes the pointer, following the wheel's own rotation (src/wheelMotion.ts:
+// it speeds up from rest inside the app, then slows to Music in 3 seconds); an air glide that rises with the
+// camera's push and peaks as it passes through the phone's edges, and a soft tom as the lilac grows; a bass
+// pedal, a snare roll and hats that build through the spin; a bell as Music lands on the downbeat, a held breath
+// over the result with a swell, then the film's only crash with the confetti.
 tom(scene.wheel.start, 0.55, 170, 80); bell(scene.wheel.start, 70, 0.1);
 B.wheelChoices.forEach((t, i) => mallet(t, [65, 69, 72, 74, 77, 81][i], 0.1, (i - 2.5) * 0.3));
 riser(B.wheelWindup[1], B.wheelWindup[1] - B.wheelWindup[0] + 0.1, 0.05);
 {
-  const [w0, w1] = B.wheelWindup, [s0, s1] = B.wheelSpin, back = tl.wheel.windup, clamp01 = (x) => Math.min(1, Math.max(0, x));
-  const spinCurve = (u) => { const a = 0.15, g = (u < a ? (u * u) / (2 * a) : u - a / 2) / (1 - a / 2); return 1 - (1 - g) ** 3; };
-  const smooth01 = (x) => x * x * (3 - 2 * x);
-  const rot = (t) => t < w0 ? 0 : t < s0 ? -back * smooth01(clamp01((t - w0) / (w1 - w0))) : -back + (tl.wheel.turn + back) * spinCurve(clamp01((t - s0) / (s1 - s0)));
-  let last = Math.floor((rot(s0) + 1000 * 60) / 60);
-  for (let t = s0; t < s1; t += 48 / RATE) { const seg = Math.floor((rot(t) + 1000 * 60) / 60); if (seg !== last) { tick(t, 0.12, 1600, -0.2); last = seg; } }
-  fwip(B.wheelTumble[0] + 0.2, 0.5, 0.05);
-  glide(B.wheelExtract[0] - 0.05, 0.45, 420, 980, 0.05); tom(B.wheelExtract[0], 0.18, 140, 90);
+  const [s0, s1] = B.wheelSpin, [c0, cEdge] = B.wheelCamera, [r0] = B.wheelReveal;
+  let last = Math.floor((wheelRotation(s0) + 1000 * 60) / 60);
+  for (let t = s0; t < s1; t += 48 / RATE) { const seg = Math.floor((wheelRotation(t) + 1000 * 60) / 60); if (seg !== last) { tick(t, 0.12, 1600, -0.2); last = seg; } }
+  glide(c0 + 0.4, cEdge - c0 - 0.3, 300, 1100, 0.05); fwip(cEdge - 0.1, 0.45, 0.07);
+  tom(r0, 0.2, 140, 90); glide(r0, 0.5, 900, 520, 0.035);
   bass(s0, 36, s1 - s0, 0.2);
-  for (let k = 0; k < 20; k++) { const t = s0 + 1.6 + ((s1 - s0 - 1.6) * (1 - (1 - k / 20) ** 1.6)); clap(t, 0.03 + k * 0.012); }
+  for (let k = 0; k < 20; k++) { const t = s0 + 0.8 + ((s1 - s0 - 0.8) * (1 - (1 - k / 20) ** 1.6)); clap(t, 0.03 + k * 0.012); }
   for (let t = s0 + 0.5; t < s1; t += BEAT / 4) hat(t, 0.02 + 0.06 * ((t - s0) / (s1 - s0)), Math.round(t * 8) % 2 ? 0.35 : -0.35);
-  riser(B.wheelBurst, 1.6, 0.12);
-  bell(B.wheelPick, 77, 0.12, -0.2, 2.5); mallet(B.wheelPick, 81, 0.08, 0.2);
+  bell(B.wheelPick, 77, 0.12, -0.2, 2.5); mallet(B.wheelPick, 81, 0.08, 0.2); kick(B.wheelPick, 0.6); bass(B.wheelPick, 41, 0.9, 0.22);
+  riser(B.wheelBurst, B.wheelBurst - B.wheelPick, 0.1);
   kick(B.wheelBurst, 1); crash(B.wheelBurst, 0.15); tom(B.wheelBurst, 0.35, 120, 60);
   [96, 93, 91, 89, 86, 84, 81, 79, 77].forEach((m, i) => mallet(B.wheelBurst + 0.03 + i * 0.05 + rand() * 0.02, m, 0.065, rand() * 1.4 - 0.7, 9));
 }
 
 // Montage: a pluck as each confetto becomes a tool, climbing the scale; each card lands with its own tool's
 // sound (a drop, a run of ticks, a mallet pair, a print, a ratchet); a bell for the line; one riser into the icon.
-// A breath after the result, leaning into the montage's drop on the next bar: hats that thicken.
-for (let t = B.wheelBurst + BAR / 2; t < B.wheelBurst + BAR - 0.01; t += BEAT / 4) hat(t, 0.02 + 0.07 * ((t - B.wheelBurst - BAR / 2) / (BAR / 2)), Math.round(t * 8) % 2 ? 0.35 : -0.35);
-const PENTA = [65, 67, 69, 72, 74, 77, 79, 81, 84, 86, 89, 91, 93, 96, 98, 101];
-PENTA.forEach((m, i) => mallet(B.montageBadges[0] + 0.25 + i * 0.035, m, 0.05, (i % 8) / 4 - 0.9, 10));
+// A breath after the confetti, leaning into the montage's groove on the next downbeat: hats that thicken.
+{
+  const h0 = B.wheelBurst + BEAT, h1 = B.montageBadges[0];
+  for (let t = h0; t < h1 - 0.01; t += BEAT / 4) hat(t, 0.02 + 0.07 * ((t - h0) / (h1 - h0)), Math.round(t * 8) % 2 ? 0.35 : -0.35);
+}
+const PENTA = [65, 67, 69, 72, 74, 77, 79, 81, 84, 86, 89, 91];
+PENTA.forEach((m, i) => mallet(B.montageBadges[0] + 0.3 + i * 0.05, m, 0.055, (i % 6) / 3 - 0.85, 10));
 const [c0, c1, c2, c3, c4] = B.montageCards;
 drop(c0, 420, 1500, 0.2, -0.4);
 for (let k = 0; k < 5; k++) tick(c1 + k * 0.04, 0.07, 2600 + k * 120, -0.2);
 mallet(c2, 77, 0.12); mallet(c2 + 0.125, 84, 0.08, 0.3);
 for (let k = 0; k < 4; k++) tick(c3 + k * 0.035, 0.07, 1400, 0.2);
 for (let k = 0; k < 6; k++) tick(c4 + k * (0.05 + k * 0.01), 0.1, 1600, 0.4);
-bell(B.montageHeadline, 81, 0.11, 0, 2);
 riser(B.converge[1], B.converge[1] - B.converge[0] + 0.2, 0.12);
 
 // End: the resolution on the downbeat the icon pops: F major in bells over a low F, a ripple of drops, the name

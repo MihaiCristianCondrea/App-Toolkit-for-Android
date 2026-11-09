@@ -11,6 +11,8 @@
     "frames": "npm run assets && node scripts/render.mjs frames",
     "transitions": "npm run assets && node scripts/render.mjs transitions",
     "preview": "npm run assets && node scripts/render.mjs preview",
+    "review": "npm run assets && node scripts/render.mjs review",
+    "verify:wheel": "node scripts/verify-wheel.mjs",
     "master": "npm run assets && node scripts/render.mjs master"
   },
   "dependencies": {

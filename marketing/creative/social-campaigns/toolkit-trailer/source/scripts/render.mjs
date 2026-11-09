@@ -1,8 +1,9 @@
-// Renders the trailer (node scripts/render.mjs frames [seconds...] | preview | master) into ../output/.
+// Renders the trailer (node scripts/render.mjs frames [seconds...] | transitions | preview | review | master) into ../output/.
 //   frames:  stills at the given seconds (default: one per scene and beat) and a contact sheet;
 //   transitions: before, during and after every scene change (timeline.json transitions), one row each, as
 //            output/images/transitions.png;
-//   preview: 960 x 540 H.264 with the composed soundtrack;  master: 2560 x 1440 H.264 with the soundtrack.
+//   preview: 960 x 540 H.264 with the composed soundtrack;  review: 1920 x 1080, to watch at normal size before
+//   approving;  master: 2560 x 1440 H.264 with the soundtrack, only once the review is approved.
 import { bundle } from "@remotion/bundler";
 import { renderMedia, renderStill, selectComposition } from "@remotion/renderer";
 import { mkdir, readFile } from "node:fs/promises";
@@ -42,7 +43,7 @@ if (mode === "transitions") {
   await writePng(path.join(out, "images", "transitions.png"), stack(rows));
   console.log(path.join(out, "images", "transitions.png"));
 } else if (mode === "frames") {
-  const times = rest.length ? rest.map(Number) : [0.7, 2.6, 4.6, 6.1, 7.4, 8.47, 9.9, 11.3, 12.9, 14.6, 16.0, 17.6, 19.1, 20.1, 23.4, 25.2, 27.5];
+  const times = rest.length ? rest.map(Number) : [0.7, 2.6, 4.6, 6.45, 7.4, 8.47, 9.9, 11.5, 12.6, 14.6, 16.0, 17.6, 19.0, 19.8, 20.6, 21.6, 22.3, 24.4, 26.4, 27.8];
   const files = [];
   for (const s of times) {
     const file = path.join(out, "images", `frame-${s.toFixed(2)}.png`);
@@ -59,10 +60,10 @@ if (mode === "transitions") {
   await writePng(path.join(out, "images", "contact-sheet.png"), { width, height, data });
   console.log(path.join(out, "images", "contact-sheet.png"));
 } else {
-  const master = mode === "master";
-  const file = path.join(out, "video", `app-toolkit-trailer-${master ? "master" : "preview"}.mp4`);
+  const master = mode === "master", review = mode === "review";
+  const file = path.join(out, "video", `app-toolkit-trailer-${master ? "master" : review ? "review" : "preview"}.mp4`);
   await renderMedia({
-    composition, serveUrl, codec: "h264", outputLocation: file, scale: master ? 4 / 3 : 0.5, crf: master ? 16 : 22,
+    composition, serveUrl, codec: "h264", outputLocation: file, scale: master ? 4 / 3 : review ? 1 : 0.5, crf: master ? 16 : review ? 18 : 22,
     audioCodec: "aac", audioBitrate: "320k", concurrency: master ? 2 : 3, timeoutInMilliseconds: 300000,
     onProgress: ({ progress }) => { if (Math.round(progress * 100) % 10 === 0) process.stdout.write(`\r${Math.round(progress * 100)}%`); },
   });

@@ -16,8 +16,13 @@ export type PhonePose = { x: number; y: number; scale: number; roll?: number; ya
 export type Screen = [string, Record<string, unknown>];
 
 /** The phone. `children` are drawn over the screen in the frame's own pixels (465 x 989, the screen at 17.6, 15.8), so they move with the phone; they line up only while the phone faces the camera (yaw and pitch 0). */
-export const Phone: React.FC<{ screen: Screen; pose: PhonePose; scroll?: number; dx?: number; dy?: number; grow?: number; opacity?: number; z?: number; children?: React.ReactNode }> = ({ screen, pose, scroll, dx = 0, dy = 0, grow = 1, opacity = 1, z = 2, children }) => (
-  <div style={{ position: "absolute", left: pose.x - FRAME.width / 2, top: pose.y - FRAME.height / 2, width: FRAME.width, height: FRAME.height, zIndex: z, opacity, transformOrigin: "50% 50%", transform: `translate(${dx}px, ${dy}px) rotate(${pose.roll ?? 0}deg) scale(${pose.scale * grow})`, filter: "drop-shadow(0 4px 6px rgba(30,24,16,.10)) drop-shadow(0 30px 40px rgba(30,24,16,.16))" }}>
+/**
+ * `shadow` scales the phone's drop shadow (1 is the listings' own). The phone is placed by its transform alone,
+ * from the origin: Blink rounds a box's left and top to whole pixels, which would make a slow phone step a pixel
+ * at a time, while a transform's translation is drawn exactly.
+ */
+export const Phone: React.FC<{ screen: Screen; pose: PhonePose; scroll?: number; dx?: number; dy?: number; grow?: number; opacity?: number; z?: number; shadow?: number; children?: React.ReactNode }> = ({ screen, pose, scroll, dx = 0, dy = 0, grow = 1, opacity = 1, z = 2, shadow = 1, children }) => (
+  <div style={{ position: "absolute", left: 0, top: 0, width: FRAME.width, height: FRAME.height, zIndex: z, opacity, transformOrigin: "50% 50%", transform: `translate(${pose.x - FRAME.width / 2 + dx}px, ${pose.y - FRAME.height / 2 + dy}px) rotate(${pose.roll ?? 0}deg) scale(${pose.scale * grow})`, filter: shadow > 0.002 ? `drop-shadow(0 4px 6px rgba(30,24,16,${(0.1 * shadow).toFixed(3)})) drop-shadow(0 30px 40px rgba(30,24,16,${(0.16 * shadow).toFixed(3)}))` : undefined }}>
     <LitScreen id={screen[0]} state={screen[1]} pose={{ yaw: pose.yaw ?? 0, pitch: pose.pitch ?? 0, perspective: 3000 }} style={{ width: FRAME.width }} scroll={scroll} />
     {children && <svg aria-hidden width={FRAME.width} height={FRAME.height} style={{ position: "absolute", left: 0, top: 0, overflow: "visible" }}>{children}</svg>}
   </div>
