@@ -1,0 +1,15 @@
+I'm excited to present the official trailer for App Toolkit for Android. App Toolkit puts the small tools you reach for every day in one clean app. It helps you clear a wet speaker with Water Eject, measure lengths and angles with the Surface Ruler and Protractor, convert units, split a bill with tip included, spin the Decision Wheel, and open live sensor and signal tools whenever you need them.
+
+Discover more about App Toolkit:
+Google Play: https://play.google.com/store/apps/details?id=com.d4rk.android.apps.apptoolkit
+
+Discover more about Mihai-Cristian Condrea:
+GitHub: https://github.com/MihaiCristianCondrea
+X / Twitter: https://x.com/MihaiCristianC
+Facebook: https://www.facebook.com/dev.mihaicristiancondrea
+TikTok: https://www.tiktok.com/@dev.mihaicristiancondrea
+Instagram: https://www.instagram.com/dev.mihaicristiancondrea
+
+#AppToolkit #Android #AndroidApps #EverydayTools #WaterEject #UnitConverter #BillSplitter #DecisionWheel #RulerApp #Protractor #PhoneTools #AppTrailer #MotionDesign
+
+Google Play and the Google Play logo are trademarks of Google LLC.

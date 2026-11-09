@@ -3,15 +3,16 @@
   "campaign": {
     "slug": "toolkit-trailer",
     "title": "App Toolkit: Trailer",
-    "status": "draft"
+    "releaseDate": "2026-11-09",
+    "status": "approved"
   },
   "software": "Android Studio",
   "copy": {
     "title": "App Toolkit: Everyday tools in one app",
-    "headline": "Everyday tools, one app",
-    "description": "App Toolkit for Android: Water Eject, Ruler and Protractor, Unit Converter, Tip and Bill Splitter, Decision Wheel and more, in one app.",
-    "longDescription": "One app. Many everyday moments. The App Toolkit name, then the water world: a tone pushes water out of a speaker; the last wave flattens into a ruler while the Surface Ruler measures 76.0 mm and the Protractor sweeps to 45 degrees; the reading becomes a conversion; the conversion folds into a receipt split two ways; a wheel lands on Music, and its confetti becomes the app's tools, which gather into App Toolkit.",
-    "altText": "App Toolkit's tool shapes gather round its icon; Water Eject pushes water out of a Pixel phone's speaker; a sound wave flattens into a ruler beside the Surface Ruler and Protractor phones; 76.0 mm becomes 7.6 cm; the unit cards fold into a receipt split in two; a decision wheel lands on Music and its confetti turns into the app's tools, which gather into the App Toolkit icon and the Get it on Google Play badge.",
+    "headline": "Everyday tools in one app",
+    "description": "App Toolkit for Android: Water Eject, Surface Ruler, Protractor, Unit Converter, Tip and Bill Splitter, Decision Wheel and everyday tools in one Android app.",
+    "longDescription": "One app. Many everyday moments. The App Toolkit name opens into the water world, where a 165 Hz tone pushes water out of a speaker; the last wave flattens into a ruler while the Surface Ruler measures 76.0 mm and the Protractor sweeps to 45 degrees; the reading becomes a unit conversion; the conversion folds into a receipt split two ways; the phone zooms into the Decision Wheel as it lands on Music, and its confetti becomes the app's tools, which gather into App Toolkit.",
+    "altText": "Five everyday Android tools transform from one to the next on Pixel phones before gathering into the App Toolkit icon.",
     "keywords": [
       "App Toolkit",
       "Android",
@@ -22,6 +23,12 @@
       "tip calculator",
       "bill splitter",
       "decision wheel",
+      "compass",
+      "bubble level",
+      "flashlight",
+      "Morse code",
+      "coin flip",
+      "dice roll",
       "everyday tools"
     ],
     "hashtags": [
@@ -31,11 +38,251 @@
     ]
   },
   "files": {
+    "soundtrack.mp3": {
+      "title": "App Toolkit: Trailer soundtrack",
+      "description": "Original 32-second trailer score in F major at 120 BPM composed from the App Toolkit trailer timeline."
+    },
+    "source/public/soundtrack.mp3": {
+      "title": "App Toolkit: Trailer soundtrack",
+      "description": "Original 32-second trailer score in F major at 120 BPM composed from the App Toolkit trailer timeline."
+    },
     "output/video/app-toolkit-trailer-preview.mp4": {
-      "title": "App Toolkit: trailer preview"
+      "title": "App Toolkit: Trailer preview"
+    },
+    "output/video/app-toolkit-trailer-review.mp4": {
+      "title": "App Toolkit: Trailer review"
     },
     "output/video/app-toolkit-trailer-master.mp4": {
-      "title": "App Toolkit: trailer"
+      "title": "App Toolkit: Everyday tools in one app",
+      "altText": "App Toolkit trailer on Pixel phones: Water Eject, Surface Ruler, Protractor, Unit Converter, Bill Splitter and Decision Wheel."
+    },
+    "output/images/app-toolkit-trailer-thumbnail.png": {
+      "title": "App Toolkit: Everyday tools in one app",
+      "altText": "App Toolkit icon and title with the official Get it on Google Play badge on a warm off-white background."
+    },
+    "output/images/contact-sheet.png": {
+      "title": "App Toolkit: Trailer contact sheet",
+      "altText": "Twenty key frames trace the trailer from the opening lockup through five tools to the Google Play end card."
+    },
+    "output/images/transitions.png": {
+      "title": "App Toolkit: Trailer transitions sheet",
+      "altText": "Nine rows of frames show the morph, fold and camera zoom transitions between every scene of the trailer."
+    },
+    "output/images/frame-0.70.png": {
+      "title": "App Toolkit: Opening tool shapes",
+      "altText": "Five colorful Material shapes arrive on a warm neutral background before the App Toolkit icon appears."
+    },
+    "output/images/frame-2.60.png": {
+      "title": "App Toolkit: Opening title lockup",
+      "altText": "The App Toolkit icon and title reading Everyday tools in one app surrounded by five pastel tool shapes."
+    },
+    "output/images/frame-3.30.png": {
+      "title": "App Toolkit: Water Eject phone entry",
+      "altText": "A tilted Pixel phone rises into a blue twelve-sided backdrop as the Water Eject screen enters the frame."
+    },
+    "output/images/frame-4.60.png": {
+      "title": "App Toolkit: Water Eject sound waves",
+      "altText": "Concentric blue sound wave arcs and glass bubbles radiate downward from the tilted Pixel phone speakers."
+    },
+    "output/images/frame-6.45.png": {
+      "title": "App Toolkit: Wave flattening into a ruler",
+      "altText": "The bottom sound wave flattens into a straight horizontal line as the phone turns toward the Ruler scene."
+    },
+    "output/images/frame-7.40.png": {
+      "title": "App Toolkit: Surface Ruler and Protractor",
+      "altText": "Two Pixel phones show Surface Ruler and Protractor over a yellow burst with a semicircular protractor dial."
+    },
+    "output/images/frame-8.47.png": {
+      "title": "App Toolkit: Protractor at 45 degrees",
+      "altText": "The semicircular protractor sweeps to 45 degrees while the Protractor phone screen displays the same angle."
+    },
+    "output/images/frame-9.90.png": {
+      "title": "App Toolkit: Surface Ruler at 76.0 mm",
+      "altText": "A measurement marker reaches 76.0 mm along the bottom ruler strip while the Surface Ruler phone matches it."
+    },
+    "output/images/frame-11.50.png": {
+      "title": "App Toolkit: Length unit conversion",
+      "altText": "Two teal Material shapes display 76.0 mm and 7.6 cm beside a Pixel phone running the Unit Converter."
+    },
+    "output/images/frame-12.60.png": {
+      "title": "App Toolkit: Temperature unit conversion",
+      "altText": "Morphing teal shapes convert 20 degrees Celsius to 68 degrees Fahrenheit beside the Unit Converter phone."
+    },
+    "output/images/frame-14.60.png": {
+      "title": "App Toolkit: Tip and Bill Splitter receipt",
+      "altText": "A printed receipt shows a 52.00 euro bill and 10 percent tip beside a Pixel phone on a coral background."
+    },
+    "output/images/frame-16.00.png": {
+      "title": "App Toolkit: Bill split two ways",
+      "altText": "Two share cards reading 28.60 euro each sit below the receipt beside the Tip and Bill Splitter phone."
+    },
+    "output/images/frame-17.60.png": {
+      "title": "App Toolkit: Decision Wheel on phone",
+      "altText": "A centred Pixel phone shows the Decision Wheel sheet with six colorful segments before the spin begins."
+    },
+    "output/images/frame-19.00.png": {
+      "title": "App Toolkit: Camera push into Decision Wheel",
+      "altText": "The camera pushes closer to the spinning Decision Wheel on the Pixel phone screen."
+    },
+    "output/images/frame-19.80.png": {
+      "title": "App Toolkit: Passing through the phone into the wheel",
+      "altText": "The spinning six-choice wheel fills the frame as a lilac flower shape opens behind it."
+    },
+    "output/images/frame-20.60.png": {
+      "title": "App Toolkit: Decision Wheel slowing down",
+      "altText": "The large colorful Decision Wheel spins over a lilac floral backdrop with a purple pointer at the top."
+    },
+    "output/images/frame-21.60.png": {
+      "title": "App Toolkit: Decision Wheel lands on Music",
+      "altText": "The Decision Wheel stops on the Music slice with a purple Music chip badge beside it."
+    },
+    "output/images/frame-22.30.png": {
+      "title": "App Toolkit: Decision Wheel confetti burst",
+      "altText": "Colorful confetti bursts from the top pointer of the Decision Wheel after selecting Music."
+    },
+    "output/images/frame-24.40.png": {
+      "title": "App Toolkit: Twelve tool badges grid",
+      "altText": "Twelve Material shape badges with icons and labels show App Toolkit's tools in two rows of six."
+    },
+    "output/images/frame-26.40.png": {
+      "title": "App Toolkit: Tool screens montage",
+      "altText": "Five tilted app screens track across the frame below a top band of twelve colorful tool badges."
+    },
+    "output/images/frame-27.80.png": {
+      "title": "App Toolkit: Five tool screens in motion",
+      "altText": "Cards showing Water Eject, Protractor, Unit Converter, Bill Splitter and Decision Wheel glide left."
+    },
+    "output/images/frame-30.50.png": {
+      "title": "App Toolkit: Closing icon and Google Play badge",
+      "altText": "The App Toolkit icon, title and Get it on Google Play badge hold at the centre as pastel ripples fade."
+    },
+    "output/images/frame-31.00.png": {
+      "title": "App Toolkit: End card on Google Play",
+      "altText": "The App Toolkit icon, title and official Google Play badge centred on a clean off-white background."
+    },
+    "output/images/transition-1-2.60.png": {
+      "title": "App Toolkit: Intro before Water Eject morph",
+      "altText": "Opening lockup with five tool shapes around the App Toolkit icon before the blue shape moves inward."
+    },
+    "output/images/transition-1-2.85.png": {
+      "title": "App Toolkit: Blue shape expanding into Water Eject",
+      "altText": "The blue cookie shape expands toward the centre as the pale blue Water Eject background floods outward."
+    },
+    "output/images/transition-1-3.30.png": {
+      "title": "App Toolkit: Water Eject phone rising in",
+      "altText": "The Pixel phone rises and rotates smoothly into the blue twelve-sided Water Eject backdrop."
+    },
+    "output/images/transition-2-6.30.png": {
+      "title": "App Toolkit: Sound wave before flattening",
+      "altText": "Concentric blue sound waves radiate below the Water Eject phone just before the last arc straightens."
+    },
+    "output/images/transition-2-6.55.png": {
+      "title": "App Toolkit: Wave line opening the Ruler scene",
+      "altText": "The straightened wave line opens the warm yellow Ruler world as the phone turns through edge-on."
+    },
+    "output/images/transition-2-6.95.png": {
+      "title": "App Toolkit: Surface Ruler and Protractor arrival",
+      "altText": "The turned Surface Ruler phone is joined by the Protractor phone above the graduated ruler strip."
+    },
+    "output/images/transition-3-10.35.png": {
+      "title": "App Toolkit: 76.0 mm reading lifting from ruler",
+      "altText": "The 76.0 mm measurement chip lifts onto a teal soft-burst shape above the yellow ruler strip."
+    },
+    "output/images/transition-3-10.70.png": {
+      "title": "App Toolkit: Reading shape expanding into Unit Converter",
+      "altText": "The teal shape behind 76.0 mm expands across the frame to become the Unit Converter ground."
+    },
+    "output/images/transition-3-11.15.png": {
+      "title": "App Toolkit: Unit Converter cards emerging",
+      "altText": "The 76.0 mm and 7.6 cm conversion shapes settle on the left as the Unit Converter phone rises on the right."
+    },
+    "output/images/transition-4-13.08.png": {
+      "title": "App Toolkit: Temperature cards sliding together",
+      "altText": "The 20 degrees Celsius and 68 degrees Fahrenheit shapes slide toward each other to fold into a receipt."
+    },
+    "output/images/transition-4-13.30.png": {
+      "title": "App Toolkit: Coral wipe opening Tip and Bill Splitter",
+      "altText": "A coral soft-burst wipe opens behind the folding surface as it stretches into a white paper receipt."
+    },
+    "output/images/transition-4-13.60.png": {
+      "title": "App Toolkit: Receipt and Bill Splitter phone",
+      "altText": "The printed receipt stands on the left while the Tip and Bill Splitter phone rises into the coral backdrop."
+    },
+    "output/images/transition-5-16.30.png": {
+      "title": "App Toolkit: Bill Splitter phone starting zoom",
+      "altText": "The Tip and Bill Splitter phone begins zooming and gliding toward the centre as the receipt fades left."
+    },
+    "output/images/transition-5-16.60.png": {
+      "title": "App Toolkit: Phone gliding from Bill to Decision Wheel",
+      "altText": "The Pixel phone scales up and glides toward the centre of the frame during the Decision Wheel transition."
+    },
+    "output/images/transition-5-16.70.png": {
+      "title": "App Toolkit: Decision Wheel crossfade on zooming phone",
+      "altText": "The zooming Pixel phone blends smoothly into the lilac Decision Wheel world."
+    },
+    "output/images/transition-5-16.98.png": {
+      "title": "App Toolkit: Decision Wheel phone settling in",
+      "altText": "The Pixel phone showing the Decision Wheel sheet arrives near the centre on a soft lilac ground."
+    },
+    "output/images/transition-5-17.02.png": {
+      "title": "App Toolkit: Decision Wheel scene start",
+      "altText": "The Decision Wheel sheet with six colorful choices sits ready on the tilted Pixel phone screen."
+    },
+    "output/images/transition-5-17.05.png": {
+      "title": "App Toolkit: Decision Wheel ready to spin",
+      "altText": "The six-segment Decision Wheel on the Pixel phone prepares to spin surrounded by lilac shapes."
+    },
+    "output/images/transition-6-18.60.png": {
+      "title": "App Toolkit: Camera closing in on spinning wheel",
+      "altText": "The camera pushes toward the spinning Decision Wheel as the Pixel phone turns face-on."
+    },
+    "output/images/transition-6-19.45.png": {
+      "title": "App Toolkit: Wheel filling the phone screen",
+      "altText": "The spinning Decision Wheel fills most of the viewport just before the phone bezel leaves the frame."
+    },
+    "output/images/transition-6-19.85.png": {
+      "title": "App Toolkit: Lilac world growing behind the wheel",
+      "altText": "A lilac twelve-sided ring expands behind the spinning wheel after the phone bezel clears the frame."
+    },
+    "output/images/transition-6-20.20.png": {
+      "title": "App Toolkit: Hero Decision Wheel in lilac world",
+      "altText": "The spinning Decision Wheel settles at the centre over a lilac flower shape and decorative accents."
+    },
+    "output/images/transition-7-20.60.png": {
+      "title": "App Toolkit: Decision Wheel decelerating",
+      "altText": "The large Decision Wheel slows down as the Music segment approaches the top pointer."
+    },
+    "output/images/transition-7-21.30.png": {
+      "title": "App Toolkit: Music selected on Decision Wheel",
+      "altText": "The Decision Wheel stops on Music and a purple Music chip pops in on the upper right."
+    },
+    "output/images/transition-7-21.90.png": {
+      "title": "App Toolkit: Decision Wheel result hold",
+      "altText": "The Music slice and purple Music chip hold steadily before the celebratory confetti burst."
+    },
+    "output/images/transition-8-22.30.png": {
+      "title": "App Toolkit: Confetti bursting from Decision Wheel",
+      "altText": "Pastel confetti pieces burst outward from the top pointer of the Decision Wheel."
+    },
+    "output/images/transition-8-23.20.png": {
+      "title": "App Toolkit: Confetti morphing into tool badges",
+      "altText": "Twelve confetti pieces fly into a two-row grid and morph into Material shape tool badges with icons."
+    },
+    "output/images/transition-8-24.30.png": {
+      "title": "App Toolkit: Named grid of twelve tools",
+      "altText": "Twelve Material shape badges with icons and tool names stand in two neat rows on a neutral ground."
+    },
+    "output/images/transition-9-28.50.png": {
+      "title": "App Toolkit: Five tool screens before convergence",
+      "altText": "Five tilted app screen cards sit below the top band of twelve tool badges before gathering inward."
+    },
+    "output/images/transition-9-28.92.png": {
+      "title": "App Toolkit: Screens and badges converging to centre",
+      "altText": "The five screen cards and twelve tool badges pull inward toward the centre of the frame."
+    },
+    "output/images/transition-9-29.30.png": {
+      "title": "App Toolkit: Icon pop with five world ripples",
+      "altText": "The App Toolkit icon pops at the centre surrounded by concentric ripples in the five worlds' colors."
     }
   }
 }

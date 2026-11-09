@@ -14,7 +14,9 @@
     "review": "npm run assets && node scripts/render.mjs review",
     "verify:wheel": "node scripts/verify-wheel.mjs",
     "playback": "node scripts/playback.mjs",
-    "master": "npm run assets && node scripts/render.mjs master"
+    "master": "npm run assets && node scripts/render.mjs master",
+    "thumbnail": "npm run assets && node scripts/render.mjs thumbnail",
+    "metadata": "node scripts/metadata.mjs"
   },
   "dependencies": {
     "@remotion/bundler": "4.0.529",

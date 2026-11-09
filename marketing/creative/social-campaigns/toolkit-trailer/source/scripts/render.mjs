@@ -32,7 +32,11 @@ const stack = (rows) => {
   return { width, height, data };
 };
 
-if (mode === "transitions") {
+if (mode === "thumbnail") {
+  const file = path.join(out, "images", "app-toolkit-trailer-thumbnail.png");
+  await renderStill({ composition, serveUrl, output: file, frame: Math.round(31.0 * fps), scale: 4 / 3, imageFormat: "png", timeoutInMilliseconds: 300000, chromiumOptions: { gl: "angle" } });
+  console.log(file);
+} else if (mode === "transitions") {
   const { transitions } = JSON.parse(await readFile(path.join(root, "src/timeline.json"), "utf8"));
   const rows = [];
   for (const [k, tr] of transitions.entries()) {

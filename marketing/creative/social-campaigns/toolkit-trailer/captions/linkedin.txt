@@ -1,0 +1,11 @@
+Most utility apps on Android do one small job and come with clutter, unnecessary permissions or outdated interfaces.
+
+I built App Toolkit for Android to put the everyday tools people actually reach for into one clean Material 3 Expressive app. Quick Tools gives you live sensor and signal widgets (Compass, Bubble Level, Flash Dimmer, Morse & SOS and Water Eject) that also pin to Quick Settings. Measure covers Surface Ruler, a full-screen Protractor, Unit Converter, Tip & Bill Splitter and Counter. Play & Decide adds the Decision Wheel, Random Number, Coin Flip and Dice Roll. Every tool runs without sensitive permissions.
+
+The 32-second trailer connects the five featured tools in one continuous story, where each tool's form transforms into the next on a score composed from the same timeline.
+
+https://play.google.com/store/apps/details?id=com.d4rk.android.apps.apptoolkit
+
+#Android #AndroidApps #MaterialDesign #ProductDesign #MobileApps
+
+Google Play and the Google Play logo are trademarks of Google LLC.

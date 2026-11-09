@@ -4,12 +4,15 @@
 
 | | |
 | --- | --- |
-| Status | Animatic for owner review; master after approval |
+| Status | Approved and rendered at 2K (2560 x 1440, 90 fps) |
 | Sound | Our own score, `soundtrack.mp3`, synthesised by `source/scripts/compose.mjs` from the same timeline: 120 BPM in F major, 32 seconds, about -14 LUFS, peak -1 dBFS |
 | Design size | 1920 x 1080, 90 fps |
 | Preview (animatic) | 960 x 540, `output/video/app-toolkit-trailer-preview.mp4` |
 | Review | 1920 x 1080, `output/video/app-toolkit-trailer-review.mp4`, to watch at normal size before approving |
 | Master | 2560 x 1440, `output/video/app-toolkit-trailer-master.mp4` |
+| Thumbnail | 2560 x 1440, `output/images/app-toolkit-trailer-thumbnail.png` |
+| Metadata | [`toolkit-trailer-metadata.json`](toolkit-trailer-metadata.json) and `output/schema.jsonld` |
+| Captions | `captions/youtube.txt`, `youtube-tags.txt`, `instagram.txt`, `x.txt`, `facebook.txt`, `tiktok.txt`, `linkedin.txt`, `threads.txt`: paste-ready; the YouTube title and alt text are in the metadata manifest |
 | Output | `output/`, generated and ignored by Git |
 
 It replaces the earlier trailers in `app-trailer/` and `trailer-v2/`, which stay as records.
@@ -23,12 +26,12 @@ The previous cut was eight equal four-second scenes, each title-left and phone-r
 | Time | Scene | What happens | Shot |
 | --- | --- | --- | --- |
 | 0 to 3.2 | App Toolkit | One shape per tool arrives on each note in its world's colour, the icon pops, the shapes breathe round it, and "App Toolkit, Everyday tools in one app" lands. Then the others swap out while the blue shape travels on. | Centred lockup |
-| 3 to 6.85 | Water Eject | The blue shape reaches the phone's place and morphs into its backdrop as the blue floods in; the phone rises into it, large and speaker down as the sheet asks. Below each group of speaker holes the water stirs softly, as on the listing: shallow tonal bands that swell a little on each note, a faint pulse, three small bubbles and one pair of droplets. Nothing else: the two waves say what the tool does. | Phone centred and dominant |
-| 6.15 to 10.95 | Ruler & Protractor | While the last wave flattens into the ruler's line, the blue backdrop morphs and moves into the yellow one (the yellow fills it from the centre) and the phone turns in 3D: past edge-on it comes round as the Surface Ruler. The Protractor phone joins it and the ruler pulls back to a strip. An arm rises to 45 degrees with the Protractor, which leads while it sweeps; a marker measures 76.0 mm while the Surface Ruler, leading again, reads the same. Both phones end on their results. | Two large phones, one leading at a time; the ruler supports |
+| 3 to 6.85 | Water Eject | The blue shape reaches the phone's place and morphs into its backdrop as the blue floods in; the phone rises and rotates smoothly in 3D into the store listing's dramatic hero orientation (pitch 28, yaw -13). Below each group of speaker holes, concentric wave arcs and glass bubbles fan out from small to big on the beat. | Phone centred and dominant |
+| 6.15 to 10.95 | Ruler & Protractor | While the last wave flattens into the ruler's line, the blue backdrop morphs and moves into the yellow one (the yellow fills it from the centre) and the phone turns in 3D: past edge-on it comes round as the Surface Ruler. The Protractor phone joins it and the ruler pulls back to a strip with a semicircular protractor dial. An arm rises to 45 degrees with the Protractor, which leads while it sweeps; a marker measures 76.0 mm while the Surface Ruler, leading again, reads the same. Both phones end on their results. | Two large phones, one leading at a time; the ruler supports |
 | 10.95 to 13.5 | Unit Converter | The reading's shape has expanded into the converter's ground; under 76.0 mm the first card grows, 7.6 cm beside it. One more conversion follows, 20 °C to 68 °F, and each result holds for a full second; the shapes morph like the loading indicator, and the phone shows the same category. | Wide, the pair leads |
-| 13.15 to 17 | Tip & Bill Splitter | The receipt prints the bill and the 10% tip, the share lands at €28.60, and the total divides into two people's cards. Then a rest. | Receipt-led, the phone rises in beside it; an almost still push during the rest |
-| 17 to 23.5 | Decision Wheel | A large phone with the real Decision Wheel sheet and its six choices, turned a little. The spin starts inside the app; one camera move pushes towards the wheel while the phone turns face on, and passes through: the phone's edges, then its bezel, leave the frame by framing alone (19.72 s), and for a moment the app's card is all there is. The lilac grows from behind the wheel, which settles to fill the frame and slows to Music in the app's 3 seconds (21 s). The pick is marked, "Music" holds for a second, and only then the confetti (22 s). | The phone, then the camera inside the app, then the wheel as the scene |
-| 22.75 to 29.1 | The toolkit | Twelve pieces of the result's confetti fly to a grid and become the app's tools as MaterialShape badges with their names, and the named grid holds for about a second and a half; then the badges rise into a band and the five tools' real screens track in from the right on the beat. | Wide, a lateral track |
+| 13.15 to 17 | Tip & Bill Splitter | The receipt prints the bill and the 10% tip, the share lands at €28.60, and the total divides into two people's cards. Then the phone zooms in and glides to the centre, blending into the Decision Wheel phone. | Receipt-led, the phone rises in beside it, then zooms to the centre |
+| 17 to 23.5 | Decision Wheel | The zoomed phone arrives with the real Decision Wheel sheet and its six choices, turned a little. The spin starts inside the app; one camera move pushes towards the wheel while the phone turns face on, and passes through: the phone's edges, then its bezel, leave the frame by framing alone (19.72 s), and for a moment the app's card is all there is. The lilac grows from behind the wheel, which settles to fill the frame and slows to Music in the app's 3 seconds (21 s). The pick is marked, "Music" holds for a second, and only then the confetti (22 s). | The phone, then the camera inside the app, then the wheel as the scene |
+| 22.75 to 29.1 | The toolkit | Twelve pieces of the result's confetti fly to a grid and become the app's tools as MaterialShape badges with their Material Symbols icons and names, and the named grid holds for about a second and a half; then the badges rise into a band and the five tools' real screens track in from the right on the beat. | Wide, a lateral track |
 | 29 to 32 | App Toolkit | Everything converges into the icon on the final downbeat; the name and the official Get it on Google Play badge settle and hold. | Centred, static hold |
 
 ## Transitions, and why each is different
@@ -39,12 +42,12 @@ The previous cut was eight equal four-second scenes, each title-left and phone-r
 | Water Eject to Ruler | The last wave loses its curve into a straight line that grows graduations and opens the yellow world; meanwhile the blue backdrop morphs and moves into the yellow one and the phone turns in 3D, coming round as the Surface Ruler; the line thickens into the ruler | A morph with a physical reason (a wave becomes a measuring line), and one phone carried from tool to tool |
 | Ruler to Unit Converter | The 76.0 mm reading lifts onto a soft-burst shape, which keeps growing until it is the converter's off-white ground; under the same text the converter's first card grows, 7.6 cm beside it | A container transform: the value carries the viewer, and the conversion is the app's real result |
 | Unit Converter to Tip & Bill Splitter | The two cards slide together, round into one surface and stretch and whiten into the receipt, while the coral world opens out of it in a soft burst | A physical Material transformation that keeps shape, place and motion; the receipt is artwork, not the app's UI |
-| Tip & Bill Splitter to Decision Wheel | A rest after the shares (the drums stop), then a hard cut on a strong accent | A change of rhythm: stillness before a choice |
-| Inside the Decision Wheel | One camera move from the cut: it creeps in, accelerates towards the wheel while the phone turns face on, and passes through the phone, whose edges and bezel leave the frame while the camera is still moving; the phone itself never moves. Face on, the wheel is handed to a replica drawn from the app's own wheel (same plate, colours, labels, pointer and angle, where the app paints it), so it can stay sharp and in front of the lilac, which grows from behind it once the phone has gone. The wheel overshoots the frame a little and settles to fill it | The one dramatic camera move in the film, and one wheel throughout: the viewer enters the app rather than watching something taken out of it |
+| Tip & Bill Splitter to Decision Wheel | The phone zooms in and glides from the right to the centre as the receipt fades aside, blending into the Decision Wheel phone | Keeps the phone in motion across the scene boundary and sets up the camera push into the wheel |
+| Inside the Decision Wheel | One camera move from the arrival: it creeps in, accelerates towards the wheel while the phone turns face on, and passes through the phone, whose edges and bezel leave the frame while the camera is still moving; the phone itself never moves. Face on, the wheel is handed to a replica drawn from the app's own wheel (same plate, colours, labels, pointer and angle, where the app paints it), so it can stay sharp and in front of the lilac, which grows from behind it once the phone has gone. The wheel overshoots the frame a little and settles to fill it | The one dramatic camera move in the film, and one wheel throughout: the viewer enters the app rather than watching something taken out of it |
 | Decision Wheel to the toolkit | The result holds, the confetti bursts, and it does not settle: twelve pieces fly on and morph into the app's tools | The payoff, and the most expressive change: a choice reveals the whole collection |
 | The toolkit to the icon | The cards and badges converge into the icon as it pops on the resolution | Everything gathers into one app |
 
-One is a plain cut; no two adjacent changes share a motion, and there is no shared camera.
+No two adjacent changes share a motion, and there is no shared camera.
 
 ## Sound
 
@@ -77,6 +80,8 @@ npm run preview            # the animatic: 960 x 540 with sound
 npm run review             # 1920 x 1080 with sound, to watch at normal size
 npm run playback           # the review's jumps and sound sync, measured (output/playback.json)
 npm run master             # 2560 x 1440, after approval
+npm run thumbnail          # 2560 x 1440 closing brand poster (output/images/app-toolkit-trailer-thumbnail.png)
+npm run metadata           # tags soundtrack.mp3 and output/**/*, writes output/schema.jsonld, and verifies
 ```
 
 `npm run dev` opens Remotion Studio. All timings are seconds in `src/timeline.json`; frames are seconds times 90.
@@ -97,4 +102,5 @@ npm run master             # 2560 x 1440, after approval
 | `scripts/render.mjs` | Frames, the transitions sheet, preview, review and master |
 | `scripts/verify-wheel.mjs` | The wheel's motion and geometry checks |
 | `scripts/playback.mjs` | The rendered film's frame-to-frame jumps and sound sync |
+| `scripts/metadata.mjs` | Injects and verifies SEO, rights and accessibility metadata across all rendered outputs |
 | `scripts/load-ts.mjs` | Loads the TypeScript motion code in Node, so the soundtrack and the checks run the picture's own code |
