@@ -51,7 +51,8 @@ const place = (spots: [number, number, number][], colors: string[], seed: number
 
 /** A large tonal shape that breathes slowly behind the phone. */
 const Behind: React.FC<{ t: number; name: string; x: number; y: number; size: number; color: string; seed: number; start: number }> = ({ t, name, x, y, size, color, seed, start }) => {
-  const p = pop(t, start, 14, 120), s = size * (0.7 + 0.3 * p);
+  // From nothing on its cue: drawn early at part size, a wipe passing over it cut it into odd shapes.
+  const p = pop(t, start, 14, 120), s = size * p;
   return <div style={{ position: "absolute", inset: 0, zIndex: 1 }}><Shape name={name} x={x - s / 2} y={y - s / 2} size={s} color={color} rotate={(t - start) * 6 + seed * 20} /></div>;
 };
 const Ground: React.FC<{ color: string; opacity?: number }> = ({ color, opacity = 1 }) => <AbsoluteFill style={{ background: color, opacity }} />;
@@ -255,13 +256,14 @@ const Unit: React.FC<{ t: number }> = ({ t }) => {
       {!folding && <MorphPair t={t} cx={PAIR.cx} cy={PAIR.cy} gap={PAIR.gap} size={PAIR.size} changes={at} shapes={CATEGORIES.map((k) => k.shapes)} colors={[w.tones[0], w.tones[1]]} ink={w.ink} arrows={w.accent} appear={grown} faceIn={[1, clamp(grown * 2)]} faces={CATEGORIES.map((k) => [k.a, k.b])} />}
       {folding && (
         <svg aria-hidden width={1920} height={1080} style={{ position: "absolute", inset: 0, zIndex: 6 }}>
+          {/* The surface grows under the two shapes: the first is its own colour, the second fades off it. */}
+          {merge > 0 && <g transform={`translate(${PAIR.cx} ${mix(PAIR.cy, RECEIPT.cy, merge)}) scale(${mix(PAIR.size * 0.86, rw, merge) / 100} ${mix(PAIR.size * 0.86, rh, merge) / 100})`}>
+            <path d={morphPath("squircle", "squircle", 1, 0, 0, 100)} fill={mixColor(w.tones[0], "#FFFBF5", merge)} />
+          </g>}
           {merge < 1 && ([0, 1] as const).map((side) => {
             const x = mix(PAIR.cx + (side ? 1 : -1) * PAIR.gap / 2, PAIR.cx, slide);
             return <path key={side} d={morphPath(CATEGORIES[CATEGORIES.length - 1].shapes[side], "squircle", slide, x, PAIR.cy, PAIR.size * mix(1, 0.86, slide), morphTurn(t, side, turns) * (1 - slide))} fill={mixColor([w.tones[0], w.tones[1]][side], "#FFFBF5", merge)} opacity={side ? 1 - merge : 1} />;
           })}
-          {merge > 0 && <g transform={`translate(${PAIR.cx} ${mix(PAIR.cy, RECEIPT.cy, merge)}) scale(${mix(PAIR.size * 0.86, rw, merge) / 100} ${mix(PAIR.size * 0.86, rh, merge) / 100})`}>
-            <path d={morphPath("squircle", "squircle", 1, 0, 0, 100)} fill={mixColor(w.tones[0], "#FFFBF5", merge)} />
-          </g>}
         </svg>
       )}
     </AbsoluteFill>
