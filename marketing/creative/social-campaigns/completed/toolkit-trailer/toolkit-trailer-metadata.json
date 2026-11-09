@@ -2,17 +2,18 @@
   "schemaVersion": "3.0",
   "campaign": {
     "slug": "toolkit-trailer",
-    "title": "App Toolkit: Trailer",
+    "title": "App Toolkit | Official App Trailer",
     "releaseDate": "2026-11-09",
-    "status": "approved"
+    "status": "published"
   },
   "software": "Android Studio",
   "copy": {
-    "title": "App Toolkit: Everyday tools in one app",
+    "title": "App Toolkit | Official App Trailer",
     "headline": "Everyday tools in one app",
     "description": "App Toolkit for Android: Water Eject, Surface Ruler, Protractor, Unit Converter, Tip and Bill Splitter, Decision Wheel and everyday tools in one Android app.",
     "longDescription": "One app. Many everyday moments. The App Toolkit name opens into the water world, where a 165 Hz tone pushes water out of a speaker; the last wave flattens into a ruler while the Surface Ruler measures 76.0 mm and the Protractor sweeps to 45 degrees; the reading becomes a unit conversion; the conversion folds into a receipt split two ways; the phone zooms into the Decision Wheel as it lands on Music, and its confetti becomes the app's tools, which gather into App Toolkit.",
     "altText": "Five everyday Android tools transform from one to the next on Pixel phones before gathering into the App Toolkit icon.",
+    "url": "https://youtu.be/GdYsGWrwLK4",
     "keywords": [
       "App Toolkit",
       "Android",
@@ -39,25 +40,28 @@
   },
   "files": {
     "soundtrack.mp3": {
-      "title": "App Toolkit: Trailer soundtrack",
+      "title": "App Toolkit | Official App Trailer (Soundtrack)",
       "description": "Original 32-second trailer score in F major at 120 BPM composed from the App Toolkit trailer timeline."
     },
     "source/public/soundtrack.mp3": {
-      "title": "App Toolkit: Trailer soundtrack",
+      "title": "App Toolkit | Official App Trailer (Soundtrack)",
       "description": "Original 32-second trailer score in F major at 120 BPM composed from the App Toolkit trailer timeline."
     },
     "output/video/app-toolkit-trailer-preview.mp4": {
-      "title": "App Toolkit: Trailer preview"
+      "title": "App Toolkit | Official App Trailer (Preview)",
+      "url": "https://youtu.be/GdYsGWrwLK4"
     },
     "output/video/app-toolkit-trailer-review.mp4": {
-      "title": "App Toolkit: Trailer review"
+      "title": "App Toolkit | Official App Trailer (Review)",
+      "url": "https://youtu.be/GdYsGWrwLK4"
     },
     "output/video/app-toolkit-trailer-master.mp4": {
-      "title": "App Toolkit: Everyday tools in one app",
-      "altText": "App Toolkit trailer on Pixel phones: Water Eject, Surface Ruler, Protractor, Unit Converter, Bill Splitter and Decision Wheel."
+      "title": "App Toolkit | Official App Trailer",
+      "altText": "App Toolkit trailer on Pixel phones: Water Eject, Surface Ruler, Protractor, Unit Converter, Bill Splitter and Decision Wheel.",
+      "url": "https://youtu.be/GdYsGWrwLK4"
     },
     "output/images/app-toolkit-trailer-thumbnail.png": {
-      "title": "App Toolkit: Everyday tools in one app",
+      "title": "App Toolkit | Official App Trailer",
       "altText": "App Toolkit icon and title with the official Get it on Google Play badge on a warm off-white background."
     },
     "output/images/contact-sheet.png": {

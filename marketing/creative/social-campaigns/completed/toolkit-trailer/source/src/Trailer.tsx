@@ -5,7 +5,7 @@ import { Shape } from "./Shape";
 import timeline from "./timeline.json";
 import icon from "./assets/icon.png";
 // Google's official badge, unaltered (marketing/assets/badges/google-play): moved and scaled whole, never redrawn.
-import badge from "../../../../../assets/badges/google-play/en_badge_web_generic.png";
+import badge from "../../../../../../assets/badges/google-play/en_badge_web_generic.png";
 import { B, FPS, clamp, enter, leave, mix, pop, ramp, smooth, standard } from "./lib/anim";
 import { CONFETTI, FONT, NEUTRAL, WORLDS } from "./theme";
 import type { World } from "./theme";

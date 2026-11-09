@@ -3,14 +3,14 @@
 import { cpSync, existsSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 
-const src = fileURLToPath(new URL("../../../../../ui/public/", import.meta.url));
+const src = fileURLToPath(new URL("../../../../../../ui/public/", import.meta.url));
 const dest = fileURLToPath(new URL("../public/", import.meta.url));
 if (!existsSync(`${src}material-next/device-frames`)) {
   console.error("marketing/ui/public is not ready. Run `npm install && npm run assets` in marketing/ui.");
   process.exit(1);
 }
 cpSync(src, dest, { recursive: true });
-const symbolsDir = fileURLToPath(new URL("../../../../../ui/node_modules/material-symbols/", import.meta.url));
+const symbolsDir = fileURLToPath(new URL("../../../../../../ui/node_modules/material-symbols/", import.meta.url));
 for (const file of ["material-symbols-outlined.woff2", "material-symbols-rounded.woff2"]) {
   if (existsSync(`${symbolsDir}${file}`)) {
     cpSync(`${symbolsDir}${file}`, `${dest}fonts/${file}`);

@@ -23,8 +23,9 @@ in order.
 
 ### Campaigns
 
-None yet. The first one follows the app redesign, see
-[`docs/plans/redesign-and-marketing.md`](../docs/plans/redesign-and-marketing.md).
+| Campaign | Type | Formats | Status |
+| --- | --- | --- | --- |
+| [completed/toolkit-trailer](creative/social-campaigns/completed/toolkit-trailer/README.md) | App trailer (`App Toolkit \| Official App Trailer`, [YouTube](https://youtu.be/GdYsGWrwLK4)) | 32 s 16:9 2K 90 fps video (`2560x1440`), 2K thumbnail (`2560x1440`), original soundtrack (`soundtrack.mp3`) | Published 2026-11-09 |
 
 A campaign folder holds `README.md`, `<campaign-slug>-metadata.json`, `captions/`, `source/` (the code that makes the
 media) and `output/` (finished files by type: `video/`, `images/`, `audio/`). `output/` is never committed.

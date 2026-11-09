@@ -1,6 +1,6 @@
 import React, { useLayoutEffect, useRef } from "react";
 import { cancelRender, continueRender, delayRender, staticFile } from "remotion";
-import { mount, setup } from "../../../../../ui/src/embed.js";
+import { mount, setup } from "../../../../../../ui/src/embed.js";
 import { PALETTE } from "./theme";
 
 // One-time setup: strip Webpack's chunked @font-face rules and preload font binaries into document.fonts from

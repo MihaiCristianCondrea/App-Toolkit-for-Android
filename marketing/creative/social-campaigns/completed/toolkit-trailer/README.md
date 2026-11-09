@@ -1,10 +1,11 @@
-# App Toolkit: Trailer
+# App Toolkit | Official App Trailer
 
 **One app. Many everyday moments.** A 32-second 16:9 trailer: the app's name, then one small story through the five custom store listings' worlds, in which one useful form turns into the next until the app's tools gather into its icon. The tools carry no titles; they show what they are.
 
 | | |
 | --- | --- |
-| Status | Approved and rendered at 2K (2560 x 1440, 90 fps) |
+| Status | Published on 2026-11-09 |
+| YouTube | https://youtu.be/GdYsGWrwLK4 (`App Toolkit \| Official App Trailer`) |
 | Sound | Our own score, `soundtrack.mp3`, synthesised by `source/scripts/compose.mjs` from the same timeline: 120 BPM in F major, 32 seconds, about -14 LUFS, peak -1 dBFS |
 | Design size | 1920 x 1080, 90 fps |
 | Preview (animatic) | 960 x 540, `output/video/app-toolkit-trailer-preview.mp4` |
@@ -14,8 +15,6 @@
 | Metadata | [`toolkit-trailer-metadata.json`](toolkit-trailer-metadata.json) and `output/schema.jsonld` |
 | Captions | `captions/youtube.txt`, `youtube-tags.txt`, `instagram.txt`, `x.txt`, `facebook.txt`, `tiktok.txt`, `linkedin.txt`, `threads.txt`: paste-ready; the YouTube title and alt text are in the metadata manifest |
 | Output | `output/`, generated and ignored by Git |
-
-It replaces the earlier trailers in `app-trailer/` and `trailer-v2/`, which stay as records.
 
 ## Why it was rebuilt
 
@@ -68,7 +67,7 @@ The arrangement follows the story's energy: an F pad under the intro, a rising m
 Requires Node 22+ and the UI kit's assets (`npm ci && npm run assets` in `marketing/ui`).
 
 ```sh
-cd marketing/creative/social-campaigns/toolkit-trailer/source
+cd marketing/creative/social-campaigns/completed/toolkit-trailer/source
 npm ci
 npm run lint
 npm run music              # the soundtrack, into ../soundtrack.mp3

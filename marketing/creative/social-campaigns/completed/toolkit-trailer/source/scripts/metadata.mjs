@@ -10,7 +10,7 @@ const root = fileURLToPath(new URL("../", import.meta.url));
 const campaign = path.resolve(root, "..");
 const out = path.join(campaign, "output");
 const manifest = path.join(campaign, "toolkit-trailer-metadata.json");
-const injector = path.resolve(campaign, "../../../skills/built-in/metadata/scripts/inject_metadata.py");
+const injector = path.resolve(campaign, "../../../../skills/built-in/metadata/scripts/inject_metadata.py");
 const python = process.platform === "win32" ? "python" : "python3";
 
 const collect = async (dir, ext) => {
@@ -23,6 +23,7 @@ const audio = [path.join(campaign, "soundtrack.mp3"), path.join(root, "public/so
 const videos = await collect(path.join(out, "video"), ".mp4");
 const images = await collect(path.join(out, "images"), ".png");
 const files = [...audio, ...videos, ...images];
+const jsonldArgs = existsSync(out) ? ["--jsonld", path.join(out, "schema.jsonld")] : [];
 
-execFileSync(python, [injector, "--manifest", manifest, "--jsonld", path.join(out, "schema.jsonld"), ...files], { stdio: "inherit" });
+execFileSync(python, [injector, "--manifest", manifest, ...jsonldArgs, ...files], { stdio: "inherit" });
 execFileSync(python, [injector, "--manifest", manifest, "--check", ...files], { stdio: "inherit" });

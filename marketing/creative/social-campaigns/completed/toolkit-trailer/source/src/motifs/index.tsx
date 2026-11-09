@@ -1,7 +1,7 @@
 import React from "react";
 import { LitScreen } from "../LitScreen";
 import { Shape } from "../Shape";
-import { shapeUrl } from "../../../../../../ui/src/kit/assets.js";
+import { shapeUrl } from "../../../../../../../ui/src/kit/assets.js";
 import { FRAME, measure } from "./geometry";
 import { scatterConfetti } from "./confetti";
 import { morphPath } from "./morph";
