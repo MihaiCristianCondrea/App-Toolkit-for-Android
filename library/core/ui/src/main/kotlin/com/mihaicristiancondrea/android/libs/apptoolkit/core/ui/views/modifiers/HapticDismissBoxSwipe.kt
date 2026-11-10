@@ -30,7 +30,7 @@ import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.runningFold
 
 /**
- * A [Modifier] that provides haptic feedback when a [SwipeToDismissBox] is swiped past a
+ * A [Modifier] that provides haptic feedback when a `SwipeToDismissBox` is swiped past a
  * certain threshold.
  *
  * This modifier observes the [swipeToDismissBoxState] and triggers a [HapticFeedbackType.GestureThresholdActivate]

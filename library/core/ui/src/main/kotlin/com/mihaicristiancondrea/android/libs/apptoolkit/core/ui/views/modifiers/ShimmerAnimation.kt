@@ -45,16 +45,15 @@ import androidx.compose.ui.graphics.drawscope.translate
  *
  * The animation is an infinite repeatable tween with a duration of 1500ms.
  *
- * @return A `Modifier` that applies the shimmer effect.
- *
- * @sample
- * ```
+ * ```kotlin
  * Box(
  *     modifier = Modifier
  *         .size(SizeConstants.OneHundredSize)
  *         .shimmerEffect()
  * )
  * ```
+ *
+ * @return A `Modifier` that applies the shimmer effect.
  */
 @Composable
 fun Modifier.shimmerEffect(): Modifier {

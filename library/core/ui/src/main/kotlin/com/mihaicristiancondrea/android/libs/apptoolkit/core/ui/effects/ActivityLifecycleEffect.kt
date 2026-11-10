@@ -31,7 +31,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extens
  * A Side Effect that listens for a specific [Lifecycle.Event] of the current Activity
  * and triggers a callback when that event occurs.
  *
- * This effect automatically finds the nearest [Activity] from the [LocalContext],
+ * This effect automatically finds the nearest `Activity` from the [LocalContext],
  * registers a [LifecycleEventObserver], and ensures the observer is removed when
  * the Composable leaves the composition or the inputs change.
  *
