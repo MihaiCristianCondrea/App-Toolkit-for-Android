@@ -168,6 +168,18 @@ Run the sample app with Android Studio or install a debug build on a connected d
 ./gradlew :sample:app:installDebug
 ```
 
+Generate the published library API reference from the repository root.
+
+```bash
+./gradlew :dokkaGenerate
+```
+
+Open `build/dokka/html/index.html` in a browser. The reference covers public declarations from the
+release variants of the published library modules.
+
+To build the same site in CI, run **Android CI** manually for `develop` from the GitHub Actions tab
+and download the `library-api-reference` artifact.
+
 ## Contributing
 
 Please read the [Code of Conduct](CODE_OF_CONDUCT.md) and follow the existing module architecture and

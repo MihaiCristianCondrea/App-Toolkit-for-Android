@@ -20,6 +20,7 @@ plugins {
     alias(notation = libs.plugins.android.application) apply false
     alias(notation = libs.plugins.android.library) apply false
     alias(libs.plugins.android.test) apply false
+    alias(libs.plugins.dokka)
     alias(libs.plugins.androidx.baselineprofile) apply false
     alias(notation = libs.plugins.kotlin.compose) apply false
     alias(notation = libs.plugins.kotlin.serialization) apply false
@@ -38,4 +39,17 @@ subprojects {
     // Keep sample and library coordinates distinct: mirrored project names under one group can resolve as self-dependencies.
     group = if (path.startsWith(":sample")) "${publishingGroupId.get()}.sample" else publishingGroupId.get()
     version = publishingVersion.get()
+
+    // Aggregate the modules that opt in through the library publishing convention.
+    val modulePath = path
+    pluginManager.withPlugin("com.mihaicristiancondrea.android.apptoolkit.library-publish") {
+        rootProject.dependencies {
+            add("dokka", project(modulePath))
+        }
+    }
+}
+
+dokka {
+    moduleName.set("App Toolkit for Android")
+    moduleVersion.set(publishingVersion)
 }
