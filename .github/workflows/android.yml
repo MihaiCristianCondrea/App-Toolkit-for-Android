@@ -92,6 +92,30 @@ jobs:
           path: build/dokka/html/
           if-no-files-found: error
 
+      - name: Upload GitHub Pages artifact
+        uses: actions/upload-pages-artifact@v4
+        with:
+          path: build/dokka/html/
+
+  deploy-library-api-reference:
+    name: Publish Library API reference
+    if: github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/develop'
+    needs: library-api-reference
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    concurrency:
+      group: library-api-reference-pages
+      cancel-in-progress: false
+    steps:
+      - name: Deploy API reference
+        id: deployment
+        uses: actions/deploy-pages@v4
+
   marketing-ui:
     name: Marketing UI and store validation
     runs-on: ubuntu-latest
