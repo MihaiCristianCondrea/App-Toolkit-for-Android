@@ -176,7 +176,8 @@ Generate the published library API reference from the repository root.
 
 Serve `build/dokka/html` with a local HTTP server and open its index. The reference covers public
 declarations from the release variants of published library modules, including each module README.
-The `dokka-plugins:site` plugin builds both guides and the Markdown exports in the same Gradle run.
+The documentation homepage uses this README. The `dokka-plugins:site` plugin generates the Markdown
+exports in the same Gradle run.
 Mermaid diagrams render in the browser using jsDelivr.
 
 Android CI runs the same command and publishes the [documentation site](https://mihaicristiancondrea.github.io/App-Toolkit-for-Android/)

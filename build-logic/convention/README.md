@@ -73,8 +73,8 @@ flowchart TD
 - `generateDokkaModuleDoc` checks local README links and adapts the README to Dokka's module
   format. The release source set includes this output and analyzes the release runtime classes.
 - The `:site` plugin in the separate `dokka-plugins` build runs inside Dokka. Module pages carry
-  references to shared assets, and the completed site gets the toolbar, Mermaid rendering, Markdown
-  exports, and guides. Guide links to local pages and anchors are checked during generation.
+  references to shared assets. The completed site includes the project README on the homepage,
+  Mermaid rendering, and Markdown exports.
 - Dokka generation fails on worker warnings except for the known AndroidX
   `MenuHost.addMenuProvider` warning about `Lifecycle.State`.
 - `:dokkaGenerate` aggregates modules that apply `library-publish` into `build/dokka/html`. Each

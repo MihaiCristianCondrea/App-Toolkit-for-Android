@@ -15,8 +15,7 @@ dependencies {
 }
 
 tasks.processResources {
-    from(rootProject.layout.projectDirectory.dir("../docs/site")) {
-        include("*.md")
-        into("site/guides")
+    from(rootProject.layout.projectDirectory.file("../README.md")) {
+        into("site")
     }
 }

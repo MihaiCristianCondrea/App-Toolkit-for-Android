@@ -14,8 +14,8 @@ object SiteAssetsInstaller : PageTransformer {
         }
 
     // Partials carry relative asset references. Only a complete publication writes the shared files.
-    internal fun publish(root: File, hasGuides: Boolean) {
-        root.resolve(SITE_SCRIPT).writeText("const toolkitHasGuides = $hasGuides;\n" + siteResource("site.js"))
+    internal fun publish(root: File) {
+        root.resolve(SITE_SCRIPT).writeText(siteResource("site.js"))
         root.resolve(SITE_STYLES).writeText(siteResource("site.css"))
     }
 }

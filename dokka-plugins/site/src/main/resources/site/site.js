@@ -1,24 +1,9 @@
 const content = document.querySelector("#main #content");
 if (content) {
-    const root = new URL("../", document.currentScript.src);
     const toolbar = document.createElement("nav");
     toolbar.className = "toolkit-docs-toolbar";
     toolbar.setAttribute("aria-label", "Documentation");
     content.prepend(toolbar);
-
-    function addLink(url, label) {
-        const link = document.createElement("a");
-        link.href = new URL(url, root);
-        link.textContent = label;
-        toolbar.append(link);
-        return link;
-    }
-
-    addLink("index.html", "API reference");
-    if (toolkitHasGuides) {
-        addLink("guides/getting-started.html", "Getting Started");
-        addLink("guides/shell-and-navigation.html", "Shell and Navigation");
-    }
 
     const markdown = new URL(location.href);
     markdown.pathname = markdown.pathname.endsWith("/")
@@ -26,7 +11,10 @@ if (content) {
         : markdown.pathname.replace(/\.html$/, ".md");
     markdown.search = "";
     markdown.hash = "";
-    const rawLink = addLink(markdown.href, "View raw Markdown");
+    const rawLink = document.createElement("a");
+    rawLink.href = markdown.href;
+    rawLink.textContent = "View raw Markdown";
+    toolbar.append(rawLink);
     if (navigator.clipboard?.writeText) {
         const button = document.createElement("button");
         button.type = "button";

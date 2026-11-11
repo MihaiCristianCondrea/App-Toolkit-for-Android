@@ -15,21 +15,25 @@ class MarkdownExportAction(private val context: DokkaContext) : PostAction {
         if (context.configuration.delayTemplateSubstitution) return
 
         val root = context.configuration.outputDir
-        val hasGuides = context.configuration.modules.isNotEmpty()
-        SiteAssetsInstaller.publish(root, hasGuides)
+        val homepage = root.resolve("index.html").takeIf { context.configuration.modules.isNotEmpty() }
+        SiteAssetsInstaller.publish(root)
 
         val converter = FlexmarkHtmlConverter.builder(
             MutableDataSet().set(FlexmarkHtmlConverter.OUTPUT_ATTRIBUTES_ID, false)
         ).build()
         root.walkTopDown().filter { it.isFile && it.extension == "html" }.forEach { page ->
             val baseUrl = PUBLISHED_SITE + page.relativeTo(root).invariantSeparatorsPath
-            val content = Jsoup.parse(page, "UTF-8", baseUrl).selectFirst("#main #content") ?: return@forEach
+            val document = Jsoup.parse(page, "UTF-8", baseUrl)
+            val content = document.selectFirst("#main #content") ?: return@forEach
+            if (page == homepage) {
+                prependHomepageReadme(content, root)
+                document.outputSettings().prettyPrint(false)
+                page.writeText(document.outerHtml())
+            }
             prepareMarkdown(content)
             page.resolveSibling("${page.nameWithoutExtension}.md")
                 .writeText(converter.convert(content).trim() + "\n")
         }
-
-        if (hasGuides) publishGuides(root)
     }
 
     private fun prepareMarkdown(content: Element) {

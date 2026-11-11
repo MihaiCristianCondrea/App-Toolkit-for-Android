@@ -13,19 +13,7 @@
     cursor: pointer;
 }
 
-.toolkit-guide {
-    color-scheme: light dark;
-    font: 1rem/1.65 system-ui, sans-serif;
-    margin: 0;
-}
-
-.toolkit-guide main {
-    max-width: 52rem;
-    margin: auto;
-    padding: 1.5rem;
-}
-
-.toolkit-guide pre,
+.toolkit-readme pre,
 .toolkit-diagram {
     margin: 1rem 0;
     padding: 1rem;
