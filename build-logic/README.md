@@ -145,3 +145,9 @@ No warning and no Firebase simply means the file is absent, which is expected on
 ## Current risks
 
 The included build imports the root catalog by relative path, so relocating it requires updating that path and root plugin management together.
+
+## Dokka documentation
+
+The separate included build at [`dokka-plugins`](../dokka-plugins/) contains the Mermaid renderer
+loaded by Dokka. The convention build registers `generateDokkaModuleDoc` for each published module
+to prepare its README before Dokka generates the API reference.

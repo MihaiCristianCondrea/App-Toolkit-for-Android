@@ -15,6 +15,9 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+import com.mihaicristiancondrea.android.apptoolkit.buildlogic.MERMAID_PLUGIN
+import com.mihaicristiancondrea.android.apptoolkit.buildlogic.checkDokkaWarnings
+
 plugins {
     id("com.mihaicristiancondrea.android.apptoolkit.module-boundaries")
     alias(notation = libs.plugins.android.application) apply false
@@ -53,3 +56,7 @@ dokka {
     moduleName.set("App Toolkit for Android")
     moduleVersion.set(publishingVersion)
 }
+
+dependencies { dokkaPlugin(MERMAID_PLUGIN) }
+
+checkDokkaWarnings()

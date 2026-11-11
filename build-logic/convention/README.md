@@ -70,6 +70,12 @@ flowchart TD
 - Dokka uses the same variant as publishing. Android variants share `src/main`, so including debug
   would document the same sources twice. Kotlin and Java visibility determine which declarations
   appear. Public data source and network contracts can live under `data.local` and `data.remote`.
+- `generateDokkaModuleDoc` checks local README links and adapts the README to Dokka's module
+  format. The release source set includes this output and analyzes the release runtime classes.
+- The Mermaid renderer runs inside Dokka from the separate `dokka-plugins` included build. The
+  generated site loads Mermaid from jsDelivr on pages with diagrams.
+- Dokka generation fails on worker warnings except for the known AndroidX
+  `MenuHost.addMenuProvider` warning about `Lifecycle.State`.
 - `:dokkaGenerate` aggregates modules that apply `library-publish` into `build/dokka/html`. Each
   declaration with a source location links to its file and line on `develop`. Documentation generation
   runs on demand and is independent of Maven publication.

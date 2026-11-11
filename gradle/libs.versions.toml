@@ -35,6 +35,7 @@ googleMobileServices = "4.5.0"
 mannodermausPlugin = "2.0.2"
 kotlin = "2.4.21"
 dokka = "2.3.0"
+dokkaKotlinxHtml = "0.9.1"
 kotlinxCollectionsImmutable = "0.5.2"
 kotlinxCoroutines = "1.11.0"
 kotlinxSerialization = "1.12.0"
@@ -114,6 +115,9 @@ android-billing = { module = "com.android.billingclient:billing", version.ref = 
 android-gradlePlugin = { group = "com.android.tools.build", name = "gradle", version.ref = "androidGradlePlugin" }
 
 # Documentation
+dokka-core = { module = "org.jetbrains.dokka:dokka-core", version.ref = "dokka" }
+dokka-base = { module = "org.jetbrains.dokka:dokka-base", version.ref = "dokka" }
+dokka-kotlinx-html = { module = "org.jetbrains.kotlinx:kotlinx-html-jvm", version.ref = "dokkaKotlinxHtml" }
 dokka-gradlePlugin = { group = "org.jetbrains.dokka", name = "dokka-gradle-plugin", version.ref = "dokka" }
 
 # Google
@@ -185,6 +189,7 @@ androidx-test-runner = { module = "androidx.test:runner", version.ref = "android
 test-mockk-android = { module = "io.mockk:mockk-android", version.ref = "testMockk" }
 
 [plugins]
+kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
 dokka = { id = "org.jetbrains.dokka", version.ref = "dokka" }
 android-test = { id = "com.android.test", version.ref = "androidGradlePlugin" }
 androidx-baselineprofile = { id = "androidx.baselineprofile", version.ref = "androidxBenchmark" }

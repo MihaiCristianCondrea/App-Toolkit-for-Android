@@ -59,6 +59,11 @@ def export_api(page, root):
         link["href"] = urljoin(base, link["href"])
     for image in export.select("img[src]"):
         image["src"] = urljoin(base, image["src"])
+    for block in export.select("pre.mermaid"):
+        diagram = export.new_tag("code", attrs={"class": "language-mermaid"})
+        diagram.string = block.get_text()
+        block.clear()
+        block.append(diagram)
     for signature in export.select(".symbol"):
         sources = signature.select(".source-link-wrapper")
         for source in sources:
@@ -96,6 +101,9 @@ def render_guides(root):
             f'<body class="toolkit-guide"><main>{html}</main></body></html>',
             "html.parser",
         )
+        document.head.append(document.new_tag(
+            "script", src="../scripts/mermaid-loader_deferred.js", defer=""
+        ))
         copyfile(source, directory / source.name)
         decorate(document, document.main, directory / f"{slug}.html", root)
 

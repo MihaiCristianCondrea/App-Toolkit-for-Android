@@ -175,7 +175,8 @@ Generate the published library API reference from the repository root.
 ```
 
 Open `build/dokka/html/index.html` in a browser. The reference covers public declarations from the
-release variants of the published library modules.
+release variants of the published library modules. Each module page includes its README, with
+Mermaid diagrams rendered in the browser. The build checks local README links and Dokka warnings.
 
 The [published documentation](https://mihaicristiancondrea.github.io/App-Toolkit-for-Android/)
 includes Getting Started, Shell and Navigation, and Markdown downloads for guide and API pages.
