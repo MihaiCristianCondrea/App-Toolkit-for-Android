@@ -1,4 +1,4 @@
-package com.mihaicristiancondrea.android.apptoolkit.dokka.mermaid
+package com.mihaicristiancondrea.android.apptoolkit.dokka.site
 
 import kotlinx.html.FlowContent
 import kotlinx.html.pre

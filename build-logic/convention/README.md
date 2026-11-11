@@ -72,8 +72,9 @@ flowchart TD
   appear. Public data source and network contracts can live under `data.local` and `data.remote`.
 - `generateDokkaModuleDoc` checks local README links and adapts the README to Dokka's module
   format. The release source set includes this output and analyzes the release runtime classes.
-- The Mermaid renderer runs inside Dokka from the separate `dokka-plugins` included build. The
-  generated site loads Mermaid from jsDelivr on pages with diagrams.
+- The `:site` plugin in the separate `dokka-plugins` build runs inside Dokka. Module pages carry
+  references to shared assets, and the completed site gets the toolbar, Mermaid rendering, Markdown
+  exports, and guides. Guide links to local pages and anchors are checked during generation.
 - Dokka generation fails on worker warnings except for the known AndroidX
   `MenuHost.addMenuProvider` warning about `Lifecycle.State`.
 - `:dokkaGenerate` aggregates modules that apply `library-publish` into `build/dokka/html`. Each

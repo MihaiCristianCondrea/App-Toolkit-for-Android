@@ -148,6 +148,8 @@ The included build imports the root catalog by relative path, so relocating it r
 
 ## Dokka documentation
 
-The separate included build at [`dokka-plugins`](../dokka-plugins/) contains the Mermaid renderer
-loaded by Dokka. The convention build registers `generateDokkaModuleDoc` for each published module
-to prepare its README before Dokka generates the API reference.
+The [`dokka-plugins`](../dokka-plugins/) included build supplies the `:site` plugin that runs inside
+Dokka. It renders Mermaid blocks, installs the site toolbar, exports page Markdown, and publishes the
+guides from `docs/site`. The root `:dokkaGenerate` task writes the complete site to `build/dokka/html`.
+The convention build registers `generateDokkaModuleDoc` to prepare each published module's README
+for the API reference. Maven publication is independent of documentation generation.

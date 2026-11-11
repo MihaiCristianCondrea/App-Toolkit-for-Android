@@ -13,4 +13,4 @@ dependencyResolutionManagement {
 }
 
 rootProject.name = "dokka-plugins"
-include(":mermaid")
+include(":site")

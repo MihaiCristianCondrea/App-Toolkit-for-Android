@@ -31,7 +31,7 @@ class LibraryDocsPlugin : Plugin<Project> {
     override fun apply(target: Project): Unit = with(target) {
         pluginManager.apply("org.jetbrains.dokka")
 
-        dependencies.add("dokkaPlugin", MERMAID_PLUGIN)
+        dependencies.add("dokkaPlugin", DOKKA_SITE_PLUGIN)
         checkDokkaWarnings()
 
         val moduleDoc = tasks.register<ReadmeModuleDocTask>("generateDokkaModuleDoc") {
@@ -79,4 +79,4 @@ class LibraryDocsPlugin : Plugin<Project> {
     }
 }
 
-const val MERMAID_PLUGIN = "com.mihaicristiancondrea.android.apptoolkit.dokka:mermaid:1.0"
+const val DOKKA_SITE_PLUGIN = "com.mihaicristiancondrea.android.apptoolkit.dokka:site:1.0"

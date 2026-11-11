@@ -15,7 +15,7 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import com.mihaicristiancondrea.android.apptoolkit.buildlogic.MERMAID_PLUGIN
+import com.mihaicristiancondrea.android.apptoolkit.buildlogic.DOKKA_SITE_PLUGIN
 import com.mihaicristiancondrea.android.apptoolkit.buildlogic.checkDokkaWarnings
 
 plugins {
@@ -57,6 +57,6 @@ dokka {
     moduleVersion.set(publishingVersion)
 }
 
-dependencies { dokkaPlugin(MERMAID_PLUGIN) }
+dependencies { dokkaPlugin(DOKKA_SITE_PLUGIN) }
 
 checkDokkaWarnings()
