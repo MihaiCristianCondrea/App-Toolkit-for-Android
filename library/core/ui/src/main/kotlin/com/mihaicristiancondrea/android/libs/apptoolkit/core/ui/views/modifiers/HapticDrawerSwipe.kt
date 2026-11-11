@@ -38,8 +38,6 @@ import kotlinx.coroutines.flow.filter
  *
  * @param state The [DrawerState] of the drawer to monitor for swipe events.
  * @return A [Modifier] that applies the haptic feedback behavior.
- *
- * @sample com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.modifiers.HapticDrawerSwipeSample
  */
 @Composable
 fun Modifier.hapticDrawerSwipe(state: DrawerState): Modifier {

@@ -1,0 +1,18 @@
+import {readFile,access} from "node:fs/promises";
+import {execFileSync} from "node:child_process";
+import {fileURLToPath} from "node:url";
+import {createHash} from "node:crypto";
+import path from "node:path";
+import {readPng} from "./png.mjs";
+const root=fileURLToPath(new URL("../",import.meta.url)),manifest=path.join(root,"metadata.json");
+const data=JSON.parse(await readFile(manifest,"utf8")),files=Object.keys(data.files).map(f=>path.resolve(root,f));
+if(files.length!==15)throw Error("Expected 15 graphics");
+await Promise.all(files.map(f=>access(f)));
+const pixels=async file=>createHash("sha256").update((await readPng(file)).data).digest("hex");
+const before=await Promise.all(files.map(pixels));
+const injector=fileURLToPath(new URL("../../../../../../../../skills/built-in/metadata/scripts/inject_metadata.py",import.meta.url));
+const tag=process.argv.includes("--phone-only")?files.filter(f=>f.includes("phone-screenshots")):files;
+execFileSync(process.platform==="win32"?"python":"python3",[injector,"--manifest",manifest,...tag],{stdio:"inherit"});
+execFileSync(process.platform==="win32"?"python":"python3",[injector,"--manifest",manifest,"--check",...files],{stdio:"inherit"});
+for(const [i,file] of files.entries())if(await pixels(file)!==before[i])throw Error("Metadata changed pixels: "+file);
+console.log("All 15 graphics read back; decoded pixels unchanged.");

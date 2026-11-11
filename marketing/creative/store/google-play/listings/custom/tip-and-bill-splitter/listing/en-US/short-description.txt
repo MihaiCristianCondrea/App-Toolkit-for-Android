@@ -1,0 +1,1 @@
+Calculate a tip and split the bill equally with a clear per-person amount.

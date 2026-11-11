@@ -1,0 +1,38 @@
+{
+  "id": "unit-converter",
+  "audience": "People converting everyday length, mass, temperature, volume and decimal digital storage units",
+  "targeting": {
+    "url": true,
+    "countries": [],
+    "keywords": "keywords.txt",
+    "googleAds": false
+  },
+  "status": "live",
+  "log": [
+    {
+      "date": "2026-11-08",
+      "status": "planned",
+      "note": "Prepared English metadata and a Material transformation creative campaign. Production availability and search targeting require Play Console confirmation before upload. Not published."
+    },
+    {
+      "date": "2026-11-08",
+      "status": "planned",
+      "note": "Completed 6 phone, 4 foldable and 4 desktop screenshots, selected the Connected measurements feature graphic, and copied the official icon. All 16 assets passed metadata readback and pixel preservation, package audit and Play listing validation. Six phone captures repeat byte-identically. Production rollout and Play Console keyword availability remain unconfirmed. Not uploaded."
+    },
+    {
+      "date": "2026-11-08",
+      "status": "planned",
+      "note": "Condensed the phone campaign to four distinct compositions: close converter hero, jointly solved mass/volume Pixel pair, grouped temperature/data UI details and the broader Measure workspace. Other upload graphics preserved. Not published."
+    },
+    {
+      "date": "2026-11-08",
+      "status": "planned",
+      "note": "Restored whole 3D Pixel frames to the Temperature/Data image with a jointly solved reversed stagger, and added five contained MaterialShape accents per phone composition. Preserved all other upload graphics and listing text. Not published."
+    },
+    {
+      "date": "2026-11-08",
+      "status": "live",
+      "note": "Approved by Google Play review and published."
+    }
+  ]
+}

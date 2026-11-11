@@ -89,16 +89,11 @@ checks the web migration; Android screenshot parity remains a separate campaign 
 
 ## 3D device
 
-`src/kit/pixel-3d.js` renders the Pixel 9 Pro XL in 3D with three.js (`createPixel3D(canvas)`, then
-`pose(turn)` from 0, the back, to 1, the front). `attachScreen(element)` puts a live screen (a
-frameless `ScreenHost`, 430 × 957) on its display through a CSS3D layer drawn with the same camera,
-so the real UI turns with the phone and stays interactive.
-
-The model is a BlenderKit Royalty Free asset, usable in our work but not redistributable, so this
-public repository never contains it. `npm run assets` copies it from a sibling `android-skills`
-checkout (or `ANDROID_SKILLS=/path/to/android-skills`) into ignored `public/models/`, with three.js's
-Draco decoder in `public/draco/`. Without it, keep the flat frame. The `marketing-ui` skill covers the
-technique and the scroll-built presentation rules.
+The phone is Material-Next's own Pixel 9 Pro XL, drawn in 3D by `<mnw-device-frame>` (Material-Next
+0.2.0 and later): every framed screen in the gallery, the prototype page, captures and the store
+listing uses it, with the live screen on its display. It needs no model file. For a phone that turns
+on scroll, set the frame's `yaw` and `pitch`; for a scene of your own, use `createPixelModel()` from
+`material-next-web-components/marketing/ui/pixel-model.js`. The `marketing-ui` skill covers both.
 
 ## Translated Screens (`src/screens/`)
 
@@ -154,3 +149,7 @@ Decision Wheel no longer has preset chips. SOS uses separate SOS and Morse-messa
 ## Native ad previews
 
 The prototype's Show ads switch reveals one shared sponsored-content layout on each overview: Quick Tools after Sensors, Measure between Convert & split and Count & time, and Play & Decide below Chance. Search hides these previews. They are static layout samples, not live ad requests, and are absent when Show ads is off.
+
+## Water Eject captures
+
+`waterCapture: true` holds an explicit `waterRunning` / `waterSeconds` state without starting audio, creating a timer or resetting the running preview. Use it for stills and deterministic checks. The idle and running readouts, 200dp visual, button labels, guidance and note follow `WaterEjectTool.kt` and the sample's English resources. `scripts/check-water-eject.mjs` checks ready and running copy, a stable countdown and silent capture behavior.

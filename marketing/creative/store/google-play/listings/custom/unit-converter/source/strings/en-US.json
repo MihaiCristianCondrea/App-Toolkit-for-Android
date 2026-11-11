@@ -1,0 +1,85 @@
+{
+  "screenshots": [
+    {
+      "id": "convert",
+      "lines": [
+        "Convert units",
+        "both ways"
+      ],
+      "highlight": "Convert units",
+      "icon": "swap_vert",
+      "alt": "Large close view of the real converter showing 1 metre and 100 centimetres; the phone extends beyond the top edge"
+    },
+    {
+      "id": "everyday",
+      "lines": [
+        "Mass and volume",
+        "side by side"
+      ],
+      "highlight": "Mass and volume",
+      "icon": "swap_horiz",
+      "alt": "Two Pixels in complementary poses: mass conversion from 2.26796185 kg to 5 lb and volume from 1 L to 1000 mL"
+    },
+    {
+      "id": "temperature-data",
+      "lines": [
+        "Temperature",
+        "and data too"
+      ],
+      "highlight": "data",
+      "icon": "storage",
+      "alt": "Two whole Pixels showing 20 Celsius to 68 Fahrenheit and 1 GB to 1000 MB, with native controls and the decimal units note"
+    },
+    {
+      "id": "toolkit",
+      "lines": [
+        "More",
+        "everyday tools"
+      ],
+      "highlight": "everyday tools",
+      "icon": "grid_view",
+      "alt": "The real Measure workspace with Surface Ruler, Protractor, Unit Converter and Tip & Bill Splitter"
+    }
+  ],
+  "tabletScreenshots": [
+    {
+      "id": "length",
+      "alt": "Length conversion from 1 metre to 100 centimetres on the foldable layout"
+    },
+    {
+      "id": "temperature",
+      "alt": "Temperature conversion from 20 Celsius to 68 Fahrenheit on the foldable layout"
+    },
+    {
+      "id": "mass",
+      "alt": "Mass conversion from 2.26796185 kilograms to 5 pounds on the foldable layout"
+    },
+    {
+      "id": "data",
+      "alt": "Decimal storage conversion from 1 gigabyte to 1000 megabytes on the foldable layout"
+    }
+  ],
+  "desktopScreenshots": [
+    {
+      "id": "length",
+      "alt": "Length conversion from 1 metre to 100 centimetres on the desktop layout"
+    },
+    {
+      "id": "temperature",
+      "alt": "Temperature conversion from 20 Celsius to 68 Fahrenheit on the desktop layout"
+    },
+    {
+      "id": "mass",
+      "alt": "Mass conversion from 2.26796185 kilograms to 5 pounds on the desktop layout"
+    },
+    {
+      "id": "data",
+      "alt": "Decimal storage conversion from 1 gigabyte to 1000 megabytes on the desktop layout"
+    }
+  ],
+  "featureGraphic": {
+    "brand": "App Toolkit",
+    "title": "Unit Converter",
+    "tagline": "Everyday units made simple"
+  }
+}

@@ -1,0 +1,42 @@
+{
+  "id": "speaker-water-eject",
+  "audience": "People looking for a simple speaker tone after their phone speaker gets wet",
+  "targeting": {
+    "url": true,
+    "countries": [],
+    "keywords": "keywords.txt",
+    "googleAds": false
+  },
+  "status": "live",
+  "log": [
+    {
+      "date": "2026-11-07",
+      "note": "Drafted the English listing and aquatic creative. Graphics await a faithful Water Eject screen and production version verification."
+    },
+    {
+      "date": "2026-11-07",
+      "status": "planned",
+      "note": "Refocused copy and first five screenshots on Water Eject; generated all 18 graphics and corrected Marketing UI parity. Production rollout confirmation remains required before upload."
+    },
+    {
+      "date": "2026-11-07",
+      "status": "planned",
+      "note": "Redesigned as an aqua water campaign with real 3D Pixel poses, closer control views, refreshed headlines and shared liquid artwork. Phone graphics render at 2160 x 3840. Production confirmation remains required before publication."
+    },
+    {
+      "date": "2026-11-07",
+      "status": "planned",
+      "note": "Final ASO pass: title Water Eject: App Toolkit, a plainer short description, a verified full description, 280 search keywords (6 rejected, see keyword-review.md) and a new Ripple feature graphic without 165 Hz. Screenshots solved and verified on all three device types. Not uploaded; Play Console keyword availability and production rollout of 26.11.02 remain to be confirmed."
+    },
+    {
+      "date": "2026-11-07",
+      "status": "planned",
+      "note": "Moved the whole campaign palette, ground and ribbons included, to the Water Eject sheet's blues; re-rendered and re-verified every graphic."
+    },
+    {
+      "date": "2026-11-08",
+      "status": "live",
+      "note": "Approved by Google Play review and published."
+    }
+  ]
+}

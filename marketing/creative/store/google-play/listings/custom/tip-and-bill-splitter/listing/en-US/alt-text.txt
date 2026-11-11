@@ -1,0 +1,13 @@
+phone-screenshots/1-dinner.png	Tip and Bill Splitter with an 84.50 USD bill, 15 percent tip, three people and a 32.40 USD share
+phone-screenshots/2-tip.png	A 52 euro bill with the 10 percent tip selected, two people and a 28.60 euro share
+phone-screenshots/3-friends.png	A 126 GBP bill, 10 percent tip and four people, showing 34.65 pounds per person
+phone-screenshots/4-currency.png	JPY selected for a 4800 yen bill, 10 percent tip and two people, showing 2640 yen each
+phone-screenshots/5-toolkit.png	The real Measure workspace with Tip and Bill Splitter, Unit Converter and Counter
+tablet-screenshots/1-dinner.png	USD bill, tip and per-person result on the foldable layout
+tablet-screenshots/2-tip.png	Euro bill with a 10 percent tip and two people on the foldable layout
+tablet-screenshots/3-friends.png	A 126 GBP bill split four ways with a 10 percent tip on the foldable layout
+tablet-screenshots/4-currency.png	A yen bill and whole-yen shares on the foldable layout
+desktop-screenshots/1-dinner.png	USD bill, tip and per-person result on the desktop layout
+desktop-screenshots/2-tip.png	Euro bill with a 10 percent tip and two people on the desktop layout
+desktop-screenshots/3-friends.png	A 126 GBP bill split four ways with a 10 percent tip on the desktop layout
+desktop-screenshots/4-currency.png	A yen bill and whole-yen shares on the desktop layout

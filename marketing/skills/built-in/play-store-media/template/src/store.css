@@ -20,10 +20,10 @@ html[data-export] #store { padding: 0; gap: 0; display: block; }
 .caption .line--pill { margin-top: 10px; }
 .caption .line--pill b { display: inline-block; font-weight: 700; padding: 0 .22em .08em; border-radius: 999px; background: var(--pill); color: var(--on-pill); }
 
-/* The kit's Pixel 9 Pro XL frame (469 x 992 CSS px), scaled; it runs off the bottom edge. */
-.phone { position: absolute; left: 50%; top: 404px; width: 469px; height: 992px; transform: translateX(-50%) scale(1.48); transform-origin: 50% 0; z-index: 1;
+/* Material Next's 3D Pixel 9 Pro XL frame (465.23 x 988.76 CSS px), scaled; it runs off the bottom edge. */
+.phone { position: absolute; left: 50%; top: 404px; width: 465.23px; height: 988.76px; transform: translateX(-50%) scale(1.48); transform-origin: 50% 0; z-index: 1;
   filter: drop-shadow(0 40px 60px rgba(0, 33, 17, .22)); }
-.phone > * { width: 469px; height: 992px; }
+.phone > * { width: 465.23px; height: 988.76px; }
 
 /* Feature graphic: 1024 x 500. Text centred (the part Play never crops), app screens at the sides, no device frame. */
 .feature { position: relative; width: 1024px; height: 500px; overflow: hidden; background: var(--md-sys-color-primary); color: var(--md-sys-color-on-primary); }

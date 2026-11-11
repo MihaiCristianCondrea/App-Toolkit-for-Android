@@ -34,6 +34,7 @@ class LibraryPublishPlugin : Plugin<Project> {
 
     override fun apply(target: Project): Unit = with(target) {
         pluginManager.apply("maven-publish")
+        pluginManager.apply(LibraryDocsPlugin::class.java)
 
         extensions.getByType<LibraryExtension>().publishing {
             singleVariant(PUBLISHED_VARIANT) {
@@ -55,8 +56,6 @@ class LibraryPublishPlugin : Plugin<Project> {
             }
         }
     }
-
-    private companion object {
-        const val PUBLISHED_VARIANT = "release"
-    }
 }
+
+internal const val PUBLISHED_VARIANT = "release"

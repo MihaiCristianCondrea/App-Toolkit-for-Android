@@ -34,6 +34,10 @@ firebasePerformancePlugin = "2.0.2"
 googleMobileServices = "4.5.0"
 mannodermausPlugin = "2.0.2"
 kotlin = "2.4.21"
+dokka = "2.3.0"
+dokkaKotlinxHtml = "0.9.1"
+dokkaJsoup = "1.23.2"
+flexmark = "0.64.8"
 kotlinxCollectionsImmutable = "0.5.2"
 kotlinxCoroutines = "1.11.0"
 kotlinxSerialization = "1.12.0"
@@ -112,6 +116,16 @@ firebase-perf = { module = "com.google.firebase:firebase-perf" }
 android-billing = { module = "com.android.billingclient:billing", version.ref = "androidBilling" }
 android-gradlePlugin = { group = "com.android.tools.build", name = "gradle", version.ref = "androidGradlePlugin" }
 
+# Documentation
+dokka-core = { module = "org.jetbrains.dokka:dokka-core", version.ref = "dokka" }
+dokka-base = { module = "org.jetbrains.dokka:dokka-base", version.ref = "dokka" }
+dokka-kotlinx-html = { module = "org.jetbrains.kotlinx:kotlinx-html-jvm", version.ref = "dokkaKotlinxHtml" }
+dokka-jsoup = { module = "org.jsoup:jsoup", version.ref = "dokkaJsoup" }
+flexmark-parser = { module = "com.vladsch.flexmark:flexmark", version.ref = "flexmark" }
+flexmark-tables = { module = "com.vladsch.flexmark:flexmark-ext-tables", version.ref = "flexmark" }
+flexmark-html-to-markdown = { module = "com.vladsch.flexmark:flexmark-html2md-converter", version.ref = "flexmark" }
+dokka-gradlePlugin = { group = "org.jetbrains.dokka", name = "dokka-gradle-plugin", version.ref = "dokka" }
+
 # Google
 google-accompanist-drawablepainter = { module = "com.google.accompanist:accompanist-drawablepainter", version.ref = "googleAccompanistDrawablePainter" }
 google-guava = { module = "com.google.guava:guava", version.ref = "googleGuava" }
@@ -181,6 +195,8 @@ androidx-test-runner = { module = "androidx.test:runner", version.ref = "android
 test-mockk-android = { module = "io.mockk:mockk-android", version.ref = "testMockk" }
 
 [plugins]
+kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
+dokka = { id = "org.jetbrains.dokka", version.ref = "dokka" }
 android-test = { id = "com.android.test", version.ref = "androidGradlePlugin" }
 androidx-baselineprofile = { id = "androidx.baselineprofile", version.ref = "androidxBenchmark" }
 roborazzi = { id = "io.github.takahirom.roborazzi", version.ref = "testRoborazzi" }

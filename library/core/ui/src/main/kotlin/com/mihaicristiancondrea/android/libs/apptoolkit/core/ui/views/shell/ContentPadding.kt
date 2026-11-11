@@ -71,7 +71,7 @@ private class SumPaddingValues(private val first: PaddingValues, private val sec
 }
 
 /**
- * Splits a scaffold's [padding] into what the frame applies itself, its top and sides, and the
+ * Splits a scaffold's padding into what the frame applies itself, its top and sides, and the
  * bottom, which the content receives through [LocalContentPadding] so it can scroll behind it.
  */
 fun PaddingValues.withoutBottom(): PaddingValues = object : PaddingValues {

@@ -168,6 +168,21 @@ Run the sample app with Android Studio or install a debug build on a connected d
 ./gradlew :sample:app:installDebug
 ```
 
+Generate the published library API reference from the repository root.
+
+```bash
+./gradlew :dokkaGenerate
+```
+
+Serve `build/dokka/html` with a local HTTP server and open its index. The reference covers public
+declarations from the release variants of published library modules, including each module README.
+The documentation homepage uses this README. The `dokka-plugins:site` plugin generates the Markdown
+exports in the same Gradle run.
+Mermaid diagrams render in the browser using jsDelivr.
+
+Android CI runs the same command and publishes the [documentation site](https://mihaicristiancondrea.github.io/App-Toolkit-for-Android/)
+on pushes to `develop`. The docs job also uploads the `library-api-reference` artifact.
+
 ## Contributing
 
 Please read the [Code of Conduct](CODE_OF_CONDUCT.md) and follow the existing module architecture and

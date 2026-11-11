@@ -47,6 +47,8 @@ plugins {
     }
 }
 
+includeBuild("dokka-plugins")
+
 rootProject.name = "App-Toolkit-for-Android"
 
 include(":sample:app")

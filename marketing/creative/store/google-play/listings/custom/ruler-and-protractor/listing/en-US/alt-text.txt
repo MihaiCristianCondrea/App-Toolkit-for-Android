@@ -1,0 +1,13 @@
+phone-screenshots/1-ruler.png	Surface Ruler with centimetre and inch scales and a movable reading line
+phone-screenshots/2-protractor.png	Protractor displaying a 45 degree angle with its slider and presets
+phone-screenshots/3-advanced.png	Surface Ruler in Advanced mode with measurement settings
+phone-screenshots/4-converter.png	Unit Converter showing a length conversion
+phone-screenshots/5-measure.png	Measure workspace with ruler and protractor tools
+tablet-screenshots/1-ruler.png	Surface Ruler on a foldable
+tablet-screenshots/2-protractor.png	Protractor on a foldable
+tablet-screenshots/3-advanced.png	Advanced Surface Ruler settings on a foldable
+tablet-screenshots/4-measure.png	Measure workspace on a foldable
+desktop-screenshots/1-ruler.png	Surface Ruler in a desktop window
+desktop-screenshots/2-protractor.png	Protractor in a desktop window
+desktop-screenshots/3-advanced.png	Advanced Surface Ruler settings in a desktop window
+desktop-screenshots/4-measure.png	Measure workspace in a desktop window

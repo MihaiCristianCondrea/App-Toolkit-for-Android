@@ -1,0 +1,38 @@
+{
+  "id": "decision-wheel",
+  "audience": "People seeking a simple wheel spinner and random-choice tools for everyday decisions",
+  "targeting": {
+    "url": true,
+    "countries": [],
+    "keywords": "keywords.txt",
+    "googleAds": false
+  },
+  "status": "live",
+  "log": [
+    {
+      "date": "2026-11-08",
+      "status": "planned",
+      "note": "Prepared custom listing; production availability and Play Console search targeting require confirmation before upload."
+    },
+    {
+      "date": "2026-11-08",
+      "status": "planned",
+      "note": "Final pass: description checked against the Android source (range presets and Quick Settings tiles added), keywords 157 to 229 with 5 rejected (see keyword-review.md), metadata copy aligned with the title, listing README added. Creative unchanged. Not uploaded."
+    },
+    {
+      "date": "2026-11-08",
+      "status": "planned",
+      "note": "Confetti now scattered across every image (phone, tablet, desktop and feature graphic) instead of tracing a ring and edge columns; lilac palette kept and centralised. Re-rendered, verified, audited. Not uploaded."
+    },
+    {
+      "date": "2026-11-08",
+      "status": "planned",
+      "note": "Aligned the full-description section structure with the default and Water Eject listings, retained existing features and limits, and made the package audit count newlines the same way as the Play validator. Artwork unchanged."
+    },
+    {
+      "date": "2026-11-08",
+      "status": "live",
+      "note": "Approved by Google Play review and published."
+    }
+  ]
+}

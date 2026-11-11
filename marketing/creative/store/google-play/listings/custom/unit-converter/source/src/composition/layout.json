@@ -1,0 +1,186 @@
+{
+ "shots": [
+  {
+   "id": "convert",
+   "screens": [
+    "length"
+   ],
+   "poses": [
+    {
+     "pitch": 3,
+     "yaw": -6,
+     "roll": -2,
+     "perspective": 3000,
+     "scale": 1.84,
+     "x": 534.648,
+     "y": 526.037
+    }
+   ],
+   "score": 0.4772,
+   "terms": {
+    "size": 0,
+    "framing": 0,
+    "goldenY": 0.4773,
+    "pose": 0
+   },
+   "searched": 27,
+   "rejected": 0
+  },
+  {
+   "id": "everyday",
+   "screens": [
+    "mass",
+    "volume"
+   ],
+   "poses": [
+    {
+     "pitch": 2,
+     "yaw": -6,
+     "roll": 2,
+     "perspective": 3000,
+     "scale": 0.974,
+     "x": 284.721,
+     "y": 936.188
+    },
+    {
+     "pitch": -2,
+     "yaw": 6,
+     "roll": -2,
+     "perspective": 3000,
+     "scale": 0.974,
+     "x": 795.47,
+     "y": 1181.102
+    }
+   ],
+   "score": 0.017,
+   "terms": {
+    "size": 0,
+    "pairBalance": 0,
+    "stagger": 0,
+    "massGuide": 0.0155,
+    "volumeGuide": 0.0015,
+    "pose": 0
+   },
+   "searched": 972,
+   "rejected": 846
+  },
+  {
+   "id": "temperature-data",
+   "screens": [
+    "temperature",
+    "data"
+   ],
+   "poses": [
+    {
+     "pitch": -2,
+     "yaw": 6,
+     "roll": 2,
+     "perspective": 3000,
+     "scale": 0.974,
+     "x": 285.279,
+     "y": 960.206
+    },
+    {
+     "pitch": 2,
+     "yaw": -6,
+     "roll": -2,
+     "perspective": 3000,
+     "scale": 0.974,
+     "x": 794.53,
+     "y": 667.437
+    }
+   ],
+   "score": 0.6106,
+   "terms": {
+    "size": 0,
+    "pairBalance": 0,
+    "stagger": 0,
+    "leftGuide": 0.2428,
+    "rightGuide": 0.3679,
+    "pose": 0
+   },
+   "searched": 972,
+   "rejected": 792
+  },
+  {
+   "id": "toolkit",
+   "screens": [
+    "toolkit"
+   ],
+   "poses": [
+    {
+     "pitch": -4,
+     "yaw": 12,
+     "roll": 3,
+     "perspective": 3000,
+     "scale": 1.288,
+     "x": 583.001,
+     "y": 1111.22
+    }
+   ],
+   "score": 0.0061,
+   "terms": {
+    "size": 0,
+    "framing": 0,
+    "goldenY": 0.0061,
+    "pose": 0
+   },
+   "searched": 27,
+   "rejected": 0
+  },
+  {
+   "id": "data",
+   "screens": [
+    "data"
+   ],
+   "poses": [
+    {
+     "pitch": 0,
+     "yaw": 0,
+     "roll": 0,
+     "perspective": 3000,
+     "scale": 1.376,
+     "x": 540,
+     "y": 1099.36
+    }
+   ],
+   "score": 0.6096,
+   "terms": {
+    "size": 0,
+    "framing": 0,
+    "goldenY": 0.6097,
+    "pose": 0,
+    "balance": 0
+   },
+   "searched": 243,
+   "rejected": 0
+  },
+  {
+   "id": "reverse",
+   "screens": [
+    "reverse"
+   ],
+   "poses": [
+    {
+     "pitch": 4,
+     "yaw": 5,
+     "roll": -1,
+     "perspective": 3000,
+     "scale": 1.39,
+     "x": 539.897,
+     "y": 776.746
+    }
+   ],
+   "score": 0.8155,
+   "terms": {
+    "size": 0,
+    "framing": 0,
+    "goldenY": 0.8153,
+    "pose": 0,
+    "balance": 0
+   },
+   "searched": 243,
+   "rejected": 88
+  }
+ ]
+}

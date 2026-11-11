@@ -347,7 +347,7 @@ try {
     await page.locator('[data-tool="bill_splitter"] .mw-open').click();
     const picker = page.locator('.bill-currency');
     await picker.click();
-    await picker.locator('md-select-option').filter({hasText: currency}).click();
+    await page.locator('.bill-currency-wrap md-menu-item').filter({hasText: currency}).click();
     const checkbox = page.locator('.bill-tip-toggle md-checkbox');
     if (!await checkbox.evaluate(el => el.checked)) await checkbox.click();
     assert.equal((await page.locator('.measure-bill > strong').innerText()).trim(), withTip);

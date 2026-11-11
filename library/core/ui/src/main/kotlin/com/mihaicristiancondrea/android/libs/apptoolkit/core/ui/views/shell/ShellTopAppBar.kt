@@ -127,8 +127,8 @@ fun topBarInsets(reachesStart: Boolean = true): WindowInsets = WindowInsets.safe
 )
 
 /**
- * Whether [style] is drawn small while an article bar is declared: a large bar would show a second,
- * expanded title above the article's own header.
+ * Uses a small bar while an article bar is declared. A large bar would show a second, expanded
+ * title above the article's own header.
  */
 fun TopBarStyle.forArticle(article: ArticleTopBarHost?): TopBarStyle =
     if (isLarge && article?.isDeclared == true) TopBarStyle.Small else this

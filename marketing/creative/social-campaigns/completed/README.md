@@ -8,4 +8,4 @@ Every campaign in this folder is published and finished. It is kept as a record 
 - To reuse one, copy what you need into a new campaign under `social-campaigns/<campaign-slug>/` and bring it up to
   date there.
 
-None yet. Each one added here gets a row in the campaign table of [`marketing/README.md`](../../../README.md#campaigns).
+- [`toolkit-trailer`](toolkit-trailer/README.md): **App Toolkit | Official App Trailer** (2026-11-09, [YouTube](https://youtu.be/GdYsGWrwLK4)). Each campaign added here also gets a row in the campaign table of [`marketing/README.md`](../../../README.md#campaigns).

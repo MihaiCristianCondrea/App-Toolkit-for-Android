@@ -1,0 +1,31 @@
+.toolkit-docs-toolbar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: .5rem 1rem;
+    margin-block-end: 1.5rem;
+    padding-block: .75rem;
+    border-block-end: 1px solid currentColor;
+}
+
+.toolkit-docs-toolbar button {
+    font: inherit;
+    cursor: pointer;
+}
+
+.toolkit-readme pre,
+.toolkit-diagram {
+    margin: 1rem 0;
+    padding: 1rem;
+    overflow: auto;
+    background: #f4f5f7;
+    color: #212630;
+    border-radius: .5rem;
+}
+
+.toolkit-diagram svg {
+    display: block;
+    max-width: 100%;
+    height: auto;
+    margin: auto;
+}

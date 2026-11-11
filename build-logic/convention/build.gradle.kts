@@ -35,6 +35,7 @@ tasks.named<Delete>("clean") {
 
 dependencies {
     compileOnly(libs.android.gradlePlugin)
+    compileOnly(libs.dokka.gradlePlugin)
     compileOnly(libs.kotlin.gradlePlugin)
     compileOnly(libs.mannodermaus.gradlePlugin)
 }
@@ -56,6 +57,10 @@ gradlePlugin {
         register("libraryPublish") {
             id = "com.mihaicristiancondrea.android.apptoolkit.library-publish"
             implementationClass = "com.mihaicristiancondrea.android.apptoolkit.buildlogic.LibraryPublishPlugin"
+        }
+        register("libraryDocs") {
+            id = "com.mihaicristiancondrea.android.apptoolkit.library-docs"
+            implementationClass = "com.mihaicristiancondrea.android.apptoolkit.buildlogic.LibraryDocsPlugin"
         }
         register("sampleModule") {
             id = "com.mihaicristiancondrea.android.apptoolkit.sample-module"

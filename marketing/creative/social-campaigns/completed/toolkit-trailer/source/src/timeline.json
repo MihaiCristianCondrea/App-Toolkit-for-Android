@@ -1,0 +1,315 @@
+{
+  "durationSeconds": 32,
+  "fps": 90,
+  "tempo": 120,
+  "barStart": 3.0,
+  "design": {
+    "width": 1920,
+    "height": 1080
+  },
+  "story": "One app. Many everyday moments.",
+  "scenes": [
+    {
+      "id": "intro",
+      "start": 0,
+      "end": 3.2,
+      "title": "App Toolkit",
+      "in": "none",
+      "action": "One shape per tool arrives on each note in its world's colour; the App Toolkit icon pops, the shapes breathe round it and the name and line land with staggered word springs."
+    },
+    {
+      "id": "water",
+      "start": 3.0,
+      "end": 6.85,
+      "title": "Water Eject",
+      "in": "morph",
+      "action": "The intro's blue shape travels to the phone's place and morphs into its backdrop while the other shapes swap out and the blue floods in; the phone rises into it, centred and speaker down as the sheet asks, and each speaker sends out its own thin wave and bubbles downward from the bottom of the device."
+    },
+    {
+      "id": "ruler",
+      "start": 6.15,
+      "end": 10.95,
+      "title": "Ruler & Protractor",
+      "in": "morph",
+      "action": "While the last wave flattens into the ruler's line, the blue backdrop morphs and moves into the yellow one and the phone turns, coming round as the Surface Ruler; the Protractor phone joins it. A semicircular protractor on the ruler sweeps to 45 degrees with the Protractor and holds, then a marker measures 76.0 mm with the Surface Ruler, so both phones end on their results. The reading lifts onto a shape that expands into the converter's ground."
+    },
+    {
+      "id": "unit",
+      "start": 10.95,
+      "end": 13.5,
+      "title": "Unit Converter",
+      "in": "expand",
+      "action": "The reading's shape has expanded into the converter's ground; under 76.0 mm the first card grows, and 7.6 cm beside it. One more conversion follows, 20 degrees Celsius to 68 Fahrenheit, each held for a full second."
+    },
+    {
+      "id": "bill",
+      "start": 13.15,
+      "end": 17.0,
+      "title": "Tip & Bill Splitter",
+      "in": "fold",
+      "action": "The two cards slide together and fold into one surface that becomes the receipt; the receipt prints, the tip appears and the total divides into two shares."
+    },
+    {
+      "id": "wheel",
+      "start": 17.0,
+      "end": 23.5,
+      "title": "Decision Wheel",
+      "in": "zoom",
+      "action": "The Bill Splitter phone zooms in and glides to the centre while transitioning into the Decision Wheel sheet. The spin starts inside the app, and one camera move pushes towards the wheel while the phone turns face on; the camera passes through, so the phone's edges leave the frame by framing alone. The lilac world grows from behind the wheel, which settles to fill the scene and slows to Music in the app's 3 seconds. The result holds for a second, then the confetti bursts."
+    },
+    {
+      "id": "montage",
+      "start": 22.75,
+      "end": 29.1,
+      "title": "Everyday tools, one app",
+      "in": "confetti",
+      "action": "Twelve confetti pieces fly to a grid and become the app's tools as MaterialShape badges with their icons, and the named grid holds; the badges rise into a band while the five tools' real screens track in on the beat."
+    },
+    {
+      "id": "end",
+      "start": 28.95,
+      "end": 32,
+      "title": "App Toolkit",
+      "in": "converge",
+      "action": "Everything converges into the icon on the final downbeat; the name and the Get it on Google Play badge settle and hold."
+    }
+  ],
+  "beats": {
+    "introShapes": [
+      0.0,
+      0.25,
+      0.5,
+      0.75,
+      1.0
+    ],
+    "icon": 1.15,
+    "swing": 1.35,
+    "title": 1.4,
+    "tagline": 1.7,
+    "waterMorph": [
+      2.55,
+      3.15
+    ],
+    "waterPhone": 3.0,
+    "waterWaves": [
+      3.5,
+      4.5,
+      5.5
+    ],
+    "waterDrops": [
+      4.5
+    ],
+    "phoneTurn": [
+      6.15,
+      6.9
+    ],
+    "shapeMorph": [
+      6.2,
+      6.9
+    ],
+    "waveLine": [
+      6.15,
+      6.55
+    ],
+    "waveTicks": [
+      6.45,
+      6.9
+    ],
+    "waveReveal": [
+      6.5,
+      6.85
+    ],
+    "rulerBody": [
+      6.7,
+      7.0
+    ],
+    "rulerPhone": 7.0,
+    "rulerPull": [
+      7.0,
+      7.6
+    ],
+    "protractorSweep": [
+      7.5,
+      7.75,
+      8.0,
+      8.25
+    ],
+    "rulerMeasure": [
+      8.8,
+      9.6
+    ],
+    "rulerLift": [
+      10.0,
+      10.45
+    ],
+    "rulerExpand": [
+      10.45,
+      10.95
+    ],
+    "unitCategories": [
+      11.0,
+      12.0
+    ],
+    "unitFold": [
+      13.0,
+      13.5
+    ],
+    "billPhone": 13.4,
+    "billLines": [
+      13.6,
+      13.95,
+      14.3,
+      14.75,
+      15.1
+    ],
+    "billShares": [
+      15.5,
+      15.75
+    ],
+    "billRest": [
+      16.1,
+      17.0
+    ],
+    "wheelChoices": [
+      17.1,
+      17.18,
+      17.26,
+      17.34,
+      17.42,
+      17.5
+    ],
+    "wheelWindup": [
+      17.8,
+      18.0
+    ],
+    "wheelSpin": [
+      18.0,
+      21.0
+    ],
+    "wheelCamera": [
+      18.1,
+      19.72,
+      20.02
+    ],
+    "wheelFace": 19.4,
+    "wheelReveal": [
+      19.95,
+      20.45
+    ],
+    "wheelSettle": [
+      20.02,
+      20.9
+    ],
+    "wheelPick": 21.0,
+    "wheelBurst": 22.0,
+    "montageBadges": [
+      23.0,
+      23.6
+    ],
+    "montageBand": [
+      25.5,
+      26.0
+    ],
+    "montageCards": [
+      25.8,
+      26.2,
+      26.6,
+      27.0,
+      27.4
+    ],
+    "converge": [
+      28.4,
+      29.0
+    ],
+    "endBurst": 29.0,
+    "endRings": [
+      29.0,
+      29.25,
+      29.5,
+      29.75,
+      30.0
+    ],
+    "endTitle": 29.4,
+    "endPlay": 29.9
+  },
+  "wheel": {
+    "turn": 1890,
+    "windup": 12
+  },
+  "transitions": [
+    {
+      "name": "Intro to Water Eject: the blue shape morphs into the water world",
+      "times": [
+        2.6,
+        2.85,
+        3.3
+      ]
+    },
+    {
+      "name": "Water Eject to Ruler: the wave flattens, the backdrop morphs, the phone turns",
+      "times": [
+        6.3,
+        6.55,
+        6.95
+      ]
+    },
+    {
+      "name": "Ruler to Unit Converter: the 76.0 mm shape expands into the converter",
+      "times": [
+        10.35,
+        10.7,
+        11.15
+      ]
+    },
+    {
+      "name": "Unit Converter to Bill: the cards fold into the receipt",
+      "times": [
+        13.08,
+        13.3,
+        13.6
+      ]
+    },
+    {
+      "name": "Bill to Decision Wheel: the phone zooms in and turns into the wheel",
+      "times": [
+        16.3,
+        16.7,
+        17.05
+      ]
+    },
+    {
+      "name": "Into the Decision Wheel: the camera passes through the phone",
+      "times": [
+        18.6,
+        19.45,
+        19.85,
+        20.2
+      ]
+    },
+    {
+      "name": "The wheel is the scene: it slows to Music and holds",
+      "times": [
+        20.6,
+        21.3,
+        21.9
+      ]
+    },
+    {
+      "name": "Decision Wheel to the toolkit: confetti becomes the tools",
+      "times": [
+        22.3,
+        23.2,
+        24.3
+      ]
+    },
+    {
+      "name": "Toolkit to the icon: everything converges",
+      "times": [
+        28.5,
+        28.92,
+        29.3
+      ]
+    }
+  ],
+  "wipeSeconds": 0.5
+}

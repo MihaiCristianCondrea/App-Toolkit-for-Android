@@ -1,6 +1,6 @@
 # Google Play listing
 
-App Toolkit's store listings as files: the default listing, and later custom store listings, each with the source
+App Toolkit's store listings as files: the default listing, custom store listings, each with the source
 that renders its visuals and the files that are uploaded. Only the Play app is listed here; the library is not marketed.
 
 ```text
@@ -13,7 +13,7 @@ google-play/
     │   └── listing/<locale>/       what is uploaded: title, short and full description, graphics/
     │       └── graphics/           icon/, feature-graphic/, phone-, tablet-, desktop-screenshots/
     ├── default-legacy/             the default listing before the redesign, retired (no source)
-    └── custom/                     one custom store listing per audience (none yet)
+    └── custom/                     one custom store listing per audience
 ```
 
 One source per listing renders every language: `strings/<locale>.json` becomes `listing/<locale>/`. The listing ships
@@ -23,7 +23,11 @@ in English (en-US) only for now.
 | --- | --- | --- |
 | [default](listings/default/source/README.md) | ready, upload with the redesigned release | 8 phone, 4 tablet and 4 desktop screenshots, feature graphic and icon, rendered with Remotion from the UI kit |
 | [default-legacy](listings/default-legacy/README.md) | retired | The listing before the redesign: 4 phone and 4 tablet screenshots, feature graphic and icon, no source |
-| [custom](listings/custom/README.md) | none yet | One listing per tool is planned, after the redesign |
+| [speaker-water-eject](listings/custom/speaker-water-eject/README.md) | live | 5 phone, 4 tablet and 4 desktop screenshots, feature graphic and icon |
+| [ruler-and-protractor](listings/custom/ruler-and-protractor/README.md) | live | 5 phone, 4 tablet and 4 desktop screenshots, feature graphic and icon |
+| [decision-wheel](listings/custom/decision-wheel/README.md) | live | 6 phone, 4 tablet and 4 desktop screenshots, feature graphic and icon |
+| [unit-converter](listings/custom/unit-converter/README.md) | live | 4 phone, 4 tablet and 4 desktop screenshots, feature graphic and icon |
+| [tip-and-bill-splitter](listings/custom/tip-and-bill-splitter/README.md) | live | 5 phone, 4 tablet and 4 desktop screenshots, feature graphic and icon |
 
 ## Change a listing
 

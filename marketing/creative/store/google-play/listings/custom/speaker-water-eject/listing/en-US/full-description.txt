@@ -1,0 +1,36 @@
+Water in your phone's speaker after a splash? App Toolkit includes Water Eject, a tool that plays a fixed 165 Hz speaker tone that may help dislodge droplets. Start a cycle lasting up to 30 seconds, follow the countdown and stop whenever you want.
+
+Water Eject is part of App Toolkit, a collection of everyday tools for measuring, calculating and making quick decisions.
+
+Features
+
+Water Eject
+• Fixed speaker tone: Play a 165 Hz sound through your phone's speaker.
+• Timed cycle: See the time remaining during a cycle of up to 30 seconds.
+• Stop anytime: Start and stop the tone using simple controls.
+• On-screen guidance: Point the speaker downward and begin at a comfortable volume.
+
+More everyday tools
+• Compass and Bubble Level for direction and surface tilt.
+• Ruler and Protractor for on-screen length and angle tools.
+• Unit Converter and Tip & Bill Splitter for everyday calculations.
+• Flash Dimmer and Morse/SOS light signals on supported hardware.
+• Decision Wheel, Random Number, Coin Flip and Dice Roll.
+• Counter, Reaction Test and a short guided breathing exercise.
+
+Benefits
+
+• Simple controls: Start the tone when you are ready and stop it whenever you want.
+• Useful beyond Water Eject: Keep everyday tools together in one app.
+• Quick access: Add Coin Flip, Counter, Dice Roll and Flash Dimmer to Android Quick Settings.
+• Adaptive design: Use App Toolkit on phones, foldables and larger screens.
+
+How it works
+
+Open Quick Tools, select Water Eject and follow the on-screen guidance. Point your speaker downward, start at a comfortable volume and tap Start 30-second cycle. The countdown shows the time remaining. Tap Stop cycle to end it early.
+
+The tone may help dislodge droplets near the speaker, but results vary by device and water exposure. It does not guarantee water removal, clean dust or debris, repair water damage or make your phone waterproof. Follow your device manufacturer's guidance after liquid exposure.
+
+Feedback
+
+If you have a suggestion or encounter a problem, leave a Google Play review or use Help & feedback in the app. Describe what happened so the issue can be investigated.

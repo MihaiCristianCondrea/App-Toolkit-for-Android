@@ -1,0 +1,13 @@
+phone-screenshots/1-water-eject.png	A Pixel with Water Eject ready at 165 Hz, an illustrated wave of water leaving its speaker grille
+phone-screenshots/2-water-running.png	A close view of Water Eject running with 20 seconds left in its cycle
+phone-screenshots/3-water-stop.png	A whole Pixel turned to show its side, Water Eject at 8 seconds with the Stop cycle button
+phone-screenshots/4-quick-tools.png	Two App Toolkit tools side by side: Unit Converter turning metres into centimetres, and Quick Tools with compass, level and flashlight
+phone-screenshots/5-level.png	Bubble Level with roll and pitch readings
+tablet-screenshots/1-water-eject.png	Water Eject ready on a foldable with the adaptive navigation rail
+tablet-screenshots/2-water-running.png	Water Eject running on a foldable with 20 seconds remaining
+tablet-screenshots/3-quick-tools.png	Quick Tools in the wide foldable layout
+tablet-screenshots/4-unit-converter.png	Unit Converter on a foldable
+desktop-screenshots/1-water-eject.png	Water Eject ready in the desktop layout
+desktop-screenshots/2-water-running.png	Water Eject running in the desktop layout
+desktop-screenshots/3-quick-tools.png	Quick Tools with the desktop navigation drawer
+desktop-screenshots/4-unit-converter.png	Unit Converter in a desktop window

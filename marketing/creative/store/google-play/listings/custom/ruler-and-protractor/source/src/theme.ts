@@ -1,0 +1,15 @@
+export const INK="#3A2600";
+export const PILL="#8F5700";
+export const ON_PILL="#FFF8E8";
+export const FIELD:[string,string]=["#FFF4D9","#FFF4D9"];
+export const FIELD_DEEP:[string,string]=["#FDE7A2","#FDE7A2"];
+export const SHAPE_TONES=["#F6A800","#FFD03B","#EE9B00","#FFC94D"];
+export const SHAPE_BEHIND="#FDE7A2";
+export const SHEET_BLUE="#8F5700";
+export const SHEET_BLUE_BRIGHT="#F6A800";
+export const SHEET_BLUE_CONTAINER="#FDE7A2";
+export const RIBBON_STOPS=["#FDE7A2","#FFF8E8","#FFD03B","#E8B04A"];
+export const RIBBON_EDGE="#EE9B00";
+export const BUBBLE_TINT="#E8B04A";
+export const FONT="'Google Sans Flex', sans-serif";
+export const PALETTE="captured";

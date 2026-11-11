@@ -65,8 +65,8 @@ if (!only || only === 'icon') {
 // The phone screenshots are cut from one panorama (8 x 1080 px wide): one ground, and shapes placed across the seams,
 // so the images read as one continuous strip when Play shows them side by side.
 const WIDTH = 1080;
-// Where the framed phone sits in each screenshot (store.css .phone: 469 x 992 at scale 1.48, centred, from y 404).
-const PHONE = { x0: 540 - (469 * 1.48) / 2, x1: 540 + (469 * 1.48) / 2, y0: 404 };
+// Where the framed phone sits in each screenshot (store.css .phone: 465.23 x 988.76 at scale 1.48, centred, from y 404).
+const PHONE = { x0: 540 - (465.23 * 1.48) / 2, x1: 540 + (465.23 * 1.48) / 2, y0: 404 };
 const SEAMS = [
   // [shape, size, y, colour token, rotation]: shapes centred on the seams between two screenshots, a large one low and a
   // small one high, alternating, so every pair of neighbours shares a shape.

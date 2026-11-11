@@ -145,3 +145,11 @@ No warning and no Firebase simply means the file is absent, which is expected on
 ## Current risks
 
 The included build imports the root catalog by relative path, so relocating it requires updating that path and root plugin management together.
+
+## Dokka documentation
+
+The [`dokka-plugins`](../dokka-plugins/) included build supplies the `:site` plugin that runs inside
+Dokka. It renders Mermaid blocks, installs the Markdown controls, exports page Markdown, and renders
+the project README on the homepage. The root `:dokkaGenerate` task writes the site to `build/dokka/html`.
+The convention build registers `generateDokkaModuleDoc` to prepare each published module's README
+for the API reference. Maven publication is independent of documentation generation.

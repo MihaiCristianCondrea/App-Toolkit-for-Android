@@ -1,0 +1,95 @@
+{
+  "screenshots": [
+    {
+      "id": "water-eject",
+      "lines": [
+        "Water Eject",
+        "for wet speakers"
+      ],
+      "highlight": "Water Eject",
+      "icon": "water_drop",
+      "alt": "A Pixel with Water Eject ready at 165 Hz, an illustrated wave of water leaving its speaker grille"
+    },
+    {
+      "id": "water-running",
+      "lines": [
+        "Up to",
+        "30 seconds"
+      ],
+      "highlight": "30 seconds",
+      "icon": "timer",
+      "alt": "A close view of Water Eject running with 20 seconds left in its cycle"
+    },
+    {
+      "id": "water-stop",
+      "lines": [
+        "You choose",
+        "when to stop"
+      ],
+      "highlight": "stop",
+      "icon": "stop_circle",
+      "alt": "A whole Pixel turned to show its side, Water Eject at 8 seconds with the Stop cycle button"
+    },
+    {
+      "id": "quick-tools",
+      "lines": [
+        "A useful little",
+        "toolbox too"
+      ],
+      "highlight": "toolbox",
+      "icon": "grid_view",
+      "alt": "Two App Toolkit tools side by side: Unit Converter turning metres into centimetres, and Quick Tools with compass, level and flashlight"
+    },
+    {
+      "id": "level",
+      "lines": [
+        "Find your",
+        "level"
+      ],
+      "highlight": "level",
+      "icon": "straighten",
+      "alt": "Bubble Level with roll and pitch readings"
+    }
+  ],
+  "tabletScreenshots": [
+    {
+      "id": "water-eject",
+      "alt": "Water Eject ready on a foldable with the adaptive navigation rail"
+    },
+    {
+      "id": "water-running",
+      "alt": "Water Eject running on a foldable with 20 seconds remaining"
+    },
+    {
+      "id": "quick-tools",
+      "alt": "Quick Tools in the wide foldable layout"
+    },
+    {
+      "id": "unit-converter",
+      "alt": "Unit Converter on a foldable"
+    }
+  ],
+  "desktopScreenshots": [
+    {
+      "id": "water-eject",
+      "alt": "Water Eject ready in the desktop layout"
+    },
+    {
+      "id": "water-running",
+      "alt": "Water Eject running in the desktop layout"
+    },
+    {
+      "id": "quick-tools",
+      "alt": "Quick Tools with the desktop navigation drawer"
+    },
+    {
+      "id": "unit-converter",
+      "alt": "Unit Converter in a desktop window"
+    }
+  ],
+  "featureGraphic": {
+    "brand": "App Toolkit",
+    "title": "Water Eject",
+    "tagline": "A short tone for wet speakers"
+  }
+}

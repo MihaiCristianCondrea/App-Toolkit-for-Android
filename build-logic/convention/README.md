@@ -3,7 +3,7 @@
 ## Purpose
 
 Provides the repository's local Gradle convention plugins for SDK/version values, JVM targets,
-JUnit 5, library publication, and the shared sample-module baseline.
+JUnit 5, library publication, API documentation, and the shared sample-module baseline.
 
 ## Owns
 
@@ -11,6 +11,8 @@ JUnit 5, library publication, and the shared sample-module baseline.
 - `jvm-target`, which keeps Java and Kotlin bytecode on JVM 21.
 - `unit-test`, which installs the JUnit 5 platform and shared test bundles.
 - `library-publish`, which publishes each Android library's release variant and sources.
+- `library-docs`, which configures Dokka for the release variant of each published library module.
+  `library-publish` applies it automatically.
 - `sample-module`, which composes the Android-library, Compose, versioning, testing, and JVM-target
   baseline used by `:sample:*` library modules.
 
@@ -22,7 +24,7 @@ JUnit 5, library publication, and the shared sample-module baseline.
 ## Depends on
 
 This included-build module has no dependencies on application Gradle projects. It compiles against
-the Android, Kotlin, and Android JUnit 5 Gradle plugin APIs.
+the Android, Kotlin, Android JUnit 5, and Dokka Gradle plugin APIs.
 
 ## Used by
 
@@ -42,6 +44,8 @@ flowchart TD
     Tests --> JUnit[JUnit 5 test tasks]
     Android --> Publish[library-publish]
     Publish --> Maven[Release AAR and sources JAR]
+    Publish --> Docs[library-docs]
+    Docs --> Reference[Aggregated HTML API reference]
     Versioning --> Sample[sample-module]
     Tests --> Sample
     Jvm --> Sample
@@ -63,6 +67,19 @@ flowchart TD
   sources while silently omitting their engine.
 - Every published library produces its own artifact because the apptoolkit POM refers to sibling module
   coordinates; publishing only apptoolkit would leave those dependencies unresolved.
+- Dokka uses the same variant as publishing. Android variants share `src/main`, so including debug
+  would document the same sources twice. Kotlin and Java visibility determine which declarations
+  appear. Public data source and network contracts can live under `data.local` and `data.remote`.
+- `generateDokkaModuleDoc` checks local README links and adapts the README to Dokka's module
+  format. The release source set includes this output and analyzes the release runtime classes.
+- The `:site` plugin in the separate `dokka-plugins` build runs inside Dokka. Module pages carry
+  references to shared assets. The completed site includes the project README on the homepage,
+  Mermaid rendering, and Markdown exports.
+- Dokka generation fails on worker warnings except for the known AndroidX
+  `MenuHost.addMenuProvider` warning about `Lifecycle.State`.
+- `:dokkaGenerate` aggregates modules that apply `library-publish` into `build/dokka/html`. Each
+  declaration with a source location links to its file and line on `develop`. Documentation generation
+  runs on demand and is independent of Maven publication.
 - Version codes encode product family, target SDK, and upload counter, while version names use the
   Bucharest calendar month and upload counter. `release.properties` is the sole input.
 - `id("org.gradle.kotlin.kotlin-dsl")` is applied in `build.gradle.kts` with a full plugin ID and an
@@ -139,12 +156,12 @@ sync with each other.
 
 ## Public contracts
 
-- The five plugin IDs, their ordering requirements, and the expected `release.properties` keys form
+- The convention plugin IDs, their ordering requirements, and the expected `release.properties` keys form
   the build-time contract.
 
 ## Internal implementations
 
-- The five `Plugin<Project>` implementations and their shared constants.
+- The `Plugin<Project>` implementations and their shared constants.
 
 ## Current risks
 
