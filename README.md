@@ -177,8 +177,10 @@ Generate the published library API reference from the repository root.
 Open `build/dokka/html/index.html` in a browser. The reference covers public declarations from the
 release variants of the published library modules.
 
-To build the same site in CI, run **Android CI** manually for `develop` from the GitHub Actions tab
-and download the `library-api-reference` artifact.
+The [published documentation](https://mihaicristiancondrea.github.io/App-Toolkit-for-Android/)
+includes Getting Started, Shell and Navigation, and Markdown downloads for guide and API pages.
+Android CI builds and publishes the site on pushes to `develop`. The docs job also uploads the
+`library-api-reference` artifact for download.
 
 ## Contributing
 

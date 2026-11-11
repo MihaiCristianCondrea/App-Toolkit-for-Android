@@ -85,6 +85,15 @@ jobs:
       - name: Generate the library API reference
         run: ./gradlew --no-daemon --stacktrace :dokkaGenerate
 
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+
+      - name: Add guides and Markdown downloads
+        run: |
+          python -m pip install -r docs/site/requirements.txt
+          python docs/site/enhance.py build/dokka/html
+
       - name: Upload the library API reference
         uses: actions/upload-artifact@v4
         with:
