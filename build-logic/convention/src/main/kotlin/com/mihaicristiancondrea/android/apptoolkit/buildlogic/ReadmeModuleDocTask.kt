@@ -36,44 +36,50 @@ abstract class ReadmeModuleDocTask : DefaultTask() {
         val lines = source.readLines().dropWhile { !it.startsWith("# ") }
         if (lines.isEmpty()) throw GradleException("README has no top-level heading: $source")
         var fence: String? = null
-        val body = lines.drop(1).map { line ->
+        val body = mutableListOf<String>()
+        val prose = mutableListOf<String>()
+
+        fun flushProse() {
+            if (prose.isEmpty()) return
+            body += inlineLink.replace(prose.joinToString("\n")) { link ->
+                val target = link.groupValues[2]
+                val uri = URI(target)
+                if (uri.isAbsolute || uri.rawAuthority != null) {
+                    link.value
+                } else {
+                    validateLink(source, target, uri)
+                    link.groupValues[1].trim().replace(whitespace, " ")
+                }
+            }
+            prose.clear()
+        }
+
+        for (line in lines.drop(1)) {
             val marker = fencePattern.find(line)?.groupValues?.get(1)
             val openFence = fence
-            when {
-                openFence != null -> {
-                    if (marker != null && marker.startsWith(openFence) &&
-                        line.trim().all { it == openFence.first() }
-                    ) fence = null
-                    line
+            if (openFence != null) {
+                body += line
+                if (marker != null && marker.startsWith(openFence) &&
+                    line.trim().all { it == openFence.first() }
+                ) fence = null
+            } else if (marker != null) {
+                flushProse()
+                fence = marker
+                body += line
+            } else {
+                // Dokka's fragment splitter also matches nested headings beginning with
+                // Module or Package. Emphasis preserves the visible title.
+                val heading = reservedHeading.replace(line) { match ->
+                    "${match.groupValues[1]}**${match.groupValues[2]}**"
                 }
-                marker != null -> {
-                    fence = marker
-                    line
-                }
-                else -> {
-                    // Dokka's fragment splitter also matches nested headings beginning with
-                    // Module or Package. Emphasis preserves the visible title.
-                    val heading = reservedHeading.replace(line) { match ->
-                        "${match.groupValues[1]}**${match.groupValues[2]}**"
-                    }
-                    val nested = if (headingPattern.containsMatchIn(heading) && !heading.startsWith("######")) {
-                        "#$heading"
-                    } else {
-                        heading
-                    }
-                    inlineLink.replace(nested) { link ->
-                        val target = link.groupValues[2]
-                        val uri = URI(target)
-                        if (uri.isAbsolute || uri.rawAuthority != null) {
-                            link.value
-                        } else {
-                            validateLink(source, target, uri)
-                            link.groupValues[1]
-                        }
-                    }
+                prose += if (headingPattern.containsMatchIn(heading) && !heading.startsWith("######")) {
+                    "#$heading"
+                } else {
+                    heading
                 }
             }
         }
+        flushProse()
         output.get().asFile.apply {
             parentFile.mkdirs()
             writeText("# Module ${moduleName.get()}\n\n" + body.joinToString("\n") + "\n")
@@ -108,6 +114,7 @@ abstract class ReadmeModuleDocTask : DefaultTask() {
         val reservedHeading = Regex("""^(#{1,6}\s+)(Module|Package)""")
         val headingPattern = Regex("""^#{1,6}\s+(.+?)\s*#*\s*$""")
         val inlineLink = Regex("""!?\[([^\]]+)]\(([^)]+)\)""")
+        val whitespace = Regex("""\s+""")
         val headingPunctuation = Regex("""[^\p{L}\p{N}_ -]""")
     }
 }
