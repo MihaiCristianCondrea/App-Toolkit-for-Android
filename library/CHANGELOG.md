@@ -11,6 +11,9 @@
 
 ### Changed
 
+- Each public type has its own source file. Packages and Kotlin imports are unchanged, but the JVM
+  classes for some files' top-level functions are renamed or gone (for example `PresentationKt` and
+  `AppToolkitNavigationRoutesKt`), so Java callers and keep rules that named them need updating.
 - `ButtonFeedback.soundEffect` defaults to null. Compose Foundation 1.12 plays the click sound for
   every clickable, so the default now adds only the haptic. Pass a sound only for one on top of
   Compose's click.
