@@ -36,6 +36,10 @@ import androidx.compose.material3.TopAppBarColors
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.rememberUpdatedState
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.movableContentWithReceiverOf
+import androidx.compose.runtime.movableContentOf
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -220,30 +224,39 @@ fun ShellTopAppBar(
             }
         }
     }
+    // The bar is a different Material composable per style, and a tab with search is always small,
+    // so moving between tabs can swap the bar. Moved rather than rebuilt, the title, the menu button
+    // and the actions keep their state across that swap instead of replaying their entrance.
+    val currentTitle by rememberUpdatedState(titleContent)
+    val currentNavigationIcon by rememberUpdatedState(navigationIcon)
+    val currentActions by rememberUpdatedState(actions)
+    val movableTitle = remember { movableContentOf { currentTitle() } }
+    val movableNavigationIcon = remember { movableContentOf { currentNavigationIcon() } }
+    val movableActions = remember { movableContentWithReceiverOf<RowScope> { currentActions() } }
     Box {
         when (resolvedStyle) {
             TopBarStyle.Small -> TopAppBar(
-                title = titleContent,
-                navigationIcon = navigationIcon,
-                actions = actions,
+                title = movableTitle,
+                navigationIcon = movableNavigationIcon,
+                actions = movableActions,
                 windowInsets = windowInsets,
                 colors = colors ?: TopAppBarDefaults.topAppBarColors(),
                 scrollBehavior = scrollBehavior,
             )
 
             TopBarStyle.CenterAligned -> CenterAlignedTopAppBar(
-                title = titleContent,
-                navigationIcon = navigationIcon,
-                actions = actions,
+                title = movableTitle,
+                navigationIcon = movableNavigationIcon,
+                actions = movableActions,
                 windowInsets = windowInsets,
                 colors = colors ?: TopAppBarDefaults.topAppBarColors(),
                 scrollBehavior = scrollBehavior,
             )
 
             TopBarStyle.Large, TopBarStyle.LargeCollapsed -> LargeTopAppBar(
-                title = titleContent,
-                navigationIcon = navigationIcon,
-                actions = actions,
+                title = movableTitle,
+                navigationIcon = movableNavigationIcon,
+                actions = movableActions,
                 windowInsets = windowInsets,
                 colors = colors ?: TopAppBarDefaults.topAppBarColors(),
                 scrollBehavior = scrollBehavior,
