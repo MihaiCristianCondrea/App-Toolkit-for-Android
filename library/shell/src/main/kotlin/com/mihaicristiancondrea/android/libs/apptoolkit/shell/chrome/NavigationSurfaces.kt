@@ -441,14 +441,18 @@ private fun RailEntry(
             callbacks.onEntryClick(entry)
         },
         icon = {
-            AnimatedToolkitIcon(
-                icon = icon,
-                clickCount = clicks,
-                contentDescription = null,
-                modifier = Modifier
-                    .size(SizeConstants.TwentyFourSize)
-                    .bounceClick(),
-            )
+            val railIcon: @Composable () -> Unit = {
+                AnimatedToolkitIcon(
+                    icon = icon,
+                    clickCount = clicks,
+                    contentDescription = null,
+                    modifier = Modifier
+                        .size(SizeConstants.TwentyFourSize)
+                        .bounceClick(),
+                )
+            }
+            val badge = entry.currentBadge()
+            if (badge != null) BadgedBox(badge = { TabBadge(badge) }) { railIcon() } else railIcon()
         },
         label = { RailLabel(label) },
         railExpanded = expanded,
@@ -463,8 +467,14 @@ private fun DrawerEntryRow(entry: DrawerEntry, callbacks: NavigationCallbacks, s
         label = label,
         icon = icon,
         selected = selected,
+        badge = entry.currentBadge(),
         onClick = { callbacks.onEntryClick(entry) })
 }
+
+/** A link's badge now: its [DrawerEntry.Link.badgeText] read in composition, or its fixed badge. */
+@Composable
+private fun DrawerEntry.currentBadge(): String? =
+    (this as? DrawerEntry.Link)?.let { link -> link.badgeText?.invoke() ?: link.badge }
 
 /** Whether this entry opens [key], the page shown beside the navigation. */
 private fun DrawerEntry.opens(key: NavKey?): Boolean =

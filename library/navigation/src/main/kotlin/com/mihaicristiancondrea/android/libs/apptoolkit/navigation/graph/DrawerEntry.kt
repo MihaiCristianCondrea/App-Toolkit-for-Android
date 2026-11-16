@@ -20,6 +20,7 @@ package com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph
 import android.content.Context
 import androidx.annotation.StringRes
 import androidx.compose.runtime.Immutable
+import androidx.compose.runtime.Composable
 import androidx.navigation3.runtime.NavKey
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.icons.ToolkitIcon
 
@@ -33,13 +34,24 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.ico
  */
 @Immutable
 sealed interface DrawerEntry {
+    /**
+     * Opens [key]. Like a tab, it can show [badge], a fixed label, or [badgeText], read in
+     * composition so it follows state such as the number of items in a trash. Either one returning
+     * null shows no badge, and an empty string shows a dot.
+     */
     @Immutable
     class Link(
         val key: NavKey,
         @param:StringRes val label: Int,
         val icon: ToolkitIcon,
         @param:StringRes override val shortLabel: Int? = null,
-    ) : DrawerEntry
+        val badge: String? = null,
+        val badgeText: (@Composable () -> String?)? = null,
+    ) : DrawerEntry {
+        init {
+            require(badge == null || badgeText == null) { "A link takes a badge or a badgeText, not both." }
+        }
+    }
 
     /** Runs [onClick] instead of navigating, for entries such as Share that leave the app. */
     @Immutable

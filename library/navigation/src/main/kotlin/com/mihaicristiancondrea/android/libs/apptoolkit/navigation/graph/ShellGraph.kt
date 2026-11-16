@@ -479,9 +479,19 @@ class DrawerBuilder internal constructor() {
         footer += DrawerBuilder().apply(builder).let { it.entries + it.footer }
     }
 
-    /** An entry that opens [key], normally a page. */
-    fun link(key: NavKey, @StringRes label: Int, icon: ToolkitIcon, @StringRes shortLabel: Int? = null) {
-        entries += DrawerEntry.Link(key, label, icon, shortLabel)
+    /**
+     * An entry that opens [key], normally a page. It shows [badge], or [badgeText] read in
+     * composition, as a tab does: a count, a label, or a dot for an empty string.
+     */
+    fun link(
+        key: NavKey,
+        @StringRes label: Int,
+        icon: ToolkitIcon,
+        @StringRes shortLabel: Int? = null,
+        badge: String? = null,
+        badgeText: (@Composable () -> String?)? = null,
+    ) {
+        entries += DrawerEntry.Link(key, label, icon, shortLabel, badge, badgeText)
     }
 
     /** An entry that runs [onClick] instead of navigating. */

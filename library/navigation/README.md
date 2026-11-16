@@ -195,7 +195,8 @@ Screens then call `LocalShellNavigator.current.navigate(key)` with any registere
   the host to stop playback and clear its active player state; the Toolkit does not stop media or
   own playback state.
 - `ShellTab`, whose badge is a fixed `badge` or a `badgeText` read in composition, such as an
-  unread count from state: null shows none and an empty string a dot.
+  unread count from state: null shows none and an empty string a dot. A drawer `link` takes the
+  same `badge` or `badgeText`, shown in the drawer and on the rail, such as a trash's item count.
 - `NavigationDefaults` and `ShellGraphBuilder(appTitle, appIcon, defaults)`. A null `topBar` on
   `tab`, `child`, `page` and `pageIfAbsent` means the default for that kind of destination.
 - `ShellNavigator` (`navigate`, `close`, `goBack`, `selectTab`, `continueStart`, `enterShell`, the
