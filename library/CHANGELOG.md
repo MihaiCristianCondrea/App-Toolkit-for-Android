@@ -6,6 +6,8 @@
 
 ### Fixed
 
+- Pagers and carousels tick once for each page a swipe reaches. Tapping a tab no longer adds a tick
+  to its click as the pager slides, and a swipe that springs back to its page no longer ticks.
 - Moving from a tab with a search field to one without no longer draws the search field cut in half
   while it leaves the app bar.
 - An app bar action that appears when a tab opens, such as a sort toggle, grows in place instead of
