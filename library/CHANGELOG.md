@@ -4,6 +4,14 @@
 
 # Unreleased
 
+### Added
+
+- `AnalyticsObserver` lets an app learn from its own analytics on the device. Bind one in Koin and
+  it receives every event and screen view the app and the Toolkit's screens report, after
+  `firebaseModule` sends them, whatever the analytics consent. Use it to adapt the app to what the
+  person does, never to send data on. `ObservedTelemetryRepository` gives the same to a host that
+  binds its own `TelemetryRepository`.
+
 ### Fixed
 
 - Pagers and carousels tick once for each page a swipe reaches. Tapping a tab no longer adds a tick

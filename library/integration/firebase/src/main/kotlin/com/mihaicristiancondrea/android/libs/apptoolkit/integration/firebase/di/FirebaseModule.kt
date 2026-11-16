@@ -17,6 +17,8 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.integration.firebase.di
 
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.telemetry.AnalyticsObserver
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.telemetry.ObservedTelemetryRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.telemetry.TelemetryRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.integration.firebase.data.repositories.FirebaseTelemetryRepository
 import org.koin.core.module.Module
@@ -26,5 +28,12 @@ import org.koin.dsl.module
  * Koin module for the firebase integration.
  */
 val firebaseModule: Module = module {
-    single<TelemetryRepository> { FirebaseTelemetryRepository() }
+    // Every event also reaches the app's on-device AnalyticsObservers, whatever the consent.
+    single<TelemetryRepository> {
+        val scope = this
+        ObservedTelemetryRepository(
+            delegate = FirebaseTelemetryRepository(),
+            observers = { scope.getAll<AnalyticsObserver>() },
+        )
+    }
 }
