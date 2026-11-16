@@ -25,13 +25,6 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
 
-/**
- * Position of an item inside a grouped list.
- */
-enum class GroupedItemPosition {
-    FIRST, MIDDLE, LAST, SINGLE
-}
-
 fun groupedItemPosition(index: Int, size: Int): GroupedItemPosition {
     return when {
         size <= 1 -> GroupedItemPosition.SINGLE

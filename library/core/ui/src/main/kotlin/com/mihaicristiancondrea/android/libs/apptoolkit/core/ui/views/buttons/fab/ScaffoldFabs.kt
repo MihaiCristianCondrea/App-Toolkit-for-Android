@@ -20,75 +20,9 @@ package com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.f
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.SideEffect
-import androidx.compose.runtime.Stable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.runtime.staticCompositionLocalOf
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.models.fab.ToolkitFab
-
-/**
- * Where a screen's floating action buttons go: the Toolkit scaffold around the screen holds one
- * and draws what the screen puts in it, with [ToolkitFabColumn].
- */
-@Stable
-class FabHost {
-    private var owner: Any? by mutableStateOf(null)
-
-    /** The buttons the screen inside the scaffold declares now. */
-    var fabs: List<ToolkitFab> by mutableStateOf(emptyList())
-        private set
-
-    /** The list the screen last declared, whose actions the drawn buttons run. */
-    private var latest: List<ToolkitFab> = emptyList()
-
-    /**
-     * Takes the screen's buttons. A screen declares them again on every recomposition, each time
-     * with new click lambdas, so the drawn list only changes when a button looks different; its
-     * clicks always run the latest actions.
-     */
-    internal fun set(owner: Any, fabs: List<ToolkitFab>) {
-        this.owner = owner
-        latest = fabs
-        if (!looksTheSame(this.fabs, fabs)) {
-            this.fabs = fabs.mapIndexed { index, fab -> fab.runningLatestClick(index) }
-        }
-    }
-
-    internal fun clear(owner: Any) {
-        if (this.owner === owner) {
-            this.owner = null
-            latest = emptyList()
-            fabs = emptyList()
-        }
-    }
-
-    /** This button, running the action of the button declared last at [index] (by [ToolkitFab.id] if the list moved). */
-    private fun ToolkitFab.runningLatestClick(index: Int): ToolkitFab = ToolkitFab(
-        icon = icon,
-        onClick = {
-            val current = latest.getOrNull(index)?.takeIf { it.id == id } ?: latest.firstOrNull { it.id == id } ?: this
-            current.onClick()
-        },
-        label = label,
-        contentDescription = contentDescription,
-        size = size,
-        color = color,
-        expanded = expanded,
-        visible = visible,
-        id = id,
-    )
-
-    private fun looksTheSame(drawn: List<ToolkitFab>, declared: List<ToolkitFab>): Boolean =
-        drawn.size == declared.size && drawn.indices.all { index ->
-            val a = drawn[index]
-            val b = declared[index]
-            a.id == b.id && a.icon == b.icon && a.label == b.label &&
-                a.contentDescription == b.contentDescription && a.size == b.size &&
-                a.color == b.color && a.expanded == b.expanded && a.visible == b.visible
-        }
-}
 
 /** The [FabHost] of the Toolkit scaffold around this point of the composition, if any. */
 val LocalFabHost = staticCompositionLocalOf<FabHost?> { null }

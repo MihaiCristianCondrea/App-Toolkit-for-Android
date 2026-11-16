@@ -19,7 +19,6 @@ package com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.ads
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
-import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -60,25 +59,6 @@ fun rememberNativeAd(
     cache = cache,
     cacheKey = cacheKey,
 ).ad
-
-/**
- * What a slot has: an ad, or the reason it has none.
- *
- * [rememberNativeAd] returns only the ad, because that is all a caller needs to render one. A
- * caller that wants to say something about an empty slot, such as the debug placeholder, needs to
- * know whether the request came back without an ad or was never made at all, which is what this
- * carries.
- *
- * @property ad the loaded ad, or null while loading, after a failure, or when disabled.
- * @property failure why there is no ad, or null when one is loaded or still on its way.
- * @property detail the SDK's own description of the failure, when it gave one.
- */
-@Immutable
-data class NativeAdSlotState(
-    val ad: NativeAd? = null,
-    val failure: AdSlotFailure? = null,
-    val detail: String? = null,
-)
 
 /**
  * [rememberNativeAd] with the reason an empty slot is empty.

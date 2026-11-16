@@ -26,20 +26,7 @@ import androidx.compose.ui.platform.LocalWindowInfo
 import androidx.window.core.layout.WindowSizeClass
 import androidx.window.core.layout.computeWindowSizeClass
 
-/**
- * Application-specific extension of the window width breakpoints.
- *
- * The default Material breakpoints only expose up to the expanded bucket. This enum adds the
- * recommended Large and ExtraLarge classes so layouts can react to wider viewports such as tablets,
- * desktop windows, or connected displays.
- */
-enum class AppWindowWidthSizeClass {
-    Compact,
-    Medium,
-    Expanded,
-    Large,
-    ExtraLarge
-}
+
 
 /**
  * Remembers the current [WindowAdaptiveInfo], with the Large and ExtraLarge width classes unless

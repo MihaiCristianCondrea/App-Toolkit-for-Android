@@ -20,15 +20,6 @@ package com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.ads
 import androidx.compose.runtime.Immutable
 import androidx.compose.ui.graphics.Color
 
-/** How an ad's call to action is drawn. */
-enum class NativeAdCallToActionStyle {
-    /** A filled pill, which is the default and reads as the strongest action in the card. */
-    Filled,
-
-    /** A text button, for screens whose own actions are text buttons. */
-    Text,
-}
-
 /**
  * Per-screen look for a native ad.
  *

@@ -17,7 +17,6 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.modifiers
 
-import android.os.SystemClock
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.FiniteAnimationSpec
 import androidx.compose.animation.core.snap
@@ -46,26 +45,10 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.EntranceR
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.LocalEntranceReplay
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.LocalScreenEntrance
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.ScreenEntrance
-import kotlin.math.min
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 import kotlin.time.Duration.Companion.milliseconds
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.first
-
-/** How an element enters with [animateVisibility]. */
-enum class EntranceStyle {
-    /** It fades in while rising into place. */
-    Slide,
-
-    /** It fades in while growing into place from slightly smaller. */
-    Scale,
-
-    /** It only fades in. */
-    Fade,
-
-    /** It appears at once. */
-    None,
-}
+import kotlinx.coroutines.launch
 
 /**
  * The [EntranceStyle] every [animateVisibility] here uses unless it names its own. The shell
@@ -340,56 +323,5 @@ private class EntranceNode(
             }
             EntranceStyle.Fade, EntranceStyle.None -> Unit
         }
-    }
-}
-
-/**
- * Decides how long each element waits before its entrance, so elements arrive in a cascade.
- *
- * Elements that start entering close together form a wave: everything within
- * [WAVE_WINDOW_MILLIS] of the wave's first element. Each waits by its place in the wave: its index
- * less the wave's first index while every element of the wave has one, its arrival order otherwise. The entrances of
- * the elements placed in one frame start within a few milliseconds of each other, so a screen's
- * first items cascade from the top of what is shown, and an item scrolled in alone starts at once.
- *
- * One cascade is shared by the whole app instead of each list owning one, so the modifier needs no
- * setup. It is only touched from the main thread.
- */
-internal class VisibilityCascade(private val clock: () -> Long = SystemClock::uptimeMillis) {
-
-    private var waveStartedAt: Long = NOT_STARTED
-    private var arrivalsInWave: Int = 0
-    private var firstIndexInWave: Int? = null
-    private var waveAllIndexed: Boolean = true
-
-    /**
-     * How long an element that is about to enter waits: its place in the current wave, capped at
-     * [maxStaggeredItems] positions.
-     */
-    fun delayMillisFor(index: Int?, staggerDelayMillis: Long, maxStaggeredItems: Int): Long {
-        val now: Long = clock()
-        if (waveStartedAt == NOT_STARTED || now - waveStartedAt > WAVE_WINDOW_MILLIS) {
-            waveStartedAt = now
-            arrivalsInWave = 0
-            firstIndexInWave = index
-            waveAllIndexed = true
-        }
-        if (index == null) waveAllIndexed = false
-        val arrival = arrivalsInWave++
-        val first = firstIndexInWave
-        // A wave of list items keeps their positions; a wave that mixes them with other elements,
-        // such as a row of filters above a grid, goes by the order they are placed in.
-        val position: Int = if (waveAllIndexed && index != null && first != null) index - first else arrival
-        return min(position.coerceAtLeast(0), maxStaggeredItems.coerceAtLeast(0)) * staggerDelayMillis
-    }
-
-    companion object {
-        /** How long after a wave starts an element still joins it. About three frames. */
-        const val WAVE_WINDOW_MILLIS: Long = 50L
-
-        private const val NOT_STARTED: Long = -1L
-
-        /** The app-wide cascade every [animateVisibility] joins. */
-        val Shared: VisibilityCascade = VisibilityCascade()
     }
 }

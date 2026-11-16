@@ -18,7 +18,6 @@
 package com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.grid
 
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.runtime.Immutable
 import androidx.compose.ui.unit.Dp
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
@@ -29,48 +28,6 @@ internal const val GROUPED_GRID_AD_INDEX: Int = -1
 
 /** Row key of the ad row, stable across the ad loading, failing, and being re-requested. */
 internal const val GROUPED_GRID_AD_ROW_KEY: String = "grouped-grid-ad"
-
-/** Whether an ad row takes part in the layout, and whether it currently occupies any space. */
-internal enum class GroupedGridAdRow {
-    /** No ad was requested, or the grid is too small to carry one. */
-    None,
-
-    /**
-     * An ad was requested but none is on screen. The row stays in the plan so the slot keeps its
-     * place in composition and can finish loading, but it takes no space and the corners of the
-     * group are cut as if it were not there.
-     */
-    Collapsed,
-
-    /** An ad is on screen and is one more row of the group. */
-    Visible,
-}
-
-/** Which of a cell's four corners sit at the outside of the group. */
-@Immutable
-internal data class GroupedGridCorners(
-    val topStart: Boolean,
-    val topEnd: Boolean,
-    val bottomStart: Boolean,
-    val bottomEnd: Boolean,
-)
-
-/** One cell of a planned row: the item it draws, and how its corners are cut. */
-@Immutable
-internal data class GroupedGridCell(
-    val itemIndex: Int,
-    val corners: GroupedGridCorners,
-) {
-    val isAd: Boolean get() = itemIndex == GROUPED_GRID_AD_INDEX
-}
-
-/** One planned row. A [collapsed] row is composed but draws nothing and takes no space. */
-@Immutable
-internal data class GroupedGridRow(
-    val key: String,
-    val cells: ImmutableList<GroupedGridCell>,
-    val collapsed: Boolean,
-)
 
 /**
  * Plans the rows of a grid, and which corners of which cells are cut at the group's outer radius.

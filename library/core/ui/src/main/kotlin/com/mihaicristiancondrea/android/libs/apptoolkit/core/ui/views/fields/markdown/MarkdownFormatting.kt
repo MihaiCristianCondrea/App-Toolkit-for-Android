@@ -18,19 +18,6 @@
 package com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.fields.markdown
 
 /**
- * Result of a formatting action: the new text and where the caret or the selection ends up.
- *
- * Selection is part of the contract because every action has to keep typing flowing: wrapping an
- * empty selection has to leave the caret between the markers, and wrapping a selection has to keep
- * the same words selected so the action can be toggled off again.
- */
-internal data class MarkdownEdit(
-    val text: String,
-    val selectionStart: Int,
-    val selectionEnd: Int,
-)
-
-/**
  * Markdown source edits behind a field's formatting bar.
  *
  * These are plain string transformations rather than composable helpers so the behaviour that is

@@ -18,17 +18,10 @@
 package com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.shell
 
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.Stable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clipToBounds
-import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
-import androidx.compose.ui.input.nestedscroll.NestedScrollSource
 import androidx.compose.ui.layout.Layout
 import kotlin.math.roundToInt
 
@@ -37,36 +30,6 @@ import kotlin.math.roundToInt
  * it from its settings; `PageScaffold` and the shell's tab scaffold read it.
  */
 val LocalHideTopBarOnScroll = staticCompositionLocalOf { false }
-
-/**
- * How far an app bar has slid away, for [HideOnScrollTopBar]. Attach [nestedScrollConnection] to
- * the scaffold after the bar's own scroll behaviour, so a large bar collapses first and only then
- * slides away; scrolling back up brings it back at once, as Material's enter-always bars do.
- */
-@Stable
-class TopBarHideState {
-    /** How far the bar has moved up, from 0 to [limit]. */
-    var offset: Float by mutableFloatStateOf(0f)
-        private set
-
-    /** The furthest the bar can move up: all of its height, the status bar's part included. */
-    var limit: Float by mutableFloatStateOf(0f)
-        internal set
-
-    val nestedScrollConnection: NestedScrollConnection = object : NestedScrollConnection {
-        override fun onPreScroll(available: Offset, source: NestedScrollSource): Offset {
-            val previous = offset
-            offset = (offset + available.y).coerceIn(limit, 0f)
-            // What the bar took, the content does not scroll: its own height gives the room.
-            return Offset(0f, offset - previous)
-        }
-    }
-
-    /** Brings the bar back in full, as a newly opened destination starts. */
-    fun show() {
-        offset = 0f
-    }
-}
 
 @Composable
 fun rememberTopBarHideState(): TopBarHideState = remember { TopBarHideState() }

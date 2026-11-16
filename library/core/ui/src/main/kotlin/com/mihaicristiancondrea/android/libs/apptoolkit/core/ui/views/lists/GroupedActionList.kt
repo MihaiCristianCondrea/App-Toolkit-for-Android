@@ -33,31 +33,13 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.Immutable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.modifiers.componentEntrance
 import kotlinx.collections.immutable.ImmutableList
-
-/**
- * One row of a [GroupedActionList]: what to show, and what to do when it is tapped.
- *
- * @param title Primary line, e.g. "Send a feature request".
- * @param description Supporting line under [title].
- * @param icon Leading icon.
- * @param onClick Invoked when the row is tapped.
- */
-@Immutable
-data class GroupedAction(
-    val title: String,
-    val description: String,
-    val icon: ImageVector,
-    val onClick: () -> Unit,
-)
 
 /**
  * A card of tappable rows rendered as one visual group.
@@ -163,6 +145,14 @@ private fun GroupedActionRow(
         }
     }
 }
+
+
+
+
+
+
+
+
 
 private val GROUP_PADDING = 6.dp
 private val ITEM_SPACING = 4.dp

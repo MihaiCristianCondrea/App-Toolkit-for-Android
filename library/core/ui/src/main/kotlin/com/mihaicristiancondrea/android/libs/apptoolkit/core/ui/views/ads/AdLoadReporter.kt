@@ -18,17 +18,8 @@
 package com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.ads
 
 import android.util.Log
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.telemetry.TelemetryRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.BuildInfoRepository
-
-/** Why an ad slot has nothing to show. */
-enum class AdSlotFailure {
-    /** The request came back with no ad. Usually no fill, which is normal and not a defect. */
-    NO_AD,
-
-    /** The loader could not be called at all, for example because the SDK was not initialized. */
-    NOT_REQUESTED,
-}
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.telemetry.TelemetryRepository
 
 /**
  * The one place an ad that failed to load is written down.
@@ -133,17 +124,3 @@ class AdLoadReporter(
         const val NETWORK_ERROR_CODE: String = "NETWORK_ERROR"
     }
 }
-
-/** Non-fatal marker for an ad failure other than no fill or a network error. */
-class AdSlotLoadException(
-    slotName: String,
-    adUnitId: String,
-    errorCode: String,
-    errorMessage: String,
-) : Exception("Ad slot '$slotName' failed for unit '$adUnitId': code=$errorCode ($errorMessage)")
-
-/** Non-fatal marker for an ad request that was never made. */
-class AdSlotNotRequestedException(
-    slotName: String,
-    adUnitId: String,
-) : Exception("Ad slot '$slotName' never requested unit '$adUnitId'.")

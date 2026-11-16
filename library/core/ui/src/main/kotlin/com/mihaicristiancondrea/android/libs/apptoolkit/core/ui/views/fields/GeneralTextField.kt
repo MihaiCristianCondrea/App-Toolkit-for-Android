@@ -61,6 +61,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.consta
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.icons.ToolkitIcon
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.icons.ToolkitIconContent
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.analytics.Ga4EventData
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.analytics.LocalTelemetry
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.analytics.logGa4Event
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.GeneralButton
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.GeneralButtonStyle
@@ -70,56 +71,6 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.fields.mar
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.fields.markdown.toTextFieldValue
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.GroupedItemPosition
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.getGroupedShape
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.analytics.LocalTelemetry
-
-enum class GeneralTextFieldStyle {
-
-    /** The Material filled field, the platform default. */
-    Filled,
-
-    Outlined,
-
-    /**
-     * A filled field without its indicator line, cut to the corners of the group it sits in. Use it
-     * for a block of fields that reads as one card, such as a form; `position` says where in the
-     * group this one is.
-     */
-    Grouped,
-
-    /**
-     * The pill-shaped Material search input, for a field that filters the content behind it as it
-     * is typed, such as a top app bar that swaps its title for a search box, say. It leads with a search
-     * icon unless another one is given, and takes its clear or filter actions in the trailing slot.
-     *
-     * It is a different Material component rather than a rounded text field, so the parameters that
-     * describe a form field (label, supportingText, errorText, minLines, maxLines,
-     * markdown, position) do not apply to it, and it is rejected by the `TextFieldValue`
-     * overload because the Material input owns its text state.
-     */
-    Search,
-
-    /**
-     * The search field as an outlined one: the Material outlined text field, fully rounded and
-     * leading with a search icon. Take it where a filled pill would disappear into the surface
-     * behind it (a search box on a page rather than in an app bar) or where the rest of the screen
-     * is outlined. Unlike [Search] it is an ordinary text field, so every parameter applies to it and
-     * the `TextFieldValue` overload accepts it.
-     */
-    SearchOutlined,
-}
-
-/** How much a field knows about the Markdown its text is written in. */
-enum class GeneralTextFieldMarkdown {
-
-    /** Plain text. The field's own `visualTransformation` is used as given. */
-    None,
-
-    /** Markdown syntax is highlighted as it is typed. The text itself is never rewritten. */
-    Highlight,
-
-    /** Highlighting, plus the formatting bar below the field. */
-    Editor,
-}
 
 /**
  * The toolkit's text field: a Material field with the toolkit's grouped styling, icon slot and

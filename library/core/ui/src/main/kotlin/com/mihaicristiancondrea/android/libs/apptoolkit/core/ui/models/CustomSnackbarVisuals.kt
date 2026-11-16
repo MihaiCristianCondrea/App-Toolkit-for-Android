@@ -22,29 +22,7 @@ import androidx.compose.material3.SnackbarData
 import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarVisuals
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.Immutable
-import androidx.compose.ui.graphics.Color
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.icons.ToolkitIcon
-
-/** The Toolkit's two snackbar looks: the inverse surface of Material, and the error colours. */
-enum class ToolkitSnackbarStyle {
-    Normal,
-    Error,
-}
-
-/**
- * Colours for one snackbar, replacing those of its [ToolkitSnackbarStyle].
- *
- * @property containerColor Behind the snackbar.
- * @property contentColor The message, the icon and the dismiss button.
- * @property actionColor The action's label.
- */
-@Immutable
-data class ToolkitSnackbarColors(
-    val containerColor: Color,
-    val contentColor: Color,
-    val actionColor: Color,
-)
 
 /**
  * A custom implementation of [androidx.compose.material3.SnackbarVisuals] to provide additional styling options,

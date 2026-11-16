@@ -22,9 +22,7 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.width
-import androidx.compose.material3.DividerDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.Immutable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawWithCache
 import androidx.compose.ui.graphics.Color
@@ -32,7 +30,6 @@ import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.unit.Dp
-import androidx.compose.ui.unit.dp
 import kotlin.math.max
 import kotlin.math.roundToInt
 
@@ -94,20 +91,6 @@ fun VerticalWavyDivider(
     )
 }
 
-/** Defaults for [HorizontalWavyDivider] and [VerticalWavyDivider], taken from `il_wavy_line`. */
-object WavyDividerDefaults {
-
-    /** The band the wave occupies across the line: the drawable's 8dp height. */
-    val WaveSize: Dp = 8.dp
-
-    /** The drawable's 1dp stroke. */
-    val Thickness: Dp = 1.dp
-
-    /** The colour of Material's plain dividers, so a wavy divider sits among them naturally. */
-    val color: Color
-        @Composable get() = DividerDefaults.color
-}
-
 /**
  * Builds the wave once per size and redraws it from that cache.
  *
@@ -128,23 +111,6 @@ private fun Modifier.drawWavyLine(vertical: Boolean, thickness: Dp, color: Color
             drawPath(path = path, color = color, style = stroke)
         }
     }
-
-/**
- * The measurements of one wavy line, in pixels, along an axis of any direction.
- *
- * The line runs from [start] along its length in [halfWaveCount] half-waves of [halfWaveLength],
- * each a cubic curve that leaves and rejoins the centre line at [centre]. The curve's two control
- * points sit a third and two thirds of the way along, [controlOffset] off the centre line on
- * alternating sides, which is exactly how `il_wavy_line` is drawn.
- */
-@Immutable
-internal data class WavyLineGeometry(
-    val start: Float,
-    val centre: Float,
-    val halfWaveCount: Int,
-    val halfWaveLength: Float,
-    val controlOffset: Float,
-)
 
 /**
  * Fits the wave of `il_wavy_line` to a line [length] long and [breadth] across.

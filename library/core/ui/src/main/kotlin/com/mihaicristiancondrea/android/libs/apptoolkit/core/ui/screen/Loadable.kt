@@ -21,17 +21,6 @@ import androidx.compose.runtime.Immutable
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.UiText
 
 /**
- * A status that [ScreenHost] reports in the `screen_state` analytics event.
- *
- * [Loadable] implements it. A screen with statuses of its own implements it too, to have them
- * tracked like the Toolkit's.
- */
-interface TrackedStatus {
-    /** The `state` parameter of the `screen_state` event. */
-    val trackingLabel: String
-}
-
-/**
  * The status of one piece of content that loads: the Toolkit's default, used as a field of a
  * screen's state rather than for the whole screen.
  *

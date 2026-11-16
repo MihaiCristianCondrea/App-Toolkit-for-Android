@@ -17,8 +17,8 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.shell
 
-import androidx.compose.animation.Crossfade
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.Crossfade
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.scaleIn
@@ -32,7 +32,6 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.R
 import androidx.compose.material.icons.outlined.Close
 import androidx.compose.material.icons.outlined.Search
 import androidx.compose.material3.Icon
@@ -41,21 +40,16 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.Immutable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
-import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.ShellSearch
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.R
 
 /** Height of the app bar's title slot, the search field's height, so the bar never resizes. */
 internal val SearchFieldHeight = 48.dp
-
-/** A search field for [ShellTopAppBar]'s title slot. */
-@Immutable
-class TopBarSearch(val state: ShellSearch, val hint: String)
 
 @Composable
 internal fun TopBarSearchField(search: TopBarSearch) {

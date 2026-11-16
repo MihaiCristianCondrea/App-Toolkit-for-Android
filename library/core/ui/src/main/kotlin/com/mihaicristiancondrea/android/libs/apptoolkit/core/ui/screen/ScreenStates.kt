@@ -18,29 +18,11 @@
 package com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen
 
 import androidx.compose.animation.ContentTransform
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.staticCompositionLocalOf
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.icons.ToolkitIcon
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.layouts.LoadingScreen
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.layouts.NoDataScreen
-
-/**
- * What a [ScreenStateHandler] knows when it draws a case other than [Loadable.Ready].
- *
- * @property contentPadding The padding the content keeps, usually the screen's content padding.
- * @property icon The screen's icon for its empty and failure content.
- * @property onRetry Tries again, or null when trying again does not apply to this case.
- * @property showAd Whether the content may show its native ad.
- */
-@Immutable
-data class StateSlot(
-    val contentPadding: PaddingValues,
-    val icon: ToolkitIcon,
-    val onRetry: (() -> Unit)?,
-    val showAd: Boolean,
-)
 
 /**
  * How an app draws loading, empty and failed content, and how one case replaces another. Every

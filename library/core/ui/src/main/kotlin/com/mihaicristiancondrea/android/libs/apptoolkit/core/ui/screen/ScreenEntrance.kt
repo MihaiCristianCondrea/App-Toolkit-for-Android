@@ -18,36 +18,16 @@
 package com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen
 
 import android.os.SystemClock
-import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
-import androidx.compose.ui.input.nestedscroll.NestedScrollSource
 import android.view.View
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.telemetry.models.TrackedScreen
-import java.util.concurrent.ConcurrentHashMap
 import androidx.compose.runtime.Stable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.staticCompositionLocalOf
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
+import androidx.compose.ui.input.nestedscroll.NestedScrollSource
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.modifiers.VisibilityCascade
-
-/**
- * When a screen's entrance plays. None of them replays it on returning from the background, on a
- * rotation, or for an item scrolled back into view within the visit.
- */
-enum class EntranceReplay {
-    /** Each time the screen is shown by navigation, including going back to it. */
-    EveryVisit,
-
-    /**
-     * Each time the screen is opened: a screen opened again after it was closed, or a tab picked
-     * from the navigation, enters anew, while going back to it does not.
-     */
-    OnOpen,
-
-    /** Only the first time each screen is opened while the app runs; opening it again does not. */
-    FirstVisit,
-}
 
 /**
  * The app's [EntranceReplay], [EntranceReplay.OnOpen] unless the app picks another. The shell
@@ -63,16 +43,6 @@ val LocalEntranceReplay = staticCompositionLocalOf { EntranceReplay.OnOpen }
  * to the screen leaves it as it is, so it does not.
  */
 val LocalScreenOpening = staticCompositionLocalOf { 0 }
-
-/**
- * Tells a screen that the transition bringing it in is far enough along for its entrance to begin,
- * so its content arrives as the screen lands rather than after it. [reached] is read inside a
- * snapshot, so it should read state. The shell provides one for each page and tab.
- */
-fun interface EntranceCue {
-    /** Whether the screen's entrance may begin. */
-    fun reached(): Boolean
-}
 
 /**
  * The [EntranceCue] of the screen here. Without one, a screen's entrance begins once it is
@@ -138,17 +108,3 @@ internal class ScreenEntrance(
 
 /** The [ScreenEntrance] of the screen around this point, if it is inside a [ScreenHost]. */
 internal val LocalScreenEntrance = staticCompositionLocalOf<ScreenEntrance?> { null }
-
-/**
- * The screens opened so far while the app runs, for [EntranceReplay.FirstVisit]. It lives as long
- * as the process, so the first copy of each screen after a restart enters again.
- */
-internal object OpenedScreens {
-    private val screens: MutableSet<TrackedScreen> = ConcurrentHashMap.newKeySet()
-
-    /** Records [screen] as opened; true only the first time it is recorded in this run. */
-    fun claim(screen: TrackedScreen): Boolean = screens.add(screen)
-
-    /** Forgets every screen, as a new run would. */
-    fun forget() = screens.clear()
-}

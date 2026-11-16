@@ -19,13 +19,6 @@ package com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.c
 
 import android.view.View
 import androidx.compose.animation.AnimatedContent
-import androidx.compose.animation.ContentTransform
-import androidx.compose.animation.core.tween
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
-import androidx.compose.animation.scaleIn
-import androidx.compose.animation.scaleOut
-import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
@@ -45,8 +38,8 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.ico
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.icons.ToolkitIcon
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.style.bounceClick
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.analytics.Ga4EventData
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.analytics.logGa4Event
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.analytics.LocalTelemetry
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.analytics.logGa4Event
 
 /**
  * A [FilterChip] with the toolkit's click feedback, bounce, and GA4 logging.
@@ -127,19 +120,5 @@ private fun FilterChipLeadingIcon(
             contentDescription = null,
             modifier = Modifier.size(size = FilterChipDefaults.IconSize),
         )
-    }
-}
-
-/**
- * A collection of predefined transitions for animating content changes,
- * specifically designed for selection states like in chips or checkboxes.
- */
-object SelectAllTransitions {
-    private const val DURATION = 300
-    private val fadeScaleSpec = tween<Float>(DURATION)
-
-    val fadeScale: ContentTransform by lazy {
-        (fadeIn(animationSpec = fadeScaleSpec) + scaleIn(animationSpec = fadeScaleSpec))
-            .togetherWith(fadeOut(animationSpec = fadeScaleSpec) + scaleOut(animationSpec = fadeScaleSpec))
     }
 }

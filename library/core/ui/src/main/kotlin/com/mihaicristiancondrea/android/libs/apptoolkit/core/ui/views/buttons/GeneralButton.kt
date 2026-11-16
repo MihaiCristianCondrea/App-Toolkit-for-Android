@@ -54,14 +54,8 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.consta
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.icons.ToolkitIcon
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.style.bounceClick
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.analytics.Ga4EventData
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.analytics.logGa4Event
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.analytics.LocalTelemetry
-
-/** Visual treatment shared by labelled and icon-only buttons. */
-enum class GeneralButtonStyle { Filled, Tonal, Outlined, Elevated, Text }
-
-/** Logical icon position; Start and End follow the layout direction. */
-enum class ButtonIconPosition { Start, End }
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.analytics.logGa4Event
 
 /**
  * Adaptive action button. A nonblank label selects a content button; otherwise [icon] is required.

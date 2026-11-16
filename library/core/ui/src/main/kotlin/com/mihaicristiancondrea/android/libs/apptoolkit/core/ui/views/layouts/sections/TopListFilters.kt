@@ -31,15 +31,13 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalLayoutDirection
-import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.LayoutDirection
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.icons.ToolkitIcon
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.analytics.Ga4EventData
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.chip.CommonFilterChip
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.modifiers.componentEntrance
@@ -47,21 +45,6 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.spacers.La
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
-
-/**
- * One chip in a [TopListFilters] row.
- *
- * @property value The filter this chip selects. Rows compare it against the current selection, so
- *   any type with a meaningful `equals` works, an enum entry being the usual one.
- * @property label Resolved chip text. Rows key their items on it, so keep it unique within a row.
- * @property icon Icon shown while the chip is not selected. Selected chips show a checkmark.
- */
-@Immutable
-data class FilterChipItem<T>(
-    val value: T,
-    val label: String,
-    val icon: ToolkitIcon? = null,
-)
 
 /**
  * A horizontally scrolling row of filter chips, optionally introduced by a caption.

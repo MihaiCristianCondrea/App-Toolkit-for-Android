@@ -38,91 +38,41 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.OpenInNew
 import androidx.compose.material.icons.outlined.Apps
 import androidx.compose.material.icons.outlined.Store
+import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularWavyProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Card
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.Immutable
-import androidx.compose.runtime.Stable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.layout.onVisibilityChanged
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.LiveRegionMode
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.heading
 import androidx.compose.ui.semantics.liveRegion
-import androidx.compose.ui.semantics.LiveRegionMode
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.min
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.modifiers.animatedItems
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.modifiers.animateVisibility
-import androidx.compose.ui.layout.onVisibilityChanged
+import coil3.compose.AsyncImage
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.icons.ToolkitIcon
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.R
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.GeneralButton
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.GeneralButtonStyle
-import coil3.compose.AsyncImage
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.R
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.modifiers.animateVisibility
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.modifiers.animatedItems
 import kotlinx.collections.immutable.ImmutableList
-
-/**
- * One app in an [AppShowcase].
- *
- * @property key Stable identity, the package name.
- * @property installed Whether the app is on this device: its card then opens it, and its action
- * reads as "open" rather than as the store.
- */
-@Immutable
-data class ShowcaseApp(
-    val key: String,
-    val name: String,
-    val category: String,
-    val description: String,
-    val iconUrl: String,
-    val installed: Boolean = false,
-)
-
-/** What an [AppShowcase] shows: the apps, or why there are none yet. */
-@Immutable
-sealed interface AppShowcaseState {
-    data object Loading : AppShowcaseState
-    data class Ready(val apps: ImmutableList<ShowcaseApp>) : AppShowcaseState
-    data object Empty : AppShowcaseState
-    data object Failed : AppShowcaseState
-}
-
-/**
- * The words an [AppShowcase] uses. The host supplies them, so the section speaks the app's
- * language and names its own store; loading and retry default to the Toolkit's strings.
- *
- * @property storeActionDescription Spoken for a card's store action, given the app's name.
- * @property openActionDescription Spoken for an installed app's action, given its name.
- */
-@Stable
-class AppShowcaseLabels(
-    val title: String,
-    val viewAll: String,
-    val viewAllDescription: String,
-    val store: String,
-    val open: String,
-    val empty: String,
-    val failed: String,
-    val loading: String,
-    val retry: String,
-    val storeActionDescription: (appName: String) -> String,
-    val openActionDescription: (appName: String) -> String,
-)
 
 /** [AppShowcaseLabels] with the Toolkit's own loading and retry strings. */
 @Composable

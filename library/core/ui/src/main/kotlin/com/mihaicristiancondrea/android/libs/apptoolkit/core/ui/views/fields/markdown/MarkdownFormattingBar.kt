@@ -51,23 +51,6 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.Ge
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.GeneralButtonStyle
 
 /**
- * One action of the Markdown formatting bar.
- *
- * [analyticsName] is the identity a host reports the action under. It is part of the contract, so
- * an event logged today keeps meaning the same thing after the enum is reordered or renamed.
- */
-enum class MarkdownFormatAction(val analyticsName: String) {
-    Bold(analyticsName = "bold"),
-    Italic(analyticsName = "italic"),
-    Code(analyticsName = "code"),
-    CodeBlock(analyticsName = "code_block"),
-    BulletList(analyticsName = "bullet_list"),
-    NumberedList(analyticsName = "numbered_list"),
-    Quote(analyticsName = "quote"),
-    Link(analyticsName = "link"),
-}
-
-/**
  * Formatting actions for a Markdown field, drawn as the block below it.
  *
  * The row scrolls horizontally rather than wrapping, so the bar keeps the height of a single row on

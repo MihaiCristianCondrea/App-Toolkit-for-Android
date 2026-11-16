@@ -22,26 +22,10 @@ import androidx.compose.material3.MaterialShapes
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.toShape
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.Immutable
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.unit.Dp
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
-
-/**
- * Colors one [GroupedGrid] draws its cells with.
- *
- * A cell may override the two badge colors on its own [GroupedGridItem]; the container and text
- * colors belong to the grid, so a group always reads as one surface.
- */
-@Immutable
-data class GroupedGridColors(
-    val containerColor: Color,
-    val contentColor: Color,
-    val iconContainerColor: Color,
-    val iconContentColor: Color,
-    val subtitleColor: Color,
-)
 
 /** Values a [GroupedGrid] falls back to when a caller does not choose its own. */
 object GroupedGridDefaults {

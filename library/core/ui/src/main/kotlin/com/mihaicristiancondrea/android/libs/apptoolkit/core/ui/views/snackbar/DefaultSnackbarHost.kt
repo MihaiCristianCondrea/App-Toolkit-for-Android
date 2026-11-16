@@ -23,10 +23,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Close
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Snackbar
 import androidx.compose.material3.SnackbarData
-import androidx.compose.material3.SnackbarDefaults
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
@@ -39,7 +37,6 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.consta
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.icons.ToolkitIcon
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.icons.ToolkitIconContent
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.CustomSnackbarVisuals
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.ToolkitSnackbarColors
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.ToolkitSnackbarStyle
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.GeneralButton
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.GeneralButtonStyle
@@ -114,24 +111,5 @@ fun ToolkitSnackbar(data: SnackbarData, modifier: Modifier = Modifier) {
             }
             Text(text = visuals.message)
         }
-    }
-}
-
-object ToolkitSnackbarDefaults {
-
-    /** Material's inverse surface for [ToolkitSnackbarStyle.Normal], the error colours for the other. */
-    @Composable
-    fun colors(style: ToolkitSnackbarStyle): ToolkitSnackbarColors = when (style) {
-        ToolkitSnackbarStyle.Normal -> ToolkitSnackbarColors(
-            containerColor = SnackbarDefaults.color,
-            contentColor = SnackbarDefaults.contentColor,
-            actionColor = SnackbarDefaults.actionColor,
-        )
-
-        ToolkitSnackbarStyle.Error -> ToolkitSnackbarColors(
-            containerColor = MaterialTheme.colorScheme.errorContainer,
-            contentColor = MaterialTheme.colorScheme.error,
-            actionColor = MaterialTheme.colorScheme.error,
-        )
     }
 }
