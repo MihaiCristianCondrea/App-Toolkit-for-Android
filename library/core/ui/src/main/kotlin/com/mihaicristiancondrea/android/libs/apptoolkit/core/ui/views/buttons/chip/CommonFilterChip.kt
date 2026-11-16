@@ -17,7 +17,6 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.chip
 
-import android.view.SoundEffectConstants
 import android.view.View
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.ContentTransform
@@ -88,7 +87,6 @@ fun CommonFilterChip(
     FilterChip(
         selected = selected,
         onClick = {
-            view.playSoundEffect(SoundEffectConstants.CLICK)
             hapticFeedback.performHapticFeedback(hapticFeedbackType = HapticFeedbackType.ContextClick)
             telemetry.logGa4Event(ga4Event)
             onClick()

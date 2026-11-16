@@ -17,7 +17,6 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.fields
 
-import android.view.SoundEffectConstants
 import android.view.View
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -104,7 +103,6 @@ fun DatePickerTextField(
                 interactionSource = interactionSource,
                 indication = ripple(bounded = true),
             ) {
-                view.playSoundEffect(SoundEffectConstants.CLICK)
                 hapticFeedback.performHapticFeedback(HapticFeedbackType.ContextClick)
                 telemetry.logGa4Event(ga4Event)
                 showDialog = true

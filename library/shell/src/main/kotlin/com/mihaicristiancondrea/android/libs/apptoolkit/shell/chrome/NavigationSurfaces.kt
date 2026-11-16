@@ -17,7 +17,6 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.shell.chrome
 
-import android.view.SoundEffectConstants
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.animateFloatAsState
@@ -79,7 +78,6 @@ import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.layout.layout
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalHapticFeedback
-import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
@@ -590,18 +588,15 @@ private fun PinnedFooterColumn(
 }
 
 /**
- * The click sound, and with [haptic] a light haptic, that the Toolkit's navigation plays on every
- * click: the bars and rail both, the drawer the sound only.
+ * The light haptic the Toolkit's bars and rail give on every click; the drawer gives none. The
+ * click sound is Compose's own: every clickable item plays it, so playing it here too sounded
+ * twice.
  */
 @Composable
 private fun rememberNavigationFeedback(haptic: Boolean): () -> Unit {
-    val view = LocalView.current
     val haptics = LocalHapticFeedback.current
-    return remember(view, haptics, haptic) {
-        {
-            view.playSoundEffect(SoundEffectConstants.CLICK)
-            if (haptic) haptics.performHapticFeedback(HapticFeedbackType.ContextClick)
-        }
+    return remember(haptics, haptic) {
+        { if (haptic) haptics.performHapticFeedback(HapticFeedbackType.ContextClick) }
     }
 }
 

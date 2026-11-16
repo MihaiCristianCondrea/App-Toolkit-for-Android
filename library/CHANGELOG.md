@@ -2,6 +2,31 @@
 
 ---
 
+# Unreleased
+
+### Added
+
+- A drawer `link` takes a `badge` or a `badgeText` read in composition, as a tab does, and shows it
+  in the drawer and on the rail. Use it for counts such as the items in a trash.
+
+### Changed
+
+- `ButtonFeedback.soundEffect` defaults to null. Compose Foundation 1.12 plays the click sound for
+  every clickable, so the default now adds only the haptic. Pass a sound only for one on top of
+  Compose's click.
+
+### Fixed
+
+- Taps no longer sound twice. Buttons, navigation items, preferences, chips, menus, cards and the
+  consent and FAQ screens played the click sound themselves on top of the one Compose now plays.
+- Switching between a tab with a search field and one without no longer makes the menu button and
+  the app bar actions slide out and back in. The bar keeps them when its style changes.
+- List items and pager pages that leave the screen partway through their entrance no longer come
+  back invisible. A page a slide only passed through, or a row scrolled away and back, enters
+  again.
+
+---
+
 # November 06, 2026
 
 **Version:** `3.0.0-pre32`

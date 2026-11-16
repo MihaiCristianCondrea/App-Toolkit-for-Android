@@ -17,7 +17,6 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.diagnostics.ui.views.dialogs
 
-import android.view.SoundEffectConstants
 import android.view.View
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -192,7 +191,6 @@ fun FirebaseConsentDialog(
                         modifier = Modifier.fillMaxWidth(),
                         label = stringResource(R.string.privacy_choices_allow_all),
                         onClick = {
-                            view.playSoundEffect(SoundEffectConstants.CLICK)
                             hapticFeedback.performHapticFeedback(HapticFeedbackType.ContextClick)
                             onAllowAll()
                         },
@@ -207,7 +205,6 @@ fun FirebaseConsentDialog(
                             modifier = Modifier.weight(1f),
                             label = stringResource(R.string.privacy_choices_confirm),
                             onClick = {
-                                view.playSoundEffect(SoundEffectConstants.CLICK)
                                 hapticFeedback.performHapticFeedback(HapticFeedbackType.ContextClick)
                                 onConfirmSelection()
                             },
@@ -218,7 +215,6 @@ fun FirebaseConsentDialog(
                             modifier = Modifier.weight(1f),
                             label = stringResource(R.string.privacy_choices_allow_essentials),
                             onClick = {
-                                view.playSoundEffect(SoundEffectConstants.CLICK)
                                 hapticFeedback.performHapticFeedback(HapticFeedbackType.ContextClick)
                                 onAllowEssentials()
                             },

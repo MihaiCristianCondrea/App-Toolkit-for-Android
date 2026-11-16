@@ -17,7 +17,6 @@
 
 package com.mihaicristiancondrea.android.apps.apptoolkit.feature.components.ui.views.sections
 
-import android.view.SoundEffectConstants
 import androidx.annotation.DrawableRes
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.clickable
@@ -50,7 +49,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.platform.LocalHapticFeedback
-import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -154,7 +152,6 @@ fun AnimationShowcase() {
         mutableStateOf(value = ToolkitIconLoopTrigger.OnInteraction)
     }
     val hapticFeedback = LocalHapticFeedback.current
-    val view = LocalView.current
 
     ShowcaseHeader(
         title = stringResource(R.string.components_section_animations),
@@ -190,7 +187,6 @@ fun AnimationShowcase() {
             AnimationControlRow(
                 label = stringResource(R.string.components_animation_loop),
                 onClick = {
-                    view.playSoundEffect(SoundEffectConstants.CLICK)
                     hapticFeedback.performHapticFeedback(
                         if (loop) HapticFeedbackType.ToggleOff else HapticFeedbackType.ToggleOn,
                     )
@@ -330,7 +326,6 @@ private fun AnimationPreviewCard(
     modifier: Modifier = Modifier,
 ) {
     val hapticFeedback = LocalHapticFeedback.current
-    val view = LocalView.current
     var clickCount by rememberSaveable(replayMode, loop, loopTrigger) { mutableIntStateOf(0) }
 
     val icon = remember(resource, replayMode, loop, loopTrigger) {
@@ -347,7 +342,6 @@ private fun AnimationPreviewCard(
         position = position,
         modifier = modifier,
         onClick = {
-            view.playSoundEffect(SoundEffectConstants.CLICK)
             hapticFeedback.performHapticFeedback(HapticFeedbackType.ContextClick)
             clickCount++
         },

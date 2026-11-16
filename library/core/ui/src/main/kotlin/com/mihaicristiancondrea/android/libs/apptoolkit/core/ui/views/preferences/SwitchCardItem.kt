@@ -17,7 +17,6 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences
 
-import android.view.SoundEffectConstants
 import android.view.View
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
@@ -76,7 +75,6 @@ fun SwitchCardItem(
         onClick = {
             if (!enabled) return@Card
             val updatedValue = !switchState.value
-            view.playSoundEffect(SoundEffectConstants.CLICK)
             telemetry.logGa4Event(ga4EventProvider?.invoke(updatedValue) ?: ga4Event)
             onSwitchToggled(updatedValue)
         }

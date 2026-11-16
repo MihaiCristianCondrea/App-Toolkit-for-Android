@@ -17,7 +17,6 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.diagnostics.ui.views.dialogs
 
-import android.view.SoundEffectConstants
 import android.view.View
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateContentSize
@@ -92,7 +91,6 @@ fun ConsentExpandableItemCard(
                 modifier = Modifier
                     .clip(MaterialTheme.shapes.large)
                     .clickable {
-                        view.playSoundEffect(SoundEffectConstants.CLICK)
                         hapticFeedback.performHapticFeedback(HapticFeedbackType.ContextClick)
                         expanded = !expanded
                     },
@@ -118,7 +116,6 @@ fun ConsentExpandableItemCard(
             CustomSwitch(
                 checked = checked,
                 onCheckedChange = { isChecked ->
-                    view.playSoundEffect(SoundEffectConstants.CLICK)
                     hapticFeedback.performHapticFeedback(HapticFeedbackType.ContextClick)
                     onCheckedChange(isChecked)
                 },

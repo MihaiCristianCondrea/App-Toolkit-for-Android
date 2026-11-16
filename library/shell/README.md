@@ -219,7 +219,7 @@ JUnit 5. They start Koin with the theme, display and ads repositories `AppTheme`
   Beside a rail or permanent drawer both sit inside `ShellFrame`, next to the navigation, which
   therefore belongs to no entry and never moves with a page.
 - **Toolkit components throughout.** Tab, rail and drawer icons are `AnimatedToolkitIcon`s with
-  `bounceClick`, a click sound and haptic feedback, so an animated vector plays on each click; the
+  `bounceClick`, Compose's click sound and a haptic, so an animated vector plays on each click; the
   drawer header sizes the app's `ToolkitIcon` to the title's line height; the app bar's buttons are
   `AnimatedIconButtonDirection`s.
 - **The app bar's buttons move, not pop.** The navigation button is one

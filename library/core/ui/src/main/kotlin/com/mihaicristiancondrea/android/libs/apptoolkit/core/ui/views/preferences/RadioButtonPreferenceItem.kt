@@ -17,7 +17,6 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences
 
-import android.view.SoundEffectConstants
 import android.view.View
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Row
@@ -70,7 +69,6 @@ fun RadioButtonPreferenceItem(
                     if (enabled) {
                         base
                             .clickable {
-                                view.playSoundEffect(SoundEffectConstants.CLICK)
                                 hapticFeedback.performHapticFeedback(hapticFeedbackType = HapticFeedbackType.ContextClick)
                                 telemetry.logGa4Event(ga4Event)
                                 onCheckedChange(!isChecked)
@@ -84,7 +82,6 @@ fun RadioButtonPreferenceItem(
                 selected = isChecked,
                 enabled = enabled,
                 onClick = {
-                    view.playSoundEffect(SoundEffectConstants.CLICK)
                     hapticFeedback.performHapticFeedback(hapticFeedbackType = HapticFeedbackType.ContextClick)
                     telemetry.logGa4Event(ga4Event)
                     onCheckedChange(!isChecked)

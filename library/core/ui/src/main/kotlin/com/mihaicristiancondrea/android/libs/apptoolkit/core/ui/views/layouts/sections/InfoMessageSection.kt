@@ -106,7 +106,6 @@ fun InfoMessageSection(
                     LearnMoreText(
                         text = learnMoreText,
                         onClick = {
-                            view.playSoundEffect(SoundEffectConstants.CLICK)
                             hapticFeedback.performHapticFeedback(hapticFeedbackType = HapticFeedbackType.ContextClick)
                             when {
                                 learnMoreAction != null -> learnMoreAction()

@@ -17,7 +17,6 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.dropdown
 
-import android.view.SoundEffectConstants
 import android.view.View
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.DropdownMenuItem
@@ -64,7 +63,6 @@ fun CommonDropdownMenuItem(
         text = { Text(text = text) },
         leadingIcon = icon?.let { { Icon(imageVector = it, contentDescription = null) } },
         onClick = {
-            view.playSoundEffect(SoundEffectConstants.CLICK)
             hapticFeedback.performHapticFeedback(hapticFeedbackType = HapticFeedbackType.ContextClick)
             telemetry.logGa4Event(ga4Event)
             onClick()

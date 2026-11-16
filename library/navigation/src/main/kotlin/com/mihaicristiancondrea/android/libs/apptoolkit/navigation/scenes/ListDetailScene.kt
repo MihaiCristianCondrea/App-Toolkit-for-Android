@@ -21,7 +21,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import kotlinx.coroutines.coroutineScope
 import androidx.navigationevent.NavigationEvent
 import androidx.compose.ui.graphics.graphicsLayer
-import android.view.SoundEffectConstants
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.animateDpAsState
@@ -89,7 +88,6 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.layout.layout
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalLayoutDirection
-import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
@@ -494,7 +492,6 @@ private fun ListDetailTopBar(
     containerColor: Color,
     listTitleModifier: Modifier = Modifier,
 ) {
-    val view = LocalView.current
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -515,7 +512,6 @@ private fun ListDetailTopBar(
                     // This module cannot depend on core UI, so it supplies matching bounce and sound feedback locally.
                     IconButton(
                         onClick = {
-                            view.playSoundEffect(SoundEffectConstants.CLICK)
                             onCloseList()
                         },
                         modifier = Modifier

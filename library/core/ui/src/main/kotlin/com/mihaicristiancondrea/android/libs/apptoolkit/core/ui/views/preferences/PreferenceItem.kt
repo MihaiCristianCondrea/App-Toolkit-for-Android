@@ -17,7 +17,6 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences
 
-import android.view.SoundEffectConstants
 import android.view.View
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -88,7 +87,6 @@ fun PreferenceItem(
             .fillMaxWidth()
             .clip(shape = RoundedCornerShape(size = rippleEffectDp))
             .clickable(enabled = enabled, onClick = {
-                view.playSoundEffect(SoundEffectConstants.CLICK)
                 hapticFeedback.performHapticFeedback(hapticFeedbackType = HapticFeedbackType.ContextClick)
                 telemetry.logGa4Event(ga4EventProvider?.invoke() ?: ga4Event)
                 onClick()

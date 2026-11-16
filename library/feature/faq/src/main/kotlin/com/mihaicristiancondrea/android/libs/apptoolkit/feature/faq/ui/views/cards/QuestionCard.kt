@@ -17,7 +17,6 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.ui.views.cards
 
-import android.view.SoundEffectConstants
 import android.view.View
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.animateFloatAsState
@@ -96,7 +95,6 @@ fun QuestionCard(
         shape = groupedPosition?.let { RectangleShape }
             ?: RoundedCornerShape(size = SizeConstants.MediumSize),
         onClick = {
-            view.playSoundEffect(SoundEffectConstants.CLICK)
             hapticFeedback.performHapticFeedback(hapticFeedbackType = HapticFeedbackType.ContextClick)
             onToggleExpand()
         }

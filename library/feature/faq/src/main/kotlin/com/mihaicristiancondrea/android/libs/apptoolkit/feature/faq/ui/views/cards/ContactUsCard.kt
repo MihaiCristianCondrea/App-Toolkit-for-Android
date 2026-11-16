@@ -17,7 +17,6 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.ui.views.cards
 
-import android.view.SoundEffectConstants
 import android.view.View
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -83,7 +82,6 @@ fun ContactUsCard(
     Card(
         modifier = cardModifier,
         onClick = {
-            view.playSoundEffect(SoundEffectConstants.CLICK)
             hapticFeedback.performHapticFeedback(hapticFeedbackType = HapticFeedbackType.ContextClick)
             onClick()
         },

@@ -17,7 +17,6 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.onboarding.ui.views.pages.theme.cards
 
-import android.view.SoundEffectConstants
 import android.view.View
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -65,7 +64,6 @@ fun AmoledModeToggleCard(
     Card(
         onClick = {
             if (!enabled) return@Card
-            view.playSoundEffect(SoundEffectConstants.CLICK)
             hapticFeedback.performHapticFeedback(HapticFeedbackType.ContextClick)
             onCheckedChange(!isAmoledMode)
         },

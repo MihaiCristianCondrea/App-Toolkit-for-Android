@@ -17,7 +17,6 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.cards
 
-import android.view.SoundEffectConstants
 import android.view.View
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.Spring
@@ -116,7 +115,6 @@ fun ThemeChoicePreviewCard(
     ) {
         Card(
             onClick = {
-                view.playSoundEffect(SoundEffectConstants.CLICK)
                 hapticFeedback.performHapticFeedback(HapticFeedbackType.ContextClick)
                 onClick()
             },

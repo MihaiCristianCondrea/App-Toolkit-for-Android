@@ -409,6 +409,13 @@ Every enabled click replays the icon, performs `ButtonFeedback`, logs the option
 through `LocalTelemetry`, then invokes `onClick`. Disabled buttons do none of these.
 Do not add `bounceClick()`, manual sounds, haptics, or duplicate analytics at call sites.
 
+`ButtonFeedback` adds the haptic. The click sound is Compose's own: since Compose Foundation 1.12
+every `clickable`, `selectable` and `toggleable` plays the system click
+(`ComposeFoundationFlags.isInteractionSoundEffectOnClickEnabled`), so `ButtonFeedback.soundEffect`
+defaults to null and the Toolkit never plays `SoundEffectConstants.CLICK` itself in a click
+handler: doing both sounded every tap twice. Play a sound by hand only where no Compose click is
+involved, such as a text link's `LinkInteractionListener` or a dropdown's `onExpandedChange`.
+
 ```kotlin
 GeneralButton(onClick = ::save, label = stringResource(R.string.save))
 GeneralButton(

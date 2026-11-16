@@ -17,7 +17,6 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.diagnostics.ui.onboarding.cards
 
-import android.view.SoundEffectConstants
 import android.view.View
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.animateContentSize
@@ -63,7 +62,6 @@ fun UsageAndDiagnosticsToggleCard(
             .fillMaxWidth()
             .bounceClick(),
         onClick = {
-            view.playSoundEffect(SoundEffectConstants.CLICK)
             hapticFeedback.performHapticFeedback(hapticFeedbackType = HapticFeedbackType.ContextClick)
             onCheckedChange(!switchState)
         },

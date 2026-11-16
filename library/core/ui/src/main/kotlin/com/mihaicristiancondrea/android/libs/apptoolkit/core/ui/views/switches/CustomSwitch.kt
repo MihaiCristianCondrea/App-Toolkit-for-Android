@@ -17,7 +17,6 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.switches
 
-import android.view.SoundEffectConstants
 import android.view.View
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.SizeTransform
@@ -59,7 +58,6 @@ fun CustomSwitch(
         enabled = enabled,
         onCheckedChange = { isChecked ->
             if (!enabled) return@Switch
-            view.playSoundEffect(SoundEffectConstants.CLICK)
             hapticFeedback.performHapticFeedback(
                 hapticFeedbackType = if (checked) {
                     HapticFeedbackType.ToggleOn

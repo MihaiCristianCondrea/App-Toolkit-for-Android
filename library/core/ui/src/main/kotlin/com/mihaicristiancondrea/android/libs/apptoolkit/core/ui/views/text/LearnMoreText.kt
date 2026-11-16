@@ -17,7 +17,6 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.text
 
-import android.view.SoundEffectConstants
 import android.view.View
 import androidx.compose.foundation.clickable
 import androidx.compose.material3.MaterialTheme
@@ -68,7 +67,6 @@ fun LearnMoreText(
             .bounceClick()
             .clip(MaterialTheme.shapes.small)
             .clickable(onClick = {
-                view.playSoundEffect(SoundEffectConstants.CLICK)
                 hapticFeedback.performHapticFeedback(hapticFeedbackType = HapticFeedbackType.ContextClick)
                 onClick()
             })

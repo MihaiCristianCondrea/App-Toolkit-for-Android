@@ -17,7 +17,6 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons
 
-import android.view.SoundEffectConstants
 import android.view.View
 import androidx.compose.ui.hapticfeedback.HapticFeedback
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
@@ -25,11 +24,15 @@ import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 /**
  * Configures feedback behavior for button interactions.
  *
- * @param soundEffect The Android sound effect to play, or `null` to disable sound.
+ * The click sound is not part of it by default: Compose plays the system click sound for every
+ * clickable, so a button that played it as well sounded twice.
+ *
+ * @param soundEffect An extra Android sound effect to play on top of Compose's click, or `null`
+ * (the default) for Compose's click alone.
  * @param hapticFeedbackType The haptic feedback type to perform, or `null` to disable haptics.
  */
 data class ButtonFeedback(
-    val soundEffect: Int? = SoundEffectConstants.CLICK,
+    val soundEffect: Int? = null,
     val hapticFeedbackType: HapticFeedbackType? = HapticFeedbackType.ContextClick,
 ) {
     /**

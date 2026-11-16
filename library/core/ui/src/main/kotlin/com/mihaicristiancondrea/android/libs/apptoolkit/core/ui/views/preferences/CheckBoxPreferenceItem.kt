@@ -17,7 +17,6 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences
 
-import android.view.SoundEffectConstants
 import android.view.View
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
@@ -73,7 +72,6 @@ fun CheckBoxPreferenceItem(
             modifier = Modifier
                 .fillMaxWidth()
                 .clickable {
-                    view.playSoundEffect(SoundEffectConstants.CLICK)
                     hapticFeedback.performHapticFeedback(hapticFeedbackType = HapticFeedbackType.ContextClick)
                     telemetry.logGa4Event(ga4Event)
                     onCheckedChange(!checked)
@@ -104,7 +102,6 @@ fun CheckBoxPreferenceItem(
             Checkbox(
                 checked = checked,
                 onCheckedChange = { isChecked: Boolean ->
-                    view.playSoundEffect(SoundEffectConstants.CLICK)
                     hapticFeedback.performHapticFeedback(hapticFeedbackType = HapticFeedbackType.ContextClick)
                     telemetry.logGa4Event(ga4Event)
                     onCheckedChange(isChecked)
