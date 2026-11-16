@@ -56,12 +56,3 @@ class ToolkitFab(
     val visible: Boolean = true,
     val id: Any = label ?: contentDescription ?: icon,
 )
-
-/** The sizes Material 3 gives a floating action button, from the smallest to the largest. */
-enum class FabSize { Small, Regular, Medium, Large }
-
-/**
- * The theme colour a floating action button's container takes: the primary, secondary or
- * tertiary container, or a raised surface for a button that should not draw the eye.
- */
-enum class FabColor { Primary, Secondary, Tertiary, Surface }

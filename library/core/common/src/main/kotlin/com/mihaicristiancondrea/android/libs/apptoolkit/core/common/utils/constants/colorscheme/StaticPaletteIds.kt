@@ -18,17 +18,6 @@
 package com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.colorscheme
 
 /**
- * Palette variant indices for dynamic color schemes.
- */
-object DynamicPaletteVariant {
-    const val MIN: Int = 0
-    const val MAX: Int = 7
-    val indices: IntRange = MIN..MAX
-
-    fun clamp(value: Int): Int = value.coerceIn(MIN, MAX)
-}
-
-/**
  * Supported static palette identifiers.
  */
 object StaticPaletteIds {

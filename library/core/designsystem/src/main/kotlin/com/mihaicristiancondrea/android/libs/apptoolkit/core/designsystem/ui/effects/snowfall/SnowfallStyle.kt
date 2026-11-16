@@ -22,17 +22,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 
-enum class SnowflakeShape {
-    /** Soft round dots, the lightest option to draw. */
-    Dots,
-
-    /** Six-armed crystals that slowly turn as they fall. */
-    Crystals,
-
-    /** Mostly dots with an occasional larger crystal, which reads as depth. */
-    Mixed,
-}
-
 /**
  * Appearance and motion of [snowfall].
  *

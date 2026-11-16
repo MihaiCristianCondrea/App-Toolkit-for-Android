@@ -21,7 +21,6 @@ package com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.ef
 import androidx.compose.runtime.withFrameNanos
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.drawscope.ContentDrawScope
-import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.node.DrawModifierNode
 import androidx.compose.ui.node.LayoutAwareModifierNode
 import androidx.compose.ui.node.invalidateDraw
@@ -30,23 +29,6 @@ import androidx.compose.ui.unit.IntSize
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
-
-/**
- * The moving state of a falling-particle effect, such as snow or rain, kept apart from Compose so
- * its motion can be tested directly. [ParticleEffectNode] drives it.
- */
-internal interface ParticleSimulation {
-
-    /** Number of particles currently simulated; none means there is nothing to draw or move. */
-    val particleCount: Int
-
-    /** Rebuilds the particles for a [widthPx] by [heightPx] surface at [pxPerDp]. */
-    fun resize(widthPx: Int, heightPx: Int, pxPerDp: Float)
-
-    fun advance(elapsedMillis: Float)
-
-    fun draw(scope: DrawScope)
-}
 
 /**
  * Draws a [ParticleSimulation] over its element's content, shared by `snowfall` and `rainfall`.

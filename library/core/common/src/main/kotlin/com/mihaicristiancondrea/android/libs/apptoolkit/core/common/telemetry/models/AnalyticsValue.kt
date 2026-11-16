@@ -23,8 +23,3 @@ sealed interface AnalyticsValue {
     data class DoubleVal(val value: Double) : AnalyticsValue
     data class Bool(val value: Boolean) : AnalyticsValue
 }
-
-data class AnalyticsEvent(
-    val name: String,
-    val params: Map<String, AnalyticsValue> = emptyMap(),
-)

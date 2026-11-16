@@ -49,18 +49,6 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.sty
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.style.typography.AppTypography
 
 /**
- * The host's own light and dark schemes for the `default` palette.
- *
- * These are configuration, not state: set them before the first composition, normally in
- * `Application.onCreate`. `AppTheme` reads them when one of its theme inputs changes, so a value
- * assigned while a screen is showing is not picked up until the next theme change.
- */
-object AppThemeConfig {
-    var customLightScheme: ColorScheme? = null
-    var customDarkScheme: ColorScheme? = null
-}
-
-/**
  * Resolves the color scheme the app is drawn in.
  *
  * The wallpaper-based schemes are only built when they are used: each one reads roughly fifty

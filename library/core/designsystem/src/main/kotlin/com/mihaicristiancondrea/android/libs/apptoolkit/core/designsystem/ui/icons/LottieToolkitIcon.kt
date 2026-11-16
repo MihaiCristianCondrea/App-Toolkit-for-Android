@@ -123,25 +123,3 @@ internal fun LottieToolkitIcon(
         dynamicProperties = properties,
     )
 }
-
-internal data class LottiePlaybackTarget(val progress: Float, val restart: Boolean)
-
-/** Keeps click replays distinct from selection changes, including clicks before JSON finishes loading. */
-internal class LottieIconPlayback(private var restingAtEnd: Boolean) {
-    private var lastClickCount = 0
-    private var targetAtEnd = restingAtEnd
-
-    fun target(atEnd: Boolean, clickCount: Int, mode: ToolkitIconReplayMode): LottiePlaybackTarget {
-        val clicked = clickCount != lastClickCount
-        val selectionChanged = atEnd != restingAtEnd
-        targetAtEnd = when {
-            clicked && mode == ToolkitIconReplayMode.Restart -> true
-            selectionChanged -> atEnd
-            clicked -> !targetAtEnd
-            else -> targetAtEnd
-        }
-        restingAtEnd = atEnd
-        lastClickCount = clickCount
-        return LottiePlaybackTarget(if (targetAtEnd) 1f else 0f, clicked && mode == ToolkitIconReplayMode.Restart)
-    }
-}
