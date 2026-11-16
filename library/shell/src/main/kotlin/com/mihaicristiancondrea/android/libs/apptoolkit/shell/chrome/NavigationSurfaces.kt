@@ -95,13 +95,8 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.ShellGr
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.ShellTab
 import com.mihaicristiancondrea.android.libs.apptoolkit.shell.R
 import kotlin.math.roundToInt
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.R as CoreUiR
 
-/** What a navigation surface does when one of its rows is chosen. */
-internal class NavigationCallbacks(
-    val onTabClick: (Int) -> Unit,
-    val onEntryClick: (DrawerEntry) -> Unit,
-)
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.R as CoreUiR
 
 /** The drawer's entries before its [DrawerEntry.Spacer], and the pinned footer after it. */
 internal fun List<DrawerEntry>.splitAtSpacer(): Pair<List<DrawerEntry>, List<DrawerEntry>> {

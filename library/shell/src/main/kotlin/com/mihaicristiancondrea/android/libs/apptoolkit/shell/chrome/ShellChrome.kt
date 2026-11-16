@@ -48,8 +48,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.layout.safeDrawing
+import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
@@ -67,9 +67,7 @@ import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.DisposableEffect
-import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.Stable
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
@@ -110,6 +108,7 @@ import androidx.navigation3.scene.SinglePaneSceneStrategy
 import androidx.navigationevent.NavigationEvent
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.icons.ToolkitIcon
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.style.LocalShowBottomBarLabels
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.LocalScreenOpening
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.AnimatedIconButtonDirection
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.ButtonFeedback
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.fab.FabHost
@@ -134,7 +133,6 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.shell.with
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.snackbar.DefaultSnackbarHost
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.snackbar.LocalScaffoldSnackbars
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.snackbar.ScaffoldSnackbars
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.LocalScreenOpening
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.LocalShellSearch
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.ShellBackHandler
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.ShellNavDisplay
@@ -143,12 +141,15 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.ShellSearch
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.DestinationKind
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.DrawerEntry
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.LocalShellCapabilities
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.LocalTopBarScrollMode
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.PaneRole
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.ShellGraph
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.TopBarScrollMode
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.TopBarStyle
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.layout.ArticleTopBarHost
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.layout.ContentCardShape
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.layout.FollowScrollWithFrameTint
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.layout.FrameTint
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.layout.LocalArticleTopBarHost
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.layout.LocalShellLayout
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.layout.ShellLayoutMode
@@ -166,61 +167,8 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.shell.settings.Navigatio
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.launch
+
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.R as CoreUiR
-import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.LocalTopBarScrollMode
-import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.TopBarScrollMode
-import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.layout.FrameTint
-
-/**
- * What a screen inside the shell can ask of the chrome around it: whether the navigation hides in
- * a drawer, and a way to open it, for screens that draw their own header.
- */
-@Immutable
-class ShellChromeController(
-    val showsMenuButton: Boolean,
-    /**
-     * Opens the navigation drawer or rail. Nothing in the Toolkit calls it, since its own screens
-     * use the shell's app bar; it is the host-facing way for a screen that draws its own header
-     * to open the navigation, documented in the module README.
-     */
-    @Suppress("unused")
-    val openNavigation: () -> Unit,
-)
-
-/**
- * What the tab screens declare into the shell's scaffold, by screen entry: their floating action
- * buttons and their article bar.
- *
- * A stable holder, so the bodies it is passed to can skip; a plain mutable map is unstable. Its
- * contents need no snapshot state: a screen takes its hosts once, in `remember`.
- */
-@Stable
-internal class EntryHosts {
-    private val fabHosts: MutableMap<String, FabHost> = mutableMapOf()
-    private val articleHosts: MutableMap<String, ArticleTopBarHost> = mutableMapOf()
-
-    /** The floating action button host for [entryKey], created the first time it is asked for. */
-    fun fabHostFor(entryKey: String): FabHost = fabHosts.getOrPut(entryKey) { FabHost() }
-
-    /** The article bar host for [entryKey], created the first time it is asked for. */
-    fun articleHostFor(entryKey: String): ArticleTopBarHost = articleHosts.getOrPut(entryKey) { ArticleTopBarHost() }
-
-    /** Drops the hosts of every screen not in [liveEntryKeys]. */
-    fun retainOnly(liveEntryKeys: Set<String>) {
-        fabHosts.keys.retainAll(liveEntryKeys)
-        articleHosts.keys.retainAll(liveEntryKeys)
-    }
-}
-
-/**
- * The shell's snackbar host, set by `ShellHost`, and how many tab scaffolds draw it now. While none
- * does, on a start screen or under a page, `ShellHost` draws it itself, so a message the app shows
- * there is never left waiting on a host nobody draws.
- */
-@Stable
-internal class ShellSnackbarHost(val hostState: SnackbarHostState) {
-    var drawnByTabs: Int by mutableIntStateOf(0)
-}
 
 internal val LocalShellSnackbarHost = staticCompositionLocalOf<ShellSnackbarHost?> { null }
 

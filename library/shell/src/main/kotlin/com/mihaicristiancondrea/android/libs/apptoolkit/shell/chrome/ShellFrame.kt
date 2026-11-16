@@ -18,8 +18,6 @@
 package com.mihaicristiancondrea.android.libs.apptoolkit.shell.chrome
 
 import androidx.compose.animation.SharedTransitionLayout
-import androidx.compose.animation.core.Animatable
-import androidx.compose.animation.core.AnimationVector1D
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.spring
 import androidx.compose.foundation.layout.Box
@@ -37,7 +35,6 @@ import androidx.compose.material3.PermanentDrawerSheet
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.Stable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -66,31 +63,6 @@ import kotlinx.coroutines.flow.collectLatest
 /** Whether this layout keeps the navigation on screen beside the content: a rail or a permanent drawer. */
 internal val ShellLayoutMode.keepsNavigationBeside: Boolean
     get() = this == ShellLayoutMode.Rail || this == ShellLayoutMode.ExpandedRail || this == ShellLayoutMode.PermanentDrawer
-
-/** What the navigation beside the content shares with the shell drawn next to it. */
-@Stable
-internal class ShellFrameState(railExpanded: Boolean) {
-    /** Whether the expanded rail layout shows its rail open, with labels, or collapsed. */
-    var railExpanded: Boolean by mutableStateOf(railExpanded)
-
-    /** Whether the rail layout's modal rail is open over the content. */
-    var railOverlayOpen: Boolean by mutableStateOf(false)
-
-    /**
-     * How far the navigation and the app bar have taken the shared colour, from 0 to 1. The frame
-     * draws it; the app bar drives it when the colour follows scrolling.
-     */
-    val tint: Animatable<Float, AnimationVector1D> = Animatable(0f)
-
-    /** Opens the navigation the way [mode] does: the modal rail, or the expanded rail toggled. */
-    fun openNavigation(mode: ShellLayoutMode) {
-        when (mode) {
-            ShellLayoutMode.Rail -> railOverlayOpen = true
-            ShellLayoutMode.ExpandedRail -> railExpanded = !railExpanded
-            else -> Unit
-        }
-    }
-}
 
 /**
  * The frame's state for the layout [mode] the window has now. The expanded rail starts collapsed,

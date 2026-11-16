@@ -18,13 +18,7 @@
 package com.mihaicristiancondrea.android.libs.apptoolkit.shell.settings
 
 import androidx.compose.runtime.Immutable
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.style.MotionTempo
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.EntranceReplay
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.modifiers.EntranceStyle
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.NavigationDefaults
-import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.TopBarStyle
-import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.layout.ShellLayoutPolicy
-import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.motion.TabTransitionStyle
 
 /**
  * One app's defaults for the Toolkit: how its shell behaves and how its destinations look when
@@ -55,69 +49,3 @@ data class AppToolkitDefaults(
 /** Builds [AppToolkitDefaults]. Anything left out keeps the Toolkit's default. */
 fun appToolkitDefaults(builder: AppToolkitDefaultsBuilder.() -> Unit): AppToolkitDefaults =
     AppToolkitDefaultsBuilder().apply(builder).build()
-
-@DslMarker
-annotation class AppToolkitDefaultsDsl
-
-@AppToolkitDefaultsDsl
-class AppToolkitDefaultsBuilder internal constructor() {
-    private var shell = ShellSettings()
-    private var navigation = NavigationDefaults()
-
-    fun shell(builder: ShellDefaultsBuilder.() -> Unit) {
-        shell = ShellDefaultsBuilder(shell).apply(builder).build()
-    }
-
-    fun navigation(builder: NavigationDefaultsBuilder.() -> Unit) {
-        navigation = NavigationDefaultsBuilder(navigation).apply(builder).build()
-    }
-
-    internal fun build(): AppToolkitDefaults = AppToolkitDefaults(shell = shell, navigation = navigation)
-}
-
-/**
- * The shell settings an app may choose as its own defaults. The settings that only exist to test
- * the shell, such as a forced layout, a slowed animation or a start override, stay at the Toolkit's
- * defaults and are left to the developer options.
- */
-@AppToolkitDefaultsDsl
-class ShellDefaultsBuilder internal constructor(private val from: ShellSettings) {
-    var tabTransition: TabTransitionStyle = from.tabTransition
-    var backEdgeStyle: BackEdgeStyle = from.backEdgeStyle
-    var hideBottomBarOnScroll: Boolean = from.hideBottomBarOnScroll
-    var hideTopBarOnScroll: Boolean = from.hideTopBarOnScroll
-    var limitContentWidth: Boolean = from.limitContentWidth
-    var navigationBarStyle: NavigationBarStyle = from.navigationBarStyle
-    var navigationTint: NavigationTint = from.navigationTint
-    var entranceStyle: EntranceStyle = from.entranceStyle
-    var motionTempo: MotionTempo = from.motionTempo
-    var entranceReplay: EntranceReplay = from.entranceReplay
-
-    internal fun build(): ShellSettings = from.copy(
-        tabTransition = tabTransition,
-        backEdgeStyle = backEdgeStyle,
-        hideBottomBarOnScroll = hideBottomBarOnScroll,
-        hideTopBarOnScroll = hideTopBarOnScroll,
-        limitContentWidth = limitContentWidth,
-        navigationBarStyle = navigationBarStyle,
-        navigationTint = navigationTint,
-        entranceStyle = entranceStyle,
-        motionTempo = motionTempo,
-        entranceReplay = entranceReplay,
-    )
-}
-
-@AppToolkitDefaultsDsl
-class NavigationDefaultsBuilder internal constructor(private val from: NavigationDefaults) {
-    var tabTopBarStyle: TopBarStyle = from.tabTopBarStyle
-    var childTopBarStyle: TopBarStyle = from.childTopBarStyle
-    var pageTopBarStyle: TopBarStyle = from.pageTopBarStyle
-    var layoutPolicy: ShellLayoutPolicy = from.layoutPolicy
-
-    internal fun build(): NavigationDefaults = NavigationDefaults(
-        tabTopBarStyle = tabTopBarStyle,
-        childTopBarStyle = childTopBarStyle,
-        pageTopBarStyle = pageTopBarStyle,
-        layoutPolicy = layoutPolicy,
-    )
-}
