@@ -2,6 +2,16 @@
 
 ---
 
+# Unreleased
+
+### Fixed
+
+- Taps no longer sound twice.
+- The menu button and app bar actions no longer slide out and back in when you switch tabs.
+- Lists no longer come back empty after you swipe away from them partway through their entrance.
+
+---
+
 # November 10, 2026
 
 **Version:** `26.11.02`
