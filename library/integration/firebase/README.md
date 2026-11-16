@@ -9,7 +9,8 @@ service wiring.
 
 - `data.repositories.FirebaseTelemetryRepository` for analytics events, breadcrumbs, and crash
   reporting.
-- `firebaseModule` Koin bindings.
+- `firebaseModule` Koin bindings. Its `TelemetryRepository` is `FirebaseTelemetryRepository` inside an
+  `ObservedTelemetryRepository`, so every event also reaches the app's bound `AnalyticsObserver`s.
 - `data.notifications.FirebaseNotificationsService` and its notification/wake-lock manifest
   permissions.
 

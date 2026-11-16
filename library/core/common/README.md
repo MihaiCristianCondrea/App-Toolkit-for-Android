@@ -26,6 +26,11 @@ Android utility abstractions shared across the toolkit.
   switches). `TelemetryRepository` is all three, for the UI layer; `telemetryModule` binds the
   three to the app's one `TelemetryRepository`. The analytics models are in `telemetry.models`,
   with `TrackedScreen`, the stable name and class of a screen that `ScreenHost` reports.
+- `AnalyticsObserver`, the app's on-device listener to its own analytics, and
+  `ObservedTelemetryRepository`, which hands every event and screen view to the observers after the
+  app's `TelemetryRepository` reports it. An app learns from it what the person does, such as which
+  tools they open and finish, to order its own suggestions. Observers see events whatever the
+  analytics consent, so what they receive must never leave the device.
 - `BillingCore`, dispatcher, build-info, app-info, permissions, and ad-SDK contracts.
 - Host DI configuration (`AppToolkitHostBuildConfig`, qualifiers, and constants).
 - Small platform and Kotlin extensions used across modules. An extension or constant that one
@@ -104,7 +109,7 @@ blocking `PackageManager` call, so data-layer callers switch to `dispatchers.io`
 ## Public contracts
 
 - `TelemetryRepository`, `AnalyticsReporter`, `DiagnosticsReporter`, `TelemetryCollection`,
-  `telemetryModule`, `BillingCore`, `DispatcherProvider`, and provider/helper interfaces.
+  `AnalyticsObserver`, `ObservedTelemetryRepository`, `telemetryModule`, `BillingCore`, `DispatcherProvider`, and provider/helper interfaces.
 - `AppToolkitHostBuildConfig`, DI qualifiers, common result/value models, and stable constants.
 - `core.common.data.models.theme.ThemePreferencesState`, the immutable application-facing
   representation shared by persistence and theme UI.

@@ -17,6 +17,7 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.shell
 
+import androidx.compose.animation.fadeIn
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.EnterTransition
 import androidx.compose.animation.ExitTransition
@@ -194,6 +195,11 @@ fun ShellTopAppBar(
             transitionSpec = {
                 if (initialState.article != targetState.article) {
                     EnterTransition.None togetherWith ExitTransition.None
+                } else if ((initialState.search == null) != (targetState.search == null)) {
+                    // A search field and a title swap at once, the newcomer fading in. The field fills
+                    // the bar and a centred title's slot shrinks around its content, so a field
+                    // leaving it was drawn cut in half while the slot narrowed.
+                    fadeIn(motion.fastEffectsSpec()) togetherWith ExitTransition.None
                 } else {
                     motion.textSwap(initialScale = 0.96f, targetScale = 0.98f).using(sizeTransform = null)
                 }

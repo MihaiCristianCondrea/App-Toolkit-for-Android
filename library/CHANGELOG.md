@@ -4,6 +4,29 @@
 
 # November 16, 2026
 
+**Version:** `3.0.0-pre34`
+
+### Added
+
+- `AnalyticsObserver` lets an app learn from its own analytics on the device. Bind one in Koin and
+  it receives every event and screen view the app and the Toolkit's screens report, after
+  `firebaseModule` sends them, whatever the analytics consent. Use it to adapt the app to what the
+  person does, never to send data on. `ObservedTelemetryRepository` gives the same to a host that
+  binds its own `TelemetryRepository`.
+
+### Fixed
+
+- Pagers and carousels tick once for each page a swipe reaches. Tapping a tab no longer adds a tick
+  to its click as the pager slides, and a swipe that springs back to its page no longer ticks.
+- Moving from a tab with a search field to one without no longer draws the search field cut in half
+  while it leaves the app bar.
+- An app bar action that appears when a tab opens, such as a sort toggle, grows in place instead of
+  sliding right and down into the row.
+
+---
+
+# November 16, 2026
+
 **Version:** `3.0.0-pre33`
 
 ### Added

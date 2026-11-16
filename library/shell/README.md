@@ -159,6 +159,27 @@ visible and the navigation's frame untinted by scrolling; the bottom bar and the
 own scrolling. The mode reaches pages the shell frames, pages with a `PageScaffold` of their own and
 each pane of a list-detail scene.
 
+## App bar transitions between tabs
+
+Moving between tabs keeps one shell app bar, but its style can change under it: a tab with a
+`TabSearch` is always drawn as a small bar, and `ShellTopAppBar` draws each style with a different
+Material composable. These rules keep that change invisible. Each has regressed before, so keep
+them when changing the bar.
+
+- **The bar's slots move, they are not rebuilt.** `ShellTopAppBar` passes its title, menu button
+  and actions through `movableContentOf`, so a style change carries them into the new Material bar
+  with their state. Rebuilt, the menu button and actions replayed their `AnimatedIconButtonDirection`
+  entrance and slid out and back in on every tab switch (System monitor to Dashboard).
+  `ShellTopAppBarTest` covers this.
+- **A search field and a title swap at once.** The field fills the bar while a centred title's slot
+  shrinks around its text, so an animated exit drew the field cut in half as the slot narrowed
+  (App Manager to System monitor). The newcomer fades in and the outgoing one leaves at once.
+  Between two tabs with search, the field is kept, not swapped, so its text and focus stay.
+- **A destination's actions are held to the end of the row, centred vertically.** They cross-fade
+  in an `AnimatedContent` whose size follows them. At the default top start alignment, an action
+  entering an empty row grew from the corner and slid right and down into place (the App Manager
+  sort toggle).
+
 ## Pages beside the navigation
 
 Below the rail's width the chrome is part of the shell's own screen: a bottom bar and a modal

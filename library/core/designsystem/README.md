@@ -416,6 +416,11 @@ defaults to null and the Toolkit never plays `SoundEffectConstants.CLICK` itself
 handler: doing both sounded every tap twice. Play a sound by hand only where no Compose click is
 involved, such as a text link's `LinkInteractionListener` or a dropdown's `onExpandedChange`.
 
+Haptics follow the same rule: one per thing the person did. Compose gives no haptic for a click,
+so a click handler gives its own (`ButtonFeedback.hapticFeedbackType`). A pager's
+`hapticPagerSwipe` ticks once per page the person's own swipe reaches, through to its fling, and
+never for a slide the app starts: a tab's tap that moves the pager has already given its click.
+
 ```kotlin
 GeneralButton(onClick = ::save, label = stringResource(R.string.save))
 GeneralButton(

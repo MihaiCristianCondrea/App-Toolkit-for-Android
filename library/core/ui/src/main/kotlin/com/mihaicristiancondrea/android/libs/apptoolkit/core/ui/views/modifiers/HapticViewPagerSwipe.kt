@@ -17,6 +17,7 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.modifiers
 
+import androidx.compose.foundation.interaction.DragInteraction
 import androidx.compose.foundation.pager.PagerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -26,26 +27,39 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.platform.LocalHapticFeedback
 import kotlinx.coroutines.flow.distinctUntilChanged
-import kotlinx.coroutines.flow.runningFold
+import kotlinx.coroutines.flow.drop
+import kotlinx.coroutines.launch
 
+/**
+ * One light tick each time a swipe the person makes brings the pager to another page, as a detent
+ * under the finger.
+ *
+ * Only their own swipes tick, through to the fling that ends them. A slide the app starts, such as
+ * a tab's tap moving the pager, gets none: the tap already gave its click, and the two together felt
+ * doubled. A swipe that lets go and springs back to the same page gets none either.
+ */
 @Composable
 fun Modifier.hapticPagerSwipe(pagerState: PagerState): Modifier {
     val haptics = rememberUpdatedState(LocalHapticFeedback.current)
 
     LaunchedEffect(pagerState) {
-        snapshotFlow { pagerState.isScrollInProgress }
-            .distinctUntilChanged()
-            .runningFold(false) { vibrated, isScrolling ->
-                if (!isScrolling) {
-                    false
-                } else {
-                    if (!vibrated) {
-                        haptics.value.performHapticFeedback(HapticFeedbackType.SegmentTick)
-                    }
-                    true
-                }
+        var swipedByUser = false
+        launch {
+            pagerState.interactionSource.interactions.collect { interaction ->
+                if (interaction is DragInteraction.Start) swipedByUser = true
             }
-            .collect {  }
+        }
+        launch {
+            snapshotFlow { pagerState.isScrollInProgress }
+                .distinctUntilChanged()
+                .collect { scrolling -> if (!scrolling) swipedByUser = false }
+        }
+        snapshotFlow { pagerState.currentPage }
+            .distinctUntilChanged()
+            .drop(1)
+            .collect {
+                if (swipedByUser) haptics.value.performHapticFeedback(HapticFeedbackType.SegmentTick)
+            }
     }
 
     return this
