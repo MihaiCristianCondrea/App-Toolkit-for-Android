@@ -2,7 +2,9 @@
 
 ---
 
-# Unreleased
+# November 16, 2026
+
+**Version:** `3.0.0-pre34`
 
 ### Added
 
