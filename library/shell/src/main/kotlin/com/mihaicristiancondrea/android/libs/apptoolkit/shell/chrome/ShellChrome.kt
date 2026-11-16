@@ -518,6 +518,10 @@ private fun ShellBody(
                         AnimatedContent(
                             targetState = topKey,
                             contentKey = { graph.destination(it) },
+                            // Centred on the row and held to its end, so a button entering a row that
+                            // was empty grows in place. At the default top start it rode the size
+                            // change from the corner, sliding right and down into place.
+                            contentAlignment = Alignment.CenterEnd,
                             transitionSpec = {
                                 (fadeIn(motion.defaultEffectsSpec()) + scaleIn(motion.defaultSpatialSpec(), initialScale = 0.8f))
                                     .togetherWith(fadeOut(motion.defaultEffectsSpec()) + scaleOut(motion.defaultSpatialSpec(), targetScale = 0.8f))

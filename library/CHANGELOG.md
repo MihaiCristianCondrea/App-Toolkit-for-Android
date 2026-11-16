@@ -2,6 +2,17 @@
 
 ---
 
+# Unreleased
+
+### Fixed
+
+- Moving from a tab with a search field to one without no longer draws the search field cut in half
+  while it leaves the app bar.
+- An app bar action that appears when a tab opens, such as a sort toggle, grows in place instead of
+  sliding right and down into the row.
+
+---
+
 # November 16, 2026
 
 **Version:** `3.0.0-pre33`
