@@ -26,11 +26,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.layout.LocalBesideNavigation
 import androidx.navigation3.runtime.NavEntry
 import androidx.navigation3.scene.Scene
-import androidx.navigation3.scene.SceneStrategy
-import androidx.navigation3.scene.SceneStrategyScope
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.layout.LocalBesideNavigation
 
 /**
  * One page filling the window, drawn like a window: opaque and clipped to the display's rounded
@@ -45,13 +43,6 @@ data class PageScene<T : Any>(
 ) : Scene<T> {
     override val entries: List<NavEntry<T>> = listOf(entry)
     override val content: @Composable () -> Unit = { PageSurface { entry.Content() } }
-}
-
-class PageSceneStrategy<T : Any> : SceneStrategy<T> {
-    override fun SceneStrategyScope<T>.calculateScene(entries: List<NavEntry<T>>): Scene<T> {
-        val entry = entries.last()
-        return PageScene(key = entry.contentKey, entry = entry, previousEntries = entries.dropLast(1))
-    }
 }
 
 @Composable

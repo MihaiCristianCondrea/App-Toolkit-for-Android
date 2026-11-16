@@ -17,10 +17,6 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.navigation.scenes
 
-import androidx.compose.foundation.shape.RoundedCornerShape
-import kotlinx.coroutines.coroutineScope
-import androidx.navigationevent.NavigationEvent
-import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.animateDpAsState
@@ -57,6 +53,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.Icon
@@ -82,6 +79,7 @@ import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
 import androidx.compose.ui.input.nestedscroll.NestedScrollSource
 import androidx.compose.ui.input.nestedscroll.nestedScroll
@@ -100,8 +98,7 @@ import androidx.navigation3.runtime.NavEntry
 import androidx.navigation3.runtime.NavMetadataKey
 import androidx.navigation3.runtime.get
 import androidx.navigation3.scene.Scene
-import androidx.navigation3.scene.SceneStrategy
-import androidx.navigation3.scene.SceneStrategyScope
+import androidx.navigationevent.NavigationEvent
 import androidx.navigationevent.NavigationEventInfo
 import androidx.navigationevent.NavigationEventTransitionState
 import androidx.navigationevent.compose.NavigationBackHandler
@@ -114,15 +111,16 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.layout.Articl
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.layout.ArticleTopBarHost
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.layout.ArticleTopBarTitle
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.layout.ContentCardShape
-import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.layout.LocalArticleTopBarHost
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.layout.FollowScrollWithFrameTint
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.layout.FrameTint
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.layout.LocalArticleTopBarHost
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.layout.LocalBesideNavigation
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.layout.besideNavigationTitle
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.layout.isTopLevelPage
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.motion.LocalShellMotion
-import kotlinx.coroutines.launch
 import kotlin.math.roundToInt
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.launch
 
 /**
  * A list page with the detail opened from it beside it, or with a placeholder until one is.
@@ -615,47 +613,6 @@ private fun PaneSeparator(interactions: MutableInteractionSource, modifier: Modi
                     CircleShape,
                 ),
         )
-    }
-}
-
-/**
- * Shows list and detail pages side by side while [enabled], which follows the window width.
- *
- * With [framed] false, for the tabs inside the shell, the scene draws no app bar and no window
- * frame, and a list with nothing open beside it stays a single, full-width pane.
- */
-class ListDetailSceneStrategy<T : Any>(
-    private val enabled: Boolean,
-    private val framed: Boolean = true,
-) : SceneStrategy<T> {
-    override fun SceneStrategyScope<T>.calculateScene(entries: List<NavEntry<T>>): Scene<T>? {
-        if (!enabled) return null
-        val last = entries.last()
-        return when (last.shellInfo?.paneRole) {
-            PaneRole.List -> if (!framed) null else ListDetailScene(
-                key = last.contentKey,
-                listEntry = last,
-                detailEntry = null,
-                previousEntries = entries.dropLast(1),
-                onBack = onBack,
-            )
-
-            PaneRole.Detail -> {
-                val list = entries.getOrNull(entries.lastIndex - 1)
-                    ?.takeIf { it.shellInfo?.paneRole == PaneRole.List }
-                    ?: return null
-                ListDetailScene(
-                    key = list.contentKey,
-                    listEntry = list,
-                    detailEntry = last,
-                    previousEntries = entries.dropLast(1),
-                    onBack = onBack,
-                    framed = framed,
-                )
-            }
-
-            else -> null
-        }
     }
 }
 

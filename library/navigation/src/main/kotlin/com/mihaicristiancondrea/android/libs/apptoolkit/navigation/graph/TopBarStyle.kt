@@ -17,8 +17,6 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph
 
-import androidx.compose.runtime.Immutable
-import androidx.compose.ui.unit.Dp
 
 /** The app bar a tab, child or page is drawn under. */
 enum class TopBarStyle {
@@ -47,24 +45,4 @@ enum class TopBarStyle {
 
     /** Whether this is a large bar, collapsed at first or not. */
     val isLarge: Boolean get() = this == Large || this == LargeCollapsed
-}
-
-/**
- * How wide a destination's content may grow on a large window.
- *
- * Content that reads well at phone width, such as lists and forms, looks lost stretched across a
- * desktop window. With [Default] the shell centres it in a column no wider than
- * [com.mihaicristiancondrea.android.libs.apptoolkit.navigation.layout.ShellLayoutPolicy.contentMaxWidth],
- * leaving margins on either side the way a website does. The app bar still spans the window.
- */
-@Immutable
-sealed interface ContentWidth {
-    /** The policy's maximum width. */
-    data object Default : ContentWidth
-
-    /** The whole width the shell has, for grids, maps and media that use every pixel. */
-    data object Full : ContentWidth
-
-    /** A maximum of this destination's own. */
-    data class Max(val width: Dp) : ContentWidth
 }

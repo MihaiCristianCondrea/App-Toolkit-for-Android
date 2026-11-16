@@ -20,11 +20,9 @@ package com.mihaicristiancondrea.android.libs.apptoolkit.navigation.layout
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
-import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.Stable
 import androidx.compose.runtime.compositionLocalOf
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.graphics.Color
@@ -53,45 +51,6 @@ class BesideNavigation(
     val scrollTint: FrameScrollTint? = null,
     val frameColor: () -> Color,
 )
-
-/**
- * How far the frame's shared colour should go, from `0` to `1`, and whether to jump there, as it
- * does while a large app bar blends as it collapses, rather than ease there.
- */
-@Immutable
-data class FrameTint(val amount: Float, val snap: Boolean = false) {
-    companion object {
-        /** Content at rest under its app bar: the frame keeps the surface colour. */
-        val None: FrameTint = FrameTint(amount = 0f)
-
-        /** Content scrolled under its app bar: the frame takes the shared colour. */
-        val Full: FrameTint = FrameTint(amount = 1f)
-    }
-}
-
-/**
- * The app bars beside the navigation that follow scrolling, in the order they appeared: the one on
- * top decides the frame's colour. The shell's tabs sit underneath, so a page the navigation opens
- * takes over while it is shown and hands back to the tab when it leaves.
- *
- * Bars join with [FollowScrollWithFrameTint]; the shell reads [current].
- */
-@Stable
-class FrameScrollTint {
-    private val drivers = mutableStateListOf<() -> FrameTint>()
-
-    /** What the bar on top asks for, or [FrameTint.None] when none is shown. */
-    val current: FrameTint
-        get() = drivers.lastOrNull()?.invoke() ?: FrameTint.None
-
-    internal fun add(driver: () -> FrameTint, underneath: Boolean) {
-        if (underneath) drivers.add(0, driver) else drivers.add(driver)
-    }
-
-    internal fun remove(driver: () -> FrameTint) {
-        drivers.remove(driver)
-    }
-}
 
 /**
  * Lets this app bar drive the shared colour of the navigation beside it, while the person's

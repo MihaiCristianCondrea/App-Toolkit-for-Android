@@ -30,24 +30,6 @@ import androidx.compose.animation.togetherWith
 import androidx.compose.runtime.Immutable
 import kotlin.math.roundToInt
 
-/** How the shell moves between tabs. Pages and children use a [ScreenTransition]. */
-enum class TabTransitionStyle {
-    /**
-     * The incoming tab slides a fifth of the width in from the side of its tab, the outgoing one an
-     * eighth the other way, both fading. Tells the person which way they moved along the bar.
-     */
-    Directional,
-
-    /** Material's fade through: the old tab fades out, then the new one fades and scales in. */
-    FadeThrough,
-
-    /** A plain cross-fade. */
-    Fade,
-
-    /** Tabs swap instantly. */
-    None,
-}
-
 @Immutable
 class TabTransitions internal constructor(
     private val style: TabTransitionStyle,

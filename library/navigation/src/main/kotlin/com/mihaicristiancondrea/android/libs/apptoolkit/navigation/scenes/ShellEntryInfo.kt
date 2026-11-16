@@ -17,8 +17,6 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.navigation.scenes
 
-import androidx.compose.foundation.layout.RowScope
-import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
 import androidx.navigation3.runtime.NavEntry
 import androidx.navigation3.runtime.NavMetadataKey
@@ -27,7 +25,6 @@ import androidx.navigation3.runtime.metadata
 import androidx.navigation3.scene.Scene
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.DestinationKind
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.PaneRole
-import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.TopBarScrollMode
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.motion.ScreenTransition
 
 /**
@@ -54,24 +51,6 @@ val NavEntry<*>.shellInfo: ShellEntryInfo?
 
 val Scene<*>.topShellInfo: ShellEntryInfo?
     get() = entries.lastOrNull()?.shellInfo
-
-/**
- * A page's title and app bar actions, attached to its entry so a scene that shows several pages
- * at once can draw one app bar for all of them.
- */
-@Immutable
-class PageChrome(
-    val title: @Composable () -> String,
-    val actions: (@Composable RowScope.() -> Unit)? = null,
-    /** The page's key, to tell whether it stands in for a tab beside the navigation. */
-    val key: Any? = null,
-    /** How the bar answers the page's scrolling; a static page does not tint the bar across both panes. */
-    val topBarScrollMode: TopBarScrollMode = TopBarScrollMode.Default,
-) {
-    object Key : NavMetadataKey<PageChrome>
-
-    fun toMetadata(): Map<String, Any> = metadata { put(Key, this@PageChrome) }
-}
 
 val NavEntry<*>.pageChrome: PageChrome?
     get() = metadata[PageChrome.Key]

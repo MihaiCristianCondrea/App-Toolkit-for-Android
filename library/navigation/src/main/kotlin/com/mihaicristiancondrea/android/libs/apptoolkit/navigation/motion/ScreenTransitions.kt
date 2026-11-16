@@ -27,65 +27,7 @@ import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.animation.togetherWith
 import androidx.compose.runtime.Immutable
 import androidx.compose.ui.unit.IntOffset
-import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.DestinationKind
-import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.layout.ShellLayoutMode
 import kotlin.math.roundToInt
-
-/** How a child or a page enters, and leaves again on back. */
-enum class ScreenTransition {
-    /**
-     * Android's activity transition: the new screen slides in over the old one, and back is the
-     * system's cross-activity animation, predictive gesture included. Made for screens that stand
-     * on their own, the way activities did.
-     */
-    Activity,
-
-    /**
-     * A plain horizontal push: the new screen slides in across the whole width while the old one
-     * slides a quarter of the way out; back reverses it, and the gesture seeks it. Made for a
-     * detail inside a tab.
-     */
-    Slide,
-
-    /** Material's fade through. */
-    FadeThrough,
-
-    /** A cross-fade. */
-    Fade,
-
-    /** An instant swap. */
-    None,
-}
-
-/**
- * Which [ScreenTransition] each kind of destination uses when it declares none, with defaults of
- * their own for some navigation layouts.
- *
- * ```
- * transitions(
- *     ShellTransitions(
- *         children = ScreenTransition.Slide,
- *         pages = ScreenTransition.Activity,
- *         byLayout = mapOf(ShellLayoutMode.PermanentDrawer to ShellTransitions(children = ScreenTransition.Fade)),
- *     ),
- * )
- * ```
- *
- * A destination's own `transition` wins over all of these.
- */
-@Immutable
-class ShellTransitions(
-    val children: ScreenTransition = ScreenTransition.Slide,
-    val pages: ScreenTransition = ScreenTransition.Activity,
-    val byLayout: Map<ShellLayoutMode, ShellTransitions> = emptyMap(),
-) {
-    /** The transition of a destination of [kind] declaring [own], in [layout]. */
-    fun resolve(kind: DestinationKind, own: ScreenTransition?, layout: ShellLayoutMode): ScreenTransition {
-        if (own != null) return own
-        val defaults = byLayout[layout] ?: this
-        return if (kind == DestinationKind.Page) defaults.pages else defaults.children
-    }
-}
 
 /** Plays a [ScreenTransition] forward or back, scaled by the developer options' animation speed. */
 @Immutable
