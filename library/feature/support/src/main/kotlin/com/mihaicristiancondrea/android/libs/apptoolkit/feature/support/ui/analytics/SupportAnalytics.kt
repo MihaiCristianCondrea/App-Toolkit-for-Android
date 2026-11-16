@@ -95,16 +95,6 @@ private const val MICROS_PER_UNIT: Double = 1_000_000.0
 
 internal const val SUPPORT_SCREEN_NAME = "Support"
 
-internal object SupportPreferenceKeys {
-    const val DONATE_LOW: String = "donate_low"
-    const val DONATE_NORMAL: String = "donate_normal"
-    const val DONATE_HIGH: String = "donate_high"
-    const val DONATE_EXTREME: String = "donate_extreme"
-    const val WEB_AD: String = "web_ad"
-    const val PRODUCT_ID: String = "product_id"
-    const val DESTINATION: String = "destination"
-}
-
 internal fun supportPreferenceTapEvent(
     preferenceKey: String,
     productId: String? = null,

@@ -27,30 +27,6 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.do
 /** The screen name the sheet and its ViewModel report under. */
 internal const val ISSUE_REPORTER_SCREEN_NAME: String = "IssueReporter"
 
-internal object IssueReporterActionNames {
-    const val SEND_ISSUE: String = "send_issue"
-    const val TOGGLE_DEVICE_INFO: String = "toggle_device_info"
-    const val FORMAT_DESCRIPTION: String = "format_description"
-}
-
-/**
- * Parameters of the send event. They describe the attempt, never its content: no text and no
- * email is ever logged.
- */
-internal object IssueReporterParams {
-    const val TITLE_LENGTH: String = "title_length"
-    const val DESCRIPTION_LENGTH: String = "description_length"
-
-    /**
-     * Why the send went no further: `field_reason` for the first invalid field, top first, such
-     * as `email_invalid` or `description_too_short`, then `cooldown` or `duplicate`, and
-     * [VALIDATION_PASSED] for a report handed to GitHub.
-     */
-    const val VALIDATION_FAILURE: String = "validation_failure"
-
-    const val VALIDATION_PASSED: String = "none"
-}
-
 /** A tap in the sheet, in the shared settings action shape. */
 internal fun issueReporterActionEvent(
     actionName: String,

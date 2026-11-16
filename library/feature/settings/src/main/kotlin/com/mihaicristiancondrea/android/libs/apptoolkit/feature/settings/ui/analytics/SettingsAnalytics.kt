@@ -23,10 +23,6 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.analytics
 
 internal const val SETTINGS_SCREEN_NAME = "Settings"
 
-internal object SettingsActionNames {
-    const val RETRY_LOAD: String = "retry_load"
-}
-
 internal fun settingsActionGa4Event(actionName: String): Ga4EventData {
     return Ga4EventData(
         name = SettingsAnalytics.Events.ACTION,

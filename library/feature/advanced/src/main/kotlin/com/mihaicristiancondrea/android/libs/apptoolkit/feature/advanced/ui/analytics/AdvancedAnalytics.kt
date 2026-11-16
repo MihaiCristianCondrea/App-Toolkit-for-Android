@@ -23,12 +23,6 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.analytics
 
 internal const val ADVANCED_SETTINGS_SCREEN_NAME = "AdvancedSettings"
 
-internal object AdvancedPreferenceKeys {
-    const val BUG_REPORT: String = "bug_report"
-    const val CLEAR_CACHE: String = "clear_cache"
-    const val DEVELOPER_OPTIONS: String = "developer_options"
-}
-
 internal fun advancedPreferenceTapEvent(preferenceKey: String): Ga4EventData {
     return Ga4EventData(
         name = SettingsAnalytics.Events.PREFERENCE_VIEW,

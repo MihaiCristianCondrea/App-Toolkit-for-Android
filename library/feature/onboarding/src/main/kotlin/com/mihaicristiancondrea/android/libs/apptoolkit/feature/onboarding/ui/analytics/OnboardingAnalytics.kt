@@ -25,38 +25,11 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.feature.onboarding.ui.co
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.onboarding.ui.contracts.OnboardingStepDirection
 
 internal const val ONBOARDING_SCREEN_NAME: String = "Onboarding"
+
 private const val ONBOARDING_SCREEN_CLASS: String = "OnboardingScreen"
+
 internal val ONBOARDING_SCREEN: TrackedScreen =
     TrackedScreen(name = ONBOARDING_SCREEN_NAME, className = ONBOARDING_SCREEN_CLASS)
-
-internal object OnboardingEventNames {
-    /** Recommended event when the onboarding tutorial begins. */
-    const val TUTORIAL_BEGIN: String = "tutorial_begin"
-
-    /** Recommended event when the onboarding tutorial completes. */
-    const val TUTORIAL_COMPLETE: String = "tutorial_complete"
-
-    /** Custom event emitted when a step or page is viewed in the onboarding carousel. */
-    const val STEP_VIEW: String = "onboarding_step_view"
-
-    /** Custom action event for discrete buttons and choices. */
-    const val ACTION: String = SettingsAnalytics.Events.ACTION
-}
-
-internal object OnboardingActionNames {
-    const val SKIP: String = "skip"
-    const val STEP_BACK: String = "step_back"
-    const val THEME_CUSTOMIZED: String = "theme_customized"
-}
-
-internal object OnboardingParams {
-    const val SCREEN: String = SettingsAnalytics.Params.SCREEN
-    const val STEP_INDEX: String = "step_index"
-    const val PAGE_KEY: String = "page_key"
-    const val DIRECTION: String = "direction"
-    const val METHOD: String = "method"
-    const val SETTING: String = "setting"
-}
 
 internal fun onboardingTutorialBeginEvent(): AnalyticsEvent = AnalyticsEvent(
     name = OnboardingEventNames.TUTORIAL_BEGIN,

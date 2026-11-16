@@ -20,23 +20,6 @@ package com.mihaicristiancondrea.android.libs.apptoolkit.feature.onboarding.ui.c
 import com.mihaicristiancondrea.android.libs.apptoolkit.integration.consent.data.models.ConsentHost
 
 /**
- * Direction the user moved in the onboarding pager.
- */
-enum class OnboardingStepDirection(val trackingLabel: String) {
-    INITIAL(trackingLabel = "initial"),
-    FORWARD(trackingLabel = "forward"),
-    BACKWARD(trackingLabel = "backward"),
-}
-
-/**
- * How onboarding was concluded.
- */
-enum class OnboardingCompletionMethod(val trackingLabel: String) {
-    DONE(trackingLabel = "done"),
-    SKIP(trackingLabel = "skip"),
-}
-
-/**
  * What the user can ask the onboarding screen's ViewModel to do.
  */
 sealed interface OnboardingEvent {

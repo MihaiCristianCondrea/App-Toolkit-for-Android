@@ -24,27 +24,6 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.analytics
 
 internal const val DISPLAY_SETTINGS_SCREEN_NAME = "DisplaySettings"
 
-internal object DisplayPreferenceKeys {
-    const val THEME_SETTINGS: String = "theme_settings"
-    const val STARTUP_PAGE: String = "startup_page"
-    const val LANGUAGE: String = "language"
-}
-
-internal object DisplayActionNames {
-    const val OPEN_THEME_SETTINGS: String = "open_theme_settings"
-    const val THEME_REDIRECT: String = "theme_redirect"
-    const val OPEN_STARTUP_DIALOG: String = "open_startup_dialog"
-    const val CHANGE_STARTUP_DESTINATION: String = "change_startup_destination"
-    const val OPEN_LANGUAGE_SETTINGS: String = "open_language_settings"
-    const val CHANGE_LANGUAGE: String = "change_language"
-}
-
-internal object LanguageDestinations {
-    const val SYSTEM_LOCALE: String = "system_locale"
-    const val APP_DETAILS: String = "app_details"
-    const val IN_APP_DIALOG: String = "in_app_dialog"
-}
-
 internal fun displayActionGa4Event(actionName: String, preferenceKey: String): Ga4EventData {
     return Ga4EventData(
         name = SettingsAnalytics.Events.ACTION,

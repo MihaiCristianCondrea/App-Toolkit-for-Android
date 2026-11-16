@@ -23,11 +23,6 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.telemetry.mo
 
 internal const val USAGE_DIAGNOSTICS_SCREEN_NAME = "UsageAndDiagnostics"
 
-internal object UsageAndDiagnosticsPreferenceKeys {
-    const val USAGE_AND_DIAGNOSTICS: String = "usage_and_diagnostics"
-    const val PRIVACY_CHOICES: String = "advanced_privacy_settings"
-}
-
 internal fun diagnosticsToggleEvent(enabled: Boolean): Ga4EventData = Ga4EventData(
     name = SettingsAnalytics.Events.PREFERENCE_TOGGLE,
     params = mapOf(

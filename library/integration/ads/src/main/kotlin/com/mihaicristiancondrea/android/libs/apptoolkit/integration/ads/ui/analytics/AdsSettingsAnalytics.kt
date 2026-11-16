@@ -24,13 +24,6 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.consta
 
 internal const val ADS_SETTINGS_SCREEN_NAME = "AdsSettings"
 
-internal object AdsPreferenceKeys {
-    const val DISPLAY_ADS: String = "display_ads"
-    const val REDUCE_ADS: String = "reduce_ads"
-    const val PERSONALIZED_ADS: String = "personalized_ads"
-    const val LEARN_MORE: String = "learn_more"
-}
-
 /** The `screen` and `preference_key` parameters every ads settings GA4 event carries. */
 private fun adsPreferenceParams(preferenceKey: String): Map<String, AnalyticsValue> = mapOf(
     SettingsAnalytics.Params.SCREEN to AnalyticsValue.Str(ADS_SETTINGS_SCREEN_NAME),
