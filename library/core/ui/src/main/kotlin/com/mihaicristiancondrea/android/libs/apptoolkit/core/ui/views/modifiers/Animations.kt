@@ -266,6 +266,18 @@ private class EntranceNode(
         }
     }
 
+    /**
+     * A node detached halfway through its entrance, as a list item or a pager page scrolled away
+     * and back, or one a slide between pages only passed, lost its animation with its coroutines and
+     * would keep the frame it stopped on: often invisible, so a whole page of a list stayed empty.
+     * Back on screen it enters again, in the cascade when it has a place in one.
+     */
+    override fun onAttach() {
+        if (!visible || awaitingPlacement) return
+        if (effects.value >= 1f && spatial.value >= 1f) return
+        if (cascade != null) awaitingPlacement = true else animateTo(1f)
+    }
+
     override fun MeasureScope.measure(measurable: Measurable, constraints: Constraints): MeasureResult {
         val placeable = measurable.measure(constraints)
         val lookingAhead = isLookingAhead

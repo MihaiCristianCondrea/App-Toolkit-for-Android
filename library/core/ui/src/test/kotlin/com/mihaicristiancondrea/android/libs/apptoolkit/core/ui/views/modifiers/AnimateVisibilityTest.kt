@@ -23,6 +23,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.ReusableContentHost
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -108,6 +109,24 @@ class AnimateVisibilityTest {
 
         compose.mainClock.advanceTimeBy(2_000)
         assertTrue("Not fully shown once settled: ${shown()}", shown() > 0.98f)
+    }
+
+    @Test
+    fun `an element set aside halfway through its entrance enters again when it returns`() {
+        // A lazy list or a pager deactivates an item that leaves the screen and reattaches the same
+        // nodes when it returns, which cancels an entrance still running.
+        var active by mutableStateOf(true)
+        setContent {
+            ReusableContentHost(active = active) { RedBox(Modifier.animateVisibility()) }
+        }
+        compose.mainClock.advanceTimeBy(60)
+
+        set { active = false }
+        compose.mainClock.advanceTimeBy(2_000)
+        set { active = true }
+        compose.mainClock.advanceTimeBy(2_000)
+
+        assertTrue("Stuck part-way after returning: ${shown()}", shown() > 0.98f)
     }
 
     @Test
