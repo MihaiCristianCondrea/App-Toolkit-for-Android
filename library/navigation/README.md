@@ -201,6 +201,8 @@ Screens then call `LocalShellNavigator.current.navigate(key)` with any registere
   `tab`, `child`, `page` and `pageIfAbsent` means the default for that kind of destination.
 - `ShellNavigator` (`navigate`, `close`, `goBack`, `selectTab`, `continueStart`, `enterShell`, the
   page and tab stacks) and `rememberShellNavigator`.
+- `ShellSearch.query` reads and updates the tab's search text. The app bar edits the same
+  `ShellSearch.textFieldState`, which also owns the editor selection.
 - `ShellNavDisplay`, `ShellBackHandler`, `ShellHomeRoute`, the scenes and their strategies,
   `ScreenTransition`, `ShellTransitions`, `CrossActivityBackMotion` and `ShellLayoutPolicy`.
 - The composition locals `LocalShellNavigator`, `LocalShellGraph`, `LocalPageKey`,

@@ -2,6 +2,18 @@
 
 ---
 
+# Unreleased
+
+### Fixed
+
+- `ShellHost` builds with Compose Foundation 1.13 after removal of the temporary pausable prefetch flag.
+
+### Changed
+
+- App bar search uses a state-based Compose text field. `ShellSearch.query` remains readable and writable.
+
+---
+
 # November 16, 2026
 
 **Version:** `3.0.0-pre34`

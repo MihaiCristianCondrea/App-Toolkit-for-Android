@@ -15,6 +15,9 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+// The value-based public API still accepts Compose VisualTransformation implementations.
+@file:Suppress("DEPRECATION")
+
 package com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.fields
 
 import androidx.compose.foundation.layout.Arrangement
@@ -28,7 +31,6 @@ import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Search
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
@@ -578,7 +580,6 @@ private fun rememberGeneralTextFieldSkin(
 }
 
 /** The indicator line is dropped for a grouped field: it would cut the block into strips. */
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun generalTextFieldColors(style: GeneralTextFieldStyle): TextFieldColors = when (style) {
     GeneralTextFieldStyle.Outlined, GeneralTextFieldStyle.SearchOutlined ->

@@ -15,6 +15,9 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+// The value-based public API still accepts Compose VisualTransformation implementations.
+@file:Suppress("DEPRECATION")
+
 package com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.fields.markdown
 
 import androidx.compose.material3.MaterialTheme

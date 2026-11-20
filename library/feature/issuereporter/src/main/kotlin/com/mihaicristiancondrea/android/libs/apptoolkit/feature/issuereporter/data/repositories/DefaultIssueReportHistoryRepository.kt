@@ -70,8 +70,8 @@ class DefaultIssueReportHistoryRepository(
                         .take(MAX_RECENT_REPORTS),
                 )
             }
-        } catch (exception: IOException) {
-            Unit
+        } catch (_: IOException) {
+            // Filing succeeded. Saving its local history is best effort.
         }
     }
 

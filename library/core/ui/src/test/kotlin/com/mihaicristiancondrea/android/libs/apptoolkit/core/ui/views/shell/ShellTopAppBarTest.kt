@@ -24,8 +24,15 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.test.junit4.createAndroidComposeRule
+import androidx.compose.ui.test.assertTextEquals
+import androidx.compose.ui.test.hasSetTextAction
+import androidx.compose.ui.test.junit4.v2.createAndroidComposeRule
+import androidx.compose.ui.test.onNodeWithContentDescription
+import androidx.compose.ui.test.performClick
+import androidx.compose.ui.test.performTextReplacement
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.R
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.ShellSearch
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.TopBarStyle
 import org.junit.Assert.assertEquals
 import org.junit.Rule
@@ -69,5 +76,28 @@ class ShellTopAppBarTest {
 
         assertEquals(1, navigationCompositions)
         assertEquals(1, actionCompositions)
+    }
+
+    @Test
+    fun `search edits and programmatic updates use the same query`() {
+        val search = ShellSearch(initialQuery = "initial")
+        compose.setContent {
+            MaterialTheme {
+                TopBarSearchField(TopBarSearch(state = search, hint = "Search"))
+            }
+        }
+
+        val field = compose.onNode(hasSetTextAction())
+        field.assertTextEquals("initial")
+        field.performTextReplacement("typed")
+        compose.runOnIdle {
+            assertEquals("typed", search.query)
+            search.query = "updated"
+        }
+        field.assertTextEquals("updated")
+
+        compose.onNodeWithContentDescription(compose.activity.getString(R.string.clear_search))
+            .performClick()
+        compose.runOnIdle { assertEquals("", search.query) }
     }
 }
