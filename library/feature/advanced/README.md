@@ -65,7 +65,8 @@ flowchart TD
   `AdvancedSettingsUiState` is a `Loadable`. `cacheClear` is a `CacheClearStatus`, a
   `TrackedStatus` whose labels are the ones the page has always reported in `screen_state`:
   `success` while idle, `loading` while clearing and `error` after a failed clear.
-- A clear confirms with a snackbar, and a failure shows an error snackbar while the rows stay. The
+- The clear cache row shows loading and is disabled while a clear runs. Repeated requests during the
+  same clear are ignored. A successful clear shows a snackbar, and a failure shows an error snackbar. The
   failure text comes from `toErrorMessage`, so full or busy storage shows its own text and anything
   else shows "Cache cleared with some errors".
 - `CacheRepository.clearCache()` is a main-safe suspend function that throws a `StorageException`:
@@ -77,8 +78,8 @@ flowchart TD
   module binds one, the error reporting category is left out. The sheet's visibility is saved, so a
   rotation does not close it.
 - The developer options row is hidden until the About screen's version easter egg is found. The
-  ViewModel takes that as a `Flow<Boolean>` (`developerOptionsUnlocked`), which the Koin module maps
-  from `SeasonalThemeRepository`'s unlock, the same flag that keeps the seasonal themes all year,
+  ViewModel takes that as a `Flow<Boolean>` (`developerOptionsUnlocked`). The transformer in
+  `ui/transformers/` reads `SeasonalThemeRepository`'s unlock, the same flag that keeps the seasonal themes all year,
   so one discovery unlocks both.
 - There is no domain layer: the ViewModel calls one repository and holds no reusable business rule.
 

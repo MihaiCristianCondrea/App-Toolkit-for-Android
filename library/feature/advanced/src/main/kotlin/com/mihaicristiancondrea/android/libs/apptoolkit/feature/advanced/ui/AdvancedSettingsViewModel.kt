@@ -70,9 +70,8 @@ class AdvancedSettingsViewModel(
         }
     }
 
-    /** A second tap restarts the clear rather than queueing another, so only one result shows. */
     private fun clearCache() {
-        clearJob = clearJob.restart {
+        clearJob = clearJob.ifIsActive {
             launchReport(
                 action = Actions.CLEAR_CACHE,
                 onError = { error ->

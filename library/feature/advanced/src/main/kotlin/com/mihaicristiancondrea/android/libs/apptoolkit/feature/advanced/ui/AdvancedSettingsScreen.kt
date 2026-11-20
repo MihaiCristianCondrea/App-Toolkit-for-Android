@@ -48,10 +48,12 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.shell.cont
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.advanced.R
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.advanced.ui.contracts.AdvancedSettingsEvent
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.advanced.ui.states.AdvancedSettingsUiState
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.advanced.ui.states.CacheClearStatus
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.LocalShellNavigator
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.DeveloperOptionsRoute
 import org.koin.compose.getKoin
 import org.koin.compose.viewmodel.koinViewModel
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.R as CoreUiR
 
 
 private const val ADVANCED_SETTINGS_SCREEN_CLASS = "AdvancedSettingsScreen"
@@ -146,9 +148,13 @@ internal fun AdvancedSettingsScreenContent(
         }
 
         animatedItem {
+            val isClearingCache = state.cacheClear == CacheClearStatus.Clearing
             SettingsPreferenceItem(
+                enabled = !isClearingCache,
                 title = stringResource(id = R.string.clear_cache),
-                summary = stringResource(id = R.string.summary_preference_settings_clear_cache),
+                summary = stringResource(
+                    id = if (isClearingCache) CoreUiR.string.loading else R.string.summary_preference_settings_clear_cache,
+                ),
                 onClick = { onEvent(AdvancedSettingsEvent.ClearCache) },
                 ga4Event = advancedPreferenceTapEvent(preferenceKey = AdvancedPreferenceKeys.CLEAR_CACHE),
                 modifier = Modifier.groupedPreferenceItem(

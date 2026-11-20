@@ -188,6 +188,38 @@ fun SettingsPreferenceItem(
     ga4Event: Ga4EventData? = null,
     ga4EventProvider: (() -> Ga4EventData?)? = null,
 ) {
+    SettingsPreferenceItem(
+        enabled = true,
+        modifier = modifier,
+        icon = icon,
+        title = title,
+        summary = summary,
+        useIconContainer = useIconContainer,
+        iconColor = iconColor,
+        iconContainerColor = iconContainerColor,
+        rippleEffectDp = rippleEffectDp,
+        onClick = onClick,
+        ga4Event = ga4Event,
+        ga4EventProvider = ga4EventProvider,
+    )
+}
+
+/** Preference card that can be disabled while its action is running. */
+@Composable
+fun SettingsPreferenceItem(
+    enabled: Boolean,
+    modifier: Modifier = Modifier,
+    icon: ToolkitIcon? = null,
+    title: String? = null,
+    summary: String? = null,
+    useIconContainer: Boolean = false,
+    iconColor: Color? = null,
+    iconContainerColor: Color? = null,
+    rippleEffectDp: Dp = SizeConstants.ExtraTinySize,
+    onClick: () -> Unit = {},
+    ga4Event: Ga4EventData? = null,
+    ga4EventProvider: (() -> Ga4EventData?)? = null,
+) {
     Card(
         modifier = modifier.componentEntrance()
             .fillMaxWidth(),
@@ -201,9 +233,8 @@ fun SettingsPreferenceItem(
             useIconContainer = useIconContainer,
             iconColor = iconColor,
             iconContainerColor = iconContainerColor,
-            onClick = {
-                onClick()
-            },
+            enabled = enabled,
+            onClick = onClick,
             ga4Event = ga4Event,
             ga4EventProvider = ga4EventProvider,
         )

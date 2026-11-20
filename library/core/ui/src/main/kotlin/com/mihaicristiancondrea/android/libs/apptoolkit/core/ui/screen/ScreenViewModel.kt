@@ -93,6 +93,10 @@ abstract class ScreenViewModel<S, E : Any>(initialState: S) : ViewModel() {
         mutableMessages.update { queue -> queue.removingAll { it.id == id } }
     }
 
+    /** Returns this job while it is active. Otherwise, calls [orStart] and returns the new job. */
+    protected fun Job?.ifIsActive(orStart: () -> Job): Job =
+        this?.takeIf { it.isActive } ?: orStart()
+
     /** Cancels this job, if any, and starts the one [start] returns. */
     protected fun Job?.restart(start: () -> Job): Job {
         this?.cancel()

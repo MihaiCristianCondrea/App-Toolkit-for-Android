@@ -462,6 +462,9 @@ The full setup, with the file tree, templates and the migration steps, is the
   reported by `ScreenHost` like `Loadable`'s `loading`, `success`, `no_data` and `error`.
 - **Messages** go through `showMessage(UiMessage(...))` and `MessageHost`, which shows them one at a
   time and removes each once it has left. A screen needs no dismiss event.
+- **Job helpers** pair with launches such as `launchReport`. Assign the result back to the stored
+  job. `ifIsActive { ... }` keeps the active job and launches only when the job is absent or inactive.
+  `restart { ... }` cancels the previous job and starts new work.
 - **`LoggedScreenViewModel`** logs `vm_init` and `vm_event` itself; `launchReport`,
   `collectReport` and `observeReport` take the same arguments and log `vm_op_start` and, on
   failure, `vm_op_error` and a Crashlytics report before calling `onError`. `observeReport` logs a

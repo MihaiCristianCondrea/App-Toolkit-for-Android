@@ -20,7 +20,7 @@ package com.mihaicristiancondrea.android.libs.apptoolkit.feature.advanced.di
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.settings.SettingsSearchProvider
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.advanced.ui.search.advancedSettingsSearch
 import org.koin.core.qualifier.named
-import kotlinx.coroutines.flow.map
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.advanced.ui.transformers.toDeveloperOptionsUnlocked
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.repositories.SeasonalThemeRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.telemetry.TelemetryRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.advanced.data.repositories.CacheRepository
@@ -48,7 +48,7 @@ val advancedSettingsModule: Module = module {
         AdvancedSettingsViewModel(
             repository = get(),
             telemetryRepository = get(),
-            developerOptionsUnlocked = get<SeasonalThemeRepository>().state.map { it.unlocked },
+            developerOptionsUnlocked = get<SeasonalThemeRepository>().state.toDeveloperOptionsUnlocked(),
         )
     }
 }

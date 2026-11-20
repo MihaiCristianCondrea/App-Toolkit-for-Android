@@ -39,5 +39,5 @@
     <string name="summary_preference_settings_oss">تفاصيل الترخيص للبرامج مفتوحة المصدر</string>
     <string name="summary_share_message">اطلع على هذا التطبيق الرائع الذي أستخدمه. يحتوي على بعض الميزات الرائعة التي قد تجدها مثيرة للاهتمام. يمكنك تنزيله من متجر Play على: %1$s</string>
     <string name="updates">التحديثات</string>
-    <string name="snack_seasonal_themes_unlocked">استمتع</string>
+    <string name="snack_seasonal_themes_unlocked">تم فتح السمات الموسمية وخيارات المطوّر</string>
 </resources>

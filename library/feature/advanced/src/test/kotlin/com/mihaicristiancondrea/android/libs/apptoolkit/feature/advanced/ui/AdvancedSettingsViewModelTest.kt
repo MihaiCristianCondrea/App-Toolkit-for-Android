@@ -108,6 +108,27 @@ class AdvancedSettingsViewModelTest {
         }
 
     @Test
+    fun `repeated taps while clearing start one deletion and show one confirmation`() =
+        runTest(dispatcherExtension.testDispatcher) {
+            val gate = CompletableDeferred<Unit>()
+            val repository = FakeCacheRepository(gate = gate)
+            val viewModel = createViewModel(repository = repository)
+
+            viewModel.onEvent(AdvancedSettingsEvent.ClearCache)
+            viewModel.onEvent(AdvancedSettingsEvent.ClearCache)
+            advance()
+
+            assertEquals(1, repository.clears)
+            assertEquals(CacheClearStatus.Clearing, viewModel.state.value.cacheClear)
+            assertTrue(viewModel.messages.value.isEmpty())
+
+            gate.complete(Unit)
+            advance()
+            assertEquals(CacheClearStatus.Idle, viewModel.state.value.cacheClear)
+            assertEquals(R.string.cache_cleared_success, viewModel.onlyMessage().resourceId)
+        }
+
+    @Test
     fun `a failure with no text of its own shows the page's text and keeps the rows`() =
         runTest(dispatcherExtension.testDispatcher) {
             val viewModel = createViewModel(

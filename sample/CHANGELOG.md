@@ -9,6 +9,11 @@
 - Taps no longer sound twice.
 - The menu button and app bar actions no longer slide out and back in when you switch tabs.
 - Lists no longer come back empty after you swipe away from them partway through their entrance.
+- Clear cache shows when it is running and prevents repeated taps.
+
+### Improved
+
+- About confirms when you unlock seasonal themes and developer options.
 
 ---
 
