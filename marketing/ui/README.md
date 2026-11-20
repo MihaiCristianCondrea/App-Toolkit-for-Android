@@ -53,13 +53,13 @@ shell, rails, drawers and sheets come with Material Next.
 
 ## Dependencies
 
-It uses Material Next `0.1.0` from npm and needs Node.js 24. The gallery opens
+It uses Material Next `0.2.x` from npm and needs Node.js 24. The gallery opens
 each screen in the same page; `screen.html` remains for captures and direct links.
 Gallery cards start without device frames. Opening screen detail shows a frame automatically,
 while an explicit `frame=none` URL stays frameless.
 
 Shared frames and badges are copied from the installed package into ignored `public/material-next/`
-at build time. App-specific fonts, logos and illustrations still come from this repository.
+before development, builds and browser QA. Google Sans Flex is copied from the Android design system so the preview uses the same font file as the app. Logos, illustrations and shapes come from `marketing/assets/`.
 
 ## Entry Points
 
@@ -114,7 +114,7 @@ Node.js and npm must be on PATH. The Windows window stays open on failure so the
 npm install
 npm run dev      # sync assets and start Vite dev server
 npm run build    # sync assets and build production bundle to dist/
-npm run qa       # browser checks (CHROMIUM_PATH can select a local Chromium)
+npm run qa       # sync assets and run browser checks (CHROMIUM_PATH can select a local Chromium)
 npm run palettes # regenerate src/theme/palettes.css from Kotlin Color.kt files
 ```
 

@@ -9,9 +9,6 @@ import { asset, shapeMaskStyle } from "./assets.js";
 /** BreathingRepository.kt: inhale 4 s, hold 2 s, exhale 4 s, hold 1 s. */
 export const BREATH_STEPS = [["Inhale", 4], ["Hold", 2], ["Exhale", 4], ["Hold", 1]];
 
-/** The brand's own MaterialShapes exports in marketing/assets/shapes, used as masks. */
-const brandShape = (name) => asset(`shapes/${encodeURIComponent(name)}.svg`);
-
 /** Two values side by side as a connected pair: round outer corners, small inner ones (ResultPill.kt colours). */
 const pillPair = (a, b) => html`<div class="tk-pill-pair"><span class="tk-pill">${a}</span><span class="tk-pill">${b}</span></div>`;
 
@@ -158,7 +155,7 @@ export function extraToolBody(tool, state, onState) {
       const shift = (deg) => (-Math.max(-45, Math.min(45, deg)) / 45) * 80;
       return html`
         <div class="tk-tool-interactive tk-tool-interactive--center">
-          <div class="tk-level" style=${shapeMaskStyle(brandShape("16 Sided Cookie"))} role="img"
+          <div class="tk-level" style=${shapeMaskStyle(asset("shapes/16-sided-cookie.svg"))} role="img"
             aria-label="Bubble level, ${flat ? "level" : "tilted"}, pitch ${Math.trunc(pitch)} degrees, roll ${Math.trunc(roll)} degrees">
             <svg class="tk-level__cross" viewBox="0 0 100 100" aria-hidden="true">
               <line x1="0" y1="50" x2="100" y2="50" /><line x1="50" y1="0" x2="50" y2="100" />

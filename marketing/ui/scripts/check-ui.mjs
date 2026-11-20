@@ -80,7 +80,29 @@ try {
       }
     }
   }
-  // Chance belongs to Quick Tools, with Compose range controls and six-sided dice.
+  // A missing mask hides a dial without causing a page error.
+  {
+    const checkMask = async (dial, filename) => {
+      const mask = await dial.evaluate(el => getComputedStyle(el).maskImage);
+      const match = /^url\("(.*)"\)$/.exec(mask);
+      assert.ok(match, `Expected a dial mask, got ${mask}`);
+      assert.equal(new URL(match[1]).pathname, `/shapes/${filename}`);
+      await page.evaluate(async url => {
+        const image = new Image();
+        image.src = url;
+        await image.decode();
+      }, match[1]);
+    };
+    await page.goto(`${base}/screen.html?id=quick-tools&panel=none`);
+    const compass = page.getByRole('button', {name: /^Compass,/});
+    const bubbleLevel = page.getByRole('button', {name: /^Bubble level,/});
+    await checkMask(compass.locator('.qt-live__face'), '8-sided-cookie.svg');
+    await checkMask(bubbleLevel.locator('.qt-live__face'), '16-sided-cookie.svg');
+    await bubbleLevel.click();
+    await checkMask(page.locator(SHEET_CONTENT).locator('.tk-level'), '16-sided-cookie.svg');
+    checks++;
+  }
+  // Chance uses Compose range controls and six-sided dice.
   for (const window of ['phone', 'fold', 'desktop']) {
     for (const theme of ['light', 'dark']) {
       await page.goto(`${base}/screen.html?id=play&window=${window}&theme=${theme}&panel=none`);

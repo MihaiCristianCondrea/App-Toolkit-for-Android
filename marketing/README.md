@@ -4,14 +4,13 @@ Local previews, store listing files, campaigns and shared assets for the **App T
 Play. Nothing here is packaged in the app. The library is used only by the owner's own apps and is not marketed. The
 Compose sample app is the reference for product screens; marketing composition may vary around those screens.
 
-Start any marketing task from [`STARTUP.md`](STARTUP.md): it routes each task to the skills in [`skills/`](skills/llms.txt),
-in order.
+Start with [Marketing AGENTS.md](AGENTS.md) for task routing and [Marketing UI](.agents/skills/first-party/marketing/marketing-ui/SKILL.md) for preview, capture and embed guidance.
 
 ## Layout
 
 | Folder | Contents |
 | --- | --- |
-| [STARTUP.md](STARTUP.md) | Task router: which skills, in which order |
+| [AGENTS.md](AGENTS.md) | Marketing workflow and skill routing |
 | [briefs](briefs) | App Toolkit brand and product positioning |
 | [ui](ui/README.md) | The UI kit: Material Next hub with Lit and Material Web screens, previews and capture tools |
 | [creative/store/google-play](creative/store/google-play/README.md) | Google Play store listing: the default listing (custom listings per tool later), with its source and the uploaded files per language |
@@ -19,7 +18,7 @@ in order.
 | [creative/templates](creative/templates) | Starting points for new work: [`ui-motion-starter`](creative/templates/ui-motion-starter/README.md), Remotion over the UI kit's live screens |
 | [research](research/README.md) | Google Analytics exports: context, not claims |
 | [assets](assets) | Logos (with `logos/scripts`, which generates the app's icon resources from `.idea/icon.svg`), illustrations, `MaterialShapes` SVGs, device frames and the official Play badge |
-| [skills](skills/llms.txt) | `built-in/` (ours, from [android-skills](https://github.com/MihaiCristianCondrea/android-skills)), `design-taste/`, `google/` and `social-media/` (installed, never edited) |
+| [.agents/skills](.agents/skills/) | Marketing skills grouped under `first-party/`, `official/` and `third-party/` |
 
 ### Campaigns
 

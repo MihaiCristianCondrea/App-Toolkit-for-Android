@@ -31,9 +31,8 @@ const toolkitFont = join(
   "google_sans_flex_variable.ttf",
 );
 
-if (!existsSync(localFont) && existsSync(toolkitFont)) {
-  copyFileSync(toolkitFont, localFont);
-}
+// Match the Android typography and refresh the generated copy after font updates.
+copyFileSync(toolkitFont, localFont);
 
 if (existsSync(marketingIllustrations)) {
   for (const file of readdirSync(marketingIllustrations)) {

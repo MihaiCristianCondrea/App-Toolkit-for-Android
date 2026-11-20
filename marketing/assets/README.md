@@ -30,6 +30,7 @@ The names below describe the local files. The repository does not record an upst
 | [`4-sided-cookie.svg`](shapes/4-sided-cookie.svg) | 4-sided cookie | Scalloped |
 | [`6-sided-cookie.svg`](shapes/6-sided-cookie.svg) | 6-sided cookie | Scalloped |
 | [`7-sided-cookie.svg`](shapes/7-sided-cookie.svg) | 7-sided cookie | Scalloped |
+| [`8-sided-cookie.svg`](shapes/8-sided-cookie.svg) | 8-sided cookie | Scalloped |
 | [`9-sided-cookie.svg`](shapes/9-sided-cookie.svg) | 9-sided cookie | Scalloped |
 | [`12-sided-cookie.svg`](shapes/12-sided-cookie.svg) | 12-sided cookie | Scalloped |
 | [`16-sided-cookie.svg`](shapes/16-sided-cookie.svg) | 16-sided cookie | Scalloped |
@@ -79,7 +80,7 @@ The names below describe the local files. The repository does not record an upst
 
 ## Device frames
 
-Use the device's display aperture and corner mask to fit the actual app window. The frame guide identifies which skins are local and which Material Next provides. [Device frames](device-frames/README.md)
+Use the display aperture and corner mask in each local device directory to fit the app window. The marketing UI gets its preview frames from Material Next. [Local device frames](device-frames/) · [Marketing UI dependencies](../ui/README.md#dependencies)
 
 ## Google Play badge
 
