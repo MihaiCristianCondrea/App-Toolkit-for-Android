@@ -20,7 +20,7 @@ package com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.ui.naviga
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.ui.AboutScreen
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.ui.views.extras.LibraryExtrasScreen
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.ui.features.libraries.AboutLibrariesScreen
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.PaneRole
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.ShellGraphBuilder
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.AboutRoute
@@ -29,7 +29,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.R as CommonR
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.R as CoreUiR
 
 /**
- * Registers the About page, a detail of the settings list, and the library extras page, unless
+ * Registers the About page, a detail of the settings list, and the About Libraries page, unless
  * the app registered its own.
  *
  * An app that wants more from About, such as reacting to taps on the version, calls this itself
@@ -50,6 +50,6 @@ fun ShellGraphBuilder.aboutPages(about: @Composable () -> Unit = { AboutScreen()
         paneRole = PaneRole.None,
         title = { stringResource(CommonR.string.app_name) },
     ) {
-        LibraryExtrasScreen()
+        AboutLibrariesScreen()
     }
 }

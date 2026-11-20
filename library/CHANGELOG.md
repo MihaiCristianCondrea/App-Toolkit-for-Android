@@ -11,6 +11,8 @@
 ### Changed
 
 - App bar search uses a state-based Compose text field. `ShellSearch.query` remains readable and writable.
+- `ui.features.libraries.AboutLibrariesScreen()` replaces `ui.views.extras.LibraryExtrasScreen()`.
+  The destination continues to use `LibraryExtrasRoute` and reports visits through Toolkit telemetry.
 
 ---
 

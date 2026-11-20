@@ -19,17 +19,17 @@ package com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.ui
 
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.ClipboardRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.telemetry.TelemetryRepository
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.analytics.logUnlockAchievement
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.UiText
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.analytics.logUnlockAchievement
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.repositories.SeasonalThemeRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.Loadable
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.LoggedScreenViewModel
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.UiMessage
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.toErrorMessage
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.toFailed
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.ui.analytics.SEASONAL_THEMES_ACHIEVEMENT
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.R
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.data.repositories.AboutRepository
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.ui.analytics.SEASONAL_THEMES_ACHIEVEMENT
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.ui.contracts.AboutEvent
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.ui.mappers.toAboutItems
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.ui.states.AboutUiState
@@ -119,7 +119,9 @@ open class AboutViewModel(
             clipboardRepository.copyText(label = label, text = text)
             if (!clipboardRepository.confirmsCopies) {
                 showMessage(
-                    UiMessage(successMessage ?: UiText.StringResource(R.string.snack_copied_to_clipboard)),
+                    UiMessage(
+                        successMessage ?: UiText.StringResource(R.string.snack_copied_to_clipboard)
+                    ),
                 )
             }
         }

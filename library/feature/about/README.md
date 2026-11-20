@@ -13,7 +13,8 @@ plus the tap-to-copy interaction for the entries it renders and the version-tap 
   info and the open-source licenses, which opens the licenses page.
 - Tap-to-copy for About entries, including the clipboard write and its in-app confirmation.
 - The version-tap easter egg: konfetti on the fifth tap, and the seasonal themes unlock it records.
-- The library-owned extras screen, `LibraryExtrasScreen`.
+- The About Libraries destination in `ui/features/libraries/`, which reports visits through
+  `ScreenHost`.
 - `aboutPages()`, the registration of `AboutRoute` (a detail of the settings list) and
   `LibraryExtrasRoute`.
 
@@ -44,8 +45,8 @@ plus the tap-to-copy interaction for the entries it renders and the version-tap 
 
 - [`:library:apptoolkit`](../../apptoolkit/README.md), which calls `aboutPages()` from
   `toolkitPages()`.
-- `:sample:app`, which registers About first with its own content (`aboutPages {
-  AboutSettingsContent() }`), and `:sample:feature:about`, which provides the device report.
+- `:sample:app`, which registers `aboutPages { AboutScreen() }` before the Toolkit adds its pages.
+- `:sample:feature:about`, which provides the formatted device report.
 
 ## Flow chart
 
@@ -98,8 +99,8 @@ flowchart TD
   re-declaring the page.
 - Confirmations go to the page's snackbar host (`rememberPageSnackbarHostState()`), so they sit
   above the shell's bottom chrome rather than under it.
-- Use cases are retained where they perform a named operation or combine concerns; repository calls
-  that only forwarded data were not given synthetic wrappers.
+- The ViewModel calls repositories directly. `ui/formatters/` owns the display format for the build
+  version, and the mapper applies the shared preference grouping after filtering the rows.
 
 ## Verifying tap-to-copy
 
@@ -124,7 +125,7 @@ Verify on a physical device, where the preview appears on every tap, or switch o
 ## Public contracts
 
 - `AboutDeviceInfoDataSource`, `AboutRepository`, `AboutInfo`, `AboutItem`, `AboutItemAction`,
-  `AboutEvent`, `AboutScreen`, `LibraryExtrasScreen`, and `aboutPages()`.
+  `AboutEvent`, `AboutScreen`, `AboutLibrariesScreen`, and `aboutPages()`.
 
 ## Internal implementations
 
@@ -133,7 +134,8 @@ Verify on a physical device, where the preview appears on every tap, or switch o
 
 ## Current risks
 
-`AboutDeviceInfoDataSource` lives in `data/local`; hosts supply their device-information text through this contract.
+`AboutDeviceInfoDataSource` lives in `data/local`; hosts supply their device-information text
+through this contract.
 
 ## Migration notes
 

@@ -17,19 +17,20 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.ui.mappers
 
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.R as CommonR
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.UiText
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.GroupedItemPosition
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.data.models.AboutInfo
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.groupedItemPosition
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.R
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.data.models.AboutInfo
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.ui.contracts.AboutItemAction
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.ui.formatters.formatAboutBuildVersion
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.ui.models.AboutItem
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.ui.models.AboutItemKey
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.R as CommonR
 
 /**
- * Maps the [AboutInfo] domain model to the rows the About screen renders.
+ * Maps [AboutInfo] to the rows the About screen renders.
  *
  * Entries that have nothing to show are dropped, so grouped card positions are assigned after
  * filtering and always describe the list the user actually sees.
@@ -57,7 +58,7 @@ internal fun AboutInfo.toAboutItems(): ImmutableList<AboutItem> {
             AboutItem.Preference(
                 key = AboutItemKey.APP_BUILD_VERSION,
                 title = UiText.StringResource(R.string.app_build_version),
-                summary = UiText.DynamicString("$appVersion ($appVersionCode)"),
+                summary = UiText.DynamicString(formatAboutBuildVersion(appVersion, appVersionCode)),
                 countsVersionTap = true,
             )
         )
@@ -142,11 +143,5 @@ internal fun AboutInfo.toAboutItems(): ImmutableList<AboutItem> {
 
 private fun List<AboutItem.Preference>.assignPositions(): List<AboutItem.Preference> =
     mapIndexed { index, item ->
-        val position = when {
-            size == 1 -> GroupedItemPosition.SINGLE
-            index == 0 -> GroupedItemPosition.FIRST
-            index == lastIndex -> GroupedItemPosition.LAST
-            else -> GroupedItemPosition.MIDDLE
-        }
-        item.copy(position = position)
+        item.copy(position = groupedItemPosition(index = index, size = size))
     }

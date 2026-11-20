@@ -6,15 +6,14 @@ Supplies sample build and device metadata to the Toolkit About page.
 
 ## Owns
 
-- `AppAboutDeviceInfoDataSource`, which formats metadata using Toolkit resources.
+- `AppAboutDeviceInfoDataSource`, which collects Android build and device metadata.
+- `data/formatters/`, which uses Toolkit resources to produce the formatted report required by the host contract.
 - `aboutModule(hostBuildConfig)`, which binds `AboutDeviceInfoDataSource` with the final app's build
   configuration.
 
 ## Does not own
 
 - About UI, owned by [`:library:feature:about`](../../../library/feature/about/README.md).
-- The existing showcase-unlock content, owned by `:sample:feature:settings` and passed to
-  `aboutPages` by the app.
 - Final application identity and build configuration, owned by `:sample:app`.
 - Toolkit module ordering, owned by `:sample:core:apptoolkit`.
 

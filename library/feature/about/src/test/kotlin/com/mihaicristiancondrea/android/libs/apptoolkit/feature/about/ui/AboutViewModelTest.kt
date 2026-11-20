@@ -24,7 +24,6 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.UiText
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.repositories.SeasonalThemeRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.FakeTelemetryRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.UnconfinedDispatcherExtension
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.R as CoreUiR
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.Loadable
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.UiMessage
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.R
@@ -43,6 +42,7 @@ import kotlin.test.assertEquals
 import kotlin.test.assertFalse
 import kotlin.test.assertIs
 import kotlin.test.assertTrue
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.R as CoreUiR
 
 class AboutViewModelTest {
 
@@ -244,7 +244,10 @@ class AboutViewModelTest {
             advance()
 
             val items = viewModel.state.value.items as Loadable.Failed
-            assertEquals(R.string.snack_device_info_failed, (items.message as UiText.StringResource).resourceId)
+            assertEquals(
+                R.string.snack_device_info_failed,
+                (items.message as UiText.StringResource).resourceId
+            )
             assertTrue(items.retryable)
             assertContains(telemetryRepository.loggedEvents.map { it.name }, "vm_op_error")
         }
@@ -280,7 +283,10 @@ class AboutViewModelTest {
             advance()
 
             val items = viewModel.state.value.items as Loadable.Failed
-            assertEquals(R.string.snack_device_info_failed, (items.message as UiText.StringResource).resourceId)
+            assertEquals(
+                R.string.snack_device_info_failed,
+                (items.message as UiText.StringResource).resourceId
+            )
             assertFalse(items.retryable)
         }
 
@@ -314,9 +320,16 @@ class AboutViewModelTest {
             advance()
 
             coVerify { seasonalThemes.unlockSeasonalThemes() }
-            assertEquals(R.string.snack_seasonal_themes_unlocked, viewModel.onlyMessage().resourceId)
-            val achievement = telemetryRepository.loggedEvents.single { it.name == "unlock_achievement" }
-            assertEquals(AnalyticsValue.Str("seasonal_themes"), achievement.params["achievement_id"])
+            assertEquals(
+                R.string.snack_seasonal_themes_unlocked,
+                viewModel.onlyMessage().resourceId
+            )
+            val achievement =
+                telemetryRepository.loggedEvents.single { it.name == "unlock_achievement" }
+            assertEquals(
+                AnalyticsValue.Str("seasonal_themes"),
+                achievement.params["achievement_id"]
+            )
         }
 
     @Test
