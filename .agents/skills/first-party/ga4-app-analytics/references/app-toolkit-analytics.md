@@ -1,0 +1,184 @@
+# App Toolkit Analytics
+
+## Purpose
+
+This reference explains the analytics path used by App Toolkit host applications.
+
+The host application should normally build on this system rather than creating a second Firebase
+Analytics path.
+
+## Main flow
+
+```text
+Host feature or reusable Toolkit UI
+        ↓
+AnalyticsEvent or Ga4EventData
+        ↓
+TelemetryRepository
+        ↓
+FirebaseTelemetryRepository
+        ↓
+Firebase Analytics
+```
+
+`TelemetryRepository` lives in App Toolkit's `core.common.telemetry`. Host features depend on this
+contract instead of importing the Firebase Analytics SDK directly. It combines three narrower
+contracts, each with its own owner:
+
+| Contract              | Covers                                        | Used by                             |
+|-----------------------|-----------------------------------------------|-------------------------------------|
+| `AnalyticsReporter`   | GA4 events, screen views, user properties     | the UI layer only                   |
+| `DiagnosticsReporter` | breadcrumbs, ViewModel errors, non-fatals     | any layer, repositories included    |
+| `TelemetryCollection` | consent and the collection switches           | the code that owns consent          |
+
+`telemetryModule` binds all three to the app's one `TelemetryRepository`.
+
+The Firebase integration provides the concrete implementation through dependency injection.
+
+## Analytics models
+
+App Toolkit uses a small set of value types for event parameters:
+
+```kotlin
+sealed interface AnalyticsValue {
+    data class Str(val value: String) : AnalyticsValue
+    data class LongVal(val value: Long) : AnalyticsValue
+    data class DoubleVal(val value: Double) : AnalyticsValue
+    data class Bool(val value: Boolean) : AnalyticsValue
+}
+
+data class AnalyticsEvent(
+    val name: String,
+    val params: Map<String, AnalyticsValue> = emptyMap(),
+)
+```
+
+Host applications can define their own event contracts using these types.
+
+## Telemetry responsibilities
+
+`TelemetryRepository` provides the common path for:
+
+- Analytics events.
+- Screen views.
+- User properties.
+- Analytics enablement.
+- Consent updates.
+- Crashlytics breadcrumbs.
+- ViewModel error reports.
+- Non-fatal crash reports.
+- Firebase Performance enablement.
+
+Feature code should normally call the controller instead of directly accessing Firebase SDK classes.
+
+## FirebaseTelemetryRepository behavior
+
+The Firebase implementation validates and converts Toolkit events before sending them to Firebase
+Analytics.
+
+Current protections include:
+
+- Event name validation.
+- Parameter name validation.
+- Reserved prefix rejection.
+- Maximum parameter count.
+- String value trimming.
+- User property name and value limits.
+
+Do not rely only on transport validation for analytics quality. A technically valid event can still
+be semantically wrong, noisy, unsafe, or useless.
+
+## LoggedScreenViewModel
+
+`LoggedScreenViewModel` provides standard operational telemetry.
+
+It records ViewModel lifecycle and UI event breadcrumbs for Crashlytics and can emit operation
+events such as:
+
+```text
+vm_op_start
+vm_op_error
+```
+
+These events describe application operations. They are not a replacement for product analytics.
+
+For example, a lesson completion or cleanup completion should still have a meaningful product event
+when that behavior matters to the host app.
+
+## Screen tracking
+
+`ScreenHost(screen, status, viewModel) { content }` is App Toolkit's screen boundary. It sends a
+screen view through `logScreenView()` for each visit, once the destination is visible and active,
+and shows the ViewModel's messages. `screen` is a `TrackedScreen` from `core.common.telemetry.models`,
+with a stable name and class.
+
+Use it at meaningful destinations, and around a sheet or dialog that is a screen of its own.
+
+Its `status` can additionally report bounded states such as:
+
+```text
+loading
+success
+no_data
+error
+```
+
+Use screen state tracking when it answers a real product or reliability question. Do not add it
+mechanically to every small component.
+
+## Reusable UI analytics
+
+App Toolkit supports `Ga4EventData` for reusable UI components.
+
+A reusable component receives a `ga4Event` and logs it at the exact interaction point, through
+`LocalTelemetry`, which `ShellHost` provides. It takes no telemetry parameter.
+
+Before adding a manual event around a Toolkit button, preference, chip, field, or FAB, inspect
+whether the component already supports GA4 logging. Duplicate click events can otherwise be emitted
+from both the component and the caller.
+
+## Host ownership
+
+The host application should own:
+
+- Product-specific event names.
+- Product-specific parameters.
+- Required event schemas.
+- Stable screen identifiers for host-owned screens.
+- Product-specific analytics tests.
+
+App Toolkit should own:
+
+- Firebase transport.
+- Generic Toolkit tracking helpers.
+- Toolkit-owned event vocabularies for Toolkit behavior.
+- Consent application.
+- Shared analytics value models.
+
+## Consent
+
+App Toolkit applies analytics and advertising consent centrally.
+
+Features should not normally wrap every event in their own consent check.
+
+The central consent system controls:
+
+- Analytics storage consent.
+- Ad storage consent.
+- Ad user data consent.
+- Ad personalization consent.
+- Analytics collection enablement.
+- Crashlytics collection enablement.
+- Firebase Performance collection enablement.
+
+Keep product instrumentation separate from consent policy.
+
+## Practical rule
+
+When reviewing an App Toolkit host app, first ask:
+
+1. Does the Toolkit already track this behavior?
+2. Does a reusable component already emit the interaction event?
+3. Is this operational telemetry or product analytics?
+4. Does the host already have an analytics contract for this product behavior?
+5. Can the existing architecture express the new event without introducing another analytics layer?

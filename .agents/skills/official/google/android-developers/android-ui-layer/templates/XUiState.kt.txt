@@ -1,0 +1,19 @@
+// Copy the license header from a sibling file.
+
+package <base>.feature.x.ui.states
+
+import androidx.compose.runtime.Immutable
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.Loadable
+import <base>.feature.x.ui.models.XItem
+import kotlinx.collections.immutable.ImmutableList
+
+/**
+ * Everything the X screen renders.
+ *
+ * @property items The entries. Starts at [Loadable.Loading]; start at `Loadable.Empty()` instead
+ * when the screen should show nothing until the entries arrive.
+ */
+@Immutable
+data class XUiState(
+    val items: Loadable<ImmutableList<XItem>> = Loadable.Loading,
+)

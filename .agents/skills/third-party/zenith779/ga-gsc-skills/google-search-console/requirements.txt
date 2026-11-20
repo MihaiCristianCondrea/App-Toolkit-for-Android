@@ -1,0 +1,3 @@
+git+https://github.com/joshcarty/google-searchconsole.git@9ab5a2651c3eb06d862d4b604babd84cbb7b48c0
+python-dotenv>=1.0.0
+pandas>=2.0.0
