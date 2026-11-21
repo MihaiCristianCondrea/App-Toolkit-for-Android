@@ -64,7 +64,9 @@ class ChangelogViewModel(
                 val history = getChangelogUseCase()
                 setState {
                     copy(
-                        markdown = if (history.markdown.isBlank()) Loadable.Empty() else Loadable.Ready(history.markdown),
+                        markdown = if (history.markdown.isBlank()) Loadable.Empty() else Loadable.Ready(
+                            history.markdown
+                        ),
                         currentVersion = history.currentVersion,
                     )
                 }

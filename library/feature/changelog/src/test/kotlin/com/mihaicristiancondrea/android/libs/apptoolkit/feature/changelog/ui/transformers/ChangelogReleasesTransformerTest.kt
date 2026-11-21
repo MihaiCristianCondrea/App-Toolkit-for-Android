@@ -25,10 +25,13 @@ import kotlin.test.assertTrue
 class ChangelogReleasesTransformerTest {
     @Test
     fun `all releases remain visible and grouped versions identify the current release`() {
-        val history = "# Changelog\n\n---\n\n# Unreleased\n- Future\n\n---\n\n# November 10, 2026\n\n**Version:** `2.0.0`, `2.0.1`\n\n### Fixed\n- Current\n\n---\n\n# October 30, 2026\n\n**Version:** `1.0.0`\n- Old"
+        val history =
+            "# Changelog\n\n---\n\n# Unreleased\n- Future\n\n---\n\n# November 10, 2026\n\n**Version:** `2.0.0`, `2.0.1`\n\n### Fixed\n- Current\n\n---\n\n# October 30, 2026\n\n**Version:** `1.0.0`\n- Old"
         val releases = history.toChangelogReleases("2.0.1")
 
-        assertEquals(listOf("Unreleased", "November 10, 2026", "October 30, 2026"), releases.map { it.heading })
+        assertEquals(
+            listOf("Unreleased", "November 10, 2026", "October 30, 2026"),
+            releases.map { it.heading })
         assertEquals(listOf(false, true, false), releases.map { it.isCurrent })
         assertTrue(releases[1].markdown.contains("### Fixed"))
         assertTrue(releases.last().markdown.contains("- Old"))
@@ -36,8 +39,9 @@ class ChangelogReleasesTransformerTest {
 
     @Test
     fun `stable and prerelease versions match exactly`() {
-        val releases = "## [2.0.0-beta] - 2026-08-02\n- Beta\n## Version 2.0.0\n- Stable\n## v1.0.0\n- Old"
-            .toChangelogReleases("2.0.0")
+        val releases =
+            "## [2.0.0-beta] - 2026-08-02\n- Beta\n## Version 2.0.0\n- Stable\n## v1.0.0\n- Old"
+                .toChangelogReleases("2.0.0")
 
         assertEquals(3, releases.size)
         assertEquals(listOf(false, true, false), releases.map { it.isCurrent })

@@ -18,11 +18,10 @@
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.changelog.ui
 
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.exceptions.NetworkException
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.UiText
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.BuildInfoRepository
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.UiText
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.FakeTelemetryRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.UnconfinedDispatcherExtension
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.R as CoreUiR
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.Loadable
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.changelog.R
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.changelog.data.repositories.ChangelogRepository
@@ -35,6 +34,7 @@ import org.junit.jupiter.api.extension.RegisterExtension
 import kotlin.test.assertEquals
 import kotlin.test.assertIs
 import kotlin.test.assertTrue
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.R as CoreUiR
 
 class ChangelogViewModelTest {
 
@@ -48,7 +48,10 @@ class ChangelogViewModelTest {
 
     private fun createViewModel(repository: ChangelogRepository): ChangelogViewModel =
         ChangelogViewModel(
-            getChangelogUseCase = GetChangelogUseCase(repository = repository, buildInfoRepository = BuildInfo),
+            getChangelogUseCase = GetChangelogUseCase(
+                repository = repository,
+                buildInfoRepository = BuildInfo
+            ),
             telemetryRepository = telemetryRepository,
         )
 
@@ -58,13 +61,18 @@ class ChangelogViewModelTest {
         get() = (message as UiText.StringResource).resourceId
 
     @Test
-    fun `the first load keeps full history and the installed version`() = runTest(dispatcherExtension.testDispatcher) {
-        val viewModel = createViewModel(FakeChangelogRepository(markdown = "# 2.0.0\n- New\n# 1.0.0\n- Old"))
-        advance()
+    fun `the first load keeps full history and the installed version`() =
+        runTest(dispatcherExtension.testDispatcher) {
+            val viewModel =
+                createViewModel(FakeChangelogRepository(markdown = "# 2.0.0\n- New\n# 1.0.0\n- Old"))
+            advance()
 
-        assertEquals(Loadable.Ready("# 2.0.0\n- New\n# 1.0.0\n- Old"), viewModel.state.value.markdown)
-        assertEquals("2.0.0", viewModel.state.value.currentVersion)
-    }
+            assertEquals(
+                Loadable.Ready("# 2.0.0\n- New\n# 1.0.0\n- Old"),
+                viewModel.state.value.markdown
+            )
+            assertEquals("2.0.0", viewModel.state.value.currentVersion)
+        }
 
     @Test
     fun `a load requested during the first fetch keeps the active fetch`() =
@@ -102,7 +110,8 @@ class ChangelogViewModelTest {
     @Test
     fun `a failure with no text of its own shows the changelog's text with a retry`() =
         runTest(dispatcherExtension.testDispatcher) {
-            val viewModel = createViewModel(FakeChangelogRepository(failure = IllegalStateException("bug")))
+            val viewModel =
+                createViewModel(FakeChangelogRepository(failure = IllegalStateException("bug")))
             advance()
 
             val markdown = assertIs<Loadable.Failed>(viewModel.state.value.markdown)
@@ -124,7 +133,10 @@ class ChangelogViewModelTest {
 
     @Test
     fun `retrying after a failure shows the notes`() = runTest(dispatcherExtension.testDispatcher) {
-        val repository = FakeChangelogRepository(markdown = "# 2.0.0\n- New", failure = IllegalStateException("bug"))
+        val repository = FakeChangelogRepository(
+            markdown = "# 2.0.0\n- New",
+            failure = IllegalStateException("bug")
+        )
         val viewModel = createViewModel(repository)
         advance()
         assertIs<Loadable.Failed>(viewModel.state.value.markdown)

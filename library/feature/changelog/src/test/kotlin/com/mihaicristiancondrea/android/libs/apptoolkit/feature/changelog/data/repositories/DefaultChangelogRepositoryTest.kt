@@ -110,7 +110,8 @@ class DefaultChangelogRepositoryTest {
             },
         )
 
-        val failure = runCatching { repository.getChangelog("com.example.missing") }.exceptionOrNull()
+        val failure =
+            runCatching { repository.getChangelog("com.example.missing") }.exceptionOrNull()
 
         assertEquals(NetworkException.Reason.CLIENT, assertIs<NetworkException>(failure).reason)
     }
@@ -121,7 +122,10 @@ class DefaultChangelogRepositoryTest {
 
         val failure = runCatching { repository.getChangelog("com.example.app") }.exceptionOrNull()
 
-        assertEquals(NetworkException.Reason.NO_INTERNET, assertIs<NetworkException>(failure).reason)
+        assertEquals(
+            NetworkException.Reason.NO_INTERNET,
+            assertIs<NetworkException>(failure).reason
+        )
     }
 
     private fun createRepository(engine: MockEngine): DefaultChangelogRepository =

@@ -17,7 +17,6 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.changelog.data.local
 
-import app.cash.turbine.test
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.FakePreferencesDataStore
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.first

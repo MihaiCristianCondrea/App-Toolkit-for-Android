@@ -46,11 +46,10 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.telemetry.models.TrackedScreen
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.UiText
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.context.openUrl
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.icons.ToolkitIcon
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.UiText
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.R as CoreUiR
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.Loadable
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.ScreenHost
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.ButtonMeasurements
@@ -62,6 +61,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.feature.changelog.ui.con
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.changelog.ui.states.ChangelogUiState
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.changelog.ui.views.lists.ChangelogReleaseList
 import org.koin.compose.viewmodel.koinViewModel
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.R as CoreUiR
 
 private val CHANGELOG_SCREEN = TrackedScreen(name = "Changelog", className = "ChangelogDialog")
 
@@ -135,7 +135,9 @@ internal fun ChangelogDialogContent(
             .padding(horizontal = SizeConstants.LargeSize),
     ) {
         Row(
-            modifier = Modifier.fillMaxWidth().padding(bottom = SizeConstants.LargeSize),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(bottom = SizeConstants.LargeSize),
             verticalAlignment = Alignment.CenterVertically,
         ) {
             Icon(imageVector = Icons.Outlined.NewReleases, contentDescription = null)
@@ -192,7 +194,10 @@ private fun ChangelogBody(markdown: Loadable<String>, currentVersion: String) {
 
         is Loadable.Empty -> Text(text = stringResource(id = R.string.no_new_updates_message))
 
-        is Loadable.Ready -> ChangelogReleaseList(markdown = markdown.value, currentVersion = currentVersion)
+        is Loadable.Ready -> ChangelogReleaseList(
+            markdown = markdown.value,
+            currentVersion = currentVersion
+        )
     }
 }
 

@@ -16,15 +16,19 @@
  */
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.changelog.ui.transformers
-import kotlin.test.assertEquals
+
 import org.junit.jupiter.api.Test
+import kotlin.test.assertEquals
 
 class ChangelogMarkdownSectionsTest {
     @Test
     fun `splitAtThematicBreaks splits at breaks after a blank line`() {
         val markdown = "# Unreleased\n- One\n\n---\n\n# 1.0.0\n- Two\n\n***\n\n# 0.9.0"
 
-        assertEquals(listOf("# Unreleased\n- One", "# 1.0.0\n- Two", "# 0.9.0"), markdown.splitAtThematicBreaks())
+        assertEquals(
+            listOf("# Unreleased\n- One", "# 1.0.0\n- Two", "# 0.9.0"),
+            markdown.splitAtThematicBreaks()
+        )
     }
 
     @Test

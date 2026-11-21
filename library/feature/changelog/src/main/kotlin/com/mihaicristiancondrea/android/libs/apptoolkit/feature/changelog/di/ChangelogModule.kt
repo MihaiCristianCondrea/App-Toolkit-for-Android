@@ -19,20 +19,26 @@ package com.mihaicristiancondrea.android.libs.apptoolkit.feature.changelog.di
 
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.di.AppToolkitDiConstants
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.di.DataStoreQualifiers
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.changelog.data.local.ChangelogPreferencesDataSource
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.changelog.data.local.DefaultChangelogPreferencesDataSource
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.changelog.data.remote.ChangelogRemoteDataSource
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.changelog.data.repositories.ChangelogRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.changelog.data.repositories.DefaultChangelogRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.changelog.domain.usecases.GetChangelogUseCase
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.changelog.ui.ChangelogViewModel
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.changelog.data.local.ChangelogPreferencesDataSource
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.changelog.data.local.DefaultChangelogPreferencesDataSource
 import org.koin.core.module.Module
 import org.koin.core.module.dsl.viewModel
 import org.koin.core.qualifier.named
 import org.koin.dsl.module
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.changelog.data.remote.ChangelogRemoteDataSource
 
 val changelogModule: Module = module {
-    single<ChangelogPreferencesDataSource> { DefaultChangelogPreferencesDataSource(dataStore = get(qualifier = named(DataStoreQualifiers.SETTINGS))) }
+    single<ChangelogPreferencesDataSource> {
+        DefaultChangelogPreferencesDataSource(
+            dataStore = get(
+                qualifier = named(DataStoreQualifiers.SETTINGS)
+            )
+        )
+    }
     single { ChangelogRemoteDataSource(client = get(), diagnostics = get()) }
     single<DefaultChangelogRepository> {
         DefaultChangelogRepository(

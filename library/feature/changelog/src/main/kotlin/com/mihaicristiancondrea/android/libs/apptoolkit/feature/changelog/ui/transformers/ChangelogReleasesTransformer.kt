@@ -22,7 +22,10 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.feature.changelog.utils.
 
 private val heading = Regex("""^ {0,3}(#{1,6})[\t ]+(.+?)[\t ]*#*[\t ]*$""")
 private val date = Regex("""[A-Za-z]+[\t ]+\d{1,2},[\t ]+\d{4}""")
-private val versionHeading = Regex("""(?:Version[\t ]+|v)?\[?(\d[^ \t\]]*)]?(?:[\t ]+[-:].*|[\t ]*:.*)?""", RegexOption.IGNORE_CASE)
+private val versionHeading = Regex(
+    """(?:Version[\t ]+|v)?\[?(\d[^ \t\]]*)]?(?:[\t ]+[-:].*|[\t ]*:.*)?""",
+    RegexOption.IGNORE_CASE
+)
 private val versionLine = Regex("""\*\*Version:\*\*[\t ]+(.+)""", RegexOption.IGNORE_CASE)
 
 /** Keeps every release and marks exact installed-version matches outside code fences. */
@@ -40,7 +43,7 @@ internal fun String.toChangelogReleases(currentVersion: String): List<ChangelogR
         val level = match.groupValues[1].length
         val title = match.groupValues[2]
         val isRelease = date.matches(title) || versionHeading.matches(title) ||
-            title.equals("Unreleased", ignoreCase = true)
+                title.equals("Unreleased", ignoreCase = true)
         if (isRelease && level <= releaseLevel) {
             boundaries += index
             titles += title
@@ -59,13 +62,19 @@ internal fun String.toChangelogReleases(currentVersion: String): List<ChangelogR
         val end = boundaries.getOrNull(index + 1) ?: lines.size
         val body = lines.subList(start + 1, end).joinToString("\n")
             .trim().removeSuffix("---").trim()
-        val metadata = lines.subList(start + 1, end).firstOrNull { it.isNotBlank() }?.trim().orEmpty()
+        val metadata =
+            lines.subList(start + 1, end).firstOrNull { it.isNotBlank() }?.trim().orEmpty()
         val versionMetadata = versionLine.matchEntire(metadata)
         val listedVersions = versionMetadata?.groupValues?.get(1)
             ?.split(',')?.map { it.trim().removeSurrounding("`") }.orEmpty()
         val titleVersion = versionHeading.matchEntire(titles[index])?.groupValues?.get(1)
         val current = currentVersion.isNotBlank() &&
-            (listedVersions + listOfNotNull(titleVersion)).any { it.equals(currentVersion.trim(), ignoreCase = true) }
+                (listedVersions + listOfNotNull(titleVersion)).any {
+                    it.equals(
+                        currentVersion.trim(),
+                        ignoreCase = true
+                    )
+                }
         val versionMarkdown = if (versionMetadata != null) metadata else ""
         releases += ChangelogRelease(
             heading = titles[index],

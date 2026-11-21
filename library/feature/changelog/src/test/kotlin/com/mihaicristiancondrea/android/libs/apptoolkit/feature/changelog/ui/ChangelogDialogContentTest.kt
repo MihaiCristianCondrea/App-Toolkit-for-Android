@@ -17,18 +17,18 @@
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.changelog.ui
 
 import androidx.activity.ComponentActivity
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.foundation.layout.height
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
 import androidx.compose.ui.test.assertIsDisplayed
-import androidx.compose.ui.test.onNodeWithText
-import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.hasText
-import androidx.compose.ui.test.performScrollToNode
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.onNodeWithContentDescription
+import androidx.compose.ui.test.onNodeWithTag
+import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
+import androidx.compose.ui.test.performScrollToNode
+import androidx.compose.ui.unit.dp
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.Loadable
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.changelog.R
@@ -56,7 +56,10 @@ class ChangelogDialogContentTest {
         compose.setContent {
             MaterialTheme {
                 ChangelogDialogContent(
-                    state = ChangelogUiState(markdown = Loadable.Ready(history), currentVersion = currentVersion),
+                    state = ChangelogUiState(
+                        markdown = Loadable.Ready(history),
+                        currentVersion = currentVersion
+                    ),
                     modifier = Modifier.height(480.dp),
                     onRetry = {},
                     onDismiss = {},
@@ -74,7 +77,8 @@ class ChangelogDialogContentTest {
             history = "# 3.0.0\n$notes\n\n# 2.0.0\n$notes\n\n# 1.0.0\n- First release",
             currentVersion = "2.0.0",
         )
-        compose.onNodeWithText(compose.activity.getString(R.string.changelog_current)).assertIsDisplayed()
+        compose.onNodeWithText(compose.activity.getString(R.string.changelog_current))
+            .assertIsDisplayed()
         compose.onNodeWithText("2.0.0").assertIsDisplayed()
         val list = compose.onNodeWithTag("changelog_releases")
         list.performScrollToNode(hasText("1.0.0"))
@@ -86,7 +90,8 @@ class ChangelogDialogContentTest {
     @Test
     fun `scrolling content reaches the fixed Done action without an external gap`() {
         setContent(onOpenReleases = null)
-        val listBottom = compose.onNodeWithTag("changelog_releases").fetchSemanticsNode().boundsInRoot.bottom
+        val listBottom =
+            compose.onNodeWithTag("changelog_releases").fetchSemanticsNode().boundsInRoot.bottom
         val doneTop = compose.onNodeWithText(
             compose.activity.getString(com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.R.string.done_button_content_description),
         ).fetchSemanticsNode().boundsInRoot.top

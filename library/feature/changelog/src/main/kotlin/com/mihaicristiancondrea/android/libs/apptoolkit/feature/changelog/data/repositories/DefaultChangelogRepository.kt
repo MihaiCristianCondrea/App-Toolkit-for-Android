@@ -40,9 +40,17 @@ class DefaultChangelogRepository(
 ) : ChangelogRepository {
 
     override suspend fun getChangelog(packageName: String): String {
-        if (packageName.isBlank()) return getLegacyChangelog(reason = LegacyReason.BLANK_PACKAGE, packageName)
+        if (packageName.isBlank()) return getLegacyChangelog(
+            reason = LegacyReason.BLANK_PACKAGE,
+            packageName
+        )
 
-        val primary = remoteDataSource.fetchMarkdown(url = ApiHost.appChangelogUrl(packageName = packageName, baseUrl = apiBaseUrl))
+        val primary = remoteDataSource.fetchMarkdown(
+            url = ApiHost.appChangelogUrl(
+                packageName = packageName,
+                baseUrl = apiBaseUrl
+            )
+        )
         if (primary.status == HttpStatusCode.NotFound) {
             return getLegacyChangelog(reason = LegacyReason.NOT_FOUND, packageName)
         }

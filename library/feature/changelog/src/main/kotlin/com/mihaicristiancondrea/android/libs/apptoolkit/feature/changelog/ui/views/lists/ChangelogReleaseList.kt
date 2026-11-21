@@ -19,18 +19,17 @@ package com.mihaicristiancondrea.android.libs.apptoolkit.feature.changelog.ui.vi
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
 import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.key
 import androidx.compose.runtime.remember
@@ -55,7 +54,9 @@ internal fun ChangelogReleaseList(markdown: String, currentVersion: String) {
         val currentIndex = releases.indexOfFirst { it.isCurrent }.coerceAtLeast(0)
         val listState = rememberLazyListState(initialFirstVisibleItemIndex = currentIndex)
         LazyColumn(
-            modifier = Modifier.fillMaxSize().testTag("changelog_releases"),
+            modifier = Modifier
+                .fillMaxSize()
+                .testTag("changelog_releases"),
             state = listState,
             contentPadding = PaddingValues(bottom = SizeConstants.LargeSize),
         ) {
@@ -105,13 +106,15 @@ internal fun ChangelogReleaseList(markdown: String, currentVersion: String) {
                             HorizontalWavyDivider(modifier = Modifier.padding(vertical = SizeConstants.LargeSize))
                         }
                         MarkdownText(
-                            modifier = Modifier.fillMaxWidth().padding(
-                                top = if (partIndex == 0 && release.heading.isNotEmpty()) {
-                                    SizeConstants.LargeSize
-                                } else {
-                                    0.dp
-                                },
-                            ),
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(
+                                    top = if (partIndex == 0 && release.heading.isNotEmpty()) {
+                                        SizeConstants.LargeSize
+                                    } else {
+                                        0.dp
+                                    },
+                                ),
                             markdown = part,
                         )
                     }

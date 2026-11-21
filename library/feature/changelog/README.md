@@ -9,14 +9,18 @@ and the bottom sheet that renders it.
 
 - `ChangelogPreferencesDataSource` and its default in `data/local`, exposed for hosts through the
   shared settings file. The dialog fetches remotely and does not use the stored values.
-- `ChangelogRepository` and `DefaultChangelogRepository`, including selection of the Android App Metadata API
+- `ChangelogRepository` and `DefaultChangelogRepository`, including selection of the Android App
+  Metadata API
   call and the legacy GitHub fallback.
 - `GetChangelogUseCase`, which returns `ChangelogHistory` with the full Markdown and installed
   host version. `ui/transformers/` identifies releases and marks exact current-version matches.
-- `ChangelogViewModel`, `ChangelogUiState` (whose `markdown` is a `Loadable`), and `ChangelogEvent.Load`,
+- `ChangelogViewModel`, `ChangelogUiState` (whose `markdown` is a `Loadable`), and
+  `ChangelogEvent.Load`,
   sent on start and on retry.
-- `ChangelogDialog`, in `feature.changelog.ui`, the modal bottom sheet the host shows from its drawer,
-  and the stateless `ChangelogDialogContent` it draws inside the sheet. The content draws each part of
+- `ChangelogDialog`, in `feature.changelog.ui`, the modal bottom sheet the host shows from its
+  drawer,
+  and the stateless `ChangelogDialogContent` it draws inside the sheet. The content draws each part
+  of
   the Markdown on its own and the Toolkit's `HorizontalWavyDivider` where the Markdown has a rule
   (`splitAtThematicBreaks`), in place of the renderer's flat line. `ChangelogDialog(releasesUrl)`
   adds an info button beside the title that opens that page, such as
@@ -55,7 +59,8 @@ flowchart TD
 
 ## Architectural decisions
 
-- The dialog is on `core.ui.screen`. `ChangelogRepository.getChangelog` returns the Markdown or throws a
+- The dialog is on `core.ui.screen`. `ChangelogRepository.getChangelog` returns the Markdown or
+  throws a
   `NetworkException`, the use case passes a failure through, and `ChangelogViewModel` maps it with
   `toFailed`. Shared errors such as offline use their own text. The sheet shows Retry only when
   the failure is retryable. `ScreenHost` reports visits and load states, and `ifIsActive` keeps a
@@ -78,7 +83,8 @@ flowchart TD
 ## Public contracts
 
 - `ChangelogPreferencesDataSource` and its default in `data/local`, using the shared settings file.
-- `ChangelogRepository`, `GetChangelogUseCase`, `ChangelogHistory`, `ChangelogViewModel`, `ChangelogUiState`,
+- `ChangelogRepository`, `GetChangelogUseCase`, `ChangelogHistory`, `ChangelogViewModel`,
+  `ChangelogUiState`,
   `ChangelogEvent`, `ChangelogDialog`, and `changelogModule`. `ChangelogDialogContent` is internal.
 
 ## Internal implementations
