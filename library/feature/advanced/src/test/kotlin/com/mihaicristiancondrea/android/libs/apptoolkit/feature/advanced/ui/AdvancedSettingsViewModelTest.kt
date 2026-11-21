@@ -226,7 +226,7 @@ class AdvancedSettingsViewModelTest {
             assertEquals(UiText.StringResource(CoreUiR.string.try_again), message.actionLabel)
 
             viewModel.messageShown(message.id)
-            viewModel.observeDeveloperOptions()
+            viewModel.onEvent(event = AdvancedSettingsEvent.ObserveDeveloperOptions)
             advance()
             assertFalse(viewModel.state.value.developerOptionsUnlocked)
 

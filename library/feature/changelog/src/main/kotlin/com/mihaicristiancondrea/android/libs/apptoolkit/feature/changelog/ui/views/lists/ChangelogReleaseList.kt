@@ -41,8 +41,8 @@ import androidx.compose.ui.unit.dp
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.dividers.HorizontalWavyDivider
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.changelog.R
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.changelog.ui.transformers.splitAtThematicBreaks
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.changelog.ui.transformers.toChangelogReleases
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.changelog.ui.parsers.splitAtThematicBreaks
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.changelog.ui.parsers.toChangelogReleases
 import dev.jeziellago.compose.markdowntext.MarkdownText
 
 /** Renders the release history and initially positions it at the installed release when present. */

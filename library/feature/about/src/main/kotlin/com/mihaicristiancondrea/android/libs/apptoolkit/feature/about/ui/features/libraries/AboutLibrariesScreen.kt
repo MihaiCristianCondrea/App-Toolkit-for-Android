@@ -17,7 +17,6 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.ui.features.libraries
 
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.ui.analytics.ABOUT_LIBRARIES_SCREEN
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -34,6 +33,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.ScreenHos
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.shell.contentPadding
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.spacers.SmallVerticalSpacer
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.R
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.ui.features.libraries.analytics.ABOUT_LIBRARIES_SCREEN
 
 /** Renders the About Libraries destination registered under `LibraryExtrasRoute`. */
 @Composable

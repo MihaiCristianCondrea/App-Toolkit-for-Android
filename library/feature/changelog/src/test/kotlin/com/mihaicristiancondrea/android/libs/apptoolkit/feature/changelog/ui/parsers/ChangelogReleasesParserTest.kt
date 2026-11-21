@@ -15,14 +15,14 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.mihaicristiancondrea.android.libs.apptoolkit.feature.changelog.ui.transformers
+package com.mihaicristiancondrea.android.libs.apptoolkit.feature.changelog.ui.parsers
 
 import org.junit.jupiter.api.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
 import kotlin.test.assertTrue
 
-class ChangelogReleasesTransformerTest {
+class ChangelogReleasesParserTest {
     @Test
     fun `all releases remain visible and grouped versions identify the current release`() {
         val history =

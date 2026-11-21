@@ -70,7 +70,7 @@ fun AdvancedSettingsScreen() {
         screen = ADVANCED_SETTINGS_SCREEN,
         status = state.cacheClear,
         viewModel = viewModel,
-        onMessageAction = { viewModel.observeDeveloperOptions() },
+        onMessageAction = { viewModel.onEvent(event = AdvancedSettingsEvent.ObserveDeveloperOptions) },
     ) {
         AdvancedSettingsScreenContent(
             state = state,

@@ -17,6 +17,12 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.repositories
 
+import androidx.datastore.core.CorruptionException
+import androidx.datastore.core.DataStore
+import androidx.datastore.preferences.core.Preferences
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.exceptions.StorageException
+import kotlinx.coroutines.flow.flow
+import kotlin.test.assertFailsWith
 import androidx.datastore.preferences.core.preferencesOf
 import androidx.datastore.preferences.core.stringPreferencesKey
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.models.HolidaySeason
@@ -52,6 +58,18 @@ class DefaultSeasonalThemeRepositoryTest {
     private val seasonal = DefaultSeasonalThemePreferencesDataSource(preferences)
     private val theme = DefaultThemePreferencesDataSource(preferences)
     private val repository = DefaultSeasonalThemeRepository(seasonal = seasonal)
+
+    @Test
+    fun `corrupt preferences surface a typed failure through the seasonal state`() = runTest {
+        val corruptStore = object : DataStore<Preferences> by FakePreferencesDataStore() {
+            override val data = flow<Preferences> { throw CorruptionException(message = "Invalid preferences") }
+        }
+        val seasonal = DefaultSeasonalThemePreferencesDataSource(dataStore = corruptStore)
+        val repository = DefaultSeasonalThemeRepository(seasonal = seasonal)
+
+        val failure = assertFailsWith<StorageException> { repository.state.first() }
+        assertEquals(StorageException.Reason.CORRUPT, failure.reason)
+    }
 
     @Test
     fun `no greeting is due outside the holidays`() = runTest {

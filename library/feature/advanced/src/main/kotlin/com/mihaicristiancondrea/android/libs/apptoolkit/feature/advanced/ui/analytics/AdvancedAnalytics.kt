@@ -35,4 +35,4 @@ internal fun advancedPreferenceTapEvent(preferenceKey: String): Ga4EventData {
 }
 
 internal val ADVANCED_SETTINGS_SCREEN =
-    TrackedScreen(name = "AdvancedSettings", className = "AdvancedSettingsScreen")
+    TrackedScreen(name = ADVANCED_SETTINGS_SCREEN_NAME, className = "AdvancedSettingsScreen")

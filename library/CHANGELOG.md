@@ -13,8 +13,9 @@
 
 - `ShellHost` builds with Compose Foundation 1.13 after removal of the temporary pausable prefetch flag.
 - Advanced settings prevents repeated Clear cache taps from starting overlapping deletions.
-- Advanced settings lets users retry a failed Developer Options unlock read without losing the
-  last known unlock state.
+- Advanced settings retains the last known Developer Options unlock state on read failure and
+  offers Retry for recoverable errors.
+- Changelog preference reads and writes report storage failures as `StorageException`.
 - The changelog preserves literal trailing dashes in release notes.
 - Developer options handles failed saves and resets with error messages and records successful
   changes through settings analytics. Failed reads keep the last settings visible and offer a retry.
@@ -26,6 +27,8 @@
 
 ### Changed
 
+- Handle `AdvancedSettingsEvent.ObserveDeveloperOptions` in exhaustive `when` expressions that
+  consume `AdvancedSettingsEvent`.
 - Replace `helpPage()` with `helpScreen()` when registering the FAQ destination. The key remains
   `HelpScreen`. Import `FaqEndpointConstants` and `faqCatalogUrl` from the FAQ data layer.
 - `GetChangelogUseCase.invoke()` returns `ChangelogHistory` with the full Markdown and installed

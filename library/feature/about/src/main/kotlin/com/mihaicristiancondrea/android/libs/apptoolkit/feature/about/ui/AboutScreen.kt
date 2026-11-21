@@ -30,6 +30,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
@@ -86,26 +87,6 @@ fun AboutScreen(
     }
 }
 
-private val konfettiBurst: Party = Party(
-    speed = 0f,
-    maxSpeed = 30f,
-    damping = 0.9f,
-    spread = Spread.ROUND,
-    position = Position.Relative(x = 0.5, y = 0.3),
-    emitter = Emitter(duration = 200, TimeUnit.MILLISECONDS).max(amount = 100),
-)
-
-private val konfettiRain: Party = Party(
-    emitter = Emitter(duration = 3, TimeUnit.SECONDS).perSecond(amount = 60),
-    angle = Angle.BOTTOM,
-    spread = Spread.SMALL,
-    speed = 5f,
-    maxSpeed = 15f,
-    timeToLive = 3000L,
-    position = Position.Relative(x = 0.0, y = 0.0)
-        .between(value = Position.Relative(x = 1.0, y = 0.0)),
-)
-
 /**
  * Renders the About entries and owns the visual version-tap gesture.
  *
@@ -133,32 +114,6 @@ internal fun AboutScreenContent(
         }
     }
 
-    fun onPreferenceClick(item: AboutItem.Preference) {
-        if (item.countsVersionTap) {
-            versionTotalTapCount += 1
-            onVersionTap(versionTotalTapCount)
-            versionTapCount += 1
-            if (versionTapCount >= AboutEasterEggConstants.EASTER_EGG_TAPS) {
-                versionTapCount = 0
-                showKonfetti = true
-                onEvent(AboutEvent.EasterEggFound)
-            }
-        }
-        when (val action = item.action) {
-            is AboutItemAction.CopyToClipboard -> onEvent(
-                AboutEvent.CopyToClipboard(
-                    label = action.label.asString(context = context),
-                    text = action.text.asString(context = context),
-                    successMessage = action.successMessage,
-                )
-            )
-
-            is AboutItemAction.OpenLicenses -> onOpenLicenses()
-
-            null -> Unit
-        }
-    }
-
     Box(modifier = modifier.fillMaxHeight()) {
         ScreenStateHandler(
             state = state.items,
@@ -180,7 +135,31 @@ internal fun AboutScreenContent(
                             is AboutItem.Preference -> SettingsPreferenceItem(
                                 title = item.title.asString(),
                                 summary = item.summary.asString(),
-                                onClick = { onPreferenceClick(item = item) },
+                                onClick = {
+                                    if (item.countsVersionTap) {
+                                        versionTotalTapCount += 1
+                                        onVersionTap(versionTotalTapCount)
+                                        versionTapCount += 1
+                                        if (versionTapCount >= AboutEasterEggConstants.EASTER_EGG_TAPS) {
+                                            versionTapCount = 0
+                                            showKonfetti = true
+                                            onEvent(AboutEvent.EasterEggFound)
+                                        }
+                                    }
+
+                                    when (val action = item.action) {
+                                        is AboutItemAction.CopyToClipboard -> onEvent(
+                                            AboutEvent.CopyToClipboard(
+                                                label = action.label.asString(context = context),
+                                                text = action.text.asString(context = context),
+                                                successMessage = action.successMessage,
+                                            ),
+                                        )
+
+                                        is AboutItemAction.OpenLicenses -> onOpenLicenses()
+                                        null -> Unit
+                                    }
+                                },
                                 ga4Event = item.action?.let {
                                     aboutPreferenceTapEvent(preferenceKey = item.key)
                                 },
@@ -198,7 +177,28 @@ internal fun AboutScreenContent(
         if (showKonfetti) {
             KonfettiView(
                 modifier = Modifier.fillMaxSize(),
-                parties = listOf(konfettiBurst, konfettiRain),
+                parties = remember {
+                    listOf(
+                        Party(
+                            speed = 0f,
+                            maxSpeed = 30f,
+                            damping = 0.9f,
+                            spread = Spread.ROUND,
+                            position = Position.Relative(x = 0.5, y = 0.3),
+                            emitter = Emitter(duration = 200, TimeUnit.MILLISECONDS).max(amount = 100),
+                        ),
+                        Party(
+                            emitter = Emitter(duration = 3, TimeUnit.SECONDS).perSecond(amount = 60),
+                            angle = Angle.BOTTOM,
+                            spread = Spread.SMALL,
+                            speed = 5f,
+                            maxSpeed = 15f,
+                            timeToLive = 3000L,
+                            position = Position.Relative(x = 0.0, y = 0.0)
+                                .between(value = Position.Relative(x = 1.0, y = 0.0)),
+                        ),
+                    )
+                },
             )
         }
     }

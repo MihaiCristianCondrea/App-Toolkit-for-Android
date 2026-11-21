@@ -21,6 +21,9 @@ package com.mihaicristiancondrea.android.libs.apptoolkit.feature.advanced.ui.con
  * What the user can ask the advanced settings page's ViewModel to do.
  */
 sealed interface AdvancedSettingsEvent {
+    /** Starts or retries observation of the developer options unlock state. */
+    data object ObserveDeveloperOptions : AdvancedSettingsEvent
+
     /** Deletes the application's cache directories, then confirms or reports the failure. */
     data object ClearCache : AdvancedSettingsEvent
 }

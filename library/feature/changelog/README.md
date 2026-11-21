@@ -98,8 +98,8 @@ metadata API, a 404 silently changes which document the user reads.
 
 ## Markdown ownership
 
-Release parsing and thematic-break splitting live in `ui/transformers/`. Both use the fence
-scanner in `ui/transformers/MarkdownFence.kt`. `GetChangelogUseCase.invoke()` now returns `ChangelogHistory`; direct callers
+Release parsing and thematic-break splitting live in `ui/parsers/`. Both use the fence
+scanner in `ui/parsers/MarkdownFence.kt`. `GetChangelogUseCase.invoke()` now returns `ChangelogHistory`; direct callers
 read its `markdown` and `currentVersion` properties.
 `DefaultChangelogRepository` takes `ChangelogRemoteDataSource` directly instead of an HttpClient.
 Callers constructing the repository directly must update that argument; the feature's Koin module

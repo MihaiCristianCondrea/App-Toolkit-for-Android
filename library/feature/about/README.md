@@ -13,8 +13,8 @@ plus the tap-to-copy interaction for the entries it renders and the version-tap 
   info and the open-source licenses, which opens the licenses page.
 - Tap-to-copy for About entries, including the clipboard write and its in-app confirmation.
 - The version-tap easter egg: konfetti on the fifth tap, and the seasonal themes unlock it records.
-- The About Libraries destination in `ui/features/libraries/`, which reports visits through
-  `ScreenHost`.
+- The About Libraries destination keeps its content in `AboutLibrariesScreen.kt` and reports
+  visits through `ScreenHost` using its own analytics identifier.
 - `aboutPages()`, the registration of `AboutRoute` (a detail of the settings list) and
   `LibraryExtrasRoute`.
 

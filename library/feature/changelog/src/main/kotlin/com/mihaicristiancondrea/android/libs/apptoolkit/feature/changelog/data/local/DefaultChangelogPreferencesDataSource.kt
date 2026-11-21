@@ -23,15 +23,21 @@ import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.datastore.DataStoreNamesConstants
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.local.mappers.toStorageException
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.local.storageCall
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
 
-/** Changelog state stored in the shared `settings` Preferences DataStore. */
 /** Stores host-managed changelog state in the shared settings DataStore. */
 class DefaultChangelogPreferencesDataSource(
     private val dataStore: DataStore<Preferences>,
 ) : ChangelogPreferencesDataSource {
+
+    private val preferencesFlow = dataStore.data.catch { error ->
+        throw error.toStorageException() ?: error
+    }
 
     private val lastSeenVersionKey =
         stringPreferencesKey(name = DataStoreNamesConstants.DATA_STORE_LAST_SEEN_VERSION)
@@ -39,22 +45,22 @@ class DefaultChangelogPreferencesDataSource(
         stringPreferencesKey(name = DataStoreNamesConstants.DATA_STORE_CACHED_CHANGELOG)
 
     override fun lastSeenVersion(default: String): Flow<String> =
-        dataStore.data.map { preferences: Preferences ->
+        preferencesFlow.map { preferences: Preferences ->
             preferences[lastSeenVersionKey] ?: default
         }.distinctUntilChanged()
 
     override fun cachedChangelog(default: String): Flow<String> =
-        dataStore.data.map { preferences: Preferences ->
+        preferencesFlow.map { preferences: Preferences ->
             preferences[cachedChangelogKey] ?: default
         }.distinctUntilChanged()
 
-    override suspend fun saveLastSeenVersion(version: String) {
+    override suspend fun saveLastSeenVersion(version: String): Unit = storageCall {
         dataStore.edit { preferences: MutablePreferences ->
             preferences[lastSeenVersionKey] = version
         }
     }
 
-    override suspend fun saveCachedChangelog(changelog: String) {
+    override suspend fun saveCachedChangelog(changelog: String): Unit = storageCall {
         dataStore.edit { preferences: MutablePreferences ->
             preferences[cachedChangelogKey] = changelog
         }

@@ -17,6 +17,7 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.advanced.ui
 
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.advanced.ui.analytics.ADVANCED_SETTINGS_SCREEN
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.isRetryable
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.R as CoreUiR
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.advanced.ui.constants.AdvancedSettingsOperationNames
@@ -46,24 +47,25 @@ class AdvancedSettingsViewModel(
 ) : LoggedScreenViewModel<AdvancedSettingsUiState, AdvancedSettingsEvent>(
     initialState = AdvancedSettingsUiState(),
     telemetryRepository = telemetryRepository,
-    screenName = "AdvancedSettings",
+    screenName = ADVANCED_SETTINGS_SCREEN.name,
     viewModelName = "AdvancedSettingsViewModel",
 ) {
     private var clearJob: Job? = null
     private var observeJob: Job? = null
 
     init {
-        observeDeveloperOptions()
+        onEvent(event = AdvancedSettingsEvent.ObserveDeveloperOptions)
     }
 
     override fun handleEvent(event: AdvancedSettingsEvent) {
         when (event) {
+            is AdvancedSettingsEvent.ObserveDeveloperOptions -> observeDeveloperOptions()
             is AdvancedSettingsEvent.ClearCache -> clearCache()
         }
     }
 
     /** Observes unlock state and allows retry after the observation has failed. */
-    internal fun observeDeveloperOptions() {
+    private fun observeDeveloperOptions() {
         observeJob = observeJob.ifIsActive {
             developerOptionsUnlocked.collectReport(
                 action = AdvancedSettingsOperationNames.OBSERVE_DEVELOPER_OPTIONS,
@@ -71,7 +73,7 @@ class AdvancedSettingsViewModel(
                     val message = error.toErrorMessage()
                     showMessage(
                         if (error.isRetryable) {
-                            message.copy(actionLabel = UiText.StringResource(CoreUiR.string.try_again))
+                            message.copy(actionLabel = UiText.StringResource(resourceId = CoreUiR.string.try_again))
                         } else {
                             message
                         },

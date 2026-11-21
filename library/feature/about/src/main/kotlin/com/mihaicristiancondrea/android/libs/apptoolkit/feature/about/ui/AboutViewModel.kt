@@ -17,6 +17,7 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.ui
 
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.ui.analytics.ABOUT_SCREEN
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.ui.constants.AboutOperationNames
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.ClipboardRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.telemetry.TelemetryRepository
@@ -49,7 +50,7 @@ open class AboutViewModel(
 ) : LoggedScreenViewModel<AboutUiState, AboutEvent>(
     initialState = AboutUiState(),
     telemetryRepository = telemetryRepository,
-    screenName = "About",
+    screenName = ABOUT_SCREEN.name,
     viewModelName = "AboutViewModel",
 ) {
     private var loadJob: Job? = null
@@ -72,7 +73,7 @@ open class AboutViewModel(
         }
     }
 
-        /** Loads and maps About metadata for the screen. A new request replaces the previous load. */
+    /** Loads and maps About metadata for the screen. A new request replaces the previous load. */
     private fun loadAboutInfo() {
         loadJob = loadJob.restart {
             launchReport(

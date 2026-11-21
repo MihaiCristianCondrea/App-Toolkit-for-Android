@@ -101,7 +101,7 @@ banned names below.
 | `ui/providers/`           | host-supplied content contracts                                    |
 | `ui/views/`               | stateless composables the screen uses                              |
 | `ui/utils/`               | UI-only helpers                                                    |
-| `ui/features/<name>/`     | a parent-owned surface with its own ViewModel (see below)          |
+| `ui/features/<name>/`     | a parent-owned destination or independently stateful surface (see below)          |
 | `workers/`                | WorkManager workers: framework entry points                        |
 | `services/`               | services, tile services and AppFunctions: framework entry points   |
 | `receivers/`              | broadcast receivers: framework entry points                        |
@@ -149,7 +149,7 @@ Classify by responsibility first and Kotlin syntax second.
 | Event               | `ui/contracts/`                       |                                                               |
 | ViewModel           | `ui/`, or `ui/features/<name>/`       | **checked** (`*ViewModel.kt` in a `ui` package, not `views`)  |
 | Screen              | `ui/`, with its content in one file   | see `app-toolkit` for Toolkit screen contracts                                        |
-| Stateless piece     | `ui/views/`                           | no ViewModel, repository or lifecycle owner                   |
+| Stateless piece     | `ui/views/`                           | child composable with a separate rendering responsibility                   |
 | DI bindings         | `di/`                                 |                                                               |
 | Worker              | `workers/`                            | an entry point; may report analytics on its outcome           |
 | Service or receiver | `services/` or `receivers/`           | an entry point; may report analytics on its outcome           |
@@ -362,11 +362,13 @@ parent, or would remain meaningful without the parent screen.
 Use `ui/features/<name>/` only when all of these are true:
 
 1. The parent feature exclusively owns the UI.
-2. It has its own ViewModel, lifecycle, or equivalent state holder.
+2. It is a registered destination or has its own ViewModel, lifecycle, or equivalent state holder.
 3. It is not useful enough to justify a standalone module.
 4. A separate module would add dependency or module overhead for nothing.
 
-Stateless UI goes in `views/`. Stateful UI driven by the main screen's ViewModel stays in the main
+Keep a nested destination's entry point and screen content in the same file. Put its destination-only
+analytics in its own `analytics/` package. Child views belong in `views/` when they own a separate
+rendering responsibility. Stateful UI driven by the main screen's ViewModel stays in the main
 `ui/` structure. Size or visual complexity alone never justifies `ui/features/`.
 
 ## Placement decision
@@ -376,7 +378,7 @@ Stateless UI goes in `views/`. Stateful UI driven by the main screen's ViewModel
 3. Is it a mapper, reducer, transformer, validator, formatter, converter, adapter, extension,
    or layer-owned constant with independent ownership? Apply its package and file rule. Keep
    local implementation details with their owner.
-4. Is it a parent-owned surface with its own ViewModel? `ui/features/<name>/` may fit.
+4. Is it a parent-owned destination or independently stateful surface? `ui/features/<name>/` may fit.
 5. Is ownership still unclear? Leave it in place and defer to the relevant architecture skill.
 
 ## Review

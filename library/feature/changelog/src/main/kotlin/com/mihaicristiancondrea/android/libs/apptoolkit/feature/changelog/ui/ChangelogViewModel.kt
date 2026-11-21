@@ -17,6 +17,7 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.changelog.ui
 
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.changelog.ui.analytics.CHANGELOG_SCREEN
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.changelog.ui.constants.ChangelogOperationNames
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.telemetry.TelemetryRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.UiText
@@ -36,7 +37,7 @@ class ChangelogViewModel(
 ) : LoggedScreenViewModel<ChangelogUiState, ChangelogEvent>(
     initialState = ChangelogUiState(),
     telemetryRepository = telemetryRepository,
-    screenName = "Changelog",
+    screenName = CHANGELOG_SCREEN.name,
     viewModelName = "ChangelogViewModel",
 ) {
     private var loadJob: Job? = null

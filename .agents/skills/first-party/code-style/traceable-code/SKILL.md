@@ -35,6 +35,10 @@ Text(text = title)
 single { CatalogRepository(client = get()) }
 ```
 
+Keep a short, single-use interaction in its callback when extracting a helper adds only a call.
+Keep single-use values at their use site when their purpose is clear. In Compose, use `remember`
+there if recreating a value on recomposition would change its lifetime or repeat work.
+
 ## Example: Kotlin nested menu search
 
 Less direct for a reader who prefers immediate cause-and-effect:

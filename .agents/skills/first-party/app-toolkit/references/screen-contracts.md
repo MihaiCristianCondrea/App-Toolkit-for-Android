@@ -6,7 +6,10 @@ stateless, previewable `XScreenContent` in the same file. Keep ViewModel lookup,
 and side effects at the screen boundary. Content takes the data it displays and callbacks for
 what the person can do.
 
-Keep the feature entry point and its content in `ui/XScreen.kt`. The entry point collects state,
+Keep a destination's entry point and its screen content in the same `XScreen.kt`, including
+static and parent-owned destinations. Place child composables in `ui/views/` when they own a
+separate rendering responsibility. Screen content stays beside its entry point when it renders
+without state or dependencies. The entry point collects state,
 connects `ScreenHost` and handles navigation. The content renders the state with `ScreenStateHandler`
 where appropriate and delegates to reusable views in `ui/views/`. Use the host's existing `ShellHost`
 for shell composition. Place previews in sibling files using `layered-tree-review`.

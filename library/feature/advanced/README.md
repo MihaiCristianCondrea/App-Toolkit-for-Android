@@ -59,7 +59,7 @@ flowchart TD
     Unlock["SeasonalThemeRepository"] --> Transformer["toDeveloperOptionsUnlocked()"]
     Transformer --> VM
     VM -->|"AdvancedSettingsUiState and messages"| Host
-    Host -->|"Retry unlock observation"| VM
+    Host -->|"ObserveDeveloperOptions on retry"| VM
 ```
 
 ## Architectural decisions

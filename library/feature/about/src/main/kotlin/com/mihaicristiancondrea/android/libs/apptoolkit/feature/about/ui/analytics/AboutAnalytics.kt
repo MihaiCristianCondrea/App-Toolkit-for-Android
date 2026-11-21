@@ -29,12 +29,10 @@ internal fun aboutPreferenceTapEvent(preferenceKey: String): Ga4EventData {
     return Ga4EventData(
         name = SettingsAnalytics.Events.PREFERENCE_VIEW,
         params = mapOf(
-            SettingsAnalytics.Params.SCREEN to AnalyticsValue.Str(value = "About"),
+            SettingsAnalytics.Params.SCREEN to AnalyticsValue.Str(value = ABOUT_SCREEN.name),
             SettingsAnalytics.Params.PREFERENCE_KEY to AnalyticsValue.Str(value = preferenceKey),
         ),
     )
 }
 
 internal val ABOUT_SCREEN = TrackedScreen(name = "About", className = "AboutScreen")
-internal val ABOUT_LIBRARIES_SCREEN =
-    TrackedScreen(name = "Library Extras", className = "LibraryExtrasScreen")

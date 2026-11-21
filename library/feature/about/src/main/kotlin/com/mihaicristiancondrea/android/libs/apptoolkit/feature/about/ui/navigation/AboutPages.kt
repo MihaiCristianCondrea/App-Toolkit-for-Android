@@ -42,13 +42,13 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.R as CoreUiR
 fun ShellGraphBuilder.aboutPages(about: @Composable () -> Unit = { AboutScreen() }) {
     pageIfAbsent<AboutRoute>(
         paneRole = PaneRole.Detail,
-        title = { stringResource(CoreUiR.string.about) },
+        title = { stringResource(id = CoreUiR.string.about) },
     ) {
         about()
     }
     pageIfAbsent<LibraryExtrasRoute>(
         paneRole = PaneRole.None,
-        title = { stringResource(CommonR.string.app_name) },
+        title = { stringResource(id = CommonR.string.app_name) },
     ) {
         AboutLibrariesScreen()
     }

@@ -15,7 +15,7 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.mihaicristiancondrea.android.libs.apptoolkit.feature.changelog.ui.transformers
+package com.mihaicristiancondrea.android.libs.apptoolkit.feature.changelog.ui.parsers
 
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.changelog.ui.models.ChangelogRelease
 
@@ -27,7 +27,6 @@ private val versionHeading = Regex(
 )
 private val versionLine = Regex("""\*\*Version:\*\*[\t ]+(.+)""", RegexOption.IGNORE_CASE)
 
-/** Keeps every release and marks exact installed-version matches outside code fences. */
 /** Parses releases in document order and marks exact matches for the installed version. */
 internal fun String.toChangelogReleases(currentVersion: String): List<ChangelogRelease> {
     if (isBlank()) return emptyList()
@@ -51,12 +50,12 @@ internal fun String.toChangelogReleases(currentVersion: String): List<ChangelogR
         }
     }
 
-    if (boundaries.isEmpty()) return listOf(ChangelogRelease("", trim(), false))
+    if (boundaries.isEmpty()) return listOf(ChangelogRelease(heading = "", markdown = trim(), isCurrent = false))
     val releases = mutableListOf<ChangelogRelease>()
     val introduction = lines.subList(0, boundaries.first()).joinToString("\n")
         .trimReleaseMarkdown()
     if (introduction.isNotEmpty() && !introduction.equals("# Changelog", ignoreCase = true)) {
-        releases += ChangelogRelease("", introduction, false)
+        releases += ChangelogRelease(heading = "", markdown = introduction, isCurrent = false)
     }
     boundaries.forEachIndexed { index, start ->
         val end = boundaries.getOrNull(index + 1) ?: lines.size
