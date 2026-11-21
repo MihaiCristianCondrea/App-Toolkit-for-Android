@@ -47,7 +47,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.spacers.La
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.spacers.SmallVerticalSpacer
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.settings.R
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.LocalShellNavigator
-import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.HelpRoute
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.HelpScreen
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.R as CommonR
 
 /**
@@ -100,7 +100,7 @@ fun SettingsDetailPlaceholder() {
                         bottom = SizeConstants.MediumSize * 2,
                     )
                     .align(Alignment.Start),
-                onClick = { navigator.navigate(HelpRoute) },
+                onClick = { navigator.navigate(HelpScreen) },
                 icon = ToolkitIcon.Vector(Icons.AutoMirrored.Outlined.ContactSupport),
                 label = stringResource(R.string.get_help),
             )

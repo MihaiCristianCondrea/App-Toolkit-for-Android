@@ -21,7 +21,6 @@ import androidx.activity.compose.LocalActivity
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.RateReview
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -32,7 +31,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.R as CommonR
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ads.AdsQualifiers
@@ -43,16 +41,14 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extens
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.icons.ToolkitIcon
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.models.fab.ToolkitFab
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.ads.AdsConfig
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.Loadable
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.ScreenHost
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.ScreenStateHandler
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.ads.rememberAdsEnabled
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.analytics.LocalTelemetry
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.shell.contentPadding
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.R
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.data.models.FaqId
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.data.models.FaqItem
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.ui.analytics.FAQ_SCREEN
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.ui.analytics.FaqAnalytics
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.ui.analytics.FaqActionNames
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.ui.analytics.FaqContentTypes
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.ui.analytics.FaqItemIds
@@ -64,7 +60,6 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.ui.states.Fa
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.ui.views.lists.FaqList
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.ui.views.sheets.FaqFeedbackSheet
 import com.mihaicristiancondrea.android.libs.apptoolkit.integration.review.domain.models.ReviewHost
-import kotlinx.collections.immutable.persistentListOf
 import org.koin.compose.koinInject
 import org.koin.compose.viewmodel.koinViewModel
 import org.koin.core.qualifier.named
@@ -72,7 +67,7 @@ import org.koin.core.qualifier.named
 /**
  * Help and feedback: the questions, a contact card and a button that opens the feedback sheet.
  *
- * The body of the help page, which `helpPage()` registers with `FaqMenuActions` in its app bar.
+ * The body of the help page, which `helpScreen()` registers with `FaqMenuActions` in its app bar.
  * This is the stateful half. It owns the [FaqViewModel], tracks the screen, logs each tap, opens
  * links, mail and the store listing, and hands the rendering to [FaqScreenContent].
  *
@@ -100,7 +95,7 @@ fun FaqScreen() {
     }
 
     ScreenHost(
-        screen = FAQ_SCREEN,
+        screen = FaqAnalytics.SCREEN,
         status = state.questions,
         viewModel = viewModel,
         fabs = listOf(
@@ -236,39 +231,6 @@ internal fun FaqScreenContent(
             onDismiss = onFeedbackSheetDismissed,
             onRequestFeature = onRequestFeature,
             onLeaveReview = onLeaveReview,
-        )
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-private fun FaqScreenContentPreview() {
-    MaterialTheme {
-        FaqScreenContent(
-            state = FaqUiState(
-                questions = Loadable.Ready(
-                    persistentListOf(
-                        FaqItem(
-                            id = FaqId("preview-1"),
-                            question = "How do I change the theme?",
-                            answer = "Open Settings, then Theme, and pick a palette.",
-                        ),
-                        FaqItem(
-                            id = FaqId("preview-2"),
-                            question = "Does the app work offline?",
-                            answer = "Yes. Everything but the remote questions works offline.",
-                        ),
-                    )
-                ),
-            ),
-            showFeedbackSheet = false,
-            onFeedbackSheetDismissed = {},
-            onRetry = {},
-            onRequestFeature = {},
-            onLeaveReview = {},
-            onQuestionToggled = { _, _, _ -> },
-            onShowMoreQuestions = {},
-            onContactUs = {},
         )
     }
 }

@@ -17,6 +17,7 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.data.repositories
 
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.data.transformers.normalizeFaqItems
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.telemetry.DiagnosticsReporter
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.result.runSuspendCatching
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.network.data.remote.networkCall
@@ -57,19 +58,16 @@ class DefaultFaqRepository(
     override suspend fun getFaq(): List<FaqItem> {
         diagnostics.logBreadcrumb(
             message = "FAQ repositories fetch",
-            attributes = mapOf(
-                "catalogUrl" to catalogUrl,
-                "productId" to productId,
-            ),
+            attributes = emptyMap(),
         )
         val remoteResult: Result<List<FaqItem>> = runSuspendCatching {
             fetchRemoteFaqItems()
         }
 
-        val remoteItems = remoteResult.getOrNull().orEmpty().normalize()
+        val remoteItems = remoteResult.getOrNull().orEmpty().normalizeFaqItems()
         if (remoteItems.isNotEmpty()) return remoteItems
 
-        val localItems = localDataSource.loadLocalQuestions().normalize()
+        val localItems = localDataSource.loadLocalQuestions().normalizeFaqItems()
         if (localItems.isNotEmpty()) return localItems
 
         // Nothing to show: the remote failure is the reason, so it reaches the screen. A remote
@@ -93,19 +91,4 @@ class DefaultFaqRepository(
 
         return questions.toFaqItems()
     }
-
-    /**
-     * Trims each entry, drops the ones left without a question or an answer, and keeps the first
-     * of any repeated id.
-     */
-    private fun List<FaqItem>.normalize(): List<FaqItem> = asSequence()
-        .map { faqItem ->
-            faqItem.copy(
-                question = faqItem.question.trim(),
-                answer = faqItem.answer.trim(),
-            )
-        }
-        .filter { it.question.isNotBlank() && it.answer.isNotBlank() }
-        .distinctBy { it.id.value }
-        .toList()
 }

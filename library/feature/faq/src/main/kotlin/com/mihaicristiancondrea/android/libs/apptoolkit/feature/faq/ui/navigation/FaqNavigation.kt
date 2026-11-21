@@ -23,11 +23,11 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.ui.FaqScreen
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.ui.views.dropdowns.FaqMenuActions
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.PaneRole
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.ShellGraphBuilder
-import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.HelpRoute
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.HelpScreen
 
-/** Registers the help and feedback page for [HelpRoute], unless the app registered its own. */
-fun ShellGraphBuilder.helpPage() {
-    pageIfAbsent<HelpRoute>(
+/** Registers the help and feedback page for [HelpScreen], unless the app registered its own. */
+fun ShellGraphBuilder.helpScreen() {
+    pageIfAbsent<HelpScreen>(
         paneRole = PaneRole.None,
         title = { stringResource(R.string.help) },
         actions = { FaqMenuActions() },

@@ -17,6 +17,7 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.ui
 
+import kotlinx.coroutines.CompletableDeferred
 import android.app.Activity
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.exceptions.NetworkException
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.UiText
@@ -33,6 +34,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.integration.review.domai
 import com.mihaicristiancondrea.android.libs.apptoolkit.integration.review.domain.models.ReviewOutcome
 import com.mihaicristiancondrea.android.libs.apptoolkit.integration.review.domain.usecases.ForceInAppReviewUseCase
 import io.mockk.coEvery
+import io.mockk.coVerify
 import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Test
@@ -80,6 +82,23 @@ class FaqViewModelTest {
 
         val questions = viewModel.state.value.questions as Loadable.Ready
         assertEquals(listOf(question), questions.value.toList())
+    }
+
+    @Test
+    fun `a duplicate load keeps the active fetch`() = runTest(dispatcherExtension.testDispatcher) {
+        val response = CompletableDeferred<List<FaqItem>>()
+        val repository: FaqRepository = mockk()
+        coEvery { repository.getFaq() } coAnswers { response.await() }
+        val viewModel = createViewModel(repository)
+        advance()
+
+        viewModel.onEvent(FaqEvent.Load)
+        advance()
+        response.complete(listOf(question))
+        advance()
+
+        coVerify(exactly = 1) { repository.getFaq() }
+        assertEquals(listOf(question), assertIs<Loadable.Ready<*>>(viewModel.state.value.questions).value)
     }
 
     @Test

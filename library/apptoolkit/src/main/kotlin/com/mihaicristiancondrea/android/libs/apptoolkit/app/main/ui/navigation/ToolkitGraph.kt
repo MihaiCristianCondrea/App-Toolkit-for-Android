@@ -24,7 +24,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.feature.advanced.ui.navi
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.developer.ui.navigation.developerOptionsPage
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.diagnostics.ui.navigation.diagnosticsSettingsPage
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.display.ui.navigation.displaySettingsPage
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.ui.navigation.helpPage
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.ui.navigation.helpScreen
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.licenses.ui.navigation.licensesPage
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.onboarding.ui.navigation.onboardingPages
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.startup.ui.navigation.startupPage
@@ -88,7 +88,7 @@ fun ShellGraphBuilder.toolkitPages() {
     advancedSettingsPage()
     aboutPages()
     licensesPage()
-    helpPage()
+    helpScreen()
     supportPage()
     developerOptionsPage()
     startupPage()

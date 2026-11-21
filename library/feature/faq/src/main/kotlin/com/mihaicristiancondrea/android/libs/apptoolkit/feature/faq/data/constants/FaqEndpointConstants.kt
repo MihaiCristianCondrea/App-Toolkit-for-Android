@@ -15,9 +15,9 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.utils.constants
+package com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.data.constants
 
-object FaqConstants {
+object FaqEndpointConstants {
     const val FAQ_BASE_URL: String =
         "https://mihaicristiancondrea.github.io/com.d4rk.apis/api/faq/v1"
 }

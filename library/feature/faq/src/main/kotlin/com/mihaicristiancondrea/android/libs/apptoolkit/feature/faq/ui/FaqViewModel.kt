@@ -17,6 +17,8 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.ui
 
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.ui.analytics.FaqAnalytics
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.ui.constants.FaqOperationNames
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.telemetry.TelemetryRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.UiText
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.Loadable
@@ -44,7 +46,7 @@ class FaqViewModel(
 ) : LoggedScreenViewModel<FaqUiState, FaqEvent>(
     initialState = FaqUiState(),
     telemetryRepository = telemetryRepository,
-    screenName = "Help",
+    screenName = FaqAnalytics.SCREEN_NAME,
     viewModelName = "FaqViewModel",
 ) {
     private var loadJob: Job? = null
@@ -63,9 +65,9 @@ class FaqViewModel(
     }
 
     private fun loadFaq() {
-        loadJob = loadJob.restart {
+        loadJob = loadJob.ifIsActive {
             launchReport(
-                action = Actions.LOAD_FAQ,
+                action = FaqOperationNames.LOAD_FAQ,
                 onError = { error ->
                     setState {
                         copy(
@@ -100,7 +102,7 @@ class FaqViewModel(
     private fun requestReview(host: ReviewHost) {
         reviewJob = reviewJob.restart {
             launchReport(
-                action = Actions.REQUEST_REVIEW,
+                action = FaqOperationNames.REQUEST_REVIEW,
                 onError = { setState { copy(openStoreListing = true) } },
             ) {
                 val outcome: ReviewOutcome = forceInAppReviewUseCase(host = host)
@@ -109,11 +111,6 @@ class FaqViewModel(
                 }
             }
         }
-    }
-
-    private object Actions {
-        const val LOAD_FAQ: String = "loadFaq"
-        const val REQUEST_REVIEW: String = "requestReview"
     }
 
 }

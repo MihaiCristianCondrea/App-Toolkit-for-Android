@@ -23,7 +23,7 @@ import androidx.compose.material.icons.automirrored.outlined.HelpOutline
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.context.shareApp
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.icons.ToolkitIcon
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.DrawerBuilder
-import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.HelpRoute
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.HelpScreen
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.R as DesignSystemR
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.R as AboutR
 
@@ -46,7 +46,7 @@ fun DrawerBuilder.toolkitFooter(onShowUpdates: (() -> Unit)?) {
     footer {
         settings()
         link(
-            key = HelpRoute,
+            key = HelpScreen,
             label = AboutR.string.help_and_feedback,
             icon = ToolkitIcon.Vector(Icons.AutoMirrored.Outlined.HelpOutline),
         )

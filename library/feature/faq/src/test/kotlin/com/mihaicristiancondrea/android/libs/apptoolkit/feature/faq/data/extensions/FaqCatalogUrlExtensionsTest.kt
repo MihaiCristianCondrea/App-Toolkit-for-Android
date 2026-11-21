@@ -15,12 +15,12 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.utils.extensions
+package com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.data.extensions
 
 import org.junit.jupiter.api.Test
 import kotlin.test.assertEquals
 
-class FaqExtensionsTest {
+class FaqCatalogUrlExtensionsTest {
 
     @Test
     fun `faqCatalogUrl builds environment specific url`() {

@@ -9,7 +9,8 @@ review, and store actions around it. This module replaced `:library:feature:help
 
 - `FaqScreen` and the stateless `FaqScreenContent`, `FaqViewModel`, and their state and event
   contracts.
-- `helpPage()`, the registration of `HelpRoute`, with `FaqMenuActions` in its app bar.
+- `helpScreen()` in `ui/navigation/FaqNavigation.kt`, which registers `HelpScreen` with
+  `FaqMenuActions` in the app bar.
 - `FaqRepository` and `DefaultFaqRepository`, which normalize both sources, prefer the remote
   catalog, and fall back to the resources bundled in the host.
 - `FaqRemoteDataSource`, `FaqLocalDataSource`, the catalog DTOs, and the DTO mappers under
@@ -17,8 +18,8 @@ review, and store actions around it. This module replaced `:library:feature:help
 - `FaqItem` and `FaqId` in `data/models`, `QuestionCard`, `ContactUsCard`, `FaqNativeAdCard`, and
   the overflow menu.
 - The nine question and nine answer placeholder resources a host fills in.
-- `FaqConstants.FAQ_BASE_URL` and `faqCatalogUrl`, which build the catalogue address for the
-  build type.
+- `FaqEndpointConstants.FAQ_BASE_URL` in `data/constants/` and `faqCatalogUrl` in
+  `data/extensions/`, which build the catalog address for the build type.
 
 ## Does not own
 
@@ -79,14 +80,14 @@ The screen already skips the slot when the id is blank or the user has ads switc
 
 ## Used by
 
-- [`:library:apptoolkit`](../../apptoolkit/README.md), which calls `helpPage()` from
+- [`:library:apptoolkit`](../../apptoolkit/README.md), which calls `helpScreen()` from
   `toolkitPages()`, and `:sample:feature:faq`, which fills in the questions.
 
 ## Flow chart
 
 ```mermaid
 flowchart TD
-    Page[helpPage: HelpRoute] --> Screen[FaqScreen]
+    Page[helpScreen: HelpRoute] --> Screen[FaqScreen]
     Page --> Menu[FaqMenuActions]
     Screen --> VM[FaqViewModel]
     Screen --> Content[FaqScreenContent]
@@ -126,17 +127,22 @@ flowchart TD
 - When the in-app review cannot show, the ViewModel sets `openStoreListing` and the screen opens the
   store listing, then reports back with `StoreListingOpened`. A flag in state, not a one-off event,
   so it still happens when the review finishes during a configuration change.
-- The feedback button stays in the screen's body rather than the shell's FAB slot: it belongs to
-  this page only, and the page pads it by `contentPadding()`.
+- The screen registers its feedback button with `ScreenHost`. The button stays available while
+  questions load or fail. The screen preview lives in `FaqScreenPreview.kt`.
+- Repeated requests to load the same catalog keep the active fetch. After a failure, Retry starts
+  a new fetch.
 - Normalizing inside the repository, before the emptiness check rather than after it, is what makes
   the fallback correct: a remote catalog of nothing but blank rows now counts as empty and falls
   through to the local questions instead of rendering blank rows.
 
 ## Public contracts
 
-- `FaqScreen`, `helpPage()`, `FaqMenuActions`, `FaqViewModel`, `FaqUiState`, `FaqEvent`,
+- `FaqScreen`, `helpScreen()`, `FaqMenuActions`, `FaqViewModel`, `FaqUiState`, `FaqEvent`,
   `FaqRepository`, `FaqItem`, `FaqId`, `QuestionCard`, and `faqModule`. `FaqScreenContent` is
   internal.
+- `FaqEndpointConstants` and `faqCatalogUrl` are exposed in `data/constants/` and
+  `data/extensions/` respectively. See the [3.0.0 migration guide](../../../docs/migration/3.0.0.md)
+  for the former import paths.
 
 ## Internal implementations
 

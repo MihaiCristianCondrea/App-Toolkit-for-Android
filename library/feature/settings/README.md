@@ -205,7 +205,7 @@ and is checked the same way.
 - **A list page.** `SettingsRoute` is registered with `PaneRole.List`, so on wide windows the
   category pages, registered as `PaneRole.Detail`, open beside it. Until one is, the detail side
   shows `SettingsDetailPlaceholder`: the settings illustration, the app's name and a Get help
-  button that opens `HelpRoute`.
+  button that opens `HelpScreen`.
 - **On `core.ui.screen`.** `SettingsViewModel` loads the provider's config on each `Load`, which
   the screen sends each time the list is shown so a row's summary follows a change made on its
   page. A config with no category is `Loadable.Empty` with "No settings found"; a provider that

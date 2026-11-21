@@ -57,7 +57,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.ui.analytics
 /**
  * The help page's app bar menu: version information, terms, privacy policy and licenses.
  *
- * `helpPage()` puts it in the page's app bar. It keeps whether the version dialog is showing itself.
+ * `helpScreen()` puts it in the page's app bar. It keeps whether the version dialog is showing itself.
  */
 @Composable
 fun FaqMenuActions() {

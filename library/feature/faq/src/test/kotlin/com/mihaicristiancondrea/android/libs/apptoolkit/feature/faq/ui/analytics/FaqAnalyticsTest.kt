@@ -28,8 +28,8 @@ class FaqAnalyticsTest {
 
     @Test
     fun `screen identity preserves Help identity and FaqScreen class`() {
-        assertEquals("Help", FAQ_SCREEN.name)
-        assertEquals("FaqScreen", FAQ_SCREEN.className)
+        assertEquals("Help", FaqAnalytics.SCREEN.name)
+        assertEquals("FaqScreen", FaqAnalytics.SCREEN.className)
     }
 
     @Test

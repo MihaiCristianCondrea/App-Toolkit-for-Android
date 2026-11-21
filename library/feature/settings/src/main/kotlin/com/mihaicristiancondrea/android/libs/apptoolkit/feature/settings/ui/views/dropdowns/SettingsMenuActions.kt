@@ -18,7 +18,7 @@
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.settings.ui.views.dropdowns
 
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.LocalShellNavigator
-import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.HelpRoute
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.HelpScreen
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.R as NavigationR
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.material.icons.Icons
@@ -72,7 +72,7 @@ fun SettingsMenuActions() {
             icon = Icons.AutoMirrored.Outlined.HelpOutline,
             onClick = {
                 showMenu.value = false
-                navigator.navigate(HelpRoute)
+                navigator.navigate(HelpScreen)
             },
         )
     }

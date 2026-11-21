@@ -26,6 +26,8 @@
 
 ### Changed
 
+- Replace `helpPage()` with `helpScreen()` when registering the FAQ destination. The key remains
+  `HelpScreen`. Import `FaqEndpointConstants` and `faqCatalogUrl` from the FAQ data layer.
 - `GetChangelogUseCase.invoke()` returns `ChangelogHistory` with the full Markdown and installed
   version. Direct callers use its `markdown` and `currentVersion` properties.
 - Developer options uses `developerOptionsModule`, included in the assembled Toolkit graph. Hosts
@@ -1498,7 +1500,7 @@ every removed API to its replacement.
   feature. Help-specific classes and constants were renamed to their FAQ equivalents, `helpModule`
   became `faqModule(hostBuildConfig)`, `GetFaqUseCase` was removed, `FaqMappers` moved to
   `data/remote/mappers`, `FaqItem` and `FaqId` moved to `data/models`, and the sample FAQ resources
-  moved to `:sample:feature:faq`. The user-facing `Help & feedback` destination, `HelpRoute`,
+  moved to `:sample:feature:faq`. The user-facing `Help & feedback` destination, `HelpScreen`,
   `HELP_NATIVE_AD` qualifier, and GA4 screen name remain unchanged.
 - Moved `AboutInfo` from `domain/models` to `data/models`.
 - Moved `DefaultNavigationRepository` and its drawer labels from `:library:feature:about` to

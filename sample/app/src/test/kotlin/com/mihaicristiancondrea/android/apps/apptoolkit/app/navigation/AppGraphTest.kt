@@ -41,7 +41,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.Onboar
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.PrivacySettingsRoute
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.StartupRoute
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.ThemeSettingsRoute
-import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.HelpRoute
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.HelpScreen
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.LibraryExtrasRoute
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.LicensesRoute
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.PermissionsRoute
@@ -117,7 +117,7 @@ class AppGraphTest {
             AboutRoute,
             StartupRoute,
             OnboardingRoute,
-            HelpRoute,
+            HelpScreen,
             SupportRoute,
             AdsSettingsRoute,
             PermissionsRoute,
@@ -149,7 +149,7 @@ class AppGraphTest {
 
         assertEquals(DrawerEntry.Spacer, drawer[drawer.size - 5])
         assertEquals(SettingsRoute, (footer[0] as DrawerEntry.Link).key)
-        assertEquals(HelpRoute, (footer[1] as DrawerEntry.Link).key)
+        assertEquals(HelpScreen, (footer[1] as DrawerEntry.Link).key)
         assertEquals(AboutR.string.updates, (footer[2] as DrawerEntry.Action).label)
         assertEquals(AboutR.string.share, (footer[3] as DrawerEntry.Action).label)
         // The debug page comes first, and developer options are reached from Advanced.

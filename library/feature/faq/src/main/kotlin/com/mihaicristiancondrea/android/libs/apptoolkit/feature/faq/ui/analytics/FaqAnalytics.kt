@@ -25,12 +25,10 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.consta
 /**
  * Keeps the established `Help` analytics identity so the screen retains its GA4 history.
  */
-internal const val FAQ_SCREEN_NAME: String = "Help"
-
-private const val FAQ_SCREEN_CLASS: String = "FaqScreen"
-
-internal val FAQ_SCREEN: TrackedScreen =
-    TrackedScreen(name = FAQ_SCREEN_NAME, className = FAQ_SCREEN_CLASS)
+internal object FaqAnalytics {
+    const val SCREEN_NAME: String = "Help"
+    val SCREEN = TrackedScreen(name = SCREEN_NAME, className = "FaqScreen")
+}
 
 internal fun faqSelectContentEvent(
     contentType: String,
@@ -40,7 +38,7 @@ internal fun faqSelectContentEvent(
     return AnalyticsEvent(
         name = FaqEventNames.SELECT_CONTENT,
         params = buildMap {
-            put(SettingsAnalytics.Params.SCREEN, AnalyticsValue.Str(FAQ_SCREEN_NAME))
+            put(SettingsAnalytics.Params.SCREEN, AnalyticsValue.Str(FaqAnalytics.SCREEN_NAME))
             put(FaqParams.CONTENT_TYPE, AnalyticsValue.Str(contentType))
             put(FaqParams.ITEM_ID, AnalyticsValue.Str(itemId))
             putAll(params)
@@ -70,7 +68,7 @@ internal fun faqActionEvent(
     return AnalyticsEvent(
         name = FaqEventNames.ACTION,
         params = buildMap {
-            put(SettingsAnalytics.Params.SCREEN, AnalyticsValue.Str(FAQ_SCREEN_NAME))
+            put(SettingsAnalytics.Params.SCREEN, AnalyticsValue.Str(FaqAnalytics.SCREEN_NAME))
             put(SettingsAnalytics.Params.ACTION_NAME, AnalyticsValue.Str(actionName))
             putAll(params)
         },

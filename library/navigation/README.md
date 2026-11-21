@@ -27,7 +27,7 @@ it in the activity; this module has no chrome of its own.
   (`ArticleTopBarTitle`, `ArticleReadingProgress`), and `readingProgress()` for `ScrollState` and
   `LazyListState`. It is here, not in `:library:core:ui`, because the list-detail scene draws it
   too.
-- `AppToolkitNavKey`, one `@Serializable` key per Toolkit page: `SettingsRoute`, `HelpRoute`, `SupportRoute`, `AdsSettingsRoute`, `PermissionsRoute`,
+- `AppToolkitNavKey`, one `@Serializable` key per Toolkit page: `SettingsRoute`, `HelpScreen`, `SupportRoute`, `AdsSettingsRoute`, `PermissionsRoute`,
   `LicensesRoute`, `LibraryExtrasRoute`, `AboutRoute`, `ThemeSettingsRoute`,
   `DisplaySettingsRoute`, `PrivacySettingsRoute`, `AdvancedSettingsRoute`,
   `DiagnosticsSettingsRoute`, `DeveloperOptionsRoute`, `StartupRoute` and `OnboardingRoute`.

@@ -17,6 +17,7 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.ui.views.lists
 
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.ui.constants.FaqConstants
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.shrinkVertically
@@ -56,8 +57,6 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.ui.views.car
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.ui.views.cards.QuestionCard
 import kotlinx.collections.immutable.ImmutableList
 
-private const val INITIAL_VISIBLE_QUESTION_COUNT = 5
-
 /**
  * The questions, five at first and the rest behind Show more, then the native ad and the contact
  * card. Which questions are expanded and whether all of them show is visual state kept here.
@@ -76,9 +75,9 @@ internal fun FaqList(
     val visibleQuestions = if (showAllQuestions) {
         questions
     } else {
-        questions.take(INITIAL_VISIBLE_QUESTION_COUNT)
+        questions.take(FaqConstants.INITIAL_VISIBLE_QUESTION_COUNT)
     }
-    val hasHiddenQuestions = questions.size > INITIAL_VISIBLE_QUESTION_COUNT
+    val hasHiddenQuestions = questions.size > FaqConstants.INITIAL_VISIBLE_QUESTION_COUNT
     val popularGroupItemCount = visibleQuestions.size + if (hasHiddenQuestions) 1 else 0
     val supportGroupItemCount = 1 + if (adUnitId != null && isAdLoaded) 1 else 0
     val motion = MaterialTheme.motionScheme

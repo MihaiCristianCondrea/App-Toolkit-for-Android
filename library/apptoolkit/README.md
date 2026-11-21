@@ -150,7 +150,7 @@ app's own; see the shell README's [App defaults](../shell/README.md#app-defaults
 | `advancedSettingsPage()` | advanced | `AdvancedSettingsRoute` | Detail |
 | `aboutPages()` | about | `AboutRoute`, `LibraryExtrasRoute` | Detail, None |
 | `licensesPage()` | licenses | `LicensesRoute` | None |
-| `helpPage()` | faq | `HelpRoute` | None |
+| `helpScreen()` | faq | `HelpScreen` | None |
 | `supportPage()` | support | `SupportRoute` | None |
 | `developerOptionsPage()` | developer | `DeveloperOptionsRoute` | None |
 | `startupPage()` | startup | `StartupRoute`, as a start screen | None |

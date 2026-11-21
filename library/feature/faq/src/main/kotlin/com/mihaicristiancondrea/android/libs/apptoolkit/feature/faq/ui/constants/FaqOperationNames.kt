@@ -15,10 +15,9 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes
+package com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.ui.constants
 
-import kotlinx.serialization.Serializable
-
-/** Help and feedback, registered by `:library:feature:faq`. */
-@Serializable
-data object HelpRoute : AppToolkitNavKey
+internal object FaqOperationNames {
+    const val LOAD_FAQ: String = "loadFaq"
+    const val REQUEST_REVIEW: String = "requestReview"
+}
