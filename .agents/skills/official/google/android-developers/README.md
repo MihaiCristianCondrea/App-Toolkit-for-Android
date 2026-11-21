@@ -14,9 +14,7 @@ home-screen widgets, and Android TV asset specifications:
 - **Jetpack & system API skills**: DataStore, WorkManager, notification views, and Jetpack Glance
   widgets.
 - **Design & platform guideline skills**: Android TV launcher icon and banner specifications.
-- **Local `references/` mirrors and `templates/`**: Offline Markdown copies of official Android
-  Developers guides (`references/*.md`) plus starter Kotlin code templates
-  (`android-ui-layer/templates/*.kt.txt`).
+- **Local `references/` mirrors**: Offline Markdown copies of Android Developers guides.
 
 ## Relationship to Google's Android Developers Documentation
 
@@ -36,6 +34,7 @@ distinct layers:
     - The `references/*.md` files inside [
       `android-data-layer`](android-data-layer/references/architecture.md), [
       `android-domain-layer`](android-domain-layer/references/domain-layer.md), [
+      `android-ui-layer`](android-ui-layer/references/ui-layer.md), [
       `android-datastore`](android-datastore/references/datastore.md), [
       `android-workmanager`](android-workmanager/references/workmanager.md), [
       `android-notification-views`](android-notification-views/SKILL.md#references), and [
@@ -59,18 +58,14 @@ distinct layers:
     - Several skills layer repository-specific **App Toolkit** architecture conventions on top of
       Google's official guidance. These local rules are maintained in this repository and are
       **not** part of Google's published documentation:
-        - [`android-ui-layer`](android-ui-layer/SKILL.md) (including its `references/*.md` and
-          `templates/*.kt.txt` files) defines App Toolkit's `:library:core:ui` / `core.ui.screen`
-          architecture (`LoggedScreenViewModel`, `ScreenHost`, `ScreenStateHandler`, `Loadable<T>`,
-          `UiMessage`, Koin `viewModel { }` wiring, `XScreen` + `XScreenContent` pairing, and
-          per-feature `ui/analytics/` contracts) built on top of Google's unidirectional data flow
-          and lifecycle principles.
+        - The `app-toolkit` skill owns Toolkit screen contracts and starter templates. The
+          `android-ui-layer` skill routes to Google's UI architecture references.
         - [`android-data-layer/SKILL.md`](android-data-layer/SKILL.md) incorporates App Toolkit
           conventions for `networkCall { }`, `storageCall { }`, `data/exceptions/`,
           `DiagnosticsReporter`, `TelemetryCollection`, `DispatcherProvider`, and
           `checkModuleBoundaries`.
         - [`android-domain-layer/SKILL.md`](android-domain-layer/SKILL.md) cross-references
-          `android-ui-layer` for UI-side error-to-text mapping.
+          `app-toolkit` for Toolkit-specific UI error mapping.
 
 ## Why Documentation Is Stored Locally
 
@@ -91,7 +86,7 @@ repeatable agent execution:
 |:-------------------------------|:-----------------------------------------------------------------------------|:-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|:----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | **android-data-layer**         | [`android-data-layer/SKILL.md`](android-data-layer/SKILL.md)                 | 1 reference (`architecture.md`)                                                                                                                                                          | Official Android data-layer architecture (repositories, data sources, sources of truth, caching, main-safety, threading) plus App Toolkit error, telemetry, and dispatcher conventions. |
 | **android-domain-layer**       | [`android-domain-layer/SKILL.md`](android-domain-layer/SKILL.md)             | 1 reference (`domain-layer.md`)                                                                                                                                                          | Optional Android domain-layer guidance: when to introduce use cases, avoiding Clean Architecture boilerplate and pass-through use cases, naming, and error propagation.                 |
-| **android-ui-layer**           | [`android-ui-layer/SKILL.md`](android-ui-layer/SKILL.md)                     | 8 references, 6 Kotlin templates                                                                                                                                                         | App Toolkit UI layer architecture (`LoggedScreenViewModel`, `XUiState`, `XEvent`, `ScreenHost`, `ScreenStateHandler`, `XScreen`/`XScreenContent`, Koin DI, error mapping, and tests).   |
+| **android-ui-layer** | [`android-ui-layer/SKILL.md`](android-ui-layer/SKILL.md) | 12 Android Developers references | UI architecture, state holders, events, and state production. |
 | **android-datastore**          | [`android-datastore/SKILL.md`](android-datastore/SKILL.md)                   | 1 reference (`datastore.md`)                                                                                                                                                             | Choosing between Preferences, Proto, and JSON DataStore, enforcing single-instance ownership, data-layer isolation, migrations, and corruption handling.                                |
 | **android-workmanager**        | [`android-workmanager/SKILL.md`](android-workmanager/SKILL.md)               | 1 reference (`workmanager.md`)                                                                                                                                                           | Persistent background work with `WorkManager` (`OneTimeWorkRequest`, `PeriodicWorkRequest`, constraints, retries, expedited/long-running work) vs. coroutines or `AlarmManager`.        |
 | **android-notification-views** | [`android-notification-views/SKILL.md`](android-notification-views/SKILL.md) | 9 references (`channels.md`, `badges.md`, `metric-style.md`, `live-update.md`, `custom-notification.md`, `time-sensitive.md`, `group.md`, `navigation.md`, `notification-permission.md`) | Designing, auditing, and debugging Android notifications (`NotificationCompat`, channels, `POST_NOTIFICATIONS`, `MetricStyle`, Live Updates, `RemoteViews`, `PendingIntent`, groups).   |

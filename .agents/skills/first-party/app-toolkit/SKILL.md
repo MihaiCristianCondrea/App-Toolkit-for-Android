@@ -4,6 +4,16 @@ description: >
   Coordinate implementation, code review, and integration for App Toolkit for Android,
   its sample app, and Android apps built on it. Apply the shared architecture and ViewModel
   conventions in standalone Android projects using their existing AndroidX stack.
+metadata:
+  author: Mihai-Cristian Condrea
+  last-updated: '2026-11-21'
+  keywords:
+    - app toolkit
+    - android architecture
+    - jetpack compose
+    - viewmodel
+    - navigation
+    - consumer integration
 ---
 
 # App Toolkit
@@ -17,24 +27,27 @@ description: >
    destinations and shared components and use its AndroidX stack.
 2. Search by capability and by user-facing, route or module names. Read the owning README,
    implementation, tests and host example where available. Identify the entry point, extension
-   points and what the host must supply. A request to add FAQ may already be covered by Help.
+   points and what the host must supply.
 3. Decide whether to reuse, configure, extend or build. For a consumer, verify every API used
    against the resolved public contract. If the available evidence is incomplete, say what remains
-   unverified. [Consumer integration](references/consumer-integration.md) walks through FAQ reuse.
+   unverified. [Consumer integration](references/consumer-integration.md) describes how to verify and reuse an installed capability.
 
 Read only the references and installed specialist skills that the task needs. Look up specialist
 skills by name in the active catalog, since installations can use different directory layouts.
-The references here describe the Toolkit conventions even when a specialist is unavailable.
+Load `android-ui-layer` for Google's guidance on UI state, events and state holders. This skill
+owns Toolkit-specific code and [starter templates](references/screen-contracts.md#starter-templates).
+Use `layered-tree-review` for placement and verify Toolkit APIs against the target checkout or
+resolved dependency.
 
-| Task | Read | Specialist scope |
-| --- | --- | --- |
-| Ownership, naming, dependencies | [Architecture](references/architecture.md) | `layered-tree-review` owns placement, `android-data-layer` owns repository and data source behavior, and `android-domain-layer` decides when a use case earns its place. |
-| Compose screen, route-facing content, messages | [Screen contracts](references/screen-contracts.md) | `android-ui-layer` owns rendering and screen state. Load `navigation-3` when changing navigation. |
-| ViewModel, events, coroutine policy | [ViewModel conventions](references/viewmodel-conventions.md) | `android-ui-layer` owns state and effects. `traceable-code` guides readable dispatch and control flow. |
-| Reusable library feature or public API | [Library development](references/library-development.md) | Use the owners above for the affected layers and `changelog` for consumer-facing changes. |
-| Sample or consumer integration | [Consumer integration](references/consumer-integration.md) | Use the owner of the capability being integrated, such as `android-ui-layer` for screen wiring. |
-| Code review | [Code review](references/code-review.md) | Load the owners for the code under review. |
-| Verification | [Validation](references/validation.md) | `android-build-validation` owns environment setup and Gradle checks. |
+| Task                                           | Read                                                         | Specialist scope                                                                                                                                                         |
+|------------------------------------------------|--------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| Ownership, naming, dependencies                | [Architecture](references/architecture.md)                   | `layered-tree-review` owns placement, `android-data-layer` owns repository and data source behavior, and `android-domain-layer` decides when a use case earns its place. |
+| Compose screen, route-facing content, messages | [Screen contracts](references/screen-contracts.md)           | `android-ui-layer` owns rendering and screen state. Load `navigation-3` when changing navigation.                                                                        |
+| ViewModel, events, coroutine policy            | [ViewModel conventions](references/viewmodel-conventions.md) | `android-ui-layer` owns state and effects. `traceable-code` guides readable dispatch and control flow.                                                                   |
+| Reusable library feature or public API         | [Library development](references/library-development.md)     | Use the owners above for the affected layers and `changelog` for consumer-facing changes.                                                                                |
+| Sample or consumer integration                 | [Consumer integration](references/consumer-integration.md)   | Use the owner of the capability being integrated, such as `android-ui-layer` for screen wiring.                                                                          |
+| Code review                                    | [Code review](references/code-review.md)                     | Load the owners for the code under review.                                                                                                                               |
+| Verification                                   | [Validation](references/validation.md)                       | `android-build-validation` owns environment setup and Gradle checks.                                                                                                     |
 
 Before implementation, identify the affected responsibilities and checks:
 

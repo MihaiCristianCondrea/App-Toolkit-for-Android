@@ -217,7 +217,7 @@ formatter, converter, transformer, adapter, or extension responsibility. Do not 
 `Utils.kt`, `Extensions.kt`, or `Reducers.kt` files. Do not create artificial operations merely
 to populate these folders.
 
-For example, FAQ's `FaqQuestionDto.toFaqItem()` crosses the wire-to-application boundary
+For example, `CatalogItemDto.toCatalogItem()` crosses the wire-to-application boundary
 and belongs in `data/remote/mappers/` even if the body is short. A local query update in
 `setState { copy(...) }` stays in the ViewModel. A named operation that derives matching rows
 is a transformer if it has an independent contract. Checking whether a query is valid is
@@ -238,9 +238,10 @@ those responsibilities.
   module only when independent modules actually need the same operation.
 - Constants are organized in **each owning layer**: `data/constants/`,
   `domain/constants/` (only with a justified domain layer), and `ui/constants/`.
-  Place layer-owned constants in concern-specific files. Keep private class-owned identifiers,
-  such as a ViewModel's `Actions` object, in the class. Inline simple single-use values when
-  their meaning is clear.
+  Place layer-owned constants in concern-specific files. Put ViewModel operation names in
+  `ui/constants/`, for example `CatalogOperationNames.kt`. Keep GA4 event names, parameters
+  and builders together in `ui/analytics/` or their shared analytics contract. Inline simple
+  single-use values when their meaning is clear.
   `utils/constants/` is reserved for genuinely layer-neutral constants needed across layers.
 - Stable identifiers are contracts, not arbitrary constants: analytics names and parameters
   belong to the owning analytics contract, navigation keys to navigation, persisted keys to
@@ -249,6 +250,15 @@ those responsibilities.
   true owner and dependency direction before relocating it.
 
 ## Naming
+
+- For Compose previews, place the preview in a sibling file named after the composable followed
+  by `Preview.kt`. For example, `ui/CatalogScreenPreview.kt` sits beside `ui/CatalogScreen.kt`,
+  and `ui/views/CatalogRowPreview.kt` sits beside `ui/views/CatalogRow.kt`. The preview normally
+  renders the stateless content.
+- Keep a feature's endpoint configuration in its owning data package, and feature-specific
+  extensions in the layer that uses them. Reserve module-level utils for code genuinely shared
+  across layers. Use names that identify what the values or functions do.
+
 
 - One top-level class or interface per file, named after it. Private helpers may share the file.
 - An interface and its implementation are two files side by side. Name the implementation after

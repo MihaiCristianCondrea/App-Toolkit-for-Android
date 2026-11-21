@@ -17,8 +17,8 @@ Keep a feature's primary screen and ViewModel under `ui/`. Place events in `ui/c
 state in `ui/states/`, screen-specific models in `ui/models/`, and reusable Compose pieces in
 `ui/views/`. Give a distinct subfeature its own `ui/features/<name>/` when its screen or flow warrants a separate owner. Keep labels and display conversion close to their UI owner. Extract a named
 responsibility when it needs an independent contract. Once extracted, place it by responsibility
-using `layered-tree-review`. Local state copies and private ViewModel action names stay with the
-operation that owns them.
+using `layered-tree-review`. Local state copies stay with the operation. Stable operation names belong under
+`ui/constants/`; GA4 contracts belong under `ui/analytics/`.
 
 Repositories are the data layer entry points. Put repositories in `data/repositories/`, actual
 local or remote sources in `data/local/` or `data/remote/`, and data models in `data/models/`
@@ -41,3 +41,10 @@ placement reference before drafting files. A typical remote catalog has `ui/Cata
 designated packages. The ViewModel can call the repository directly unless a domain operation
 adds meaningful policy or coordinates distinct data sources through repositories. Plan tests for
 load, failure and recovery with the project's existing tooling.
+
+For new Toolkit destinations, use screen names for graph registration and keys, such as
+`ShellGraphBuilder.catalogScreen()` and `CatalogScreen : AppToolkitNavKey`. Keep reusable
+Toolkit keys in the navigation module and feature graph registration in the feature's
+`ui/navigation/`. The key and composable can share a name in their respective packages. Use an
+import alias where both appear together. Consumers define their own keys using the contract their
+graph supports. Preserve existing public or serialized names unless a migration is in scope.

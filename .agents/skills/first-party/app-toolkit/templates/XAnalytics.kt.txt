@@ -1,0 +1,7 @@
+// Copy the license header from a sibling file.
+
+package <base>.feature.x.ui.analytics
+
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.telemetry.models.TrackedScreen
+
+internal val X_SCREEN = TrackedScreen(name = "X", className = "XScreen")

@@ -1,0 +1,5 @@
+// Copy the license header from a sibling file.
+
+package <base>.feature.x.ui.constants
+
+internal const val LOAD_X: String = "loadX"

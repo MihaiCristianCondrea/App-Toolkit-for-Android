@@ -196,7 +196,7 @@ Do not return a loading value from the data layer. Loading belongs to the UI sta
 In App Toolkit, wrap remote calls in `networkCall { }` and storage calls in `storageCall { }`, so
 callers receive a `NetworkException` or `StorageException` with a `reason` instead of the client's
 own exception. A feature's own exceptions live in its `data/exceptions/`. The text each failure
-shows is the UI layer's: see the `android-ui-layer` skill, `references/errors.md`.
+shows is the UI layer's. For Toolkit screens, see the `app-toolkit` skill's screen contracts.
 
 ## Telemetry
 

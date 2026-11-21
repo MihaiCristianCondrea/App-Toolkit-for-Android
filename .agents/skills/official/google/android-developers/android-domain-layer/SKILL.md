@@ -116,4 +116,4 @@ For naming, dependencies, threading, lifecycle, combining repositories, and test
 
 A use case lets the repository's exceptions pass through, and throws its own only when a business
 rule is what failed. Mapping a failure to text is not a reason to add a use case: the UI layer does
-that, as the `android-ui-layer` skill describes in `references/errors.md`.
+that. For Toolkit screens, see the `app-toolkit` skill's screen contracts.

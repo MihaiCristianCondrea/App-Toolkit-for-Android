@@ -6,9 +6,10 @@
   their public signatures, including constructor dependencies, state and events, need compatible
   visibility. Keep implementation members private. Review API impact before widening visibility
   in an existing published library.
-- Order members as constructor and properties, optional `init`, event entry point and
-  `handleEvent`, private operations, `private object Actions` when reporting operations,
-  then other necessary class-owned constants.
+- Put job fields first among private ViewModel properties, then other necessary state or
+  dependencies, optional `init`, `handleEvent` and private operation methods. For a load
+  started in `init`, dispatch its typed event. Use the same event for Retry when it runs
+  the same operation.
 - Use typed events and exhaustive dispatch. The initial load and retry should send the same
   event when they run the same operation. Pick one startup owner. Changelog starts in `init`;
   Settings starts from the screen. Restoring state or starting a lifetime observer with no load
@@ -25,35 +26,34 @@
   Keep usable state on failed writes or refreshes when possible. Report successful persistence
   only after the write completes.
 
-Keep stable operation names in the ViewModel's private `Actions` object. Keep shared identifiers
-with their owning contract. Inline single-use expressions when their meaning is clear at the call
+Put stable ViewModel operation names in a concern-specific file under `ui/constants/`.
+Keep GA4 event names, parameters and builders in `ui/analytics/` or their shared analytics contract. Inline single-use expressions when their meaning is clear at the call
 site. Keep constants that name a policy, stabilize an identifier, or prevent duplication.
 
 ## App Toolkit pattern
 
-Changelog is the reference for a one-shot load. Its public ViewModel takes its use case and
-telemetry through the constructor. It forwards telemetry to `LoggedScreenViewModel` without
-a duplicate property. Its state starts at `Loadable.Loading`.
+A catalog with a one-shot load starts at `Loadable.Loading`. Its ViewModel forwards telemetry
+to `LoggedScreenViewModel` without a duplicate property.
 
 ```kotlin
 private var loadJob: Job? = null
 
 init {
-    onEvent(ChangelogEvent.Load)
+    onEvent(CatalogEvent.Load)
 }
 
-override fun handleEvent(event: ChangelogEvent) {
+override fun handleEvent(event: CatalogEvent) {
     when (event) {
-        ChangelogEvent.Load -> loadChangelog()
+        CatalogEvent.Load -> loadCatalog()
     }
 }
 ```
 
-Avoid a single-use field such as the former FAQ fallback.
+Avoid a single-use property for the error fallback.
 
 ```kotlin
 private companion object {
-    val LoadFailedText = UiText.StringResource(R.string.error_failed_to_load_faq)
+    val LoadFailedText = UiText.StringResource(R.string.catalog_load_failed)
 }
 ```
 
@@ -63,8 +63,8 @@ Prefer the resource at the point where the failure is mapped.
 onError = { error ->
     setState {
         copy(
-            questions = error.toFailed(
-                fallback = UiText.StringResource(R.string.error_failed_to_load_faq),
+            items = error.toFailed(
+                fallback = UiText.StringResource(R.string.catalog_load_failed),
             ),
         )
     }
@@ -79,7 +79,7 @@ selected values and identifiers out of diagnostic context.
 | Operation | Toolkit pattern |
 | --- | --- |
 | One-shot fetch | Changelog uses `launchReport` inside `loadJob.ifIsActive { ... }` so duplicate loads share the active fetch. Once it finishes, another request can start. |
-| Replace the previous request | Settings uses `restart` for its config load. The helper cancels the previous job and starts a replacement. |
+| Replace the previous request | A new search query uses `restart` to request cancellation and begin replacement work. It does not join the previous job. Guard result publication if the old operation can still return. |
 | Observe preferences | Theme and Developer Options use `collectReport` and keep a job they can restart on `Load`. Theme uses a content error with retry. Developer Options keeps usable settings and routes the snackbar action to `Load`. |
 | Save a setting or reset | Use a named `launchReport` operation. Keep independent writes eligible to complete, as Theme does. Choose write ordering according to the repository contract. |
 | Observe an expensive stream | Consider `observeReport` when work should track active state subscribers and emissions may be missed while nobody collects. |
@@ -91,8 +91,8 @@ propagates. Check the production data flow as well as a throwing fake.
 ## Standalone AndroidX pattern
 
 Use the project's existing AndroidX and coroutine dependencies. This example uses a main-safe
-FAQ repository, one load at a time, and a typed retryable read failure. The screen collects
-`state` with lifecycle awareness and sends `FaqEvent.Load` for Retry. It maps `ReadFailed` to
+catalog repository, one load at a time, and a typed retryable read failure. The screen collects
+`state` with lifecycle awareness and sends `CatalogEvent.Load` for Retry. It maps `ReadFailed` to
 localized copy, showing a content error on first load and retaining usable items on refresh.
 
 ```kotlin
@@ -106,54 +106,54 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
-interface FaqRepository {
-    suspend fun loadQuestions(): List<String>
+interface CatalogRepository {
+    suspend fun loadItems(): List<String>
 }
 
-sealed interface FaqEvent {
-    data object Load : FaqEvent
+sealed interface CatalogEvent {
+    data object Load : CatalogEvent
 }
 
-enum class FaqFailure { ReadFailed }
+enum class CatalogFailure { ReadFailed }
 
-data class FaqUiState(
-    val questions: List<String> = emptyList(),
+data class CatalogUiState(
+    val items: List<String> = emptyList(),
     val loading: Boolean = true,
-    val failure: FaqFailure? = null,
+    val failure: CatalogFailure? = null,
 )
 
-class FaqViewModel(private val repository: FaqRepository) : ViewModel() {
-    private val mutableState = MutableStateFlow(FaqUiState())
-    val state = mutableState.asStateFlow()
+class CatalogViewModel(private val repository: CatalogRepository) : ViewModel() {
     private var loadJob: Job? = null
+    private val mutableState = MutableStateFlow(CatalogUiState())
+    val state = mutableState.asStateFlow()
 
     init {
-        handleEvent(FaqEvent.Load)
+        handleEvent(CatalogEvent.Load)
     }
 
-    fun handleEvent(event: FaqEvent) {
+    fun handleEvent(event: CatalogEvent) {
         when (event) {
-            FaqEvent.Load -> loadFaq()
+            CatalogEvent.Load -> loadCatalog()
         }
     }
 
-    private fun loadFaq() {
+    private fun loadCatalog() {
         if (loadJob?.isActive == true) return
         loadJob = viewModelScope.launch {
             mutableState.update { it.copy(loading = true, failure = null) }
             try {
-                val questions = repository.loadQuestions()
-                mutableState.update { it.copy(questions = questions, loading = false) }
+                val items = repository.loadQuestions()
+                mutableState.update { it.copy(items = items, loading = false) }
             } catch (cancelled: CancellationException) {
                 throw cancelled
             } catch (error: IOException) {
-                mutableState.update { it.copy(loading = false, failure = FaqFailure.ReadFailed) }
+                mutableState.update { it.copy(loading = false, failure = CatalogFailure.ReadFailed) }
             }
         }
     }
 }
 ```
 
-Use the failure types declared by the actual repository. Declare `Actions` when the ViewModel
-uses real operation reporting. A small screen needs no reporting base class or reducer to
+Use the failure types declared by the actual repository. Add operation identifiers only when
+used by the project's reporting. A small screen needs no reporting base class or reducer to
 follow these conventions.

@@ -6,6 +6,11 @@ stateless, previewable `XScreenContent` in the same file. Keep ViewModel lookup,
 and side effects at the screen boundary. Content takes the data it displays and callbacks for
 what the person can do.
 
+Keep the feature entry point and its content in `ui/XScreen.kt`. The entry point collects state,
+connects `ScreenHost` and handles navigation. The content renders the state with `ScreenStateHandler`
+where appropriate and delegates to reusable views in `ui/views/`. Use the host's existing `ShellHost`
+for shell composition. Place previews in sibling files using `layered-tree-review`.
+
 In the Toolkit screen setup, `ScreenViewModel` owns observable state, typed events and queued
 `UiMessage` values. `LoggedScreenViewModel` adds operation reporting. `ScreenHost` connects
 screen visits, optional status and messages to the Toolkit shell. Use the existing message host
@@ -17,7 +22,8 @@ screens use `Loadable` and `ScreenStateHandler` for loading, empty, failed and r
 Standalone screens can render those cases directly from their existing state and use Compose
 snackbar APIs for transient feedback. A failed first load belongs in the content area when there
 is no usable data. A failed mutation or a failed refresh with still usable content can use a snackbar.
-Map errors through the shared helpers and use localized feature text for a specific fallback.
+Map a content failure with `toFailed` and a failed action on usable content with `toErrorMessage`.
+Use localized feature text for a specific fallback.
 Reuse shared strings for actions such as Try again. Wire retry to the corresponding event.
 
 Changelog shows initial loading, empty and retryable failure in the sheet. Theme waits for the
@@ -32,5 +38,15 @@ query and index at the screen boundary. For a settings entry, check whether the 
 already supports indexing it through host settings or a settings search provider. For a local
 filter over loaded rows, keep the query near the rendering owner and derive visible rows from
 the existing data. Distinguish no matches from load failure. If the query drives repository
-requests, handle it as a typed event and apply latest-query behavior using the UI specialist's
-operation guidance. Test clearing the query, no matches and stale results where applicable.
+requests, handle it as a typed event and apply latest-query behavior using the [ViewModel operation guidance](viewmodel-conventions.md). Test clearing the query, no matches and stale results where applicable.
+
+## Starter templates
+
+Load `android-ui-layer` for the underlying Android UI architecture. For Toolkit scaffolding, use these templates and replace
+the placeholder types, imports, resources and test dependencies with the target's own contracts.
+Select only the files that match the feature.
+
+- [Screen](../templates/XScreen.kt.txt), [screen preview](../templates/XScreenPreview.kt.txt), and [tracking contract](../templates/XAnalytics.kt.txt).
+- [ViewModel](../templates/XViewModel.kt.txt), [state](../templates/XUiState.kt.txt),
+  [events](../templates/XEvent.kt.txt) and [operation names](../templates/XOperationNames.kt.txt).
+- [Dependency bindings](../templates/XModule.kt.txt) and [ViewModel tests](../templates/XViewModelTest.kt.txt).

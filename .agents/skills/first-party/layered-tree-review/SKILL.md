@@ -53,9 +53,9 @@ Do not duplicate or override their rules here.
    UI-state transition is a reducer; a display-string function is a formatter even if it is an
    extension function. A Flow operator that owns a transformation follows transformer placement.
 2. Place each independently extracted responsibility and layer-owned constant in its designated
-   package and responsibility-named file. Keep local state copies and private class-owned
-   details, such as a ViewModel's `Actions` object, with their owner. Placement rules do
-   not require extracting a helper.
+   package and responsibility-named file. Keep local state copies and one-off implementation values with their owner. Follow the
+   reference for operation identifiers and analytics placement. Placement rules do not require
+   extracting a helper.
 3. Keep each responsibility in the owning module and layer. Use the package and file naming rules;
    keep layer-specific constants and extensions in their layer's packages.
 4. Create packages when their first real file is needed. Do not create empty directories, an

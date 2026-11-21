@@ -9,6 +9,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.LoggedScr
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.toFailed
 import <base>.feature.x.R
 import <base>.feature.x.data.repositories.XRepository
+import <base>.feature.x.ui.constants.LOAD_X
 import <base>.feature.x.ui.contracts.XEvent
 import <base>.feature.x.ui.mappers.toXItems
 import <base>.feature.x.ui.states.XUiState
@@ -42,7 +43,7 @@ class XViewModel(
     private fun load() {
         loadJob = loadJob.ifIsActive {
             launchReport(
-                action = Actions.LOAD,
+                action = LOAD_X,
                 onError = { error ->
                     setState {
                         copy(
@@ -58,9 +59,5 @@ class XViewModel(
                 setState { copy(items = if (items.isEmpty()) Loadable.Empty() else Loadable.Ready(items)) }
             }
         }
-    }
-
-    private object Actions {
-        const val LOAD: String = "load"
     }
 }

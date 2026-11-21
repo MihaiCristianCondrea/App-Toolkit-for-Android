@@ -9,6 +9,12 @@ Keep render-only content and implementation helpers as narrow as their callers a
 existing public contracts during routine changes. Review visibility migrations separately and
 check publishing configuration, the artifact and compatibility checks when relevant.
 
+Bind Toolkit ViewModels in the feature's Koin module with `viewModel { ... }`. When moving a
+legacy screen from `core.ui.base`, `core.ui.states` or `DataState`, trace the repository, ViewModel,
+screen and tests together. Map data-layer failures at the UI boundary and preserve existing
+retry, user feedback and reporting behavior. Use the [screen contracts](screen-contracts.md)
+and [ViewModel conventions](viewmodel-conventions.md) for the target wiring.
+
 Inspect host-facing defaults, persisted identifiers, and telemetry keys before changing them.
 For a deliberate API or integration change, update the owning README and consumer-facing changelog,
 and check dependent modules. Keep product policy and host-specific strings or integrations in the host.
