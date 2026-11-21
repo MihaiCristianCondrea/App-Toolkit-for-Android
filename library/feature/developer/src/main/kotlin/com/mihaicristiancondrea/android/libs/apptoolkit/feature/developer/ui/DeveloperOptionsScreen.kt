@@ -26,10 +26,12 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.getValue
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import org.koin.compose.viewmodel.koinViewModel
+import org.koin.core.parameter.parametersOf
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.navigation3.runtime.NavKey
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.telemetry.models.TrackedScreen
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.ScreenHost
@@ -39,21 +41,21 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preference
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.PreferenceCategoryItem
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.SettingsPreferenceItem
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.groupedItemPosition
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.groupedPreferenceItem
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.shell.contentPadding
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.developer.R
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.developer.ui.models.DeveloperCategory
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.developer.ui.models.DeveloperOption
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.developer.ui.utils.availableDeveloperOptions
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.developer.ui.transformers.developerOptionCategories
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.developer.ui.views.DeveloperOptionItem
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.developer.ui.utils.layoutModeLabel
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.developer.ui.formatters.layoutModeLabel
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.developer.ui.formatters.describeNavigationStack
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.developer.ui.extensions.groupedDeveloperPreference
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.LocalShellGraph
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.LocalShellNavigator
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.LocalShellCapabilities
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.layout.LocalShellLayout
 import com.mihaicristiancondrea.android.libs.apptoolkit.shell.settings.LocalShellPreferences
-import com.mihaicristiancondrea.android.libs.apptoolkit.shell.settings.LocalShellSettings
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.developer.ui.contracts.DeveloperOptionChange
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.developer.ui.contracts.DeveloperOptionsEvent
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.developer.ui.models.DeveloperStateLine
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.developer.ui.views.DeveloperStateItem
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.ShellCapabilities
@@ -62,7 +64,6 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.ShellGr
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.DeveloperOptionsRoute
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.ShellGraph
 import com.mihaicristiancondrea.android.libs.apptoolkit.shell.settings.ShellSettings
-import kotlinx.coroutines.launch
 import kotlin.math.roundToInt
 
 /**
@@ -78,13 +79,13 @@ import kotlin.math.roundToInt
  */
 @Composable
 fun DeveloperOptionsScreen() {
-    val settings = LocalShellSettings.current
     val preferences = LocalShellPreferences.current
     val layout = LocalShellLayout.current
     val navigator = LocalShellNavigator.current
     val graph = LocalShellGraph.current
     val capabilities = LocalShellCapabilities.current
-    val scope = rememberCoroutineScope()
+    val viewModel: DeveloperOptionsViewModel = koinViewModel(parameters = { parametersOf(preferences) })
+    val state by viewModel.state.collectAsStateWithLifecycle()
 
     val windowSummary = stringResource(
         R.string.shell_dev_window_summary,
@@ -103,35 +104,19 @@ fun DeveloperOptionsScreen() {
         DeveloperStateLine(stringResource(R.string.shell_dev_window), windowSummary),
         DeveloperStateLine(stringResource(R.string.shell_dev_page_stack), navigator.pages.describeNavigationStack()),
     ) + tabStacks
-    ScreenHost(screen = DEVELOPER_OPTIONS_SCREEN) {
+    ScreenHost(
+        screen = DEVELOPER_OPTIONS_SCREEN,
+        viewModel = viewModel,
+        onMessageAction = { viewModel.onEvent(DeveloperOptionsEvent.Load) },
+    ) {
         DeveloperOptionsScreenContent(
-            settings = settings,
+            settings = state.settings,
             graph = graph,
             capabilities = capabilities,
             liveState = liveState,
             contentPadding = contentPadding(PaddingValues(bottom = SizeConstants.LargeSize)),
-            onReset = { scope.launch { preferences.resetDeveloperOptions() } },
-            onChange = { change ->
-                scope.launch {
-                    when (change) {
-                        is DeveloperOptionChange.SetLayout -> preferences.setLayoutMode(change.value)
-                        is DeveloperOptionChange.SetTopBarStyle -> preferences.setTopBarOverride(change.value)
-                        is DeveloperOptionChange.SetHideTopBarOnScroll -> preferences.setHideTopBarOnScroll(change.value)
-                        is DeveloperOptionChange.SetNavigationBarStyle -> preferences.setNavigationBarStyle(change.value)
-                        is DeveloperOptionChange.SetHideBottomBarOnScroll -> preferences.setHideBottomBarOnScroll(change.value)
-                        is DeveloperOptionChange.SetNavigationTint -> preferences.setNavigationTint(change.value)
-                        is DeveloperOptionChange.SetContentWidth -> preferences.setLimitContentWidth(change.value)
-                        is DeveloperOptionChange.SetStartOverride -> preferences.setStartOverride(change.value)
-                        is DeveloperOptionChange.SetTabTransition -> preferences.setTabTransition(change.value)
-                        is DeveloperOptionChange.SetBackEdge -> preferences.setBackEdgeStyle(change.value)
-                        is DeveloperOptionChange.SetAnimationSpeed -> preferences.setAnimationSpeed(change.value)
-                        is DeveloperOptionChange.SetEntranceStyle -> preferences.setEntranceStyle(change.value)
-                        is DeveloperOptionChange.SetMotionTempo -> preferences.setMotionTempo(change.value)
-                        is DeveloperOptionChange.SetEntranceReplay -> preferences.setEntranceReplay(change.value)
-                        is DeveloperOptionChange.SetBottomAccessory -> preferences.setAccessoryMode(change.value)
-                    }
-                }
-            },
+            onReset = { viewModel.onEvent(DeveloperOptionsEvent.Reset) },
+            onChange = viewModel::onEvent,
         )
     }
 }
@@ -142,13 +127,13 @@ internal fun DeveloperOptionsScreenContent(
     graph: ShellGraph,
     capabilities: ShellCapabilities,
     liveState: List<DeveloperStateLine>,
-    onChange: (DeveloperOptionChange) -> Unit,
+    onChange: (DeveloperOptionsEvent) -> Unit,
     onReset: () -> Unit,
     modifier: Modifier = Modifier,
     contentPadding: PaddingValues = PaddingValues(),
 ) {
     val categories: List<Pair<DeveloperCategory, List<DeveloperOption>>> = remember(capabilities) {
-        availableDeveloperOptions(capabilities).groupBy { it.category }.toList()
+        developerOptionCategories(capabilities)
     }
 
     val categoryLiveState = stringResource(R.string.shell_dev_live_state)
@@ -162,7 +147,7 @@ internal fun DeveloperOptionsScreenContent(
     ) {
         animatedItem { PreferenceCategoryItem(title = categoryLiveState) }
         animatedItemsIndexed(liveState) { index, line ->
-            DeveloperStateItem(line, Modifier.grouped(groupedItemPosition(index, liveState.size)))
+            DeveloperStateItem(line, Modifier.groupedDeveloperPreference(groupedItemPosition(index, liveState.size)))
         }
         categories.forEach { (category, options) ->
             animatedItem(key = "category_${category.name}") { PreferenceCategoryItem(title = stringResource(category.title)) }
@@ -173,7 +158,7 @@ internal fun DeveloperOptionsScreenContent(
                     onChange = onChange,
                     graph = graph,
                     capabilities = capabilities,
-                    modifier = Modifier.grouped(groupedItemPosition(index, options.size)),
+                    modifier = Modifier.groupedDeveloperPreference(groupedItemPosition(index, options.size)),
                 )
             }
         }
@@ -181,7 +166,7 @@ internal fun DeveloperOptionsScreenContent(
             SettingsPreferenceItem(
                 modifier = Modifier
                     .padding(top = SizeConstants.LargeSize)
-                    .grouped(GroupedItemPosition.SINGLE),
+                    .groupedDeveloperPreference(GroupedItemPosition.SINGLE),
                 title = resetTitle,
                 summary = resetSummary,
                 onClick = onReset,
@@ -192,12 +177,7 @@ internal fun DeveloperOptionsScreenContent(
 
 private val DEVELOPER_OPTIONS_SCREEN = TrackedScreen(name = "DeveloperOptions", className = "DeveloperOptionsScreen")
 
-private fun Modifier.grouped(position: GroupedItemPosition): Modifier =
-    groupedPreferenceItem(position = position, outerRadius = SizeConstants.LargeMediumSize)
 
-private fun List<NavKey>.describeNavigationStack(): String = joinToString(separator = "  \u203A  ") { key ->
-    key.toString().substringAfterLast('.').substringBefore('@').substringBefore('(')
-}
 
 @Preview(showBackground = true)
 @Composable

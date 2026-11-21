@@ -80,7 +80,7 @@
     <string name="shell_navigation_tint_always">Zabarwione razem, treść na karcie</string>
     <string name="shell_navigation_tint_on_scroll">Zabarwione razem, gdy treść się przewinie</string>
     <string name="shell_back_edge_system">Jak w Androidzie: strona zmniejsza się w miejscu</string>
-    <string name="shell_back_edge_follow">Podąża za palcem, jak przy lewej krawędzi (domyślnie)</string>
+    <string name="shell_back_edge_follow">Podąża za palcem, jak przy lewej krawędzi</string>
     <string name="shell_transition_directional">Przesunięcie kierunkowe</string>
     <string name="shell_transition_fade_through">Przenikanie przez tło</string>
     <string name="shell_transition_fade">Przenikanie</string>

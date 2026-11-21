@@ -13,6 +13,10 @@
 
 - `ShellHost` builds with Compose Foundation 1.13 after removal of the temporary pausable prefetch flag.
 - Advanced settings prevents repeated Clear cache taps from starting overlapping deletions.
+- Developer options handles failed saves and resets with error messages and records successful
+  changes through settings analytics. Failed reads keep the last settings visible and offer a retry.
+  Accessory labels follow the host's available accessories.
+- Shell preference writes, updates and resets expose storage failures as `StorageException`.
 - The changelog dialog shows all releases, marks the installed version as Current, and opens at
   its release. The scrolling body reaches the fixed Done action. Repeated requests keep the current
   fetch, and the dialog reports visits and load states.
@@ -21,6 +25,8 @@
 
 - `GetChangelogUseCase.invoke()` returns `ChangelogHistory` with the full Markdown and installed
   version. Direct callers use its `markdown` and `currentVersion` properties.
+- Developer options uses `developerOptionsModule`, included in the assembled Toolkit graph. Hosts
+  listing modules manually add it to open `DeveloperOptionsScreen`.
 - App bar search uses a state-based Compose text field. `ShellSearch.query` remains readable and writable.
 - `SettingsPreferenceItem` accepts an `enabled` argument for actions that need a disabled state.
 - `ui.features.libraries.AboutLibrariesScreen()` replaces `ui.views.extras.LibraryExtrasScreen()`.

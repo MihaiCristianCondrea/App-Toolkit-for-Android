@@ -80,7 +80,7 @@
     <string name="shell_navigation_tint_always">Tô màu cùng nhau, nội dung trong thẻ</string>
     <string name="shell_navigation_tint_on_scroll">Tô màu cùng nhau khi nội dung cuộn</string>
     <string name="shell_back_edge_system">Như Android: trang thu nhỏ tại chỗ</string>
-    <string name="shell_back_edge_follow">Theo ngón tay, đối xứng với cạnh trái (mặc định)</string>
+    <string name="shell_back_edge_follow">Theo ngón tay, đối xứng với cạnh trái</string>
     <string name="shell_transition_directional">Trượt theo hướng</string>
     <string name="shell_transition_fade_through">Mờ qua nền</string>
     <string name="shell_transition_fade">Mờ chéo</string>

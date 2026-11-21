@@ -80,7 +80,7 @@
     <string name="shell_navigation_tint_always">Berwarna bersama, konten di dalam kartu</string>
     <string name="shell_navigation_tint_on_scroll">Berwarna bersama setelah konten digulir</string>
     <string name="shell_back_edge_system">Seperti Android: halaman mengecil di tempat</string>
-    <string name="shell_back_edge_follow">Mengikuti jari, mencerminkan tepi kiri (default)</string>
+    <string name="shell_back_edge_follow">Mengikuti jari, mencerminkan tepi kiri</string>
     <string name="shell_transition_directional">Geser berarah</string>
     <string name="shell_transition_fade_through">Pudar melalui</string>
     <string name="shell_transition_fade">Pudar silang</string>

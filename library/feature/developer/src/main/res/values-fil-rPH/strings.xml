@@ -80,7 +80,7 @@
     <string name="shell_navigation_tint_always">Magkasamang may kulay, content sa loob ng card</string>
     <string name="shell_navigation_tint_on_scroll">Magkasamang may kulay kapag nag-scroll ang content</string>
     <string name="shell_back_edge_system">Parang Android: lumiliit ang page sa lugar nito</string>
-    <string name="shell_back_edge_follow">Sumusunod sa daliri, gaya ng sa kaliwang gilid (default)</string>
+    <string name="shell_back_edge_follow">Sumusunod sa daliri, gaya ng sa kaliwang gilid</string>
     <string name="shell_transition_directional">Direksyonal na pag-slide</string>
     <string name="shell_transition_fade_through">Fade through</string>
     <string name="shell_transition_fade">Cross-fade</string>

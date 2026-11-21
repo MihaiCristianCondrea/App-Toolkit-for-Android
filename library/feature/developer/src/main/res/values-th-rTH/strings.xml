@@ -80,7 +80,7 @@
     <string name="shell_navigation_tint_always">ลงสีพร้อมกัน เนื้อหาอยู่ในการ์ด</string>
     <string name="shell_navigation_tint_on_scroll">ลงสีพร้อมกันเมื่อเนื้อหาเลื่อน</string>
     <string name="shell_back_edge_system">เหมือน Android: หน้าหดลงอยู่กับที่</string>
-    <string name="shell_back_edge_follow">ตามนิ้ว สะท้อนขอบซ้าย (ค่าเริ่มต้น)</string>
+    <string name="shell_back_edge_follow">ตามนิ้ว สะท้อนขอบซ้าย</string>
     <string name="shell_transition_directional">เลื่อนตามทิศทาง</string>
     <string name="shell_transition_fade_through">จางผ่าน</string>
     <string name="shell_transition_fade">จางไขว้</string>

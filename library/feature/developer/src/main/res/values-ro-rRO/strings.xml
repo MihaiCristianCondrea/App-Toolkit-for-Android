@@ -80,7 +80,7 @@
     <string name="shell_navigation_tint_always">Colorate împreună, conținut într-un card</string>
     <string name="shell_navigation_tint_on_scroll">Colorate împreună odată ce conținutul se derulează</string>
     <string name="shell_back_edge_system">Ca Android: pagina se micșorează pe loc</string>
-    <string name="shell_back_edge_follow">Urmează degetul, în oglindă cu marginea stângă (implicit)</string>
+    <string name="shell_back_edge_follow">Urmează degetul, în oglindă cu marginea stângă</string>
     <string name="shell_transition_directional">Glisare direcțională</string>
     <string name="shell_transition_fade_through">Estompare prin mijloc</string>
     <string name="shell_transition_fade">Estompare încrucișată</string>

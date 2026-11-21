@@ -17,6 +17,7 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.shell.data.repositories
 
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.local.storageCall
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.MutablePreferences
 import androidx.datastore.preferences.core.Preferences
@@ -67,7 +68,7 @@ internal class DataStoreShellPreferencesRepository(
     override val lastKnown: ShellSettings? get() = lastRead
 
     /** Saves the settings [transform] changes; the ones it leaves alone stay unchosen. */
-    override suspend fun update(transform: (ShellSettings) -> ShellSettings) {
+    override suspend fun update(transform: (ShellSettings) -> ShellSettings): Unit = storageCall {
         dataStore.edit { preferences ->
             val current = preferences.read()
             val next = transform(current)
@@ -91,12 +92,12 @@ internal class DataStoreShellPreferencesRepository(
     override suspend fun setMotionTempo(value: MotionTempo) = choose(Keys.motionTempo, value.name)
     override suspend fun setEntranceReplay(value: EntranceReplay) = choose(Keys.entranceReplay, value.name)
 
-    override suspend fun resetDeveloperOptions() {
+    override suspend fun resetDeveloperOptions(): Unit = storageCall {
         dataStore.edit { preferences -> Stored.all.forEach { it.forget(preferences) } }
     }
 
     /** Saves [value] as a choice, whether or not it equals the current setting. */
-    private suspend fun <S : Any> choose(key: Preferences.Key<S>, value: S) {
+    private suspend fun <S : Any> choose(key: Preferences.Key<S>, value: S): Unit = storageCall {
         dataStore.edit { it[key] = value }
     }
 

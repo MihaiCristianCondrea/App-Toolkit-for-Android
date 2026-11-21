@@ -80,7 +80,7 @@
     <string name="shell_navigation_tint_always">Tinted together, content in a card</string>
     <string name="shell_navigation_tint_on_scroll">Tinted together once content scrolls</string>
     <string name="shell_back_edge_system">As Android: the page shrinks in place</string>
-    <string name="shell_back_edge_follow">Follows the finger, mirroring the left edge (default)</string>
+    <string name="shell_back_edge_follow">Follows the finger, mirroring the left edge</string>
     <string name="shell_transition_directional">Directional slide</string>
     <string name="shell_transition_fade_through">Fade through</string>
     <string name="shell_transition_fade">Cross-fade</string>

@@ -315,6 +315,8 @@ JUnit 5. They start Koin with the theme, display and ads repositories `AppTheme`
   person's preferences, such as the navigation labels, live in the common store and are not
   touched. `ShellHost(preferences = ...)` takes any `ShellPreferencesRepository`, and tests pass an
   `InMemoryShellPreferencesRepository`.
+- Shell settings writes, updates and resets translate storage failures to `StorageException`.
+  Developer options reports those failures through the shared UI error messages.
 - **The store keeps choices, not values.** A setting someone chose is saved even when it equals the
   current default, and a setting nobody chose is not saved at all. A later release that changes the
   app's defaults therefore reaches the people who never chose, and leaves alone the ones who did.

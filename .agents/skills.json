@@ -5,6 +5,7 @@
       "include_only": [
         "first-party/android-build-validation",
         "first-party/app-changelog",
+        "first-party/app-toolkit",
         "first-party/code-style/traceable-code",
         "first-party/ga4-app-analytics",
         "first-party/layered-tree-review",

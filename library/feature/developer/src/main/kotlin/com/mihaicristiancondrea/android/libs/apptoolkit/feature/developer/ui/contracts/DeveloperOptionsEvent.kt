@@ -29,21 +29,23 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.shell.settings.Navigatio
 import com.mihaicristiancondrea.android.libs.apptoolkit.shell.settings.NavigationTint
 import com.mihaicristiancondrea.android.libs.apptoolkit.shell.settings.TopBarOverride
 
-/** A requested shell override, applied by the screen rather than the option row. */
-internal sealed interface DeveloperOptionChange {
-    data class SetLayout(val value: ShellLayoutMode) : DeveloperOptionChange
-    data class SetTopBarStyle(val value: TopBarOverride) : DeveloperOptionChange
-    data class SetHideTopBarOnScroll(val value: Boolean) : DeveloperOptionChange
-    data class SetNavigationBarStyle(val value: NavigationBarStyle) : DeveloperOptionChange
-    data class SetHideBottomBarOnScroll(val value: Boolean) : DeveloperOptionChange
-    data class SetNavigationTint(val value: NavigationTint) : DeveloperOptionChange
-    data class SetContentWidth(val value: Boolean) : DeveloperOptionChange
-    data class SetStartOverride(val value: Int) : DeveloperOptionChange
-    data class SetTabTransition(val value: TabTransitionStyle) : DeveloperOptionChange
-    data class SetBackEdge(val value: BackEdgeStyle) : DeveloperOptionChange
-    data class SetAnimationSpeed(val value: AnimationSpeed) : DeveloperOptionChange
-    data class SetEntranceStyle(val value: EntranceStyle) : DeveloperOptionChange
-    data class SetMotionTempo(val value: MotionTempo) : DeveloperOptionChange
-    data class SetEntranceReplay(val value: EntranceReplay) : DeveloperOptionChange
-    data class SetBottomAccessory(val value: AccessoryMode) : DeveloperOptionChange
+internal sealed interface DeveloperOptionsEvent {
+    data object Load : DeveloperOptionsEvent
+    data object Reset : DeveloperOptionsEvent
+
+    data class SetLayout(val value: ShellLayoutMode) : DeveloperOptionsEvent
+    data class SetTopBarStyle(val value: TopBarOverride) : DeveloperOptionsEvent
+    data class SetHideTopBarOnScroll(val value: Boolean) : DeveloperOptionsEvent
+    data class SetNavigationBarStyle(val value: NavigationBarStyle) : DeveloperOptionsEvent
+    data class SetHideBottomBarOnScroll(val value: Boolean) : DeveloperOptionsEvent
+    data class SetNavigationTint(val value: NavigationTint) : DeveloperOptionsEvent
+    data class SetContentWidth(val value: Boolean) : DeveloperOptionsEvent
+    data class SetStartOverride(val value: Int) : DeveloperOptionsEvent
+    data class SetTabTransition(val value: TabTransitionStyle) : DeveloperOptionsEvent
+    data class SetBackEdge(val value: BackEdgeStyle) : DeveloperOptionsEvent
+    data class SetAnimationSpeed(val value: AnimationSpeed) : DeveloperOptionsEvent
+    data class SetEntranceStyle(val value: EntranceStyle) : DeveloperOptionsEvent
+    data class SetMotionTempo(val value: MotionTempo) : DeveloperOptionsEvent
+    data class SetEntranceReplay(val value: EntranceReplay) : DeveloperOptionsEvent
+    data class SetBottomAccessory(val value: AccessoryMode) : DeveloperOptionsEvent
 }

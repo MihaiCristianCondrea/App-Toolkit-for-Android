@@ -15,15 +15,16 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.mihaicristiancondrea.android.libs.apptoolkit.feature.developer.ui.models
+package com.mihaicristiancondrea.android.libs.apptoolkit.feature.developer.ui.transformers
 
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.ShellCapabilities
 import com.mihaicristiancondrea.android.libs.apptoolkit.shell.settings.AccessoryMode
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Assertions.assertTrue
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.developer.ui.utils.availableDeveloperOptions
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.developer.ui.utils.accessoryModes
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.developer.ui.models.DeveloperOption
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.developer.ui.models.DeveloperCategory
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.developer.ui.transformers.accessoryModes
 import org.junit.jupiter.api.Test
 
 class DeveloperOptionsTest {

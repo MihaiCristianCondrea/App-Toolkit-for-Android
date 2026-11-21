@@ -15,7 +15,7 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.mihaicristiancondrea.android.libs.apptoolkit.feature.developer.ui.utils
+package com.mihaicristiancondrea.android.libs.apptoolkit.feature.developer.ui.transformers
 
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.developer.ui.models.DeveloperCategory
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.developer.ui.models.DeveloperOption
@@ -59,3 +59,6 @@ internal fun accessoryModes(capabilities: ShellCapabilities): List<AccessoryMode
     } else {
         listOf(AccessoryMode.AsDeclared, AccessoryMode.None)
     }
+
+internal fun developerOptionCategories(capabilities: ShellCapabilities): List<Pair<DeveloperCategory, List<DeveloperOption>>> =
+    availableDeveloperOptions(capabilities).groupBy { it.category }.toList()

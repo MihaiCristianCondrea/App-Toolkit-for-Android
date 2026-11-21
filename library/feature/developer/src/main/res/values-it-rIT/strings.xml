@@ -80,7 +80,7 @@
     <string name="shell_navigation_tint_always">Colorate insieme, contenuto in una scheda</string>
     <string name="shell_navigation_tint_on_scroll">Colorate insieme appena il contenuto scorre</string>
     <string name="shell_back_edge_system">Come Android: la pagina si riduce sul posto</string>
-    <string name="shell_back_edge_follow">Segue il dito, speculare al bordo sinistro (predefinito)</string>
+    <string name="shell_back_edge_follow">Segue il dito, speculare al bordo sinistro</string>
     <string name="shell_transition_directional">Scorrimento direzionale</string>
     <string name="shell_transition_fade_through">Dissolvenza attraverso</string>
     <string name="shell_transition_fade">Dissolvenza incrociata</string>

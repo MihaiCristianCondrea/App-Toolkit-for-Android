@@ -76,13 +76,13 @@ class AdvancedSettingsViewModel(
                 action = Actions.CLEAR_CACHE,
                 onError = { error ->
                     setState { copy(cacheClear = CacheClearStatus.Failed) }
-                    showMessage(error.toErrorMessage(fallback = ClearFailedText))
+                    showMessage(error.toErrorMessage(fallback = UiText.StringResource(R.string.cache_cleared_error)))
                 },
             ) {
                 setState { copy(cacheClear = CacheClearStatus.Clearing) }
                 repository.clearCache()
                 setState { copy(cacheClear = CacheClearStatus.Idle) }
-                showMessage(UiMessage(ClearedText))
+                showMessage(UiMessage(UiText.StringResource(R.string.cache_cleared_success)))
             }
         }
     }
@@ -90,12 +90,5 @@ class AdvancedSettingsViewModel(
     private object Actions {
         const val CLEAR_CACHE: String = "clearCache"
         const val OBSERVE_DEVELOPER_OPTIONS: String = "observeDeveloperOptions"
-    }
-
-    private companion object {
-        val ClearedText = UiText.StringResource(R.string.cache_cleared_success)
-
-        /** Shown for a failure with no text of its own; see `toUiText` for the ones that have one. */
-        val ClearFailedText = UiText.StringResource(R.string.cache_cleared_error)
     }
 }

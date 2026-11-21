@@ -102,6 +102,10 @@ with the code.
 
 ## Skills
 
+Start with [`app-toolkit`](.agents/skills/first-party/app-toolkit/SKILL.md) when implementing, reviewing,
+or integrating App Toolkit features in the library, sample, or a consumer app. Use it to select
+only the references and specialist skills needed for the task.
+
 Skills contain the detailed technical guidance that should not be duplicated in this file.
 
 ### Finding skills

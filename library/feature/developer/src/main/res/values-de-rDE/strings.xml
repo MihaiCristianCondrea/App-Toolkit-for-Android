@@ -80,7 +80,7 @@
     <string name="shell_navigation_tint_always">Gemeinsam gefärbt, Inhalt in einer Karte</string>
     <string name="shell_navigation_tint_on_scroll">Gemeinsam gefärbt, sobald der Inhalt scrollt</string>
     <string name="shell_back_edge_system">Wie Android: die Seite schrumpft an Ort und Stelle</string>
-    <string name="shell_back_edge_follow">Folgt dem Finger, gespiegelt zum linken Rand (Standard)</string>
+    <string name="shell_back_edge_follow">Folgt dem Finger, gespiegelt zum linken Rand</string>
     <string name="shell_transition_directional">Gerichtetes Schieben</string>
     <string name="shell_transition_fade_through">Überblenden über Mitte</string>
     <string name="shell_transition_fade">Überblenden</string>

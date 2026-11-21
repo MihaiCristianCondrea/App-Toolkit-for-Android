@@ -80,7 +80,7 @@
     <string name="shell_navigation_tint_always">একসাথে রঙিন, কনটেন্ট একটি কার্ডে</string>
     <string name="shell_navigation_tint_on_scroll">কনটেন্ট স্ক্রল হলেই একসাথে রঙিন</string>
     <string name="shell_back_edge_system">Android-এর মতো: পেজ নিজের জায়গায় ছোট হয়</string>
-    <string name="shell_back_edge_follow">আঙুল অনুসরণ করে, বাম প্রান্তের মতো (ডিফল্ট)</string>
+    <string name="shell_back_edge_follow">আঙুল অনুসরণ করে, বাম প্রান্তের মতো</string>
     <string name="shell_transition_directional">দিকনির্দেশক স্লাইড</string>
     <string name="shell_transition_fade_through">ফেড থ্রু</string>
     <string name="shell_transition_fade">ক্রস-ফেড</string>

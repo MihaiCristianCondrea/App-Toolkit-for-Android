@@ -32,9 +32,13 @@ be restarted into a variation. The person's own preferences are display settings
   `accessoryModes(capabilities)`: which overrides act on something in this app.
 - `DeveloperOptionItem`, the row of each override, and its option labels.
 - `DeveloperOptionsScreenContent`, in the screen file, renders explicit values and reports edits
-  through `DeveloperOptionChange`. The screen alone applies and persists those edits.
+  through `DeveloperOptionsEvent`. `DeveloperOptionsViewModel` applies edits and Reset through the
+  host's `ShellPreferencesRepository`, reports failures as messages, and records successful actions.
 - `DeveloperStateLine` in `ui/models` and its `DeveloperStateItem` in `ui/views` render live state.
-- Capability filtering and shared label formatting live in `ui/utils`.
+- Capability filtering and category derivation live in `ui/transformers/`, display labels and stack
+  text in `ui/formatters/`, and the grouped row modifier in `ui/extensions/`.
+- Successful option changes and resets are reported by the event builders in `ui/analytics/`.
+  Parameters contain bounded option keys, with no host names, stack text or selected values.
 - `developerOptionsPage()`, the registration of `DeveloperOptionsRoute`.
 - Its strings, in every supported locale, including the page title `shell_developer_options` and
   the override rows' titles and options.
@@ -84,10 +88,15 @@ be restarted into a variation. The person's own preferences are display settings
   so a later change to the app's defaults does not move it.
 - The page reads the shell's composition locals (`LocalShellSettings`, `LocalShellPreferences`,
   `LocalShellLayout`, `LocalShellCapabilities`, `LocalShellNavigator`, `LocalShellGraph`), so it
-  only works as a page of a `ShellHost`. It keeps no view model: the settings store is its state.
+  only works as a page of a `ShellHost`. It passes that host's repository to the ViewModel as a
+  Koin parameter. The ViewModel observes its settings, so state and writes use the same store.
+  A read failure keeps the last settings visible and offers Try again in the error snackbar.
+  `Load` restarts observation, replacing the previous collector.
 - It uses the Toolkit's grouped preference rows and `ChoicePreferenceItem`, so it looks like the
   Toolkit's other settings pages.
 
 ## Public contracts
 
-- `DeveloperOptionsScreen()` and `developerOptionsPage()`. The option model and rows are internal.
+- `DeveloperOptionsScreen()`, `developerOptionsPage()` and `developerOptionsModule`. The assembled
+  Toolkit graph includes the module. Hosts assembling modules manually include it before opening
+  the page. The ViewModel, state, event contracts, option model and rows are internal.

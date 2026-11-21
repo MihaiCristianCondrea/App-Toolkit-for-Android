@@ -80,7 +80,7 @@
     <string name="shell_navigation_tint_always">Együtt színezve, a tartalom kártyán</string>
     <string name="shell_navigation_tint_on_scroll">Együtt színezve, amint a tartalom görget</string>
     <string name="shell_back_edge_system">Mint az Android: az oldal helyben zsugorodik</string>
-    <string name="shell_back_edge_follow">Követi az ujjat, a bal szél tükreként (alapértelmezett)</string>
+    <string name="shell_back_edge_follow">Követi az ujjat, a bal szél tükreként</string>
     <string name="shell_transition_directional">Irányított csúsztatás</string>
     <string name="shell_transition_fade_through">Áttűnés háttéren át</string>
     <string name="shell_transition_fade">Áttűnés</string>

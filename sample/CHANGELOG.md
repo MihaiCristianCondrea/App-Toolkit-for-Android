@@ -10,6 +10,7 @@
 - The menu button and app bar actions no longer slide out and back in when you switch tabs.
 - Lists no longer come back empty after you swipe away from them partway through their entrance.
 - Clear cache shows when it is running and prevents repeated taps.
+- Developer options shows an error when a setting or Reset cannot be saved.
 - Updates shows the full release history and marks your installed version as Current.
 
 ### Improved

@@ -80,7 +80,7 @@
     <string name="shell_navigation_tint_always">साथ में रंगीन, कंटेंट एक कार्ड में</string>
     <string name="shell_navigation_tint_on_scroll">कंटेंट स्क्रॉल होते ही साथ में रंगीन</string>
     <string name="shell_back_edge_system">Android की तरह: पेज अपनी जगह पर छोटा होता है</string>
-    <string name="shell_back_edge_follow">उंगली के साथ चलता है, बाएँ किनारे की तरह (डिफ़ॉल्ट)</string>
+    <string name="shell_back_edge_follow">उंगली के साथ चलता है, बाएँ किनारे की तरह</string>
     <string name="shell_transition_directional">दिशा वाली स्लाइड</string>
     <string name="shell_transition_fade_through">फ़ेड थ्रू</string>
     <string name="shell_transition_fade">क्रॉस-फ़ेड</string>
