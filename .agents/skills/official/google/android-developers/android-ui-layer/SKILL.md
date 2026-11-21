@@ -5,6 +5,7 @@ description: >
   state holders, handling UI events, or producing state from asynchronous sources.
 metadata:
   author: Google
+  maintainer: android-skills
   source: https://developer.android.com/topic/architecture/ui-layer
   last-updated: '2026-11-21'
   keywords:
@@ -43,4 +44,4 @@ rendering code. Collect observable UI state with lifecycle awareness.
 
 Use `android-data-layer` for repository contracts and `android-domain-layer` when deciding whether
 to add a use case. For Toolkit-owned components, file layout and starter templates, load
-`app-toolkit`. The references are copies of Google's published documentation.
+`app-toolkit`. Google authored the reference documents. The `android-skills` project maintains this routing wrapper.

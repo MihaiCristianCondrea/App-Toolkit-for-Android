@@ -158,7 +158,8 @@ The following are common entry points. This list is not exhaustive.
 | Build validation, Gradle checks, SDK setup                      | `.agents/skills/first-party/android-build-validation/SKILL.md`                 |
 | Repository, data source, model, threading and caching decisions | `.agents/skills/official/google/android-developers/android-data-layer/SKILL.md`          |
 | Domain layer and use-case decisions                             | `.agents/skills/official/google/android-developers/android-domain-layer/SKILL.md`        |
-| Screens, ViewModels, UI state, events and messages              | `.agents/skills/official/google/android-developers/android-ui-layer/SKILL.md`            |
+| Google UI architecture, state, events and state holders          | `.agents/skills/official/google/android-developers/android-ui-layer/SKILL.md` |
+| Toolkit screen contracts, ViewModels and starter templates      | `.agents/skills/first-party/app-toolkit/SKILL.md` |
 | Module and package placement                                    | `.agents/skills/first-party/layered-tree-review/SKILL.md`         |
 | Navigation 3                                                    | `.agents/skills/official/google/android/navigation/navigation-3/SKILL.md`          |
 | Navigation events                                               | `.agents/skills/official/google/android/navigation/navigation-event/SKILL.md`      |

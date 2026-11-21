@@ -142,7 +142,7 @@ class CatalogViewModel(private val repository: CatalogRepository) : ViewModel() 
         loadJob = viewModelScope.launch {
             mutableState.update { it.copy(loading = true, failure = null) }
             try {
-                val items = repository.loadQuestions()
+                val items = repository.loadItems()
                 mutableState.update { it.copy(items = items, loading = false) }
             } catch (cancelled: CancellationException) {
                 throw cancelled

@@ -43,9 +43,10 @@ Use them when behavior, not placement, decides the answer:
 
 - `android-data-layer`: repositories, data sources, models, errors, threading, caching.
 - `android-domain-layer`: whether a use case should exist.
-- `android-ui-layer`: the files a screen needs, its state, events and errors.
+- `android-ui-layer`: Google's guidance on UI state, events, and state holders.
+- `app-toolkit`: Toolkit screen contracts and implementation conventions.
 
-Do not duplicate or override their rules here.
+This skill owns module, package, and file placement. Use the sibling skills for behavior.
 
 ## How to apply
 

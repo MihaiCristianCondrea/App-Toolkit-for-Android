@@ -51,8 +51,8 @@ distinct layers:
       `glance-widget/SKILL.md`](glance-widget/SKILL.md), [
       `android-datastore/SKILL.md`](android-datastore/SKILL.md), and [
       `android-workmanager/SKILL.md`](android-workmanager/SKILL.md)).
-    - Check each `SKILL.md` file's YAML `metadata` block (`author`, `source`, `last-updated`) to see
-      whether the wrapper itself is locally authored or vendor-attributed.
+    - The UI layer skill credits Google as the documentation author and identifies `android-skills`
+      as the routing wrapper maintainer. See its `source` field for upstream documentation.
 
 3. **Project-Specific Adaptations (App Toolkit Conventions)**
     - Several skills layer repository-specific **App Toolkit** architecture conventions on top of
@@ -121,9 +121,8 @@ When refreshing documentation or adjusting wrapper instructions:
    aligned with their corresponding `developer.android.com` pages (for example, the `.md.txt` source
    URLs indexed in [`glance-widget/SKILL.md`](glance-widget/SKILL.md)). Avoid rewriting official
    prose for style unless fixing broken Markdown syntax or formatting artifacts.
-2. **Keep local adaptations separate and explicit**: Update App Toolkit rules in `SKILL.md` (and
-   `android-ui-layer/references/` or `android-ui-layer/templates/`) without mixing project-specific
-   APIs into verbatim Google reference files.
+2. **Keep Toolkit conventions in their owning skill**: Update Toolkit screen rules and starter
+   templates in `first-party/app-toolkit`. Keep the Google UI reference files read-only.
 3. **Update routing and metadata**: Whenever a reference file is added, renamed, or refreshed from
    `developer.android.com`, update the routing table/index and `metadata.last-updated` in the owning
    `SKILL.md`.
