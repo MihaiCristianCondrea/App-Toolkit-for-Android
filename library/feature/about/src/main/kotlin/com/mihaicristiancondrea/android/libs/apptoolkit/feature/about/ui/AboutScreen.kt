@@ -44,7 +44,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preference
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.groupedPreferenceItem
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.shell.contentPadding
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.ui.analytics.aboutPreferenceTapEvent
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.ui.constants.EASTER_EGG_TAPS
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.ui.constants.AboutEasterEggConstants
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.ui.contracts.AboutEvent
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.ui.contracts.AboutItemAction
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.ui.models.AboutItem
@@ -63,18 +63,9 @@ import java.util.concurrent.TimeUnit
 import kotlin.time.Duration.Companion.milliseconds
 
 /**
- * The "About" screen: information about the application and the device.
+ * Displays the host and Toolkit versions, the device report and the open-source licenses link.
  *
- * This is the stateful half. It owns the [AboutViewModel], collects its state, tracks the screen,
- * shows the ViewModel's messages and navigates, then hands the rendering to [AboutScreenContent].
- *
- * The list includes:
- * - App information: full name, version, and a link to the open-source licenses screen.
- * - Device information: a summary of the device's details, which can be copied to the clipboard.
- *
- * It also features an easter egg: tapping the app version five times triggers a konfetti animation.
- *
- * @param onVersionTap Callback invoked with the cumulative number of taps on the app version item.
+ * @param onVersionTap Receives the cumulative number of version-row taps.
  */
 @Composable
 fun AboutScreen(
@@ -88,7 +79,7 @@ fun AboutScreen(
         AboutScreenContent(
             state = state,
             onEvent = viewModel::onEvent,
-            onOpenLicenses = { navigator.navigate(LicensesRoute) },
+            onOpenLicenses = { navigator.navigate(key = LicensesRoute) },
             contentPadding = contentPadding(),
             onVersionTap = onVersionTap,
         )
@@ -100,7 +91,7 @@ private val konfettiBurst: Party = Party(
     maxSpeed = 30f,
     damping = 0.9f,
     spread = Spread.ROUND,
-    position = Position.Relative(0.5, 0.3),
+    position = Position.Relative(x = 0.5, y = 0.3),
     emitter = Emitter(duration = 200, TimeUnit.MILLISECONDS).max(amount = 100),
 )
 
@@ -116,17 +107,10 @@ private val konfettiRain: Party = Party(
 )
 
 /**
- * Renders the About list for [state] and reports what the user does through callbacks.
+ * Renders the About entries and owns the visual version-tap gesture.
  *
- * This is the stateless half of [AboutScreen]: it holds no ViewModel, injects nothing and does not
- * navigate, so it can be previewed and tested with any [AboutUiState]. The only state it keeps is
- * the version-tap counters and the konfetti flag, which are visual and die with the screen.
- *
- * @param state What to render.
- * @param onEvent Receives the events the ViewModel handles: retry, copy and the easter egg.
- * @param onOpenLicenses Invoked by the licenses row. Navigation belongs to the caller.
- * @param contentPadding Padding from the shell, applied inside the list and the state screens.
- * @param onVersionTap Invoked with the cumulative number of taps on the app version row.
+ * @param onOpenLicenses Handles the licenses row action.
+ * @param contentPadding Shell insets applied inside the list and load-state surfaces.
  */
 @Composable
 internal fun AboutScreenContent(
@@ -138,13 +122,13 @@ internal fun AboutScreenContent(
     onVersionTap: (Int) -> Unit = {},
 ) {
     val context: Context = LocalContext.current
-    var showKonfetti: Boolean by rememberSaveable { mutableStateOf(false) }
-    var versionTapCount: Int by rememberSaveable { mutableIntStateOf(0) }
-    var versionTotalTapCount: Int by rememberSaveable { mutableIntStateOf(0) }
+    var showKonfetti: Boolean by rememberSaveable { mutableStateOf(value = false) }
+    var versionTapCount: Int by rememberSaveable { mutableIntStateOf(value = 0) }
+    var versionTotalTapCount: Int by rememberSaveable { mutableIntStateOf(value = 0) }
 
-    LaunchedEffect(showKonfetti) {
+    LaunchedEffect(key1 = showKonfetti) {
         if (showKonfetti) {
-            delay(3000.milliseconds)
+            delay(duration = 3000.milliseconds)
             showKonfetti = false
         }
     }
@@ -154,7 +138,7 @@ internal fun AboutScreenContent(
             versionTotalTapCount += 1
             onVersionTap(versionTotalTapCount)
             versionTapCount += 1
-            if (versionTapCount >= EASTER_EGG_TAPS) {
+            if (versionTapCount >= AboutEasterEggConstants.EASTER_EGG_TAPS) {
                 versionTapCount = 0
                 showKonfetti = true
                 onEvent(AboutEvent.EasterEggFound)
@@ -163,13 +147,13 @@ internal fun AboutScreenContent(
         when (val action = item.action) {
             is AboutItemAction.CopyToClipboard -> onEvent(
                 AboutEvent.CopyToClipboard(
-                    label = action.label.asString(context),
-                    text = action.text.asString(context),
+                    label = action.label.asString(context = context),
+                    text = action.text.asString(context = context),
                     successMessage = action.successMessage,
                 )
             )
 
-            AboutItemAction.OpenLicenses -> onOpenLicenses()
+            is AboutItemAction.OpenLicenses -> onOpenLicenses()
 
             null -> Unit
         }
@@ -196,7 +180,7 @@ internal fun AboutScreenContent(
                             is AboutItem.Preference -> SettingsPreferenceItem(
                                 title = item.title.asString(),
                                 summary = item.summary.asString(),
-                                onClick = { onPreferenceClick(item) },
+                                onClick = { onPreferenceClick(item = item) },
                                 ga4Event = item.action?.let {
                                     aboutPreferenceTapEvent(preferenceKey = item.key)
                                 },

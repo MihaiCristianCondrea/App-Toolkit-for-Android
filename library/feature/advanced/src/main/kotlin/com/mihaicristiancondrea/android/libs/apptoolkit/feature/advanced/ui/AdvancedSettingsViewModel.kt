@@ -19,8 +19,7 @@ package com.mihaicristiancondrea.android.libs.apptoolkit.feature.advanced.ui
 
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.isRetryable
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.R as CoreUiR
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.advanced.ui.constants.CLEAR_CACHE
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.advanced.ui.constants.OBSERVE_DEVELOPER_OPTIONS
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.advanced.ui.constants.AdvancedSettingsOperationNames
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.telemetry.TelemetryRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.UiText
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.LoggedScreenViewModel
@@ -36,19 +35,14 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
 
 /**
- * ViewModel for the advanced settings page: clearing the cache, and whether the developer options
- * are offered.
+ * Owns cache-clear status and developer options visibility.
  *
- * [CacheRepository] moves its own file work off the main thread, so this needs no dispatcher. A
- * clear confirms with a message, and a failed one reports with an error message while the rows stay.
- *
- * @param developerOptionsUnlocked Whether the About screen's version easter egg has been found,
- * which offers the developer options here.
+ * @param developerOptionsUnlocked Emits the current developer options unlock state.
  */
 class AdvancedSettingsViewModel(
     private val repository: CacheRepository,
     telemetryRepository: TelemetryRepository,
-    private val developerOptionsUnlocked: Flow<Boolean> = flowOf(false),
+    private val developerOptionsUnlocked: Flow<Boolean> = flowOf(value = false),
 ) : LoggedScreenViewModel<AdvancedSettingsUiState, AdvancedSettingsEvent>(
     initialState = AdvancedSettingsUiState(),
     telemetryRepository = telemetryRepository,
@@ -64,14 +58,15 @@ class AdvancedSettingsViewModel(
 
     override fun handleEvent(event: AdvancedSettingsEvent) {
         when (event) {
-            AdvancedSettingsEvent.ClearCache -> clearCache()
+            is AdvancedSettingsEvent.ClearCache -> clearCache()
         }
     }
 
+    /** Observes unlock state and allows retry after the observation has failed. */
     internal fun observeDeveloperOptions() {
         observeJob = observeJob.ifIsActive {
             developerOptionsUnlocked.collectReport(
-                action = OBSERVE_DEVELOPER_OPTIONS,
+                action = AdvancedSettingsOperationNames.OBSERVE_DEVELOPER_OPTIONS,
                 onError = { error ->
                     val message = error.toErrorMessage()
                     showMessage(
@@ -88,19 +83,20 @@ class AdvancedSettingsViewModel(
         }
     }
 
+    /** Runs one cache clear at a time and reports completion through a snackbar. */
     private fun clearCache() {
         clearJob = clearJob.ifIsActive {
             launchReport(
-                action = CLEAR_CACHE,
+                action = AdvancedSettingsOperationNames.CLEAR_CACHE,
                 onError = { error ->
                     setState { copy(cacheClear = CacheClearStatus.Failed) }
-                    showMessage(error.toErrorMessage(fallback = UiText.StringResource(R.string.cache_cleared_error)))
+                    showMessage(error.toErrorMessage(fallback = UiText.StringResource(resourceId = R.string.cache_cleared_error)))
                 },
             ) {
                 setState { copy(cacheClear = CacheClearStatus.Clearing) }
                 repository.clearCache()
                 setState { copy(cacheClear = CacheClearStatus.Idle) }
-                showMessage(UiMessage(UiText.StringResource(R.string.cache_cleared_success)))
+                showMessage(UiMessage(text = UiText.StringResource(resourceId = R.string.cache_cleared_success)))
             }
         }
     }

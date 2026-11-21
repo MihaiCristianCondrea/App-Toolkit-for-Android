@@ -26,5 +26,5 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.Advanc
  * reporter is bound, and the developer options only once unlocked, so neither is listed.
  */
 internal val advancedSettingsSearch = settingsSearchProvider(section = R.string.advanced, destination = AdvancedSettingsRoute) {
-    preference(R.string.clear_cache, summary = R.string.summary_preference_settings_clear_cache)
+    preference(title = R.string.clear_cache, summary = R.string.summary_preference_settings_clear_cache)
 }

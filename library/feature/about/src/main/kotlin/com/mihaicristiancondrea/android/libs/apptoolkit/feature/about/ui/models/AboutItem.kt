@@ -35,11 +35,9 @@ sealed interface AboutItem {
     ) : AboutItem
 
     /**
-     * An individual preference entry within a category card.
+     * A preference row with a grouped position and an optional action.
      *
-     * @property countsVersionTap Taps on this row advance the hidden version-tap counter that
-     * launches konfetti on the fifth one. It is a gesture layered on top of the row, not something
-     * the row does instead of its [action], so it is a flag rather than an [AboutItemAction].
+     * @property countsVersionTap Whether taps on this row count toward the version gesture.
      */
     data class Preference(
         override val key: String,

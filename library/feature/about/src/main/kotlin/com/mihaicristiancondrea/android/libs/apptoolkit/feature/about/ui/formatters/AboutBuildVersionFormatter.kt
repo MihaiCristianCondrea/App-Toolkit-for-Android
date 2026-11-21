@@ -17,5 +17,6 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.ui.formatters
 
+/** Combines the version name and build code for the About preference summary. */
 internal fun formatAboutBuildVersion(versionName: String, versionCode: Int): String =
     "$versionName ($versionCode)"

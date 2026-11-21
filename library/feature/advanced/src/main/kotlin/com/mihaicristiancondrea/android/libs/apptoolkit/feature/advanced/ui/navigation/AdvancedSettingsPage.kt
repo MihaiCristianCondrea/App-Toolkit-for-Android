@@ -31,7 +31,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.Advanc
 fun ShellGraphBuilder.advancedSettingsPage() {
     pageIfAbsent<AdvancedSettingsRoute>(
         paneRole = PaneRole.Detail,
-        title = { stringResource(R.string.advanced) },
+        title = { stringResource(id = R.string.advanced) },
     ) {
         AdvancedSettingsScreen()
     }

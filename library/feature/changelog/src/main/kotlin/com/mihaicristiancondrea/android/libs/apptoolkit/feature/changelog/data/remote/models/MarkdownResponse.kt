@@ -20,6 +20,7 @@ package com.mihaicristiancondrea.android.libs.apptoolkit.feature.changelog.data.
 import io.ktor.http.HttpStatusCode
 
 /** HTTP status and raw Markdown, before the repository chooses whether to use its fallback. */
+/** HTTP response used to choose the changelog source and handle unsuccessful statuses. */
 data class MarkdownResponse(
     val status: HttpStatusCode,
     val body: String,

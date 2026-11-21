@@ -48,19 +48,19 @@ private fun AboutLibrariesScreenContent() {
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(contentPadding()),
+            .padding(paddingValues = contentPadding()),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         Card {
-            Column(modifier = Modifier.padding(SizeConstants.MediumSize)) {
+            Column(modifier = Modifier.padding(all = SizeConstants.MediumSize)) {
                 Text(
-                    text = stringResource(R.string.settings),
+                    text = stringResource(id = R.string.settings),
                     style = MaterialTheme.typography.headlineSmall,
                 )
                 SmallVerticalSpacer()
                 Text(
-                    text = stringResource(R.string.settings_placeholder_description),
+                    text = stringResource(id = R.string.settings_placeholder_description),
                     style = MaterialTheme.typography.bodyMedium,
                 )
             }

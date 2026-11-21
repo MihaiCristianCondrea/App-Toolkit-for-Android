@@ -26,6 +26,11 @@ class GetChangelogUseCase(
     private val repository: ChangelogRepository,
     private val buildInfoRepository: BuildInfoRepository,
 ) {
+    /**
+     * Returns the trimmed release history paired with the installed version.
+     *
+     * Network failures from the repository propagate to the caller.
+     */
     suspend operator fun invoke(): ChangelogHistory = ChangelogHistory(
         markdown = repository.getChangelog(packageName = buildInfoRepository.packageName).trim(),
         currentVersion = buildInfoRepository.appVersion,

@@ -17,7 +17,7 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.changelog.ui
 
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.changelog.ui.constants.LOAD_CHANGELOG
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.changelog.ui.constants.ChangelogOperationNames
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.telemetry.TelemetryRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.UiText
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.Loadable
@@ -29,11 +29,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.feature.changelog.ui.con
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.changelog.ui.states.ChangelogUiState
 import kotlinx.coroutines.Job
 
-/**
- * Owns changelog loading and retry for the changelog dialog.
- *
- * The use case and the repository behind it are main-safe, so it needs no dispatcher.
- */
+/** Loads changelog history on creation and retries through [ChangelogEvent.Load]. */
 class ChangelogViewModel(
     private val getChangelogUseCase: GetChangelogUseCase,
     telemetryRepository: TelemetryRepository,
@@ -46,24 +42,25 @@ class ChangelogViewModel(
     private var loadJob: Job? = null
 
     init {
-        onEvent(ChangelogEvent.Load)
+        onEvent(event = ChangelogEvent.Load)
     }
 
     override fun handleEvent(event: ChangelogEvent) {
         when (event) {
-            ChangelogEvent.Load -> loadChangelog()
+            is ChangelogEvent.Load -> loadChangelog()
         }
     }
 
+    /** Loads the release history and installed version, sharing an active fetch with duplicate requests. */
     private fun loadChangelog() {
         loadJob = loadJob.ifIsActive {
             launchReport(
-                action = LOAD_CHANGELOG,
+                action = ChangelogOperationNames.LOAD_CHANGELOG,
                 onError = { error ->
                     setState {
                         copy(
                             markdown = error.toFailed(
-                                fallback = UiText.StringResource(R.string.error_loading_changelog_message),
+                                fallback = UiText.StringResource(resourceId = R.string.error_loading_changelog_message),
                             ),
                         )
                     }
@@ -73,9 +70,11 @@ class ChangelogViewModel(
                 val history = getChangelogUseCase()
                 setState {
                     copy(
-                        markdown = if (history.markdown.isBlank()) Loadable.Empty() else Loadable.Ready(
-                            history.markdown
-                        ),
+                        markdown = if (history.markdown.isBlank()) {
+                            Loadable.Empty()
+                        } else {
+                            Loadable.Ready(value = history.markdown)
+                        },
                         currentVersion = history.currentVersion,
                     )
                 }

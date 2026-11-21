@@ -29,8 +29,8 @@ internal fun aboutPreferenceTapEvent(preferenceKey: String): Ga4EventData {
     return Ga4EventData(
         name = SettingsAnalytics.Events.PREFERENCE_VIEW,
         params = mapOf(
-            SettingsAnalytics.Params.SCREEN to AnalyticsValue.Str("About"),
-            SettingsAnalytics.Params.PREFERENCE_KEY to AnalyticsValue.Str(preferenceKey),
+            SettingsAnalytics.Params.SCREEN to AnalyticsValue.Str(value = "About"),
+            SettingsAnalytics.Params.PREFERENCE_KEY to AnalyticsValue.Str(value = preferenceKey),
         ),
     )
 }

@@ -17,4 +17,7 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.ui.constants
 
-internal const val EASTER_EGG_TAPS: Int = 5
+/** Threshold for recognizing the About version gesture. */
+internal object AboutEasterEggConstants {
+    const val EASTER_EGG_TAPS: Int = 5
+}

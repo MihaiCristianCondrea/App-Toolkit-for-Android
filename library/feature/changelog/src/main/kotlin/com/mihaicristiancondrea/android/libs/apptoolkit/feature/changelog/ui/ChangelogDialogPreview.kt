@@ -30,7 +30,7 @@ private fun ChangelogDialogContentPreview() {
     MaterialTheme {
         ChangelogDialogContent(
             state = ChangelogUiState(
-                markdown = Loadable.Ready("# 2.0.0\n- A new settings search\n\n---\n\n# 1.9.0\n- Faster start"),
+                markdown = Loadable.Ready(value = "# 2.0.0\n- A new settings search\n\n---\n\n# 1.9.0\n- Faster start"),
                 currentVersion = "2.0.0",
             ),
             onRetry = {},
@@ -45,7 +45,7 @@ private fun ChangelogDialogContentFailedPreview() {
     MaterialTheme {
         ChangelogDialogContent(
             state = ChangelogUiState(
-                markdown = Loadable.Failed(UiText.DynamicString("No internet connection.")),
+                markdown = Loadable.Failed(message = UiText.DynamicString(content = "No internet connection.")),
             ),
             onRetry = {},
             onDismiss = {},

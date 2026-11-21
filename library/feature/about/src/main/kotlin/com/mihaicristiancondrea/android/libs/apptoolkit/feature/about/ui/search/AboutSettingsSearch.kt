@@ -28,10 +28,10 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.R as CoreUiR
  */
 internal val aboutSettingsSearch =
     settingsSearchProvider(section = CoreUiR.string.about, destination = AboutRoute) {
-        preference(R.string.app_info)
-        preference(R.string.device_info)
+        preference(title = R.string.app_info)
+        preference(title = R.string.device_info)
         preference(
-            R.string.oss_license_title,
+            title = R.string.oss_license_title,
             summary = R.string.summary_preference_settings_oss,
             destination = LicensesRoute
         )

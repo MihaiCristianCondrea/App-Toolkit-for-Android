@@ -17,5 +17,8 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.advanced.ui.constants
 
-internal const val CLEAR_CACHE = "clearCache"
-internal const val OBSERVE_DEVELOPER_OPTIONS = "observeDeveloperOptions"
+/** Stable identifiers for advanced settings operation reporting. */
+internal object AdvancedSettingsOperationNames {
+    const val CLEAR_CACHE: String = "clearCache"
+    const val OBSERVE_DEVELOPER_OPTIONS: String = "observeDeveloperOptions"
+}

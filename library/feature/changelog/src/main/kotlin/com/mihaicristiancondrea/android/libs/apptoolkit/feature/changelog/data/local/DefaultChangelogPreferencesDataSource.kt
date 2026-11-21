@@ -28,6 +28,7 @@ import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
 
 /** Changelog state stored in the shared `settings` Preferences DataStore. */
+/** Stores host-managed changelog state in the shared settings DataStore. */
 class DefaultChangelogPreferencesDataSource(
     private val dataStore: DataStore<Preferences>,
 ) : ChangelogPreferencesDataSource {

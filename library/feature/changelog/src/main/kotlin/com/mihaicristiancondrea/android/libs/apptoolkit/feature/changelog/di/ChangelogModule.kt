@@ -31,11 +31,16 @@ import org.koin.core.module.dsl.viewModel
 import org.koin.core.qualifier.named
 import org.koin.dsl.module
 
+/**
+ * Registers changelog loading and host storage bindings.
+ *
+ * The host supplies the API base URL, legacy Markdown URL, settings DataStore and telemetry.
+ */
 val changelogModule: Module = module {
     single<ChangelogPreferencesDataSource> {
         DefaultChangelogPreferencesDataSource(
             dataStore = get(
-                qualifier = named(DataStoreQualifiers.SETTINGS)
+                qualifier = named(name = DataStoreQualifiers.SETTINGS)
             )
         )
     }
@@ -44,10 +49,10 @@ val changelogModule: Module = module {
         DefaultChangelogRepository(
             remoteDataSource = get(),
             apiBaseUrl = get(
-                qualifier = named(AppToolkitDiConstants.ANDROID_APPS_METADATA_API_BASE_URL),
+                qualifier = named(name = AppToolkitDiConstants.ANDROID_APPS_METADATA_API_BASE_URL),
             ),
             legacyChangelogUrl = get(
-                qualifier = named(AppToolkitDiConstants.GITHUB_CHANGELOG),
+                qualifier = named(name = AppToolkitDiConstants.GITHUB_CHANGELOG),
             ),
             diagnostics = get(),
         )

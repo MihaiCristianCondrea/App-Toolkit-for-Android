@@ -54,12 +54,9 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.R as CoreUiR
 
 
 /**
- * The advanced settings page: the bug report, clearing the cache, and the developer options once
- * the About screen's easter egg unlocks them.
+ * Displays cache management and unlocked developer options.
  *
- * Owns [AdvancedSettingsViewModel], tracking, messages and navigation. The bug report opens the
- * `IssueReporterSheet` bound in Koin over this page, and is left out when nothing binds one. The
- * sheet's visibility is saved, so a rotation does not close it.
+ * A bound [IssueReporterSheet] enables bug reporting. Its visibility survives configuration changes.
  */
 @Composable
 fun AdvancedSettingsScreen() {
@@ -79,7 +76,7 @@ fun AdvancedSettingsScreen() {
             state = state,
             onEvent = viewModel::onEvent,
             onReportBug = { showIssueReporter = true },
-            onOpenDeveloperOptions = { navigator.navigate(DeveloperOptionsRoute) },
+            onOpenDeveloperOptions = { navigator.navigate(key = DeveloperOptionsRoute) },
             contentPadding = contentPadding(),
             showBugReport = issueReporterSheet != null,
         )
@@ -91,15 +88,10 @@ fun AdvancedSettingsScreen() {
 }
 
 /**
- * Renders the advanced settings rows for [state]. Each row logs its own tap through its
- * `ga4Event`.
+ * Renders advanced settings rows for [state] and reports row actions through callbacks.
  *
- * @param onEvent Receives the events [AdvancedSettingsViewModel] handles.
- * @param onReportBug Opens the issue reporter. Shown only when [showBugReport] is true.
- * @param onOpenDeveloperOptions Opens the developer options. Navigation belongs to the caller.
- * @param contentPadding Padding from the shell, applied inside the list.
- * @param showBugReport Whether an issue reporter is available, which adds the error reporting
- * category.
+ * @param showBugReport Whether the issue reporter is available.
+ * @param contentPadding Shell insets applied inside the list.
  */
 @Composable
 internal fun AdvancedSettingsScreenContent(

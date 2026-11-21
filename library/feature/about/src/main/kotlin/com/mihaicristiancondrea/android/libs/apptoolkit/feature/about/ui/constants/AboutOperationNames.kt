@@ -17,6 +17,9 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.ui.constants
 
-internal const val LOAD_ABOUT_INFO = "loadAboutInfo"
-internal const val COPY_TO_CLIPBOARD = "copyToClipboard"
-internal const val UNLOCK_SEASONAL_THEMES = "unlockSeasonalThemes"
+/** Stable identifiers for About operation reporting. */
+internal object AboutOperationNames {
+    const val LOAD_ABOUT_INFO: String = "loadAboutInfo"
+    const val COPY_TO_CLIPBOARD: String = "copyToClipboard"
+    const val UNLOCK_SEASONAL_THEMES: String = "unlockSeasonalThemes"
+}

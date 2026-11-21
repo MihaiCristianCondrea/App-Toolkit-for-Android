@@ -21,5 +21,6 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.data.model
 
 /** Supplies the application and device metadata rendered by the About screen. */
 interface AboutRepository {
+    /** Reads the host, Toolkit and device metadata. Safe to call from the main thread. */
     suspend fun getAboutInfo(): AboutInfo
 }

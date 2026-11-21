@@ -17,6 +17,7 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.changelog.ui.models
 
+/** A parsed release with a separate version line for the release header. */
 internal data class ChangelogRelease(
     val heading: String,
     val markdown: String,

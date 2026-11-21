@@ -45,22 +45,23 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.feature.changelog.ui.tra
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.changelog.ui.transformers.toChangelogReleases
 import dev.jeziellago.compose.markdowntext.MarkdownText
 
+/** Renders the release history and initially positions it at the installed release when present. */
 @Composable
 internal fun ChangelogReleaseList(markdown: String, currentVersion: String) {
     key(markdown, currentVersion) {
-        val releases = remember(markdown, currentVersion) {
-            markdown.toChangelogReleases(currentVersion)
+        val releases = remember(key1 = markdown, key2 = currentVersion) {
+            markdown.toChangelogReleases(currentVersion = currentVersion)
         }
-        val currentIndex = releases.indexOfFirst { it.isCurrent }.coerceAtLeast(0)
+        val currentIndex = releases.indexOfFirst { it.isCurrent }.coerceAtLeast(minimumValue = 0)
         val listState = rememberLazyListState(initialFirstVisibleItemIndex = currentIndex)
         LazyColumn(
             modifier = Modifier
                 .fillMaxSize()
-                .testTag("changelog_releases"),
+                .testTag(tag = "changelog_releases"),
             state = listState,
             contentPadding = PaddingValues(bottom = SizeConstants.LargeSize),
         ) {
-            itemsIndexed(releases) { index, release ->
+            itemsIndexed(items = releases) { index, release ->
                 Column(modifier = Modifier.fillMaxWidth()) {
                     if (index > 0) {
                         HorizontalWavyDivider(modifier = Modifier.padding(vertical = SizeConstants.LargeSize))
@@ -68,9 +69,9 @@ internal fun ChangelogReleaseList(markdown: String, currentVersion: String) {
                     Row(
                         modifier = Modifier.fillMaxWidth(),
                         verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.spacedBy(SizeConstants.SmallSize),
+                        horizontalArrangement = Arrangement.spacedBy(space = SizeConstants.SmallSize),
                     ) {
-                        Column(modifier = Modifier.weight(1f)) {
+                        Column(modifier = Modifier.weight(weight = 1f)) {
                             if (release.heading.isNotEmpty()) {
                                 Text(
                                     text = release.heading,
@@ -91,7 +92,7 @@ internal fun ChangelogReleaseList(markdown: String, currentVersion: String) {
                                 contentColor = MaterialTheme.colorScheme.onSecondaryContainer,
                             ) {
                                 Text(
-                                    text = stringResource(R.string.changelog_current),
+                                    text = stringResource(id = R.string.changelog_current),
                                     style = MaterialTheme.typography.labelMedium,
                                     modifier = Modifier.padding(
                                         horizontal = SizeConstants.SmallSize,

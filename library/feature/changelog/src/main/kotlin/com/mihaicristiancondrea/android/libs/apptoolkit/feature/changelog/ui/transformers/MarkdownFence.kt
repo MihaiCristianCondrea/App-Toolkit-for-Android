@@ -18,6 +18,7 @@
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.changelog.ui.transformers
 
 /** Tracks fenced code so headings and rules inside it remain literal Markdown. */
+/** Tracks backtick and tilde code fences across consecutive Markdown lines. */
 internal class MarkdownFence {
     private var marker: Char? = null
     private var length: Int = 0

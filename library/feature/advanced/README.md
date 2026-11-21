@@ -29,13 +29,15 @@ options entry once it is unlocked.
 - The settings list whose row opens this page, owned by
   [`:library:feature:settings`](../settings/README.md).
 
+## Host requirements
+
+The assembled Toolkit graph provides the standard settings bindings. Bind `IssueReporterSheet`
+to enable bug reporting. With no sheet binding, Advanced Settings omits the bug report category.
+
 ## Depends on
 
-- `:library:core:common` and `:library:core:ui`, and through `:library:core:ui` the keys of
-  `:library:navigation` and `storageCall` and `SeasonalThemeRepository` of `:library:core:datastore`.
-- No other feature module. The feature asks nothing of its host: the removed
-  `AdvancedSettingsProvider` existed only to supply a bug-report URL, which the list stopped using
-  once the issue reporter began submitting reports itself.
+- `:library:core:common`, `:library:core:network` and `:library:core:ui` for diagnostics, error handling
+  and presentation. Navigation and `SeasonalThemeRepository` are available through Core UI.
 
 ## Used by
 
@@ -46,17 +48,18 @@ options entry once it is unlocked.
 
 ```mermaid
 flowchart TD
-    Page[advancedSettingsPage: AdvancedSettingsRoute] --> Screen[AdvancedSettingsScreen]
-    Screen --> Content[AdvancedSettingsScreenContent]
-    Content -->|bug report row| Sheet[IssueReporterSheet from Koin]
-    Content -->|clear cache row| Clear[AdvancedSettingsEvent.ClearCache]
-    Clear --> VM[AdvancedSettingsViewModel]
-    VM --> Repo[CacheRepository: delete cache directories on IO]
-    Repo -->|done or StorageException| VM
-    VM --> Message[UiMessage: cleared, or the failure text]
-    Message --> Host[MessageHost]
-    Unlock[SeasonalThemeRepository unlock] --> VM
-    Content -->|developer options row| Developer[navigator.navigate: DeveloperOptionsRoute]
+    Entry["advancedSettingsPage(): AdvancedSettingsRoute"] --> Screen["AdvancedSettingsScreen"]
+    Screen --> Host["ScreenHost"]
+    Host --> Content["AdvancedSettingsScreenContent"]
+    Content -->|"Bug report action"| Sheet["IssueReporterSheet from Koin"]
+    Content -->|"AdvancedSettingsEvent.ClearCache"| VM["AdvancedSettingsViewModel"]
+    Content -->|"Developer options action"| Developer["DeveloperOptionsRoute"]
+    VM --> Repo["CacheRepository / DefaultCacheRepository"]
+    Repo --> IO["App cache directories on IO"]
+    Unlock["SeasonalThemeRepository"] --> Transformer["toDeveloperOptionsUnlocked()"]
+    Transformer --> VM
+    VM -->|"AdvancedSettingsUiState and messages"| Host
+    Host -->|"Retry unlock observation"| VM
 ```
 
 ## Architectural decisions
@@ -90,6 +93,11 @@ flowchart TD
   `AdvancedSettingsUiState`, `CacheClearStatus`, `AdvancedSettingsEvent`, `CacheRepository`,
   `DefaultCacheRepository` and `advancedSettingsModule`. `AdvancedSettingsScreenContent` is
   internal.
+
+## Internal implementations
+
+- The unlock transformer projects `SeasonalThemeRepository` state into developer options visibility.
+- The cache repository runs recursive file deletion on the injected IO dispatcher.
 
 ## Current risks
 

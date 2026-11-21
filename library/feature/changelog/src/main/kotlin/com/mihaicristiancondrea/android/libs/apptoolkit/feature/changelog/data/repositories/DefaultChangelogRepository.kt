@@ -25,12 +25,9 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.feature.changelog.data.r
 import io.ktor.http.HttpStatusCode
 
 /**
- * Fetches changelog Markdown from the public Android App Metadata API.
+ * Reads the package-specific changelog from the Android App Metadata API.
  *
- * The package endpoint is authoritative, while [legacyChangelogUrl] is a compatibility fallback,
- * used only when the package is blank or the endpoint answers HTTP 404. Any other failure of the
- * endpoint is the answer: it is thrown, not covered by the fallback. It needs no dispatcher, as
- * Ktor suspends.
+ * @param legacyChangelogUrl Compatibility URL used for a blank package or HTTP 404.
  */
 class DefaultChangelogRepository(
     private val remoteDataSource: ChangelogRemoteDataSource,
@@ -42,7 +39,7 @@ class DefaultChangelogRepository(
     override suspend fun getChangelog(packageName: String): String {
         if (packageName.isBlank()) return getLegacyChangelog(
             reason = LegacyReason.BLANK_PACKAGE,
-            packageName
+            packageName = packageName,
         )
 
         val primary = remoteDataSource.fetchMarkdown(
@@ -52,7 +49,7 @@ class DefaultChangelogRepository(
             )
         )
         if (primary.status == HttpStatusCode.NotFound) {
-            return getLegacyChangelog(reason = LegacyReason.NOT_FOUND, packageName)
+            return getLegacyChangelog(reason = LegacyReason.NOT_FOUND, packageName = packageName)
         }
         return primary.bodyOrThrow()
     }

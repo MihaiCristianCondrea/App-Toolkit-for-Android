@@ -17,4 +17,7 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.changelog.ui.constants
 
-internal const val LOAD_CHANGELOG = "loadChangelog"
+/** Stable identifiers for changelog operation reporting. */
+internal object ChangelogOperationNames {
+    const val LOAD_CHANGELOG: String = "loadChangelog"
+}

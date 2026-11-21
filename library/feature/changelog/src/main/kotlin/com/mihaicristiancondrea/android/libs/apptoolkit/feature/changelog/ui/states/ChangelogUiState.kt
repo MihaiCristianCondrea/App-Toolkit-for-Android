@@ -21,10 +21,10 @@ import androidx.compose.runtime.Immutable
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.Loadable
 
 /**
- * What the changelog dialog renders.
+ * State rendered by the changelog dialog.
  *
- * @property markdown The release notes to show. Empty when the changelog loaded but has nothing in
- * it, which the dialog shows as "no new updates".
+ * @property markdown Current load result for the full release history.
+ * @property currentVersion Installed host version used to mark the current release.
  */
 @Immutable
 data class ChangelogUiState(

@@ -35,21 +35,21 @@ private fun AboutScreenContentPreview() {
         AboutScreenContent(
             state = AboutUiState(
                 items = Loadable.Ready(
-                    persistentListOf(
+                    value = persistentListOf(
                         AboutItem.Header(
                             key = AboutItemKey.HEADER_APP_INFO,
-                            title = UiText.DynamicString("App information"),
+                            title = UiText.DynamicString(content = "App information"),
                         ),
                         AboutItem.Preference(
                             key = AboutItemKey.APP_NAME,
-                            title = UiText.DynamicString("App name"),
-                            summary = UiText.DynamicString("App Toolkit Sample"),
+                            title = UiText.DynamicString(content = "App name"),
+                            summary = UiText.DynamicString(content = "App Toolkit Sample"),
                             position = GroupedItemPosition.FIRST,
                         ),
                         AboutItem.Preference(
                             key = AboutItemKey.APP_BUILD_VERSION,
-                            title = UiText.DynamicString("Version"),
-                            summary = UiText.DynamicString("1.0.0 (100)"),
+                            title = UiText.DynamicString(content = "Version"),
+                            summary = UiText.DynamicString(content = "1.0.0 (100)"),
                             position = GroupedItemPosition.LAST,
                             countsVersionTap = true,
                         ),

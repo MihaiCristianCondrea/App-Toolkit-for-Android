@@ -28,8 +28,8 @@ internal fun advancedPreferenceTapEvent(preferenceKey: String): Ga4EventData {
     return Ga4EventData(
         name = SettingsAnalytics.Events.PREFERENCE_VIEW,
         params = mapOf(
-            SettingsAnalytics.Params.SCREEN to AnalyticsValue.Str(ADVANCED_SETTINGS_SCREEN_NAME),
-            SettingsAnalytics.Params.PREFERENCE_KEY to AnalyticsValue.Str(preferenceKey),
+            SettingsAnalytics.Params.SCREEN to AnalyticsValue.Str(value = ADVANCED_SETTINGS_SCREEN_NAME),
+            SettingsAnalytics.Params.PREFERENCE_KEY to AnalyticsValue.Str(value = preferenceKey),
         ),
     )
 }

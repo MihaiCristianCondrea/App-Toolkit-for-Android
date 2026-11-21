@@ -29,25 +29,15 @@ import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.R as CommonR
 
-/**
- * Maps [AboutInfo] to the rows the About screen renders.
- *
- * Entries that have nothing to show are dropped, so grouped card positions are assigned after
- * filtering and always describe the list the user actually sees.
- *
- * Every row that displays a value copies it on tap, with two exceptions. The licenses row
- * navigates instead. The build version row is where the easter egg lives: people tap it over and
- * over, and copying on every one of those taps put the version on the clipboard five times and
- * covered the konfetti with clipboard confirmations.
- */
+/** Maps About metadata to rows and assigns grouped positions after filtering unavailable values. */
 internal fun AboutInfo.toAboutItems(): ImmutableList<AboutItem> {
     val appInfoPreferences = buildList {
-        val appNameTitle = UiText.StringResource(CommonR.string.app_full_name)
+        val appNameTitle = UiText.StringResource(resourceId = CommonR.string.app_full_name)
         add(
             AboutItem.Preference(
                 key = AboutItemKey.APP_NAME,
                 title = appNameTitle,
-                summary = UiText.StringResource(CommonR.string.copyright),
+                summary = UiText.StringResource(resourceId = CommonR.string.copyright),
                 action = AboutItemAction.CopyToClipboard(
                     label = appNameTitle,
                     text = appNameTitle,
@@ -57,45 +47,46 @@ internal fun AboutInfo.toAboutItems(): ImmutableList<AboutItem> {
         add(
             AboutItem.Preference(
                 key = AboutItemKey.APP_BUILD_VERSION,
-                title = UiText.StringResource(R.string.app_build_version),
-                summary = UiText.DynamicString(formatAboutBuildVersion(appVersion, appVersionCode)),
+                title = UiText.StringResource(resourceId = R.string.app_build_version),
+                summary = UiText.DynamicString(
+                    content = formatAboutBuildVersion(versionName = appVersion, versionCode = appVersionCode),
+                ),
                 countsVersionTap = true,
             )
         )
         if (appToolkitVersion.isNotBlank()) {
-            val title = UiText.StringResource(R.string.app_toolkit_version)
+            val title = UiText.StringResource(resourceId = R.string.app_toolkit_version)
             add(
                 AboutItem.Preference(
                     key = AboutItemKey.APP_TOOLKIT_VERSION,
                     title = title,
-                    summary = UiText.DynamicString(appToolkitVersion),
+                    summary = UiText.DynamicString(content = appToolkitVersion),
                     action = AboutItemAction.CopyToClipboard(
                         label = title,
-                        text = UiText.DynamicString(appToolkitVersion),
+                        text = UiText.DynamicString(content = appToolkitVersion),
                     ),
                 )
             )
         }
         if (!googlePlayServicesVersion.isNullOrBlank()) {
-            val title = UiText.StringResource(R.string.google_play_services_version)
+            val title = UiText.StringResource(resourceId = R.string.google_play_services_version)
             add(
                 AboutItem.Preference(
                     key = AboutItemKey.GOOGLE_PLAY_SERVICES_VERSION,
                     title = title,
-                    summary = UiText.DynamicString(googlePlayServicesVersion),
+                    summary = UiText.DynamicString(content = googlePlayServicesVersion),
                     action = AboutItemAction.CopyToClipboard(
                         label = title,
-                        text = UiText.DynamicString(googlePlayServicesVersion),
+                        text = UiText.DynamicString(content = googlePlayServicesVersion),
                     ),
                 )
             )
         }
-        // The licenses row navigates; it is the one entry with no value to put on the clipboard.
         add(
             AboutItem.Preference(
                 key = AboutItemKey.OSS_LICENSES,
-                title = UiText.StringResource(R.string.oss_license_title),
-                summary = UiText.StringResource(R.string.summary_preference_settings_oss),
+                title = UiText.StringResource(resourceId = R.string.oss_license_title),
+                summary = UiText.StringResource(resourceId = R.string.summary_preference_settings_oss),
                 action = AboutItemAction.OpenLicenses,
             )
         )
@@ -103,17 +94,17 @@ internal fun AboutInfo.toAboutItems(): ImmutableList<AboutItem> {
 
     val deviceInfoPreferences = buildList {
         if (deviceInfo.isNotBlank()) {
-            val title = UiText.StringResource(R.string.device_info)
+            val title = UiText.StringResource(resourceId = R.string.device_info)
             add(
                 AboutItem.Preference(
                     key = AboutItemKey.DEVICE_INFO,
                     title = title,
-                    summary = UiText.DynamicString(deviceInfo),
+                    summary = UiText.DynamicString(content = deviceInfo),
                     action = AboutItemAction.CopyToClipboard(
                         label = title,
-                        text = UiText.DynamicString(deviceInfo),
+                        text = UiText.DynamicString(content = deviceInfo),
                         successMessage = UiText.StringResource(
-                            R.string.snack_device_info_copied,
+                            resourceId = R.string.snack_device_info_copied,
                         ),
                     ),
                 )
@@ -125,18 +116,18 @@ internal fun AboutInfo.toAboutItems(): ImmutableList<AboutItem> {
         add(
             AboutItem.Header(
                 key = AboutItemKey.HEADER_APP_INFO,
-                title = UiText.StringResource(R.string.app_info),
+                title = UiText.StringResource(resourceId = R.string.app_info),
             )
         )
-        addAll(appInfoPreferences)
+        addAll(elements = appInfoPreferences)
         if (deviceInfoPreferences.isNotEmpty()) {
             add(
                 AboutItem.Header(
                     key = AboutItemKey.HEADER_DEVICE_INFO,
-                    title = UiText.StringResource(R.string.device_info),
+                    title = UiText.StringResource(resourceId = R.string.device_info),
                 )
             )
-            addAll(deviceInfoPreferences)
+            addAll(elements = deviceInfoPreferences)
         }
     }.toImmutableList()
 }

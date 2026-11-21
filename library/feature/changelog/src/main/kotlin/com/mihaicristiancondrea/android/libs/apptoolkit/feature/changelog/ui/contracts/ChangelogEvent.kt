@@ -18,7 +18,9 @@
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.changelog.ui.contracts
 
 /** What the changelog dialog asks its ViewModel to do. */
+/** Requests handled by the changelog dialog ViewModel. */
 sealed interface ChangelogEvent {
     /** Loads the changelog, on start and on retry. */
+    /** Loads the release history on entry or retries after a failed fetch. */
     data object Load : ChangelogEvent
 }

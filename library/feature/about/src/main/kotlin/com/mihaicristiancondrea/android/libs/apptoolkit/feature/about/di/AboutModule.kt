@@ -27,8 +27,9 @@ import org.koin.core.module.dsl.viewModel
 import org.koin.core.qualifier.named
 import org.koin.dsl.module
 
+/** Registers the About repository, ViewModel and settings search provider. */
 val aboutModule: Module = module {
-    single<SettingsSearchProvider>(named("about")) { aboutSettingsSearch }
+    single<SettingsSearchProvider>(qualifier = named(name = "about")) { aboutSettingsSearch }
 
     single<DefaultAboutRepository> {
         DefaultAboutRepository(

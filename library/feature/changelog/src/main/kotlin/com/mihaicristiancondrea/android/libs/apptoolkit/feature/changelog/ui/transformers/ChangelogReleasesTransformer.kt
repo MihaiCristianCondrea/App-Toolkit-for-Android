@@ -28,6 +28,7 @@ private val versionHeading = Regex(
 private val versionLine = Regex("""\*\*Version:\*\*[\t ]+(.+)""", RegexOption.IGNORE_CASE)
 
 /** Keeps every release and marks exact installed-version matches outside code fences. */
+/** Parses releases in document order and marks exact matches for the installed version. */
 internal fun String.toChangelogReleases(currentVersion: String): List<ChangelogRelease> {
     if (isBlank()) return emptyList()
     val lines = lines()

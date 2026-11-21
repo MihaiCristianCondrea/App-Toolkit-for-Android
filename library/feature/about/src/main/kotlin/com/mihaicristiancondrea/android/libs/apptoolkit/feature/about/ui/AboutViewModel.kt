@@ -17,9 +17,7 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.ui
 
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.ui.constants.LOAD_ABOUT_INFO
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.ui.constants.COPY_TO_CLIPBOARD
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.ui.constants.UNLOCK_SEASONAL_THEMES
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.ui.constants.AboutOperationNames
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.ClipboardRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.telemetry.TelemetryRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.UiText
@@ -39,19 +37,9 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.ui.states.
 import kotlinx.coroutines.Job
 
 /**
- * ViewModel for the About screen, including tap-to-copy of the entries it renders.
+ * Loads About entries and handles clipboard requests and the seasonal themes unlock.
  *
- * Writing to the clipboard is a system UI interaction, so it happens on the main thread, which is
- * where `viewModelScope` already runs. A successful copy is confirmed in-app only where the system
- * does not confirm it itself ([ClipboardRepository.confirmsCopies]). A failed copy raises no system
- * UI at all, so it is always reported.
- *
- * The version-tap easter egg also unlocks the seasonal themes controls on the theme screen and the
- * developer options entry in the advanced settings. The first unlock is announced, since nothing
- * else points at where the reward went.
- *
- * @param clipboardRepository Receives the copied entries, so this ViewModel holds no `Context`.
- * @param seasonalThemes Records the easter egg unlock.
+ * Successful clipboard writes show a message when the platform provides no confirmation.
  */
 open class AboutViewModel(
     private val aboutRepository: AboutRepository,
@@ -67,12 +55,12 @@ open class AboutViewModel(
     private var loadJob: Job? = null
 
     init {
-        onEvent(AboutEvent.Load)
+        onEvent(event = AboutEvent.Load)
     }
 
     override fun handleEvent(event: AboutEvent) {
         when (event) {
-            AboutEvent.Load -> loadAboutInfo()
+            is AboutEvent.Load -> loadAboutInfo()
 
             is AboutEvent.CopyToClipboard -> copyToClipboard(
                 label = event.label,
@@ -80,25 +68,28 @@ open class AboutViewModel(
                 successMessage = event.successMessage,
             )
 
-            AboutEvent.EasterEggFound -> unlockSeasonalThemes()
+            is AboutEvent.EasterEggFound -> unlockSeasonalThemes()
         }
     }
 
-    /**
-     * Loads the entries. The GMS repository owns its package lookup's dispatcher switch, so this
-     * ViewModel needs no dispatcher.
-     */
+        /** Loads and maps About metadata for the screen. A new request replaces the previous load. */
     private fun loadAboutInfo() {
         loadJob = loadJob.restart {
             launchReport(
-                action = LOAD_ABOUT_INFO,
+                action = AboutOperationNames.LOAD_ABOUT_INFO,
                 onError = { error ->
-                    setState { copy(items = error.toFailed(fallback = UiText.StringResource(R.string.snack_device_info_failed))) }
+                    setState {
+                        copy(
+                            items = error.toFailed(
+                                fallback = UiText.StringResource(resourceId = R.string.snack_device_info_failed),
+                            ),
+                        )
+                    }
                 },
             ) {
                 setState { copy(items = Loadable.Loading) }
                 val items = aboutRepository.getAboutInfo().toAboutItems()
-                setState { copy(items = Loadable.Ready(items)) }
+                setState { copy(items = Loadable.Ready(value = items)) }
             }
         }
     }
@@ -113,16 +104,16 @@ open class AboutViewModel(
         successMessage: UiText?,
     ) {
         launchReport(
-            action = COPY_TO_CLIPBOARD,
+            action = AboutOperationNames.COPY_TO_CLIPBOARD,
             onError = { error ->
-                showMessage(error.toErrorMessage(fallback = UiText.StringResource(R.string.snack_copy_failed)))
+                showMessage(error.toErrorMessage(fallback = UiText.StringResource(resourceId = R.string.snack_copy_failed)))
             },
         ) {
             clipboardRepository.copyText(label = label, text = text)
             if (!clipboardRepository.confirmsCopies) {
                 showMessage(
                     UiMessage(
-                        successMessage ?: UiText.StringResource(R.string.snack_copied_to_clipboard)
+                        text = successMessage ?: UiText.StringResource(resourceId = R.string.snack_copied_to_clipboard)
                     ),
                 )
             }
@@ -134,10 +125,10 @@ open class AboutViewModel(
      * retried on a later visit.
      */
     private fun unlockSeasonalThemes() {
-        launchReport(action = UNLOCK_SEASONAL_THEMES) {
+        launchReport(action = AboutOperationNames.UNLOCK_SEASONAL_THEMES) {
             if (seasonalThemes.unlockSeasonalThemes()) {
                 telemetryRepository.logUnlockAchievement(achievementId = SEASONAL_THEMES_ACHIEVEMENT)
-                showMessage(UiMessage(UiText.StringResource(R.string.snack_seasonal_themes_unlocked)))
+                showMessage(UiMessage(text = UiText.StringResource(resourceId = R.string.snack_seasonal_themes_unlocked)))
             }
         }
     }

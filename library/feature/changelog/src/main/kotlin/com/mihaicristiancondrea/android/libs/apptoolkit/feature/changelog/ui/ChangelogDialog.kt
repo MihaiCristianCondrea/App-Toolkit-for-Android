@@ -63,14 +63,10 @@ import org.koin.compose.viewmodel.koinViewModel
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.R as CoreUiR
 
 /**
- * Displays the host application's package-aware changelog in a modal bottom sheet.
+ * Displays the host application's full release history in a modal bottom sheet.
  *
- * Collects the [ChangelogViewModel] state and tracks the sheet visit before rendering
- * [ChangelogDialogContent].
- *
- * @param releasesUrl A page with more release notes, such as
- * `GithubConstants.APP_TOOLKIT_RELEASES`, opened from an info button beside the title; null shows
- * no button.
+ * @param onDismiss Closes the bottom sheet.
+ * @param releasesUrl Optional page opened from the title's info button.
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -94,26 +90,20 @@ fun ChangelogDialog(
         ScreenHost(screen = CHANGELOG_SCREEN, status = state.markdown, viewModel = viewModel) {
             ChangelogDialogContent(
                 state = state,
-                onRetry = { viewModel.onEvent(ChangelogEvent.Load) },
+                onRetry = { viewModel.onEvent(event = ChangelogEvent.Load) },
                 onDismiss = onDismiss,
-                onOpenReleases = releasesUrl?.let { url -> { context.openUrl(url) } },
+                onOpenReleases = releasesUrl?.let { url -> { context.openUrl(url = url) } },
             )
         }
     }
 }
 
 /**
- * What the changelog sheet shows for [state]: the title, the release notes or why there are none,
- * and one action.
+ * Renders changelog state with the header and action fixed outside the scrolling release list.
  *
- * The stateless half of [ChangelogDialog]. The header and action stay fixed while the body scrolls,
- * so long release notes cannot push the action off-screen. The action retries a failure that can
- * be retried, and otherwise dismisses.
- *
- * @param onRetry Loads the changelog again.
+ * @param onRetry Triggered when the load failure offers Retry.
  * @param onDismiss Closes the sheet.
- * @param onOpenReleases Opens more release notes from an info button beside the title; null shows
- * no button.
+ * @param onOpenReleases Optional action for the title's info button.
  */
 @Composable
 internal fun ChangelogDialogContent(
@@ -142,20 +132,20 @@ internal fun ChangelogDialogContent(
             Text(
                 text = stringResource(id = R.string.changelog_title),
                 style = MaterialTheme.typography.headlineSmall,
-                modifier = Modifier.weight(1f),
+                modifier = Modifier.weight(weight = 1f),
             )
             if (onOpenReleases != null) {
                 GeneralButton(
                     style = GeneralButtonStyle.Text,
                     onClick = onOpenReleases,
-                    icon = ToolkitIcon.Vector(Icons.Outlined.Info),
+                    icon = ToolkitIcon.Vector(imageVector = Icons.Outlined.Info),
                     contentDescription = stringResource(id = R.string.changelog_all_releases),
                 )
             }
         }
         Box(
             modifier = Modifier
-                .weight(1f)
+                .weight(weight = 1f)
                 .fillMaxWidth(),
             contentAlignment = Alignment.Center,
         ) {

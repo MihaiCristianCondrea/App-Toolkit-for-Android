@@ -35,7 +35,7 @@ import org.koin.dsl.module
  * which the About screen's version easter egg records.
  */
 val advancedSettingsModule: Module = module {
-    single<SettingsSearchProvider>(named("advanced")) { advancedSettingsSearch }
+    single<SettingsSearchProvider>(qualifier = named(name = "advanced")) { advancedSettingsSearch }
     single<CacheRepository> {
         DefaultCacheRepository(
             context = get(),

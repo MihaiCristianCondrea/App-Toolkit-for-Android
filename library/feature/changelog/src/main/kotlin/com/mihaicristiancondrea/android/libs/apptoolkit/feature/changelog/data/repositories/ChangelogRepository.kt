@@ -20,6 +20,7 @@ package com.mihaicristiancondrea.android.libs.apptoolkit.feature.changelog.data.
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.exceptions.NetworkException
 
 /** Provides Markdown changelog content for a host application package. */
+/** Supplies release notes for a host application. */
 interface ChangelogRepository {
 
     /**
