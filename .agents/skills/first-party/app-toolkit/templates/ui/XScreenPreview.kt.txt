@@ -1,5 +1,3 @@
-// Copy the license header from a sibling file.
-
 package <base>.feature.x.ui
 
 import androidx.compose.material3.MaterialTheme
@@ -11,7 +9,6 @@ import <base>.feature.x.ui.models.XItem
 import <base>.feature.x.ui.states.XUiState
 import kotlinx.collections.immutable.persistentListOf
 
-// The default empty and failure screens inject Koin bindings, so only Ready and Loading preview.
 @Preview(showBackground = true)
 @Composable
 private fun XScreenContentPreview() {
@@ -19,9 +16,9 @@ private fun XScreenContentPreview() {
         XScreenContent(
             state = XUiState(
                 items = Loadable.Ready(
-                    persistentListOf(
-                        XItem(key = "first", title = UiText.DynamicString("First entry")),
-                        XItem(key = "second", title = UiText.DynamicString("Second entry")),
+                    value = persistentListOf(
+                        XItem(key = "first", title = UiText.DynamicString(content = "First entry")),
+                        XItem(key = "second", title = UiText.DynamicString(content = "Second entry")),
                     )
                 ),
             ),

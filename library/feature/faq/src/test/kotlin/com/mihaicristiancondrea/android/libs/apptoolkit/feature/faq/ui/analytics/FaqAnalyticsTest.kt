@@ -28,8 +28,8 @@ class FaqAnalyticsTest {
 
     @Test
     fun `screen identity preserves Help identity and FaqScreen class`() {
-        assertEquals("Help", FaqAnalytics.SCREEN.name)
-        assertEquals("FaqScreen", FaqAnalytics.SCREEN.className)
+        assertEquals(expected = "Help", actual = FaqAnalytics.SCREEN.name)
+        assertEquals(expected = "FaqScreen", actual = FaqAnalytics.SCREEN.className)
     }
 
     @Test
@@ -40,12 +40,18 @@ class FaqAnalyticsTest {
             expanded = true,
         )
 
-        assertEquals("select_content", event.name)
-        assertEquals(AnalyticsValue.Str("Help"), event.params[SettingsAnalytics.Params.SCREEN])
-        assertEquals(AnalyticsValue.Str(FaqContentTypes.FAQ_ITEM), event.params[FaqParams.CONTENT_TYPE])
-        assertEquals(AnalyticsValue.Str("question_3"), event.params[FaqParams.ITEM_ID])
-        assertEquals(AnalyticsValue.LongVal(2L), event.params[FaqParams.FAQ_POSITION])
-        assertEquals(AnalyticsValue.Bool(value = true), event.params[FaqParams.EXPANDED])
+        assertEquals(expected = "select_content", actual = event.name)
+        assertEquals(
+            expected = AnalyticsValue.Str(value = "Help"),
+            actual = event.params[SettingsAnalytics.Params.SCREEN],
+        )
+        assertEquals(
+            expected = AnalyticsValue.Str(value = FaqContentTypes.FAQ_ITEM),
+            actual = event.params[FaqParams.CONTENT_TYPE],
+        )
+        assertEquals(expected = AnalyticsValue.Str(value = "question_3"), actual = event.params[FaqParams.ITEM_ID])
+        assertEquals(expected = AnalyticsValue.LongVal(value = 2L), actual = event.params[FaqParams.FAQ_POSITION])
+        assertEquals(expected = AnalyticsValue.Bool(value = true), actual = event.params[FaqParams.EXPANDED])
     }
 
     @Test
@@ -55,31 +61,52 @@ class FaqAnalyticsTest {
             itemId = FaqItemIds.REQUEST_FEATURE,
         )
 
-        assertEquals("select_content", feedbackEvent.name)
-        assertEquals(AnalyticsValue.Str("Help"), feedbackEvent.params[SettingsAnalytics.Params.SCREEN])
-        assertEquals(AnalyticsValue.Str(FaqContentTypes.FEEDBACK_OPTION), feedbackEvent.params[FaqParams.CONTENT_TYPE])
-        assertEquals(AnalyticsValue.Str(FaqItemIds.REQUEST_FEATURE), feedbackEvent.params[FaqParams.ITEM_ID])
+        assertEquals(expected = "select_content", actual = feedbackEvent.name)
+        assertEquals(
+            expected = AnalyticsValue.Str(value = "Help"),
+            actual = feedbackEvent.params[SettingsAnalytics.Params.SCREEN],
+        )
+        assertEquals(
+            expected = AnalyticsValue.Str(value = FaqContentTypes.FEEDBACK_OPTION),
+            actual = feedbackEvent.params[FaqParams.CONTENT_TYPE],
+        )
+        assertEquals(
+            expected = AnalyticsValue.Str(value = FaqItemIds.REQUEST_FEATURE),
+            actual = feedbackEvent.params[FaqParams.ITEM_ID],
+        )
 
         val contactEvent = faqSelectContentEvent(
             contentType = FaqContentTypes.SUPPORT,
             itemId = FaqItemIds.CONTACT_US,
         )
 
-        assertEquals("select_content", contactEvent.name)
-        assertEquals(AnalyticsValue.Str("Help"), contactEvent.params[SettingsAnalytics.Params.SCREEN])
-        assertEquals(AnalyticsValue.Str(FaqContentTypes.SUPPORT), contactEvent.params[FaqParams.CONTENT_TYPE])
-        assertEquals(AnalyticsValue.Str(FaqItemIds.CONTACT_US), contactEvent.params[FaqParams.ITEM_ID])
+        assertEquals(expected = "select_content", actual = contactEvent.name)
+        assertEquals(
+            expected = AnalyticsValue.Str(value = "Help"),
+            actual = contactEvent.params[SettingsAnalytics.Params.SCREEN],
+        )
+        assertEquals(
+            expected = AnalyticsValue.Str(value = FaqContentTypes.SUPPORT),
+            actual = contactEvent.params[FaqParams.CONTENT_TYPE],
+        )
+        assertEquals(
+            expected = AnalyticsValue.Str(value = FaqItemIds.CONTACT_US),
+            actual = contactEvent.params[FaqParams.ITEM_ID],
+        )
     }
 
     @Test
     fun `faqActionEvent formats settings_action with action name and Help screen`() {
         val event = faqActionEvent(actionName = FaqActionNames.FEEDBACK_SHEET_OPENED)
 
-        assertEquals("settings_action", event.name)
-        assertEquals(AnalyticsValue.Str("Help"), event.params[SettingsAnalytics.Params.SCREEN])
+        assertEquals(expected = "settings_action", actual = event.name)
         assertEquals(
-            AnalyticsValue.Str(FaqActionNames.FEEDBACK_SHEET_OPENED),
-            event.params[SettingsAnalytics.Params.ACTION_NAME],
+            expected = AnalyticsValue.Str(value = "Help"),
+            actual = event.params[SettingsAnalytics.Params.SCREEN],
+        )
+        assertEquals(
+            expected = AnalyticsValue.Str(value = FaqActionNames.FEEDBACK_SHEET_OPENED),
+            actual = event.params[SettingsAnalytics.Params.ACTION_NAME],
         )
     }
 
@@ -99,13 +126,13 @@ class FaqAnalyticsTest {
             FaqActionNames.MENU_LICENSES,
         )
 
-        assertEquals(actions.distinct().size, actions.size, "Action names must be unique")
+        assertEquals(expected = actions.distinct().size, actual = actions.size, message = "Action names must be unique")
 
-        val validIdentifierRegex = Regex("^[a-z][a-z0-9_]{1,39}$")
+        val validIdentifierRegex = Regex(pattern = "^[a-z][a-z0-9_]{1,39}$")
         for (action in actions) {
             assertTrue(
-                validIdentifierRegex.matches(action),
-                "Action name '$action' must be valid GA4 parameter format",
+                actual = validIdentifierRegex.matches(input = action),
+                message = "Action name '$action' must be valid GA4 parameter format",
             )
         }
     }
@@ -117,8 +144,8 @@ class FaqAnalyticsTest {
         val actionEvent = faqActionEvent(actionName = FaqActionNames.MENU_TERMS_OF_SERVICE)
 
         for (key in forbiddenKeys) {
-            assertFalse(selectEvent.params.containsKey(key))
-            assertFalse(actionEvent.params.containsKey(key))
+            assertFalse(actual = selectEvent.params.containsKey(key = key))
+            assertFalse(actual = actionEvent.params.containsKey(key = key))
         }
     }
 }

@@ -54,11 +54,8 @@ This module declares all eighteen as empty, untranslatable placeholders in
 `res/values/untranslatable_strings.xml`, purely so it compiles on its own. They are slots, not copy:
 the host declares the text and translates it, the way
 [`:sample:feature:faq`](../../../sample/feature/faq/README.md) does. A host that does not gets a FAQ
-screen showing nine blank rows the moment the remote catalog is unavailable, with nothing in the
-build output to say why.
-
-Provide fewer than nine only if the host is fine with the remainder rendering blank; the count is
-fixed here, not derived from what the host declares.
+screen with no bundled questions when the remote catalog is unavailable. Empty question or answer
+slots are dropped before rendering.
 
 ### The FAQ native ad unit
 
@@ -87,7 +84,7 @@ The screen already skips the slot when the id is blank or the user has ads switc
 
 ```mermaid
 flowchart TD
-    Page[helpScreen: HelpRoute] --> Screen[FaqScreen]
+    Page[helpScreen: HelpScreen] --> Screen[FaqScreen]
     Page --> Menu[FaqMenuActions]
     Screen --> VM[FaqViewModel]
     Screen --> Content[FaqScreenContent]
@@ -119,14 +116,15 @@ flowchart TD
   `FaqViewModel` maps a failure with `toFailed`, so an offline device sees the offline text and
   anything else the FAQ's own. Neither needs a dispatcher: Ktor suspends, and the bundled questions
   are string resources.
-- The repository throws only when there is nothing to show. A failed catalog with bundled questions
-  to fall back on is not an error, and a catalog that loaded empty is `Loadable.Empty`, with Retry.
+- A failed question source is skipped so other sources can still supply questions. When a catalog
+  fetch fails and there are no bundled questions, the repository propagates the failure. An empty
+  result shows `Loadable.Empty` with Retry.
 - `FaqScreenContent` logs nothing and opens nothing. Every tap reaches `FaqScreen` as a named
   callback, which logs GA4 events (`select_content` for content selection, action events for buttons
   and overflow menu items) and opens the form, mail or store listing, since those need a `Context`.
-- When the in-app review cannot show, the ViewModel sets `openStoreListing` and the screen opens the
-  store listing, then reports back with `StoreListingOpened`. A flag in state, not a one-off event,
-  so it still happens when the review finishes during a configuration change.
+- An unavailable or failed in-app review falls back to the Play Store listing. The ViewModel keeps
+  the request in `openStoreListing` across configuration changes until the screen sends
+  `StoreListingOpened`.
 - The screen registers its feedback button with `ScreenHost`. The button stays available while
   questions load or fail. The screen preview lives in `FaqScreenPreview.kt`.
 - Repeated requests to load the same catalog keep the active fetch. After a failure, Retry starts

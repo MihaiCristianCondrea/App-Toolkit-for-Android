@@ -38,10 +38,10 @@ internal fun faqSelectContentEvent(
     return AnalyticsEvent(
         name = FaqEventNames.SELECT_CONTENT,
         params = buildMap {
-            put(SettingsAnalytics.Params.SCREEN, AnalyticsValue.Str(FaqAnalytics.SCREEN_NAME))
-            put(FaqParams.CONTENT_TYPE, AnalyticsValue.Str(contentType))
-            put(FaqParams.ITEM_ID, AnalyticsValue.Str(itemId))
-            putAll(params)
+            put(key = SettingsAnalytics.Params.SCREEN, value = AnalyticsValue.Str(value = FaqAnalytics.SCREEN_NAME))
+            put(key = FaqParams.CONTENT_TYPE, value = AnalyticsValue.Str(value = contentType))
+            put(key = FaqParams.ITEM_ID, value = AnalyticsValue.Str(value = itemId))
+            putAll(from = params)
         },
     )
 }
@@ -55,8 +55,8 @@ internal fun faqQuestionSelectEvent(
         contentType = FaqContentTypes.FAQ_ITEM,
         itemId = faqId,
         params = mapOf(
-            FaqParams.FAQ_POSITION to AnalyticsValue.LongVal(position.toLong()),
-            FaqParams.EXPANDED to AnalyticsValue.Bool(expanded),
+            FaqParams.FAQ_POSITION to AnalyticsValue.LongVal(value = position.toLong()),
+            FaqParams.EXPANDED to AnalyticsValue.Bool(value = expanded),
         ),
     )
 }
@@ -68,9 +68,9 @@ internal fun faqActionEvent(
     return AnalyticsEvent(
         name = FaqEventNames.ACTION,
         params = buildMap {
-            put(SettingsAnalytics.Params.SCREEN, AnalyticsValue.Str(FaqAnalytics.SCREEN_NAME))
-            put(SettingsAnalytics.Params.ACTION_NAME, AnalyticsValue.Str(actionName))
-            putAll(params)
+            put(key = SettingsAnalytics.Params.SCREEN, value = AnalyticsValue.Str(value = FaqAnalytics.SCREEN_NAME))
+            put(key = SettingsAnalytics.Params.ACTION_NAME, value = AnalyticsValue.Str(value = actionName))
+            putAll(from = params)
         },
     )
 }

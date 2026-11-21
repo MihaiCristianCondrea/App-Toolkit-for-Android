@@ -3,10 +3,10 @@ name: writing-style
 description: >
   Enforces strict human developer writing guidelines across code, comments, Markdown
   documentation, social captions, and commit messages. Bans em dashes, en dashes,
-  emojis, and generic AI copywriting cliches.
+  emojis, and generic AI copywriting cliches. Defines where technical documentation belongs.
 metadata:
   author: Mihai-Cristian Condrea
-  last-updated: '2026-10-16'
+  last-updated: '2026-11-21'
   keywords:
   - writing-style
   - punctuation
@@ -15,6 +15,8 @@ metadata:
   - no-emojis
   - human-copy
   - documentation
+  - kdoc
+  - code comments
 ---
 
 # Human Writing Style and Copywriting Guidelines
@@ -47,6 +49,18 @@ This is the only place these rules are written. Every other marketing skill appl
 5. **Plain punctuation**:
    - Use straight quotes and apostrophes (`'`, `"`) in files; let the platform typeset them.
    - Use the middle dot (`·`) or a colon to separate a number from a title, never a dash.
+
+## Technical documentation placement
+
+- Put architectural decisions, behavioral policies, integration requirements and rationale in the
+  owning module's README. Keep the explanation there when the code already shows the behavior.
+- Use concise KDoc for a declaration's contract, invariant, side effect, lifecycle requirement
+  or other non-obvious requirement. Document what a caller needs to know.
+- Reserve inline comments for exceptional technical constraints that the code cannot explain
+  clearly. Remove comments that restate or narrate the implementation.
+- Review inherited comments in the code you touch. Remove redundant text and preserve necessary
+  explanations in the appropriate place. Convert a comment to KDoc only if it explains a
+  declaration-level contract.
 
 ## Checking a file
 

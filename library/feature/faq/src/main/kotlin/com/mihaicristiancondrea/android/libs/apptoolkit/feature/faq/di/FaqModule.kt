@@ -30,10 +30,6 @@ import org.koin.core.module.Module
 import org.koin.core.module.dsl.viewModel
 import org.koin.dsl.module
 
-/**
- * Binds the FAQ feature: the catalog sources, the repository that normalizes and falls back
- * between them, and the screen that lists them alongside the contact and review actions.
- */
 fun faqModule(hostBuildConfig: AppToolkitHostBuildConfig): Module = module {
     single<FaqLocalDataSource> { FaqLocalDataSource(context = get()) }
     single<FaqRemoteDataSource> { FaqRemoteDataSource(client = get()) }

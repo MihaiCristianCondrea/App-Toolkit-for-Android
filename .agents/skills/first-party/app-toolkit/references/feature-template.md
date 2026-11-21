@@ -3,6 +3,8 @@
 Use [placement and declaration rules](architecture.md) to choose files. These starters work
 together as an inventory catalog. Replace `<base>`, the feature segment `x`, and the `X` names
 consistently. Put each file in the package declared in its header and remove the `.txt` suffix.
+Use a sibling source file as the reference for the project's license header. Follow `traceable-code`
+for Kotlin call sites and `writing-style` for documentation placement.
 Use the [consumer integration guidance](consumer-integration.md) for the Toolkit APIs available
 to the target. Standalone Android apps can use the same layout with the AndroidX patterns in
 [ViewModel conventions](viewmodel-conventions.md).
@@ -58,6 +60,9 @@ If the host uses the example navigation, call `xScreen(onOpenDetails = ...)` in 
 and use the host's existing key serialization configuration. Use the settings search provider
 only if the destination should appear in settings search, and register it under a distinct
 Koin qualifier in the owning module. Reuse a registered destination when one already fits.
+
+The content preview uses ready data. Supply preview-safe slots or bindings before previewing
+empty or failure states that resolve dependencies from Koin.
 
 ## Adapt by behavior
 

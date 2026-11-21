@@ -27,12 +27,12 @@ class FaqCatalogUrlExtensionsTest {
         val baseUrl = "https://d4rk.dev/help"
 
         assertEquals(
-            "$baseUrl/debug/catalog.json",
-            baseUrl.faqCatalogUrl(isDebugBuild = true)
+            expected = "$baseUrl/debug/catalog.json",
+            actual = baseUrl.faqCatalogUrl(isDebugBuild = true),
         )
         assertEquals(
-            "$baseUrl/release/catalog.json",
-            baseUrl.faqCatalogUrl(isDebugBuild = false)
+            expected = "$baseUrl/release/catalog.json",
+            actual = baseUrl.faqCatalogUrl(isDebugBuild = false),
         )
     }
 }

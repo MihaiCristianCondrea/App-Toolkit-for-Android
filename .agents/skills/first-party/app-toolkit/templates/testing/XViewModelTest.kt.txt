@@ -1,5 +1,3 @@
-// Copy the license header from a sibling file.
-
 package <base>.feature.x.ui
 
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.FakeTelemetryRepository
@@ -30,11 +28,11 @@ class XViewModelTest {
     private fun advance() = dispatcherExtension.testDispatcher.scheduler.advanceUntilIdle()
 
     @Test
-    fun `initial load shows the entries`() = runTest(dispatcherExtension.testDispatcher) {
+    fun `initial load shows the entries`() = runTest(context = dispatcherExtension.testDispatcher) {
         val viewModel = createViewModel()
         advance()
 
-        assertIs<Loadable.Ready<*>>(viewModel.state.value.items)
+        assertIs<Loadable.Ready<*>>(value = viewModel.state.value.items)
     }
 
     @Test
@@ -43,7 +41,7 @@ class XViewModelTest {
         advance()
 
         val items = viewModel.state.value.items
-        assertTrue(assertIs<Loadable.Failed>(items).retryable)
+        assertTrue(actual = assertIs<Loadable.Failed>(value = items).retryable)
     }
 
     @Test
@@ -53,16 +51,16 @@ class XViewModelTest {
         advance()
 
         repository.fails = false
-        viewModel.onEvent(XEvent.Load)
+        viewModel.onEvent(event = XEvent.Load)
         advance()
 
-        assertIs<Loadable.Ready<*>>(viewModel.state.value.items)
+        assertIs<Loadable.Ready<*>>(value = viewModel.state.value.items)
     }
 
     private class FakeXRepository(var fails: Boolean = false) : XRepository {
         override suspend fun getItems(): List<XModel> {
-            check(!fails) { "Failed to load" }
-            return listOf(XModel(id = "first", title = "First entry", availableQuantity = 1))
+            check(value = !fails) { "Failed to load" }
+            return listOf(element = XModel(id = "first", title = "First entry", availableQuantity = 1))
         }
     }
 }

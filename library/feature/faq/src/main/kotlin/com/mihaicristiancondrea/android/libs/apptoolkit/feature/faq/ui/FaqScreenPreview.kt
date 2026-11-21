@@ -33,14 +33,14 @@ private fun FaqScreenContentPreview() {
         FaqScreenContent(
             state = FaqUiState(
                 questions = Loadable.Ready(
-                    persistentListOf(
+                    value = persistentListOf(
                         FaqItem(
-                            id = FaqId("preview-1"),
+                            id = FaqId(value = "preview-1"),
                             question = "How do I change the theme?",
                             answer = "Open Settings, then Theme, and pick a palette.",
                         ),
                         FaqItem(
-                            id = FaqId("preview-2"),
+                            id = FaqId(value = "preview-2"),
                             question = "Does the app work offline?",
                             answer = "Yes. Everything but the remote questions works offline.",
                         ),

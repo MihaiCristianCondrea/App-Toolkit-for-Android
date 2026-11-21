@@ -19,18 +19,9 @@ package com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.ui.contract
 
 import com.mihaicristiancondrea.android.libs.apptoolkit.integration.review.domain.models.ReviewHost
 
-/**
- * What the user can ask the help page's ViewModel to do.
- */
 sealed interface FaqEvent {
-    /** Loads the questions, on start and on retry. */
     data object Load : FaqEvent
 
-    /**
-     * Asks for the in-app review, falling back to the Play Store listing when it cannot show.
-     *
-     * @property host The activity the review sheet shows over, used only for this request.
-     */
     data class RequestReview(val host: ReviewHost) : FaqEvent
 
     /** The screen opened the Play Store listing that `FaqUiState.openStoreListing` asked for. */

@@ -29,7 +29,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.HelpSc
 fun ShellGraphBuilder.helpScreen() {
     pageIfAbsent<HelpScreen>(
         paneRole = PaneRole.None,
-        title = { stringResource(R.string.help) },
+        title = { stringResource(id = R.string.help) },
         actions = { FaqMenuActions() },
     ) {
         FaqScreen()

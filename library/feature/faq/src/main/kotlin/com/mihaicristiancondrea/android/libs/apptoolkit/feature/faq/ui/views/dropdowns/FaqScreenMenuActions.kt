@@ -54,11 +54,6 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.R
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.ui.analytics.FaqActionNames
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.ui.analytics.faqActionEvent
 
-/**
- * The help page's app bar menu: version information, terms, privacy policy and licenses.
- *
- * `helpScreen()` puts it in the page's app bar. It keeps whether the version dialog is showing itself.
- */
 @Composable
 fun FaqMenuActions() {
     val config: AppVersionInfo = koinInject()
@@ -91,7 +86,7 @@ fun FaqScreenMenuActions(
         modifier = Modifier.graphicsLayer { rotationZ = rotation },
         fromRight = true,
         contentDescription = stringResource(id = com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.R.string.content_description_more_options),
-        icon = ToolkitIcon.Vector(Icons.Default.MoreVert),
+        icon = ToolkitIcon.Vector(imageVector = Icons.Default.MoreVert),
         onClick = { showMenu.value = true }
     )
 
@@ -109,9 +104,9 @@ fun FaqScreenMenuActions(
             icon = Icons.Outlined.Shop,
             onClick = {
                 closeMenu()
-                telemetry.logEvent(faqActionEvent(actionName = FaqActionNames.MENU_PLAY_STORE))
+                telemetry.logEvent(event = faqActionEvent(actionName = FaqActionNames.MENU_PLAY_STORE))
                 context.openUrl(
-                    "${AppLinks.PLAY_STORE_APP}${context.packageName}"
+                    url = "${AppLinks.PLAY_STORE_APP}${context.packageName}"
                 )
             }
         )
@@ -121,7 +116,7 @@ fun FaqScreenMenuActions(
             icon = Icons.Outlined.Info,
             onClick = {
                 closeMenu()
-                telemetry.logEvent(faqActionEvent(actionName = FaqActionNames.MENU_VERSION_INFO))
+                telemetry.logEvent(event = faqActionEvent(actionName = FaqActionNames.MENU_VERSION_INFO))
                 onShowDialogChange(true)
             }
         )
@@ -131,9 +126,9 @@ fun FaqScreenMenuActions(
             icon = Icons.Outlined.Science,
             onClick = {
                 closeMenu()
-                telemetry.logEvent(faqActionEvent(actionName = FaqActionNames.MENU_BETA_PROGRAM))
+                telemetry.logEvent(event = faqActionEvent(actionName = FaqActionNames.MENU_BETA_PROGRAM))
                 context.openUrl(
-                    "${AppLinks.PLAY_STORE_BETA}${context.packageName}"
+                    url = "${AppLinks.PLAY_STORE_BETA}${context.packageName}"
                 )
             }
         )
@@ -143,8 +138,8 @@ fun FaqScreenMenuActions(
             icon = Icons.Outlined.Description,
             onClick = {
                 closeMenu()
-                telemetry.logEvent(faqActionEvent(actionName = FaqActionNames.MENU_TERMS_OF_SERVICE))
-                context.openUrl(AppLinks.TERMS_OF_SERVICE)
+                telemetry.logEvent(event = faqActionEvent(actionName = FaqActionNames.MENU_TERMS_OF_SERVICE))
+                context.openUrl(url = AppLinks.TERMS_OF_SERVICE)
             }
         )
 
@@ -153,8 +148,8 @@ fun FaqScreenMenuActions(
             icon = Icons.Outlined.PrivacyTip,
             onClick = {
                 closeMenu()
-                telemetry.logEvent(faqActionEvent(actionName = FaqActionNames.MENU_PRIVACY_POLICY))
-                context.openUrl(AppLinks.PRIVACY_POLICY)
+                telemetry.logEvent(event = faqActionEvent(actionName = FaqActionNames.MENU_PRIVACY_POLICY))
+                context.openUrl(url = AppLinks.PRIVACY_POLICY)
             }
         )
 
@@ -163,8 +158,8 @@ fun FaqScreenMenuActions(
             icon = Icons.Outlined.Balance,
             onClick = {
                 closeMenu()
-                telemetry.logEvent(faqActionEvent(actionName = FaqActionNames.MENU_LICENSES))
-                navigator.navigate(LicensesRoute)
+                telemetry.logEvent(event = faqActionEvent(actionName = FaqActionNames.MENU_LICENSES))
+                navigator.navigate(key = LicensesRoute)
             }
         )
     }

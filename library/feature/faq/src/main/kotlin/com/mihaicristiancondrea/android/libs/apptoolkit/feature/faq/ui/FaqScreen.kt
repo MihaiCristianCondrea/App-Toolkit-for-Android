@@ -64,33 +64,24 @@ import org.koin.compose.koinInject
 import org.koin.compose.viewmodel.koinViewModel
 import org.koin.core.qualifier.named
 
-/**
- * Help and feedback: the questions, a contact card and a button that opens the feedback sheet.
- *
- * The body of the help page, which `helpScreen()` registers with `FaqMenuActions` in its app bar.
- * This is the stateful half. It owns the [FaqViewModel], tracks the screen, logs each tap, opens
- * links, mail and the store listing, and hands the rendering to [FaqScreenContent].
- *
- * The feedback button stays while the questions load or fail: feedback does not need them.
- */
 @Composable
 fun FaqScreen() {
     val viewModel: FaqViewModel = koinViewModel()
     val state: FaqUiState by viewModel.state.collectAsStateWithLifecycle()
     val telemetry = LocalTelemetry.current
-    val adsConfig: AdsConfig = koinInject(qualifier = named(AdsQualifiers.HELP_NATIVE_AD))
+    val adsConfig: AdsConfig = koinInject(qualifier = named(name = AdsQualifiers.HELP_NATIVE_AD))
     val adsEnabled: Boolean = rememberAdsEnabled()
     val context = LocalContext.current
     val activity = LocalActivity.current
-    val reviewHost: ReviewHost? = remember(activity) { activity?.let(::ReviewHost) }
+    val reviewHost: ReviewHost? = remember(key1 = activity) { activity?.let(block = ::ReviewHost) }
     var showFeedbackSheet: Boolean by rememberSaveable { mutableStateOf(value = false) }
     var feedbackActionSelected: Boolean by remember { mutableStateOf(value = false) }
 
-    LaunchedEffect(state.openStoreListing) {
+    LaunchedEffect(key1 = state.openStoreListing) {
         if (state.openStoreListing) {
-            telemetry.logEvent(faqActionEvent(actionName = FaqActionNames.STORE_LISTING_OPENED))
-            context.openPlayStoreForApp(context.packageName)
-            viewModel.onEvent(FaqEvent.StoreListingOpened)
+            telemetry.logEvent(event = faqActionEvent(actionName = FaqActionNames.STORE_LISTING_OPENED))
+            context.openPlayStoreForApp(packageName = context.packageName)
+            viewModel.onEvent(event = FaqEvent.StoreListingOpened)
         }
     }
 
@@ -99,12 +90,12 @@ fun FaqScreen() {
         status = state.questions,
         viewModel = viewModel,
         fabs = listOf(
-            ToolkitFab(
-                icon = ToolkitIcon.Vector(Icons.Outlined.RateReview),
+            element = ToolkitFab(
+                icon = ToolkitIcon.Vector(imageVector = Icons.Outlined.RateReview),
                 label = stringResource(id = R.string.feedback),
                 onClick = {
                     feedbackActionSelected = false
-                    telemetry.logEvent(faqActionEvent(actionName = FaqActionNames.FEEDBACK_SHEET_OPENED))
+                    telemetry.logEvent(event = faqActionEvent(actionName = FaqActionNames.FEEDBACK_SHEET_OPENED))
                     showFeedbackSheet = true
                 },
             ),
@@ -115,37 +106,37 @@ fun FaqScreen() {
             showFeedbackSheet = showFeedbackSheet,
             onFeedbackSheetDismissed = {
                 if (!feedbackActionSelected) {
-                    telemetry.logEvent(faqActionEvent(actionName = FaqActionNames.FEEDBACK_SHEET_DISMISSED))
+                    telemetry.logEvent(event = faqActionEvent(actionName = FaqActionNames.FEEDBACK_SHEET_DISMISSED))
                 }
                 showFeedbackSheet = false
             },
             onRetry = {
-                telemetry.logEvent(faqActionEvent(actionName = FaqActionNames.RETRY_LOAD))
-                viewModel.onEvent(FaqEvent.Load)
+                telemetry.logEvent(event = faqActionEvent(actionName = FaqActionNames.RETRY_LOAD))
+                viewModel.onEvent(event = FaqEvent.Load)
             },
             onRequestFeature = {
                 feedbackActionSelected = true
                 telemetry.logEvent(
-                    faqSelectContentEvent(
+                    event = faqSelectContentEvent(
                         contentType = FaqContentTypes.FEEDBACK_OPTION,
                         itemId = FaqItemIds.REQUEST_FEATURE,
                     ),
                 )
-                context.openUrl(AppLinks.FEATURE_REQUESTS_FORM)
+                context.openUrl(url = AppLinks.FEATURE_REQUESTS_FORM)
             },
             onLeaveReview = {
                 feedbackActionSelected = true
                 telemetry.logEvent(
-                    faqSelectContentEvent(
+                    event = faqSelectContentEvent(
                         contentType = FaqContentTypes.FEEDBACK_OPTION,
                         itemId = FaqItemIds.LEAVE_REVIEW,
                     ),
                 )
-                reviewHost?.let { host -> viewModel.onEvent(FaqEvent.RequestReview(host = host)) }
+                reviewHost?.let { host -> viewModel.onEvent(event = FaqEvent.RequestReview(host = host)) }
             },
             onQuestionToggled = { question, position, expanded ->
                 telemetry.logEvent(
-                    faqQuestionSelectEvent(
+                    event = faqQuestionSelectEvent(
                         faqId = question.id.value,
                         position = position,
                         expanded = expanded,
@@ -154,12 +145,12 @@ fun FaqScreen() {
             },
             onShowMoreQuestions = {
                 telemetry.logEvent(
-                    faqActionEvent(actionName = FaqActionNames.SHOW_MORE_QUESTIONS),
+                    event = faqActionEvent(actionName = FaqActionNames.SHOW_MORE_QUESTIONS),
                 )
             },
             onContactUs = {
                 telemetry.logEvent(
-                    faqSelectContentEvent(
+                    event = faqSelectContentEvent(
                         contentType = FaqContentTypes.SUPPORT,
                         itemId = FaqItemIds.CONTACT_US,
                     ),
@@ -172,27 +163,7 @@ fun FaqScreen() {
     }
 }
 
-/**
- * Renders the help page for [state]: the questions, the contact card and, while
- * [showFeedbackSheet], the feedback sheet. Reports every tap through a callback and does nothing
- * else with it.
- *
- * This is the stateless half of [FaqScreen]: it holds no ViewModel, injects nothing, logs nothing
- * and opens nothing, so it renders in a preview or a test with plain values. The state it keeps is
- * visual: which questions are expanded and whether all of them show.
- *
- * @param showFeedbackSheet Whether the feedback sheet is open; [FaqScreen]'s feedback button opens
- * it.
- * @param onFeedbackSheetDismissed The sheet closed, dismissed or after one of its rows was tapped.
- * @param onRetry Loads the questions again after a failure or an empty result.
- * @param onRequestFeature The sheet's feature request row was tapped.
- * @param onLeaveReview The sheet's review row was tapped.
- * @param onQuestionToggled A question was expanded or collapsed, with its position in the list.
- * @param onShowMoreQuestions The rest of the questions were revealed.
- * @param onContactUs The contact card was tapped.
- * @param contentPadding Padding from the shell, applied inside the list and the state screens.
- * @param adUnitId The native ad slot's unit, or `null` when no ad should show.
- */
+/** @param adUnitId Native ad unit, or `null` to omit the ad slot. */
 @Composable
 internal fun FaqScreenContent(
     state: FaqUiState,
@@ -213,7 +184,6 @@ internal fun FaqScreenContent(
         modifier = modifier,
         contentPadding = contentPadding,
         onRetry = onRetry,
-        // Nothing to show is still worth another try: the catalog may have been updated.
         retryWhenEmpty = true,
     ) { ready ->
         FaqList(

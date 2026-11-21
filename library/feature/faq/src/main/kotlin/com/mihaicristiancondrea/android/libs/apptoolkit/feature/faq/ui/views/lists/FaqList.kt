@@ -57,10 +57,6 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.ui.views.car
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.ui.views.cards.QuestionCard
 import kotlinx.collections.immutable.ImmutableList
 
-/**
- * The questions, five at first and the rest behind Show more, then the native ad and the contact
- * card. Which questions are expanded and whether all of them show is visual state kept here.
- */
 @Composable
 internal fun FaqList(
     questions: ImmutableList<FaqItem>,
@@ -75,7 +71,7 @@ internal fun FaqList(
     val visibleQuestions = if (showAllQuestions) {
         questions
     } else {
-        questions.take(FaqConstants.INITIAL_VISIBLE_QUESTION_COUNT)
+        questions.take(n = FaqConstants.INITIAL_VISIBLE_QUESTION_COUNT)
     }
     val hasHiddenQuestions = questions.size > FaqConstants.INITIAL_VISIBLE_QUESTION_COUNT
     val popularGroupItemCount = visibleQuestions.size + if (hasHiddenQuestions) 1 else 0
@@ -90,7 +86,7 @@ internal fun FaqList(
             start = SizeConstants.LargeSize,
             end = SizeConstants.LargeSize,
         ),
-        verticalArrangement = Arrangement.spacedBy(SizeConstants.ExtraTinySize),
+        verticalArrangement = Arrangement.spacedBy(space = SizeConstants.ExtraTinySize),
     ) {
         animatedItem {
             Text(text = stringResource(id = R.string.popular_help_resources))
@@ -198,7 +194,7 @@ internal fun FaqList(
                 ),
                 onClick = onContactUs,
             )
-            repeat(3) { ExtraLargeVerticalSpacer() }
+            repeat(times = 3) { ExtraLargeVerticalSpacer() }
         }
     }
 }

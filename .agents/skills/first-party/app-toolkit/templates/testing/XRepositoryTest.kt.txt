@@ -1,5 +1,3 @@
-// Copy the license header from a sibling file.
-
 package <base>.feature.x.data.repositories
 
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.exceptions.NetworkException
@@ -20,20 +18,23 @@ class XRepositoryTest {
 
     @Test
     fun `remote entries map to application models`() = runTest {
-        coEvery { remote.fetchItems() } returns listOf(XDto("first", "First entry", 1))
+        coEvery { remote.fetchItems() } returns listOf(element = XDto(id = "first", title = "First entry", availableQuantity = 1))
 
-        assertEquals(listOf(XModel("first", "First entry", 1)), DefaultXRepository(remote).getItems())
+        assertEquals(
+            expected = listOf(element = XModel(id = "first", title = "First entry", availableQuantity = 1)),
+            actual = DefaultXRepository(remote = remote).getItems(),
+        )
     }
 
     @Test
     fun `offline read uses the local snapshot when available`() = runTest {
         val offline = NetworkException(reason = NetworkException.Reason.NO_INTERNET)
         coEvery { remote.fetchItems() } throws offline
-        val saved = listOf(XModel("saved", "Saved entry", 2))
+        val saved = listOf(element = XModel(id = "saved", title = "Saved entry", availableQuantity = 2))
         val local = XLocalDataSource { saved }
 
-        assertEquals(saved, DefaultXRepository(remote, local).getItems())
-        val failure = assertFailsWith<NetworkException> { DefaultXRepository(remote).getItems() }
-        assertSame(offline, failure)
+        assertEquals(expected = saved, actual = DefaultXRepository(remote = remote, local = local).getItems())
+        val failure = assertFailsWith<NetworkException> { DefaultXRepository(remote = remote).getItems() }
+        assertSame(expected = offline, actual = failure)
     }
 }

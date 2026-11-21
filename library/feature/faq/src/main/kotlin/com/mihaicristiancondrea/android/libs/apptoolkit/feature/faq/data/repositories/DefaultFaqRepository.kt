@@ -27,26 +27,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.data.remote.
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.data.remote.mappers.toFaqItems
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.data.remote.models.FaqQuestionDto
 
-/**
- * Implementation of [FaqRepository] that manages the retrieval of FAQ items
- * from both remote and local data sources.
- *
- * Prioritizes remote data from a specified catalog and product, falling back to the bundled local
- * questions when the remote fetch fails or yields nothing usable.
- *
- * Both sources are normalized before they are considered: entries are trimmed, blanks are dropped
- * and repeated ids collapse to their first occurrence. Normalizing here rather than downstream is
- * what makes the fallback correct, a remote catalog of nothing but blank rows now counts as empty
- * and falls through to the local questions instead of rendering blank rows.
- *
- * It needs no dispatcher: the remote calls suspend inside Ktor, and the local questions are string
- * resources, which the system already holds in memory.
- *
- * @property localDataSource The local data source for accessing cached or bundled FAQ questions.
- * @property remoteDataSource The remote data source for fetching FAQ catalogs and questions via network.
- * @property catalogUrl The URL of the remote catalog containing product information.
- * @property productId The identifier used to find the specific product within the catalog.
- */
+/** Uses bundled questions when the remote catalog fails or has no usable entries. */
 class DefaultFaqRepository(
     private val localDataSource: FaqLocalDataSource,
     private val remoteDataSource: FaqRemoteDataSource,
@@ -70,23 +51,19 @@ class DefaultFaqRepository(
         val localItems = localDataSource.loadLocalQuestions().normalizeFaqItems()
         if (localItems.isNotEmpty()) return localItems
 
-        // Nothing to show: the remote failure is the reason, so it reaches the screen. A remote
-        // catalog that loaded but had nothing for this product is not a failure, only empty.
         remoteResult.exceptionOrNull()?.let { failure -> throw failure }
         return emptyList()
     }
 
-    // The catalog must load for there to be anything remote; a question source that fails only
-    // drops its own questions, so the rest still show.
     private suspend fun fetchRemoteFaqItems(): List<FaqItem> {
-        val catalog = networkCall { remoteDataSource.fetchCatalog(catalogUrl) }
+        val catalog = networkCall { remoteDataSource.fetchCatalog(url = catalogUrl) }
         val product = catalog.products.firstOrNull { it.productId == productId || it.key == productId }
             ?: return emptyList()
 
         val questions: List<FaqQuestionDto> = product.questionSources.flatMap { source ->
             runSuspendCatching {
-                networkCall { remoteDataSource.fetchQuestions(source.url) }
-            }.getOrDefault(emptyList())
+                networkCall { remoteDataSource.fetchQuestions(url = source.url) }
+            }.getOrDefault(defaultValue = emptyList())
         }
 
         return questions.toFaqItems()

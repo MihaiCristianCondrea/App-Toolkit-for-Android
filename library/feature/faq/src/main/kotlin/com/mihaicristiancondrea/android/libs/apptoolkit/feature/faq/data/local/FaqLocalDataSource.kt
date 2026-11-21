@@ -22,14 +22,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.data.models.
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.data.models.FaqItem
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.R
 
-/**
- * Local data source responsible for retrieving FAQ items from the application's resources.
- *
- * This class maps predefined string resources to [FaqItem] domain models, providing
- * a static list of questions and answers available offline.
- *
- * @property context The [Context] used to resolve string resources.
- */
+/** Reads the FAQ question and answer pairs supplied through host string resources. */
 class FaqLocalDataSource(private val context: Context) {
     fun loadLocalQuestions(): List<FaqItem> {
         val faq = listOf(
@@ -44,7 +37,7 @@ class FaqLocalDataSource(private val context: Context) {
             R.string.question_9 to R.string.summary_preference_faq_9
         ).map { (questionRes, answerRes) ->
             FaqItem(
-                id = FaqId("local:$questionRes"),
+                id = FaqId(value = "local:$questionRes"),
                 question = context.getString(questionRes),
                 answer = context.getString(answerRes),
             )

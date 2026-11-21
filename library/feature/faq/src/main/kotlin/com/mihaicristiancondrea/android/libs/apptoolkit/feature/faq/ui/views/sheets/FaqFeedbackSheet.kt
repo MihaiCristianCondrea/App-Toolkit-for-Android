@@ -38,10 +38,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.lists.Grou
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.R
 import kotlinx.collections.immutable.persistentListOf
 
-/**
- * The feedback sheet: a feature request or a review. Picking either closes it through [onDismiss]
- * before running the choice.
- */
+/** Dismisses the sheet before invoking the selected feedback action. */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun FaqFeedbackSheet(
@@ -59,7 +56,7 @@ internal fun FaqFeedbackSheet(
             style = MaterialTheme.typography.headlineSmall,
             modifier = Modifier.padding(horizontal = SizeConstants.ExtraLargeCompactSize),
         )
-        Spacer(modifier = Modifier.height(SizeConstants.SmallSize))
+        Spacer(modifier = Modifier.height(height = SizeConstants.SmallSize))
 
         GroupedActionList(
             modifier = Modifier.padding(horizontal = SizeConstants.MediumSize),
@@ -85,6 +82,6 @@ internal fun FaqFeedbackSheet(
             ),
         )
 
-        Spacer(modifier = Modifier.height(SizeConstants.ExtraLargeCompactSize))
+        Spacer(modifier = Modifier.height(height = SizeConstants.ExtraLargeCompactSize))
     }
 }

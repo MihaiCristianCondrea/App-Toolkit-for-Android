@@ -10,10 +10,9 @@
   dependencies, optional `init`, `handleEvent` and private operation methods. For a load
   started in `init`, dispatch its typed event. Use the same event for Retry when it runs
   the same operation.
-- Use typed events and exhaustive dispatch. The initial load and retry should send the same
-  event when they run the same operation. Pick one startup owner. Changelog starts in `init`;
-  Settings starts from the screen. Restoring state or starting a lifetime observer with no load
-  or retry event can have its own initialization.
+- Dispatch exhaustively with `when (event)` and `is` branches, including data-object events.
+  Pick one startup owner. Changelog starts in `init` and Settings starts from the screen.
+  Restore state or start a lifetime observer directly when no load or retry event applies.
 - Delegate substantial work to named private operations. A direct repository setter passed to
   a shared save method or a simple state update can stay in a branch. Keep a single expression
   on one line when it fits the project's formatting.
@@ -30,6 +29,8 @@ Put stable operation names in an `XOperationNames` object in `ui/constants/XOper
 Keep GA4 event names, parameters and builders in `ui/analytics/` or their shared analytics contract. Inline single-use expressions when their meaning is clear at the call
 site. Keep constants that name a policy, stabilize an identifier, or prevent duplication.
 
+Use `traceable-code` for named arguments and `writing-style` for documentation placement.
+
 ## App Toolkit pattern
 
 A catalog with a one-shot load starts at `Loadable.Loading`. Its ViewModel forwards telemetry
@@ -39,12 +40,12 @@ to `LoggedScreenViewModel` without a duplicate property.
 private var loadJob: Job? = null
 
 init {
-    onEvent(CatalogEvent.Load)
+    onEvent(event = CatalogEvent.Load)
 }
 
 override fun handleEvent(event: CatalogEvent) {
     when (event) {
-        CatalogEvent.Load -> loadCatalog()
+        is CatalogEvent.Load -> loadCatalog()
     }
 }
 ```
@@ -53,7 +54,7 @@ Avoid a single-use property for the error fallback.
 
 ```kotlin
 private companion object {
-    val LoadFailedText = UiText.StringResource(R.string.catalog_load_failed)
+    val LoadFailedText = UiText.StringResource(resourceId = R.string.catalog_load_failed)
 }
 ```
 
@@ -64,7 +65,7 @@ onError = { error ->
     setState {
         copy(
             items = error.toFailed(
-                fallback = UiText.StringResource(R.string.catalog_load_failed),
+                fallback = UiText.StringResource(resourceId = R.string.catalog_load_failed),
             ),
         )
     }
@@ -124,16 +125,16 @@ data class CatalogUiState(
 
 class CatalogViewModel(private val repository: CatalogRepository) : ViewModel() {
     private var loadJob: Job? = null
-    private val mutableState = MutableStateFlow(CatalogUiState())
+    private val mutableState = MutableStateFlow(value = CatalogUiState())
     val state = mutableState.asStateFlow()
 
     init {
-        handleEvent(CatalogEvent.Load)
+        handleEvent(event = CatalogEvent.Load)
     }
 
     fun handleEvent(event: CatalogEvent) {
         when (event) {
-            CatalogEvent.Load -> loadCatalog()
+            is CatalogEvent.Load -> loadCatalog()
         }
     }
 

@@ -9,11 +9,15 @@ feature's behavior.
   wrapper, or an existing core API the feature can reuse. Ask for a mapper, reducer or use case
   only when it would own behavior that is currently duplicated or difficult to follow.
 - Check concrete ViewModel visibility, exposed types, declaration order and operation names.
-  Check that `handleEvent` dispatches and private methods carry out substantial work. Look for dropped
+  Verify the exhaustive type-based branches in [ViewModel conventions](viewmodel-conventions.md)
+  and that private methods carry out substantial work. Look for dropped
   interactions, cancelled saves, overlapping observers, and flows that stop on failure with no
   way to resume.
 - Check first load, empty content, usable state after a failure, retry, and the distinction
   between write success and a tap. Check that diagnostics use stable names and bounded context.
+- Check eligible Kotlin call sites against the named-argument rules in `traceable-code`.
+- Apply `writing-style` to new and inherited comments and KDoc in the touched code. Check that
+  policy and integration rationale live in the owning README and remove redundant narration.
 - Check public API impact and feature string ownership. Use relevant specialist skills if
   the review covers localization, security, navigation or another specialized concern.
 

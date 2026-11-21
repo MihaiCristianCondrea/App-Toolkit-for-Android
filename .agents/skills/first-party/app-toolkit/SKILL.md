@@ -14,6 +14,8 @@ metadata:
     - viewmodel
     - navigation
     - consumer integration
+    - feature templates
+    - typed events
 ---
 
 # App Toolkit
@@ -43,7 +45,7 @@ resolved dependency.
 |------------------------------------------------|--------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | Ownership, naming, dependencies                | [Architecture](references/architecture.md)                   | `layered-tree-review` owns placement, `android-data-layer` owns repository and data source behavior, and `android-domain-layer` decides when a use case earns its place. |
 | Compose screen, route-facing content, messages | [Screen contracts](references/screen-contracts.md)           | `android-ui-layer` owns rendering and screen state. Load `navigation-3` when changing navigation.                                                                        |
-| ViewModel, events, coroutine policy            | [ViewModel conventions](references/viewmodel-conventions.md) | `android-ui-layer` owns state and effects. `traceable-code` guides readable dispatch and control flow.                                                                   |
+| ViewModel, events, coroutine policy            | [ViewModel conventions](references/viewmodel-conventions.md) | `android-ui-layer` owns state and effects. `traceable-code` owns Kotlin call sites and readable control flow.                                                                   |
 | Reusable library feature or public API         | [Library development](references/library-development.md)     | Use the owners above for the affected layers and `changelog` for consumer-facing changes.                                                                                |
 | Sample or consumer integration                 | [Consumer integration](references/consumer-integration.md)   | Use the owner of the capability being integrated, such as `android-ui-layer` for screen wiring.                                                                          |
 | Code review                                    | [Code review](references/code-review.md)                     | Load the owners for the code under review.                                                                                                                               |
@@ -56,6 +58,8 @@ Before implementation, identify the affected responsibilities and checks:
   evaluate whether `android-domain-layer` applies. A direct repository call may be enough.
 - Use `navigation-3` for destination or graph changes in a Navigation 3 project, `android-localization`
   for localized resources, and `android-datastore` only for persistence work involving DataStore.
+- Use `traceable-code` for Kotlin call sites and `writing-style` for code documentation and
+  module READMEs. Apply the [code review checks](references/code-review.md) to the touched code.
 - For implementation, use `android-build-validation` to select checks. Use the existing test
   setup and the relevant specialist's testing guidance. Load `testing-setup` when the project
   needs a test strategy or infrastructure.

@@ -1,5 +1,3 @@
-// Copy the license header from a sibling file.
-
 package <base>.feature.x.ui
 
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.telemetry.TelemetryRepository
@@ -16,9 +14,6 @@ import <base>.feature.x.ui.mappers.toXItems
 import <base>.feature.x.ui.states.XUiState
 import kotlinx.coroutines.Job
 
-/**
- * ViewModel for the X screen.
- */
 class XViewModel(
     private val repository: XRepository,
     telemetryRepository: TelemetryRepository,
@@ -31,16 +26,15 @@ class XViewModel(
     private var loadJob: Job? = null
 
     init {
-        onEvent(XEvent.Load)
+        onEvent(event = XEvent.Load)
     }
 
     override fun handleEvent(event: XEvent) {
         when (event) {
-            XEvent.Load -> load()
+            is XEvent.Load -> load()
         }
     }
 
-    // Repeated Load events request the same data, so keep the active fetch.
     private fun load() {
         loadJob = loadJob.ifIsActive {
             launchReport(
@@ -49,7 +43,7 @@ class XViewModel(
                     setState {
                         copy(
                             items = error.toFailed(
-                                fallback = UiText.StringResource(R.string.x_load_failed),
+                                fallback = UiText.StringResource(resourceId = R.string.x_load_failed),
                             ),
                         )
                     }
@@ -57,7 +51,7 @@ class XViewModel(
             ) {
                 setState { copy(items = Loadable.Loading) }
                 val items = repository.getItems().toXItems()
-                setState { copy(items = if (items.isEmpty()) Loadable.Empty() else Loadable.Ready(items)) }
+                setState { copy(items = if (items.isEmpty()) Loadable.Empty() else Loadable.Ready(value = items)) }
             }
         }
     }

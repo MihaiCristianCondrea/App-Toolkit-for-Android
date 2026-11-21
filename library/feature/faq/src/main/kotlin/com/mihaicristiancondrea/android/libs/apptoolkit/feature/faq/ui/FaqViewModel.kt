@@ -34,11 +34,6 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.integration.review.domai
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.Job
 
-/**
- * ViewModel for the help page: the questions, and the review request from the feedback sheet.
- *
- * Both the repository and the review use case are main-safe, so it needs no dispatcher.
- */
 class FaqViewModel(
     private val faqRepository: FaqRepository,
     private val forceInAppReviewUseCase: ForceInAppReviewUseCase,
@@ -53,14 +48,14 @@ class FaqViewModel(
     private var reviewJob: Job? = null
 
     init {
-        onEvent(FaqEvent.Load)
+        onEvent(event = FaqEvent.Load)
     }
 
     override fun handleEvent(event: FaqEvent) {
         when (event) {
-            FaqEvent.Load -> loadFaq()
+            is FaqEvent.Load -> loadFaq()
             is FaqEvent.RequestReview -> requestReview(host = event.host)
-            FaqEvent.StoreListingOpened -> setState { copy(openStoreListing = false) }
+            is FaqEvent.StoreListingOpened -> setState { copy(openStoreListing = false) }
         }
     }
 
@@ -72,7 +67,7 @@ class FaqViewModel(
                     setState {
                         copy(
                             questions = error.toFailed(
-                                fallback = UiText.StringResource(R.string.error_failed_to_load_faq),
+                                fallback = UiText.StringResource(resourceId = R.string.error_failed_to_load_faq),
                             ),
                         )
                     }
@@ -89,7 +84,7 @@ class FaqViewModel(
                         questions = if (questions.isEmpty()) {
                             Loadable.Empty()
                         } else {
-                            Loadable.Ready(questions.toImmutableList())
+                            Loadable.Ready(value = questions.toImmutableList())
                         },
                     )
                 }
@@ -97,8 +92,6 @@ class FaqViewModel(
         }
     }
 
-    // Any outcome but a shown review, a failure included, sends the user to the store listing, so
-    // the request they made always leads somewhere.
     private fun requestReview(host: ReviewHost) {
         reviewJob = reviewJob.restart {
             launchReport(
@@ -112,5 +105,4 @@ class FaqViewModel(
             }
         }
     }
-
 }

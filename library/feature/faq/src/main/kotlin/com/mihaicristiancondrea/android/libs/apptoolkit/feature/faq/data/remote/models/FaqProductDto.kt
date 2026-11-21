@@ -25,6 +25,6 @@ data class FaqProductDto(
     val name: String,
     val productId: String,
     val key: String,
-    @SerialName("questionSources")
+    @SerialName(value = "questionSources")
     val questionSources: List<FaqQuestionSourceDto> = emptyList(),
 )

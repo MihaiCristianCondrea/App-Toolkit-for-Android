@@ -1,5 +1,3 @@
-// Copy the license header from a sibling file.
-
 package <base>.feature.x.ui
 
 import androidx.compose.foundation.layout.PaddingValues
@@ -18,13 +16,6 @@ import <base>.feature.x.ui.states.XUiState
 import <base>.feature.x.ui.views.XView
 import org.koin.compose.viewmodel.koinViewModel
 
-/**
- * The X screen. Connects the [XViewModel] and host callbacks, and hands the rendering to [XScreenContent]
- * inside its [ScreenHost], which reports the screen's visits and status and shows its messages.
- *
- * To log an interaction of its own, the screen reads `val telemetry = LocalTelemetry.current` and
- * calls it from a callback.
- */
 @Composable
 fun XScreen(onOpenDetails: (String) -> Unit) {
     val viewModel: XViewModel = koinViewModel()
@@ -40,14 +31,6 @@ fun XScreen(onOpenDetails: (String) -> Unit) {
     }
 }
 
-/**
- * Renders [state] and reports what the user does through callbacks. Holds no ViewModel, injects
- * nothing and does not navigate, so it renders in a preview or a test with plain values.
- *
- * @param onEvent Receives the events [XViewModel] handles.
- * @param onOpenDetails Opens an entry's details. Navigation belongs to the caller.
- * @param contentPadding Padding from the shell, applied inside the list and the state screens.
- */
 @Composable
 internal fun XScreenContent(
     state: XUiState,
