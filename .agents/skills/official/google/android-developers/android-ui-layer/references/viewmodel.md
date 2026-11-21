@@ -45,7 +45,11 @@ private fun load() {
     loadJob = loadJob.restart {
         launchReport(
             action = Actions.LOAD,
-            onError = { error -> setState { copy(items = error.toFailed(fallback = LoadFailedText)) } },
+            onError = { error ->
+                setState {
+                    copy(items = error.toFailed(fallback = UiText.StringResource(R.string.x_load_failed)))
+                }
+            },
         ) {
             setState { copy(items = Loadable.Loading) }
             val items = repository.getItems().toXItems()
@@ -58,8 +62,7 @@ private fun load() {
 - `launchReport` logs the start, runs the block in `viewModelScope`, and on a throw reports it and
   calls `onError`. Cancellation passes through and is never reported.
 - `onError` receives the failure and maps it into state or a message with `toFailed` or
-  `toErrorMessage` (`errors.md`). `LoadFailedText` is the screen's fallback text, a
-  `UiText` constant. Leaving it empty is right only when the user has nothing to see
+  `toErrorMessage` (`errors.md`). The fallback is the screen's localized text. Keep a single-use resource at the call site. Leaving it empty is right only when the user has nothing to see
   or do, as with the About easter egg write.
 - `restart` cancels the previous job before starting the next, so a retry never races the load it
   replaces. An operation where every call must complete, such as a copy or a save, launches without
@@ -76,7 +79,11 @@ private fun observe() {
     observeJob = observeJob.restart {
         repository.observeItems().collectReport(
             action = Actions.OBSERVE,
-            onError = { error -> setState { copy(items = error.toFailed(fallback = LoadFailedText)) } },
+            onError = { error ->
+                setState {
+                    copy(items = error.toFailed(fallback = UiText.StringResource(R.string.x_load_failed)))
+                }
+            },
         ) { items ->
             setState { copy(items = Loadable.Ready(items.toXItems())) }
         }
@@ -105,7 +112,7 @@ into a chain that continues, for example before `stateIn`:
 ```kotlin
 val summary: StateFlow<Loadable<Summary>> = repository.observeSummary()
     .map<Summary, Loadable<Summary>> { Loadable.Ready(it) }
-    .catchReport(action = Actions.OBSERVE_SUMMARY) { error -> emit(error.toFailed(fallback = LoadFailedText)) }
+    .catchReport(action = Actions.OBSERVE_SUMMARY) { error -> emit(error.toFailed(fallback = UiText.StringResource(R.string.x_load_failed))) }
     .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), Loadable.Loading)
 ```
 

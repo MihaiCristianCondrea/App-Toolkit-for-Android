@@ -114,12 +114,12 @@ Prefer a skill set in this repository:
 
 ```text
 .agents/skills/
-├── built-in/          # project family skills: architecture, data, UI, build, localization
-├── android-official/  # Google's Android skills
-└── kotlin-official/   # JetBrains' Kotlin skills
+├── first-party/       # project family skills
+├── official/          # vendor skills grouped by publisher
+└── third-party/       # externally maintained skills
 ```
 
-`built-in/` and `marketing/skills/` are copies of the `android-skills` repository, which is their
+`.agents/skills/` and `marketing/.agents/skills/` are copies of the `android-skills` repository, which is their
 source of truth. Change a shared skill there first, then copy it into each repository that carries
 it, so the copies never drift.
 
@@ -155,29 +155,29 @@ The following are common entry points. This list is not exhaustive.
 
 | Work                                                            | Skill                                                                       |
 |-----------------------------------------------------------------|-----------------------------------------------------------------------------|
-| Build validation, Gradle checks, SDK setup                      | `.agents/skills/built-in/android-build-validation/SKILL.md`                 |
-| Repository, data source, model, threading and caching decisions | `.agents/skills/built-in/architecture/android-data-layer/SKILL.md`          |
-| Domain layer and use-case decisions                             | `.agents/skills/built-in/architecture/android-domain-layer/SKILL.md`        |
-| Screens, ViewModels, UI state, events and messages              | `.agents/skills/built-in/architecture/android-ui-layer/SKILL.md`            |
-| Module and package placement                                    | `.agents/skills/built-in/architecture/layered-tree-review/SKILL.md`         |
-| Navigation 3                                                    | `.agents/skills/android-official/navigation/navigation-3/SKILL.md`          |
-| Navigation events                                               | `.agents/skills/android-official/navigation/navigation-event/SKILL.md`      |
-| Adaptive Compose layouts                                        | `.agents/skills/android-official/jetpack-compose/adaptive/SKILL.md`         |
-| Compose styles and theming                                      | `.agents/skills/android-official/jetpack-compose/theming/styles/SKILL.md`   |
-| Edge-to-edge and system UI                                      | `.agents/skills/android-official/system/edge-to-edge/SKILL.md`              |
-| DataStore                                                       | `.agents/skills/built-in/android-datastore/SKILL.md`                        |
-| WorkManager                                                     | `.agents/skills/built-in/android-workmanager/SKILL.md`                      |
-| Notifications                                                   | `.agents/skills/built-in/android-notification-views/SKILL.md`               |
-| Glance widgets                                                  | `.agents/skills/built-in/glance-widget/SKILL.md`                            |
-| Analytics and Firebase telemetry                                | `.agents/skills/built-in/ga4-app-analytics/SKILL.md`                        |
-| Localization                                                    | `.agents/skills/built-in/localization/SKILL.md`                             |
-| Testing                                                         | `.agents/skills/android-official/testing/testing-setup/SKILL.md`            |
-| R8 and keep rules                                               | `.agents/skills/android-official/performance/r8-analyzer/SKILL.md`          |
-| Intent and component security                                   | `.agents/skills/android-official/security/android-intent-security/SKILL.md` |
-| Changelog updates                                               | `.agents/skills/built-in/changelog/SKILL.md`                                |
+| Build validation, Gradle checks, SDK setup                      | `.agents/skills/first-party/android-build-validation/SKILL.md`                 |
+| Repository, data source, model, threading and caching decisions | `.agents/skills/official/google/android-developers/android-data-layer/SKILL.md`          |
+| Domain layer and use-case decisions                             | `.agents/skills/official/google/android-developers/android-domain-layer/SKILL.md`        |
+| Screens, ViewModels, UI state, events and messages              | `.agents/skills/official/google/android-developers/android-ui-layer/SKILL.md`            |
+| Module and package placement                                    | `.agents/skills/first-party/layered-tree-review/SKILL.md`         |
+| Navigation 3                                                    | `.agents/skills/official/google/android/navigation/navigation-3/SKILL.md`          |
+| Navigation events                                               | `.agents/skills/official/google/android/navigation/navigation-event/SKILL.md`      |
+| Adaptive Compose layouts                                        | `.agents/skills/official/google/android/jetpack-compose/adaptive/SKILL.md`         |
+| Compose styles and theming                                      | `marketing/.agents/skills/official/google/material-ui/SKILL.md`   |
+| Edge-to-edge and system UI                                      | `.agents/skills/official/google/android/system/edge-to-edge/SKILL.md`              |
+| DataStore                                                       | `.agents/skills/official/google/android-developers/android-datastore/SKILL.md`                        |
+| WorkManager                                                     | `.agents/skills/official/google/android-developers/android-workmanager/SKILL.md`                      |
+| Notifications                                                   | `.agents/skills/official/google/android-developers/android-notification-views/SKILL.md`               |
+| Glance widgets                                                  | `.agents/skills/official/google/android-developers/glance-widget/SKILL.md`                            |
+| Analytics and Firebase telemetry                                | `.agents/skills/first-party/ga4-app-analytics/SKILL.md`                        |
+| Localization                                                    | `.agents/skills/first-party/localization/SKILL.md`                             |
+| Testing                                                         | `.agents/skills/official/google/android/testing/testing-setup/SKILL.md`            |
+| R8 and keep rules                                               | `.agents/skills/official/google/android/performance/r8-analyzer/SKILL.md`          |
+| Intent and component security                                   | `.agents/skills/official/google/android/security/android-intent-security/SKILL.md` |
+| Changelog updates                                               | `.agents/skills/first-party/app-changelog/SKILL.md`                                |
 
-Additional specialized skills exist under `android-official/` (such as `build-system/`,
-`device-ai/`, `devtools/`, `play/`, `profilers/` and `wear/`) and under `kotlin-official/`.
+Additional specialized skills exist under `official/google/android/` (such as `build-system/`,
+`device-ai/`, `devtools/`, `play/`, `profilers/` and `wear/`) and under `official/jetbrains/kotlin/`.
 
 Discover the available `SKILL.md` files instead of assuming this table contains every skill.
 

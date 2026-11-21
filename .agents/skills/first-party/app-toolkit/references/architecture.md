@@ -1,8 +1,9 @@
 # Architecture and placement
 
 The reusable Toolkit is organized into core, features, integrations, navigation, shell, and the
-host-facing assembly module. The sample is a host with its own composition root. A consumer app
-can use the same ownership model with fewer modules.
+host-facing assembly module. The sample is a host with its own composition root. A consumer or standalone app
+can use the same ownership model with fewer modules. Apply dependency boundaries to the modules
+it already has.
 
 - Core owns shared infrastructure and contracts. Core, integrations, navigation and shell stay
   independent of concrete Toolkit features and the assembled Toolkit module.
@@ -14,9 +15,10 @@ can use the same ownership model with fewer modules.
 
 Keep a feature's primary screen and ViewModel under `ui/`. Place events in `ui/contracts/`,
 state in `ui/states/`, screen-specific models in `ui/models/`, and reusable Compose pieces in
-`ui/views/`. Give a distinct subfeature its own `ui/features/<name>/` when its screen or flow warrants a separate owner. Keep labels and display conversion close to their UI owner. Use a named formatter,
-mapper, or transformer when the behavior warrants extraction. Follow `layered-tree-review` for
-the detailed package vocabulary and existing exceptions.
+`ui/views/`. Give a distinct subfeature its own `ui/features/<name>/` when its screen or flow warrants a separate owner. Keep labels and display conversion close to their UI owner. Extract a named
+responsibility when it needs an independent contract. Once extracted, place it by responsibility
+using `layered-tree-review`. Local state copies and private ViewModel action names stay with the
+operation that owns them.
 
 Repositories are the data layer entry points. Put repositories in `data/repositories/`, actual
 local or remote sources in `data/local/` or `data/remote/`, and data models in `data/models/`

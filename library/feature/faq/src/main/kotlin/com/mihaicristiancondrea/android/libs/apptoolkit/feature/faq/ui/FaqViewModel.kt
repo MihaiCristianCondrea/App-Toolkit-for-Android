@@ -66,7 +66,15 @@ class FaqViewModel(
         loadJob = loadJob.restart {
             launchReport(
                 action = Actions.LOAD_FAQ,
-                onError = { error -> setState { copy(questions = error.toFailed(fallback = LoadFailedText)) } },
+                onError = { error ->
+                    setState {
+                        copy(
+                            questions = error.toFailed(
+                                fallback = UiText.StringResource(R.string.error_failed_to_load_faq),
+                            ),
+                        )
+                    }
+                },
             ) {
                 telemetryRepository.logBreadcrumb(
                     message = "FAQ fetch started",
@@ -108,7 +116,4 @@ class FaqViewModel(
         const val REQUEST_REVIEW: String = "requestReview"
     }
 
-    private companion object {
-        val LoadFailedText = UiText.StringResource(R.string.error_failed_to_load_faq)
-    }
 }

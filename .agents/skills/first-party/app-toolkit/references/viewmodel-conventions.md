@@ -1,37 +1,39 @@
 # ViewModel conventions
 
-## Required behavior
+## Shared rules
 
-- Use the feature's typed event contract for user actions. Keep dispatch exhaustive and delegate
-  work to named private methods. Prefer direct events such as `SetLayout`, `Load` and `Reset`.
-  A second event hierarchy needs a distinct consumer or purpose.
-- Use the Toolkit's state update API to apply related changes together. In `setState { copy(...) }`,
-  copy the current state so concurrent updates to other fields survive. Replace the whole state
-  only when the operation owns every field.
-- Run screen work in the ViewModel lifecycle. Preserve coroutine cancellation and keep it out of
-  failure messages and telemetry. Give a failed observation a recovery path. Verify whether the
-  repository propagates the error, retries it, or emits a fallback and completes. An error
-  callback in the ViewModel cannot catch a failure the repository already handled.
-- Keep valid state on failed writes and on refresh failures where the existing content is usable.
-  Put a first-load failure in the content state when the screen has no usable data. Only report a
-  successful settings change after persistence succeeds.
+- Declare concrete feature ViewModels as public Kotlin classes (`class XViewModel`). Types in
+  their public signatures, including constructor dependencies, state and events, need compatible
+  visibility. Keep implementation members private. Review API impact before widening visibility
+  in an existing published library.
+- Order members as constructor and properties, optional `init`, event entry point and
+  `handleEvent`, private operations, `private object Actions` when reporting operations,
+  then other necessary class-owned constants.
+- Use typed events and exhaustive dispatch. The initial load and retry should send the same
+  event when they run the same operation. Pick one startup owner. Changelog starts in `init`;
+  Settings starts from the screen. Restoring state or starting a lifetime observer with no load
+  or retry event can have its own initialization.
+- Delegate substantial work to named private operations. A direct repository setter passed to
+  a shared save method or a simple state update can stay in a branch. Keep a single expression
+  on one line when it fits the project's formatting.
+- Update related state fields together. An ordinary `setState { copy(...) }` or
+  `MutableStateFlow.update { it.copy(...) }` is a local update. Extract a reducer when a
+  distinct pure transition needs its own contract. Place that reducer in the owning layer's
+  reducers package.
+- Run work in the ViewModel lifecycle. Preserve cancellation. Make failed observations
+  recoverable and verify whether the repository propagates errors or handles them itself.
+  Keep usable state on failed writes or refreshes when possible. Report successful persistence
+  only after the write completes.
 
-## Preferred declaration order
+Keep stable operation names in the ViewModel's private `Actions` object. Keep shared identifiers
+with their owning contract. Inline single-use expressions when their meaning is clear at the call
+site. Keep constants that name a policy, stabilize an identifier, or prevent duplication.
 
-Declare `XViewModel` with constructor injection and a typed state and event superclass.
-Keep dependencies used by the class as `private val`. Pass telemetry through to the logged
-base class without a second property. Keep stable screen and ViewModel identifiers when the
-base class reports them. Prefer internal declarations for implementation details. If the ViewModel
-is already a public contract, preserve its constructor and exposed types unless the task includes
-a migration.
+## App Toolkit pattern
 
-Order the class as constructor and superclass arguments, private job fields, optional
-initialization, event dispatch, private operation methods, then named constants. Put the first
-load on the same event path as retry. Dispatch it from `init` for eager loading, or from the
-screen for a screen-owned start, as Settings does. Choose one startup owner.
-
-This excerpt matches the Toolkit's Changelog implementation. The state starts with
-`markdown = Loadable.Loading`, and the event contract has one `Load` object.
+Changelog is the reference for a one-shot load. Its public ViewModel takes its use case and
+telemetry through the constructor. It forwards telemetry to `LoggedScreenViewModel` without
+a duplicate property. Its state starts at `Loadable.Loading`.
 
 ```kotlin
 private var loadJob: Job? = null
@@ -47,7 +49,32 @@ override fun handleEvent(event: ChangelogEvent) {
 }
 ```
 
-## Choose the job policy for the operation
+Avoid a single-use field such as the former FAQ fallback.
+
+```kotlin
+private companion object {
+    val LoadFailedText = UiText.StringResource(R.string.error_failed_to_load_faq)
+}
+```
+
+Prefer the resource at the point where the failure is mapped.
+
+```kotlin
+onError = { error ->
+    setState {
+        copy(
+            questions = error.toFailed(
+                fallback = UiText.StringResource(R.string.error_failed_to_load_faq),
+            ),
+        )
+    }
+},
+```
+
+Use `LoggedScreenViewModel` for feature screens with Toolkit reporting, or `ScreenViewModel`
+where the project intentionally has no operation telemetry. Add stable, bounded diagnostic
+context where useful, as Developer Options does with its option key. Keep user-entered text,
+selected values and identifiers out of diagnostic context.
 
 | Operation | Toolkit pattern |
 | --- | --- |
@@ -57,32 +84,76 @@ override fun handleEvent(event: ChangelogEvent) {
 | Save a setting or reset | Use a named `launchReport` operation. Keep independent writes eligible to complete, as Theme does. Choose write ordering according to the repository contract. |
 | Observe an expensive stream | Consider `observeReport` when work should track active state subscribers and emissions may be missed while nobody collects. |
 
-Developer Options attaches retry to the read error. Its screen sends `Load` when the action
-is pressed. The observer updates settings only on a successful emission.
+These helper names come from Toolkit source. Verify them against the resolved dependency when
+working in a consumer app. The Developer Options retry only catches failures the repository
+propagates. Check the production data flow as well as a throwing fake.
+
+## Standalone AndroidX pattern
+
+Use the project's existing AndroidX and coroutine dependencies. This example uses a main-safe
+FAQ repository, one load at a time, and a typed retryable read failure. The screen collects
+`state` with lifecycle awareness and sends `FaqEvent.Load` for Retry. It maps `ReadFailed` to
+localized copy, showing a content error on first load and retaining usable items on refresh.
 
 ```kotlin
-private fun observeSettings() {
-    observeJob = observeJob.restart {
-        preferences.settings.collectReport(
-            action = Actions.OBSERVE_SETTINGS,
-            onError = { error ->
-                showMessage(
-                    error.toErrorMessage().copy(
-                        actionLabel = UiText.StringResource(CoreUiR.string.try_again),
-                    ),
-                )
-            },
-        ) { settings -> setState { copy(settings = settings) } }
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import java.io.IOException
+import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
+
+interface FaqRepository {
+    suspend fun loadQuestions(): List<String>
+}
+
+sealed interface FaqEvent {
+    data object Load : FaqEvent
+}
+
+enum class FaqFailure { ReadFailed }
+
+data class FaqUiState(
+    val questions: List<String> = emptyList(),
+    val loading: Boolean = true,
+    val failure: FaqFailure? = null,
+)
+
+class FaqViewModel(private val repository: FaqRepository) : ViewModel() {
+    private val mutableState = MutableStateFlow(FaqUiState())
+    val state = mutableState.asStateFlow()
+    private var loadJob: Job? = null
+
+    init {
+        handleEvent(FaqEvent.Load)
+    }
+
+    fun handleEvent(event: FaqEvent) {
+        when (event) {
+            FaqEvent.Load -> loadFaq()
+        }
+    }
+
+    private fun loadFaq() {
+        if (loadJob?.isActive == true) return
+        loadJob = viewModelScope.launch {
+            mutableState.update { it.copy(loading = true, failure = null) }
+            try {
+                val questions = repository.loadQuestions()
+                mutableState.update { it.copy(questions = questions, loading = false) }
+            } catch (cancelled: CancellationException) {
+                throw cancelled
+            } catch (error: IOException) {
+                mutableState.update { it.copy(loading = false, failure = FaqFailure.ReadFailed) }
+            }
+        }
     }
 }
 ```
 
-Use `LoggedScreenViewModel` for feature screens. Use `ScreenViewModel` where the project
-intentionally has no operation telemetry. Use named telemetry actions
-such as `Actions.SAVE_OPTION`. When it helps diagnose failures, use a stable bounded value such
-as the option key in `launchReport(extra = ...)`. Keep selected values, user text and identifiers
-out of diagnostic context. Follow the shared analytics contract for product events.
-
-The code excerpt was checked against Toolkit source. Helper names in this reference describe
-that implementation. Verify availability before using them with a published dependency. Keep the
-same behavior with the project's available APIs when a helper is absent.
+Use the failure types declared by the actual repository. Declare `Actions` when the ViewModel
+uses real operation reporting. A small screen needs no reporting base class or reducer to
+follow these conventions.

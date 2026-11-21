@@ -3,7 +3,7 @@
 Inspect the target's Gradle configuration and verification tasks. For implementation, start with
 the affected module's tests, then relevant integration and repository checks. App Toolkit has
 `checkModuleBoundaries`. Verify that this or any other named task exists before using it in a
-consumer. Broaden compilation, JVM tests, or lint as the change warrants. Run Gradle validations
+consumer or standalone app. Broaden compilation, JVM tests, or lint as the change warrants. Run Gradle validations
 serially in the same checkout.
 
 For ViewModel changes, verify observable state and messages with the project's coroutine and

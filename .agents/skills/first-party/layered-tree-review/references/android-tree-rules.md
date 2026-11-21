@@ -132,14 +132,14 @@ Classify by responsibility first and Kotlin syntax second.
 | Use case            | `domain/usecases/`                    | **checked** (`*UseCase.kt`)                                   |
 | Domain package      | `domain/`                             | exists only with a use case, **checked**                      |
 | Mapper              | `mappers/` next to the boundary       | see the mapper table                                          |
-| Reducer             | `ui/reducers/`, `data/reducers/`, or existing `domain/reducers/` | always separate; pure state transition even if one line |
+| Reducer             | `ui/reducers/`, `data/reducers/`, or existing `domain/reducers/` | independently defined pure state transition |
 | Transformer         | owning layer's `transformers/`        | separate any transformation responsibility; size is irrelevant |
 | Validator           | owning layer's `validators/`          | distinguish UI input checks from business and storage rules   |
 | Formatter           | `ui/formatters/` for display text     | data/domain only when the text is their own contract          |
 | Converter           | `data/local/converters/` or `data/remote/converters/` | persistence/API encoding, not DTO-to-model mapping |
 | Adapter             | owning layer's `adapters/`            | bridges genuinely incompatible APIs or contracts             |
 | Layer extension     | owning layer's `extensions/`          | separate every extension that owns this responsibility       |
-| Layer constant      | owning layer's `constants/`           | separate constants by owning layer and concern                |
+| Layer constant      | owning layer's `constants/`           | shared layer-owned constants by concern                |
 | UI model            | `ui/models/`                          |                                                               |
 | UI state            | `ui/states/`                          | **checked** (`*UiState.kt`)                                   |
 | Event               | `ui/contracts/`                       |                                                               |
@@ -196,11 +196,10 @@ function, class, or Flow operator. Use only the category that clarifies actual o
 - **Reducers:** a UI reducer computes the next `UiState` from state and action without
   performing repository calls, navigation, GA4 logging, or persistence. The ViewModel or
   appropriate effect owner handles side effects. Always place a reducer in its own
-  `reducers/` file, including a one-line reducer. This does not require adopting MVI or
-  introducing reducers where no state-reduction operation exists.
-- **Transformers:** classify the operation by responsibility, not syntax. When a Flow pipeline or
-  function derives or combines data, place the named transformation in its own
-  `transformers/` file regardless of size. A DTO-to-model mapping inside a Flow still belongs
+  `reducers/` file, including a short reducer with a distinct contract. A local `setState { copy(...) }` or
+  `MutableStateFlow.update { it.copy(...) }` does not require a reducer.
+- **Transformers:** classify the operation by responsibility, not syntax. Place a named transformation with its own contract in `transformers/`. Keep a local Flow
+  composition with its caller when it only assembles that operation's inputs. A DTO-to-model mapping inside a Flow still belongs
   to `mappers/`. Do not mix transformation and reduction responsibilities in one file.
 - **Validators:** input formatting and presentation checks live in UI. Shared business invariants
   must not depend on UI; if they justify a use case, its domain rules can live in that domain
@@ -210,9 +209,9 @@ function, class, or Flow operator. Use only the category that clarifies actual o
 - **Adapters:** bridge an actual API mismatch, not a routine model transformation. Do not wrap
   an existing compatible interface without a reason.
 
-**Mandatory separation:** each identified responsibility above gets a dedicated, descriptively
-named file in its designated package from the first implementation, even if one line or used only
-once. Do not defer extraction until the feature grows. A file may contain private implementation
+**Mandatory placement:** a distinct responsibility belongs in a descriptively named file in its
+owning package. Size and reuse are not exemptions from placement. Use a separate operation when
+there is an independent responsibility to name. A file may contain private implementation
 details of its own responsibility, but cannot also own a distinct reducer, mapper, validator,
 formatter, converter, transformer, adapter, or extension responsibility. Do not create catch-all
 `Utils.kt`, `Extensions.kt`, or `Reducers.kt` files. Do not create artificial operations merely
@@ -232,7 +231,9 @@ to populate these folders.
   module only when independent modules actually need the same operation.
 - Constants are organized in **each owning layer**: `data/constants/`,
   `domain/constants/` (only with a justified domain layer), and `ui/constants/`.
-  Place new constants in concern-specific files there, even for a single consumer.
+  Place layer-owned constants in concern-specific files. Keep private class-owned identifiers,
+  such as a ViewModel's `Actions` object, in the class. Inline simple single-use values when
+  their meaning is clear.
   `utils/constants/` is reserved for genuinely layer-neutral constants needed across layers.
 - Stable identifiers are contracts, not arbitrary constants: analytics names and parameters
   belong to the owning analytics contract, navigation keys to navigation, persisted keys to
@@ -276,7 +277,8 @@ Stateless UI goes in `views/`. Stateful UI driven by the main screen's ViewModel
 1. Is it reusable or independently meaningful? Prefer a dedicated feature or core module.
 2. Which layer owns its responsibility? Use the placement table.
 3. Is it a mapper, reducer, transformer, validator, formatter, converter, adapter, extension,
-   or constant? Apply its package and file rule every time, regardless of how small it is.
+   or layer-owned constant with independent ownership? Apply its package and file rule. Keep
+   local implementation details with their owner.
 4. Is it a parent-owned surface with its own ViewModel? `ui/features/<name>/` may fit.
 5. Is ownership still unclear? Leave it in place and defer to the relevant architecture skill.
 

@@ -52,10 +52,10 @@ Do not duplicate or override their rules here.
 1. Classify by responsibility before syntax. A DTO-to-model extension is a mapper; a pure
    UI-state transition is a reducer; a display-string function is a formatter even if it is an
    extension function. A Flow operator that owns a transformation follows transformer placement.
-2. Place every identified reducer, mapper, transformer, validator, formatter, converter, adapter,
-   extension, or layer-owned constant in its designated package and responsibility-named file,
-   regardless of size, reuse count, or current complexity. Do not bury a small reducer in a
-   ViewModel or combine it with a mapper in the same file.
+2. Place each independently extracted responsibility and layer-owned constant in its designated
+   package and responsibility-named file. Keep local state copies and private class-owned
+   details, such as a ViewModel's `Actions` object, with their owner. Placement rules do
+   not require extracting a helper.
 3. Keep each responsibility in the owning module and layer. Use the package and file naming rules;
    keep layer-specific constants and extensions in their layer's packages.
 4. Create packages when their first real file is needed. Do not create empty directories, an

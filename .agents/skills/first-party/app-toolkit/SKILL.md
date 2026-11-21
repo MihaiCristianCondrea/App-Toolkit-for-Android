@@ -2,14 +2,14 @@
 name: app-toolkit
 description: >
   Coordinate implementation, code review, and integration for App Toolkit for Android,
-  its sample app, and Android apps built on it. Route work to focused architecture,
-  UI, data, domain, code style, and validation skills using the target project's contracts.
+  its sample app, and Android apps built on it. Apply the shared architecture and ViewModel
+  conventions in standalone Android projects using their existing AndroidX stack.
 ---
 
 # App Toolkit
 
 Start here for App Toolkit work. Identify whether the task changes the reusable library,
-the sample app, or a consumer app. Follow the target's local instructions and identify the owning
+the sample app, a consumer app, or a standalone Android app. Follow the target's local instructions and identify the owning
 module before proposing a change.
 
 - **Toolkit source available.** Read the affected module README, implementation, tests, and build
@@ -20,6 +20,9 @@ module before proposing a change.
   decisions. Verify specific API calls against the consumer's dependencies, IDE declarations,
   sources JAR, artifact, or published docs for its version. If a symbol cannot be verified,
   identify the gap and keep the design independent of that symbol. A Toolkit checkout is optional.
+- **Standalone Android.** Apply the shared architecture and ViewModel conventions to the project's
+  existing AndroidX stack. Use the AndroidX example in the ViewModel reference. Toolkit dependencies
+  and Toolkit-specific APIs are only relevant to projects that already use them.
 
 Read only the references and installed specialist skills that the task needs. Look up specialist
 skills by name in the active catalog, since installations can use different directory layouts.

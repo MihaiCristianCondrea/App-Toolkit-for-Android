@@ -54,7 +54,11 @@ private fun load() {
     loadJob = loadJob.restart {
         launchReport(
             action = Actions.LOAD,
-            onError = { error -> setState { copy(items = error.toFailed(fallback = LoadFailedText)) } },
+            onError = { error ->
+                setState {
+                    copy(items = error.toFailed(fallback = UiText.StringResource(R.string.x_load_failed)))
+                }
+            },
         ) {
             setState { copy(items = Loadable.Loading) }
             setState { copy(items = Loadable.Ready(repository.getItems().toXItems())) }
@@ -65,16 +69,14 @@ private fun load() {
 private fun save() {
     launchReport(
         action = Actions.SAVE,
-        onError = { error -> showMessage(error.toErrorMessage(fallback = SaveFailedText)) },
+        onError = { error ->
+            showMessage(error.toErrorMessage(fallback = UiText.StringResource(R.string.x_save_failed)))
+        },
     ) {
         repository.save(currentState.draft)
     }
 }
 
-private companion object {
-    val LoadFailedText = UiText.StringResource(R.string.x_load_failed)
-    val SaveFailedText = UiText.StringResource(R.string.x_save_failed)
-}
 ```
 
 - A failure that replaces the content goes into state with `toFailed`, which also sets

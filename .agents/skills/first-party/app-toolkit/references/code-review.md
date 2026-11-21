@@ -8,7 +8,8 @@ feature's behavior.
 - Check ownership and package placement. Point out a misplaced file, a redundant use case or
   wrapper, or an existing core API the feature can reuse. Ask for a mapper, reducer or use case
   only when it would own behavior that is currently duplicated or difficult to follow.
-- Check that `handleEvent` dispatches and private methods carry out the work. Look for dropped
+- Check concrete ViewModel visibility, exposed types, declaration order and operation names.
+  Check that `handleEvent` dispatches and private methods carry out substantial work. Look for dropped
   interactions, cancelled saves, overlapping observers, and flows that stop on failure with no
   way to resume.
 - Check first load, empty content, usable state after a failure, retry, and the distinction

@@ -71,6 +71,9 @@ their own queue.
 
 ### ViewModel
 
+For visibility, declaration order, extraction and the standalone AndroidX equivalent, use the
+`app-toolkit` skill's ViewModel conventions. Toolkit APIs below apply to Toolkit screens.
+
 - Extend `LoggedScreenViewModel` for every feature screen. Use the bare `ScreenViewModel` only where
   reporting is unwanted, such as a test double.
 - Pass `screenName` and `viewModelName` as string literals. R8 renames classes, so a name read from

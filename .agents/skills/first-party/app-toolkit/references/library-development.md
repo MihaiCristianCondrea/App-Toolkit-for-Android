@@ -4,10 +4,10 @@ Read the owning module's README and inspect its dependencies, public signatures,
 and route registration before editing. Place behavior in the module that owns it. The assembled
 Toolkit graph wires feature modules and public host contracts. It does not own their implementations.
 
-Prefer an internal ViewModel, event, state and implementation when the host only opens a public
-screen or route. Preserve a documented public ViewModel and its exposed types unless the task
-authorizes an API change. Kotlin visibility alone does not establish what a published version
-supports. Check publishing configuration, the artifact, and compatibility checks when relevant.
+Declare concrete ViewModels and the types they expose with compatible public visibility.
+Keep render-only content and implementation helpers as narrow as their callers allow. Preserve
+existing public contracts during routine changes. Review visibility migrations separately and
+check publishing configuration, the artifact and compatibility checks when relevant.
 
 Inspect host-facing defaults, persisted identifiers, and telemetry keys before changing them.
 For a deliberate API or integration change, update the owning README and consumer-facing changelog,

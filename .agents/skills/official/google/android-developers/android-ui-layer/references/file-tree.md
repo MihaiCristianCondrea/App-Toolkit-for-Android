@@ -82,7 +82,8 @@ A secondary surface with a ViewModel of its own, such as a bottom sheet, repeats
 
 One top-level class or interface per file, named after it. An interface and its implementation are
 two files side by side, as `AboutRepository.kt` and `DefaultAboutRepository.kt` are. Private
-helpers, constants and extension functions may share the file that uses them.
+helpers and private class-owned constants may stay with their owner. Independently extracted
+operations and layer-owned constants follow `layered-tree-review`.
 
 `XScreen` and `XScreenContent` share `XScreen.kt`, the screen first and the content below it, as
 `AboutScreen.kt` does. The two are read and changed together, so one file keeps the screen in one
