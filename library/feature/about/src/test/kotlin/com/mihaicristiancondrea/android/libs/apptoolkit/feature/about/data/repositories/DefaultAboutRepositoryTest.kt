@@ -31,7 +31,7 @@ import org.junit.jupiter.api.extension.RegisterExtension
 import kotlin.test.assertEquals
 import kotlin.test.assertNull
 
-class TestDefaultAboutRepository {
+class DefaultAboutRepositoryTest {
 
     companion object {
         @JvmField

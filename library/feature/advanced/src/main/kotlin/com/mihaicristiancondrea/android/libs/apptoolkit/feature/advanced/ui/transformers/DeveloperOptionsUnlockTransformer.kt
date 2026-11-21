@@ -19,8 +19,9 @@ package com.mihaicristiancondrea.android.libs.apptoolkit.feature.advanced.ui.tra
 
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.models.SeasonalThemeState
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
 
 /** Exposes the seasonal themes unlock as the developer options visibility flag. */
 internal fun Flow<SeasonalThemeState>.toDeveloperOptionsUnlocked(): Flow<Boolean> =
-    map { it.unlocked }
+    map { it.unlocked }.distinctUntilChanged()

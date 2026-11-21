@@ -17,7 +17,10 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.ui.constants
 
-/** Threshold for recognizing the About version gesture. */
+/** Threshold and timing for the About version gesture and celebration. */
 internal object AboutEasterEggConstants {
     const val EASTER_EGG_TAPS: Int = 5
+    const val KONFETTI_DURATION_MILLIS: Long = 3_000L
+    const val KONFETTI_BURST_DURATION_MILLIS: Long = 200L
+    const val KONFETTI_RAIN_DURATION_SECONDS: Long = 3L
 }

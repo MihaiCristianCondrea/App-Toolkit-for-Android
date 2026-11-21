@@ -17,22 +17,20 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.advanced.ui.analytics
 
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.telemetry.models.TrackedScreen
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.telemetry.models.AnalyticsValue
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.telemetry.models.TrackedScreen
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.analytics.SettingsAnalytics
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.analytics.Ga4EventData
 
-internal const val ADVANCED_SETTINGS_SCREEN_NAME = "AdvancedSettings"
+internal val ADVANCED_SETTINGS_SCREEN =
+    TrackedScreen(name = "AdvancedSettings", className = "AdvancedSettingsScreen")
 
 internal fun advancedPreferenceTapEvent(preferenceKey: String): Ga4EventData {
     return Ga4EventData(
         name = SettingsAnalytics.Events.PREFERENCE_VIEW,
         params = mapOf(
-            SettingsAnalytics.Params.SCREEN to AnalyticsValue.Str(value = ADVANCED_SETTINGS_SCREEN_NAME),
+            SettingsAnalytics.Params.SCREEN to AnalyticsValue.Str(value = ADVANCED_SETTINGS_SCREEN.name),
             SettingsAnalytics.Params.PREFERENCE_KEY to AnalyticsValue.Str(value = preferenceKey),
         ),
     )
 }
-
-internal val ADVANCED_SETTINGS_SCREEN =
-    TrackedScreen(name = ADVANCED_SETTINGS_SCREEN_NAME, className = "AdvancedSettingsScreen")

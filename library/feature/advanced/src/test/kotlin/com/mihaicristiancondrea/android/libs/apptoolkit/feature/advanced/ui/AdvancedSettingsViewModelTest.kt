@@ -39,6 +39,7 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.RegisterExtension
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
+import kotlin.test.assertNull
 import kotlin.test.assertTrue
 
 class AdvancedSettingsViewModelTest {
@@ -234,6 +235,40 @@ class AdvancedSettingsViewModelTest {
             advance()
             assertTrue(viewModel.state.value.developerOptionsUnlocked)
             assertTrue(viewModel.messages.value.isEmpty())
+        }
+
+    @Test
+    fun `a non-retryable unlock failure omits the retry action`() =
+        runTest(dispatcherExtension.testDispatcher) {
+            val viewModel = createViewModel(
+                developerOptionsUnlocked = flow {
+                    throw StorageException(reason = StorageException.Reason.CORRUPT)
+                },
+            )
+            advance()
+
+            val message = viewModel.onlyMessage()
+            assertTrue(message.isError)
+            assertNull(message.actionLabel)
+        }
+
+    @Test
+    fun `requesting unlock observation while already active keeps the single collector`() =
+        runTest(dispatcherExtension.testDispatcher) {
+            val unlocked = MutableStateFlow(value = false)
+            var subscriptions = 0
+            val viewModel = createViewModel(
+                developerOptionsUnlocked = flow {
+                    subscriptions += 1
+                    emitAll(flow = unlocked)
+                },
+            )
+            advance()
+
+            viewModel.onEvent(event = AdvancedSettingsEvent.ObserveDeveloperOptions)
+            advance()
+
+            assertEquals(1, subscriptions)
         }
 
     /** Counts each clear; [failure] makes it throw, and [gate] holds it until completed. */

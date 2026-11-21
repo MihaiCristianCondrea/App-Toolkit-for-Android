@@ -19,15 +19,15 @@ package com.mihaicristiancondrea.android.libs.apptoolkit.feature.changelog.ui.st
 
 import androidx.compose.runtime.Immutable
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.Loadable
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.changelog.data.models.ChangelogRelease
+import kotlinx.collections.immutable.ImmutableList
 
 /**
  * State rendered by the changelog dialog.
  *
- * @property markdown Current load result for the full release history.
- * @property currentVersion Installed host version used to mark the current release.
+ * @property releases Current load result for the parsed release history.
  */
 @Immutable
 data class ChangelogUiState(
-    val markdown: Loadable<String> = Loadable.Loading,
-    val currentVersion: String = "",
+    val releases: Loadable<ImmutableList<ChangelogRelease>> = Loadable.Loading,
 )

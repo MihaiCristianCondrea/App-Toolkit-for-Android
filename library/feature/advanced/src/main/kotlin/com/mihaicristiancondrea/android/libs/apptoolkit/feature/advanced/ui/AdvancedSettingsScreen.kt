@@ -17,10 +17,6 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.advanced.ui
 
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.advanced.ui.analytics.ADVANCED_SETTINGS_SCREEN
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.advanced.ui.analytics.AdvancedPreferenceKeys
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.advanced.ui.analytics.advancedPreferenceTapEvent
-
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxHeight
@@ -33,6 +29,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.UiText
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.ScreenHost
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.modifiers.animatedItem
@@ -43,6 +40,9 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preference
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.sheets.IssueReporterSheet
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.shell.contentPadding
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.advanced.R
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.advanced.ui.analytics.ADVANCED_SETTINGS_SCREEN
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.advanced.ui.analytics.AdvancedPreferenceKeys
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.advanced.ui.analytics.advancedPreferenceTapEvent
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.advanced.ui.contracts.AdvancedSettingsEvent
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.advanced.ui.states.AdvancedSettingsUiState
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.advanced.ui.states.CacheClearStatus
@@ -70,7 +70,11 @@ fun AdvancedSettingsScreen() {
         screen = ADVANCED_SETTINGS_SCREEN,
         status = state.cacheClear,
         viewModel = viewModel,
-        onMessageAction = { viewModel.onEvent(event = AdvancedSettingsEvent.ObserveDeveloperOptions) },
+        onMessageAction = { message ->
+            if (message.actionLabel == UiText.StringResource(resourceId = CoreUiR.string.try_again)) {
+                viewModel.onEvent(event = AdvancedSettingsEvent.ObserveDeveloperOptions)
+            }
+        },
     ) {
         AdvancedSettingsScreenContent(
             state = state,

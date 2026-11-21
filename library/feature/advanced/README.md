@@ -36,8 +36,10 @@ to enable bug reporting. With no sheet binding, Advanced Settings omits the bug 
 
 ## Depends on
 
-- `:library:core:common`, `:library:core:network` and `:library:core:ui` for diagnostics, error handling
-  and presentation. Navigation and `SeasonalThemeRepository` are available through Core UI.
+- `:library:core:common` and `:library:core:ui` for diagnostics, error handling, and presentation.
+- [`:library:core:datastore`](../../core/datastore/README.md) for `SeasonalThemeRepository`, which
+  stores the developer options unlock.
+- [`:library:navigation`](../../navigation/README.md) for the route keys and shell graph builder.
 
 ## Used by
 

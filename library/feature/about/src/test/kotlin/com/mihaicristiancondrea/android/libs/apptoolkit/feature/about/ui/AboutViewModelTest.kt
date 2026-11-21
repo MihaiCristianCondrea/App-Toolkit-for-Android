@@ -34,6 +34,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.ui.mappers
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.mockk
+import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.RegisterExtension
@@ -344,6 +345,48 @@ class AboutViewModelTest {
         assertEquals(emptyList(), viewModel.messages.value)
         assertFalse("unlock_achievement" in telemetryRepository.loggedEvents.map { it.name })
     }
+
+    @Test
+    fun `a duplicate load during an active fetch shares the active load`() =
+        runTest(dispatcherExtension.testDispatcher) {
+            val gate = CompletableDeferred<AboutInfo>()
+            var requests = 0
+            val repository = object : AboutRepository {
+                override suspend fun getAboutInfo(): AboutInfo {
+                    requests += 1
+                    return gate.await()
+                }
+            }
+
+            val viewModel = createViewModel(repository = repository)
+            viewModel.onEvent(event = AboutEvent.Load)
+            advance()
+
+            assertEquals(1, requests)
+            assertIs<Loadable.Loading>(viewModel.state.value.items)
+
+            gate.complete(value = defaultAboutInfo)
+            advance()
+
+            assertIs<Loadable.Ready<*>>(viewModel.state.value.items)
+        }
+
+    @Test
+    fun `a failed easter egg unlock reports diagnostics without logging the achievement or showing a message`() =
+        runTest(dispatcherExtension.testDispatcher) {
+            coEvery { seasonalThemes.unlockSeasonalThemes() } throws StorageException(
+                reason = StorageException.Reason.FAILED,
+            )
+            val viewModel = createViewModel()
+            advance()
+
+            viewModel.onEvent(event = AboutEvent.EasterEggFound)
+            advance()
+
+            assertEquals(emptyList(), viewModel.messages.value)
+            assertContains(telemetryRepository.loggedEvents.map { it.name }, "vm_op_error")
+            assertFalse("unlock_achievement" in telemetryRepository.loggedEvents.map { it.name })
+        }
 
     /** Records each accepted copy; [accepts] and [confirmsCopies] set how the system behaves. */
     private class FakeClipboardRepository(

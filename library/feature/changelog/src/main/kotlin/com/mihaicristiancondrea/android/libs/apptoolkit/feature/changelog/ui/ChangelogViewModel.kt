@@ -17,8 +17,6 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.changelog.ui
 
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.changelog.ui.analytics.CHANGELOG_SCREEN
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.changelog.ui.constants.ChangelogOperationNames
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.telemetry.TelemetryRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.UiText
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.Loadable
@@ -26,11 +24,14 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.LoggedScr
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.toFailed
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.changelog.R
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.changelog.domain.usecases.GetChangelogUseCase
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.changelog.ui.analytics.CHANGELOG_SCREEN
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.changelog.ui.constants.ChangelogOperationNames
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.changelog.ui.contracts.ChangelogEvent
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.changelog.ui.states.ChangelogUiState
+import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.Job
 
-/** Loads changelog history on creation and retries through [ChangelogEvent.Load]. */
+/** Loads parsed changelog releases on creation and retries through [ChangelogEvent.Load]. */
 class ChangelogViewModel(
     private val getChangelogUseCase: GetChangelogUseCase,
     telemetryRepository: TelemetryRepository,
@@ -52,7 +53,7 @@ class ChangelogViewModel(
         }
     }
 
-    /** Loads the release history and installed version, sharing an active fetch with duplicate requests. */
+    /** Loads the parsed release history, sharing an active fetch with duplicate requests. */
     private fun loadChangelog() {
         loadJob = loadJob.ifIsActive {
             launchReport(
@@ -60,23 +61,22 @@ class ChangelogViewModel(
                 onError = { error ->
                     setState {
                         copy(
-                            markdown = error.toFailed(
+                            releases = error.toFailed(
                                 fallback = UiText.StringResource(resourceId = R.string.error_loading_changelog_message),
                             ),
                         )
                     }
                 },
             ) {
-                setState { copy(markdown = Loadable.Loading) }
-                val history = getChangelogUseCase()
+                setState { copy(releases = Loadable.Loading) }
+                val releases = getChangelogUseCase()
                 setState {
                     copy(
-                        markdown = if (history.markdown.isBlank()) {
+                        releases = if (releases.isEmpty()) {
                             Loadable.Empty()
                         } else {
-                            Loadable.Ready(value = history.markdown)
+                            Loadable.Ready(value = releases.toImmutableList())
                         },
-                        currentVersion = history.currentVersion,
                     )
                 }
             }

@@ -93,9 +93,9 @@ flowchart TD
   formatted value.
 - The build-version row counts taps toward the easter egg. Clipboard actions on other rows copy the
   displayed value. The licenses row opens `LicensesRoute`.
-- The fifth tap plays konfetti and raises `AboutEvent.EasterEggFound`. `AboutViewModel` records the
-  unlock through `SeasonalThemeRepository`, which keeps the holiday palettes and snowfall available
-  all year.
+- The fifth tap plays konfetti when system animations are enabled and raises
+  `AboutEvent.EasterEggFound`. `AboutViewModel` records the unlock through
+  `SeasonalThemeRepository`, which keeps the holiday palettes and snowfall available all year.
   Only the first unlock shows a snackbar.
 - The page takes its content as a parameter. `aboutPages(about = ...)` lets an app wrap
   `AboutScreen` (to react to version taps, say) and keep the Toolkit's key and pane role, instead of

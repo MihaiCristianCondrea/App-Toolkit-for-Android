@@ -20,12 +20,14 @@ package com.mihaicristiancondrea.android.libs.apptoolkit.feature.changelog.data.
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.telemetry.DiagnosticsReporter
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.api.ApiHost
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.network.data.remote.mappers.toNetworkException
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.changelog.data.models.ChangelogRelease
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.changelog.data.remote.ChangelogRemoteDataSource
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.changelog.data.remote.mappers.toChangelogReleases
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.changelog.data.remote.models.MarkdownResponse
 import io.ktor.http.HttpStatusCode
 
 /**
- * Reads the package-specific changelog from the Android App Metadata API.
+ * Reads the package-specific changelog from the Android App Metadata API and maps it into releases.
  *
  * @param legacyChangelogUrl Compatibility URL used for a blank package or HTTP 404.
  */
@@ -36,17 +38,27 @@ class DefaultChangelogRepository(
     private val diagnostics: DiagnosticsReporter,
 ) : ChangelogRepository {
 
-    override suspend fun getChangelog(packageName: String): String {
-        if (packageName.isBlank()) return getLegacyChangelog(
-            reason = LegacyReason.BLANK_PACKAGE,
-            packageName = packageName,
-        )
+    override suspend fun getChangelog(
+        packageName: String,
+        currentVersion: String,
+    ): List<ChangelogRelease> {
+        val markdown = fetchChangelogMarkdown(packageName = packageName)
+        return markdown.toChangelogReleases(currentVersion = currentVersion)
+    }
+
+    private suspend fun fetchChangelogMarkdown(packageName: String): String {
+        if (packageName.isBlank()) {
+            return getLegacyChangelog(
+                reason = LegacyReason.BLANK_PACKAGE,
+                packageName = packageName,
+            )
+        }
 
         val primary = remoteDataSource.fetchMarkdown(
             url = ApiHost.appChangelogUrl(
                 packageName = packageName,
-                baseUrl = apiBaseUrl
-            )
+                baseUrl = apiBaseUrl,
+            ),
         )
         if (primary.status == HttpStatusCode.NotFound) {
             return getLegacyChangelog(reason = LegacyReason.NOT_FOUND, packageName = packageName)

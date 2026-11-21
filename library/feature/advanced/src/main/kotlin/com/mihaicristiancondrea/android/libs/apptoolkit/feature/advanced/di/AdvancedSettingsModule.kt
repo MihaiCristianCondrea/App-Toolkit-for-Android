@@ -17,17 +17,16 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.advanced.di
 
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.settings.SettingsSearchProvider
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.advanced.ui.search.advancedSettingsSearch
-import org.koin.core.qualifier.named
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.advanced.ui.transformers.toDeveloperOptionsUnlocked
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.repositories.SeasonalThemeRepository
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.telemetry.TelemetryRepository
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.settings.SettingsSearchProvider
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.advanced.data.repositories.CacheRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.advanced.data.repositories.DefaultCacheRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.advanced.ui.AdvancedSettingsViewModel
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.advanced.ui.search.advancedSettingsSearch
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.advanced.ui.transformers.toDeveloperOptionsUnlocked
 import org.koin.core.module.Module
 import org.koin.core.module.dsl.viewModel
+import org.koin.core.qualifier.named
 import org.koin.dsl.module
 
 /**
@@ -36,13 +35,14 @@ import org.koin.dsl.module
  */
 val advancedSettingsModule: Module = module {
     single<SettingsSearchProvider>(qualifier = named(name = "advanced")) { advancedSettingsSearch }
-    single<CacheRepository> {
+    single<DefaultCacheRepository> {
         DefaultCacheRepository(
             context = get(),
-            diagnostics = get<TelemetryRepository>(),
+            diagnostics = get(),
             dispatchers = get(),
         )
     }
+    single<CacheRepository> { get<DefaultCacheRepository>() }
 
     viewModel {
         AdvancedSettingsViewModel(

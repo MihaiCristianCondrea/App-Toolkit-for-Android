@@ -18,21 +18,21 @@
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.changelog.domain.usecases
 
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.BuildInfoRepository
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.changelog.data.models.ChangelogRelease
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.changelog.data.repositories.ChangelogRepository
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.changelog.domain.models.ChangelogHistory
 
-/** Loads the full changelog together with the installed host version. */
+/** Loads the host application's parsed changelog releases with the installed release marked. */
 class GetChangelogUseCase(
     private val repository: ChangelogRepository,
     private val buildInfoRepository: BuildInfoRepository,
 ) {
     /**
-     * Returns the trimmed release history paired with the installed version.
+     * Returns parsed releases in document order for the installed host package and version.
      *
      * Network failures from the repository propagate to the caller.
      */
-    suspend operator fun invoke(): ChangelogHistory = ChangelogHistory(
-        markdown = repository.getChangelog(packageName = buildInfoRepository.packageName).trim(),
+    suspend operator fun invoke(): List<ChangelogRelease> = repository.getChangelog(
+        packageName = buildInfoRepository.packageName,
         currentVersion = buildInfoRepository.appVersion,
     )
 }

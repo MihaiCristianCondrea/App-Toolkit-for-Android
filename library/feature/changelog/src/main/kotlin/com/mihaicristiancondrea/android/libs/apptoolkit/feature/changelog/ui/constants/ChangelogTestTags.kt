@@ -15,12 +15,9 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.mihaicristiancondrea.android.libs.apptoolkit.feature.changelog.ui.models
+package com.mihaicristiancondrea.android.libs.apptoolkit.feature.changelog.ui.constants
 
-/** A parsed release with a separate version line for the release header. */
-internal data class ChangelogRelease(
-    val heading: String,
-    val markdown: String,
-    val isCurrent: Boolean,
-    val versionMarkdown: String = "",
-)
+/** Compose test tags for changelog UI elements. */
+internal object ChangelogTestTags {
+    const val RELEASES: String = "changelog_releases"
+}

@@ -19,6 +19,7 @@ package com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.ui.featur
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Card
@@ -39,28 +40,30 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.ui.feature
 @Composable
 fun AboutLibrariesScreen() {
     ScreenHost(screen = ABOUT_LIBRARIES_SCREEN) {
-        AboutLibrariesScreenContent()
+        AboutLibrariesScreenContent(contentPadding = contentPadding())
     }
 }
 
 @Composable
-private fun AboutLibrariesScreenContent() {
+internal fun AboutLibrariesScreenContent(
+    contentPadding: PaddingValues = PaddingValues(),
+) {
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(paddingValues = contentPadding()),
+            .padding(paddingValues = contentPadding),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         Card {
             Column(modifier = Modifier.padding(all = SizeConstants.MediumSize)) {
                 Text(
-                    text = stringResource(id = R.string.settings),
+                    text = stringResource(id = R.string.oss_license_title),
                     style = MaterialTheme.typography.headlineSmall,
                 )
                 SmallVerticalSpacer()
                 Text(
-                    text = stringResource(id = R.string.settings_placeholder_description),
+                    text = stringResource(id = R.string.summary_preference_settings_oss),
                     style = MaterialTheme.typography.bodyMedium,
                 )
             }

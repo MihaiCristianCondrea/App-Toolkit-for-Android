@@ -18,8 +18,6 @@
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.changelog.ui
 
 
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.ScreenStateHandler
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.changelog.ui.analytics.CHANGELOG_SCREEN
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -32,7 +30,6 @@ import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material.icons.outlined.NewReleases
 import androidx.compose.material3.CircularWavyProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
@@ -40,6 +37,7 @@ import androidx.compose.material3.SheetValue
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberBottomSheetState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -51,14 +49,18 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extens
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.icons.ToolkitIcon
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.Loadable
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.ScreenHost
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.ScreenStateHandler
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.ButtonMeasurements
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.GeneralButton
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.GeneralButtonStyle
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.spacers.LargeHorizontalSpacer
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.changelog.R
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.changelog.data.models.ChangelogRelease
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.changelog.ui.analytics.CHANGELOG_SCREEN
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.changelog.ui.contracts.ChangelogEvent
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.changelog.ui.states.ChangelogUiState
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.changelog.ui.views.lists.ChangelogReleaseList
+import kotlinx.collections.immutable.ImmutableList
 import org.koin.compose.viewmodel.koinViewModel
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.R as CoreUiR
 
@@ -82,17 +84,26 @@ fun ChangelogDialog(
         enabledValues = setOf(SheetValue.Hidden, SheetValue.Expanded),
     )
 
-    ModalBottomSheet(
-        modifier = Modifier.fillMaxHeight(),
-        onDismissRequest = onDismiss,
-        sheetState = sheetState,
-    ) {
-        ScreenHost(screen = CHANGELOG_SCREEN, status = state.markdown, viewModel = viewModel) {
+    LaunchedEffect(key1 = viewModel) {
+        val currentReleases = viewModel.state.value.releases
+        if ((currentReleases is Loadable.Failed) || (currentReleases is Loadable.Empty)) {
+            viewModel.onEvent(event = ChangelogEvent.Load)
+        }
+    }
+
+    ScreenHost(screen = CHANGELOG_SCREEN, status = state.releases) {
+        ModalBottomSheet(
+            modifier = Modifier.fillMaxHeight(),
+            onDismissRequest = onDismiss,
+            sheetState = sheetState,
+        ) {
             ChangelogDialogContent(
                 state = state,
                 onRetry = { viewModel.onEvent(event = ChangelogEvent.Load) },
                 onDismiss = onDismiss,
-                onOpenReleases = releasesUrl?.let { url -> { context.openUrl(url = url) } },
+                onOpenReleases = releasesUrl
+                    ?.takeIf { it.isNotBlank() }
+                    ?.let { url -> { context.openUrl(url = url) } },
             )
         }
     }
@@ -113,13 +124,17 @@ internal fun ChangelogDialogContent(
     modifier: Modifier = Modifier,
     onOpenReleases: (() -> Unit)? = null,
 ) {
-    val markdown: Loadable<String> = state.markdown
-    val canRetry: Boolean = markdown is Loadable.Failed && markdown.retryable
+    val releases: Loadable<ImmutableList<ChangelogRelease>> = state.releases
+    val canRetry: Boolean = (releases is Loadable.Failed) && releases.retryable
 
     Column(
         modifier = modifier
             .fillMaxHeight()
-            .padding(horizontal = SizeConstants.LargeSize),
+            .padding(
+                start = SizeConstants.LargeSize,
+                end = SizeConstants.LargeSize,
+                bottom = SizeConstants.LargeSize,
+            ),
     ) {
         Row(
             modifier = Modifier
@@ -149,7 +164,7 @@ internal fun ChangelogDialogContent(
                 .fillMaxWidth(),
             contentAlignment = Alignment.Center,
         ) {
-            ChangelogBody(markdown = markdown, currentVersion = state.currentVersion)
+            ChangelogBody(releases = releases)
         }
         GeneralButton(
             modifier = Modifier.fillMaxWidth(),
@@ -164,11 +179,10 @@ internal fun ChangelogDialogContent(
     }
 }
 
-@OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
-private fun ChangelogBody(markdown: Loadable<String>, currentVersion: String) {
+private fun ChangelogBody(releases: Loadable<ImmutableList<ChangelogRelease>>) {
     ScreenStateHandler(
-        state = markdown,
+        state = releases,
         showAd = false,
         onLoading = {
             Row(
@@ -183,6 +197,6 @@ private fun ChangelogBody(markdown: Loadable<String>, currentVersion: String) {
         onEmpty = { Text(text = stringResource(id = R.string.no_new_updates_message)) },
         onError = { failure -> Text(text = failure.message.asString()) },
     ) { ready ->
-        ChangelogReleaseList(markdown = ready.value, currentVersion = currentVersion)
+        ChangelogReleaseList(releases = ready.value)
     }
 }

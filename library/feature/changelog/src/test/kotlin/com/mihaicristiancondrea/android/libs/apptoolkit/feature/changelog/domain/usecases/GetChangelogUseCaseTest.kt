@@ -11,6 +11,7 @@ package com.mihaicristiancondrea.android.libs.apptoolkit.feature.changelog.domai
 
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.exceptions.NetworkException
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.BuildInfoRepository
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.changelog.data.models.ChangelogRelease
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.changelog.data.repositories.ChangelogRepository
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Test
@@ -20,40 +21,35 @@ import kotlin.test.assertSame
 class GetChangelogUseCaseTest {
 
     @Test
-    fun `full history and installed version are returned`() = runTest {
-        val history = "# 2.0.0\n- Current\n# 1.0.0\n- Previous"
-        val repository = FakeChangelogRepository(markdown = history)
-        val useCase = GetChangelogUseCase(repository, buildInfo(version = "2.0.0"))
+    fun `full release list is requested with the host package and version`() = runTest {
+        val expected = listOf(
+            ChangelogRelease(heading = "2.0.0", sections = listOf("- Current"), isCurrent = true),
+            ChangelogRelease(heading = "1.0.0", sections = listOf("- Previous"), isCurrent = false),
+        )
+        val repository = FakeChangelogRepository(releases = expected)
+        val useCase = GetChangelogUseCase(
+            repository = repository,
+            buildInfoRepository = buildInfo(version = "2.0.0"),
+        )
 
-        assertEquals(history, useCase().markdown)
-        assertEquals("2.0.0", useCase().currentVersion)
+        assertEquals(expected, useCase())
         assertEquals("com.example.app", repository.requestedPackage)
+        assertEquals("2.0.0", repository.requestedVersion)
     }
 
     @Test
-    fun `full history is shown when current version heading is absent`() = runTest {
-        val history = "# 1.0.0\n- Previous"
+    fun `empty release list remains empty for the localized no updates state`() = runTest {
         val useCase = GetChangelogUseCase(
-            repository = FakeChangelogRepository(markdown = history),
+            repository = FakeChangelogRepository(releases = emptyList()),
             buildInfoRepository = buildInfo(version = "2.0.0"),
         )
 
-        assertEquals(history, useCase().markdown)
-    }
-
-    @Test
-    fun `blank response remains blank for the localized no updates state`() = runTest {
-        val useCase = GetChangelogUseCase(
-            repository = FakeChangelogRepository(markdown = "  "),
-            buildInfoRepository = buildInfo(version = "2.0.0"),
-        )
-
-        assertEquals("", useCase().markdown)
+        assertEquals(emptyList(), useCase())
     }
 
     @Test
     fun `a repository failure passes through`() = runTest {
-        val failure = NetworkException(NetworkException.Reason.SERVER)
+        val failure = NetworkException(reason = NetworkException.Reason.SERVER)
         val useCase = GetChangelogUseCase(
             repository = FakeChangelogRepository(failure = failure),
             buildInfoRepository = buildInfo(version = "2.0.0"),
@@ -71,14 +67,19 @@ class GetChangelogUseCaseTest {
 }
 
 private class FakeChangelogRepository(
-    private val markdown: String = "",
+    private val releases: List<ChangelogRelease> = emptyList(),
     private val failure: Throwable? = null,
 ) : ChangelogRepository {
     var requestedPackage: String? = null
+    var requestedVersion: String? = null
 
-    override suspend fun getChangelog(packageName: String): String {
+    override suspend fun getChangelog(
+        packageName: String,
+        currentVersion: String,
+    ): List<ChangelogRelease> {
         requestedPackage = packageName
+        requestedVersion = currentVersion
         failure?.let { throw it }
-        return markdown
+        return releases
     }
 }

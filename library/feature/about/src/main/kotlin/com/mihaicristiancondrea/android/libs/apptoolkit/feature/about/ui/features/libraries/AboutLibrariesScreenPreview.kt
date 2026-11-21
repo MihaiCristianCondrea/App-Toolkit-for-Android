@@ -15,10 +15,16 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.mihaicristiancondrea.android.libs.apptoolkit.feature.changelog.domain.models
+package com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.ui.features.libraries
 
-/** Full release notes and the host version used to identify the installed release. */
-data class ChangelogHistory(
-    val markdown: String,
-    val currentVersion: String,
-)
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.tooling.preview.Preview
+
+@Preview(showBackground = true)
+@Composable
+private fun AboutLibrariesScreenContentPreview() {
+    MaterialTheme {
+        AboutLibrariesScreenContent()
+    }
+}

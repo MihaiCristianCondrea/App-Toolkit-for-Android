@@ -17,8 +17,6 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.ui
 
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.ui.analytics.ABOUT_SCREEN
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.ui.constants.AboutOperationNames
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.ClipboardRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.telemetry.TelemetryRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.UiText
@@ -31,7 +29,9 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.toErrorMe
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.toFailed
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.R
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.data.repositories.AboutRepository
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.ui.analytics.ABOUT_SCREEN
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.ui.analytics.SEASONAL_THEMES_ACHIEVEMENT
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.ui.constants.AboutOperationNames
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.ui.contracts.AboutEvent
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.ui.mappers.toAboutItems
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.ui.states.AboutUiState
@@ -73,9 +73,9 @@ class AboutViewModel(
         }
     }
 
-    /** Loads and maps About metadata for the screen. A new request replaces the previous load. */
+    /** Loads and maps About metadata for the screen. A duplicate request shares the active load. */
     private fun loadAboutInfo() {
-        loadJob = loadJob.restart {
+        loadJob = loadJob.ifIsActive {
             launchReport(
                 action = AboutOperationNames.LOAD_ABOUT_INFO,
                 onError = { error ->
@@ -107,14 +107,18 @@ class AboutViewModel(
         launchReport(
             action = AboutOperationNames.COPY_TO_CLIPBOARD,
             onError = { error ->
-                showMessage(error.toErrorMessage(fallback = UiText.StringResource(resourceId = R.string.snack_copy_failed)))
+                showMessage(
+                    message = error.toErrorMessage(
+                        fallback = UiText.StringResource(resourceId = R.string.snack_copy_failed),
+                    ),
+                )
             },
         ) {
             clipboardRepository.copyText(label = label, text = text)
             if (!clipboardRepository.confirmsCopies) {
                 showMessage(
-                    UiMessage(
-                        text = successMessage ?: UiText.StringResource(resourceId = R.string.snack_copied_to_clipboard)
+                    message = UiMessage(
+                        text = successMessage ?: UiText.StringResource(resourceId = R.string.snack_copied_to_clipboard),
                     ),
                 )
             }
@@ -129,7 +133,11 @@ class AboutViewModel(
         launchReport(action = AboutOperationNames.UNLOCK_SEASONAL_THEMES) {
             if (seasonalThemes.unlockSeasonalThemes()) {
                 telemetryRepository.logUnlockAchievement(achievementId = SEASONAL_THEMES_ACHIEVEMENT)
-                showMessage(UiMessage(text = UiText.StringResource(resourceId = R.string.snack_seasonal_themes_unlocked)))
+                showMessage(
+                    message = UiMessage(
+                        text = UiText.StringResource(resourceId = R.string.snack_seasonal_themes_unlocked),
+                    ),
+                )
             }
         }
     }

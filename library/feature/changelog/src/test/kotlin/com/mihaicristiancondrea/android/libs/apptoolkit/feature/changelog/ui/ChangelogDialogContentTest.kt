@@ -30,16 +30,22 @@ import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollToNode
 import androidx.compose.ui.unit.dp
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.UiText
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.Loadable
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.changelog.R
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.changelog.data.models.ChangelogRelease
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.changelog.ui.constants.ChangelogTestTags
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.changelog.ui.states.ChangelogUiState
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.persistentListOf
 import org.junit.Assert.assertEquals
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.annotation.Config
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.R as CoreUiR
 
-/** The sheet's info button, which an app shows only when it has a page of more release notes. */
+/** UI contract tests for [ChangelogDialogContent]. */
 @RunWith(AndroidJUnit4::class)
 @Config(sdk = [36])
 class ChangelogDialogContentTest {
@@ -47,22 +53,30 @@ class ChangelogDialogContentTest {
     val compose = createAndroidComposeRule<ComponentActivity>()
 
     private val allReleases: String get() = compose.activity.getString(R.string.changelog_all_releases)
+    private val doneLabel: String get() = compose.activity.getString(CoreUiR.string.done_button_content_description)
+    private val tryAgainLabel: String get() = compose.activity.getString(CoreUiR.string.try_again)
 
     private fun setContent(
-        onOpenReleases: (() -> Unit)?,
-        history: String = "# 1.0.0\n- First release",
-        currentVersion: String = "",
+        onOpenReleases: (() -> Unit)? = null,
+        releases: Loadable<ImmutableList<ChangelogRelease>> = Loadable.Ready(
+            value = persistentListOf(
+                ChangelogRelease(
+                    heading = "1.0.0",
+                    sections = listOf("- First release"),
+                    isCurrent = false,
+                ),
+            ),
+        ),
+        onRetry: () -> Unit = {},
+        onDismiss: () -> Unit = {},
     ) {
         compose.setContent {
             MaterialTheme {
                 ChangelogDialogContent(
-                    state = ChangelogUiState(
-                        markdown = Loadable.Ready(history),
-                        currentVersion = currentVersion
-                    ),
-                    modifier = Modifier.height(480.dp),
-                    onRetry = {},
-                    onDismiss = {},
+                    state = ChangelogUiState(releases = releases),
+                    modifier = Modifier.height(height = 480.dp),
+                    onRetry = onRetry,
+                    onDismiss = onDismiss,
                     onOpenReleases = onOpenReleases,
                 )
             }
@@ -71,16 +85,24 @@ class ChangelogDialogContentTest {
 
     @Test
     fun `opens at the installed release and keeps older and newer releases reachable`() {
-        val notes = (1..30).joinToString("\n") { "- Change $it" }
+        val notes = (1..30).joinToString(separator = "\n") { "- Change $it" }
         setContent(
-            onOpenReleases = null,
-            history = "# 3.0.0\n$notes\n\n# 2.0.0\n$notes\n\n# 1.0.0\n- First release",
-            currentVersion = "2.0.0",
+            releases = Loadable.Ready(
+                value = persistentListOf(
+                    ChangelogRelease(heading = "3.0.0", sections = listOf(notes), isCurrent = false),
+                    ChangelogRelease(heading = "2.0.0", sections = listOf(notes), isCurrent = true),
+                    ChangelogRelease(
+                        heading = "1.0.0",
+                        sections = listOf("- First release"),
+                        isCurrent = false,
+                    ),
+                ),
+            ),
         )
         compose.onNodeWithText(compose.activity.getString(R.string.changelog_current))
             .assertIsDisplayed()
         compose.onNodeWithText("2.0.0").assertIsDisplayed()
-        val list = compose.onNodeWithTag("changelog_releases")
+        val list = compose.onNodeWithTag(ChangelogTestTags.RELEASES)
         list.performScrollToNode(hasText("1.0.0"))
         compose.onNodeWithText("1.0.0").assertIsDisplayed()
         list.performScrollToNode(hasText("3.0.0"))
@@ -89,12 +111,10 @@ class ChangelogDialogContentTest {
 
     @Test
     fun `scrolling content reaches the fixed Done action without an external gap`() {
-        setContent(onOpenReleases = null)
+        setContent()
         val listBottom =
-            compose.onNodeWithTag("changelog_releases").fetchSemanticsNode().boundsInRoot.bottom
-        val doneTop = compose.onNodeWithText(
-            compose.activity.getString(com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.R.string.done_button_content_description),
-        ).fetchSemanticsNode().boundsInRoot.top
+            compose.onNodeWithTag(ChangelogTestTags.RELEASES).fetchSemanticsNode().boundsInRoot.bottom
+        val doneTop = compose.onNodeWithText(doneLabel).fetchSemanticsNode().boundsInRoot.top
         assertEquals(listBottom, doneTop, 1f)
     }
 
@@ -113,5 +133,65 @@ class ChangelogDialogContentTest {
         setContent(onOpenReleases = null)
 
         compose.onNodeWithContentDescription(allReleases).assertDoesNotExist()
+    }
+
+    @Test
+    fun `loading state shows the loading message and Done action`() {
+        var dismissed = 0
+        setContent(
+            releases = Loadable.Loading,
+            onDismiss = { dismissed += 1 },
+        )
+
+        compose.onNodeWithText(compose.activity.getString(R.string.loading_changelog_message))
+            .assertIsDisplayed()
+        compose.onNodeWithText(doneLabel).performClick()
+        assertEquals(1, dismissed)
+    }
+
+    @Test
+    fun `empty state shows the empty message and Done action`() {
+        var dismissed = 0
+        setContent(
+            releases = Loadable.Empty(),
+            onDismiss = { dismissed += 1 },
+        )
+
+        compose.onNodeWithText(compose.activity.getString(R.string.no_new_updates_message))
+            .assertIsDisplayed()
+        compose.onNodeWithText(doneLabel).performClick()
+        assertEquals(1, dismissed)
+    }
+
+    @Test
+    fun `retryable failure shows Try again and triggers retry`() {
+        var retries = 0
+        setContent(
+            releases = Loadable.Failed(
+                message = UiText.DynamicString(content = "Offline"),
+                retryable = true,
+            ),
+            onRetry = { retries += 1 },
+        )
+
+        compose.onNodeWithText("Offline").assertIsDisplayed()
+        compose.onNodeWithText(tryAgainLabel).performClick()
+        assertEquals(1, retries)
+    }
+
+    @Test
+    fun `non-retryable failure shows Done and dismisses`() {
+        var dismissed = 0
+        setContent(
+            releases = Loadable.Failed(
+                message = UiText.DynamicString(content = "Unavailable"),
+                retryable = false,
+            ),
+            onDismiss = { dismissed += 1 },
+        )
+
+        compose.onNodeWithText("Unavailable").assertIsDisplayed()
+        compose.onNodeWithText(doneLabel).performClick()
+        assertEquals(1, dismissed)
     }
 }

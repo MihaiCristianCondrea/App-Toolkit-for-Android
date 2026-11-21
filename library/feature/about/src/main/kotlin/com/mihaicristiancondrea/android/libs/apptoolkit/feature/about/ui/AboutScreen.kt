@@ -17,7 +17,6 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.ui
 
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.ui.analytics.ABOUT_SCREEN
 import android.content.Context
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -28,8 +27,8 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.key
 import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
@@ -37,6 +36,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.context.isSystemAnimationDisabled
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.ScreenHost
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.ScreenStateHandler
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.modifiers.animatedItems
@@ -44,6 +44,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preference
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.SettingsPreferenceItem
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.groupedPreferenceItem
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.shell.contentPadding
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.ui.analytics.ABOUT_SCREEN
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.ui.analytics.aboutPreferenceTapEvent
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.ui.constants.AboutEasterEggConstants
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.ui.contracts.AboutEvent
@@ -103,14 +104,14 @@ internal fun AboutScreenContent(
     onVersionTap: (Int) -> Unit = {},
 ) {
     val context: Context = LocalContext.current
-    var showKonfetti: Boolean by rememberSaveable { mutableStateOf(value = false) }
+    var konfettiBurstId: Int by remember { mutableIntStateOf(value = 0) }
     var versionTapCount: Int by rememberSaveable { mutableIntStateOf(value = 0) }
     var versionTotalTapCount: Int by rememberSaveable { mutableIntStateOf(value = 0) }
 
-    LaunchedEffect(key1 = showKonfetti) {
-        if (showKonfetti) {
-            delay(duration = 3000.milliseconds)
-            showKonfetti = false
+    LaunchedEffect(key1 = konfettiBurstId) {
+        if (konfettiBurstId > 0) {
+            delay(duration = AboutEasterEggConstants.KONFETTI_DURATION_MILLIS.milliseconds)
+            konfettiBurstId = 0
         }
     }
 
@@ -142,7 +143,9 @@ internal fun AboutScreenContent(
                                         versionTapCount += 1
                                         if (versionTapCount >= AboutEasterEggConstants.EASTER_EGG_TAPS) {
                                             versionTapCount = 0
-                                            showKonfetti = true
+                                            if (!context.isSystemAnimationDisabled()) {
+                                                konfettiBurstId += 1
+                                            }
                                             onEvent(AboutEvent.EasterEggFound)
                                         }
                                     }
@@ -174,32 +177,40 @@ internal fun AboutScreenContent(
             },
         )
 
-        if (showKonfetti) {
-            KonfettiView(
-                modifier = Modifier.fillMaxSize(),
-                parties = remember {
-                    listOf(
-                        Party(
-                            speed = 0f,
-                            maxSpeed = 30f,
-                            damping = 0.9f,
-                            spread = Spread.ROUND,
-                            position = Position.Relative(x = 0.5, y = 0.3),
-                            emitter = Emitter(duration = 200, TimeUnit.MILLISECONDS).max(amount = 100),
-                        ),
-                        Party(
-                            emitter = Emitter(duration = 3, TimeUnit.SECONDS).perSecond(amount = 60),
-                            angle = Angle.BOTTOM,
-                            spread = Spread.SMALL,
-                            speed = 5f,
-                            maxSpeed = 15f,
-                            timeToLive = 3000L,
-                            position = Position.Relative(x = 0.0, y = 0.0)
-                                .between(value = Position.Relative(x = 1.0, y = 0.0)),
-                        ),
-                    )
-                },
-            )
+        if (konfettiBurstId > 0) {
+            key(konfettiBurstId) {
+                KonfettiView(
+                    modifier = Modifier.fillMaxSize(),
+                    parties = remember {
+                        listOf(
+                            Party(
+                                speed = 0f,
+                                maxSpeed = 30f,
+                                damping = 0.9f,
+                                spread = Spread.ROUND,
+                                position = Position.Relative(x = 0.5, y = 0.3),
+                                emitter = Emitter(
+                                    duration = AboutEasterEggConstants.KONFETTI_BURST_DURATION_MILLIS,
+                                    timeUnit = TimeUnit.MILLISECONDS,
+                                ).max(amount = 100),
+                            ),
+                            Party(
+                                emitter = Emitter(
+                                    duration = AboutEasterEggConstants.KONFETTI_RAIN_DURATION_SECONDS,
+                                    timeUnit = TimeUnit.SECONDS,
+                                ).perSecond(amount = 60),
+                                angle = Angle.BOTTOM,
+                                spread = Spread.SMALL,
+                                speed = 5f,
+                                maxSpeed = 15f,
+                                timeToLive = AboutEasterEggConstants.KONFETTI_DURATION_MILLIS,
+                                position = Position.Relative(x = 0.0, y = 0.0)
+                                    .between(value = Position.Relative(x = 1.0, y = 0.0)),
+                            ),
+                        )
+                    },
+                )
+            }
         }
     }
 }

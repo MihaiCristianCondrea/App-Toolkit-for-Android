@@ -17,23 +17,23 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.advanced.ui
 
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.advanced.ui.analytics.ADVANCED_SETTINGS_SCREEN
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.isRetryable
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.R as CoreUiR
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.advanced.ui.constants.AdvancedSettingsOperationNames
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.telemetry.TelemetryRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.UiText
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.LoggedScreenViewModel
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.UiMessage
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.isRetryable
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.toErrorMessage
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.advanced.R
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.advanced.data.repositories.CacheRepository
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.advanced.ui.analytics.ADVANCED_SETTINGS_SCREEN
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.advanced.ui.constants.AdvancedSettingsOperationNames
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.advanced.ui.contracts.AdvancedSettingsEvent
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.advanced.ui.states.AdvancedSettingsUiState
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.advanced.ui.states.CacheClearStatus
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.R as CoreUiR
 
 /**
  * Owns cache-clear status and developer options visibility.
@@ -72,7 +72,7 @@ class AdvancedSettingsViewModel(
                 onError = { error ->
                     val message = error.toErrorMessage()
                     showMessage(
-                        if (error.isRetryable) {
+                        message = if (error.isRetryable) {
                             message.copy(actionLabel = UiText.StringResource(resourceId = CoreUiR.string.try_again))
                         } else {
                             message
@@ -92,13 +92,21 @@ class AdvancedSettingsViewModel(
                 action = AdvancedSettingsOperationNames.CLEAR_CACHE,
                 onError = { error ->
                     setState { copy(cacheClear = CacheClearStatus.Failed) }
-                    showMessage(error.toErrorMessage(fallback = UiText.StringResource(resourceId = R.string.cache_cleared_error)))
+                    showMessage(
+                        message = error.toErrorMessage(
+                            fallback = UiText.StringResource(resourceId = R.string.cache_cleared_error),
+                        ),
+                    )
                 },
             ) {
                 setState { copy(cacheClear = CacheClearStatus.Clearing) }
                 repository.clearCache()
                 setState { copy(cacheClear = CacheClearStatus.Idle) }
-                showMessage(UiMessage(text = UiText.StringResource(resourceId = R.string.cache_cleared_success)))
+                showMessage(
+                    message = UiMessage(
+                        text = UiText.StringResource(resourceId = R.string.cache_cleared_success),
+                    ),
+                )
             }
         }
     }

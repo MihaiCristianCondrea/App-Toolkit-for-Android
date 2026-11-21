@@ -32,7 +32,6 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.key
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
@@ -41,23 +40,21 @@ import androidx.compose.ui.unit.dp
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.dividers.HorizontalWavyDivider
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.changelog.R
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.changelog.ui.parsers.splitAtThematicBreaks
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.changelog.ui.parsers.toChangelogReleases
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.changelog.data.models.ChangelogRelease
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.changelog.ui.constants.ChangelogTestTags
 import dev.jeziellago.compose.markdowntext.MarkdownText
+import kotlinx.collections.immutable.ImmutableList
 
-/** Renders the release history and initially positions it at the installed release when present. */
+/** Renders the parsed release history and initially positions it at the installed release when present. */
 @Composable
-internal fun ChangelogReleaseList(markdown: String, currentVersion: String) {
-    key(markdown, currentVersion) {
-        val releases = remember(key1 = markdown, key2 = currentVersion) {
-            markdown.toChangelogReleases(currentVersion = currentVersion)
-        }
+internal fun ChangelogReleaseList(releases: ImmutableList<ChangelogRelease>) {
+    key(releases) {
         val currentIndex = releases.indexOfFirst { it.isCurrent }.coerceAtLeast(minimumValue = 0)
         val listState = rememberLazyListState(initialFirstVisibleItemIndex = currentIndex)
         LazyColumn(
             modifier = Modifier
                 .fillMaxSize()
-                .testTag(tag = "changelog_releases"),
+                .testTag(tag = ChangelogTestTags.RELEASES),
             state = listState,
             contentPadding = PaddingValues(bottom = SizeConstants.LargeSize),
         ) {
@@ -102,7 +99,7 @@ internal fun ChangelogReleaseList(markdown: String, currentVersion: String) {
                             }
                         }
                     }
-                    release.markdown.splitAtThematicBreaks().forEachIndexed { partIndex, part ->
+                    release.sections.forEachIndexed { partIndex, part ->
                         if (partIndex > 0) {
                             HorizontalWavyDivider(modifier = Modifier.padding(vertical = SizeConstants.LargeSize))
                         }
@@ -110,7 +107,7 @@ internal fun ChangelogReleaseList(markdown: String, currentVersion: String) {
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .padding(
-                                    top = if (partIndex == 0 && release.heading.isNotEmpty()) {
+                                    top = if ((partIndex == 0) && release.heading.isNotEmpty()) {
                                         SizeConstants.LargeSize
                                     } else {
                                         0.dp

@@ -18,16 +18,19 @@
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.changelog.data.repositories
 
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.exceptions.NetworkException
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.changelog.data.models.ChangelogRelease
 
-/** Provides Markdown changelog content for a host application package. */
-/** Supplies release notes for a host application. */
+/** Provides parsed changelog releases for a host application package. */
 interface ChangelogRepository {
 
     /**
-     * Returns the changelog Markdown for [packageName], applying the data-layer fallback. Safe to
-     * call from the main thread.
+     * Returns the parsed changelog releases for [packageName], marking exact matches for
+     * [currentVersion] and applying the data-layer fallback. Safe to call from the main thread.
      *
      * @throws NetworkException when the changelog could not be fetched.
      */
-    suspend fun getChangelog(packageName: String): String
+    suspend fun getChangelog(
+        packageName: String,
+        currentVersion: String = "",
+    ): List<ChangelogRelease>
 }
