@@ -17,6 +17,10 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.advanced.ui
 
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.isRetryable
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.R as CoreUiR
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.advanced.ui.constants.CLEAR_CACHE
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.advanced.ui.constants.OBSERVE_DEVELOPER_OPTIONS
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.telemetry.TelemetryRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.UiText
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.LoggedScreenViewModel
@@ -44,7 +48,7 @@ import kotlinx.coroutines.flow.flowOf
 class AdvancedSettingsViewModel(
     private val repository: CacheRepository,
     telemetryRepository: TelemetryRepository,
-    developerOptionsUnlocked: Flow<Boolean> = flowOf(false),
+    private val developerOptionsUnlocked: Flow<Boolean> = flowOf(false),
 ) : LoggedScreenViewModel<AdvancedSettingsUiState, AdvancedSettingsEvent>(
     initialState = AdvancedSettingsUiState(),
     telemetryRepository = telemetryRepository,
@@ -52,9 +56,10 @@ class AdvancedSettingsViewModel(
     viewModelName = "AdvancedSettingsViewModel",
 ) {
     private var clearJob: Job? = null
+    private var observeJob: Job? = null
 
     init {
-        observeDeveloperOptions(unlocked = developerOptionsUnlocked)
+        observeDeveloperOptions()
     }
 
     override fun handleEvent(event: AdvancedSettingsEvent) {
@@ -63,17 +68,30 @@ class AdvancedSettingsViewModel(
         }
     }
 
-    /** A failure leaves the row hidden; the unlock is read again the next time the page opens. */
-    private fun observeDeveloperOptions(unlocked: Flow<Boolean>) {
-        unlocked.collectReport(action = Actions.OBSERVE_DEVELOPER_OPTIONS) { isUnlocked ->
-            setState { copy(developerOptionsUnlocked = isUnlocked) }
+    internal fun observeDeveloperOptions() {
+        observeJob = observeJob.ifIsActive {
+            developerOptionsUnlocked.collectReport(
+                action = OBSERVE_DEVELOPER_OPTIONS,
+                onError = { error ->
+                    val message = error.toErrorMessage()
+                    showMessage(
+                        if (error.isRetryable) {
+                            message.copy(actionLabel = UiText.StringResource(CoreUiR.string.try_again))
+                        } else {
+                            message
+                        },
+                    )
+                },
+            ) { isUnlocked ->
+                setState { copy(developerOptionsUnlocked = isUnlocked) }
+            }
         }
     }
 
     private fun clearCache() {
         clearJob = clearJob.ifIsActive {
             launchReport(
-                action = Actions.CLEAR_CACHE,
+                action = CLEAR_CACHE,
                 onError = { error ->
                     setState { copy(cacheClear = CacheClearStatus.Failed) }
                     showMessage(error.toErrorMessage(fallback = UiText.StringResource(R.string.cache_cleared_error)))
@@ -85,10 +103,5 @@ class AdvancedSettingsViewModel(
                 showMessage(UiMessage(UiText.StringResource(R.string.cache_cleared_success)))
             }
         }
-    }
-
-    private object Actions {
-        const val CLEAR_CACHE: String = "clearCache"
-        const val OBSERVE_DEVELOPER_OPTIONS: String = "observeDeveloperOptions"
     }
 }

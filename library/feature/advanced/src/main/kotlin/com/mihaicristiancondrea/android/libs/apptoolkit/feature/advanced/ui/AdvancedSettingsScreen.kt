@@ -17,7 +17,7 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.advanced.ui
 
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.advanced.ui.analytics.ADVANCED_SETTINGS_SCREEN_NAME
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.advanced.ui.analytics.ADVANCED_SETTINGS_SCREEN
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.advanced.ui.analytics.AdvancedPreferenceKeys
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.advanced.ui.analytics.advancedPreferenceTapEvent
 
@@ -25,7 +25,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -33,9 +32,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.telemetry.models.TrackedScreen
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.ScreenHost
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.modifiers.animatedItem
@@ -54,12 +51,6 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.Develo
 import org.koin.compose.getKoin
 import org.koin.compose.viewmodel.koinViewModel
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.R as CoreUiR
-
-
-private const val ADVANCED_SETTINGS_SCREEN_CLASS = "AdvancedSettingsScreen"
-private val ADVANCED_SETTINGS_SCREEN: TrackedScreen =
-    TrackedScreen(name = ADVANCED_SETTINGS_SCREEN_NAME, className = ADVANCED_SETTINGS_SCREEN_CLASS)
-
 
 
 /**
@@ -82,6 +73,7 @@ fun AdvancedSettingsScreen() {
         screen = ADVANCED_SETTINGS_SCREEN,
         status = state.cacheClear,
         viewModel = viewModel,
+        onMessageAction = { viewModel.observeDeveloperOptions() },
     ) {
         AdvancedSettingsScreenContent(
             state = state,
@@ -182,35 +174,5 @@ internal fun AdvancedSettingsScreenContent(
                 )
             }
         }
-    }
-}
-
-
-
-@Preview(showBackground = true)
-@Composable
-private fun AdvancedSettingsScreenContentPreview() {
-    MaterialTheme {
-        AdvancedSettingsScreenContent(
-            state = AdvancedSettingsUiState(developerOptionsUnlocked = true),
-            onEvent = {},
-            onReportBug = {},
-            onOpenDeveloperOptions = {},
-            showBugReport = true,
-        )
-    }
-}
-
-/** Without an issue reporter and before the easter egg, only the cache row shows. */
-@Preview(showBackground = true)
-@Composable
-private fun AdvancedSettingsScreenContentMinimalPreview() {
-    MaterialTheme {
-        AdvancedSettingsScreenContent(
-            state = AdvancedSettingsUiState(),
-            onEvent = {},
-            onReportBug = {},
-            onOpenDeveloperOptions = {},
-        )
     }
 }

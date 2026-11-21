@@ -17,6 +17,9 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.ui
 
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.ui.constants.LOAD_ABOUT_INFO
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.ui.constants.COPY_TO_CLIPBOARD
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.ui.constants.UNLOCK_SEASONAL_THEMES
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.ClipboardRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.telemetry.TelemetryRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.UiText
@@ -88,7 +91,7 @@ open class AboutViewModel(
     private fun loadAboutInfo() {
         loadJob = loadJob.restart {
             launchReport(
-                action = Actions.LOAD_ABOUT_INFO,
+                action = LOAD_ABOUT_INFO,
                 onError = { error ->
                     setState { copy(items = error.toFailed(fallback = UiText.StringResource(R.string.snack_device_info_failed))) }
                 },
@@ -110,8 +113,7 @@ open class AboutViewModel(
         successMessage: UiText?,
     ) {
         launchReport(
-            action = Actions.COPY_TO_CLIPBOARD,
-            extra = mapOf(ExtraKeys.LABEL to label),
+            action = COPY_TO_CLIPBOARD,
             onError = { error ->
                 showMessage(error.toErrorMessage(fallback = UiText.StringResource(R.string.snack_copy_failed)))
             },
@@ -132,21 +134,11 @@ open class AboutViewModel(
      * retried on a later visit.
      */
     private fun unlockSeasonalThemes() {
-        launchReport(action = Actions.UNLOCK_SEASONAL_THEMES) {
+        launchReport(action = UNLOCK_SEASONAL_THEMES) {
             if (seasonalThemes.unlockSeasonalThemes()) {
                 telemetryRepository.logUnlockAchievement(achievementId = SEASONAL_THEMES_ACHIEVEMENT)
                 showMessage(UiMessage(UiText.StringResource(R.string.snack_seasonal_themes_unlocked)))
             }
         }
-    }
-
-    private object Actions {
-        const val LOAD_ABOUT_INFO: String = "loadAboutInfo"
-        const val COPY_TO_CLIPBOARD: String = "copyToClipboard"
-        const val UNLOCK_SEASONAL_THEMES: String = "unlockSeasonalThemes"
-    }
-
-    private object ExtraKeys {
-        const val LABEL: String = "label"
     }
 }

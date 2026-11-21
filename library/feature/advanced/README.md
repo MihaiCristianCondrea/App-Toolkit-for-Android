@@ -80,7 +80,8 @@ flowchart TD
 - The developer options row is hidden until the About screen's version easter egg is found. The
   ViewModel takes that as a `Flow<Boolean>` (`developerOptionsUnlocked`). The transformer in
   `ui/transformers/` reads `SeasonalThemeRepository`'s unlock, the same flag that keeps the seasonal themes all year,
-  so one discovery unlocks both.
+  so one discovery unlocks both. A failed read keeps the last known unlock state. The error
+  snackbar offers Try again when the failure is retryable.
 - There is no domain layer: the ViewModel calls one repository and holds no reusable business rule.
 
 ## Public contracts

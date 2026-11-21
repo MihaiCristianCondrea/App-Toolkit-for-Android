@@ -18,7 +18,6 @@
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.changelog.ui.transformers
 
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.changelog.ui.models.ChangelogRelease
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.changelog.utils.MarkdownFence
 
 private val heading = Regex("""^ {0,3}(#{1,6})[\t ]+(.+?)[\t ]*#*[\t ]*$""")
 private val date = Regex("""[A-Za-z]+[\t ]+\d{1,2},[\t ]+\d{4}""")
@@ -54,14 +53,14 @@ internal fun String.toChangelogReleases(currentVersion: String): List<ChangelogR
     if (boundaries.isEmpty()) return listOf(ChangelogRelease("", trim(), false))
     val releases = mutableListOf<ChangelogRelease>()
     val introduction = lines.subList(0, boundaries.first()).joinToString("\n")
-        .trim().removeSuffix("---").trim()
+        .trimReleaseMarkdown()
     if (introduction.isNotEmpty() && !introduction.equals("# Changelog", ignoreCase = true)) {
         releases += ChangelogRelease("", introduction, false)
     }
     boundaries.forEachIndexed { index, start ->
         val end = boundaries.getOrNull(index + 1) ?: lines.size
         val body = lines.subList(start + 1, end).joinToString("\n")
-            .trim().removeSuffix("---").trim()
+            .trimReleaseMarkdown()
         val metadata =
             lines.subList(start + 1, end).firstOrNull { it.isNotBlank() }?.trim().orEmpty()
         val versionMetadata = versionLine.matchEntire(metadata)

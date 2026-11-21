@@ -18,6 +18,8 @@
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.changelog.ui
 
 
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.ScreenStateHandler
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.changelog.ui.analytics.CHANGELOG_SCREEN
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -43,10 +45,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.telemetry.models.TrackedScreen
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.UiText
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.context.openUrl
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.icons.ToolkitIcon
@@ -62,8 +61,6 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.feature.changelog.ui.sta
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.changelog.ui.views.lists.ChangelogReleaseList
 import org.koin.compose.viewmodel.koinViewModel
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.R as CoreUiR
-
-private val CHANGELOG_SCREEN = TrackedScreen(name = "Changelog", className = "ChangelogDialog")
 
 /**
  * Displays the host application's package-aware changelog in a modal bottom sheet.
@@ -180,52 +177,22 @@ internal fun ChangelogDialogContent(
 @OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
 private fun ChangelogBody(markdown: Loadable<String>, currentVersion: String) {
-    when (markdown) {
-        Loadable.Loading -> Row(
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.Center,
-        ) {
-            CircularWavyProgressIndicator()
-            LargeHorizontalSpacer()
-            Text(text = stringResource(id = R.string.loading_changelog_message))
-        }
-
-        is Loadable.Failed -> Text(text = markdown.message.asString())
-
-        is Loadable.Empty -> Text(text = stringResource(id = R.string.no_new_updates_message))
-
-        is Loadable.Ready -> ChangelogReleaseList(
-            markdown = markdown.value,
-            currentVersion = currentVersion
-        )
-    }
-}
-
-@Preview(showBackground = true, heightDp = 480)
-@Composable
-private fun ChangelogDialogContentPreview() {
-    MaterialTheme {
-        ChangelogDialogContent(
-            state = ChangelogUiState(
-                markdown = Loadable.Ready("# 2.0.0\n- A new settings search\n\n---\n\n# 1.9.0\n- Faster start"),
-                currentVersion = "2.0.0",
-            ),
-            onRetry = {},
-            onDismiss = {},
-        )
-    }
-}
-
-@Preview(showBackground = true, heightDp = 480)
-@Composable
-private fun ChangelogDialogContentFailedPreview() {
-    MaterialTheme {
-        ChangelogDialogContent(
-            state = ChangelogUiState(
-                markdown = Loadable.Failed(UiText.DynamicString("No internet connection.")),
-            ),
-            onRetry = {},
-            onDismiss = {},
-        )
+    ScreenStateHandler(
+        state = markdown,
+        showAd = false,
+        onLoading = {
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.Center,
+            ) {
+                CircularWavyProgressIndicator()
+                LargeHorizontalSpacer()
+                Text(text = stringResource(id = R.string.loading_changelog_message))
+            }
+        },
+        onEmpty = { Text(text = stringResource(id = R.string.no_new_updates_message)) },
+        onError = { failure -> Text(text = failure.message.asString()) },
+    ) { ready ->
+        ChangelogReleaseList(markdown = ready.value, currentVersion = currentVersion)
     }
 }

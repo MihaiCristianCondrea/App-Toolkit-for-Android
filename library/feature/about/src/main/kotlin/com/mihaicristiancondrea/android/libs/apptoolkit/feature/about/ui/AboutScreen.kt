@@ -17,6 +17,7 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.ui
 
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.ui.analytics.ABOUT_SCREEN
 import android.content.Context
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -24,7 +25,6 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -34,16 +34,11 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.telemetry.models.TrackedScreen
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.UiText
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.Loadable
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.ScreenHost
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.ScreenStateHandler
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.modifiers.animatedItems
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.GroupedItemPosition
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.PreferenceCategoryItem
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.SettingsPreferenceItem
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.groupedPreferenceItem
@@ -53,11 +48,9 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.ui.constan
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.ui.contracts.AboutEvent
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.ui.contracts.AboutItemAction
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.ui.models.AboutItem
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.ui.models.AboutItemKey
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.ui.states.AboutUiState
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.LocalShellNavigator
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.LicensesRoute
-import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.delay
 import nl.dionsegijn.konfetti.compose.KonfettiView
 import nl.dionsegijn.konfetti.core.Angle
@@ -68,9 +61,6 @@ import nl.dionsegijn.konfetti.core.emitter.Emitter
 import org.koin.compose.viewmodel.koinViewModel
 import java.util.concurrent.TimeUnit
 import kotlin.time.Duration.Companion.milliseconds
-
-private val ABOUT_SCREEN: TrackedScreen =
-    TrackedScreen(name = "About", className = "AboutScreen")
 
 /**
  * The "About" screen: information about the application and the device.
@@ -227,39 +217,5 @@ internal fun AboutScreenContent(
                 parties = listOf(konfettiBurst, konfettiRain),
             )
         }
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-private fun AboutScreenContentPreview() {
-    MaterialTheme {
-        AboutScreenContent(
-            state = AboutUiState(
-                items = Loadable.Ready(
-                    persistentListOf(
-                        AboutItem.Header(
-                            key = AboutItemKey.HEADER_APP_INFO,
-                            title = UiText.DynamicString("App information"),
-                        ),
-                        AboutItem.Preference(
-                            key = AboutItemKey.APP_NAME,
-                            title = UiText.DynamicString("App name"),
-                            summary = UiText.DynamicString("App Toolkit Sample"),
-                            position = GroupedItemPosition.FIRST,
-                        ),
-                        AboutItem.Preference(
-                            key = AboutItemKey.APP_BUILD_VERSION,
-                            title = UiText.DynamicString("Version"),
-                            summary = UiText.DynamicString("1.0.0 (100)"),
-                            position = GroupedItemPosition.LAST,
-                            countsVersionTap = true,
-                        ),
-                    )
-                ),
-            ),
-            onEvent = {},
-            onOpenLicenses = {},
-        )
     }
 }

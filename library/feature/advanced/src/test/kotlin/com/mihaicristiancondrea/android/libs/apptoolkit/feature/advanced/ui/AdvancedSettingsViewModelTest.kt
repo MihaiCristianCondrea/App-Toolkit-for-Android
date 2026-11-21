@@ -31,6 +31,8 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.feature.advanced.ui.stat
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.emitAll
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Test
@@ -200,6 +202,38 @@ class AdvancedSettingsViewModelTest {
             advance()
 
             assertTrue(viewModel.state.value.developerOptionsUnlocked)
+        }
+
+    @Test
+    fun `retry resumes unlock observation without discarding the last value`() =
+        runTest(dispatcherExtension.testDispatcher) {
+            val unlocked = MutableStateFlow(false)
+            var firstRead = true
+            val viewModel = createViewModel(
+                developerOptionsUnlocked = flow {
+                    if (firstRead) {
+                        firstRead = false
+                        emit(true)
+                        throw StorageException(reason = StorageException.Reason.FAILED)
+                    }
+                    emitAll(unlocked)
+                },
+            )
+            advance()
+
+            assertTrue(viewModel.state.value.developerOptionsUnlocked)
+            val message = viewModel.onlyMessage()
+            assertEquals(UiText.StringResource(CoreUiR.string.try_again), message.actionLabel)
+
+            viewModel.messageShown(message.id)
+            viewModel.observeDeveloperOptions()
+            advance()
+            assertFalse(viewModel.state.value.developerOptionsUnlocked)
+
+            unlocked.value = true
+            advance()
+            assertTrue(viewModel.state.value.developerOptionsUnlocked)
+            assertTrue(viewModel.messages.value.isEmpty())
         }
 
     /** Counts each clear; [failure] makes it throw, and [gate] holds it until completed. */

@@ -35,7 +35,7 @@ class ChangelogRemoteDataSource(
     suspend fun fetchMarkdown(url: String): MarkdownResponse {
         diagnostics.logBreadcrumb(
             message = "Changelog fetch",
-            attributes = mapOf("url" to url),
+            attributes = emptyMap(),
         )
         return networkCall {
             val response = client.get(url) {

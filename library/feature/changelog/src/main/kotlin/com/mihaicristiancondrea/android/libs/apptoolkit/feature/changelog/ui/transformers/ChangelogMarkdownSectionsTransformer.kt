@@ -17,7 +17,6 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.changelog.ui.transformers
 
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.changelog.utils.MarkdownFence
 
 /**
  * Splits Markdown at its thematic breaks (`---`, `***` or `___` on a line of their own), so each
@@ -50,3 +49,16 @@ internal fun String.splitAtThematicBreaks(): List<String> {
 
 /** Three or more of the same `-`, `*` or `_`, spaces allowed between, indented at most three. */
 private val ThematicBreak = Regex("""^ {0,3}([-*_])(?:\s*\1){2,}\s*$""")
+
+/** Removes a trailing thematic break while keeping literal text and fenced Markdown intact. */
+internal fun String.trimReleaseMarkdown(): String {
+    val lines = trimEnd().lines()
+    if (lines.size < 2 || !lines[lines.lastIndex - 1].isBlank() || !ThematicBreak.matches(lines.last())) {
+        return trim()
+    }
+    val fence = MarkdownFence()
+    for (index in 0 until lines.lastIndex) {
+        fence.consume(lines[index])
+    }
+    return if (fence.consume(lines.last())) trim() else lines.dropLast(1).joinToString("\n").trim()
+}

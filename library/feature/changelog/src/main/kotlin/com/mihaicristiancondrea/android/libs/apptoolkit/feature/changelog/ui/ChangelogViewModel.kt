@@ -17,6 +17,7 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.changelog.ui
 
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.changelog.ui.constants.LOAD_CHANGELOG
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.telemetry.TelemetryRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.UiText
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.Loadable
@@ -57,8 +58,16 @@ class ChangelogViewModel(
     private fun loadChangelog() {
         loadJob = loadJob.ifIsActive {
             launchReport(
-                action = Actions.LOAD_CHANGELOG,
-                onError = { error -> setState { copy(markdown = error.toFailed(fallback = LoadFailedText)) } },
+                action = LOAD_CHANGELOG,
+                onError = { error ->
+                    setState {
+                        copy(
+                            markdown = error.toFailed(
+                                fallback = UiText.StringResource(R.string.error_loading_changelog_message),
+                            ),
+                        )
+                    }
+                },
             ) {
                 setState { copy(markdown = Loadable.Loading) }
                 val history = getChangelogUseCase()
@@ -72,13 +81,5 @@ class ChangelogViewModel(
                 }
             }
         }
-    }
-
-    private object Actions {
-        const val LOAD_CHANGELOG: String = "loadChangelog"
-    }
-
-    private companion object {
-        val LoadFailedText = UiText.StringResource(R.string.error_loading_changelog_message)
     }
 }

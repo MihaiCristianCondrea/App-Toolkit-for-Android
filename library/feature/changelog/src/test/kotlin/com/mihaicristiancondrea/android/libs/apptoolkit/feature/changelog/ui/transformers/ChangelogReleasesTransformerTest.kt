@@ -58,6 +58,21 @@ class ChangelogReleasesTransformerTest {
     }
 
     @Test
+    fun `only a trailing thematic break is removed`() {
+        val history = "# Changelog\n\n---\n\n# 2.0.0\n- Keep the marker---\n\n---\n\n# 1.0.0\nHeading\n---"
+        val releases = history.toChangelogReleases("2.0.0")
+
+        assertEquals(listOf("- Keep the marker---", "Heading\n---"), releases.map { it.markdown })
+        assertEquals("- Keep the marker---", "# 2.0.0\n- Keep the marker---".toChangelogReleases("").single().markdown)
+    }
+
+    @Test
+    fun `a break inside an open code fence remains literal`() {
+        val body = "~~~text\nExample\n\n---"
+        assertEquals(body, "# 2.0.0\n\n$body".toChangelogReleases("2.0.0").single().markdown)
+    }
+
+    @Test
     fun `unknown versions and unstructured documents retain all content`() {
         val history = "# 1.0.0\n- Notes"
         assertFalse(history.toChangelogReleases("2.0.0").single().isCurrent)

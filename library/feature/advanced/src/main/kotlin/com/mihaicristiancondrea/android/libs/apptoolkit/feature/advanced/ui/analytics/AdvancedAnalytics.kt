@@ -17,6 +17,7 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.advanced.ui.analytics
 
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.telemetry.models.TrackedScreen
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.telemetry.models.AnalyticsValue
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.analytics.SettingsAnalytics
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.analytics.Ga4EventData
@@ -32,3 +33,6 @@ internal fun advancedPreferenceTapEvent(preferenceKey: String): Ga4EventData {
         ),
     )
 }
+
+internal val ADVANCED_SETTINGS_SCREEN =
+    TrackedScreen(name = "AdvancedSettings", className = "AdvancedSettingsScreen")
