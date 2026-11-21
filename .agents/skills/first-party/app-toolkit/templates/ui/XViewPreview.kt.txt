@@ -1,0 +1,17 @@
+// Copy the license header from a sibling file.
+
+package <base>.feature.x.ui.views
+
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.tooling.preview.Preview
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.UiText
+import <base>.feature.x.ui.models.XItem
+
+@Preview(showBackground = true)
+@Composable
+private fun XViewPreview() {
+    MaterialTheme {
+        XView(item = XItem(key = "first", title = UiText.DynamicString("First entry")), onClick = {})
+    }
+}

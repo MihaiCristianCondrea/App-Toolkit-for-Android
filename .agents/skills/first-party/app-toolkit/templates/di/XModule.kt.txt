@@ -2,20 +2,22 @@
 
 package <base>.feature.x.di
 
+import <base>.feature.x.data.remote.XRemoteDataSource
 import <base>.feature.x.data.repositories.DefaultXRepository
 import <base>.feature.x.data.repositories.XRepository
 import <base>.feature.x.ui.XViewModel
 import org.koin.core.module.Module
 import org.koin.core.module.dsl.viewModel
+import org.koin.core.qualifier.named
 import org.koin.dsl.module
 
 val xModule: Module = module {
-    single<XRepository> { DefaultXRepository(/* named arguments, each get() */) }
-
-    viewModel {
-        XViewModel(
-            repository = get(),
-            telemetryRepository = get(),
+    single {
+        XRemoteDataSource(
+            client = get(),
+            endpoint = get(qualifier = named("xEndpoint")),
         )
     }
+    single<XRepository> { DefaultXRepository(remote = get()) }
+    viewModel { XViewModel(repository = get(), telemetryRepository = get()) }
 }

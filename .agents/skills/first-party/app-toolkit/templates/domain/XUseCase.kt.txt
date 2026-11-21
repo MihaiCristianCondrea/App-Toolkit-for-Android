@@ -1,0 +1,14 @@
+// Copy the license header from a sibling file.
+
+package <base>.feature.x.domain.usecases
+
+import <base>.feature.x.data.models.XModel
+import <base>.feature.x.data.repositories.XRepository
+
+/** Selects stock that can fulfill a positive requested quantity. */
+class XUseCase(private val repository: XRepository) {
+    suspend operator fun invoke(quantity: Int): List<XModel> {
+        require(quantity > 0)
+        return repository.getItems().filter { it.availableQuantity >= quantity }
+    }
+}

@@ -1,0 +1,5 @@
+// Copy the license header from a sibling file.
+
+package <base>.feature.x.data.models
+
+data class XModel(val id: String, val title: String, val availableQuantity: Int)

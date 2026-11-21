@@ -1,0 +1,39 @@
+// Copy the license header from a sibling file.
+
+package <base>.feature.x.data.repositories
+
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.exceptions.NetworkException
+import <base>.feature.x.data.local.XLocalDataSource
+import <base>.feature.x.data.models.XModel
+import <base>.feature.x.data.remote.XRemoteDataSource
+import <base>.feature.x.data.remote.models.XDto
+import io.mockk.coEvery
+import io.mockk.mockk
+import kotlinx.coroutines.test.runTest
+import org.junit.jupiter.api.Test
+import kotlin.test.assertEquals
+import kotlin.test.assertFailsWith
+import kotlin.test.assertSame
+
+class XRepositoryTest {
+    private val remote = mockk<XRemoteDataSource>()
+
+    @Test
+    fun `remote entries map to application models`() = runTest {
+        coEvery { remote.fetchItems() } returns listOf(XDto("first", "First entry", 1))
+
+        assertEquals(listOf(XModel("first", "First entry", 1)), DefaultXRepository(remote).getItems())
+    }
+
+    @Test
+    fun `offline read uses the local snapshot when available`() = runTest {
+        val offline = NetworkException(reason = NetworkException.Reason.NO_INTERNET)
+        coEvery { remote.fetchItems() } throws offline
+        val saved = listOf(XModel("saved", "Saved entry", 2))
+        val local = XLocalDataSource { saved }
+
+        assertEquals(saved, DefaultXRepository(remote, local).getItems())
+        val failure = assertFailsWith<NetworkException> { DefaultXRepository(remote).getItems() }
+        assertSame(offline, failure)
+    }
+}

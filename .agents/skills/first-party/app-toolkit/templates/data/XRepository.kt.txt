@@ -1,0 +1,9 @@
+// Copy the license header from a sibling file.
+
+package <base>.feature.x.data.repositories
+
+import <base>.feature.x.data.models.XModel
+
+interface XRepository {
+    suspend fun getItems(): List<XModel>
+}

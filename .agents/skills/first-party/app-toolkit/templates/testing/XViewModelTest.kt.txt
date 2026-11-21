@@ -2,16 +2,17 @@
 
 package <base>.feature.x.ui
 
-import com.google.common.truth.Truth.assertThat
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.FakeTelemetryRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.UnconfinedDispatcherExtension
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.Loadable
-import <base>.feature.x.data.models.XData
+import <base>.feature.x.data.models.XModel
 import <base>.feature.x.data.repositories.XRepository
 import <base>.feature.x.ui.contracts.XEvent
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.RegisterExtension
+import kotlin.test.assertIs
+import kotlin.test.assertTrue
 
 class XViewModelTest {
 
@@ -33,7 +34,7 @@ class XViewModelTest {
         val viewModel = createViewModel()
         advance()
 
-        assertThat(viewModel.state.value.items).isInstanceOf(Loadable.Ready::class.java)
+        assertIs<Loadable.Ready<*>>(viewModel.state.value.items)
     }
 
     @Test
@@ -42,8 +43,7 @@ class XViewModelTest {
         advance()
 
         val items = viewModel.state.value.items
-        assertThat(items).isInstanceOf(Loadable.Failed::class.java)
-        assertThat((items as Loadable.Failed).retryable).isTrue()
+        assertTrue(assertIs<Loadable.Failed>(items).retryable)
     }
 
     @Test
@@ -56,13 +56,13 @@ class XViewModelTest {
         viewModel.onEvent(XEvent.Load)
         advance()
 
-        assertThat(viewModel.state.value.items).isInstanceOf(Loadable.Ready::class.java)
+        assertIs<Loadable.Ready<*>>(viewModel.state.value.items)
     }
 
     private class FakeXRepository(var fails: Boolean = false) : XRepository {
-        override suspend fun getItems(): List<XData> {
+        override suspend fun getItems(): List<XModel> {
             check(!fails) { "Failed to load" }
-            return listOf(XData(id = "first"))
+            return listOf(XModel(id = "first", title = "First entry", availableQuantity = 1))
         }
     }
 }

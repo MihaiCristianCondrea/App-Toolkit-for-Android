@@ -1,0 +1,21 @@
+// Copy the license header from a sibling file.
+
+package <base>.feature.x.data.remote
+
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.network.data.remote.mappers.toNetworkException
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.network.data.remote.networkCall
+import <base>.feature.x.data.remote.models.XDto
+import io.ktor.client.HttpClient
+import io.ktor.client.call.body
+import io.ktor.client.request.get
+
+internal class XRemoteDataSource(
+    private val client: HttpClient,
+    private val endpoint: String,
+) {
+    suspend fun fetchItems(): List<XDto> = networkCall {
+        val response = client.get(endpoint)
+        response.status.toNetworkException()?.let { throw it }
+        response.body()
+    }
+}

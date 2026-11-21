@@ -1,0 +1,9 @@
+// Copy the license header from a sibling file.
+
+package <base>.feature.x.data.remote.mappers
+
+import <base>.feature.x.data.models.XModel
+import <base>.feature.x.data.remote.models.XDto
+
+internal fun XDto.toXModel(): XModel =
+    XModel(id = id, title = title, availableQuantity = availableQuantity)

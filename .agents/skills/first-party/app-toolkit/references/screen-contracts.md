@@ -42,11 +42,5 @@ requests, handle it as a typed event and apply latest-query behavior using the [
 
 ## Starter templates
 
-Load `android-ui-layer` for the underlying Android UI architecture. For Toolkit scaffolding, use these templates and replace
-the placeholder types, imports, resources and test dependencies with the target's own contracts.
-Select only the files that match the feature.
-
-- [Screen](../templates/XScreen.kt.txt), [screen preview](../templates/XScreenPreview.kt.txt), and [tracking contract](../templates/XAnalytics.kt.txt).
-- [ViewModel](../templates/XViewModel.kt.txt), [state](../templates/XUiState.kt.txt),
-  [events](../templates/XEvent.kt.txt) and [operation names](../templates/XOperationNames.kt.txt).
-- [Dependency bindings](../templates/XModule.kt.txt) and [ViewModel tests](../templates/XViewModelTest.kt.txt).
+Use the [feature template](feature-template.md) to select compatible Toolkit starters, including the
+screen, reusable views and sibling previews. Use `android-ui-layer` for Android UI architecture.

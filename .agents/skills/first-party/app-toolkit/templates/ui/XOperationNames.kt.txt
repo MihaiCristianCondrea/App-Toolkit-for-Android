@@ -2,4 +2,6 @@
 
 package <base>.feature.x.ui.constants
 
-internal const val LOAD_X: String = "loadX"
+internal object XOperationNames {
+    const val LOAD: String = "loadX"
+}

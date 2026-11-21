@@ -15,3 +15,8 @@ when behavior depends on the real shell, navigation, or snackbar action.
 For a public API change, compile a representative caller and run any compatibility checks that
 the repository provides. Report the exact checks that passed and any unresolved environment or
 runtime limitation.
+
+Skills explain why a responsibility exists. Templates show its Kotlin declaration and wiring.
+Use repository checks for objectively verifiable placement. Add Kotlin-aware checks for
+declaration shapes only when the project adopts them. A path check cannot establish coroutine
+cancellation, error recovery or the need for a use case. Verify those through tests and review.

@@ -13,6 +13,10 @@ it already has.
 - The app module assembles the consumer's dependencies, graph and host providers. Reusable Toolkit
   code stays independent of sample and product code. Give each Kotlin package one module owner.
 
+Start with the [canonical feature template](feature-template.md). The tree and declaration
+tables in `layered-tree-review` define the available responsibilities. Create only packages and
+files the feature uses.
+
 Keep a feature's primary screen and ViewModel under `ui/`. Place events in `ui/contracts/`,
 state in `ui/states/`, screen-specific models in `ui/models/`, and reusable Compose pieces in
 `ui/views/`. Give a distinct subfeature its own `ui/features/<name>/` when its screen or flow warrants a separate owner. Keep labels and display conversion close to their UI owner. Extract a named

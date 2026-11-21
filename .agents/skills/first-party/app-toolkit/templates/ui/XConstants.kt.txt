@@ -1,0 +1,7 @@
+// Copy the license header from a sibling file.
+
+package <base>.feature.x.ui.constants
+
+internal object XConstants {
+    const val MAX_TITLE_LINES: Int = 2
+}

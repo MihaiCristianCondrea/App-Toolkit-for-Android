@@ -26,7 +26,7 @@
   Keep usable state on failed writes or refreshes when possible. Report successful persistence
   only after the write completes.
 
-Put stable ViewModel operation names in a concern-specific file under `ui/constants/`.
+Put stable operation names in an `XOperationNames` object in `ui/constants/XOperationNames.kt`.
 Keep GA4 event names, parameters and builders in `ui/analytics/` or their shared analytics contract. Inline single-use expressions when their meaning is clear at the call
 site. Keep constants that name a policy, stabilize an identifier, or prevent duplication.
 

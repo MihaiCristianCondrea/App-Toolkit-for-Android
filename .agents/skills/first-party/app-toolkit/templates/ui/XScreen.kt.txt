@@ -12,10 +12,10 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.ScreenHost
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.ScreenStateHandler
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.shell.contentPadding
-import <base>.feature.x.ui.analytics.X_SCREEN
+import <base>.feature.x.ui.analytics.XAnalytics
 import <base>.feature.x.ui.contracts.XEvent
 import <base>.feature.x.ui.states.XUiState
-import <base>.feature.x.ui.views.XRow
+import <base>.feature.x.ui.views.XView
 import org.koin.compose.viewmodel.koinViewModel
 
 /**
@@ -30,7 +30,7 @@ fun XScreen(onOpenDetails: (String) -> Unit) {
     val viewModel: XViewModel = koinViewModel()
     val state: XUiState by viewModel.state.collectAsStateWithLifecycle()
 
-    ScreenHost(screen = X_SCREEN, status = state.items, viewModel = viewModel) {
+    ScreenHost(screen = XAnalytics.SCREEN, status = state.items, viewModel = viewModel) {
         XScreenContent(
             state = state,
             onEvent = viewModel::onEvent,
@@ -64,7 +64,7 @@ internal fun XScreenContent(
     ) { ready ->
         LazyColumn(contentPadding = contentPadding) {
             items(items = ready.value, key = { it.key }) { item ->
-                XRow(item = item, onClick = { onOpenDetails(item.key) })
+                XView(item = item, onClick = { onOpenDetails(item.key) })
             }
         }
     }

@@ -1,0 +1,12 @@
+// Copy the license header from a sibling file.
+
+package <base>.feature.x.ui.mappers
+
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.UiText
+import <base>.feature.x.data.models.XModel
+import <base>.feature.x.ui.models.XItem
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.toImmutableList
+
+internal fun List<XModel>.toXItems(): ImmutableList<XItem> =
+    map { XItem(key = it.id, title = UiText.DynamicString(it.title)) }.toImmutableList()

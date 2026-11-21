@@ -1,0 +1,8 @@
+// Copy the license header from a sibling file.
+
+package <base>.feature.x.data.remote.models
+
+import kotlinx.serialization.Serializable
+
+@Serializable
+internal data class XDto(val id: String, val title: String, val availableQuantity: Int)

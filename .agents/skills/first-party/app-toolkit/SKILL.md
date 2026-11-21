@@ -35,7 +35,7 @@ metadata:
 Read only the references and installed specialist skills that the task needs. Look up specialist
 skills by name in the active catalog, since installations can use different directory layouts.
 Load `android-ui-layer` for Google's guidance on UI state, events and state holders. This skill
-owns Toolkit-specific code and [starter templates](references/screen-contracts.md#starter-templates).
+owns Toolkit-specific code and [starter templates](references/feature-template.md).
 Use `layered-tree-review` for placement and verify Toolkit APIs against the target checkout or
 resolved dependency.
 

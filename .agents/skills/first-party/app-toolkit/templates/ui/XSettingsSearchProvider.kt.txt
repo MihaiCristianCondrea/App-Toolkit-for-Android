@@ -1,0 +1,13 @@
+// Copy the license header from a sibling file.
+
+package <base>.feature.x.ui.search
+
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.settings.SettingsSearchProvider
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.settings.settingsSearchProvider
+import <base>.feature.x.R
+import <base>.feature.x.ui.navigation.XScreen
+
+internal val xSettingsSearchProvider: SettingsSearchProvider =
+    settingsSearchProvider(section = R.string.x_title, destination = XScreen) {
+        preference(R.string.x_title)
+    }

@@ -4,4 +4,7 @@ package <base>.feature.x.ui.analytics
 
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.telemetry.models.TrackedScreen
 
-internal val X_SCREEN = TrackedScreen(name = "X", className = "XScreen")
+internal object XAnalytics {
+    const val SCREEN_NAME: String = "X"
+    val SCREEN = TrackedScreen(name = SCREEN_NAME, className = "XScreen")
+}

@@ -1,0 +1,21 @@
+// Copy the license header from a sibling file.
+
+package <base>.feature.x.data.repositories
+
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.exceptions.NetworkException
+import <base>.feature.x.data.local.XLocalDataSource
+import <base>.feature.x.data.models.XModel
+import <base>.feature.x.data.remote.XRemoteDataSource
+import <base>.feature.x.data.remote.mappers.toXModel
+
+internal class DefaultXRepository(
+    private val remote: XRemoteDataSource,
+    private val local: XLocalDataSource? = null,
+) : XRepository {
+    override suspend fun getItems(): List<XModel> = try {
+        remote.fetchItems().map { it.toXModel() }
+    } catch (failure: NetworkException) {
+        if (failure.reason != NetworkException.Reason.NO_INTERNET) throw failure
+        local?.getItems() ?: throw failure
+    }
+}

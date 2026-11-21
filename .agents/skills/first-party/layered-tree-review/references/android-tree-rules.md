@@ -52,6 +52,7 @@ banned names below.
 | Package                   | Holds                                                              |
 |---------------------------|--------------------------------------------------------------------|
 | `data/repositories/`      | repository interfaces and their implementations, side by side      |
+| `data/contracts/`         | data-layer contracts shared by independent data responsibilities   |
 | `data/models/`            | application models the repositories return                         |
 | `data/mappers/`           | mappings shared by several data sources                            |
 | `data/exceptions/`        | the module's own failures                                          |
@@ -93,6 +94,9 @@ banned names below.
 | `ui/adapters/`            | UI-specific API or component bridges                               |
 | `ui/extensions/`          | UI-layer extensions that are not mappers, formatters, etc.         |
 | `ui/constants/`           | UI-only constants such as presentation thresholds                  |
+| `ui/analytics/`           | feature analytics identifiers and event builders                   |
+| `ui/parsers/`             | encoded presentation content to structured UI content             |
+| `ui/search/`              | typed settings search providers                                   |
 | `ui/navigation/`          | keys and page registration                                         |
 | `ui/providers/`           | host-supplied content contracts                                    |
 | `ui/views/`               | stateless composables the screen uses                              |
@@ -144,7 +148,7 @@ Classify by responsibility first and Kotlin syntax second.
 | UI state            | `ui/states/`                          | **checked** (`*UiState.kt`)                                   |
 | Event               | `ui/contracts/`                       |                                                               |
 | ViewModel           | `ui/`, or `ui/features/<name>/`       | **checked** (`*ViewModel.kt` in a `ui` package, not `views`)  |
-| Screen              | `ui/`, with its content in one file   | see `android-ui-layer`                                        |
+| Screen              | `ui/`, with its content in one file   | see `app-toolkit` for Toolkit screen contracts                                        |
 | Stateless piece     | `ui/views/`                           | no ViewModel, repository or lifecycle owner                   |
 | DI bindings         | `di/`                                 |                                                               |
 | Worker              | `workers/`                            | an entry point; may report analytics on its outcome           |
@@ -186,6 +190,7 @@ function, class, or Flow operator. Use only the category that clarifies actual o
 | Reducer | Calculates next state from current state and an action, without side effects | `reduce(state, action)` | `ui/reducers/` for UI state; data/domain equivalent only if it owns the state |
 | Mapper | Maps one model across a representation boundary | `ArticleDto.toArticle()` | the boundary's `mappers/` (see above) |
 | Extension | Adds useful operations to a type; placement follows the operation's meaning | `Context.isDarkMode()` | `ui/extensions/` if UI-only, otherwise owning layer's `extensions/` |
+| Parser | Reads encoded content into a structured form | `MarkdownReleaseParser.parse(markdown)` | `ui/parsers/` when the result is presentation-owned; otherwise the data source owns the format |
 | Transformer | Derives or combines information into a representation or stream | combining `Flow<Article>` streams for a UI model | owning layer's `transformers/` |
 | Validator | Checks rules and returns an outcome/violation | `EmailValidator.validate(input)` | `ui/validators/` for form feedback; `domain/validators/` for business rules; `data/validators/` for storage constraints |
 | Formatter | Produces display-ready text | `date.formatForDisplay()` | `ui/formatters/` for user-visible formatting |
@@ -248,6 +253,81 @@ those responsibilities.
   data/local, and public product IDs to their owning module. Do not move them merely to centralize.
 - Avoid duplicating the same constant across layers. If two layers need a value, determine its
   true owner and dependency direction before relocating it.
+
+## Canonical feature structure
+
+This tree shows available responsibilities. Use the placement table for specialized packages such
+as `data/remote/models/` and `data/remote/mappers/`. Add a package when its first file needs it.
+
+```text
+feature/
+├── data/
+│   ├── constants/
+│   ├── contracts/
+│   ├── exceptions/
+│   ├── local/
+│   ├── remote/
+│   ├── models/
+│   ├── mappers/
+│   ├── transformers/
+│   ├── repositories/
+│   ├── validators/
+│   └── extensions/
+├── domain/
+│   ├── models/
+│   └── usecases/
+├── di/
+│   └── XModule.kt
+└── ui/
+    ├── XScreen.kt
+    ├── XScreenPreview.kt
+    ├── XViewModel.kt
+    ├── analytics/
+    ├── constants/
+    ├── contracts/
+    ├── extensions/
+    ├── features/
+    ├── formatters/
+    ├── mappers/
+    ├── models/
+    ├── navigation/
+    ├── parsers/
+    ├── providers/
+    ├── reducers/
+    ├── search/
+    ├── states/
+    ├── transformers/
+    ├── validators/
+    └── views/
+```
+
+## Kotlin declaration defaults
+
+| Responsibility | Filename | Declaration |
+| --- | --- | --- |
+| Screen and stateless content | `XScreen.kt` | Composable functions |
+| Preview | `XScreenPreview.kt` or `XViewPreview.kt` | Private composable functions |
+| ViewModel | `XViewModel.kt` | Class |
+| UI state | `XUiState.kt` | Immutable data class |
+| Events | `XEvent.kt` | Sealed interface |
+| Related constants | `XConstants.kt` | Object with named constants |
+| Operation names | `XOperationNames.kt` | Object with stable operation identifiers |
+| Preference analytics keys | `XPreferenceKeys.kt` | Object in `ui/analytics/` |
+| Repository | `XRepository.kt` | Interface |
+| Repository implementation | `DefaultXRepository.kt` | Class |
+| Mapper | `XMappers.kt` | Functions |
+| Reducer | `XReducer.kt` | Pure functions |
+| Transformer | `XTransformer.kt` | Functions |
+| Formatter | `XFormatter.kt` | Functions |
+| Parser | `XParser.kt` | Functions or a stateful class when parsing needs state |
+| Validator | `XValidator.kt` | Functions returning a validation result |
+| Settings search | `XSettingsSearchProvider.kt` | Typed property or factory function |
+| Navigation registration | `XNavigation.kt` | Graph builder extension functions |
+| DI | `XModule.kt` | Typed module property |
+| Use case | `XUseCase.kt` | Class |
+
+These defaults apply unless the responsibility requires a different declaration. Group related
+constants in a named object. Keep independent mappers, formatters and extensions as functions.
 
 ## Naming
 
