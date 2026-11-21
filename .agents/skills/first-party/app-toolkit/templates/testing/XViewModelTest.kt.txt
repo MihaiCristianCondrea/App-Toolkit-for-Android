@@ -12,6 +12,7 @@ import org.junit.jupiter.api.extension.RegisterExtension
 import kotlin.test.assertIs
 import kotlin.test.assertTrue
 
+/** Verifies first load, failure state and retry for the catalog. */
 class XViewModelTest {
 
     companion object {
@@ -36,7 +37,7 @@ class XViewModelTest {
     }
 
     @Test
-    fun `repository error shows the failure state with a retry`() = runTest(dispatcherExtension.testDispatcher) {
+    fun `repository error shows the failure state with a retry`() = runTest(context = dispatcherExtension.testDispatcher) {
         val viewModel = createViewModel(repository = FakeXRepository(fails = true))
         advance()
 
@@ -45,7 +46,7 @@ class XViewModelTest {
     }
 
     @Test
-    fun `retrying after a failed load shows the entries`() = runTest(dispatcherExtension.testDispatcher) {
+    fun `retrying after a failed load shows the entries`() = runTest(context = dispatcherExtension.testDispatcher) {
         val repository = FakeXRepository(fails = true)
         val viewModel = createViewModel(repository = repository)
         advance()

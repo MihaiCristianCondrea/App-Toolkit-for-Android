@@ -56,9 +56,8 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.spacers.La
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.R
 
 /**
- * Displays the FAQ screen Contact Us action.
+ * Displays the FAQ contact action and delegates the contact flow to the caller.
  *
- * @param onClick Invoked when the card is selected.
  * @param groupedPosition Optional position in a grouped FAQ content section.
  */
 @OptIn(ExperimentalMaterial3ExpressiveApi::class)

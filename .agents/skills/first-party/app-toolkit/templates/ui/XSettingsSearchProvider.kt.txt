@@ -5,6 +5,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.settings.
 import <base>.feature.x.R
 import <base>.feature.x.ui.navigation.XScreen
 
+/** Indexes the catalog destination when the host enables settings search for it. */
 internal val xSettingsSearchProvider: SettingsSearchProvider =
     settingsSearchProvider(section = R.string.x_title, destination = XScreen) {
         preference(title = R.string.x_title)

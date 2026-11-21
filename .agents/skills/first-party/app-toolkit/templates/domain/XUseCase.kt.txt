@@ -3,8 +3,13 @@ package <base>.feature.x.domain.usecases
 import <base>.feature.x.data.models.XModel
 import <base>.feature.x.data.repositories.XRepository
 
-/** Selects stock that can fulfill a positive requested quantity. */
+/** Applies quantity-based availability to the catalog without reserving inventory. */
 class XUseCase(private val repository: XRepository) {
+    /**
+     * Selects entries that can fulfill the requested quantity.
+     *
+     * @throws IllegalArgumentException If [quantity] is zero or negative.
+     */
     suspend operator fun invoke(quantity: Int): List<XModel> {
         require(value = quantity > 0)
         return repository.getItems().filter { it.availableQuantity >= quantity }

@@ -54,6 +54,10 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.R
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.ui.analytics.FaqActionNames
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.ui.analytics.faqActionEvent
 
+/**
+ * Displays the help destination's app bar actions with saveable version dialog state.
+ * Requires an [AppVersionInfo] binding in the host's Koin graph.
+ */
 @Composable
 fun FaqMenuActions() {
     val config: AppVersionInfo = koinInject()
@@ -65,6 +69,13 @@ fun FaqMenuActions() {
     )
 }
 
+/**
+ * Displays the help overflow actions and version dialog.
+ *
+ * @param config Version shown in the dialog.
+ * @param showDialog Whether the version dialog is currently shown.
+ * @param onShowDialogChange Requests a change to the version dialog's visibility.
+ */
 @OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
 fun FaqScreenMenuActions(

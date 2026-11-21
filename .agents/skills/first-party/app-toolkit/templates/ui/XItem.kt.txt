@@ -3,5 +3,6 @@ package <base>.feature.x.ui.models
 import androidx.compose.runtime.Immutable
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.UiText
 
+/** A catalog row with a key shared by the lazy list and the host's detail callback. */
 @Immutable
 data class XItem(val key: String, val title: UiText)

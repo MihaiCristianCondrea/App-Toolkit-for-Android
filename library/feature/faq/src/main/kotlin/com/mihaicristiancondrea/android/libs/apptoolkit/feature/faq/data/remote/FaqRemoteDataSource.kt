@@ -23,8 +23,11 @@ import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.request.get
 
+/** Reads the FAQ catalog and question arrays using the host's JSON-enabled [HttpClient]. */
 class FaqRemoteDataSource(private val client: HttpClient) {
+    /** Decodes the catalog document at [url]. Request and decoding failures propagate to the caller. */
     suspend fun fetchCatalog(url: String): FaqCatalogDto = client.get(urlString = url).body()
+    /** Decodes the question array at [url]. Request and decoding failures propagate to the caller. */
     suspend fun fetchQuestions(url: String): List<FaqQuestionDto> = client.get(urlString = url).body()
 }
 

@@ -8,9 +8,15 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.PaneRol
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.ShellGraphBuilder
 import kotlinx.serialization.Serializable
 
+/** Serializable key for the inventory catalog destination. */
 @Serializable
 data object XScreen : NavKey
 
+/**
+ * Registers the catalog destination unless the shell already defines [XScreen].
+ *
+ * @param onOpenDetails Receives the selected item's key for host-owned navigation.
+ */
 fun ShellGraphBuilder.xScreen(onOpenDetails: (String) -> Unit) {
     pageIfAbsent<XScreen>(paneRole = PaneRole.None, title = { stringResource(id = R.string.x_title) }) {
         XScreenContentEntry(onOpenDetails = onOpenDetails)

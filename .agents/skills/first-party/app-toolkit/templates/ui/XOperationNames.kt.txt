@@ -1,5 +1,6 @@
 package <base>.feature.x.ui.constants
 
+/** Stable identifiers for catalog ViewModel operation reporting. */
 internal object XOperationNames {
     const val LOAD: String = "loadX"
 }

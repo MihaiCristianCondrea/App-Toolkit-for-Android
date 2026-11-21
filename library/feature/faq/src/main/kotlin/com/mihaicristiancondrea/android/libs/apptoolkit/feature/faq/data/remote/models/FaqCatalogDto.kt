@@ -20,6 +20,11 @@ package com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.data.remote
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.SerialName
 
+/**
+ * Catalog response containing the schema version and available product entries.
+ *
+ * @property schemaVersion Version of the JSON catalog format.
+ */
 @Serializable
 data class FaqCatalogDto(
     @SerialName(value = "schemaVersion")

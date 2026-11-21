@@ -23,6 +23,9 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.data.models.
 import kotlinx.collections.immutable.ImmutableList
 
 /**
+ * State rendered by the FAQ and feedback screen.
+ *
+ * @property questions Current question load result.
  * @property openStoreListing Stays set across configuration changes until the screen reports
  * `FaqEvent.StoreListingOpened`.
  */

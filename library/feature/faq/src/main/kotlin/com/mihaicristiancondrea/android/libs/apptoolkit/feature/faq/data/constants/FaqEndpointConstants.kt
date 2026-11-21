@@ -17,7 +17,9 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.data.constants
 
+/** Endpoint configuration for the versioned FAQ catalog. */
 object FaqEndpointConstants {
+    /** Base URL shared by the debug and release catalog paths. */
     const val FAQ_BASE_URL: String =
         "https://mihaicristiancondrea.github.io/com.d4rk.apis/api/faq/v1"
 }

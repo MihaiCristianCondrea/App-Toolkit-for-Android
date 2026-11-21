@@ -2,7 +2,8 @@ package <base>.feature.x.data.local
 
 import <base>.feature.x.data.models.XModel
 
-/** A local snapshot, or null when this feature has nothing stored. */
+/** Supplies an optional stored catalog snapshot for offline reads. */
 internal fun interface XLocalDataSource {
+    /** Returns `null` when no snapshot exists. An empty snapshot is a valid result. */
     suspend fun getItems(): List<XModel>?
 }

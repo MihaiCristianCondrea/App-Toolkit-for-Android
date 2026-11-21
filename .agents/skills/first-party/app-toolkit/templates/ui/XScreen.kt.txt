@@ -16,6 +16,13 @@ import <base>.feature.x.ui.states.XUiState
 import <base>.feature.x.ui.views.XView
 import org.koin.compose.viewmodel.koinViewModel
 
+/**
+ * Displays the host's inventory catalog as a shell page.
+ *
+ * Requires the catalog DI bindings and a shell that supplies content padding.
+ *
+ * @param onOpenDetails Receives the selected item's key so the host can open its details.
+ */
 @Composable
 fun XScreen(onOpenDetails: (String) -> Unit) {
     val viewModel: XViewModel = koinViewModel()
@@ -31,6 +38,11 @@ fun XScreen(onOpenDetails: (String) -> Unit) {
     }
 }
 
+/**
+ * Renders catalog state and delegates retry and selection to the caller.
+ *
+ * @param contentPadding Insets applied inside the list and the load-state surfaces.
+ */
 @Composable
 internal fun XScreenContent(
     state: XUiState,

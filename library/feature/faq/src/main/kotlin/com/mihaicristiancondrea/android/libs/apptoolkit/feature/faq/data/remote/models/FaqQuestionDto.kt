@@ -19,7 +19,12 @@ package com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.data.remote
 
 import kotlinx.serialization.Serializable
 
-/** The catalog ID identifies an entry across sources. `featured` prioritizes an entry in the list. */
+/**
+ * Question as supplied by a remote FAQ source.
+ *
+ * @property id Catalog identifier used to identify duplicates across sources.
+ * @property featured Editorial flag supplied by the source. The FAQ screen preserves source order.
+ */
 @Serializable
 data class FaqQuestionDto(
     val id: String,

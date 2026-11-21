@@ -2,5 +2,6 @@ package <base>.feature.x.data.remote.models
 
 import kotlinx.serialization.Serializable
 
+/** Wire representation of an entry in the catalog endpoint's JSON array. */
 @Serializable
 internal data class XDto(val id: String, val title: String, val availableQuantity: Int)

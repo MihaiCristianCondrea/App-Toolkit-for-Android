@@ -14,6 +14,10 @@ import <base>.feature.x.ui.mappers.toXItems
 import <base>.feature.x.ui.states.XUiState
 import kotlinx.coroutines.Job
 
+/**
+ * Loads inventory when created and retries through [XEvent.Load].
+ * Concurrent requests for the same catalog share the active load.
+ */
 class XViewModel(
     private val repository: XRepository,
     telemetryRepository: TelemetryRepository,
@@ -35,6 +39,7 @@ class XViewModel(
         }
     }
 
+    /** Publishes the catalog load result, including retryable failures. */
     private fun load() {
         loadJob = loadJob.ifIsActive {
             launchReport(

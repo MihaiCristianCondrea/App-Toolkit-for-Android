@@ -16,6 +16,7 @@ metadata:
     - consumer integration
     - feature templates
     - typed events
+    - module documentation
 ---
 
 # App Toolkit
@@ -58,8 +59,7 @@ Before implementation, identify the affected responsibilities and checks:
   evaluate whether `android-domain-layer` applies. A direct repository call may be enough.
 - Use `navigation-3` for destination or graph changes in a Navigation 3 project, `android-localization`
   for localized resources, and `android-datastore` only for persistence work involving DataStore.
-- Use `traceable-code` for Kotlin call sites and `writing-style` for code documentation and
-  module READMEs. Apply the [code review checks](references/code-review.md) to the touched code.
+- Use `traceable-code` for Kotlin call sites and `writing-style` for KDoc, module READMEs and Mermaid diagrams. Apply the [code review checks](references/code-review.md) to the touched code.
 - For implementation, use `android-build-validation` to select checks. Use the existing test
   setup and the relevant specialist's testing guidance. Load `testing-setup` when the project
   needs a test strategy or infrastructure.

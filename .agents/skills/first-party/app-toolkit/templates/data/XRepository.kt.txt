@@ -1,7 +1,15 @@
 package <base>.feature.x.data.repositories
 
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.exceptions.NetworkException
 import <base>.feature.x.data.models.XModel
 
+/** Provides catalog entries to callers independently of their source. */
 interface XRepository {
+    /**
+     * Reads the catalog. Safe to call from the main thread.
+     *
+     * @return Available entries, or an empty list when the source contains none.
+     * @throws NetworkException If the catalog read fails and no fallback can serve it.
+     */
     suspend fun getItems(): List<XModel>
 }

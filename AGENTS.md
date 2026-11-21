@@ -194,9 +194,6 @@ Discover the available `SKILL.md` files instead of assuming this table contains 
 * Do not change frameworks or architectural approaches unless the task requires it.
 * Keep public APIs small and deliberate.
 * Keep implementation details in the module that owns them.
-* Avoid comments and KDoc that only repeat what the code already says.
-* Add or improve KDoc when it explains a public contract, invariant, side effect, ownership rule,
-  lifecycle requirement, or non-obvious behavior.
 
 ## Module boundaries
 
@@ -577,6 +574,7 @@ Keep ownership clear and document the host contract in the owning library module
 Each active module may contain a local `README.md`.
 
 Treat it as the primary written source for that module's responsibilities and contracts.
+Use `writing-style` for the README and Mermaid diagram, and the `app-toolkit` starter for a new module.
 
 Before substantial changes:
 
@@ -616,24 +614,8 @@ notes, internal implementations, publishing information, architecture guards, or
 
 ## KDoc and comments
 
-Documentation must explain things that are not obvious from the code itself.
-
-Useful KDoc and comments explain:
-
-* public contracts
-* lifecycle requirements
-* ownership
-* invariants
-* side effects
-* compatibility requirements
-* unusual platform behavior
-* reasons for a non-obvious implementation decision
-
-Do not use comments as prose decoration. A comment should explain a reason, constraint, invariant,
-lifecycle detail, compatibility requirement, or other information that cannot be understood easily
-from the code itself.
-
-If existing documentation becomes inaccurate because of the change, update it.
+Apply `writing-style` to public API KDoc, meaningful internal operations and inline comments.
+Include inherited documentation in review. Use the configured Dokka checks for published modules.
 
 ## Repository-level docs
 

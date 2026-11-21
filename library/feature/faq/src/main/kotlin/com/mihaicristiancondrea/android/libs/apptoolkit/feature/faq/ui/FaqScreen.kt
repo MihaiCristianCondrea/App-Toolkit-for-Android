@@ -64,6 +64,14 @@ import org.koin.compose.koinInject
 import org.koin.compose.viewmodel.koinViewModel
 import org.koin.core.qualifier.named
 
+/**
+ * Displays the FAQ and feedback screen with remote questions and bundled fallback content.
+ *
+ * The feedback button remains available while questions load or fail.
+ *
+ * Requires an [AdsConfig] binding qualified by [AdsQualifiers.HELP_NATIVE_AD].
+ * A blank ad unit ID disables the ad slot.
+ */
 @Composable
 fun FaqScreen() {
     val viewModel: FaqViewModel = koinViewModel()
@@ -163,7 +171,13 @@ fun FaqScreen() {
     }
 }
 
-/** @param adUnitId Native ad unit, or `null` to omit the ad slot. */
+/**
+ * Renders the question states and feedback sheet and delegates interactions to its caller.
+ *
+ * @param onRetry Invoked for failed or empty question results.
+ * @param contentPadding Shell insets applied inside the list and load-state surfaces.
+ * @param adUnitId Native ad unit, or `null` to omit the ad slot.
+ */
 @Composable
 internal fun FaqScreenContent(
     state: FaqUiState,

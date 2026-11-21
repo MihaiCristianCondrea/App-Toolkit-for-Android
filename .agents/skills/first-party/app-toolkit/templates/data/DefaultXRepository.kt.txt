@@ -6,6 +6,7 @@ import <base>.feature.x.data.models.XModel
 import <base>.feature.x.data.remote.XRemoteDataSource
 import <base>.feature.x.data.remote.mappers.toXModel
 
+/** Reads the remote catalog first and uses a configured local snapshot when offline. */
 internal class DefaultXRepository(
     private val remote: XRemoteDataSource,
     private val local: XLocalDataSource? = null,

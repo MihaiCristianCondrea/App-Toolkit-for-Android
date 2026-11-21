@@ -9,6 +9,11 @@ import org.koin.core.module.dsl.viewModel
 import org.koin.core.qualifier.named
 import org.koin.dsl.module
 
+/**
+ * Registers the catalog sources, repository and ViewModel.
+ *
+ * The host supplies a JSON-enabled HTTP client, telemetry and a String qualified by `xEndpoint`.
+ */
 val xModule: Module = module {
     single {
         XRemoteDataSource(

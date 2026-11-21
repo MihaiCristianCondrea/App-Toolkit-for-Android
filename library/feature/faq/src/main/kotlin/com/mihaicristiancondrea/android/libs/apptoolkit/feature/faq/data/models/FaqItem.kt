@@ -17,6 +17,11 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.data.models
 
+/**
+ * Resolved question and answer from the remote catalog or the host's bundled resources.
+ *
+ * @property id Stable identity within the catalog result.
+ */
 data class FaqItem(
     val id: FaqId,
     val question: String,

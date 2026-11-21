@@ -7,6 +7,7 @@ import androidx.compose.ui.Modifier
 import <base>.feature.x.ui.constants.XConstants
 import <base>.feature.x.ui.models.XItem
 
+/** Displays a catalog title and makes the whole row a detail action. */
 @Composable
 internal fun XView(item: XItem, onClick: () -> Unit, modifier: Modifier = Modifier) {
     Text(

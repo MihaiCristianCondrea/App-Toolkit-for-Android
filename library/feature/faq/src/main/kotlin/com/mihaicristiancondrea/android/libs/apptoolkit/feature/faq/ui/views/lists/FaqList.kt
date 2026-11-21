@@ -57,6 +57,12 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.ui.views.car
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.ui.views.cards.QuestionCard
 import kotlinx.collections.immutable.ImmutableList
 
+/**
+ * Renders the question list and support rows, retaining each question's expansion state.
+ *
+ * @param onQuestionToggled Reports the question, its zero-based list position and its new state.
+ * @param adUnitId Native ad unit, or `null` to omit the ad row.
+ */
 @Composable
 internal fun FaqList(
     questions: ImmutableList<FaqItem>,

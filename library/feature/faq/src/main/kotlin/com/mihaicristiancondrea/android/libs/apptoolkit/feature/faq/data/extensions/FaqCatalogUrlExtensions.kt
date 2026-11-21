@@ -20,7 +20,9 @@ package com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.data.extens
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.boolean.toApiEnvironment
 
 /**
- * Builds the FAQ catalog URL for the current build type.
+ * Appends the build environment and catalog filename to a base URL without a trailing slash.
+ *
+ * @param isDebugBuild Selects the debug catalog when true and the release catalog otherwise.
  */
 fun String.faqCatalogUrl(isDebugBuild: Boolean): String {
     val catalogEnvironment = isDebugBuild.toApiEnvironment()

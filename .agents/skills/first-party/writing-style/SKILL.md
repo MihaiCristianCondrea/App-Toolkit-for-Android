@@ -3,7 +3,7 @@ name: writing-style
 description: >
   Enforces strict human developer writing guidelines across code, comments, Markdown
   documentation, social captions, and commit messages. Bans em dashes, en dashes,
-  emojis, and generic AI copywriting cliches. Defines where technical documentation belongs.
+  emojis, and generic AI copywriting cliches. Defines Kotlin API documentation and module README standards.
 metadata:
   author: Mihai-Cristian Condrea
   last-updated: '2026-11-21'
@@ -16,6 +16,8 @@ metadata:
   - human-copy
   - documentation
   - kdoc
+  - dokka
+  - mermaid
   - code comments
 ---
 
@@ -50,17 +52,53 @@ This is the only place these rules are written. Every other marketing skill appl
    - Use straight quotes and apostrophes (`'`, `"`) in files; let the platform typeset them.
    - Use the middle dot (`·`) or a colon to separate a number from a title, never a dash.
 
-## Technical documentation placement
+## Technical documentation ownership
 
-- Put architectural decisions, behavioral policies, integration requirements and rationale in the
-  owning module's README. Keep the explanation there when the code already shows the behavior.
-- Use concise KDoc for a declaration's contract, invariant, side effect, lifecycle requirement
-  or other non-obvious requirement. Document what a caller needs to know.
-- Reserve inline comments for exceptional technical constraints that the code cannot explain
-  clearly. Remove comments that restate or narrate the implementation.
-- Review inherited comments in the code you touch. Remove redundant text and preserve necessary
-  explanations in the appropriate place. Convert a comment to KDoc only if it explains a
-  declaration-level contract.
+| Documentation | Responsibility |
+| --- | --- |
+| KDoc | Declaration purpose, usage requirements, parameters, results, side effects and invariants |
+| Module README | Module architecture, dependencies, integration, behavioral policies and rationale |
+| Mermaid | Relationships, ownership and important control or data flows |
+| Inline comments | Exceptional technical constraints that need a local explanation |
+| Tests | Observable guarantees and regression coverage |
+
+### Kotlin declarations
+
+Document public types, including objects, sealed interfaces, UI state and events, and public
+functions, including composables and extensions. Document public properties and constants when
+their meaning, value or use forms part of the contract. Preserve or improve useful public KDoc
+during refactoring, including when the module README discusses related behavior. Rewrite verbose
+or informal KDoc into a direct description of what callers can rely on.
+
+Prefer short KDoc for distinct internal and private operations when purpose, effects or boundaries
+need explanation. Trivial overrides, generated declarations, simple accessors and self-explanatory
+implementation details need no added prose. Put a shared contract on its owning interface. Document
+an implementation separately when it adds a meaningful guarantee or requirement.
+
+Start with a concise summary. Use resolvable declaration links and tags where they add information:
+`@param` or `@property` for inputs and exposed state, `@return` for result semantics,
+`@throws` for failures callers should handle, `@see` for related APIs and `@sample` for an
+existing sample in a Dokka source set. Avoid restating names or signatures.
+
+Review inherited KDoc and comments in changed code. Remove stray inline commentary and narration.
+Preserve explanations of exceptional constraints. Use KDoc for declaration contracts and the
+module README for architectural rationale. Add a local comment only where the constraint needs it.
+
+### Module README
+
+Inspect the module's current README and nearby modules first. Preserve the established logic-graph
+structure. Cover the applicable sections: Purpose, Owns, Does not own, Host requirements, Depends on,
+Used by, Flow chart, Architectural decisions, Public contracts, Internal implementations and Current
+risks. Add relevant sections when needed and omit sections with no useful content.
+
+Treat Mermaid as part of the technical documentation. Review the diagram whenever ownership,
+dependencies, class names, navigation keys or operation flows change. Use the actual entry points,
+screens, state and event owners, repositories, sources, use cases and integrations that participate.
+Show the relationships that explain the flow and verify identifiers against the implementation.
+
+Check Markdown links, paths and KDoc references in the affected module. Run the project's Dokka
+generation and warning checks when available. Review coverage directly when undocumented
+declarations are excluded from warnings.
 
 ## Checking a file
 

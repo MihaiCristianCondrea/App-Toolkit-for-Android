@@ -1,5 +1,7 @@
 package <base>.feature.x.ui.contracts
 
+/** Requests accepted by the catalog ViewModel. */
 sealed interface XEvent {
+    /** Requests the catalog on first entry or after an unsuccessful load. */
     data object Load : XEvent
 }

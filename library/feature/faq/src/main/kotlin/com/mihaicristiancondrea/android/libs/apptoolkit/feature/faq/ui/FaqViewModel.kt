@@ -34,6 +34,11 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.integration.review.domai
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.Job
 
+/**
+ * Owns the FAQ load state and pending store listing request.
+ *
+ * Starts the first load on creation and accepts [FaqEvent.Load] for retry.
+ */
 class FaqViewModel(
     private val faqRepository: FaqRepository,
     private val forceInAppReviewUseCase: ForceInAppReviewUseCase,
@@ -59,6 +64,7 @@ class FaqViewModel(
         }
     }
 
+    /** Loads questions and publishes a load result. Duplicate requests retain the active load. */
     private fun loadFaq() {
         loadJob = loadJob.ifIsActive {
             launchReport(
@@ -92,6 +98,7 @@ class FaqViewModel(
         }
     }
 
+    /** Requests an in-app review with a Play Store listing fallback. */
     private fun requestReview(host: ReviewHost) {
         reviewJob = reviewJob.restart {
             launchReport(

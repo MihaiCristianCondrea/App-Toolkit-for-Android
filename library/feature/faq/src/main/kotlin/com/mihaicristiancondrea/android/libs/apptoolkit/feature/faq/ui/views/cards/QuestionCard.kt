@@ -57,7 +57,10 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.spacers.Sm
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.text.HtmlText
 
 /**
- * Displays one expandable FAQ entry.
+ * Displays one FAQ entry whose expanded state is controlled by the caller.
+ *
+ * @param summary Answer rendered as HTML when the entry is expanded.
+ * @param onToggleExpand Requests an expansion state change.
  *
  * @param groupedPosition Optional position in the FAQ content group. When supplied, the card
  * uses grouped corners and a compact layout; when omitted, the standalone shape is kept.

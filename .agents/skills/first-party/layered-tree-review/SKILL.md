@@ -46,7 +46,8 @@ Use them when behavior, not placement, decides the answer:
 - `android-ui-layer`: Google's guidance on UI state, events, and state holders.
 - `app-toolkit`: Toolkit screen contracts and implementation conventions.
 
-This skill owns module, package, and file placement. Use the sibling skills for behavior.
+This skill owns module, package, and file placement. Use the sibling skills for behavior and
+`writing-style` for KDoc and module documentation.
 
 ## How to apply
 

@@ -27,7 +27,12 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.data.remote.
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.data.remote.mappers.toFaqItems
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.data.remote.models.FaqQuestionDto
 
-/** Uses bundled questions when the remote catalog fails or has no usable entries. */
+/**
+ * Resolves the host product from the remote catalog and normalizes both sources before selection.
+ *
+ * @param catalogUrl Full URL for the selected catalog environment.
+ * @param productId Matches the product ID or alternate key in the catalog.
+ */
 class DefaultFaqRepository(
     private val localDataSource: FaqLocalDataSource,
     private val remoteDataSource: FaqRemoteDataSource,
@@ -55,6 +60,7 @@ class DefaultFaqRepository(
         return emptyList()
     }
 
+    /** Reads the host product's question sources and keeps results from sources that succeed. */
     private suspend fun fetchRemoteFaqItems(): List<FaqItem> {
         val catalog = networkCall { remoteDataSource.fetchCatalog(url = catalogUrl) }
         val product = catalog.products.firstOrNull { it.productId == productId || it.key == productId }

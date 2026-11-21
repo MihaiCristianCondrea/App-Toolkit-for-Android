@@ -21,8 +21,10 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.data.remote.
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.data.models.FaqId
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.data.models.FaqItem
 
+/** Maps the question source entries to application models in source order. */
 internal fun Iterable<FaqQuestionDto>.toFaqItems(): List<FaqItem> = map(transform = FaqQuestionDto::toFaqItem)
 
+/** Keeps the catalog ID and question text needed by the application model. */
 internal fun FaqQuestionDto.toFaqItem(): FaqItem =
     FaqItem(
         id = FaqId(value = id),

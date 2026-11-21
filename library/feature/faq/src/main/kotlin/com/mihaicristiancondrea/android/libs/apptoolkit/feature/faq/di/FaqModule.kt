@@ -30,6 +30,11 @@ import org.koin.core.module.Module
 import org.koin.core.module.dsl.viewModel
 import org.koin.dsl.module
 
+/**
+ * Registers the FAQ sources, repository and ViewModel for the host.
+ *
+ * @param hostBuildConfig Selects the catalog environment and identifies the host's catalog product.
+ */
 fun faqModule(hostBuildConfig: AppToolkitHostBuildConfig): Module = module {
     single<FaqLocalDataSource> { FaqLocalDataSource(context = get()) }
     single<FaqRemoteDataSource> { FaqRemoteDataSource(client = get()) }

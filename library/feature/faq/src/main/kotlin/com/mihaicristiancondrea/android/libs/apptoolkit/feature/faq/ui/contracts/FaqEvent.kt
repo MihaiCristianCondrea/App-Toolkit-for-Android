@@ -19,11 +19,18 @@ package com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.ui.contract
 
 import com.mihaicristiancondrea.android.libs.apptoolkit.integration.review.domain.models.ReviewHost
 
+/** Requests and acknowledgments handled by the FAQ ViewModel. */
 sealed interface FaqEvent {
+    /** Loads questions on entry or retries after an empty or failed result. */
     data object Load : FaqEvent
 
+    /**
+     * Requests an in-app review and uses the store listing as a fallback.
+     *
+     * @property host Activity-backed host for the review prompt.
+     */
     data class RequestReview(val host: ReviewHost) : FaqEvent
 
-    /** The screen opened the Play Store listing that `FaqUiState.openStoreListing` asked for. */
+    /** Acknowledges that the screen handled the pending Play Store listing request. */
     data object StoreListingOpened : FaqEvent
 }

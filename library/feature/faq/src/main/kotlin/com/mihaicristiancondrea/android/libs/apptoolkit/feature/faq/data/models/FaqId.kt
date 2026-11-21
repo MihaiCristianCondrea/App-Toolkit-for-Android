@@ -17,5 +17,6 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.data.models
 
+/** Identifies a FAQ item for deduplication and stable list keys. */
 @JvmInline
 value class FaqId(val value: String)

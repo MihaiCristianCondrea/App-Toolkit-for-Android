@@ -3,5 +3,6 @@ package <base>.feature.x.data.remote.mappers
 import <base>.feature.x.data.models.XModel
 import <base>.feature.x.data.remote.models.XDto
 
+/** Converts a wire entry to the application model while preserving its catalog identity. */
 internal fun XDto.toXModel(): XModel =
     XModel(id = id, title = title, availableQuantity = availableQuantity)

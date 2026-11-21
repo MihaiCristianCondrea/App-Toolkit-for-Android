@@ -19,6 +19,12 @@ package com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.data.remote
 
 import kotlinx.serialization.Serializable
 
+/**
+ * Catalog reference to a JSON array of FAQ questions.
+ *
+ * @property url URL passed to the question source request.
+ * @property category Classification supplied by the catalog.
+ */
 @Serializable
 data class FaqQuestionSourceDto(
     val url: String,

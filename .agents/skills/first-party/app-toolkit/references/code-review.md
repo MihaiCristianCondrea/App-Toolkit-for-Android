@@ -16,8 +16,10 @@ feature's behavior.
 - Check first load, empty content, usable state after a failure, retry, and the distinction
   between write success and a tap. Check that diagnostics use stable names and bounded context.
 - Check eligible Kotlin call sites against the named-argument rules in `traceable-code`.
-- Apply `writing-style` to new and inherited comments and KDoc in the touched code. Check that
-  policy and integration rationale live in the owning README and remove redundant narration.
+- Apply `writing-style` to new and inherited documentation. Review public KDoc coverage and
+  meaningful internal operations, then check the owning README and Mermaid diagram against the
+  implementation. Resolve stale identifiers and links. Use the project's Dokka checks where
+  configured.
 - Check public API impact and feature string ownership. Use relevant specialist skills if
   the review covers localization, security, navigation or another specialized concern.
 

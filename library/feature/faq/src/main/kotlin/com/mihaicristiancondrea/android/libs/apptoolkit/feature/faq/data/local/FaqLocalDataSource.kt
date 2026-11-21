@@ -24,6 +24,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.R
 
 /** Reads the FAQ question and answer pairs supplied through host string resources. */
 class FaqLocalDataSource(private val context: Context) {
+    /** Reads the localized host slots in resource order, including empty placeholders. */
     fun loadLocalQuestions(): List<FaqItem> {
         val faq = listOf(
             R.string.question_1 to R.string.summary_preference_faq_1,

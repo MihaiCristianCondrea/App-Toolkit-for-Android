@@ -30,6 +30,7 @@ internal object FaqAnalytics {
     val SCREEN = TrackedScreen(name = SCREEN_NAME, className = "FaqScreen")
 }
 
+/** Builds a GA4 selection event for a FAQ question, feedback action or support card. */
 internal fun faqSelectContentEvent(
     contentType: String,
     itemId: String,
@@ -46,6 +47,7 @@ internal fun faqSelectContentEvent(
     )
 }
 
+/** Builds a question selection event with its zero-based position and resulting expansion state. */
 internal fun faqQuestionSelectEvent(
     faqId: String,
     position: Int,
@@ -61,6 +63,7 @@ internal fun faqQuestionSelectEvent(
     )
 }
 
+/** Builds a settings action event attributed to the help screen. */
 internal fun faqActionEvent(
     actionName: String,
     params: Map<String, AnalyticsValue> = emptyMap(),
