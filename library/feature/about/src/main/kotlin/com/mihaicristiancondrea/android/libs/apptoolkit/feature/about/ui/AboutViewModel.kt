@@ -42,7 +42,7 @@ import kotlinx.coroutines.Job
  *
  * Successful clipboard writes show a message when the platform provides no confirmation.
  */
-open class AboutViewModel(
+class AboutViewModel(
     private val aboutRepository: AboutRepository,
     private val clipboardRepository: ClipboardRepository,
     telemetryRepository: TelemetryRepository,
