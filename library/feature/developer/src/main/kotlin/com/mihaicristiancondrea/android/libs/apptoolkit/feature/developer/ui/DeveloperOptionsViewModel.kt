@@ -51,51 +51,21 @@ internal class DeveloperOptionsViewModel(
         when (event) {
             DeveloperOptionsEvent.Load -> observeSettings()
             DeveloperOptionsEvent.Reset -> resetOptions()
-            is DeveloperOptionsEvent.SetLayout -> saveOption(DeveloperOption.Layout) {
-                preferences.setLayoutMode(event.value)
-            }
-            is DeveloperOptionsEvent.SetTopBarStyle -> saveOption(DeveloperOption.TopBarStyle) {
-                preferences.setTopBarOverride(event.value)
-            }
-            is DeveloperOptionsEvent.SetHideTopBarOnScroll -> saveOption(DeveloperOption.HideTopBarOnScroll) {
-                preferences.setHideTopBarOnScroll(event.value)
-            }
-            is DeveloperOptionsEvent.SetNavigationBarStyle -> saveOption(DeveloperOption.NavigationBarStyle) {
-                preferences.setNavigationBarStyle(event.value)
-            }
-            is DeveloperOptionsEvent.SetHideBottomBarOnScroll -> saveOption(DeveloperOption.HideBottomBarOnScroll) {
-                preferences.setHideBottomBarOnScroll(event.value)
-            }
-            is DeveloperOptionsEvent.SetNavigationTint -> saveOption(DeveloperOption.NavigationTint) {
-                preferences.setNavigationTint(event.value)
-            }
-            is DeveloperOptionsEvent.SetContentWidth -> saveOption(DeveloperOption.ContentWidth) {
-                preferences.setLimitContentWidth(event.value)
-            }
-            is DeveloperOptionsEvent.SetStartOverride -> saveOption(DeveloperOption.StartOverride) {
-                preferences.setStartOverride(event.value)
-            }
-            is DeveloperOptionsEvent.SetTabTransition -> saveOption(DeveloperOption.TabTransition) {
-                preferences.setTabTransition(event.value)
-            }
-            is DeveloperOptionsEvent.SetBackEdge -> saveOption(DeveloperOption.BackEdge) {
-                preferences.setBackEdgeStyle(event.value)
-            }
-            is DeveloperOptionsEvent.SetAnimationSpeed -> saveOption(DeveloperOption.AnimationSpeed) {
-                preferences.setAnimationSpeed(event.value)
-            }
-            is DeveloperOptionsEvent.SetEntranceStyle -> saveOption(DeveloperOption.EntranceStyle) {
-                preferences.setEntranceStyle(event.value)
-            }
-            is DeveloperOptionsEvent.SetMotionTempo -> saveOption(DeveloperOption.MotionTempo) {
-                preferences.setMotionTempo(event.value)
-            }
-            is DeveloperOptionsEvent.SetEntranceReplay -> saveOption(DeveloperOption.EntranceReplay) {
-                preferences.setEntranceReplay(event.value)
-            }
-            is DeveloperOptionsEvent.SetBottomAccessory -> saveOption(DeveloperOption.BottomAccessory) {
-                preferences.setAccessoryMode(event.value)
-            }
+            is DeveloperOptionsEvent.SetLayout -> saveOption(DeveloperOption.Layout) { preferences.setLayoutMode(event.value) }
+            is DeveloperOptionsEvent.SetTopBarStyle -> saveOption(DeveloperOption.TopBarStyle) { preferences.setTopBarOverride(event.value) }
+            is DeveloperOptionsEvent.SetHideTopBarOnScroll -> saveOption(DeveloperOption.HideTopBarOnScroll) { preferences.setHideTopBarOnScroll(event.value) }
+            is DeveloperOptionsEvent.SetNavigationBarStyle -> saveOption(DeveloperOption.NavigationBarStyle) { preferences.setNavigationBarStyle(event.value) }
+            is DeveloperOptionsEvent.SetHideBottomBarOnScroll -> saveOption(DeveloperOption.HideBottomBarOnScroll) { preferences.setHideBottomBarOnScroll(event.value) }
+            is DeveloperOptionsEvent.SetNavigationTint -> saveOption(DeveloperOption.NavigationTint) { preferences.setNavigationTint(event.value) }
+            is DeveloperOptionsEvent.SetContentWidth -> saveOption(DeveloperOption.ContentWidth) { preferences.setLimitContentWidth(event.value) }
+            is DeveloperOptionsEvent.SetStartOverride -> saveOption(DeveloperOption.StartOverride) { preferences.setStartOverride(event.value) }
+            is DeveloperOptionsEvent.SetTabTransition -> saveOption(DeveloperOption.TabTransition) { preferences.setTabTransition(event.value) }
+            is DeveloperOptionsEvent.SetBackEdge -> saveOption(DeveloperOption.BackEdge) { preferences.setBackEdgeStyle(event.value) }
+            is DeveloperOptionsEvent.SetAnimationSpeed -> saveOption(DeveloperOption.AnimationSpeed) { preferences.setAnimationSpeed(event.value) }
+            is DeveloperOptionsEvent.SetEntranceStyle -> saveOption(DeveloperOption.EntranceStyle) { preferences.setEntranceStyle(event.value) }
+            is DeveloperOptionsEvent.SetMotionTempo -> saveOption(DeveloperOption.MotionTempo) { preferences.setMotionTempo(event.value) }
+            is DeveloperOptionsEvent.SetEntranceReplay -> saveOption(DeveloperOption.EntranceReplay) { preferences.setEntranceReplay(event.value) }
+            is DeveloperOptionsEvent.SetBottomAccessory -> saveOption(DeveloperOption.BottomAccessory) { preferences.setAccessoryMode(event.value) }
         }
     }
 
