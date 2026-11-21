@@ -64,9 +64,14 @@ private fun load() {
 - `onError` receives the failure and maps it into state or a message with `toFailed` or
   `toErrorMessage` (`errors.md`). The fallback is the screen's localized text. Keep a single-use resource at the call site. Leaving it empty is right only when the user has nothing to see
   or do, as with the About easter egg write.
-- `restart` cancels the previous job before starting the next, so a retry never races the load it
-  replaces. An operation where every call must complete, such as a copy or a save, launches without
-  it.
+- Use `ifIsActive` for duplicate requests with the same inputs. Changelog keeps the active
+  fetch. A completed or failed load allows Retry to start a fresh job.
+- Use `restart` when new input supersedes the current work, such as a new search query or
+  replacement settings observer. It requests cancellation and starts the next job without
+  joining the old one. Use cooperative cancellation and guard result publication if an old
+  result can still arrive. Cancellation should produce neither a failure message nor telemetry.
+- Launch independently when each write must complete. For ordered mutations, keep the ordering
+  in the existing repository contract or serialize the operation where it is owned.
 - `extra` adds attributes to the operation's breadcrumbs and events. Keep its values free of user
   text.
 
@@ -106,8 +111,9 @@ combine(repository.items, preferences.sortOrder) { items, order -> items.sortedB
     }
 ```
 
-Use `catchReport` only when the flow has to keep going after the failure, by emitting a fallback
-into a chain that continues, for example before `stateIn`:
+Use `catchReport` to report and optionally emit a fallback into a surrounding chain, for
+example before `stateIn`. A fallback completes the failed upstream collection. Use an explicit
+retry or resubscription when updates need to resume:
 
 ```kotlin
 val summary: StateFlow<Loadable<Summary>> = repository.observeSummary()

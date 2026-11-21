@@ -30,3 +30,14 @@ Data APIs must be main-safe. The owner of a blocking call switches only that wor
 appropriate injected dispatcher. Suspend DataStore, Room and network calls that are already
 main-safe need no switch. Keep product analytics in UI or at the relevant product boundary.
 Repositories use diagnostics for operational failures.
+
+## Example: a genuinely new feature
+
+Suppose the app needs a catalog absent from the host and the resolved Toolkit API. Use
+`android-ui-layer` for the screen contract and `android-data-layer` for fetching. Read the
+placement reference before drafting files. A typical remote catalog has `ui/CatalogViewModel.kt`,
+`ui/contracts/CatalogEvent.kt`, `ui/states/CatalogUiState.kt` and a repository under
+`data/repositories/`. Put wire DTOs and DTO-to-model mapping under `data/remote/` in their
+designated packages. The ViewModel can call the repository directly unless a domain operation
+adds meaningful policy or coordinates distinct data sources through repositories. Plan tests for
+load, failure and recovery with the project's existing tooling.

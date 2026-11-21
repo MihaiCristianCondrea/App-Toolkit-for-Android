@@ -217,6 +217,13 @@ formatter, converter, transformer, adapter, or extension responsibility. Do not 
 `Utils.kt`, `Extensions.kt`, or `Reducers.kt` files. Do not create artificial operations merely
 to populate these folders.
 
+For example, FAQ's `FaqQuestionDto.toFaqItem()` crosses the wire-to-application boundary
+and belongs in `data/remote/mappers/` even if the body is short. A local query update in
+`setState { copy(...) }` stays in the ViewModel. A named operation that derives matching rows
+is a transformer if it has an independent contract. Checking whether a query is valid is
+validation, formatting a result label is formatting, and extension syntax changes none of
+those responsibilities.
+
 ## Extensions and constants
 
 - Classify an extension by what it does, not its `Receiver.method()` syntax. An extension that

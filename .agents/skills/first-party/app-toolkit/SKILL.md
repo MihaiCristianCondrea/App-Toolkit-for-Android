@@ -8,21 +8,19 @@ description: >
 
 # App Toolkit
 
-Start here for App Toolkit work. Identify whether the task changes the reusable library,
-the sample app, a consumer app, or a standalone Android app. Follow the target's local instructions and identify the owning
-module before proposing a change.
+## Discover before designing
 
-- **Toolkit source available.** Read the affected module README, implementation, tests, and build
-  configuration. For integration, resolve the Toolkit dependency or source substitution used by
-  the target app. Use the current source for library work and the resolved public contract for
-  consumer work. Treat examples here as patterns, with signatures subject to verification.
-- **Toolkit source unavailable.** Use the references below to make architecture and placement
-  decisions. Verify specific API calls against the consumer's dependencies, IDE declarations,
-  sources JAR, artifact, or published docs for its version. If a symbol cannot be verified,
-  identify the gap and keep the design independent of that symbol. A Toolkit checkout is optional.
-- **Standalone Android.** Apply the shared architecture and ViewModel conventions to the project's
-  existing AndroidX stack. Use the AndroidX example in the ViewModel reference. Toolkit dependencies
-  and Toolkit-specific APIs are only relevant to projects that already use them.
+1. Establish the target. For **Toolkit development**, search Toolkit feature modules, the assembled
+   graph, and the sample. For an **installed Toolkit dependency**, resolve the actual artifact
+   version and search the host's graph and bindings plus that version's public API. Toolkit source
+   and the sample can suggest where to look. For **standalone Android**, search the app's own
+   destinations and shared components and use its AndroidX stack.
+2. Search by capability and by user-facing, route or module names. Read the owning README,
+   implementation, tests and host example where available. Identify the entry point, extension
+   points and what the host must supply. A request to add FAQ may already be covered by Help.
+3. Decide whether to reuse, configure, extend or build. For a consumer, verify every API used
+   against the resolved public contract. If the available evidence is incomplete, say what remains
+   unverified. [Consumer integration](references/consumer-integration.md) walks through FAQ reuse.
 
 Read only the references and installed specialist skills that the task needs. Look up specialist
 skills by name in the active catalog, since installations can use different directory layouts.
@@ -38,6 +36,16 @@ The references here describe the Toolkit conventions even when a specialist is u
 | Code review | [Code review](references/code-review.md) | Load the owners for the code under review. |
 | Verification | [Validation](references/validation.md) | `android-build-validation` owns environment setup and Gradle checks. |
 
-Load the relevant specialist for work involving storage, localization, telemetry or another
-specific Android API. Keep the target project's approval and design workflows in force. Each
-specialist retains ownership of its subject.
+Before implementation, identify the affected responsibilities and checks:
+
+- For a new or moved declaration, read the actual placement reference from `layered-tree-review`
+  before proposing the file tree. When data behavior changes, use `android-data-layer` and
+  evaluate whether `android-domain-layer` applies. A direct repository call may be enough.
+- Use `navigation-3` for destination or graph changes in a Navigation 3 project, `android-localization`
+  for localized resources, and `android-datastore` only for persistence work involving DataStore.
+- For implementation, use `android-build-validation` to select checks. Use the existing test
+  setup and the relevant specialist's testing guidance. Load `testing-setup` when the project
+  needs a test strategy or infrastructure.
+
+Use the existing telemetry contract and its specialist when changing instrumentation. Keep the
+target project's approval and design workflows in force.

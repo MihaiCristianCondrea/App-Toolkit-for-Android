@@ -24,3 +24,13 @@ Changelog shows initial loading, empty and retryable failure in the sheet. Theme
 stored selection before drawing the preference rows. Developer Options starts with the last known
 settings or host defaults and uses a snackbar action to retry a failed read. These are choices
 based on what each surface can still render.
+
+## Example: add filtering to an existing screen
+
+First identify the current owner of the query and the rows. Toolkit Settings keeps its local
+query and index at the screen boundary. For a settings entry, check whether the resolved API
+already supports indexing it through host settings or a settings search provider. For a local
+filter over loaded rows, keep the query near the rendering owner and derive visible rows from
+the existing data. Distinguish no matches from load failure. If the query drives repository
+requests, handle it as a typed event and apply latest-query behavior using the UI specialist's
+operation guidance. Test clearing the query, no matches and stale results where applicable.

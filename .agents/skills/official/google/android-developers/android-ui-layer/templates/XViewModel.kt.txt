@@ -38,11 +38,20 @@ class XViewModel(
         }
     }
 
+    // Repeated Load events request the same data, so keep the active fetch.
     private fun load() {
-        loadJob = loadJob.restart {
+        loadJob = loadJob.ifIsActive {
             launchReport(
                 action = Actions.LOAD,
-                onError = { error -> setState { copy(items = error.toFailed(fallback = LoadFailedText)) } },
+                onError = { error ->
+                    setState {
+                        copy(
+                            items = error.toFailed(
+                                fallback = UiText.StringResource(R.string.x_load_failed),
+                            ),
+                        )
+                    }
+                },
             ) {
                 setState { copy(items = Loadable.Loading) }
                 val items = repository.getItems().toXItems()
@@ -53,10 +62,5 @@ class XViewModel(
 
     private object Actions {
         const val LOAD: String = "load"
-    }
-
-    private companion object {
-        /** Shown for a failure with no text of its own; see `toUiText` for the ones that have one. */
-        val LoadFailedText = UiText.StringResource(R.string.x_load_failed)
     }
 }
