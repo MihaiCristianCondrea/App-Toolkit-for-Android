@@ -15,7 +15,7 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.mihaicristiancondrea.android.libs.apptoolkit.feature.changelog.ui.extensions
+package com.mihaicristiancondrea.android.libs.apptoolkit.feature.changelog.ui.transformers
 
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.changelog.utils.MarkdownFence
 

@@ -18,4 +18,5 @@
     <string name="changelog_title">App changelog</string>
     <string name="changelog_all_releases">All releases</string>
     <string name="no_new_updates_message">No new updates available.</string>
+    <string name="changelog_current">Current</string>
 </resources>

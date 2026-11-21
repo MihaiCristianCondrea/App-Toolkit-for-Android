@@ -17,18 +17,14 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.changelog.ui
 
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.changelog.ui.extensions.splitAtThematicBreaks
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material.icons.outlined.NewReleases
@@ -43,35 +39,36 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.rememberBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.telemetry.models.TrackedScreen
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.context.openUrl
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.icons.ToolkitIcon
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.UiText
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.R as CoreUiR
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.Loadable
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.ScreenHost
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.ButtonMeasurements
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.GeneralButton
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.GeneralButtonStyle
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.dividers.HorizontalWavyDivider
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.spacers.LargeHorizontalSpacer
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.changelog.R
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.changelog.ui.contracts.ChangelogEvent
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.changelog.ui.states.ChangelogUiState
-import dev.jeziellago.compose.markdowntext.MarkdownText
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.changelog.ui.views.lists.ChangelogReleaseList
 import org.koin.compose.viewmodel.koinViewModel
+
+private val CHANGELOG_SCREEN = TrackedScreen(name = "Changelog", className = "ChangelogDialog")
 
 /**
  * Displays the host application's package-aware changelog in a modal bottom sheet.
  *
- * This is the stateful half. It owns the [ChangelogViewModel], which decides the network source
- * and the fallback, and the sheet itself, and hands what the sheet shows to
+ * Collects the [ChangelogViewModel] state and tracks the sheet visit before rendering
  * [ChangelogDialogContent].
  *
  * @param releasesUrl A page with more release notes, such as
@@ -97,12 +94,14 @@ fun ChangelogDialog(
         onDismissRequest = onDismiss,
         sheetState = sheetState,
     ) {
-        ChangelogDialogContent(
-            state = state,
-            onRetry = { viewModel.onEvent(ChangelogEvent.Load) },
-            onDismiss = onDismiss,
-            onOpenReleases = releasesUrl?.let { url -> { context.openUrl(url) } },
-        )
+        ScreenHost(screen = CHANGELOG_SCREEN, status = state.markdown, viewModel = viewModel) {
+            ChangelogDialogContent(
+                state = state,
+                onRetry = { viewModel.onEvent(ChangelogEvent.Load) },
+                onDismiss = onDismiss,
+                onOpenReleases = releasesUrl?.let { url -> { context.openUrl(url) } },
+            )
+        }
     }
 }
 
@@ -134,10 +133,9 @@ internal fun ChangelogDialogContent(
         modifier = modifier
             .fillMaxHeight()
             .padding(horizontal = SizeConstants.LargeSize),
-        verticalArrangement = Arrangement.spacedBy(SizeConstants.LargeSize),
     ) {
         Row(
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier.fillMaxWidth().padding(bottom = SizeConstants.LargeSize),
             verticalAlignment = Alignment.CenterVertically,
         ) {
             Icon(imageVector = Icons.Outlined.NewReleases, contentDescription = null)
@@ -162,7 +160,7 @@ internal fun ChangelogDialogContent(
                 .fillMaxWidth(),
             contentAlignment = Alignment.Center,
         ) {
-            ChangelogBody(markdown = markdown)
+            ChangelogBody(markdown = markdown, currentVersion = state.currentVersion)
         }
         GeneralButton(
             modifier = Modifier.fillMaxWidth(),
@@ -179,7 +177,7 @@ internal fun ChangelogDialogContent(
 
 @OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
-private fun ChangelogBody(markdown: Loadable<String>) {
+private fun ChangelogBody(markdown: Loadable<String>, currentVersion: String) {
     when (markdown) {
         Loadable.Loading -> Row(
             verticalAlignment = Alignment.CenterVertically,
@@ -194,25 +192,7 @@ private fun ChangelogBody(markdown: Loadable<String>) {
 
         is Loadable.Empty -> Text(text = stringResource(id = R.string.no_new_updates_message))
 
-        is Loadable.Ready -> {
-            // Use the Toolkit's wavy divider instead of the Markdown renderer's flat rule.
-            val sections = remember(markdown.value) { markdown.value.splitAtThematicBreaks() }
-            Column(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .verticalScroll(rememberScrollState()),
-            ) {
-                sections.forEachIndexed { index, section ->
-                    if (index > 0) {
-                        HorizontalWavyDivider(modifier = Modifier.padding(vertical = SizeConstants.LargeSize))
-                    }
-                    MarkdownText(
-                        modifier = Modifier.fillMaxWidth(),
-                        markdown = section,
-                    )
-                }
-            }
-        }
+        is Loadable.Ready -> ChangelogReleaseList(markdown = markdown.value, currentVersion = currentVersion)
     }
 }
 
@@ -223,6 +203,7 @@ private fun ChangelogDialogContentPreview() {
         ChangelogDialogContent(
             state = ChangelogUiState(
                 markdown = Loadable.Ready("# 2.0.0\n- A new settings search\n\n---\n\n# 1.9.0\n- Faster start"),
+                currentVersion = "2.0.0",
             ),
             onRetry = {},
             onDismiss = {},

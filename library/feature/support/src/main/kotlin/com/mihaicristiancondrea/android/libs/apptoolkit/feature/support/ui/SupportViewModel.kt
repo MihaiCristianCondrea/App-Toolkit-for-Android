@@ -95,14 +95,14 @@ class SupportViewModel(
      * retry also restarts a stream that failed, then queries the products.
      */
     private fun load() {
-        if (productDetailsJob?.isActive != true) observeProductDetails()
-        if (purchaseResultJob?.isActive != true) observePurchaseResults()
+        productDetailsJob = productDetailsJob.ifIsActive(::observeProductDetails)
+        purchaseResultJob = purchaseResultJob.ifIsActive(::observePurchaseResults)
         queryProductDetails()
     }
 
     /** The repository replays its last result, so a page opened again shows its options at once. */
-    private fun observeProductDetails() {
-        productDetailsJob = billingRepository.productDetails.collectReport(
+    private fun observeProductDetails(): Job =
+        billingRepository.productDetails.collectReport(
             action = Actions.OBSERVE_PRODUCT_DETAILS,
             onError = { error -> showLoadFailure(error = error) },
         ) { details ->
@@ -117,10 +117,9 @@ class SupportViewModel(
                 )
             }
         }
-    }
 
-    private fun observePurchaseResults() {
-        purchaseResultJob = billingRepository.purchaseResult.collectReport(
+    private fun observePurchaseResults(): Job =
+        billingRepository.purchaseResult.collectReport(
             action = Actions.OBSERVE_PURCHASE_RESULT,
             onError = { error ->
                 endBillingLaunch()
@@ -129,7 +128,6 @@ class SupportViewModel(
         ) { result ->
             onPurchaseResult(result = result)
         }
-    }
 
     /**
      * Options already on screen stay while the query runs. The query publishes its result through

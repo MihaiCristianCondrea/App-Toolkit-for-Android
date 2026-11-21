@@ -119,47 +119,47 @@ class IssueReporterViewModel(
      * intact.
      */
     private fun sendReport() {
-        if (sendJob?.isActive == true) return
-
-        val draft: IssueReporterUiState = currentState
-        val validation: IssueReportValidation = validateReport(
-            title = draft.title,
-            description = draft.description,
-            email = draft.email,
-        )
-        setState { copy(fieldErrors = validation) }
-        if (!validation.isValid) {
-            logSendAttempt(draft = draft, failure = validation.failureName())
-            return
-        }
-
-        sendJob = launchReport(
-            action = Actions.SEND_REPORT,
-            onError = { error ->
-                setState { copy(submissionState = IssueSubmissionState.Failed) }
-                showMessage(error.toSendFailedMessage())
-                applyPendingReset()
-            },
-        ) {
-            val title: String = draft.title.trim()
-            val description: String = draft.description.trim()
-            val refusal: IssueReportRefusal? = historyRepository.refusalFor(title = title, description = description)
-            logSendAttempt(draft = draft, failure = refusal?.analyticsName)
-            if (refusal != null) {
-                showMessage(refusal.toMessage())
-                applyPendingReset()
-                return@launchReport
+        sendJob = sendJob.ifIsActive {
+            val draft: IssueReporterUiState = currentState
+            val validation: IssueReportValidation = validateReport(
+                title = draft.title,
+                description = draft.description,
+                email = draft.email,
+            )
+            setState { copy(fieldErrors = validation) }
+            if (!validation.isValid) {
+                logSendAttempt(draft = draft, failure = validation.failureName())
+                return
             }
 
-            setState { copy(submissionState = IssueSubmissionState.Sending) }
-            val issueUrl: String = repository.sendReport(
-                report = draft.toReport(deviceInfo = repository.captureDeviceInfo()),
-                target = githubTarget,
-                token = githubToken.takeIf { it.isNotBlank() },
-            )
-            historyRepository.recordSubmission(title = title, description = description)
-            setState { copy(submissionState = IssueSubmissionState.Submitted(issueUrl = issueUrl)) }
-            applyPendingReset()
+            launchReport(
+                action = Actions.SEND_REPORT,
+                onError = { error ->
+                    setState { copy(submissionState = IssueSubmissionState.Failed) }
+                    showMessage(error.toSendFailedMessage())
+                    applyPendingReset()
+                },
+            ) {
+                val title: String = draft.title.trim()
+                val description: String = draft.description.trim()
+                val refusal: IssueReportRefusal? = historyRepository.refusalFor(title = title, description = description)
+                logSendAttempt(draft = draft, failure = refusal?.analyticsName)
+                if (refusal != null) {
+                    showMessage(refusal.toMessage())
+                    applyPendingReset()
+                    return@launchReport
+                }
+
+                setState { copy(submissionState = IssueSubmissionState.Sending) }
+                val issueUrl: String = repository.sendReport(
+                    report = draft.toReport(deviceInfo = repository.captureDeviceInfo()),
+                    target = githubTarget,
+                    token = githubToken.takeIf { it.isNotBlank() },
+                )
+                historyRepository.recordSubmission(title = title, description = description)
+                setState { copy(submissionState = IssueSubmissionState.Submitted(issueUrl = issueUrl)) }
+                applyPendingReset()
+            }
         }
     }
 

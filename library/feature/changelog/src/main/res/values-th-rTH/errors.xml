@@ -15,6 +15,6 @@
   ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
   -->
 <resources>
-    <string name="error_loading_changelog_message">ไม่สามารถโหลดบันทึกการเปลี่ยนแปลงของแอปพลิเคชันได้ โปรดลองอีกครั้ง</string>
+    <string name="error_loading_changelog_message">ไม่สามารถโหลดบันทึกการเปลี่ยนแปลงของแอปพลิเคชันได้</string>
     <string name="loading_changelog_message">กำลังดึงบันทึกการเปลี่ยนแปลงของแอปพลิเคชัน…</string>
 </resources>

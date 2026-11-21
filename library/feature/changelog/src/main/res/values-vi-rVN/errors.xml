@@ -15,6 +15,6 @@
   ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
   -->
 <resources>
-    <string name="error_loading_changelog_message">Không thể tải nhật ký thay đổi của ứng dụng. Vui lòng thử lại.</string>
+    <string name="error_loading_changelog_message">Không thể tải nhật ký thay đổi của ứng dụng.</string>
     <string name="loading_changelog_message">Đang lấy nhật ký thay đổi của ứng dụng…</string>
 </resources>

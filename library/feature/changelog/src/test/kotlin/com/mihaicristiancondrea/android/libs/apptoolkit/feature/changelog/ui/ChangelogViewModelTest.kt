@@ -28,6 +28,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.feature.changelog.R
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.changelog.data.repositories.ChangelogRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.changelog.domain.usecases.GetChangelogUseCase
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.changelog.ui.contracts.ChangelogEvent
+import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.RegisterExtension
@@ -57,12 +58,38 @@ class ChangelogViewModelTest {
         get() = (message as UiText.StringResource).resourceId
 
     @Test
-    fun `the first load shows the current version's notes`() = runTest(dispatcherExtension.testDispatcher) {
+    fun `the first load keeps full history and the installed version`() = runTest(dispatcherExtension.testDispatcher) {
         val viewModel = createViewModel(FakeChangelogRepository(markdown = "# 2.0.0\n- New\n# 1.0.0\n- Old"))
         advance()
 
-        assertEquals(Loadable.Ready("# 2.0.0\n- New"), viewModel.state.value.markdown)
+        assertEquals(Loadable.Ready("# 2.0.0\n- New\n# 1.0.0\n- Old"), viewModel.state.value.markdown)
+        assertEquals("2.0.0", viewModel.state.value.currentVersion)
     }
+
+    @Test
+    fun `a load requested during the first fetch keeps the active fetch`() =
+        runTest(dispatcherExtension.testDispatcher) {
+            val response = CompletableDeferred<String>()
+            var requests = 0
+            val viewModel = createViewModel(
+                object : ChangelogRepository {
+                    override suspend fun getChangelog(packageName: String): String {
+                        requests++
+                        return response.await()
+                    }
+                },
+            )
+
+            viewModel.onEvent(ChangelogEvent.Load)
+            advance()
+            assertEquals(1, requests)
+            assertEquals(Loadable.Loading, viewModel.state.value.markdown)
+
+            val markdown = "# 2.0.0\n- New"
+            response.complete(markdown)
+            advance()
+            assertEquals(Loadable.Ready(markdown), viewModel.state.value.markdown)
+        }
 
     @Test
     fun `a blank changelog shows the empty state`() = runTest(dispatcherExtension.testDispatcher) {

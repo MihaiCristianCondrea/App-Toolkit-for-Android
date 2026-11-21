@@ -94,7 +94,7 @@ abstract class ScreenViewModel<S, E : Any>(initialState: S) : ViewModel() {
     }
 
     /** Returns this job while it is active. Otherwise, calls [orStart] and returns the new job. */
-    protected fun Job?.ifIsActive(orStart: () -> Job): Job =
+    protected inline fun Job?.ifIsActive(orStart: () -> Job): Job =
         this?.takeIf { it.isActive } ?: orStart()
 
     /** Cancels this job, if any, and starts the one [start] returns. */

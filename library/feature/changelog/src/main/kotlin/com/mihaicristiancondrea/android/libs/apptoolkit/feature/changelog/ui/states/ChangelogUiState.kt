@@ -29,4 +29,5 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.Loadable
 @Immutable
 data class ChangelogUiState(
     val markdown: Loadable<String> = Loadable.Loading,
+    val currentVersion: String = "",
 )

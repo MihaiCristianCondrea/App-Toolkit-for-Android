@@ -20,12 +20,13 @@ import kotlin.test.assertSame
 class GetChangelogUseCaseTest {
 
     @Test
-    fun `current version section is preferred`() = runTest {
+    fun `full history and installed version are returned`() = runTest {
         val history = "# 2.0.0\n- Current\n# 1.0.0\n- Previous"
         val repository = FakeChangelogRepository(markdown = history)
         val useCase = GetChangelogUseCase(repository, buildInfo(version = "2.0.0"))
 
-        assertEquals("# 2.0.0\n- Current", useCase())
+        assertEquals(history, useCase().markdown)
+        assertEquals("2.0.0", useCase().currentVersion)
         assertEquals("com.example.app", repository.requestedPackage)
     }
 
@@ -37,7 +38,7 @@ class GetChangelogUseCaseTest {
             buildInfoRepository = buildInfo(version = "2.0.0"),
         )
 
-        assertEquals(history, useCase())
+        assertEquals(history, useCase().markdown)
     }
 
     @Test
@@ -47,7 +48,7 @@ class GetChangelogUseCaseTest {
             buildInfoRepository = buildInfo(version = "2.0.0"),
         )
 
-        assertEquals("", useCase())
+        assertEquals("", useCase().markdown)
     }
 
     @Test

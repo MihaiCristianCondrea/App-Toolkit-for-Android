@@ -55,14 +55,19 @@ class ChangelogViewModel(
     }
 
     private fun loadChangelog() {
-        loadJob = loadJob.restart {
+        loadJob = loadJob.ifIsActive {
             launchReport(
                 action = Actions.LOAD_CHANGELOG,
                 onError = { error -> setState { copy(markdown = error.toFailed(fallback = LoadFailedText)) } },
             ) {
                 setState { copy(markdown = Loadable.Loading) }
-                val markdown = getChangelogUseCase()
-                setState { copy(markdown = if (markdown.isBlank()) Loadable.Empty() else Loadable.Ready(markdown)) }
+                val history = getChangelogUseCase()
+                setState {
+                    copy(
+                        markdown = if (history.markdown.isBlank()) Loadable.Empty() else Loadable.Ready(history.markdown),
+                        currentVersion = history.currentVersion,
+                    )
+                }
             }
         }
     }
