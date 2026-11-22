@@ -15,31 +15,24 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.ui.navigation
+package com.mihaicristiancondrea.android.libs.apptoolkit.feature.display.ui.navigation
 
-import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.ui.AboutScreen
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.display.R
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.display.ui.DisplaySettingsScreen as DisplaySettingsScreenContentEntry
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.PaneRole
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.ShellGraphBuilder
-import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.AboutScreen
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.R as CoreUiR
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.DisplaySettingsScreen
 
 /**
- * Registers the About page, a detail of the settings list, unless the app registered its own.
- *
- * An app that wants more from About, such as reacting to taps on the version, calls this itself
- * before the Toolkit's pages are added, with its own [about] content:
- *
- * ```
- * aboutScreen { AboutScreen(onVersionTap = { taps -> unlockAfter(taps) }) }
- * ```
+ * Registers the display settings page for [DisplaySettingsScreen], a detail of the settings list,
+ * unless the app registered its own.
  */
-fun ShellGraphBuilder.aboutScreen(about: @Composable () -> Unit = { AboutScreen() }) {
-    pageIfAbsent<AboutScreen>(
+fun ShellGraphBuilder.displaySettingsScreen() {
+    pageIfAbsent<DisplaySettingsScreen>(
         paneRole = PaneRole.Detail,
-        title = { stringResource(id = CoreUiR.string.about) },
+        title = { stringResource(R.string.display) },
     ) {
-        about()
+        DisplaySettingsScreenContentEntry()
     }
 }

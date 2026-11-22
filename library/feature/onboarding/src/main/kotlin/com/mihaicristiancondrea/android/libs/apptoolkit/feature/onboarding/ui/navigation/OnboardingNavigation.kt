@@ -15,29 +15,21 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.mihaicristiancondrea.android.libs.apptoolkit.feature.startup.ui.navigation
+package com.mihaicristiancondrea.android.libs.apptoolkit.feature.onboarding.ui.navigation
 
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.startup.ui.StartupScreen
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.onboarding.ui.OnboardingScreen as OnboardingScreenContentEntry
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.PaneRole
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.ShellGraphBuilder
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.OnboardingScreen
-import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.StartupScreen
 
 /**
- * Registers [StartupScreen], the first-launch start screen (consent and runtime permissions),
- * unless the app registered its own. Continuing hands over to [OnboardingScreen], which
- * `:library:feature:onboarding` registers; this module opens it by key and does not depend on it.
- *
- * There is no shell under it, so back leaves the app. The app opens it by starting on
- * [StartupScreen] until onboarding is done, from `ShellHost(resolveStart = ...)`:
- *
- * ```
- * resolveStart = { if (dataStore.startup.first()) StartupScreen else null }
- * ```
+ * Registers [OnboardingScreen], the onboarding start screen, unless the app registered its own. It
+ * follows `StartupScreen` from `:library:feature:startup` and enters the shell when the person
+ * finishes it. There is no shell under it, so back leaves the app.
  *
  * It is also offered as a start screen in the developer options, to try it again.
  */
-fun ShellGraphBuilder.startupScreen() {
-    pageIfAbsent<StartupScreen>(paneRole = PaneRole.None, title = null) { StartupScreen() }
-    startScreens(StartupScreen)
+fun ShellGraphBuilder.onboardingScreen() {
+    pageIfAbsent<OnboardingScreen>(paneRole = PaneRole.None, title = null) { OnboardingScreenContentEntry() }
+    startScreens(OnboardingScreen)
 }

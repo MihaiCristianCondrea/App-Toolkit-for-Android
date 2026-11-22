@@ -15,41 +15,39 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.mihaicristiancondrea.android.libs.apptoolkit.feature.settings.ui.navigation
+package com.mihaicristiancondrea.android.libs.apptoolkit.feature.permissions.ui.navigation
 
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.PaneRole
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.shellGraph
-import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.SettingsScreen
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.PermissionsScreen
 import org.junit.jupiter.api.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
 import kotlin.test.assertTrue
 
-class SettingsPageTest {
+class PermissionsNavigationTest {
 
     @Test
-    fun `registers SettingsScreen as a list page with title, actions and placeholder`() {
+    fun `registers PermissionsScreen as a standalone page with a title`() {
         val graph = shellGraph(appTitle = 0) {
-            settingsScreen()
-            start(key = SettingsScreen)
+            permissionsScreen()
+            start(key = PermissionsScreen)
         }
 
-        assertTrue(graph.contains(key = SettingsScreen))
-        val destination = graph.destination(key = SettingsScreen)
-        assertEquals(PaneRole.List, destination.paneRole)
+        assertTrue(graph.contains(key = PermissionsScreen))
+        val destination = graph.destination(key = PermissionsScreen)
+        assertEquals(PaneRole.None, destination.paneRole)
         assertNotNull(destination.title)
-        assertNotNull(destination.actions)
-        assertNotNull(destination.placeholder)
     }
 
     @Test
-    fun `keeps an existing host registration for SettingsScreen`() {
+    fun `keeps an existing host registration for PermissionsScreen`() {
         val graph = shellGraph(appTitle = 0) {
-            page<SettingsScreen>(paneRole = PaneRole.None, title = null) {}
-            settingsScreen()
-            start(key = SettingsScreen)
+            page<PermissionsScreen>(paneRole = PaneRole.Detail, title = null) {}
+            permissionsScreen()
+            start(key = PermissionsScreen)
         }
 
-        assertEquals(PaneRole.None, graph.destination(key = SettingsScreen).paneRole)
+        assertEquals(PaneRole.Detail, graph.destination(key = PermissionsScreen).paneRole)
     }
 }

@@ -15,40 +15,39 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.mihaicristiancondrea.android.libs.apptoolkit.feature.theme.ui.navigation
+package com.mihaicristiancondrea.android.libs.apptoolkit.integration.ads.ui.navigation
 
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.PaneRole
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.shellGraph
-import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.ThemeSettingsScreen
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.AdsSettingsScreen
 import org.junit.jupiter.api.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
 import kotlin.test.assertTrue
 
-class ThemeSettingsPageTest {
+class AdsSettingsNavigationTest {
 
     @Test
-    fun `themeSettingsScreen registers ThemeSettingsScreen with a title and app bar actions`() {
+    fun `registers AdsSettingsScreen as a standalone page with a title`() {
         val graph = shellGraph(appTitle = 0) {
-            themeSettingsScreen()
-            start(key = ThemeSettingsScreen)
+            adsSettingsScreen()
+            start(key = AdsSettingsScreen)
         }
 
-        assertTrue(graph.contains(key = ThemeSettingsScreen))
-        val destination = graph.destination(key = ThemeSettingsScreen)
+        assertTrue(graph.contains(key = AdsSettingsScreen))
+        val destination = graph.destination(key = AdsSettingsScreen)
         assertEquals(PaneRole.None, destination.paneRole)
         assertNotNull(destination.title)
-        assertNotNull(destination.actions)
     }
 
     @Test
-    fun `themeSettingsScreen preserves a host page registered for ThemeSettingsScreen`() {
+    fun `keeps an existing host registration for AdsSettingsScreen`() {
         val graph = shellGraph(appTitle = 0) {
-            page<ThemeSettingsScreen>(paneRole = PaneRole.Detail, title = null) {}
-            themeSettingsScreen()
-            start(key = ThemeSettingsScreen)
+            page<AdsSettingsScreen>(paneRole = PaneRole.Detail, title = null) {}
+            adsSettingsScreen()
+            start(key = AdsSettingsScreen)
         }
 
-        assertEquals(PaneRole.Detail, graph.destination(key = ThemeSettingsScreen).paneRole)
+        assertEquals(PaneRole.Detail, graph.destination(key = AdsSettingsScreen).paneRole)
     }
 }

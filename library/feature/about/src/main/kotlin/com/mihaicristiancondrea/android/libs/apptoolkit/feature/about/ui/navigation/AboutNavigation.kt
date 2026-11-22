@@ -15,24 +15,31 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.mihaicristiancondrea.android.libs.apptoolkit.feature.display.ui.navigation
+package com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.ui.navigation
 
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.display.R
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.display.ui.DisplaySettingsScreen
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.ui.AboutScreen as AboutScreenContentEntry
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.PaneRole
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.ShellGraphBuilder
-import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.DisplaySettingsScreen
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.AboutScreen
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.R as CoreUiR
 
 /**
- * Registers the display settings page for [DisplaySettingsScreen], a detail of the settings list,
- * unless the app registered its own.
+ * Registers the About page, a detail of the settings list, unless the app registered its own.
+ *
+ * An app that wants more from About, such as reacting to taps on the version, calls this itself
+ * before the Toolkit's pages are added, with its own [about] content:
+ *
+ * ```
+ * aboutScreen { AboutScreen(onVersionTap = { taps -> unlockAfter(taps) }) }
+ * ```
  */
-fun ShellGraphBuilder.displaySettingsScreen() {
-    pageIfAbsent<DisplaySettingsScreen>(
+fun ShellGraphBuilder.aboutScreen(about: @Composable () -> Unit = { AboutScreenContentEntry() }) {
+    pageIfAbsent<AboutScreen>(
         paneRole = PaneRole.Detail,
-        title = { stringResource(R.string.display) },
+        title = { stringResource(id = CoreUiR.string.about) },
     ) {
-        DisplaySettingsScreen()
+        about()
     }
 }

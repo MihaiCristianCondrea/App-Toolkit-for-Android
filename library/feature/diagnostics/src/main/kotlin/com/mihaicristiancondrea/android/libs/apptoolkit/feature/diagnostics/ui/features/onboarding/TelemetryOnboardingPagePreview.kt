@@ -15,7 +15,7 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.mihaicristiancondrea.android.libs.apptoolkit.feature.diagnostics.ui.onboarding
+package com.mihaicristiancondrea.android.libs.apptoolkit.feature.diagnostics.ui.features.onboarding
 
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable

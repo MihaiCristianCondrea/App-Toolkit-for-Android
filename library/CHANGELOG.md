@@ -101,6 +101,8 @@
 - `ThemeOnboardingPageTab`, `OnboardingThemeViewModel`, `OnboardingThemeUiState`,
   `OnboardingThemeEvent`, and `AmoledModeToggleCard` moved to `feature.onboarding.ui.features.theme`
   and its subpackages (`contracts`, `states`, `views`).
+- `TelemetryOnboardingPage` moved to `feature.diagnostics.ui.features.onboarding` the same way, with
+  `UsageAndDiagnosticsToggleCard` and `PrivacyPolicySection` in its `views` subpackage.
 - `OnboardingPage` exposes `key` and `isEnabled` directly on the sealed base class,
   `FinishOnboardingPage` accepts an optional `isSelected` parameter, and `OnboardingFooter` accepts
   an optional `enabled` parameter.

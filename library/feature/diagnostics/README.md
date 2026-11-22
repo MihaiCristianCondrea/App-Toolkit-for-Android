@@ -100,7 +100,7 @@ flowchart TD
 ## Migration notes
 
 In `3.0.0-pre30`, `FirebaseOnboardingPage` was renamed directly to `TelemetryOnboardingPage`
-(`ui.onboarding`). Hosts must update imports and calls; no compatibility alias is provided.
+(`ui.features.onboarding`). Hosts must update imports and calls; no compatibility alias is provided.
 The name covers the page's usage and diagnostics reporting and its analytics and advertising
 consent choices. Keep the existing page key and pass the same `isSelected` value. Consent state,
 defaults and SDK updates keep their existing behavior. See the

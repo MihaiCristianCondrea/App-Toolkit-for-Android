@@ -15,7 +15,7 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.mihaicristiancondrea.android.libs.apptoolkit.feature.diagnostics.ui.onboarding
+package com.mihaicristiancondrea.android.libs.apptoolkit.feature.diagnostics.ui.features.onboarding
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -64,8 +64,8 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.feature.diagnostics.R
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.diagnostics.data.models.UsageAndDiagnosticsSettings
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.diagnostics.ui.UsageAndDiagnosticsViewModel
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.diagnostics.ui.contracts.UsageAndDiagnosticsEvent
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.diagnostics.ui.onboarding.cards.UsageAndDiagnosticsToggleCard
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.diagnostics.ui.onboarding.text.PrivacyPolicySection
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.diagnostics.ui.features.onboarding.views.UsageAndDiagnosticsToggleCard
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.diagnostics.ui.features.onboarding.views.PrivacyPolicySection
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.diagnostics.ui.states.UsageAndDiagnosticsUiState
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.diagnostics.ui.views.dialogs.FirebaseConsentDialog
 import org.koin.compose.viewmodel.koinViewModel

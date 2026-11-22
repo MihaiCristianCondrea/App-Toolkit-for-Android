@@ -24,7 +24,7 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ProcessLifecycleOwner
 import androidx.lifecycle.lifecycleScope
 import com.mihaicristiancondrea.android.apps.apptoolkit.di.initializeKoin
-import com.mihaicristiancondrea.android.apps.apptoolkit.integration.ads.constants.AdsConstants
+import com.mihaicristiancondrea.android.apps.apptoolkit.integration.ads.utils.constants.AdsConstants
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.AppToolkitApplication
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.style.AppThemeConfig
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.style.colors.ColorPalette

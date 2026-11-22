@@ -57,7 +57,7 @@ import org.junit.jupiter.api.Test
 import kotlin.time.TimeSource
 
 @OptIn(ExperimentalCoroutinesApi::class)
-class TestAppOpenAdController {
+class AppOpenAdControllerTest {
     private val testScope = CoroutineScope(Dispatchers.Unconfined)
     private val controllers = mutableListOf<AppOpenAdController>()
 

@@ -15,7 +15,7 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.navigation
+package com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui
 
 import androidx.compose.material3.SegmentedButton
 import androidx.compose.runtime.Composable
@@ -27,21 +27,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.runtime.getValue
 import androidx.lifecycle.compose.LifecycleStartEffect
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.BillSplitterToolViewModel
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.BreathingToolViewModel
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.CoinFlipToolViewModel
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.CompassToolViewModel
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.CounterToolViewModel
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.DiceRollToolViewModel
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.FlashDimmerToolViewModel
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.LevelToolViewModel
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.MorseToolViewModel
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.ProtractorToolViewModel
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.RandomNumberToolViewModel
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.ReactionTestToolViewModel
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.RulerToolViewModel
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.SosToolViewModel
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.UnitConverterToolViewModel
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.contracts.BillSplitterToolEvent
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.contracts.BreathingToolEvent
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.contracts.CoinFlipToolEvent
@@ -75,15 +60,16 @@ import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.t
 import org.koin.compose.viewmodel.koinViewModel
 
 /*
- * These routes take their ViewModel as a defaulted parameter, which Compose reports as unstable and
- * therefore unskippable. That is not worth chasing: a route is the content of one navigation
- * destination, composed once and never re-invoked with different arguments, so skippability buys
+ * Each tool sheet is the stateful entry point the tool bottom sheet shows: it resolves the tool's
+ * ViewModel and renders the stateless tool. These sheets take their ViewModel as a defaulted parameter, which Compose reports as unstable and
+ * therefore unskippable. That is not worth chasing: a sheet is the content of one open tool,
+ * composed once and never re-invoked with different arguments, so skippability buys
  * nothing. Removing the parameter to satisfy the inspection would only cost the tests their seam
  * for injecting a fake.
  */
 
 @Composable
-internal fun CoinFlipToolRoute(viewModel: CoinFlipToolViewModel = koinViewModel()) {
+internal fun CoinFlipToolSheet(viewModel: CoinFlipToolViewModel = koinViewModel()) {
     val state by viewModel.state.collectAsStateWithLifecycle()
     DisposeTool { viewModel.onEvent(CoinFlipToolEvent.Dismiss) }
     CoinFlipTool(
@@ -94,7 +80,7 @@ internal fun CoinFlipToolRoute(viewModel: CoinFlipToolViewModel = koinViewModel(
 }
 
 @Composable
-internal fun DiceRollToolRoute(viewModel: DiceRollToolViewModel = koinViewModel()) {
+internal fun DiceRollToolSheet(viewModel: DiceRollToolViewModel = koinViewModel()) {
     val state by viewModel.state.collectAsStateWithLifecycle()
     DisposeTool { viewModel.onEvent(DiceRollToolEvent.Dismiss) }
     DiceRollTool(
@@ -105,7 +91,7 @@ internal fun DiceRollToolRoute(viewModel: DiceRollToolViewModel = koinViewModel(
 }
 
 @Composable
-internal fun CounterToolRoute(viewModel: CounterToolViewModel = koinViewModel()) {
+internal fun CounterToolSheet(viewModel: CounterToolViewModel = koinViewModel()) {
     val state by viewModel.state.collectAsStateWithLifecycle()
     DisposeTool { viewModel.onEvent(CounterToolEvent.Dismiss) }
     CounterTool(
@@ -117,7 +103,7 @@ internal fun CounterToolRoute(viewModel: CounterToolViewModel = koinViewModel())
 }
 
 @Composable
-internal fun CompassToolRoute(viewModel: CompassToolViewModel = koinViewModel()) {
+internal fun CompassToolSheet(viewModel: CompassToolViewModel = koinViewModel()) {
     val state by viewModel.state.collectAsStateWithLifecycle()
     StartStopTool(
         start = { viewModel.onEvent(CompassToolEvent.Open) },
@@ -131,7 +117,7 @@ internal fun CompassToolRoute(viewModel: CompassToolViewModel = koinViewModel())
 }
 
 @Composable
-internal fun LevelToolRoute(viewModel: LevelToolViewModel = koinViewModel()) {
+internal fun LevelToolSheet(viewModel: LevelToolViewModel = koinViewModel()) {
     val state by viewModel.state.collectAsStateWithLifecycle()
     StartStopTool(
         start = { viewModel.onEvent(LevelToolEvent.Open) },
@@ -157,7 +143,7 @@ private fun ForegroundSensor(start: () -> Unit, stop: () -> Unit) {
 }
 
 @Composable
-internal fun BreathingToolRoute(viewModel: BreathingToolViewModel = koinViewModel()) {
+internal fun BreathingToolSheet(viewModel: BreathingToolViewModel = koinViewModel()) {
     val state by viewModel.state.collectAsStateWithLifecycle()
     StartStopTool(
         start = { viewModel.onEvent(BreathingToolEvent.Open) },
@@ -167,7 +153,7 @@ internal fun BreathingToolRoute(viewModel: BreathingToolViewModel = koinViewMode
 }
 
 @Composable
-internal fun SosToolRoute(viewModel: SosToolViewModel = koinViewModel(), morse: MorseToolViewModel = koinViewModel()) {
+internal fun SosToolSheet(viewModel: SosToolViewModel = koinViewModel(), morse: MorseToolViewModel = koinViewModel()) {
     val state by viewModel.state.collectAsStateWithLifecycle()
     val message by morse.state.collectAsStateWithLifecycle()
     var messageMode by androidx.compose.runtime.saveable.rememberSaveable { androidx.compose.runtime.mutableStateOf(false) }
@@ -192,7 +178,7 @@ internal fun SosToolRoute(viewModel: SosToolViewModel = koinViewModel(), morse: 
 }
 
 @Composable
-internal fun MorseToolRoute(viewModel: MorseToolViewModel = koinViewModel()) {
+internal fun MorseToolSheet(viewModel: MorseToolViewModel = koinViewModel()) {
     val state by viewModel.state.collectAsStateWithLifecycle()
     LifecycleStartEffect(viewModel) { onStopOrDispose { viewModel.onEvent(MorseToolEvent.Dismiss) } }
     MorseTool(
@@ -203,7 +189,7 @@ internal fun MorseToolRoute(viewModel: MorseToolViewModel = koinViewModel()) {
 }
 
 @Composable
-internal fun FlashDimmerToolRoute(viewModel: FlashDimmerToolViewModel = koinViewModel()) {
+internal fun FlashDimmerToolSheet(viewModel: FlashDimmerToolViewModel = koinViewModel()) {
     val state by viewModel.state.collectAsStateWithLifecycle()
     LifecycleStartEffect(viewModel) { onStopOrDispose { viewModel.onEvent(FlashDimmerToolEvent.Dismiss) } }
     FlashDimmerTool(
@@ -214,7 +200,7 @@ internal fun FlashDimmerToolRoute(viewModel: FlashDimmerToolViewModel = koinView
 }
 
 @Composable
-internal fun ReactionTestToolRoute(autoStart: Boolean = false, viewModel: ReactionTestToolViewModel = koinViewModel()) {
+internal fun ReactionTestToolSheet(autoStart: Boolean = false, viewModel: ReactionTestToolViewModel = koinViewModel()) {
     val state by viewModel.state.collectAsStateWithLifecycle()
     LaunchedEffect(autoStart) { if (autoStart) viewModel.onEvent(ReactionTestToolEvent.Start) }
     LifecycleStartEffect(viewModel) {
@@ -239,42 +225,42 @@ private fun DisposeTool(dispose: () -> Unit) {
 }
 
 @Composable
-internal fun UnitConverterToolRoute(viewModel: UnitConverterToolViewModel = koinViewModel()) {
+internal fun UnitConverterToolSheet(viewModel: UnitConverterToolViewModel = koinViewModel()) {
     val state by viewModel.state.collectAsStateWithLifecycle()
     DisposeTool { viewModel.onEvent(UnitConverterToolEvent.Dismiss) }
     UnitConverterTool(state = state, onEvent = viewModel::onEvent)
 }
 
 @Composable
-internal fun RulerToolRoute(onClose: () -> Unit, viewModel: RulerToolViewModel = koinViewModel()) {
+internal fun RulerToolSheet(onClose: () -> Unit, viewModel: RulerToolViewModel = koinViewModel()) {
     val state by viewModel.state.collectAsStateWithLifecycle()
     DisposeTool { viewModel.onEvent(RulerToolEvent.Dismiss) }
     RulerTool(state = state, onEvent = viewModel::onEvent, onClose = onClose)
 }
 
 @Composable
-internal fun ProtractorToolRoute(onClose: () -> Unit, viewModel: ProtractorToolViewModel = koinViewModel()) {
+internal fun ProtractorToolSheet(onClose: () -> Unit, viewModel: ProtractorToolViewModel = koinViewModel()) {
     val state by viewModel.state.collectAsStateWithLifecycle()
     DisposeTool { viewModel.onEvent(ProtractorToolEvent.Dismiss) }
     ProtractorTool(state = state, onEvent = viewModel::onEvent, onClose = onClose)
 }
 
 @Composable
-internal fun BillSplitterToolRoute(viewModel: BillSplitterToolViewModel = koinViewModel()) {
+internal fun BillSplitterToolSheet(viewModel: BillSplitterToolViewModel = koinViewModel()) {
     val state by viewModel.state.collectAsStateWithLifecycle()
     DisposeTool { viewModel.onEvent(BillSplitterToolEvent.Dismiss) }
     BillSplitterTool(state = state, onEvent = viewModel::onEvent)
 }
 
 @Composable
-internal fun RandomNumberToolRoute(viewModel: RandomNumberToolViewModel = koinViewModel()) {
+internal fun RandomNumberToolSheet(viewModel: RandomNumberToolViewModel = koinViewModel()) {
     val state by viewModel.state.collectAsStateWithLifecycle()
     DisposeTool { viewModel.onEvent(RandomNumberToolEvent.Dismiss) }
     RandomNumberTool(state = state, onEvent = viewModel::onEvent)
 }
 
 @Composable
-internal fun WaterEjectToolRoute(viewModel: com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.WaterEjectToolViewModel = koinViewModel()) {
+internal fun WaterEjectToolSheet(viewModel: WaterEjectToolViewModel = koinViewModel()) {
     val state by viewModel.state.collectAsStateWithLifecycle()
     LifecycleStartEffect(viewModel) {
         onStopOrDispose { viewModel.onEvent(com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.contracts.WaterEjectToolEvent.Stop) }
@@ -283,7 +269,7 @@ internal fun WaterEjectToolRoute(viewModel: com.mihaicristiancondrea.android.app
 }
 
 @Composable
-internal fun DecisionWheelToolRoute(viewModel: com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.WheelToolViewModel = koinViewModel()) {
+internal fun DecisionWheelToolSheet(viewModel: WheelToolViewModel = koinViewModel()) {
     val state by viewModel.state.collectAsStateWithLifecycle()
     LifecycleStartEffect(viewModel) {
         onStopOrDispose { viewModel.onEvent(com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.contracts.WheelToolEvent.Dismiss) }

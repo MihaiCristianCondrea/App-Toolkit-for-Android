@@ -15,44 +15,39 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.mihaicristiancondrea.android.libs.apptoolkit.feature.startup.ui.navigation
+package com.mihaicristiancondrea.android.libs.apptoolkit.feature.privacy.ui.navigation
 
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.PaneRole
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.shellGraph
-import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.StartupScreen
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.PrivacySettingsScreen
 import org.junit.jupiter.api.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
-import kotlin.test.assertNull
 import kotlin.test.assertTrue
 
-class StartupPagesTest {
+class PrivacySettingsNavigationTest {
 
     @Test
-    fun `startupScreen registers StartupScreen without a title and adds it to startScreens`() {
+    fun `registers PrivacySettingsScreen as a detail page with a title`() {
         val graph = shellGraph(appTitle = 0) {
-            startupScreen()
-            start(key = StartupScreen)
+            privacySettingsScreen()
+            start(key = PrivacySettingsScreen)
         }
 
-        assertTrue(graph.contains(key = StartupScreen))
-        val destination = graph.destination(key = StartupScreen)
-        assertEquals(PaneRole.None, destination.paneRole)
-        assertNull(destination.title)
-        assertTrue(StartupScreen in graph.startScreens)
+        assertTrue(graph.contains(key = PrivacySettingsScreen))
+        val destination = graph.destination(key = PrivacySettingsScreen)
+        assertEquals(PaneRole.Detail, destination.paneRole)
+        assertNotNull(destination.title)
     }
 
     @Test
-    fun `startupScreen preserves a host page registered for StartupScreen`() {
+    fun `keeps an existing host registration for PrivacySettingsScreen`() {
         val graph = shellGraph(appTitle = 0) {
-            page<StartupScreen>(paneRole = PaneRole.Detail, title = { "Custom" }) {}
-            startupScreen()
-            start(key = StartupScreen)
+            page<PrivacySettingsScreen>(paneRole = PaneRole.None, title = null) {}
+            privacySettingsScreen()
+            start(key = PrivacySettingsScreen)
         }
 
-        val destination = graph.destination(key = StartupScreen)
-        assertEquals(PaneRole.Detail, destination.paneRole)
-        assertNotNull(destination.title)
-        assertTrue(StartupScreen in graph.startScreens)
+        assertEquals(PaneRole.None, graph.destination(key = PrivacySettingsScreen).paneRole)
     }
 }

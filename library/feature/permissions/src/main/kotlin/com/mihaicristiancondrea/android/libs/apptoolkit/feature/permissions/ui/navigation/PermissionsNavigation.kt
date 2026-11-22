@@ -15,24 +15,26 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.mihaicristiancondrea.android.libs.apptoolkit.feature.support.ui.navigation
+package com.mihaicristiancondrea.android.libs.apptoolkit.feature.permissions.ui.navigation
 
 import androidx.compose.ui.res.stringResource
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.R as CoreUiR
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.support.ui.SupportScreen
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.permissions.R
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.permissions.ui.PermissionsScreen as PermissionsScreenContentEntry
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.PaneRole
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.ShellGraphBuilder
-import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.SupportScreen
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.PermissionsScreen
 
 /**
- * Registers the support page for [SupportScreen], unless the app registered its own. The overflow
- * menu's `supportUs()` entry opens it.
+ * Registers the permissions page for [PermissionsScreen], unless the app registered its own.
+ *
+ * It opens from the privacy page, itself a detail beside the settings list, so it is a page of its
+ * own rather than a detail, which would replace the privacy page instead of stacking.
  */
-fun ShellGraphBuilder.supportScreen() {
-    pageIfAbsent<SupportScreen>(
+fun ShellGraphBuilder.permissionsScreen() {
+    pageIfAbsent<PermissionsScreen>(
         paneRole = PaneRole.None,
-        title = { stringResource(CoreUiR.string.support_us) },
+        title = { stringResource(id = R.string.permissions) },
     ) {
-        SupportScreen()
+        PermissionsScreenContentEntry()
     }
 }

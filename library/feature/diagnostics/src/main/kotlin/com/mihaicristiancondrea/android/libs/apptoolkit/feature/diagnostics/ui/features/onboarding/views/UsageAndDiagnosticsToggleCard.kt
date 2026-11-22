@@ -15,7 +15,7 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.mihaicristiancondrea.android.libs.apptoolkit.feature.diagnostics.ui.onboarding.cards
+package com.mihaicristiancondrea.android.libs.apptoolkit.feature.diagnostics.ui.features.onboarding.views
 
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.layout.Arrangement

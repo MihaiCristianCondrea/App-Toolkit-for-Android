@@ -15,21 +15,24 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.mihaicristiancondrea.android.libs.apptoolkit.feature.onboarding.ui.navigation
+package com.mihaicristiancondrea.android.libs.apptoolkit.feature.support.ui.navigation
 
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.onboarding.ui.OnboardingScreen
+import androidx.compose.ui.res.stringResource
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.R as CoreUiR
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.support.ui.SupportScreen as SupportScreenContentEntry
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.PaneRole
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.ShellGraphBuilder
-import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.OnboardingScreen
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.SupportScreen
 
 /**
- * Registers [OnboardingScreen], the onboarding start screen, unless the app registered its own. It
- * follows `StartupScreen` from `:library:feature:startup` and enters the shell when the person
- * finishes it. There is no shell under it, so back leaves the app.
- *
- * It is also offered as a start screen in the developer options, to try it again.
+ * Registers the support page for [SupportScreen], unless the app registered its own. The overflow
+ * menu's `supportUs()` entry opens it.
  */
-fun ShellGraphBuilder.onboardingScreen() {
-    pageIfAbsent<OnboardingScreen>(paneRole = PaneRole.None, title = null) { OnboardingScreen() }
-    startScreens(OnboardingScreen)
+fun ShellGraphBuilder.supportScreen() {
+    pageIfAbsent<SupportScreen>(
+        paneRole = PaneRole.None,
+        title = { stringResource(CoreUiR.string.support_us) },
+    ) {
+        SupportScreenContentEntry()
+    }
 }

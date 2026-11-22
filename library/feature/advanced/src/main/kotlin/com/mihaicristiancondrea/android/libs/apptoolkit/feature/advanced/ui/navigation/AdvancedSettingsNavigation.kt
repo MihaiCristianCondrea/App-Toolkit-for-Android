@@ -15,26 +15,24 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.mihaicristiancondrea.android.libs.apptoolkit.integration.ads.ui.navigation
+package com.mihaicristiancondrea.android.libs.apptoolkit.feature.advanced.ui.navigation
 
 import androidx.compose.ui.res.stringResource
-import com.mihaicristiancondrea.android.libs.apptoolkit.integration.ads.R
-import com.mihaicristiancondrea.android.libs.apptoolkit.integration.ads.ui.AdsSettingsScreen
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.advanced.R
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.advanced.ui.AdvancedSettingsScreen as AdvancedSettingsScreenContentEntry
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.PaneRole
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.ShellGraphBuilder
-import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.AdsSettingsScreen
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.AdvancedSettingsScreen
 
 /**
- * Registers the ads settings page for [AdsSettingsScreen], unless the app registered its own.
- *
- * It opens from the privacy page, itself a detail beside the settings list, so it is a page of its
- * own rather than a detail, which would replace the privacy page instead of stacking.
+ * Registers the advanced settings page for [AdvancedSettingsScreen], a detail of the settings list,
+ * unless the app registered its own.
  */
-fun ShellGraphBuilder.adsSettingsScreen() {
-    pageIfAbsent<AdsSettingsScreen>(
-        paneRole = PaneRole.None,
-        title = { stringResource(id = R.string.ads) },
+fun ShellGraphBuilder.advancedSettingsScreen() {
+    pageIfAbsent<AdvancedSettingsScreen>(
+        paneRole = PaneRole.Detail,
+        title = { stringResource(id = R.string.advanced) },
     ) {
-        AdsSettingsScreen()
+        AdvancedSettingsScreenContentEntry()
     }
 }

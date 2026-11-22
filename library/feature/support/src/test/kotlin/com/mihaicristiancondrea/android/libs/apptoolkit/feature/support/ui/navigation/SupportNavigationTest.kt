@@ -15,39 +15,39 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.mihaicristiancondrea.android.libs.apptoolkit.feature.permissions.ui.navigation
+package com.mihaicristiancondrea.android.libs.apptoolkit.feature.support.ui.navigation
 
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.PaneRole
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.shellGraph
-import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.PermissionsScreen
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.SupportScreen
 import org.junit.jupiter.api.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
 import kotlin.test.assertTrue
 
-class PermissionsPageTest {
+class SupportNavigationTest {
 
     @Test
-    fun `registers PermissionsScreen as a standalone page with a title`() {
+    fun `supportScreen registers SupportScreen as a standalone page with a title`() {
         val graph = shellGraph(appTitle = 0) {
-            permissionsScreen()
-            start(key = PermissionsScreen)
+            supportScreen()
+            start(key = SupportScreen)
         }
 
-        assertTrue(graph.contains(key = PermissionsScreen))
-        val destination = graph.destination(key = PermissionsScreen)
+        assertTrue(graph.contains(key = SupportScreen))
+        val destination = graph.destination(key = SupportScreen)
         assertEquals(PaneRole.None, destination.paneRole)
         assertNotNull(destination.title)
     }
 
     @Test
-    fun `keeps an existing host registration for PermissionsScreen`() {
+    fun `supportScreen preserves a host page registered for SupportScreen`() {
         val graph = shellGraph(appTitle = 0) {
-            page<PermissionsScreen>(paneRole = PaneRole.Detail, title = null) {}
-            permissionsScreen()
-            start(key = PermissionsScreen)
+            page<SupportScreen>(paneRole = PaneRole.Detail, title = null) {}
+            supportScreen()
+            start(key = SupportScreen)
         }
 
-        assertEquals(PaneRole.Detail, graph.destination(key = PermissionsScreen).paneRole)
+        assertEquals(PaneRole.Detail, graph.destination(key = SupportScreen).paneRole)
     }
 }

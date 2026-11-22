@@ -15,24 +15,26 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.mihaicristiancondrea.android.libs.apptoolkit.feature.developer.ui.navigation
+package com.mihaicristiancondrea.android.libs.apptoolkit.feature.licenses.ui.navigation
 
 import androidx.compose.ui.res.stringResource
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.developer.R
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.developer.ui.DeveloperOptionsScreen
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.licenses.R
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.licenses.ui.LicensesScreen as LicensesScreenContentEntry
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.PaneRole
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.ShellGraphBuilder
-import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.DeveloperOptionsScreen
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.LicensesScreen
 
 /**
- * Registers the developer options page for [DeveloperOptionsScreen], unless the app registered its
- * own. Advanced settings offers this destination once unlocked, and hosts may link to it elsewhere.
+ * Registers the licenses page for [LicensesScreen], unless the app registered its own.
+ *
+ * It opens from About, itself a detail beside the settings list, so it is a page of its own
+ * rather than a detail: a detail opened from a detail would replace it instead of stacking on it.
  */
-fun ShellGraphBuilder.developerOptionsScreen() {
-    pageIfAbsent<DeveloperOptionsScreen>(
+fun ShellGraphBuilder.licensesScreen() {
+    pageIfAbsent<LicensesScreen>(
         paneRole = PaneRole.None,
-        title = { stringResource(id = R.string.shell_developer_options) },
+        title = { stringResource(id = R.string.oss_license_title) },
     ) {
-        DeveloperOptionsScreen()
+        LicensesScreenContentEntry()
     }
 }

@@ -15,7 +15,7 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.mihaicristiancondrea.android.libs.apptoolkit.feature.diagnostics.ui.onboarding.text
+package com.mihaicristiancondrea.android.libs.apptoolkit.feature.diagnostics.ui.features.onboarding.views
 
 import android.content.Context
 import android.widget.Toast

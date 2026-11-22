@@ -19,7 +19,7 @@ package com.mihaicristiancondrea.android.libs.apptoolkit.feature.theme.ui.naviga
 
 import androidx.compose.ui.res.stringResource
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.theme.R
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.theme.ui.ThemeSettingsScreen
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.theme.ui.ThemeSettingsScreen as ThemeSettingsScreenContentEntry
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.theme.ui.WeatherEffectAction
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.PaneRole
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.ShellGraphBuilder
@@ -38,6 +38,6 @@ fun ShellGraphBuilder.themeSettingsScreen() {
         // The weather effect, for those who found the About screen's easter egg.
         actions = { WeatherEffectAction() },
     ) {
-        ThemeSettingsScreen()
+        ThemeSettingsScreenContentEntry()
     }
 }

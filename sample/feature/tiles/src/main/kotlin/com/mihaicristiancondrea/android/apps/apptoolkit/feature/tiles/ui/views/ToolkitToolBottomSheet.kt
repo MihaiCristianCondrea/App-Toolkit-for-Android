@@ -53,21 +53,23 @@ import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.model
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.mappers.helperSummaryResId
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.mappers.helperTitleResId
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.models.ToolkitTile
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.navigation.BillSplitterToolRoute
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.navigation.BreathingToolRoute
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.navigation.CoinFlipToolRoute
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.navigation.CompassToolRoute
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.navigation.CounterToolRoute
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.navigation.DiceRollToolRoute
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.navigation.FlashDimmerToolRoute
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.navigation.LevelToolRoute
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.navigation.MorseToolRoute
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.navigation.ProtractorToolRoute
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.navigation.RandomNumberToolRoute
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.navigation.ReactionTestToolRoute
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.navigation.RulerToolRoute
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.navigation.SosToolRoute
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.navigation.UnitConverterToolRoute
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.BillSplitterToolSheet
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.BreathingToolSheet
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.CoinFlipToolSheet
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.CompassToolSheet
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.CounterToolSheet
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.DiceRollToolSheet
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.FlashDimmerToolSheet
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.LevelToolSheet
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.MorseToolSheet
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.ProtractorToolSheet
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.RandomNumberToolSheet
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.ReactionTestToolSheet
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.RulerToolSheet
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.SosToolSheet
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.UnitConverterToolSheet
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.WaterEjectToolSheet
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.DecisionWheelToolSheet
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.catalog.TileIconBadge
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.catalog.ToolAccentTheme
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.previews.GenericToolPreview
@@ -99,11 +101,11 @@ fun ToolkitToolBottomSheet(
     }
     when (tile.id) {
         ToolkitTileIds.PROTRACTOR -> {
-            ProtractorToolRoute(onClose = onClose)
+            ProtractorToolSheet(onClose = onClose)
             return
         }
         ToolkitTileIds.RULER -> {
-            RulerToolRoute(onClose = onClose)
+            RulerToolSheet(onClose = onClose)
             return
         }
     }
@@ -218,22 +220,22 @@ private fun ToolInteractiveContent(
     startReaction: Boolean,
 ) {
     when (tile.id) {
-        ToolkitTileIds.WATER_EJECT -> com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.navigation.WaterEjectToolRoute()
-        ToolkitTileIds.DECISION_WHEEL -> com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.navigation.DecisionWheelToolRoute()
-        ToolkitTileIds.COIN_FLIP -> CoinFlipToolRoute()
-        ToolkitTileIds.DICE_ROLL -> DiceRollToolRoute()
-        ToolkitTileIds.COUNTER -> CounterToolRoute()
-        ToolkitTileIds.COMPASS -> CompassToolRoute()
-        ToolkitTileIds.BUBBLE_LEVEL -> LevelToolRoute()
-        ToolkitTileIds.REACTION_TEST -> ReactionTestToolRoute(autoStart = startReaction)
-        ToolkitTileIds.SOS -> SosToolRoute()
-        ToolkitTileIds.MORSE -> MorseToolRoute()
-        ToolkitTileIds.BREATHING -> BreathingToolRoute()
-        ToolkitTileIds.FLASH_DIMMER -> FlashDimmerToolRoute()
+        ToolkitTileIds.WATER_EJECT -> WaterEjectToolSheet()
+        ToolkitTileIds.DECISION_WHEEL -> DecisionWheelToolSheet()
+        ToolkitTileIds.COIN_FLIP -> CoinFlipToolSheet()
+        ToolkitTileIds.DICE_ROLL -> DiceRollToolSheet()
+        ToolkitTileIds.COUNTER -> CounterToolSheet()
+        ToolkitTileIds.COMPASS -> CompassToolSheet()
+        ToolkitTileIds.BUBBLE_LEVEL -> LevelToolSheet()
+        ToolkitTileIds.REACTION_TEST -> ReactionTestToolSheet(autoStart = startReaction)
+        ToolkitTileIds.SOS -> SosToolSheet()
+        ToolkitTileIds.MORSE -> MorseToolSheet()
+        ToolkitTileIds.BREATHING -> BreathingToolSheet()
+        ToolkitTileIds.FLASH_DIMMER -> FlashDimmerToolSheet()
         ToolkitTileIds.PROTRACTOR -> Unit
-        ToolkitTileIds.BILL_SPLITTER -> BillSplitterToolRoute()
-        ToolkitTileIds.RANDOM_NUMBER -> RandomNumberToolRoute()
-        ToolkitTileIds.UNIT_CONVERTER -> UnitConverterToolRoute()
+        ToolkitTileIds.BILL_SPLITTER -> BillSplitterToolSheet()
+        ToolkitTileIds.RANDOM_NUMBER -> RandomNumberToolSheet()
+        ToolkitTileIds.UNIT_CONVERTER -> UnitConverterToolSheet()
         else -> GenericToolPreview(tile = tile)
     }
 }

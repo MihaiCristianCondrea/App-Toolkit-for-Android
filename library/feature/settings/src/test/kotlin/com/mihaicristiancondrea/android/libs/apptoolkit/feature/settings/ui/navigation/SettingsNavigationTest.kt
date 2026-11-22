@@ -15,39 +15,41 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.mihaicristiancondrea.android.libs.apptoolkit.feature.privacy.ui.navigation
+package com.mihaicristiancondrea.android.libs.apptoolkit.feature.settings.ui.navigation
 
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.PaneRole
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.shellGraph
-import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.PrivacySettingsScreen
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.SettingsScreen
 import org.junit.jupiter.api.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
 import kotlin.test.assertTrue
 
-class PrivacySettingsPageTest {
+class SettingsNavigationTest {
 
     @Test
-    fun `registers PrivacySettingsScreen as a detail page with a title`() {
+    fun `registers SettingsScreen as a list page with title, actions and placeholder`() {
         val graph = shellGraph(appTitle = 0) {
-            privacySettingsScreen()
-            start(key = PrivacySettingsScreen)
+            settingsScreen()
+            start(key = SettingsScreen)
         }
 
-        assertTrue(graph.contains(key = PrivacySettingsScreen))
-        val destination = graph.destination(key = PrivacySettingsScreen)
-        assertEquals(PaneRole.Detail, destination.paneRole)
+        assertTrue(graph.contains(key = SettingsScreen))
+        val destination = graph.destination(key = SettingsScreen)
+        assertEquals(PaneRole.List, destination.paneRole)
         assertNotNull(destination.title)
+        assertNotNull(destination.actions)
+        assertNotNull(destination.placeholder)
     }
 
     @Test
-    fun `keeps an existing host registration for PrivacySettingsScreen`() {
+    fun `keeps an existing host registration for SettingsScreen`() {
         val graph = shellGraph(appTitle = 0) {
-            page<PrivacySettingsScreen>(paneRole = PaneRole.None, title = null) {}
-            privacySettingsScreen()
-            start(key = PrivacySettingsScreen)
+            page<SettingsScreen>(paneRole = PaneRole.None, title = null) {}
+            settingsScreen()
+            start(key = SettingsScreen)
         }
 
-        assertEquals(PaneRole.None, graph.destination(key = PrivacySettingsScreen).paneRole)
+        assertEquals(PaneRole.None, graph.destination(key = SettingsScreen).paneRole)
     }
 }

@@ -23,7 +23,7 @@ import androidx.compose.material.icons.outlined.Handyman
 import androidx.compose.material.icons.outlined.Widgets
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.onboarding.R
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.onboarding.ui.constants.OnboardingKeys
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.diagnostics.ui.onboarding.TelemetryOnboardingPage
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.diagnostics.ui.features.onboarding.TelemetryOnboardingPage
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.onboarding.ui.models.OnboardingPage
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.onboarding.ui.providers.OnboardingProvider
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.onboarding.ui.views.pages.finish.FinishOnboardingPage

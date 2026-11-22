@@ -15,39 +15,44 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.mihaicristiancondrea.android.libs.apptoolkit.integration.ads.ui.navigation
+package com.mihaicristiancondrea.android.libs.apptoolkit.feature.startup.ui.navigation
 
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.PaneRole
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.shellGraph
-import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.AdsSettingsScreen
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.StartupScreen
 import org.junit.jupiter.api.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
+import kotlin.test.assertNull
 import kotlin.test.assertTrue
 
-class AdsSettingsPageTest {
+class StartupNavigationTest {
 
     @Test
-    fun `registers AdsSettingsScreen as a standalone page with a title`() {
+    fun `startupScreen registers StartupScreen without a title and adds it to startScreens`() {
         val graph = shellGraph(appTitle = 0) {
-            adsSettingsScreen()
-            start(key = AdsSettingsScreen)
+            startupScreen()
+            start(key = StartupScreen)
         }
 
-        assertTrue(graph.contains(key = AdsSettingsScreen))
-        val destination = graph.destination(key = AdsSettingsScreen)
+        assertTrue(graph.contains(key = StartupScreen))
+        val destination = graph.destination(key = StartupScreen)
         assertEquals(PaneRole.None, destination.paneRole)
-        assertNotNull(destination.title)
+        assertNull(destination.title)
+        assertTrue(StartupScreen in graph.startScreens)
     }
 
     @Test
-    fun `keeps an existing host registration for AdsSettingsScreen`() {
+    fun `startupScreen preserves a host page registered for StartupScreen`() {
         val graph = shellGraph(appTitle = 0) {
-            page<AdsSettingsScreen>(paneRole = PaneRole.Detail, title = null) {}
-            adsSettingsScreen()
-            start(key = AdsSettingsScreen)
+            page<StartupScreen>(paneRole = PaneRole.Detail, title = { "Custom" }) {}
+            startupScreen()
+            start(key = StartupScreen)
         }
 
-        assertEquals(PaneRole.Detail, graph.destination(key = AdsSettingsScreen).paneRole)
+        val destination = graph.destination(key = StartupScreen)
+        assertEquals(PaneRole.Detail, destination.paneRole)
+        assertNotNull(destination.title)
+        assertTrue(StartupScreen in graph.startScreens)
     }
 }

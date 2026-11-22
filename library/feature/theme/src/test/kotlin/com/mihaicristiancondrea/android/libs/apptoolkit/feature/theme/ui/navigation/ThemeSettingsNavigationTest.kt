@@ -15,39 +15,40 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.mihaicristiancondrea.android.libs.apptoolkit.feature.support.ui.navigation
+package com.mihaicristiancondrea.android.libs.apptoolkit.feature.theme.ui.navigation
 
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.PaneRole
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.shellGraph
-import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.SupportScreen
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.ThemeSettingsScreen
 import org.junit.jupiter.api.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
 import kotlin.test.assertTrue
 
-class SupportPageTest {
+class ThemeSettingsNavigationTest {
 
     @Test
-    fun `supportScreen registers SupportScreen as a standalone page with a title`() {
+    fun `themeSettingsScreen registers ThemeSettingsScreen with a title and app bar actions`() {
         val graph = shellGraph(appTitle = 0) {
-            supportScreen()
-            start(key = SupportScreen)
+            themeSettingsScreen()
+            start(key = ThemeSettingsScreen)
         }
 
-        assertTrue(graph.contains(key = SupportScreen))
-        val destination = graph.destination(key = SupportScreen)
+        assertTrue(graph.contains(key = ThemeSettingsScreen))
+        val destination = graph.destination(key = ThemeSettingsScreen)
         assertEquals(PaneRole.None, destination.paneRole)
         assertNotNull(destination.title)
+        assertNotNull(destination.actions)
     }
 
     @Test
-    fun `supportScreen preserves a host page registered for SupportScreen`() {
+    fun `themeSettingsScreen preserves a host page registered for ThemeSettingsScreen`() {
         val graph = shellGraph(appTitle = 0) {
-            page<SupportScreen>(paneRole = PaneRole.Detail, title = null) {}
-            supportScreen()
-            start(key = SupportScreen)
+            page<ThemeSettingsScreen>(paneRole = PaneRole.Detail, title = null) {}
+            themeSettingsScreen()
+            start(key = ThemeSettingsScreen)
         }
 
-        assertEquals(PaneRole.Detail, graph.destination(key = SupportScreen).paneRole)
+        assertEquals(PaneRole.Detail, graph.destination(key = ThemeSettingsScreen).paneRole)
     }
 }

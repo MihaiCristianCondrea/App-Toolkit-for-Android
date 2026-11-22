@@ -15,7 +15,7 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.mihaicristiancondrea.android.apps.apptoolkit.integration.ads.constants
+package com.mihaicristiancondrea.android.apps.apptoolkit.integration.ads.utils.constants
 
 import com.mihaicristiancondrea.android.apps.apptoolkit.integration.ads.BuildConfig
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ads.DebugAdsConstants
