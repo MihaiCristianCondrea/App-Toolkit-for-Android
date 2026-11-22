@@ -19,7 +19,7 @@ package com.mihaicristiancondrea.android.libs.apptoolkit.feature.permissions.ui.
 
 import androidx.compose.ui.res.stringResource
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.permissions.R
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.permissions.ui.PermissionsScreen as PermissionsScreenContentEntry
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.permissions.ui.PermissionsScreen
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.PaneRole
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.ShellGraphBuilder
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.PermissionsScreen
@@ -35,6 +35,6 @@ fun ShellGraphBuilder.permissionsScreen() {
         paneRole = PaneRole.None,
         title = { stringResource(id = R.string.permissions) },
     ) {
-        PermissionsScreenContentEntry()
+        PermissionsScreen()
     }
 }

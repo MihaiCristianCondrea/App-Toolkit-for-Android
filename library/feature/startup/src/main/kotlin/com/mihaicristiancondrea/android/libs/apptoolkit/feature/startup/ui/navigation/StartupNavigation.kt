@@ -17,7 +17,7 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.startup.ui.navigation
 
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.startup.ui.StartupScreen as StartupScreenContentEntry
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.startup.ui.StartupScreen
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.PaneRole
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.ShellGraphBuilder
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.OnboardingScreen
@@ -38,6 +38,6 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.Startu
  * It is also offered as a start screen in the developer options, to try it again.
  */
 fun ShellGraphBuilder.startupScreen() {
-    pageIfAbsent<StartupScreen>(paneRole = PaneRole.None, title = null) { StartupScreenContentEntry() }
+    pageIfAbsent<StartupScreen>(paneRole = PaneRole.None, title = null) { StartupScreen() }
     startScreens(StartupScreen)
 }

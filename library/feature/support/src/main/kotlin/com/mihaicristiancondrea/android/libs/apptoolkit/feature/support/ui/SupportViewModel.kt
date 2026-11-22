@@ -46,6 +46,7 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.seconds
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.R as CoreUiR
 
 /**
  * ViewModel for the support page: the donation options, and the purchase of one.
@@ -213,29 +214,34 @@ class SupportViewModel(
             is PurchaseResult.UserCancelled ->
                 showMessage(UiMessage(text = UiText.StringResource(R.string.purchase_cancelled)))
 
-            is PurchaseResult.Failed -> showPurchaseFailure(error = result.error)
+            is PurchaseResult.Failed -> showPurchaseFailure(failure = result)
         }
     }
 
     /**
      * Before any options have loaded, the failure is the product query's, so the page shows its
-     * failure state with a retry. Otherwise the options stay, and a message gives Play's reason,
-     * falling back to [GenericErrorText] when Play returns a blank debug string.
+     * failure state with a retry. Otherwise the options stay, and a message says what went wrong in
+     * the person's language. Play's own message is for developers and is never shown.
      */
-    private fun showPurchaseFailure(error: String) {
+    private fun showPurchaseFailure(failure: PurchaseResult.Failed) {
         when (currentState.donationOptions) {
             is Loadable.Loading ->
                 setState { copy(donationOptions = Loadable.Failed(message = LoadFailedText)) }
 
             is Loadable.Failed -> Unit
 
-            is Loadable.Empty, is Loadable.Ready -> {
-                val text: UiText = error.takeIf(String::isNotBlank)
-                    ?.let(UiText::DynamicString)
-                    ?: GenericErrorText
-                showMessage(UiMessage(text = text, isError = true))
-            }
+            is Loadable.Empty, is Loadable.Ready ->
+                showMessage(UiMessage(text = failure.reason.toUiText(), isError = true))
         }
+    }
+
+    private fun PurchaseResult.Failed.Reason.toUiText(): UiText = when (this) {
+        PurchaseResult.Failed.Reason.NETWORK -> UiText.StringResource(CoreUiR.string.screen_error_connection)
+        PurchaseResult.Failed.Reason.BILLING_UNAVAILABLE,
+        PurchaseResult.Failed.Reason.ITEM_UNAVAILABLE,
+        PurchaseResult.Failed.Reason.LAUNCH_UNAVAILABLE,
+        PurchaseResult.Failed.Reason.UNKNOWN,
+        -> GenericErrorText
     }
 
     /** Options already on screen stay, with a message; otherwise the failure replaces the page. */

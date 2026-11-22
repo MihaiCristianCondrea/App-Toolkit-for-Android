@@ -19,7 +19,7 @@ package com.mihaicristiancondrea.android.libs.apptoolkit.feature.display.ui.navi
 
 import androidx.compose.ui.res.stringResource
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.display.R
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.display.ui.DisplaySettingsScreen as DisplaySettingsScreenContentEntry
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.display.ui.DisplaySettingsScreen
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.PaneRole
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.ShellGraphBuilder
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.DisplaySettingsScreen
@@ -33,6 +33,6 @@ fun ShellGraphBuilder.displaySettingsScreen() {
         paneRole = PaneRole.Detail,
         title = { stringResource(R.string.display) },
     ) {
-        DisplaySettingsScreenContentEntry()
+        DisplaySettingsScreen()
     }
 }

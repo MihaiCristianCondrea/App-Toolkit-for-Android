@@ -56,8 +56,6 @@ private const val RETRY_DELAY_SIMPLE_MS: Long = 1_000L
 private const val RETRY_DELAY_EXPONENTIAL_MS: Long = 2_000L
 private const val RETRY_MAX_DELAY_MS: Long = 16_000L
 private const val PURCHASE_RESULT_BUFFER_CAPACITY: Int = 16
-private const val BILLING_LAUNCH_UNAVAILABLE_MESSAGE: String =
-    "Unable to start the billing flow. Please try again."
 
 /**
  * Process-scoped Play Billing implementation.
@@ -214,12 +212,15 @@ class DefaultBillingRepository internal constructor(
      * Settles each completed purchase and reports pending ones.
      *
      * @param productType The type of every purchase in [purchases], when the caller knows it from
-     * its query. When null the type is looked up in [launchedProductTypes], and a product that was
-     * never launched in this process is treated as a one-time donation.
+     * its query. When null the type is looked up in [launchedProductTypes]. A product never launched
+     * in this process, such as a pending purchase completing after a restart or one bought in the
+     * Play Store, is settled by [processPastPurchases], whose queries carry each purchase's type,
+     * rather than guessed: consuming a subscription fails, and an unacknowledged one is refunded.
      * @return `true` when at least one purchase was queued for settlement or reported pending.
      */
     private fun handlePurchases(purchases: List<Purchase>, productType: String? = null): Boolean {
         var handledAny = false
+        var hasUnknownType = false
         purchases.forEach { purchase ->
             when (purchase.purchaseState) {
                 Purchase.PurchaseState.PURCHASED -> {
@@ -227,7 +228,8 @@ class DefaultBillingRepository internal constructor(
                         handledAny = true
                         when (productType ?: purchase.launchedProductType()) {
                             BillingClient.ProductType.SUBS -> acknowledgePurchase(purchase = purchase)
-                            else -> consumePurchase(purchase = purchase)
+                            BillingClient.ProductType.INAPP -> consumePurchase(purchase = purchase)
+                            else -> hasUnknownType = true
                         }
                     }
                 }
@@ -239,6 +241,9 @@ class DefaultBillingRepository internal constructor(
 
                 else -> Unit
             }
+        }
+        if (hasUnknownType) {
+            scope.launch { processPastPurchases() }
         }
         return handledAny
     }
@@ -433,7 +438,7 @@ class DefaultBillingRepository internal constructor(
                     "isChangingConfigurations" to activity.isChangingConfigurations.toString(),
                 ),
             )
-            emitPurchaseResult(result = PurchaseResult.Failed(error = BILLING_LAUNCH_UNAVAILABLE_MESSAGE))
+            emitPurchaseResult(result = PurchaseResult.Failed(reason = PurchaseResult.Failed.Reason.LAUNCH_UNAVAILABLE))
             return
         }
 
@@ -442,13 +447,13 @@ class DefaultBillingRepository internal constructor(
                 message = "Billing flow skipped: missing subscription offer token",
                 attributes = mapOf("productId" to details.productId),
             )
-            emitPurchaseResult(result = PurchaseResult.Failed(error = BILLING_LAUNCH_UNAVAILABLE_MESSAGE))
+            emitPurchaseResult(result = PurchaseResult.Failed(reason = PurchaseResult.Failed.Reason.LAUNCH_UNAVAILABLE))
             return
         }
 
         if (!billingClient.isReady) {
             if (!allowReconnect) {
-                emitPurchaseResult(result = PurchaseResult.Failed(error = BILLING_LAUNCH_UNAVAILABLE_MESSAGE))
+                emitPurchaseResult(result = PurchaseResult.Failed(reason = PurchaseResult.Failed.Reason.LAUNCH_UNAVAILABLE))
                 return
             }
             val activityRef = WeakReference(activity)
@@ -466,7 +471,7 @@ class DefaultBillingRepository internal constructor(
                                         attributes = mapOf("productId" to details.productId),
                                     )
                                     emitPurchaseResult(
-                                        result = PurchaseResult.Failed(error = BILLING_LAUNCH_UNAVAILABLE_MESSAGE),
+                                        result = PurchaseResult.Failed(reason = PurchaseResult.Failed.Reason.LAUNCH_UNAVAILABLE),
                                     )
                                     return@launch
                                 }
@@ -545,7 +550,7 @@ class DefaultBillingRepository internal constructor(
                     "product_type" to productType,
                 ),
             )
-            emitPurchaseResult(result = PurchaseResult.Failed(error = BILLING_LAUNCH_UNAVAILABLE_MESSAGE))
+            emitPurchaseResult(result = PurchaseResult.Failed(reason = PurchaseResult.Failed.Reason.LAUNCH_UNAVAILABLE))
         }
     }
 
@@ -666,22 +671,26 @@ class DefaultBillingRepository internal constructor(
 
     private fun BillingResult.isRetryable(): Boolean = responseCode in RETRYABLE_RESPONSE_CODES
 
+    /** Groups Play's response code by what the person can do; Play's message is kept for diagnostics. */
     private fun BillingResult.toFailureResult(): PurchaseResult.Failed {
-        val message: String = debugMessage.takeIf { it.isNotBlank() }
-            ?: when (responseCode) {
-                BillingClient.BillingResponseCode.BILLING_UNAVAILABLE -> "Billing is unavailable"
-                BillingClient.BillingResponseCode.DEVELOPER_ERROR -> "Billing API misused"
-                BillingClient.BillingResponseCode.ITEM_ALREADY_OWNED -> "Item is already owned"
-                BillingClient.BillingResponseCode.ITEM_NOT_OWNED -> "Item is not owned"
-                BillingClient.BillingResponseCode.ITEM_UNAVAILABLE -> "Item is unavailable"
-                BillingClient.BillingResponseCode.FEATURE_NOT_SUPPORTED -> "Feature not supported"
-                BillingClient.BillingResponseCode.SERVICE_UNAVAILABLE -> "Billing service unavailable"
-                BillingClient.BillingResponseCode.SERVICE_DISCONNECTED -> "Billing service disconnected"
-                BillingClient.BillingResponseCode.NETWORK_ERROR -> "Network error"
-                BillingClient.BillingResponseCode.ERROR -> "Billing error"
-                else -> "Billing operation failed"
-            }
-        return PurchaseResult.Failed(error = message)
+        val reason: PurchaseResult.Failed.Reason = when (responseCode) {
+            BillingClient.BillingResponseCode.NETWORK_ERROR,
+            BillingClient.BillingResponseCode.SERVICE_UNAVAILABLE,
+            BillingClient.BillingResponseCode.SERVICE_DISCONNECTED,
+            -> PurchaseResult.Failed.Reason.NETWORK
+
+            BillingClient.BillingResponseCode.BILLING_UNAVAILABLE,
+            BillingClient.BillingResponseCode.FEATURE_NOT_SUPPORTED,
+            -> PurchaseResult.Failed.Reason.BILLING_UNAVAILABLE
+
+            BillingClient.BillingResponseCode.ITEM_UNAVAILABLE,
+            BillingClient.BillingResponseCode.ITEM_ALREADY_OWNED,
+            BillingClient.BillingResponseCode.ITEM_NOT_OWNED,
+            -> PurchaseResult.Failed.Reason.ITEM_UNAVAILABLE
+
+            else -> PurchaseResult.Failed.Reason.UNKNOWN
+        }
+        return PurchaseResult.Failed(reason = reason, debugMessage = debugMessage)
     }
 
     /**

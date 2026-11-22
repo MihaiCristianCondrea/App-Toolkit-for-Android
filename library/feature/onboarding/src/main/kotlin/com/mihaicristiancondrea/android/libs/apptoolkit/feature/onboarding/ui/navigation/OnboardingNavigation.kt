@@ -17,7 +17,7 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.onboarding.ui.navigation
 
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.onboarding.ui.OnboardingScreen as OnboardingScreenContentEntry
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.onboarding.ui.OnboardingScreen
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.PaneRole
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.ShellGraphBuilder
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.OnboardingScreen
@@ -30,6 +30,6 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.Onboar
  * It is also offered as a start screen in the developer options, to try it again.
  */
 fun ShellGraphBuilder.onboardingScreen() {
-    pageIfAbsent<OnboardingScreen>(paneRole = PaneRole.None, title = null) { OnboardingScreenContentEntry() }
+    pageIfAbsent<OnboardingScreen>(paneRole = PaneRole.None, title = null) { OnboardingScreen() }
     startScreens(OnboardingScreen)
 }

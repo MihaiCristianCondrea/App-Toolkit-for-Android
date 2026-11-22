@@ -41,8 +41,8 @@
   system bars, clears the Agree FAB for scrolled terms content, and pauses the welcome Lottie
   animation when system animations are disabled.
 - Support marks INAPP donation products eligible when Play Billing returns offers only through
-  `oneTimePurchaseOfferDetailsList`, falls back to the generic error text when Play reports a blank
-  failure message, and skips rendering the native ad list item when `bannerAdUnitId` is blank.
+  `oneTimePurchaseOfferDetailsList`, shows localized failure text instead of Play's English developer
+  message, and skips rendering the native ad list item when `bannerAdUnitId` is blank.
 - Theme updates `baseline-prof.txt` to match the `feature.theme.ui.features.seasonal` package,
   keeps loaded theme preferences visible when `ThemeSettingsEvent.Load` re-runs, skips redundant
   weather effect writes when Done confirms the current effect, and avoids posting redundant
@@ -86,6 +86,9 @@
 
 ### Changed
 
+- `PurchaseResult.Failed` carries a typed `reason` and Play's `debugMessage` instead of a display
+  string. Billing settles a purchase it did not launch through the typed purchase queries instead
+  of consuming it as a donation, so a subscription bought outside the app is acknowledged.
 - Handle `AdvancedSettingsEvent.ObserveDeveloperOptions` in exhaustive `when` expressions that
   consume `AdvancedSettingsEvent`.
 - Replace `helpPage()` with `helpScreen()` when registering the FAQ destination. The key remains

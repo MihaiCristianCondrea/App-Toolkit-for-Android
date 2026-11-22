@@ -19,7 +19,7 @@ package com.mihaicristiancondrea.android.libs.apptoolkit.feature.support.ui.navi
 
 import androidx.compose.ui.res.stringResource
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.R as CoreUiR
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.support.ui.SupportScreen as SupportScreenContentEntry
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.support.ui.SupportScreen
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.PaneRole
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.ShellGraphBuilder
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.SupportScreen
@@ -33,6 +33,6 @@ fun ShellGraphBuilder.supportScreen() {
         paneRole = PaneRole.None,
         title = { stringResource(CoreUiR.string.support_us) },
     ) {
-        SupportScreenContentEntry()
+        SupportScreen()
     }
 }

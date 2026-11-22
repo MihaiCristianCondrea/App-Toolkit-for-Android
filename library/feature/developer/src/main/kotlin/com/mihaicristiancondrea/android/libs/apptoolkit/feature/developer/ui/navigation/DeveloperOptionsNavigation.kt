@@ -19,7 +19,7 @@ package com.mihaicristiancondrea.android.libs.apptoolkit.feature.developer.ui.na
 
 import androidx.compose.ui.res.stringResource
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.developer.R
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.developer.ui.DeveloperOptionsScreen as DeveloperOptionsScreenContentEntry
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.developer.ui.DeveloperOptionsScreen
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.PaneRole
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.ShellGraphBuilder
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.DeveloperOptionsScreen
@@ -33,6 +33,6 @@ fun ShellGraphBuilder.developerOptionsScreen() {
         paneRole = PaneRole.None,
         title = { stringResource(id = R.string.shell_developer_options) },
     ) {
-        DeveloperOptionsScreenContentEntry()
+        DeveloperOptionsScreen()
     }
 }

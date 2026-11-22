@@ -70,7 +70,9 @@ flowchart TD
   `SupportEvent.QueryProductDetails` is sent on start and by the failure state's Retry.
 - `BillingRepository` reports a failed product query through `purchaseResult`, not by throwing. A
   failure that arrives while the options are still loading therefore becomes `Loadable.Failed` with
-  Retry. Once the options show, a failed purchase is an error message and the options stay.
+  Retry. Once the options show, a failed purchase is an error message and the options stay. The
+  message comes from the failure's `reason`: a network failure says to try again, and anything else
+  shows the generic error text. Play's developer message is never shown.
 - A thrown query failure goes through `toFailed`, so an offline device sees the offline text.
   Billing errors are reported under the support screen's `Support` and `SupportViewModel` names.
 - Purchase results are messages shown by `MessageHost` in the page's snackbar host, above the
@@ -98,5 +100,3 @@ flowchart TD
 Billing contracts/results exist in common, integration, and support namespaces, creating overlapping
 concepts that can be confused during changes.
 
-`PurchaseResult.Failed` carries Play's English debug message, which the page shows as it is. The
-billing integration has no typed failure reason the page could translate.

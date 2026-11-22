@@ -19,7 +19,7 @@ package com.mihaicristiancondrea.android.libs.apptoolkit.integration.ads.ui.navi
 
 import androidx.compose.ui.res.stringResource
 import com.mihaicristiancondrea.android.libs.apptoolkit.integration.ads.R
-import com.mihaicristiancondrea.android.libs.apptoolkit.integration.ads.ui.AdsSettingsScreen as AdsSettingsScreenContentEntry
+import com.mihaicristiancondrea.android.libs.apptoolkit.integration.ads.ui.AdsSettingsScreen
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.PaneRole
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.ShellGraphBuilder
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.AdsSettingsScreen
@@ -35,6 +35,6 @@ fun ShellGraphBuilder.adsSettingsScreen() {
         paneRole = PaneRole.None,
         title = { stringResource(id = R.string.ads) },
     ) {
-        AdsSettingsScreenContentEntry()
+        AdsSettingsScreen()
     }
 }

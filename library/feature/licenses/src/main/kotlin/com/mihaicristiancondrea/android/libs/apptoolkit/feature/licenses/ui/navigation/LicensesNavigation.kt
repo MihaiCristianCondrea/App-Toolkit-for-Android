@@ -19,7 +19,7 @@ package com.mihaicristiancondrea.android.libs.apptoolkit.feature.licenses.ui.nav
 
 import androidx.compose.ui.res.stringResource
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.licenses.R
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.licenses.ui.LicensesScreen as LicensesScreenContentEntry
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.licenses.ui.LicensesScreen
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.PaneRole
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.ShellGraphBuilder
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.LicensesScreen
@@ -35,6 +35,6 @@ fun ShellGraphBuilder.licensesScreen() {
         paneRole = PaneRole.None,
         title = { stringResource(id = R.string.oss_license_title) },
     ) {
-        LicensesScreenContentEntry()
+        LicensesScreen()
     }
 }

@@ -19,7 +19,7 @@ package com.mihaicristiancondrea.android.libs.apptoolkit.feature.advanced.ui.nav
 
 import androidx.compose.ui.res.stringResource
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.advanced.R
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.advanced.ui.AdvancedSettingsScreen as AdvancedSettingsScreenContentEntry
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.advanced.ui.AdvancedSettingsScreen
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.PaneRole
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.ShellGraphBuilder
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.AdvancedSettingsScreen
@@ -33,6 +33,6 @@ fun ShellGraphBuilder.advancedSettingsScreen() {
         paneRole = PaneRole.Detail,
         title = { stringResource(id = R.string.advanced) },
     ) {
-        AdvancedSettingsScreenContentEntry()
+        AdvancedSettingsScreen()
     }
 }

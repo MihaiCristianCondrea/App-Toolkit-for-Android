@@ -45,6 +45,7 @@ flowchart TD
     Client --> Callback[PurchasesUpdatedListener]
     Callback --> State{Purchase state}
     State -->|purchased one-time product| Consume[Consume one-time donation]
+    State -->|product not launched here| Past
     State -->|purchased subscription| Acknowledge[Acknowledge subscription]
     State -->|pending| Result[PurchaseResult Flow]
     State -->|cancelled or error| Result
@@ -64,8 +65,12 @@ flowchart TD
   because a subscription token cannot be consumed and Play refunds one that is not acknowledged
   within three days. `Purchase` does not carry its product type, so the repository remembers the
   type of each product it launches, and past-purchase recovery queries one-time products and
-  subscriptions separately. Completed unsettled purchases are recovered on setup/reconnect and
-  settled before success is emitted.
+  subscriptions separately. A purchase reported for a product it did not launch, such as a pending
+  purchase completing after a restart or one bought in the Play Store, is settled through those
+  typed queries rather than guessed. Completed unsettled purchases are recovered on setup/reconnect
+  and settled before success is emitted.
+- `PurchaseResult.Failed` carries a typed `reason` for the screen to choose localized text, and
+  Play's `debugMessage` for diagnostics only; Google documents that message as not meant for users.
 - Product details replay the latest query result; purchase outcomes are buffered one-off events
   that do not replay or park coroutines when no UI is collecting.
 - `launchInAppDonationFlow` and `launchSubscriptionFlow` validate `Activity.isValidForBilling()`

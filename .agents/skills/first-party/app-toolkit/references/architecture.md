@@ -49,6 +49,7 @@ load, failure and recovery with the project's existing tooling.
 For new Toolkit destinations, use screen names for graph registration and keys, such as
 `ShellGraphBuilder.catalogScreen()` and `CatalogScreen : AppToolkitNavKey`. Keep reusable
 Toolkit keys in the navigation module and feature graph registration in the feature's
-`ui/navigation/`. The key and composable can share a name in their respective packages. Use an
-import alias where both appear together. Consumers define their own keys using the contract their
+`ui/navigation/`. The key and composable can share a name in their respective packages; Kotlin
+resolves `pageIfAbsent<CatalogScreen>` to the key and `CatalogScreen()` to the composable, so both
+imports sit together without an alias. Consumers define their own keys using the contract their
 graph supports. Preserve existing public or serialized names unless a migration is in scope.

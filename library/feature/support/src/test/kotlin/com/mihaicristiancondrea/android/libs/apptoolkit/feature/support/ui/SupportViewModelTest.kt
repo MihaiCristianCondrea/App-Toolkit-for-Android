@@ -177,7 +177,7 @@ class SupportViewModelTest {
             val viewModel = createViewModel(billingRepository = billing)
             advance()
 
-            billing.purchaseResults.emit(PurchaseResult.Failed("Billing service unavailable"))
+            billing.purchaseResults.emit(PurchaseResult.Failed(reason = PurchaseResult.Failed.Reason.NETWORK))
 
             val failed = assertIs<Loadable.Failed>(viewModel.state.value.donationOptions)
             assertEquals(UiText.StringResource(R.string.error_failed_to_load_sku_details), failed.message)
@@ -208,32 +208,34 @@ class SupportViewModelTest {
         }
 
     @Test
-    fun `a failed purchase keeps the options and shows Play's reason`() =
+    fun `a failed purchase keeps the options and never shows Play's developer message`() =
         runTest(dispatcherExtension.testDispatcher) {
             val billing = FakeBillingRepository()
             val viewModel = createViewModel(billingRepository = billing)
             advance()
 
-            billing.purchaseResults.emit(PurchaseResult.Failed("Card declined"))
-
-            assertTrue(viewModel.readyOptions().isNotEmpty())
-            val message = viewModel.onlyMessage()
-            assertEquals(UiText.DynamicString("Card declined"), message.text)
-            assertTrue(message.isError)
-        }
-
-    @Test
-    fun `a failed purchase with a blank reason falls back to the generic error text`() =
-        runTest(dispatcherExtension.testDispatcher) {
-            val billing = FakeBillingRepository()
-            val viewModel = createViewModel(billingRepository = billing)
-            advance()
-
-            billing.purchaseResults.emit(PurchaseResult.Failed("   "))
+            billing.purchaseResults.emit(
+                PurchaseResult.Failed(reason = PurchaseResult.Failed.Reason.UNKNOWN, debugMessage = "Card declined"),
+            )
 
             assertTrue(viewModel.readyOptions().isNotEmpty())
             val message = viewModel.onlyMessage()
             assertEquals(GenericErrorText, message.text)
+            assertTrue(message.isError)
+        }
+
+    @Test
+    fun `a purchase that fails for the network says to try again`() =
+        runTest(dispatcherExtension.testDispatcher) {
+            val billing = FakeBillingRepository()
+            val viewModel = createViewModel(billingRepository = billing)
+            advance()
+
+            billing.purchaseResults.emit(PurchaseResult.Failed(reason = PurchaseResult.Failed.Reason.NETWORK))
+
+            assertTrue(viewModel.readyOptions().isNotEmpty())
+            val message = viewModel.onlyMessage()
+            assertEquals(UiText.StringResource(CoreUiR.string.screen_error_connection), message.text)
             assertTrue(message.isError)
         }
 
@@ -243,7 +245,7 @@ class SupportViewModelTest {
         val viewModel = createViewModel(billingRepository = billing)
         advance()
 
-        billing.purchaseResults.emit(PurchaseResult.Failed("Item is unavailable"))
+        billing.purchaseResults.emit(PurchaseResult.Failed(reason = PurchaseResult.Failed.Reason.ITEM_UNAVAILABLE))
 
         assertIs<Loadable.Empty>(viewModel.state.value.donationOptions)
         assertTrue(viewModel.onlyMessage().isError)

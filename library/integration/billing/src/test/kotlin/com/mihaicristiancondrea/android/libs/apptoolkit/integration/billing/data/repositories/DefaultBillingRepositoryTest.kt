@@ -147,7 +147,8 @@ class DefaultBillingRepositoryTest {
 
             assertEquals(1, attempts)
             val failure = assertIs<PurchaseResult.Failed>(results.single())
-            assertEquals("Play Store disabled", failure.error)
+            assertEquals(PurchaseResult.Failed.Reason.BILLING_UNAVAILABLE, failure.reason)
+            assertEquals("Play Store disabled", failure.debugMessage)
         } finally {
             collector.cancel()
             harness.repository.close()
@@ -161,6 +162,15 @@ class DefaultBillingRepositoryTest {
             token = "token-inapp-1",
             products = listOf("donation_low"),
         )
+        // Never launched in this process, so its type comes from the typed purchase queries. The
+        // one-time query runs first; the token is then already settling when the subscription
+        // query reports it, so it is consumed, never acknowledged.
+        every { harness.client.queryPurchasesAsync(any(), any()) } answers {
+            secondArg<PurchasesResponseListener>().onQueryPurchasesResponse(
+                billingResult(code = BillingClient.BillingResponseCode.OK),
+                listOf(purchase),
+            )
+        }
         every { harness.client.consumeAsync(any(), any()) } answers {
             secondArg<ConsumeResponseListener>().onConsumeResponse(
                 billingResult(code = BillingClient.BillingResponseCode.OK),
@@ -363,7 +373,8 @@ class DefaultBillingRepositoryTest {
                 advanceUntilIdle()
 
                 val failure = assertIs<PurchaseResult.Failed>(results.single())
-                assertEquals("Offline", failure.error)
+                assertEquals(PurchaseResult.Failed.Reason.NETWORK, failure.reason)
+                assertEquals("Offline", failure.debugMessage)
             } finally {
                 collector.cancel()
                 harness.repository.close()
