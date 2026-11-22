@@ -34,5 +34,5 @@ in English (en-US) only for now.
 1. Text: edit `listing/<locale>/*.txt`.
 2. Visuals: edit `source/` (code or strings), then render it with `npm run render`; it writes straight into
    `listing/`. Anything rendered from `source/` can be rebuilt from Git history; visuals without a source move to a
-   retired listing of their own first (`listings/<name>-legacy/`), as the `store-listing` skill describes.
+   retired listing of their own first (`listings/<name>-legacy/`), as the `play-store-listing` skill describes.
 3. `node scripts/validate.mjs` here, then upload.

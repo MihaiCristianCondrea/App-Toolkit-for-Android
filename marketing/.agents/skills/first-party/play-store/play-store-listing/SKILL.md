@@ -1,5 +1,5 @@
 ---
-name: store-listing
+name: play-store-listing
 description: >
   Keep an app's Google Play store listings in the repository under
   marketing/creative/store/google-play/listings/: the default listing and custom store
@@ -65,7 +65,7 @@ marketing/creative/store/google-play/
 
 - **Text:** edit `listing/<locale>/*.txt`; validate; upload.
 - **Visuals:** edit `source/` and render (see `play-store-media`); it writes into `listing/`. Files rendered from `source/` can always be rebuilt from Git history. Files that came from elsewhere (device screenshots, a designer's export) cannot: before replacing them, keep the listing they belong to as a retired listing of its own, `listings/<name>-legacy/` beside `default/` (the same `listing/<locale>/` layout, a `listing.json` with status `retired`, and a full README), unless a custom listing still uses them (below). There is no history or bin folder.
-- **Metadata:** write it into every new image with [`metadata`](../../metadata/files-metadata/SKILL.md), from `source/metadata.json`.
+- **Metadata:** write it into every new image with [`files-metadata`](../../metadata/files-metadata/SKILL.md), from `source/metadata.json`.
 - Run `node scripts/validate.mjs`, then upload in Play Console and paste the alt text.
 
 ## Custom store listings

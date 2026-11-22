@@ -6,7 +6,7 @@ description: >
   emojis, and generic AI copywriting cliches. Defines Kotlin API documentation and module README standards.
 metadata:
   author: Mihai-Cristian Condrea
-  last-updated: '2026-11-21'
+  last-updated: '2026-11-22'
   keywords:
   - writing-style
   - punctuation
@@ -42,15 +42,28 @@ This is the only place these rules are written. Every other marketing skill appl
 
 3. **Banned AI Copywriting Cliches**:
    - Do not use generic, hyperbolic AI buzzwords: "elevate", "unleash", "seamless", "next-gen", "game-changer", "delve", "tapestry", "in the world of", "dive into".
+   - In technical writing, do not use "facade", "orchestrate", "synergy" or "robust" when a simpler, more precise word exists.
+   - Do not call ordinary code "powerful", "comprehensive", "sophisticated", "elegant" or "production-ready" without a concrete reason, and do not claim it is "ultimate", "perfect", "best" or "fully optimized".
    - Use plain, active, and specific verbs describing concrete functionality.
 
 4. **Direct, Concise Human Tone**:
-   - Keep sentences short, confident, and direct.
+   - Keep sentences short, confident, and direct, in short paragraphs.
    - Write clear technical documentation that explains public contracts, side effects, and architectural assumptions without stating the obvious.
+   - Skip filler introductions and conclusions, and say each point once.
+   - Name the concrete thing (`app module`, `repository`, `provider`, `screen`, `worker`, `navigation entry`) rather than `layer`, `system`, `solution` or `mechanism` when it is known.
+   - Explain why something exists when the reason matters, instead of restating what the code does.
+   - Keep technical documentation factual: do not praise the implementation or write in a conversational assistant voice inside repository files.
+   - Match the tone and terminology of nearby project documentation.
 
 5. **Plain punctuation**:
    - Use straight quotes and apostrophes (`'`, `"`) in files; let the platform typeset them.
    - Use the middle dot (`·`) or a colon to separate a number from a title, never a dash.
+
+6. **Formatting**:
+   - Use headings and lists only when they improve readability, and do not over-section short documents.
+   - Keep bullet points concise.
+   - Use code blocks for commands, paths, APIs or examples when that makes them easier to read.
+   - Use backticks for code symbols, module names, file names, Gradle tasks, resource names and paths.
 
 ## Technical documentation ownership
 

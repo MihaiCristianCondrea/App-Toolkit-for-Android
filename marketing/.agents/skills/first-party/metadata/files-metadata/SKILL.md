@@ -1,5 +1,5 @@
 ---
-name: metadata
+name: files-metadata
 description: >
   Write search, rights and accessibility metadata into every finished marketing
   file (images, audio, video, SVG, HTML, PDF, captions) and verify that nothing
@@ -41,7 +41,7 @@ If `marketing/README.md` has no "Project metadata" section, add it before taggin
 ````markdown
 ## Project metadata
 
-Read by the `metadata` skill. Change it here, not in individual campaigns.
+Read by the `files-metadata` skill. Change it here, not in individual campaigns.
 
 <!-- project-metadata -->
 ```json

@@ -80,7 +80,7 @@ README.
 
 ## Project metadata
 
-Read by the `metadata` skill for every file it tags, and by `social-captions`. Change it here, not in individual
+Read by the `files-metadata` skill for every file it tags, and by `social-captions`. Change it here, not in individual
 campaigns.
 
 <!-- project-metadata -->

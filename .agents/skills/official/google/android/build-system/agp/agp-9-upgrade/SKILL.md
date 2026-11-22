@@ -18,7 +18,7 @@ metadata:
 
 ## Migration guide
 
-See the [AGP 9 migration guide](references/android/build/releases/agp-9-0-0-release-notes.md) for the major changes, many
+See the [AGP 9 migration guide](https://developer.android.com/build/releases/agp-9-0-0-release-notes) for the major changes, many
 breaking, in AGP 9 compared to AGP 8.
 
 ## Requirements
@@ -29,7 +29,7 @@ Upgrade Assistant in Android Studio to update to the latest stable version of
 AGP, and confirm when done. The user may also request that this requirement be
 skipped; if this is the case, you should update the version of AGP to the latest
 stable version as part of the AGP 9 migration. See the
-[AGP 9 migration guide](references/android/build/releases/agp-9-0-0-release-notes.md) for how to do this.
+[AGP 9 migration guide](https://developer.android.com/build/releases/agp-9-0-0-release-notes) for how to do this.
 
 Each version of AGP has its own set of compatibilities with other tools, such as
 Gradle, JDK, and Kotlin. The release notes for each of these versions will
@@ -51,11 +51,11 @@ If Hilt is used in the project, ensure it is on version 2.59.2 or higher.
 
 ### Step 2: Migrate to built-in Kotlin
 
-See [the guide](references/android/build/migrate-to-built-in-kotlin.md) for detailed information.
+See [the guide](https://developer.android.com/build/migrate-to-built-in-kotlin) for detailed information.
 
 ### Step 3. Migrate to the new AGP DSL
 
-See [the guide](references/android/build/releases/agp-9-0-0-release-notes.md) for detailed information.
+See [the guide](https://developer.android.com/build/releases/agp-9-0-0-release-notes) for detailed information.
 
 See also [gradle-recipes](references/recipes.md) for examples on how to migrate old code to code
 that is compatible with AGP 9 and the new DSL.

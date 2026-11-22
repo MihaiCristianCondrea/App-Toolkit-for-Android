@@ -80,7 +80,7 @@ The names below describe the local files. The repository does not record an upst
 
 ## Device frames
 
-Use the display aperture and corner mask in each local device directory to fit the app window. The marketing UI gets its preview frames from Material Next. [Local device frames](device-frames/) · [Marketing UI dependencies](../ui/README.md#dependencies)
+Use the device's display aperture and corner mask to fit the actual app window. The frame guide identifies which skins are local and which Material Next provides. [Device frames](device-frames/README.md)
 
 ## Google Play badge
 

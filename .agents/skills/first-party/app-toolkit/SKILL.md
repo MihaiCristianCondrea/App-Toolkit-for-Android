@@ -6,7 +6,7 @@ description: >
   conventions in standalone Android projects using their existing AndroidX stack.
 metadata:
   author: Mihai-Cristian Condrea
-  last-updated: '2026-11-21'
+  last-updated: '2026-11-22'
   keywords:
     - app toolkit
     - android architecture
@@ -47,7 +47,7 @@ resolved dependency.
 | Ownership, naming, dependencies                | [Architecture](references/architecture.md)                   | `layered-tree-review` owns placement, `android-data-layer` owns repository and data source behavior, and `android-domain-layer` decides when a use case earns its place. |
 | Compose screen, route-facing content, messages | [Screen contracts](references/screen-contracts.md)           | `android-ui-layer` owns rendering and screen state. Load `navigation-3` when changing navigation.                                                                        |
 | ViewModel, events, coroutine policy            | [ViewModel conventions](references/viewmodel-conventions.md) | `android-ui-layer` owns state and effects. `traceable-code` owns Kotlin call sites and readable control flow.                                                                   |
-| Reusable library feature or public API         | [Library development](references/library-development.md)     | Use the owners above for the affected layers and `changelog` for consumer-facing changes.                                                                                |
+| Reusable library feature or public API         | [Library development](references/library-development.md)     | Use the owners above for the affected layers and `app-changelog` for consumer-facing changes.                                                                                |
 | Sample or consumer integration                 | [Consumer integration](references/consumer-integration.md)   | Use the owner of the capability being integrated, such as `android-ui-layer` for screen wiring.                                                                          |
 | Code review                                    | [Code review](references/code-review.md)                     | Load the owners for the code under review.                                                                                                                               |
 | Verification                                   | [Validation](references/validation.md)                       | `android-build-validation` owns environment setup and Gradle checks.                                                                                                     |
@@ -59,10 +59,15 @@ Before implementation, identify the affected responsibilities and checks:
   evaluate whether `android-domain-layer` applies. A direct repository call may be enough.
 - Use `navigation-3` for destination or graph changes in a Navigation 3 project, `android-localization`
   for localized resources, and `android-datastore` only for persistence work involving DataStore.
+- Use `navigation-event` for back handling, `edge-to-edge` and `adaptive` for insets and
+  window-size layouts, `android-permissions-security` for runtime permissions,
+  `play-billing-library-version-upgrade` when changing Play Billing, and `r8-analyzer` for a
+  published module's consumer keep rules.
 - Use `traceable-code` for Kotlin call sites and `writing-style` for KDoc, module READMEs and Mermaid diagrams. Apply the [code review checks](references/code-review.md) to the touched code.
 - For implementation, use `android-build-validation` to select checks. Use the existing test
   setup and the relevant specialist's testing guidance. Load `testing-setup` when the project
   needs a test strategy or infrastructure.
 
-Use the existing telemetry contract and its specialist when changing instrumentation. Keep the
-target project's approval and design workflows in force.
+Use `ga4-app-analytics` with the existing telemetry contract when changing instrumentation, including
+the `XAnalytics` and `XOperationNames` templates and tracked screens. Keep the target project's
+approval and design workflows in force.

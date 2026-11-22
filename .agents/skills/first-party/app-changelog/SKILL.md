@@ -1,5 +1,5 @@
 ---
-name: changelog
+name: app-changelog
 description: >
   Maintain CHANGELOG.md for the correct audience. App and sample-app changelogs
   appear inside the application and summarize meaningful user-facing changes since
@@ -7,7 +7,7 @@ description: >
   and compatibility. Use for release history, unreleased changes, and changelog reviews.
 metadata:
   author: Mihai-Cristian Condrea
-  last-updated: '2026-11-20'
+  last-updated: '2026-11-22'
   keywords:
     - changelog
     - releases

@@ -185,7 +185,7 @@ Rules:
 
 - **Gallery:** `marketing/ui/open-marketing-ui.cmd` (Windows) or `./marketing/ui/open-marketing-ui.sh`.
 - **Checks:** `npm run qa` after any change to a screen or the kit.
-- **Captures:** `npm run capture -- <screen-id> --scale=3` writes PNGs for store graphics and posts; `--window=fold|desktop` renders the large-screen layout and `--frame=device` the window's device. Run [`metadata`](../../metadata/files-metadata/SKILL.md) on them before they leave the repository.
+- **Captures:** `npm run capture -- <screen-id> --scale=3` writes PNGs for store graphics and posts; `--window=fold|desktop` renders the large-screen layout and `--frame=device` the window's device. Run [`files-metadata`](../../metadata/files-metadata/SKILL.md) on them before they leave the repository.
 - **Videos:** Remotion mounts screens and parts through `embed.js` (a `LitScreen` component that calls `mount()` with a state derived from the frame). See [`motion-video`](../../motion-video/SKILL.md).
 
 ```tsx

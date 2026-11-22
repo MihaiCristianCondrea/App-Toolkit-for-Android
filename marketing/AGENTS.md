@@ -50,7 +50,7 @@ to `marketing/.agents/skills/` unless they start with `.agents/`. Skills are lis
 
 | Task | Skills | Notes and exclusions |
 | --- | --- | --- |
-| Set up `marketing/` or start a campaign | `first-party/marketing/marketing-startup` | Bootstrap with `marketing-ui` when reusing app screens. Set up the project metadata block with `metadata` when preparing publishable assets. |
+| Set up `marketing/` or start a campaign | `first-party/marketing/marketing-startup` | Bootstrap with `marketing-ui` when reusing app screens. Set up the project metadata block with `files-metadata` when preparing publishable assets. |
 | Design a new screen or redesign one | `official/google/material-ui`, `first-party/marketing/marketing-ui` (+ `references/design-handoff.md`), optional `official/lottiefiles/motion-design`, optional `third-party/microck/ui-unslop` (web kit review) | Add `official/google/stitch-skill` only when updating `DESIGN.md`; exclude `remotion/*`, `social-captions`, `play-store-*` |
 | Add, fix, or sync a screen in `marketing/ui` | `marketing-ui`, `material-ui` (tokens, components, Material Web limits), the authoritative Compose source | Run `npm run qa` and `npm run parity`; no campaign files |
 | Material 3 component, token, typography, layout, or motion question | `material-ui` | Uses its offline `documentation/`; no prototype needed |
@@ -60,16 +60,16 @@ to `marketing/.agents/skills/` unless they start with `.agents/`. Skills are lis
 | Play Store screenshots, icon, or feature graphic | [Marketing UI](.agents/skills/first-party/marketing/marketing-ui/SKILL.md) for real screens, [Material UI](.agents/skills/official/google/material-ui/SKILL.md) for Material guidance, [Play Store Media](.agents/skills/first-party/play-store/play-store-media/SKILL.md) for production and validation, then [Metadata](.agents/skills/first-party/metadata/files-metadata/SKILL.md) and [Play Store Listing](.agents/skills/first-party/play-store/play-store-listing/SKILL.md) | Use Taste when exploring composition. Review every exported image and apply the store-media rules to each device and locale. |
 | Play Store listing text or custom listings | `play-store-listing` | Text follows `writing-style` |
 | Play Store What's new notes | `first-party/play-store/play-store-changelog` | Distinct from `.agents/skills/first-party/app-changelog` (`CHANGELOG.md`) |
-| Brand kit or visual identity concepts | `marketing-startup` (briefs), `third-party/leonxlnx/imagegen-skills/brandkit`, `metadata` | |
+| Brand kit or visual identity concepts | `marketing-startup` (briefs), `third-party/leonxlnx/imagegen-skills/brandkit`, `files-metadata` | |
 | Standalone landing page or press page | App brand and [Material UI](.agents/skills/official/google/material-ui/SKILL.md) when applicable, [Taste](.agents/skills/third-party/leonxlnx/taste-skill/SKILL.md) for creative direction, web implementation, [UI Unslop](.agents/skills/third-party/microck/ui-unslop/SKILL.md) for visual review, then [Metadata](.agents/skills/first-party/metadata/files-metadata/SKILL.md) | Use [Marketing Startup](.agents/skills/first-party/marketing/marketing-startup/SKILL.md) when setting up marketing. Load Marketing UI only when the page reuses product screens. |
-| Redesign or clean up an existing web page | `ui-unslop`, `taste-skill`, `metadata` | Web pages only |
+| Redesign or clean up an existing web page | `ui-unslop`, `taste-skill`, `files-metadata` | Web pages only |
 | Concept images of app screens or sites | `third-party/leonxlnx/imagegen-skills/imagegen-frontend-mobile` or `imagegen-frontend-web`, then `image-to-code` | Concepts are not app features |
 | Social post copy, or captions for existing media | `first-party/metadata/files-metadata` (manifest, if missing), `first-party/metadata/social-captions`, plus `third-party/sergebulaev/tiktok-skills` (if TikTok) | Never for ordinary Android feature work |
 | Marketing research (GA4, Search Console, Trends) | `.agents/skills/third-party/zenith779/ga-gsc-skills/<skill>` | Reporting only; never changes Android instrumentation |
 
 The [shared asset library](assets/README.md) documents reusable fonts, shapes, frames and the Google Play badge. Load an image-generation skill only when a brief calls for new artwork. Use [Brand Kit](.agents/skills/third-party/leonxlnx/imagegen-skills/brandkit/SKILL.md) for identity concepts. Keep generated artwork outside the app-screen representation.
 
-Campaign deliverables always finish with `metadata` on the final files, then `social-captions` when
+Campaign deliverables always finish with `files-metadata` on the final files, then `social-captions` when
 the work is published socially.
 
 ## Ownership and precedence

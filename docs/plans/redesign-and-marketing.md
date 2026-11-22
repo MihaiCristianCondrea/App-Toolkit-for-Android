@@ -82,7 +82,7 @@ Done on October 28, 2026. A move, not a redesign: every file that existed keeps 
 1. **Store listing.** `creative/store/google-play/` in Insider's shape, with Insider's
    `scripts/validate.mjs`. The text, contact and language files moved from
    `sample/app/src/main/play/`, which is deleted. The live visuals stay in the default listing
-   (`listings/default/listing/en-US/graphics/`, renamed as the `store-listing` skill says) until Phase 3
+   (`listings/default/listing/en-US/graphics/`, renamed as the `play-store-listing` skill says) until Phase 3
    replaces them; they then move to `listings/default-legacy/`. Of the two feature graphics, the
    1024 x 500 one is the uploaded one (Play rejects the other's 1025 px width), so the other waits in
    `listings/default/source/unused/`. The screenshots and feature graphic were saved without their
@@ -132,7 +132,7 @@ When the last screen's concept is approved, delete `marketing/assets/ideas/`: it
    ships in English (en-US) only for now; more languages are a later, separate decision. Render only
    after Phase 2 parity, tied to a tested app revision, showing implemented features, with no ad
    placements in campaign or store output.
-2. **Listing text.** Rewrite title, short and full description with `store-listing` and
+2. **Listing text.** Rewrite title, short and full description with `play-store-listing` and
    `writing-style`, from the new `product-positioning.md`.
 3. **Custom listings, later.** One custom store listing per tool (`custom/<tool>/`), after the new
    default listing is live. Not part of this phase's first pass.
@@ -159,7 +159,7 @@ In android-skills first, then copied to every repository that carries them:
 - `marketing-startup`: the `creative/` layout (`creative/store/google-play`,
   `creative/social-campaigns`, `creative/templates`, optional content folders such as Insider's
   `lessons/`), `research/` for analytics and concept material.
-- `store-listing` and `play-store-media`: the `creative/store/google-play` path, the
+- `play-store-listing` and `play-store-media`: the `creative/store/google-play` path, the
   `<name>-legacy` rule for visuals without source, and moving a listing out of
   `app/src/main/play`.
 - `marketing-ui`: bootstrap a hub with Material Next (`mountMarketingHub`,

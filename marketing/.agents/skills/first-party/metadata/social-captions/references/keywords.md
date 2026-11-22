@@ -1,6 +1,6 @@
 # Keywords and hashtags
 
-Part of [`social-captions`](../SKILL.md), shared with [`metadata`](../../files-metadata/SKILL.md). Keywords and hashtags describe what the audience searches for, not how the product was built.
+Part of [`social-captions`](../SKILL.md), shared with [`files-metadata`](../../files-metadata/SKILL.md). Keywords and hashtags describe what the audience searches for, not how the product was built.
 
 ## Start from the audience
 

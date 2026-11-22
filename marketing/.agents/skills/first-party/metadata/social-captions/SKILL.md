@@ -49,7 +49,7 @@ Write only the files for the platforms chosen. For a platform not in the list, f
 2. The campaign manifest `<campaign-slug>-metadata.json`: title, description, keywords, hashtags, per-file alt text.
 3. The campaign README and the media itself: what the viewer actually sees.
 
-Both files come from the [`metadata`](../files-metadata/SKILL.md) skill. If the manifest doesn't exist yet, run that skill first, so the captions and the files say the same thing.
+Both files come from the [`files-metadata`](../files-metadata/SKILL.md) skill. If the manifest doesn't exist yet, run that skill first, so the captions and the files say the same thing.
 
 Pick keywords and hashtags for the audience the product is for, following [`references/keywords.md`](references/keywords.md). A note-taking app for students gets tags students search for, and for TikTok the installed skills in [`tiktok-skills`](../../../third-party/sergebulaev/tiktok-skills/SKILL.md) (hooks, captions, audience insights) go deeper; developer tags (`#AndroidDev`, `#JetpackCompose`) only belong when the audience is developers.
 

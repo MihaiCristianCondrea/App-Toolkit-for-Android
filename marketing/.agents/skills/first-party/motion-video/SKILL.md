@@ -188,7 +188,7 @@ Use these to study process, not to imitate Google branding. The films themselves
 
 1. Run the review loop and the fidelity gate ([`references/review.md`](references/review.md), [`references/technical-rules.md`](references/technical-rules.md)).
 2. Get the owner's approval on the animatic, then render the master and the delivery cut.
-3. Write metadata into every output file with [`metadata`](../metadata/files-metadata/SKILL.md).
+3. Write metadata into every output file with [`files-metadata`](../metadata/files-metadata/SKILL.md).
 4. Use [`social-captions`](../metadata/social-captions/SKILL.md) when the video is intended for social publication.
 
 ## 8. Prompt template for the next product
