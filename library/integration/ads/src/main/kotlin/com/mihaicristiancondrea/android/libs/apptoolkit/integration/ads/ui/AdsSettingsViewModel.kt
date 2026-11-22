@@ -17,6 +17,7 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.integration.ads.ui
 
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.AdsSettingsRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.telemetry.TelemetryRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.UiText
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.Loadable
@@ -24,19 +25,22 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.LoggedScr
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.toErrorMessage
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.toFailed
 import com.mihaicristiancondrea.android.libs.apptoolkit.integration.ads.R
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.AdsSettingsRepository
+import com.mihaicristiancondrea.android.libs.apptoolkit.integration.ads.ui.analytics.ADS_SETTINGS_SCREEN
+import com.mihaicristiancondrea.android.libs.apptoolkit.integration.ads.ui.analytics.AdsPreferenceKeys
+import com.mihaicristiancondrea.android.libs.apptoolkit.integration.ads.ui.analytics.adsToggleEvent
+import com.mihaicristiancondrea.android.libs.apptoolkit.integration.ads.ui.constants.AdsSettingsOperationNames
 import com.mihaicristiancondrea.android.libs.apptoolkit.integration.ads.ui.contracts.AdsSettingsEvent
 import com.mihaicristiancondrea.android.libs.apptoolkit.integration.ads.ui.models.AdsPreferences
 import com.mihaicristiancondrea.android.libs.apptoolkit.integration.ads.ui.states.AdsSettingsUiState
-import com.mihaicristiancondrea.android.libs.apptoolkit.integration.consent.data.repositories.ConsentRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.integration.consent.data.models.ConsentHost
+import com.mihaicristiancondrea.android.libs.apptoolkit.integration.consent.data.repositories.ConsentRepository
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.combine
 
 /**
  * Shows and stores the ad preferences, and opens the UMP privacy form. The switches follow the
- * store, so a failed write leaves them where they were and shows an error message. A failed read
- * replaces them with a retryable failure.
+ * store, so a failed write leaves them where they were, shows an error message, and reports no
+ * toggle event. A failed read replaces them with a retryable failure.
  */
 class AdsSettingsViewModel(
     private val repository: AdsSettingsRepository,
@@ -45,7 +49,7 @@ class AdsSettingsViewModel(
 ) : LoggedScreenViewModel<AdsSettingsUiState, AdsSettingsEvent>(
     initialState = AdsSettingsUiState(),
     telemetryRepository = telemetryRepository,
-    screenName = "AdsSettings",
+    screenName = ADS_SETTINGS_SCREEN.name,
     viewModelName = "AdsSettingsViewModel",
 ) {
 
@@ -60,21 +64,23 @@ class AdsSettingsViewModel(
 
     override fun handleEvent(event: AdsSettingsEvent) {
         when (event) {
-            AdsSettingsEvent.Load -> observe()
+            is AdsSettingsEvent.Load -> observe()
 
             is AdsSettingsEvent.SetAdsEnabled ->
                 persistAdsEnabledJob = persistPreference(
                     job = persistAdsEnabledJob,
-                    action = Actions.PERSIST_ADS_ENABLED,
+                    action = AdsSettingsOperationNames.PERSIST_ADS_ENABLED,
+                    preferenceKey = AdsPreferenceKeys.DISPLAY_ADS,
                     enabled = event.enabled,
-                ) { repository.setAdsEnabled(event.enabled) }
+                ) { repository.setAdsEnabled(enabled = event.enabled) }
 
             is AdsSettingsEvent.SetReduceAds ->
                 persistReduceAdsJob = persistPreference(
                     job = persistReduceAdsJob,
-                    action = Actions.PERSIST_REDUCE_ADS,
+                    action = AdsSettingsOperationNames.PERSIST_REDUCE_ADS,
+                    preferenceKey = AdsPreferenceKeys.REDUCE_ADS,
                     enabled = event.enabled,
-                ) { repository.setReduceAds(event.enabled) }
+                ) { repository.setReduceAds(enabled = event.enabled) }
 
             is AdsSettingsEvent.RequestConsent -> requestConsent(host = event.host)
         }
@@ -82,37 +88,64 @@ class AdsSettingsViewModel(
 
     /** Follows both stored preferences. A retry restarts the collection that failed. */
     private fun observe() {
+        setState {
+            if (preferences is Loadable.Ready) {
+                this
+            } else {
+                copy(preferences = Loadable.Loading)
+            }
+        }
         observeJob = observeJob.restart {
-            setState { copy(preferences = Loadable.Loading) }
             combine(
-                repository.observeAdsEnabled(),
-                repository.observeReduceAds(),
-            ) { adsEnabled, reduceAds -> AdsPreferences(adsEnabled = adsEnabled, reduceAds = reduceAds) }
-                .collectReport(
-                    action = Actions.OBSERVE_ADS_ENABLED,
-                    onError = { error -> setState { copy(preferences = error.toFailed(fallback = StorageErrorText)) } },
-                ) { preferences ->
-                    setState { copy(preferences = Loadable.Ready(preferences)) }
-                }
+                flow = repository.observeAdsEnabled(),
+                flow2 = repository.observeReduceAds(),
+            ) { adsEnabled, reduceAds ->
+                AdsPreferences(adsEnabled = adsEnabled, reduceAds = reduceAds)
+            }.collectReport(
+                action = AdsSettingsOperationNames.OBSERVE_ADS_ENABLED,
+                onError = { error ->
+                    setState {
+                        copy(
+                            preferences = error.toFailed(
+                                fallback = UiText.StringResource(resourceId = R.string.error_ads_settings_storage),
+                            ),
+                        )
+                    }
+                },
+            ) { preferences ->
+                setState { copy(preferences = Loadable.Ready(value = preferences)) }
+            }
         }
     }
 
     /**
-     * Restarts [job] with a reported [write] of one preference. Each preference keeps its own job,
-     * so changing one switch never cancels the other's write.
+     * Restarts [job] with a reported [write] of one preference and logs the toggle event only
+     * after persistence succeeds. Each preference keeps its own job, so changing one switch never
+     * cancels the other's write.
      */
     private fun persistPreference(
         job: Job?,
         action: String,
+        preferenceKey: String,
         enabled: Boolean,
         write: suspend () -> Unit,
     ): Job = job.restart {
         launchReport(
             action = action,
-            extra = mapOf(ExtraKeys.ENABLED to enabled.toString()),
-            onError = { error -> showMessage(error.toErrorMessage(fallback = StorageErrorText)) },
-            block = write,
-        )
+            extra = mapOf(AdsSettingsOperationNames.ExtraKeys.ENABLED to enabled.toString()),
+            onError = { error ->
+                showMessage(
+                    message = error.toErrorMessage(
+                        fallback = UiText.StringResource(resourceId = R.string.error_ads_settings_storage),
+                    ),
+                )
+            },
+        ) {
+            write()
+            telemetryRepository.logEvent(
+                event = adsToggleEvent(enabled = enabled, preferenceKey = preferenceKey),
+            )
+        }
     }
 
     /**
@@ -122,29 +155,17 @@ class AdsSettingsViewModel(
     private fun requestConsent(host: ConsentHost) {
         consentJob = consentJob.restart {
             launchReport(
-                action = Actions.REQUEST_CONSENT,
-                extra = mapOf(ExtraKeys.HOST to host.activity::class.java.name),
-                onError = { error -> showMessage(error.toErrorMessage(fallback = ConsentErrorText)) },
+                action = AdsSettingsOperationNames.REQUEST_CONSENT,
+                onError = { error ->
+                    showMessage(
+                        message = error.toErrorMessage(
+                            fallback = UiText.StringResource(resourceId = R.string.error_ads_consent_failed),
+                        ),
+                    )
+                },
             ) {
                 consentRepository.requestConsent(host = host, showIfRequired = false)
             }
         }
-    }
-
-    private object Actions {
-        const val OBSERVE_ADS_ENABLED: String = "observeAdsEnabled"
-        const val PERSIST_ADS_ENABLED: String = "persistAdsEnabled"
-        const val PERSIST_REDUCE_ADS: String = "persistReduceAds"
-        const val REQUEST_CONSENT: String = "requestConsent"
-    }
-
-    private object ExtraKeys {
-        const val ENABLED: String = "enabled"
-        const val HOST: String = "host"
-    }
-
-    private companion object {
-        val StorageErrorText = UiText.StringResource(R.string.error_ads_settings_storage)
-        val ConsentErrorText = UiText.StringResource(R.string.error_ads_consent_failed)
     }
 }

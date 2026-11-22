@@ -61,10 +61,7 @@ class AppToolkit : AppToolkitApplication(), DefaultLifecycleObserver {
     }
 
     private suspend fun initializeAds() {
-        adsCoreManager.initializeAds(
-            appOpenUnitId = AdsConstants.APP_OPEN_UNIT_ID,
-            disableNativeValidator = true,
-        )
+        adsCoreManager.initializeAds(appOpenUnitId = AdsConstants.APP_OPEN_UNIT_ID)
     }
 
     /**

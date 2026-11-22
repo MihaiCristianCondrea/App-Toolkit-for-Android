@@ -17,27 +17,28 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.integration.ads.data.local
 
-import androidx.datastore.core.DataStore
 import android.util.Log
-import java.io.IOException
+import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.MutablePreferences
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.coroutines.dispatchers.DispatcherProvider
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.telemetry.DiagnosticsReporter
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.datastore.DataStoreNamesConstants
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.retryWhen
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.retryWhen
 import kotlinx.coroutines.flow.stateIn
+import java.io.IOException
 
 /**
  * Ads preference stored in the shared `settings` Preferences DataStore.
@@ -50,9 +51,10 @@ class DefaultAdsPreferencesDataSource(
     private val dataStore: DataStore<Preferences>,
     dispatchers: DispatcherProvider,
     override val defaultAdsEnabled: Boolean,
+    private val diagnostics: DiagnosticsReporter? = null,
 ) : AdsPreferencesDataSource {
 
-    private val scope = CoroutineScope(SupervisorJob() + dispatchers.io)
+    private val scope = CoroutineScope(context = SupervisorJob() + dispatchers.io)
 
     private val adsKey = booleanPreferencesKey(name = DataStoreNamesConstants.DATA_STORE_ADS)
     private val reduceAdsKey =
@@ -66,14 +68,27 @@ class DefaultAdsPreferencesDataSource(
     override val adsEnabled: StateFlow<Boolean> = ads(default = defaultAdsEnabled)
         .retryWhen { failure, attempt ->
             if (failure !is IOException) return@retryWhen false
-            Log.w("AdsPreferences", "Cannot read ads preference; disabling ads until storage recovers.", failure)
-            emit(false)
-            delay(1_000L * (1L shl attempt.coerceAtMost(5).toInt()).coerceAtMost(30))
+            Log.w(LOG_TAG, "Cannot read ads preference; disabling ads until storage recovers.", failure)
+            diagnostics?.logBreadcrumb(
+                message = "Ads preference read failed; retrying",
+                attributes = mapOf("attempt" to attempt.toString()),
+            )
+            emit(value = false)
+            val delaySeconds: Long = (1L shl attempt.coerceAtMost(maximumValue = 5).toInt())
+                .coerceAtMost(maximumValue = 30L)
+            delay(timeMillis = 1_000L * delaySeconds)
             true
         }
         .catch { failure ->
-            Log.e("AdsPreferences", "Cannot observe ads preference; ads remain disabled.", failure)
-            emit(false)
+            Log.e(LOG_TAG, "Cannot observe ads preference; ads remain disabled.", failure)
+            diagnostics?.recordNonFatal(
+                throwable = failure,
+                attributes = mapOf(
+                    "source" to "DefaultAdsPreferencesDataSource",
+                    "action" to "observeAdsEnabled",
+                ),
+            )
+            emit(value = false)
         }
         .stateIn(
             scope = scope,
@@ -100,5 +115,9 @@ class DefaultAdsPreferencesDataSource(
 
     override fun close() {
         scope.cancel()
+    }
+
+    private companion object {
+        const val LOG_TAG: String = "AdsPreferences"
     }
 }

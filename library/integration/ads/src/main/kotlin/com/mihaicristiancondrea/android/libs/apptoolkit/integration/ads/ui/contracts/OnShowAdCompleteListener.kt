@@ -21,6 +21,6 @@ package com.mihaicristiancondrea.android.libs.apptoolkit.integration.ads.ui.cont
  * Signals completion so the caller can continue when an ad closes, fails to show, or is
  * unavailable.
  */
-interface OnShowAdCompleteListener {
+fun interface OnShowAdCompleteListener {
     fun onShowAdComplete()
 }

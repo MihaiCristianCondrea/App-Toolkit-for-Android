@@ -38,18 +38,24 @@ import org.koin.dsl.onClose
  */
 fun adsIntegrationModule(defaultAdsEnabled: Boolean = true): Module = module {
     single<AdsPreferencesDataSource>(createdAtStart = true) {
-        DefaultAdsPreferencesDataSource(dataStore = get(qualifier = named(DataStoreQualifiers.SETTINGS)), dispatchers = get(), defaultAdsEnabled = defaultAdsEnabled)
+        DefaultAdsPreferencesDataSource(
+            dataStore = get(qualifier = named(name = DataStoreQualifiers.SETTINGS)),
+            dispatchers = get(),
+            defaultAdsEnabled = defaultAdsEnabled,
+            diagnostics = get(),
+        )
     } onClose { source -> source?.close() }
 
     single<AppOpenAdController> {
         AppOpenAdController(
             context = get(),
-            buildInfoRepository = get(),
             dispatchers = get(),
             adMobAppIdDataSource = get(),
             adsSettingsRepository = get(),
+            diagnostics = get(),
         )
     } onClose { controller -> controller?.close() }
+
     single<AdsSettingsRepository> {
         DefaultAdsSettingsRepository(
             preferences = get(),

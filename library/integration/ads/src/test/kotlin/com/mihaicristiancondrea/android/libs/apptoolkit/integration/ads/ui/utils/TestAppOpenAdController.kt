@@ -24,39 +24,42 @@ import com.google.android.libraries.ads.mobile.sdk.appopen.AppOpenAd
 import com.google.android.libraries.ads.mobile.sdk.appopen.AppOpenAdEventCallback
 import com.google.android.libraries.ads.mobile.sdk.common.AdLoadCallback
 import com.google.android.libraries.ads.mobile.sdk.initialization.InitializationConfig
-import com.mihaicristiancondrea.android.libs.apptoolkit.integration.ads.data.remote.AdsSdkInitializer
-import com.mihaicristiancondrea.android.libs.apptoolkit.integration.ads.ui.contracts.OnShowAdCompleteListener
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.exceptions.StorageException
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.local.AdMobAppIdDataSource
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.BuildInfoRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.AdsSettingsRepository
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.FakeTelemetryRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.TestDispatchers
+import com.mihaicristiancondrea.android.libs.apptoolkit.integration.ads.data.remote.AdsSdkInitializer
 import io.mockk.every
 import io.mockk.justRun
 import io.mockk.mockk
 import io.mockk.mockkObject
 import io.mockk.mockkStatic
 import io.mockk.slot
+import io.mockk.unmockkObject
+import io.mockk.unmockkStatic
 import io.mockk.verify
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
+import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Assertions.assertNull
+import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import java.lang.reflect.InvocationTargetException
-import java.util.Date
-import kotlin.coroutines.Continuation
-import kotlin.coroutines.EmptyCoroutineContext
-import kotlin.test.assertFailsWith
-import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlin.time.TimeSource
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class TestAppOpenAdController {
     private val testScope = CoroutineScope(Dispatchers.Unconfined)
+    private val controllers = mutableListOf<AppOpenAdController>()
 
     /**
      * Eager dispatchers for tests using `runBlocking`. A queued [StandardTestDispatcher] cannot
@@ -78,16 +81,31 @@ class TestAppOpenAdController {
     }
 
     private lateinit var initializer: RecordingAdsSdkInitializer
+    private lateinit var diagnostics: FakeTelemetryRepository
 
     @BeforeEach
-    fun resetInitializer() {
+    fun resetFixtures() {
         initializer = RecordingAdsSdkInitializer()
+        diagnostics = FakeTelemetryRepository()
         // android.util.Log is a stub that throws in plain JVM unit tests, and
-        // ensureAdsSdkInitialized logs when the host declares no AdMob app id.
+        // AppOpenAdController logs warnings and errors on missing IDs or SDK throws.
         mockkStatic(Log::class)
         every { Log.e(any(), any()) } returns 0
         every { Log.w(any(), any<String>()) } returns 0
+        every { Log.w(any(), any<String>(), any()) } returns 0
         every { Log.d(any(), any()) } returns 0
+    }
+
+    @AfterEach
+    fun tearDown() {
+        controllers.forEach(AppOpenAdController::close)
+        controllers.clear()
+        unmockkObject(AppOpenAd.Companion)
+        unmockkStatic(Log::class)
+    }
+
+    private fun appContext(): Context = mockk<Context>(relaxed = true).also { context ->
+        every { context.applicationContext } returns context
     }
 
     /**
@@ -95,70 +113,44 @@ class TestAppOpenAdController {
      * whose background reads can fail after setup and contaminate later tests.
      */
     private fun managerWith(
-        context: Context,
-        provider: BuildInfoRepository,
+        context: Context = appContext(),
         adMobAppIdDataSource: AdMobAppIdDataSource = this.adMobAppIdDataSource,
         dataStore: AdsSettingsRepository = stubDataStore(adsEnabled = false),
     ): AppOpenAdController = AppOpenAdController(
         context = context,
-        buildInfoRepository = provider,
         dispatchers = eagerDispatchers(),
         adMobAppIdDataSource = adMobAppIdDataSource,
         adsSdkInitializer = initializer,
         adsSettingsRepository = dataStore,
-    )
+        diagnostics = diagnostics,
+    ).also(controllers::add)
 
-    /** Ads off by default, so a manager built without an explicit store initializes nothing. */
-    private fun stubDataStore(adsEnabled: Boolean): AdsSettingsRepository = mockk {
+    private fun stubDataStore(
+        adsEnabled: Boolean,
+        reduceAds: Boolean = false,
+    ): AdsSettingsRepository = mockk {
         every { this@mockk.adsEnabled } returns MutableStateFlow(adsEnabled)
+        every { observeReduceAds() } returns flowOf(reduceAds)
     }
 
-    /**
-     * Host-manifest AdMob ID fixture for manager initialization.
-     */
+    /** Host-manifest AdMob ID fixture for manager initialization. */
     private val adMobAppIdDataSource = AdMobAppIdDataSource { "ca-app-pub-1234567890123456~1234567890" }
-    private val noopContinuation = object : Continuation<Unit> {
-        override val context = EmptyCoroutineContext
-        override fun resumeWith(result: Result<Unit>) {
-            result.getOrThrow()
-        }
-    }
 
     @Test
     fun `initializeAds triggers MobileAds`() {
-        println("🚀 [TEST] initializeAds triggers MobileAds")
-        val context = mockk<Context>()
-        every { context.applicationContext } returns context
-        val provider = mockk<BuildInfoRepository>()
-        val manager = managerWith(context, provider)
-
-        val dataStore = mockk<AdsSettingsRepository>()
-        every { dataStore.adsEnabled } returns MutableStateFlow(true)
-        every { dataStore.observeReduceAds() } returns kotlinx.coroutines.flow.flowOf(false)
-        val storeField = AppOpenAdController::class.java.getDeclaredField("adsSettingsRepository")
-        storeField.isAccessible = true
-        storeField.set(manager, dataStore)
+        val manager = managerWith(dataStore = stubDataStore(adsEnabled = true))
 
         runBlocking { manager.initializeAds("id") }
 
         assertEquals(1, initializer.initializations)
-        println("🏁 [TEST DONE] initializeAds triggers MobileAds")
     }
 
     @Test
     fun `initializeAds skips MobileAds when the host declares no AdMob app id`() {
-        println("🚀 [TEST] initializeAds skips MobileAds when the host declares no AdMob app id")
-        val context = mockk<Context>()
-        every { context.applicationContext } returns context
-        val provider = mockk<BuildInfoRepository>()
-        val manager = managerWith(context, provider, adMobAppIdDataSource = { null })
-
-        val dataStore = mockk<AdsSettingsRepository>()
-        every { dataStore.adsEnabled } returns MutableStateFlow(true)
-        every { dataStore.observeReduceAds() } returns kotlinx.coroutines.flow.flowOf(false)
-        val storeField = AppOpenAdController::class.java.getDeclaredField("adsSettingsRepository")
-        storeField.isAccessible = true
-        storeField.set(manager, dataStore)
+        val manager = managerWith(
+            adMobAppIdDataSource = { null },
+            dataStore = stubDataStore(adsEnabled = true),
+        )
 
         runBlocking { manager.initializeAds("id") }
 
@@ -166,35 +158,26 @@ class TestAppOpenAdController {
         val mgrField = AppOpenAdController::class.java.getDeclaredField("appOpenAdManager")
         mgrField.isAccessible = true
         assertNull(mgrField.get(manager))
-        println("🏁 [TEST DONE] initializeAds skips MobileAds when the host declares no AdMob app id")
+        assertEquals(1, diagnostics.breadcrumbs.size)
     }
 
     @Test
-    fun `showAdIfAvailable before init does nothing`() {
-        println("🚀 [TEST] showAdIfAvailable before init does nothing")
-        val context = mockk<Context>()
-        every { context.applicationContext } returns context
-        val provider = mockk<BuildInfoRepository>()
-        val manager = managerWith(context, provider)
-        val activity = mockk<Activity>()
+    fun `showAdIfAvailable before init notifies completion listener`() {
+        val manager = managerWith()
+        var completed = false
 
-        manager.showAdIfAvailable(activity, testScope)
-        println("🏁 [TEST DONE] showAdIfAvailable before init does nothing")
+        manager.showAdIfAvailable(
+            activity = mockk<Activity>(),
+            scope = testScope,
+            onShowAdCompleteListener = { completed = true },
+        )
+
+        assertTrue(completed)
     }
 
     @Test
     fun `loadAd does not load when already loading or available`() {
-        println("🚀 [TEST] loadAd does not load when already loading or available")
-        val context = mockk<Context>()
-        every { context.applicationContext } returns context
-        val provider = mockk<BuildInfoRepository>()
-        val manager = managerWith(context, provider)
-        val dataStore = mockk<AdsSettingsRepository>()
-        every { dataStore.adsEnabled } returns MutableStateFlow(true)
-        every { dataStore.observeReduceAds() } returns kotlinx.coroutines.flow.flowOf(false)
-        val storeField = AppOpenAdController::class.java.getDeclaredField("adsSettingsRepository")
-        storeField.isAccessible = true
-        storeField.set(manager, dataStore)
+        val manager = managerWith(dataStore = stubDataStore(adsEnabled = true))
         runBlocking { manager.initializeAds("unit") }
 
         val mgrField = AppOpenAdController::class.java.getDeclaredField("appOpenAdManager")
@@ -216,85 +199,51 @@ class TestAppOpenAdController {
         val adField = inner.javaClass.getDeclaredField("appOpenAd")
         adField.isAccessible = true
         adField.set(inner, mockk<AppOpenAd>())
-        val timeField = inner.javaClass.getDeclaredField("loadTime")
-        timeField.isAccessible = true
-        timeField.setLong(inner, Date().time)
+        val markField = inner.javaClass.getDeclaredField("loadMark")
+        markField.isAccessible = true
+        markField.set(inner, TimeSource.Monotonic.markNow())
 
         inner.javaClass.getDeclaredMethod("loadAd").apply {
             isAccessible = true
             invoke(inner)
         }
         verify(exactly = 0) { AppOpenAd.load(any(), any()) }
-        println("🏁 [TEST DONE] loadAd does not load when already loading or available")
     }
 
     @Test
     fun `showAdIfAvailable loads when no ad`() {
-        println("🚀 [TEST] showAdIfAvailable loads when no ad")
-        val context = mockk<Context>()
-        every { context.applicationContext } returns context
-        val provider = mockk<BuildInfoRepository>()
-        val manager = managerWith(context, provider)
-        val dataStore = mockk<AdsSettingsRepository>()
-        every { dataStore.adsEnabled } returns MutableStateFlow(true)
-        every { dataStore.observeReduceAds() } returns kotlinx.coroutines.flow.flowOf(false)
-        val storeField = AppOpenAdController::class.java.getDeclaredField("adsSettingsRepository")
-        storeField.isAccessible = true
-        storeField.set(manager, dataStore)
+        val manager = managerWith(dataStore = stubDataStore(adsEnabled = true))
         runBlocking { manager.initializeAds("unit") }
 
         mockkObject(AppOpenAd.Companion)
         justRun { AppOpenAd.load(any(), any()) }
 
         var completed = false
-        val mgrField2 = AppOpenAdController::class.java.getDeclaredField("appOpenAdManager")
-        mgrField2.isAccessible = true
-        val inner2 = mgrField2.get(manager)!!
-        val method = inner2.javaClass.getDeclaredMethod(
-            "showAdIfAvailable",
-            Activity::class.java,
-            OnShowAdCompleteListener::class.java,
-            Continuation::class.java
+        manager.showAdIfAvailable(
+            activity = mockk<Activity>(),
+            scope = testScope,
+            onShowAdCompleteListener = { completed = true },
         )
-        method.isAccessible = true
-        val listener = object : OnShowAdCompleteListener {
-            override fun onShowAdComplete() {
-                completed = true
-            }
-        }
-        method.invoke(inner2, mockk<Activity>(), listener, noopContinuation)
 
-        assert(completed)
+        assertTrue(completed)
         verify { AppOpenAd.load(any(), any()) }
-        println("🏁 [TEST DONE] showAdIfAvailable loads when no ad")
     }
 
     @Test
     fun `callback dismiss reloads ad`() {
-        println("🚀 [TEST] callback dismiss reloads ad")
-        val context = mockk<Context>(relaxed = true)
-        every { context.applicationContext } returns context
-        val provider = mockk<BuildInfoRepository>()
-        val manager = managerWith(context, provider)
-        val dataStore = mockk<AdsSettingsRepository>()
-        every { dataStore.adsEnabled } returns MutableStateFlow(true)
-        every { dataStore.observeReduceAds() } returns kotlinx.coroutines.flow.flowOf(false)
-        val storeField = AppOpenAdController::class.java.getDeclaredField("adsSettingsRepository")
-        storeField.isAccessible = true
-        storeField.set(manager, dataStore)
+        val manager = managerWith(dataStore = stubDataStore(adsEnabled = true))
         runBlocking { manager.initializeAds("unit") }
 
         val ad = mockk<AppOpenAd>(relaxed = true)
-        val mgrField3 = AppOpenAdController::class.java.getDeclaredField("appOpenAdManager")
-        mgrField3.isAccessible = true
-        val inner3 = mgrField3.get(manager)!!
-        val adField = inner3.javaClass.getDeclaredField("appOpenAd")
+        val mgrField = AppOpenAdController::class.java.getDeclaredField("appOpenAdManager")
+        mgrField.isAccessible = true
+        val inner = mgrField.get(manager)!!
+        val adField = inner.javaClass.getDeclaredField("appOpenAd")
         adField.isAccessible = true
-        adField.set(inner3, ad)
-        // A planted ad also needs a recent load time; otherwise it is expired and the reload branch runs.
-        val loadTimeField = inner3.javaClass.getDeclaredField("loadTime")
-        loadTimeField.isAccessible = true
-        loadTimeField.setLong(inner3, Date().time)
+        adField.set(inner, ad)
+        val loadMarkField = inner.javaClass.getDeclaredField("loadMark")
+        loadMarkField.isAccessible = true
+        loadMarkField.set(inner, TimeSource.Monotonic.markNow())
 
         mockkObject(AppOpenAd.Companion)
         justRun { AppOpenAd.load(any(), any()) }
@@ -302,64 +251,132 @@ class TestAppOpenAdController {
         val slot = slot<AppOpenAdEventCallback>()
         every { ad.adEventCallback = capture(slot) } returns Unit
 
-        val method2 = inner3.javaClass.getDeclaredMethod(
-            "showAdIfAvailable",
-            Activity::class.java,
-            OnShowAdCompleteListener::class.java,
-            Continuation::class.java
+        var completed = false
+        manager.showAdIfAvailable(
+            activity = mockk<Activity>(),
+            scope = testScope,
+            onShowAdCompleteListener = { completed = true },
         )
-        method2.isAccessible = true
-        method2.invoke(inner3, mockk<Activity>(), object : OnShowAdCompleteListener {
-            override fun onShowAdComplete() {}
-        }, noopContinuation)
 
         slot.captured.onAdDismissedFullScreenContent()
 
-        val showField = inner3.javaClass.getDeclaredField("isShowingAd")
+        val showField = inner.javaClass.getDeclaredField("isShowingAd")
         showField.isAccessible = true
-        assertFalse(showField.getBoolean(inner3))
+        assertFalse(showField.getBoolean(inner))
+        assertTrue(completed)
         verify { AppOpenAd.load(any(), any()) }
-        println("🏁 [TEST DONE] callback dismiss reloads ad")
     }
 
     @Test
-    fun `ads disabled skips load and show`() {
-        println("🚀 [TEST] ads disabled skips load and show")
-        val context = mockk<Context>()
-        every { context.applicationContext } returns context
-        val provider = mockk<BuildInfoRepository>()
-        val manager = managerWith(context, provider)
-        val dataStore = mockk<AdsSettingsRepository>()
-        every { dataStore.adsEnabled } returns MutableStateFlow(false)
-        every { dataStore.observeReduceAds() } returns kotlinx.coroutines.flow.flowOf(false)
-        val storeField = AppOpenAdController::class.java.getDeclaredField("adsSettingsRepository")
-        storeField.isAccessible = true
-        storeField.set(manager, dataStore)
+    fun `ads disabled skips load and notifies completion listener`() {
+        val adsEnabled = MutableStateFlow(true)
+        val dataStore = mockk<AdsSettingsRepository> {
+            every { this@mockk.adsEnabled } returns adsEnabled
+            every { observeReduceAds() } returns flowOf(false)
+        }
+        val manager = managerWith(dataStore = dataStore)
+        runBlocking { manager.initializeAds("unit") }
+        adsEnabled.value = false
+
+        mockkObject(AppOpenAd.Companion)
+        justRun { AppOpenAd.load(any(), any()) }
+
+        var completed = false
+        manager.showAdIfAvailable(
+            activity = mockk<Activity>(),
+            scope = testScope,
+            onShowAdCompleteListener = { completed = true },
+        )
+
+        assertTrue(completed)
+        verify(exactly = 0) { AppOpenAd.load(any(), any()) }
+    }
+
+    @Test
+    fun `reduce ads skips load and notifies completion listener`() {
+        val manager = managerWith(dataStore = stubDataStore(adsEnabled = true, reduceAds = true))
         runBlocking { manager.initializeAds("unit") }
 
         mockkObject(AppOpenAd.Companion)
         justRun { AppOpenAd.load(any(), any()) }
 
-        val activity = mockk<Activity>()
-        manager.showAdIfAvailable(activity, testScope)
+        var completed = false
+        manager.showAdIfAvailable(
+            activity = mockk<Activity>(),
+            scope = testScope,
+            onShowAdCompleteListener = { completed = true },
+        )
 
+        assertTrue(completed)
         verify(exactly = 0) { AppOpenAd.load(any(), any()) }
-        println("🏁 [TEST DONE] ads disabled skips load and show")
+    }
+
+    @Test
+    fun `reduce ads read failure fails closed and notifies completion listener`() {
+        val dataStore = mockk<AdsSettingsRepository> {
+            every { adsEnabled } returns MutableStateFlow(true)
+            every { observeReduceAds() } returns flow {
+                throw StorageException(StorageException.Reason.FAILED)
+            }
+        }
+        val manager = managerWith(dataStore = dataStore)
+        runBlocking { manager.initializeAds("unit") }
+
+        mockkObject(AppOpenAd.Companion)
+        justRun { AppOpenAd.load(any(), any()) }
+
+        var completed = false
+        manager.showAdIfAvailable(
+            activity = mockk<Activity>(),
+            scope = testScope,
+            onShowAdCompleteListener = { completed = true },
+        )
+
+        assertTrue(completed)
+        assertEquals(1, diagnostics.nonFatals.size)
+        verify(exactly = 0) { AppOpenAd.load(any(), any()) }
+    }
+
+    @Test
+    fun `show throwing fails closed, resets showing flag, notifies listener, and reloads`() {
+        val manager = managerWith(dataStore = stubDataStore(adsEnabled = true))
+        runBlocking { manager.initializeAds("unit") }
+
+        val ad = mockk<AppOpenAd>(relaxed = true)
+        every { ad.show(any()) } throws IllegalStateException("window gone")
+
+        val mgrField = AppOpenAdController::class.java.getDeclaredField("appOpenAdManager")
+        mgrField.isAccessible = true
+        val inner = mgrField.get(manager)!!
+        val adField = inner.javaClass.getDeclaredField("appOpenAd")
+        adField.isAccessible = true
+        adField.set(inner, ad)
+        val loadMarkField = inner.javaClass.getDeclaredField("loadMark")
+        loadMarkField.isAccessible = true
+        loadMarkField.set(inner, TimeSource.Monotonic.markNow())
+
+        mockkObject(AppOpenAd.Companion)
+        justRun { AppOpenAd.load(any(), any()) }
+
+        var completed = false
+        manager.showAdIfAvailable(
+            activity = mockk<Activity>(),
+            scope = testScope,
+            onShowAdCompleteListener = { completed = true },
+        )
+
+        val showField = inner.javaClass.getDeclaredField("isShowingAd")
+        showField.isAccessible = true
+        assertFalse(showField.getBoolean(inner))
+        assertNull(adField.get(inner))
+        assertTrue(completed)
+        assertEquals(1, diagnostics.nonFatals.size)
+        verify(exactly = 1) { AppOpenAd.load(any(), any()) }
     }
 
     @Test
     fun `load failure resets loading flag`() {
-        println("🚀 [TEST] load failure resets loading flag")
-        val context = mockk<Context>()
-        every { context.applicationContext } returns context
-        val provider = mockk<BuildInfoRepository>()
-        val manager = managerWith(context, provider)
-        val dataStore = mockk<AdsSettingsRepository>()
-        every { dataStore.adsEnabled } returns MutableStateFlow(true)
-        every { dataStore.observeReduceAds() } returns kotlinx.coroutines.flow.flowOf(false)
-        val storeField = AppOpenAdController::class.java.getDeclaredField("adsSettingsRepository")
-        storeField.isAccessible = true
-        storeField.set(manager, dataStore)
+        val manager = managerWith(dataStore = stubDataStore(adsEnabled = true))
         runBlocking { manager.initializeAds("unit") }
 
         val mgrField = AppOpenAdController::class.java.getDeclaredField("appOpenAdManager")
@@ -382,22 +399,11 @@ class TestAppOpenAdController {
         val loadingField = inner.javaClass.getDeclaredField("isLoadingAd")
         loadingField.isAccessible = true
         assertFalse(loadingField.getBoolean(inner))
-        println("🏁 [TEST DONE] load failure resets loading flag")
     }
 
     @Test
     fun `showAdIfAvailable ignores when already showing`() {
-        println("🚀 [TEST] showAdIfAvailable ignores when already showing")
-        val context = mockk<Context>()
-        every { context.applicationContext } returns context
-        val provider = mockk<BuildInfoRepository>()
-        val manager = managerWith(context, provider)
-        val dataStore = mockk<AdsSettingsRepository>()
-        every { dataStore.adsEnabled } returns MutableStateFlow(true)
-        every { dataStore.observeReduceAds() } returns kotlinx.coroutines.flow.flowOf(false)
-        val storeField = AppOpenAdController::class.java.getDeclaredField("adsSettingsRepository")
-        storeField.isAccessible = true
-        storeField.set(manager, dataStore)
+        val manager = managerWith(dataStore = stubDataStore(adsEnabled = true))
         runBlocking { manager.initializeAds("unit") }
 
         val mgrField = AppOpenAdController::class.java.getDeclaredField("appOpenAdManager")
@@ -410,32 +416,20 @@ class TestAppOpenAdController {
         mockkObject(AppOpenAd.Companion)
         justRun { AppOpenAd.load(any(), any()) }
 
-        val method = inner.javaClass.getDeclaredMethod(
-            "showAdIfAvailable",
-            Activity::class.java,
-            OnShowAdCompleteListener::class.java,
-            Continuation::class.java
+        var completed = false
+        manager.showAdIfAvailable(
+            activity = mockk<Activity>(),
+            scope = testScope,
+            onShowAdCompleteListener = { completed = true },
         )
-        method.isAccessible = true
-        method.invoke(inner, mockk<Activity>(), mockk<OnShowAdCompleteListener>(), noopContinuation)
 
+        assertFalse(completed)
         verify(exactly = 0) { AppOpenAd.load(any(), any()) }
-        println("🏁 [TEST DONE] showAdIfAvailable ignores when already showing")
     }
 
     @Test
     fun `concurrent load requests chain correctly`() {
-        println("🚀 [TEST] concurrent load requests chain correctly")
-        val context = mockk<Context>()
-        every { context.applicationContext } returns context
-        val provider = mockk<BuildInfoRepository>()
-        val manager = managerWith(context, provider)
-        val dataStore = mockk<AdsSettingsRepository>()
-        every { dataStore.adsEnabled } returns MutableStateFlow(true)
-        every { dataStore.observeReduceAds() } returns kotlinx.coroutines.flow.flowOf(false)
-        val storeField = AppOpenAdController::class.java.getDeclaredField("adsSettingsRepository")
-        storeField.isAccessible = true
-        storeField.set(manager, dataStore)
+        val manager = managerWith(dataStore = stubDataStore(adsEnabled = true))
         runBlocking { manager.initializeAds("unit") }
 
         val mgrField = AppOpenAdController::class.java.getDeclaredField("appOpenAdManager")
@@ -473,22 +467,11 @@ class TestAppOpenAdController {
             invoke(inner)
         }
         verify(exactly = 2) { AppOpenAd.load(any(), any()) }
-        println("🏁 [TEST DONE] concurrent load requests chain correctly")
     }
 
     @Test
-    fun `loadAd propagates exceptions from AppOpenAd`() {
-        println("🚀 [TEST] loadAd propagates exceptions from AppOpenAd")
-        val context = mockk<Context>()
-        every { context.applicationContext } returns context
-        val provider = mockk<BuildInfoRepository>()
-        val manager = managerWith(context, provider)
-        val dataStore = mockk<AdsSettingsRepository>()
-        every { dataStore.adsEnabled } returns MutableStateFlow(true)
-        every { dataStore.observeReduceAds() } returns kotlinx.coroutines.flow.flowOf(false)
-        val storeField = AppOpenAdController::class.java.getDeclaredField("adsSettingsRepository")
-        storeField.isAccessible = true
-        storeField.set(manager, dataStore)
+    fun `loadAd fails closed and resets loading flag when AppOpenAd throws`() {
+        val manager = managerWith(dataStore = stubDataStore(adsEnabled = true))
         runBlocking { manager.initializeAds("unit") }
 
         val mgrField = AppOpenAdController::class.java.getDeclaredField("appOpenAdManager")
@@ -500,28 +483,17 @@ class TestAppOpenAdController {
 
         val method = inner.javaClass.getDeclaredMethod("loadAd")
         method.isAccessible = true
-
-        assertFailsWith<InvocationTargetException> { method.invoke(inner) }
+        method.invoke(inner)
 
         val loadingField = inner.javaClass.getDeclaredField("isLoadingAd")
         loadingField.isAccessible = true
-        assert(loadingField.getBoolean(inner))
-        println("🏁 [TEST DONE] loadAd propagates exceptions from AppOpenAd")
+        assertFalse(loadingField.getBoolean(inner))
+        assertEquals(1, diagnostics.nonFatals.size)
     }
 
     @Test
     fun `no app open ad is loaded while ads are disabled`() {
-        println("🚀 [TEST] no app open ad is loaded while ads are disabled")
-        val context = mockk<Context>()
-        every { context.applicationContext } returns context
-        val provider = mockk<BuildInfoRepository>()
-        val manager = managerWith(context, provider)
-        val dataStore = mockk<AdsSettingsRepository>()
-        every { dataStore.adsEnabled } returns MutableStateFlow(false)
-        every { dataStore.observeReduceAds() } returns kotlinx.coroutines.flow.flowOf(false)
-        val storeField = AppOpenAdController::class.java.getDeclaredField("adsSettingsRepository")
-        storeField.isAccessible = true
-        storeField.set(manager, dataStore)
+        val manager = managerWith(dataStore = stubDataStore(adsEnabled = false))
         runBlocking { manager.initializeAds("unit") }
 
         mockkObject(AppOpenAd.Companion)
@@ -530,22 +502,11 @@ class TestAppOpenAdController {
         manager.showAdIfAvailable(mockk(), testScope)
 
         verify(exactly = 0) { AppOpenAd.load(any(), any()) }
-        println("🏁 [TEST DONE] no app open ad is loaded while ads are disabled")
     }
 
     @Test
     fun `an app open ad is loaded while ads are enabled`() {
-        println("🚀 [TEST] an app open ad is loaded while ads are enabled")
-        val context = mockk<Context>()
-        every { context.applicationContext } returns context
-        val provider = mockk<BuildInfoRepository>()
-        val manager = managerWith(context, provider)
-        val dataStore = mockk<AdsSettingsRepository>()
-        every { dataStore.adsEnabled } returns MutableStateFlow(true)
-        every { dataStore.observeReduceAds() } returns kotlinx.coroutines.flow.flowOf(false)
-        val storeField = AppOpenAdController::class.java.getDeclaredField("adsSettingsRepository")
-        storeField.isAccessible = true
-        storeField.set(manager, dataStore)
+        val manager = managerWith(dataStore = stubDataStore(adsEnabled = true))
         runBlocking { manager.initializeAds("unit") }
 
         mockkObject(AppOpenAd.Companion)
@@ -554,7 +515,5 @@ class TestAppOpenAdController {
         manager.showAdIfAvailable(mockk(), testScope)
 
         verify { AppOpenAd.load(any(), any()) }
-        println("🏁 [TEST DONE] an app open ad is loaded while ads are enabled")
     }
-
 }

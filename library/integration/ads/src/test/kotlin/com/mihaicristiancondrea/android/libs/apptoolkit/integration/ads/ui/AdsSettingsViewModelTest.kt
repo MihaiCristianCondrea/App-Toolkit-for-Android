@@ -19,23 +19,29 @@ package com.mihaicristiancondrea.android.libs.apptoolkit.integration.ads.ui
 
 import android.app.Activity
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.exceptions.StorageException
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.AdsSettingsRepository
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.telemetry.models.AnalyticsValue
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.UiText
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.analytics.SettingsAnalytics
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.FakeTelemetryRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.UnconfinedDispatcherExtension
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.R as CoreUiR
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.Loadable
 import com.mihaicristiancondrea.android.libs.apptoolkit.integration.ads.R
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.AdsSettingsRepository
+import com.mihaicristiancondrea.android.libs.apptoolkit.integration.ads.ui.analytics.ADS_SETTINGS_SCREEN_NAME
+import com.mihaicristiancondrea.android.libs.apptoolkit.integration.ads.ui.analytics.AdsPreferenceKeys
 import com.mihaicristiancondrea.android.libs.apptoolkit.integration.ads.ui.contracts.AdsSettingsEvent
 import com.mihaicristiancondrea.android.libs.apptoolkit.integration.ads.ui.models.AdsPreferences
 import com.mihaicristiancondrea.android.libs.apptoolkit.integration.consent.data.exceptions.ConsentException
-import com.mihaicristiancondrea.android.libs.apptoolkit.integration.consent.data.repositories.ConsentRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.integration.consent.data.models.ConsentHost
 import com.mihaicristiancondrea.android.libs.apptoolkit.integration.consent.data.models.ConsentSettings
+import com.mihaicristiancondrea.android.libs.apptoolkit.integration.consent.data.repositories.ConsentRepository
 import io.mockk.mockk
+import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.RegisterExtension
@@ -82,6 +88,35 @@ class AdsSettingsViewModelTest {
     }
 
     @Test
+    fun `reloading while preferences are ready keeps content without flashing loading`() =
+        runTest(dispatcherExtension.testDispatcher) {
+            val secondReadGate = CompletableDeferred<Unit>()
+            val repository = FakeAdsSettingsRepository(adsEnabled = true, reduceAds = false)
+            val viewModel = createViewModel(repository)
+            advance()
+            assertIs<Loadable.Ready<AdsPreferences>>(viewModel.state.value.preferences)
+
+            val observedStates = mutableListOf<Loadable<AdsPreferences>>()
+            val collector = launch {
+                viewModel.state.collect { observedStates += it.preferences }
+            }
+
+            repository.readGate = secondReadGate
+            viewModel.onEvent(AdsSettingsEvent.Load)
+            advance()
+
+            assertTrue(observedStates.none { it is Loadable.Loading })
+            assertEquals(
+                Loadable.Ready(AdsPreferences(adsEnabled = true, reduceAds = false)),
+                viewModel.state.value.preferences,
+            )
+
+            secondReadGate.complete(Unit)
+            advance()
+            collector.cancel()
+        }
+
+    @Test
     fun `a failed read shows a retryable failure with the storage text`() =
         runTest(dispatcherExtension.testDispatcher) {
             val repository = FakeAdsSettingsRepository(
@@ -117,32 +152,58 @@ class AdsSettingsViewModelTest {
     }
 
     @Test
-    fun `turning ads off stores it and the switch follows`() = runTest(dispatcherExtension.testDispatcher) {
-        val viewModel = createViewModel(FakeAdsSettingsRepository(adsEnabled = true))
-        advance()
+    fun `turning ads off stores it and logs the preference toggle event`() =
+        runTest(dispatcherExtension.testDispatcher) {
+            val viewModel = createViewModel(FakeAdsSettingsRepository(adsEnabled = true))
+            advance()
 
-        viewModel.onEvent(AdsSettingsEvent.SetAdsEnabled(enabled = false))
-        advance()
+            viewModel.onEvent(AdsSettingsEvent.SetAdsEnabled(enabled = false))
+            advance()
 
-        val preferences = assertIs<Loadable.Ready<AdsPreferences>>(viewModel.state.value.preferences)
-        assertFalse(preferences.value.adsEnabled)
-        assertTrue(viewModel.messages.value.isEmpty())
-    }
+            val preferences = assertIs<Loadable.Ready<AdsPreferences>>(viewModel.state.value.preferences)
+            assertFalse(preferences.value.adsEnabled)
+            assertTrue(viewModel.messages.value.isEmpty())
+
+            val toggleEvent = telemetryRepository.loggedEvents.single {
+                it.name == SettingsAnalytics.Events.PREFERENCE_TOGGLE
+            }
+            assertEquals(
+                mapOf(
+                    SettingsAnalytics.Params.SCREEN to AnalyticsValue.Str(value = ADS_SETTINGS_SCREEN_NAME),
+                    SettingsAnalytics.Params.PREFERENCE_KEY to AnalyticsValue.Str(value = AdsPreferenceKeys.DISPLAY_ADS),
+                    SettingsAnalytics.Params.ENABLED to AnalyticsValue.Str(value = "false"),
+                ),
+                toggleEvent.params,
+            )
+        }
 
     @Test
-    fun `reducing ads stores it and the switch follows`() = runTest(dispatcherExtension.testDispatcher) {
-        val viewModel = createViewModel(FakeAdsSettingsRepository(reduceAds = false))
-        advance()
+    fun `reducing ads stores it and logs the preference toggle event`() =
+        runTest(dispatcherExtension.testDispatcher) {
+            val viewModel = createViewModel(FakeAdsSettingsRepository(reduceAds = false))
+            advance()
 
-        viewModel.onEvent(AdsSettingsEvent.SetReduceAds(enabled = true))
-        advance()
+            viewModel.onEvent(AdsSettingsEvent.SetReduceAds(enabled = true))
+            advance()
 
-        val preferences = assertIs<Loadable.Ready<AdsPreferences>>(viewModel.state.value.preferences)
-        assertTrue(preferences.value.reduceAds)
-    }
+            val preferences = assertIs<Loadable.Ready<AdsPreferences>>(viewModel.state.value.preferences)
+            assertTrue(preferences.value.reduceAds)
+
+            val toggleEvent = telemetryRepository.loggedEvents.single {
+                it.name == SettingsAnalytics.Events.PREFERENCE_TOGGLE
+            }
+            assertEquals(
+                mapOf(
+                    SettingsAnalytics.Params.SCREEN to AnalyticsValue.Str(value = ADS_SETTINGS_SCREEN_NAME),
+                    SettingsAnalytics.Params.PREFERENCE_KEY to AnalyticsValue.Str(value = AdsPreferenceKeys.REDUCE_ADS),
+                    SettingsAnalytics.Params.ENABLED to AnalyticsValue.Str(value = "true"),
+                ),
+                toggleEvent.params,
+            )
+        }
 
     @Test
-    fun `a failed write keeps the switch and shows an error message`() =
+    fun `a failed write keeps the switch, shows an error message, and logs no toggle event`() =
         runTest(dispatcherExtension.testDispatcher) {
             val repository = FakeAdsSettingsRepository(
                 adsEnabled = true,
@@ -159,6 +220,11 @@ class AdsSettingsViewModelTest {
             val message = viewModel.messages.value.single()
             assertTrue(message.isError)
             assertEquals(R.string.error_ads_settings_storage, message.text.resourceId)
+            assertTrue(
+                telemetryRepository.loggedEvents.none {
+                    it.name == SettingsAnalytics.Events.PREFERENCE_TOGGLE
+                },
+            )
         }
 
     @Test
@@ -207,6 +273,7 @@ class AdsSettingsViewModelTest {
         adsEnabled: Boolean = true,
         reduceAds: Boolean = false,
         var readFailure: Throwable? = null,
+        var readGate: CompletableDeferred<Unit>? = null,
         private val writeFailure: Throwable? = null,
     ) : AdsSettingsRepository {
         override val adsEnabled = MutableStateFlow(adsEnabled)
@@ -227,6 +294,7 @@ class AdsSettingsViewModelTest {
         }
 
         private fun observe(source: MutableStateFlow<Boolean>): Flow<Boolean> = flow {
+            readGate?.await()
             readFailure?.let { throw it }
             source.collect { emit(it) }
         }

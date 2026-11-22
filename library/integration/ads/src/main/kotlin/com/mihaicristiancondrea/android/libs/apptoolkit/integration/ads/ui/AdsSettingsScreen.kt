@@ -17,15 +17,6 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.integration.ads.ui
 
-import com.mihaicristiancondrea.android.libs.apptoolkit.integration.ads.ui.analytics.adsPrivacyPreferenceEvent
-
-import com.mihaicristiancondrea.android.libs.apptoolkit.integration.ads.ui.analytics.adsToggleEvent
-
-import com.mihaicristiancondrea.android.libs.apptoolkit.integration.ads.ui.analytics.adsLearnMoreEvent
-
-import com.mihaicristiancondrea.android.libs.apptoolkit.integration.ads.ui.analytics.ADS_SETTINGS_SCREEN_NAME
-import com.mihaicristiancondrea.android.libs.apptoolkit.integration.ads.ui.analytics.AdsPreferenceKeys
-
 import android.content.Context
 import androidx.activity.compose.LocalActivity
 import androidx.compose.foundation.layout.Arrangement
@@ -35,7 +26,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
@@ -43,34 +33,30 @@ import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.telemetry.models.TrackedScreen
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.BuildInfoRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.links.AppLinks
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.context.openUrl
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.BuildInfoRepository
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.Loadable
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.ScreenHost
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.ScreenStateHandler
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.analytics.LocalTelemetry
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.layouts.sections.InfoMessageSection
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.modifiers.animatedItem
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.PreferenceItem
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.SwitchCardItem
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.shell.contentPadding
 import com.mihaicristiancondrea.android.libs.apptoolkit.integration.ads.R
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.R as CoreUiR
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.modifiers.animatedItem
+import com.mihaicristiancondrea.android.libs.apptoolkit.integration.ads.ui.analytics.ADS_SETTINGS_SCREEN
+import com.mihaicristiancondrea.android.libs.apptoolkit.integration.ads.ui.analytics.adsLearnMoreEvent
+import com.mihaicristiancondrea.android.libs.apptoolkit.integration.ads.ui.analytics.adsPrivacyPreferenceEvent
 import com.mihaicristiancondrea.android.libs.apptoolkit.integration.ads.ui.contracts.AdsSettingsEvent
 import com.mihaicristiancondrea.android.libs.apptoolkit.integration.ads.ui.models.AdsPreferences
 import com.mihaicristiancondrea.android.libs.apptoolkit.integration.ads.ui.states.AdsSettingsUiState
 import com.mihaicristiancondrea.android.libs.apptoolkit.integration.consent.data.models.ConsentHost
 import org.koin.compose.koinInject
 import org.koin.compose.viewmodel.koinViewModel
-
-private const val ADS_SETTINGS_SCREEN_CLASS = "AdsSettingsScreen"
-private val ADS_SETTINGS_SCREEN: TrackedScreen =
-    TrackedScreen(name = ADS_SETTINGS_SCREEN_NAME, className = ADS_SETTINGS_SCREEN_CLASS)
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.R as CoreUiR
 
 /**
  * The ad preferences page, which `adsSettingsScreen()` registers and the privacy page opens. Debug
@@ -88,7 +74,7 @@ fun AdsSettingsScreen() {
     val buildInfoRepository: BuildInfoRepository = koinInject()
     val context: Context = LocalContext.current
     val activity = LocalActivity.current
-    val consentHost: ConsentHost? = remember(activity) { activity?.let(::ConsentHost) }
+    val consentHost: ConsentHost? = remember(key1 = activity) { activity?.let(::ConsentHost) }
 
     ScreenHost(screen = ADS_SETTINGS_SCREEN, status = state.preferences, viewModel = viewModel) {
         AdsSettingsScreenContent(
@@ -96,12 +82,12 @@ fun AdsSettingsScreen() {
             onEvent = viewModel::onEvent,
             showDisplayAdsSwitch = buildInfoRepository.isDebugBuild,
             onOpenPrivacyForm = {
-                consentHost?.let { host -> viewModel.onEvent(AdsSettingsEvent.RequestConsent(host)) }
+                consentHost?.let { host ->
+                    viewModel.onEvent(event = AdsSettingsEvent.RequestConsent(host = host))
+                }
             },
             onLearnMore = {
-                telemetry.logEvent(
-                    adsLearnMoreEvent()
-                )
+                telemetry.logEvent(event = adsLearnMoreEvent())
                 context.openUrl(url = AppLinks.ADS_HELP_CENTER)
             },
             contentPadding = contentPadding(),
@@ -134,9 +120,9 @@ internal fun AdsSettingsScreenContent(
         modifier = modifier,
         contentPadding = contentPadding,
         onRetry = { onEvent(AdsSettingsEvent.Load) },
-    ) { ready ->
+    ) { (preferences) ->
         AdsSettingsList(
-            preferences = ready.value,
+            preferences = preferences,
             onEvent = onEvent,
             showDisplayAdsSwitch = showDisplayAdsSwitch,
             onOpenPrivacyForm = onOpenPrivacyForm,
@@ -155,8 +141,6 @@ private fun AdsSettingsList(
     onLearnMore: () -> Unit,
     contentPadding: PaddingValues,
 ) {
-    val switchKey: String = if (showDisplayAdsSwitch) AdsPreferenceKeys.DISPLAY_ADS else AdsPreferenceKeys.REDUCE_ADS
-
     LazyColumn(
         contentPadding = contentPadding,
         modifier = Modifier.fillMaxSize(),
@@ -167,21 +151,20 @@ private fun AdsSettingsList(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = SizeConstants.LargeSize),
-                title = stringResource(id = if (showDisplayAdsSwitch) R.string.display_ads else R.string.reduce_ads),
+                title = stringResource(
+                    id = if (showDisplayAdsSwitch) R.string.display_ads else R.string.reduce_ads,
+                ),
                 switchState = rememberUpdatedState(
                     newValue = if (showDisplayAdsSwitch) preferences.adsEnabled else preferences.reduceAds,
                 ),
                 onSwitchToggled = { isChecked: Boolean ->
                     onEvent(
                         if (showDisplayAdsSwitch) {
-                            AdsSettingsEvent.SetAdsEnabled(isChecked)
+                            AdsSettingsEvent.SetAdsEnabled(enabled = isChecked)
                         } else {
-                            AdsSettingsEvent.SetReduceAds(isChecked)
+                            AdsSettingsEvent.SetReduceAds(enabled = isChecked)
                         },
                     )
-                },
-                ga4EventProvider = { isChecked ->
-                    adsToggleEvent(isChecked, switchKey)
                 },
             )
         }
@@ -208,35 +191,5 @@ private fun AdsSettingsList(
                 learnMoreAction = onLearnMore,
             )
         }
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-private fun AdsSettingsScreenContentPreview() {
-    MaterialTheme {
-        AdsSettingsScreenContent(
-            state = AdsSettingsUiState(
-                preferences = Loadable.Ready(AdsPreferences(adsEnabled = true, reduceAds = false)),
-            ),
-            onEvent = {},
-            showDisplayAdsSwitch = false,
-            onOpenPrivacyForm = {},
-            onLearnMore = {},
-        )
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-private fun AdsSettingsScreenContentLoadingPreview() {
-    MaterialTheme {
-        AdsSettingsScreenContent(
-            state = AdsSettingsUiState(preferences = Loadable.Loading),
-            onEvent = {},
-            showDisplayAdsSwitch = false,
-            onOpenPrivacyForm = {},
-            onLearnMore = {},
-        )
     }
 }

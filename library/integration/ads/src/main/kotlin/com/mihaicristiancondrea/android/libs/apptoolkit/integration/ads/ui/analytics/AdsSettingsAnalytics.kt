@@ -17,17 +17,25 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.integration.ads.ui.analytics
 
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.analytics.Ga4EventData
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.telemetry.models.AnalyticsEvent
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.telemetry.models.AnalyticsValue
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.telemetry.models.TrackedScreen
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.analytics.SettingsAnalytics
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.analytics.Ga4EventData
 
-internal const val ADS_SETTINGS_SCREEN_NAME = "AdsSettings"
+internal const val ADS_SETTINGS_SCREEN_NAME: String = "AdsSettings"
+
+private const val ADS_SETTINGS_SCREEN_CLASS: String = "AdsSettingsScreen"
+
+internal val ADS_SETTINGS_SCREEN: TrackedScreen = TrackedScreen(
+    name = ADS_SETTINGS_SCREEN_NAME,
+    className = ADS_SETTINGS_SCREEN_CLASS,
+)
 
 /** The `screen` and `preference_key` parameters every ads settings GA4 event carries. */
 private fun adsPreferenceParams(preferenceKey: String): Map<String, AnalyticsValue> = mapOf(
-    SettingsAnalytics.Params.SCREEN to AnalyticsValue.Str(ADS_SETTINGS_SCREEN_NAME),
-    SettingsAnalytics.Params.PREFERENCE_KEY to AnalyticsValue.Str(preferenceKey),
+    SettingsAnalytics.Params.SCREEN to AnalyticsValue.Str(value = ADS_SETTINGS_SCREEN_NAME),
+    SettingsAnalytics.Params.PREFERENCE_KEY to AnalyticsValue.Str(value = preferenceKey),
 )
 
 internal fun adsLearnMoreEvent(): AnalyticsEvent = AnalyticsEvent(
@@ -35,10 +43,10 @@ internal fun adsLearnMoreEvent(): AnalyticsEvent = AnalyticsEvent(
     params = adsPreferenceParams(preferenceKey = AdsPreferenceKeys.LEARN_MORE),
 )
 
-internal fun adsToggleEvent(enabled: Boolean, preferenceKey: String): Ga4EventData = Ga4EventData(
+internal fun adsToggleEvent(enabled: Boolean, preferenceKey: String): AnalyticsEvent = AnalyticsEvent(
     name = SettingsAnalytics.Events.PREFERENCE_TOGGLE,
     params = adsPreferenceParams(preferenceKey = preferenceKey) +
-        (SettingsAnalytics.Params.ENABLED to AnalyticsValue.Str(enabled.toString())),
+        (SettingsAnalytics.Params.ENABLED to AnalyticsValue.Str(value = enabled.toString())),
 )
 
 internal fun adsPrivacyPreferenceEvent(): Ga4EventData = Ga4EventData(

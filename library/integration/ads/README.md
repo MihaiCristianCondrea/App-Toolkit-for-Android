@@ -29,7 +29,6 @@ Owns ad enablement settings and Google Mobile Ads integration UI used by AppTool
 - [`:library:core:common`](../../core/common/README.md) for ads/Firebase contracts and host
   constants.
 - [`:library:core:datastore`](../../core/datastore/README.md) for persisted ads enablement.
-- [`:library:core:network`](../../core/network/README.md) for shared result/error types.
 - [`:library:core:ui`](../../core/ui/README.md) for screen contracts and reusable Compose UI.
 - [`:library:integration:consent`](../consent/README.md) so ad state respects consent.
 
@@ -43,8 +42,8 @@ Owns ad enablement settings and Google Mobile Ads integration UI used by AppTool
 flowchart TD
     Settings[AdsSettingsScreen] --> VM[AdsSettingsViewModel]
     VM --> Repo[AdsSettingsRepository]
+    VM -->|request privacy form| Consent[ConsentRepository]
     Repo -->|persist display and reduce settings| Store[AdsPreferencesDataSource]
-    Repo -->|apply privacy choice| Consent[ConsentRepository]
     Store --> Manager[AppOpenAdController]
     Manifest[Host manifest AdMob application ID] --> Id[AdMobAppIdDataSource]
     Id --> Manager
@@ -75,10 +74,16 @@ flowchart TD
   that should start without ads. Stored choices always win.
 - App-open lifecycle state and SDK callbacks use the injected main dispatcher. SDK initialization
   stays on IO. The graph closes the controller to stop preference observation and discard callbacks.
+- App-open ad expiration is measured monotonically over four hours with `TimeSource.Monotonic`.
+  Synchronous `AppOpenAd.load`, `AppOpenAd.show`, and `observeReduceAds()` failures fail closed,
+  record non-fatal diagnostics, reset in-flight flags, and invoke any registered
+  `OnShowAdCompleteListener`.
 - SDK initialization is idempotent, mutex-protected, and conditional on a valid host-manifest app
   ID; the toolkit never supplies a fallback publisher ID.
 - Readiness is explicit state because enablement and asynchronous SDK initialization are different
   facts. Ad slots wait and retry when readiness changes.
+- Ads settings logs `preference_toggle` analytics only after persistence succeeds and refreshes
+  already-loaded preferences in place without flashing `Loadable.Loading`.
 - Ad rendering fails closed: SDK exceptions or unavailable consent produce an empty slot, never a
   process-fatal composition error.
 
@@ -140,9 +145,10 @@ no fill rather than an error.
 
 ### App Open
 
-`AppOpenAdController.initializeAds(appOpenUnitId = ...)` takes the id directly; there is no qualifier.
-The
-host decides whether it wants the ad at all, see the toggle table above.
+`AppOpenAdController.initializeAds(appOpenUnitId = ...)` takes the unit id directly; there is no
+qualifier. Passing a blank `appOpenUnitId` still initializes the Mobile Ads SDK for banner and
+native slots while skipping App Open registration. Callers that wait for an App Open ad to finish
+or be skipped can use `showAdIfAvailable(activity, scope, onShowAdCompleteListener)`.
 
 ## Rendering an ad
 
@@ -356,7 +362,7 @@ The toolkit owns *primitives*; a feature owns its *placements*. The rule:
 |---------------------------------------------------------|-----------------------------------------|----------------------------------|
 | Loading, lifecycle, view tree, palette, disclosure       | `:library:core:ui`, `views/ads`         | `NativeAdSlot`, `NativeAdRenderer` |
 | A shape an ad can take                                   | `NativeAdPresentation`                   | `Featured`, `Compact`, `GridRow`  |
-| A card only one screen draws                             | that feature's own `ui/views/ads`        | `HelpNativeAdCard`                |
+| A card only one screen draws                             | that feature's own `ui/views/ads`        | `FaqNativeAdCard`                 |
 | A card only the sample draws                             | the sample feature's `ui/views/ads`      | `QuickToolsNativeAdCard`          |
 
 A one-screen wrapper in shared UI looks harmless and is not: it makes the toolkit carry a layout
@@ -472,12 +478,15 @@ if (ad == null) {
 
 ### The native ad validator
 
-The validator is the SDK's own debug overlay, configured at initialization:
-`initializeAds(appOpenUnitId, disableNativeValidator = true)` turns it off. It is left on by
-default.
+The validator is the SDK's own debug overlay, configured programmatically at initialization in the
+GMA Next-Gen SDK via `InitializationConfig.Builder.setNativeValidatorDisabled()` (the legacy
+`com.google.android.gms.ads.flag.NATIVE_AD_DEBUGGER_ENABLED` manifest meta-data flag does not apply
+to the Next-Gen SDK). It is disabled by default; pass
+`initializeAds(appOpenUnitId, disableNativeValidator = false)` to enable it when testing native ad
+placements.
 
 [Google's Android validator guide](https://developers.google.com/admob/android/native/validator)
-explains the overlay and the issues it checks. Use test ads and keep the validator enabled during
+explains the overlay and the issues it checks. Use test ads when running the validator during
 development; it checks certain implementation issues, not every placement or policy requirement.
 
 ## FAQ: are the ads written in Compose?
@@ -580,9 +589,10 @@ so none of them need a `NativeAdView`.
 
 ## Public contracts
 
-- `AdsSettingsScreen`, `adsSettingsScreen()`, the repository contract, and the UI event, action and
-  state contracts.
-- `AppOpenAdController` and its replaceable `AdsSdkInitializer` test seam.
+- `AdsSettingsScreen`, `adsSettingsScreen()`, the repository contract, and the UI event and state
+  contracts.
+- `AppOpenAdController`, `OnShowAdCompleteListener`, and the replaceable `AdsSdkInitializer` test
+  seam.
 
 ## Internal implementations
 
@@ -664,6 +674,7 @@ The ads integration owns `AdsPreferencesDataSource` and `DefaultAdsPreferencesDa
 `data/local`. `adsIntegrationModule` creates one source over the shared settings file and closes
 its collector when Koin closes. `AdsSettingsRepository` is a core common contract implemented here.
 UI and `AppOpenAdController` read its shared `adsEnabled` state; settings use cold reads so storage
-failures can reach the screen. A pending or failed read keeps shared ads disabled. IO failures retry
-with delays capped at 30 seconds; unexpected failures remain disabled until the source is recreated.
-`defaultAdsEnabled` applies only after a successful read finds no saved key.
+failures can reach the screen. A pending or failed read keeps shared ads disabled. IO failures log
+a breadcrumb and retry with delays capped at 30 seconds; unexpected failures record a non-fatal
+diagnostic and remain disabled until the source is recreated. `defaultAdsEnabled` applies only
+after a successful read finds no saved key.

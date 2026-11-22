@@ -8,6 +8,8 @@
 
 - `ScreenViewModel.ifIsActive` keeps the current active job and starts new work only when no job is
   active. Advanced settings uses it to ignore repeated Clear cache requests.
+- `AppOpenAdController.showAdIfAvailable(activity, scope, onShowAdCompleteListener)` exposes the
+  completion callback directly, and `OnShowAdCompleteListener` is now a `fun interface`.
 
 ### Fixed
 
@@ -45,6 +47,16 @@
   keeps loaded theme preferences visible when `ThemeSettingsEvent.Load` re-runs, skips redundant
   weather effect writes when Done confirms the current effect, and avoids posting redundant
   layout callbacks in `SeasonalThemeManager` once the overlay is attached.
+- Ads settings logs `preference_toggle` events only after preference writes succeed and keeps
+  loaded preferences visible when `AdsSettingsEvent.Load` re-runs.
+- `AppOpenAdController` disables the GMA Next-Gen SDK native ad validator by default via
+  `InitializationConfig.Builder.setNativeValidatorDisabled()` (`disableNativeValidator = true`)
+  instead of relying on the legacy `NATIVE_AD_DEBUGGER_ENABLED` manifest flag, measures the 4-hour
+  App Open ad lifetime monotonically, initializes the SDK without registering an App Open loader
+  when `appOpenUnitId` is blank, fails closed with non-fatal diagnostics when `AppOpenAd.load`,
+  `AppOpenAd.show`, or `observeReduceAds()` throws, and notifies completion listeners whenever an
+  ad is skipped or unavailable. `DefaultAdsPreferencesDataSource` logs breadcrumbs on transient IO
+  retries and records non-fatal diagnostics on unexpected read failures.
 
 ### Changed
 
@@ -82,6 +94,10 @@
   `diagnosticsSettingsScreen()`, `displaySettingsScreen()`, `licensesScreen()`,
   `onboardingScreen()`, `permissionsScreen()`, `privacySettingsScreen()`, `settingsScreen()`,
   `startupScreen()`, `supportScreen()`, and `themeSettingsScreen()`).
+- Removed the unused `buildInfoRepository` constructor parameter from `AppOpenAdController`, added
+  an optional `diagnostics: DiagnosticsReporter? = null` parameter to `AppOpenAdController` and
+  `DefaultAdsPreferencesDataSource`, and removed the unused `:library:core:network` dependency from
+  `:library:integration:ads`.
 
 ### Removed
 

@@ -33,7 +33,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.AdsSet
 fun ShellGraphBuilder.adsSettingsScreen() {
     pageIfAbsent<AdsSettingsScreen>(
         paneRole = PaneRole.None,
-        title = { stringResource(R.string.ads) },
+        title = { stringResource(id = R.string.ads) },
     ) {
         AdsSettingsScreen()
     }
