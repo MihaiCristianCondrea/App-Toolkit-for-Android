@@ -19,18 +19,26 @@ package com.mihaicristiancondrea.android.libs.apptoolkit.feature.display.ui.anal
 
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.telemetry.models.AnalyticsEvent
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.telemetry.models.AnalyticsValue
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.telemetry.models.TrackedScreen
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.analytics.SettingsAnalytics
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.analytics.Ga4EventData
 
-internal const val DISPLAY_SETTINGS_SCREEN_NAME = "DisplaySettings"
+internal const val DISPLAY_SETTINGS_SCREEN_NAME: String = "DisplaySettings"
+
+internal val DISPLAY_SETTINGS_SCREEN: TrackedScreen = TrackedScreen(
+    name = DISPLAY_SETTINGS_SCREEN_NAME,
+    className = "DisplaySettingsScreen",
+)
+
+private const val PARAM_VALUE: String = "value"
 
 internal fun displayActionGa4Event(actionName: String, preferenceKey: String): Ga4EventData {
     return Ga4EventData(
         name = SettingsAnalytics.Events.ACTION,
         params = mapOf(
-            SettingsAnalytics.Params.SCREEN to AnalyticsValue.Str(DISPLAY_SETTINGS_SCREEN_NAME),
-            SettingsAnalytics.Params.ACTION_NAME to AnalyticsValue.Str(actionName),
-            SettingsAnalytics.Params.PREFERENCE_KEY to AnalyticsValue.Str(preferenceKey),
+            SettingsAnalytics.Params.SCREEN to AnalyticsValue.Str(value = DISPLAY_SETTINGS_SCREEN_NAME),
+            SettingsAnalytics.Params.ACTION_NAME to AnalyticsValue.Str(value = actionName),
+            SettingsAnalytics.Params.PREFERENCE_KEY to AnalyticsValue.Str(value = preferenceKey),
         ),
     )
 }
@@ -40,24 +48,23 @@ internal fun displayActionEvent(
     preferenceKey: String,
     value: String? = null,
 ): AnalyticsEvent {
-    val base = mutableMapOf<String, AnalyticsValue>(
-        SettingsAnalytics.Params.SCREEN to AnalyticsValue.Str(DISPLAY_SETTINGS_SCREEN_NAME),
-        SettingsAnalytics.Params.ACTION_NAME to AnalyticsValue.Str(actionName),
-        SettingsAnalytics.Params.PREFERENCE_KEY to AnalyticsValue.Str(preferenceKey),
-    )
-    if (value != null) {
-        base["value"] = AnalyticsValue.Str(value)
-    }
     return AnalyticsEvent(
         name = SettingsAnalytics.Events.ACTION,
-        params = base,
+        params = buildMap {
+            put(key = SettingsAnalytics.Params.SCREEN, value = AnalyticsValue.Str(value = DISPLAY_SETTINGS_SCREEN_NAME))
+            put(key = SettingsAnalytics.Params.ACTION_NAME, value = AnalyticsValue.Str(value = actionName))
+            put(key = SettingsAnalytics.Params.PREFERENCE_KEY, value = AnalyticsValue.Str(value = preferenceKey))
+            if (value != null) {
+                put(key = PARAM_VALUE, value = AnalyticsValue.Str(value = value))
+            }
+        },
     )
 }
 
 internal fun displayThemeModeEvent(mode: String): AnalyticsEvent = AnalyticsEvent(
     name = SettingsAnalytics.Events.THEME_SWITCH,
     params = mapOf(
-        SettingsAnalytics.Params.SCREEN to AnalyticsValue.Str(DISPLAY_SETTINGS_SCREEN_NAME),
-        SettingsAnalytics.Params.THEME_MODE to AnalyticsValue.Str(mode),
+        SettingsAnalytics.Params.SCREEN to AnalyticsValue.Str(value = DISPLAY_SETTINGS_SCREEN_NAME),
+        SettingsAnalytics.Params.THEME_MODE to AnalyticsValue.Str(value = mode),
     ),
 )

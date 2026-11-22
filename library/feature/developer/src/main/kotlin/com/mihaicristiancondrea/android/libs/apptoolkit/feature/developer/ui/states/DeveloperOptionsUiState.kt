@@ -20,5 +20,13 @@ package com.mihaicristiancondrea.android.libs.apptoolkit.feature.developer.ui.st
 import androidx.compose.runtime.Immutable
 import com.mihaicristiancondrea.android.libs.apptoolkit.shell.settings.ShellSettings
 
+/**
+ * UI state for the developer options screen.
+ *
+ * @property settings Current shell settings read from the host repository, starting from its last
+ * known snapshot or declared defaults.
+ */
 @Immutable
-internal data class DeveloperOptionsUiState(val settings: ShellSettings)
+data class DeveloperOptionsUiState(
+    val settings: ShellSettings = ShellSettings(),
+)

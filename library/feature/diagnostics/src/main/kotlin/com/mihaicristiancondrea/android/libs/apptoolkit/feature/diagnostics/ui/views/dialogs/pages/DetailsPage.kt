@@ -33,13 +33,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.diagnostics.data.models.UsageAndDiagnosticsSettings
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.diagnostics.ui.views.dialogs.ConsentExpandableItemCard
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.context.openUrl
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.spacers.SmallVerticalSpacer
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.diagnostics.R
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.diagnostics.data.models.UsageAndDiagnosticsSettings
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.diagnostics.ui.views.dialogs.ConsentExpandableItemCard
 
+/** Displays per-category analytics and advertising consent toggles. */
 @Composable
 fun DetailsPage(
     settings: UsageAndDiagnosticsSettings,
@@ -53,56 +54,56 @@ fun DetailsPage(
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .verticalScroll(rememberScrollState()),
-        verticalArrangement = Arrangement.spacedBy(SizeConstants.SmallSize),
+            .verticalScroll(state = rememberScrollState()),
+        verticalArrangement = Arrangement.spacedBy(space = SizeConstants.SmallSize),
     ) {
         Text(
-            text = stringResource(R.string.privacy_choices_details_intro),
+            text = stringResource(id = R.string.privacy_choices_details_intro),
             style = MaterialTheme.typography.bodyMedium,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier.fillMaxWidth(),
         )
 
         SmallVerticalSpacer()
 
         ConsentExpandableItemCard(
-            title = stringResource(R.string.consent_analytics_storage_title),
-            summary = stringResource(R.string.consent_analytics_storage_description_short),
-            details = stringResource(R.string.consent_analytics_storage_description),
+            title = stringResource(id = R.string.consent_analytics_storage_title),
+            summary = stringResource(id = R.string.consent_analytics_storage_description_short),
+            details = stringResource(id = R.string.consent_analytics_storage_description),
             icon = Icons.Outlined.Analytics,
             checked = settings.analyticsConsent,
             onCheckedChange = onAnalyticsConsentChanged,
-            onLearnMoreClick = { url -> context.openUrl(url) }
+            onLearnMoreClick = { url -> context.openUrl(url = url) },
         )
 
         ConsentExpandableItemCard(
-            title = stringResource(R.string.consent_ad_storage_title),
-            summary = stringResource(R.string.consent_ad_storage_description_short),
-            details = stringResource(R.string.consent_ad_storage_description),
+            title = stringResource(id = R.string.consent_ad_storage_title),
+            summary = stringResource(id = R.string.consent_ad_storage_description_short),
+            details = stringResource(id = R.string.consent_ad_storage_description),
             icon = Icons.Outlined.Storage,
             checked = settings.adStorageConsent,
             onCheckedChange = onAdStorageConsentChanged,
-            onLearnMoreClick = { url -> context.openUrl(url) }
+            onLearnMoreClick = { url -> context.openUrl(url = url) },
         )
 
         ConsentExpandableItemCard(
-            title = stringResource(R.string.consent_ad_user_data_title),
-            summary = stringResource(R.string.consent_ad_user_data_description_short),
-            details = stringResource(R.string.consent_ad_user_data_description),
+            title = stringResource(id = R.string.consent_ad_user_data_title),
+            summary = stringResource(id = R.string.consent_ad_user_data_description_short),
+            details = stringResource(id = R.string.consent_ad_user_data_description),
             icon = Icons.Outlined.Info,
             checked = settings.adUserDataConsent,
             onCheckedChange = onAdUserDataConsentChanged,
-            onLearnMoreClick = { url -> context.openUrl(url) }
+            onLearnMoreClick = { url -> context.openUrl(url = url) },
         )
 
         ConsentExpandableItemCard(
-            title = stringResource(R.string.consent_ad_personalization_title),
-            summary = stringResource(R.string.consent_ad_personalization_description_short),
-            details = stringResource(R.string.consent_ad_personalization_description),
+            title = stringResource(id = R.string.consent_ad_personalization_title),
+            summary = stringResource(id = R.string.consent_ad_personalization_description_short),
+            details = stringResource(id = R.string.consent_ad_personalization_description),
             icon = Icons.Outlined.Campaign,
             checked = settings.adPersonalizationConsent,
             onCheckedChange = onAdPersonalizationConsentChanged,
-            onLearnMoreClick = { url -> context.openUrl(url) }
+            onLearnMoreClick = { url -> context.openUrl(url = url) },
         )
     }
 }

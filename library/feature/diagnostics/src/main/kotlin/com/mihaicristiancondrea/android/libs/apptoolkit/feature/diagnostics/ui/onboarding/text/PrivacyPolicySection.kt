@@ -18,7 +18,6 @@
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.diagnostics.ui.onboarding.text
 
 import android.content.Context
-import android.content.Intent
 import android.widget.Toast
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
@@ -34,35 +33,35 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
-import androidx.core.net.toUri
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.links.AppLinks
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.context.startActivitySafely
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.context.openUrl
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.icons.ToolkitIcon
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.GeneralButton
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.GeneralButtonStyle
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.spacers.MediumVerticalSpacer
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.diagnostics.R
 
+/** Displays the onboarding privacy note and a button that opens the privacy policy. */
 @Composable
 fun PrivacyPolicySection() {
     val context: Context = LocalContext.current
-    val appContext = remember(context) { context.applicationContext }
+    val appContext = remember(key1 = context) { context.applicationContext }
 
     val errorText: String = stringResource(id = R.string.error)
 
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
         HorizontalDivider(
             modifier = Modifier.padding(vertical = SizeConstants.LargeSize),
-            thickness = SizeConstants.ExtraTinySize / 4
+            thickness = SizeConstants.ExtraTinySize / 4,
         )
 
         Text(
-            text = stringResource(R.string.onboarding_crashlytics_privacy_info),
+            text = stringResource(id = R.string.onboarding_crashlytics_privacy_info),
             style = MaterialTheme.typography.bodySmall,
             textAlign = TextAlign.Center,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
-            modifier = Modifier.padding(horizontal = SizeConstants.LargeIncreasedSize + SizeConstants.ExtraSmallSize)
+            modifier = Modifier.padding(horizontal = SizeConstants.LargeIncreasedSize + SizeConstants.ExtraSmallSize),
         )
 
         MediumVerticalSpacer()
@@ -70,16 +69,12 @@ fun PrivacyPolicySection() {
         GeneralButton(
             style = GeneralButtonStyle.Outlined,
             onClick = {
-                val opened = context.startActivitySafely(
-                    intent = Intent(Intent.ACTION_VIEW, AppLinks.PRIVACY_POLICY.toUri()),
-                )
-
-                if (!opened) {
+                if (!context.openUrl(url = AppLinks.PRIVACY_POLICY)) {
                     Toast.makeText(appContext, errorText, Toast.LENGTH_SHORT).show()
                 }
             },
             icon = ToolkitIcon.Vector(imageVector = Icons.AutoMirrored.Filled.Launch),
-            label = stringResource(id = R.string.learn_more_privacy_policy)
+            label = stringResource(id = R.string.learn_more_privacy_policy),
         )
     }
 }

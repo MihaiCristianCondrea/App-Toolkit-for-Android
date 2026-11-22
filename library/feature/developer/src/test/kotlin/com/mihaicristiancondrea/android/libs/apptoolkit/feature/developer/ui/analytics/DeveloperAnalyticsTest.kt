@@ -22,17 +22,18 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.consta
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.developer.ui.models.DeveloperOption
 import org.junit.jupiter.api.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertTrue
 
 class DeveloperAnalyticsTest {
     @Test
     fun `saved option uses bounded settings vocabulary without values or host details`() {
-        val event = developerOptionSavedEvent(DeveloperOption.Layout)
+        val event = developerOptionSavedEvent(option = DeveloperOption.Layout)
         assertEquals(SettingsAnalytics.Events.ACTION, event.name)
         assertEquals(
             mapOf(
-                SettingsAnalytics.Params.SCREEN to AnalyticsValue.Str("DeveloperOptions"),
-                SettingsAnalytics.Params.ACTION_NAME to AnalyticsValue.Str("save_developer_option"),
-                SettingsAnalytics.Params.PREFERENCE_KEY to AnalyticsValue.Str("layout"),
+                SettingsAnalytics.Params.SCREEN to AnalyticsValue.Str(value = DEVELOPER_OPTIONS_SCREEN.name),
+                SettingsAnalytics.Params.ACTION_NAME to AnalyticsValue.Str(value = "save_developer_option"),
+                SettingsAnalytics.Params.PREFERENCE_KEY to AnalyticsValue.Str(value = "layout"),
             ),
             event.params,
         )
@@ -44,10 +45,17 @@ class DeveloperAnalyticsTest {
         assertEquals(SettingsAnalytics.Events.ACTION, event.name)
         assertEquals(
             mapOf(
-                SettingsAnalytics.Params.SCREEN to AnalyticsValue.Str("DeveloperOptions"),
-                SettingsAnalytics.Params.ACTION_NAME to AnalyticsValue.Str("reset_developer_options"),
+                SettingsAnalytics.Params.SCREEN to AnalyticsValue.Str(value = DEVELOPER_OPTIONS_SCREEN.name),
+                SettingsAnalytics.Params.ACTION_NAME to AnalyticsValue.Str(value = "reset_developer_options"),
             ),
             event.params,
         )
+    }
+
+    @Test
+    fun `every developer option maps to a unique non-blank preference key`() {
+        val keys = DeveloperOption.entries.map { option -> developerOptionKey(option = option) }
+        assertTrue(keys.all { it.isNotBlank() })
+        assertEquals(DeveloperOption.entries.size, keys.toSet().size)
     }
 }

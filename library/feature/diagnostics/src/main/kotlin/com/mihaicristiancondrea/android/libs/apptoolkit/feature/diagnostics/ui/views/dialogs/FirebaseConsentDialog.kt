@@ -17,7 +17,6 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.diagnostics.ui.views.dialogs
 
-import android.view.View
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -47,7 +46,6 @@ import androidx.compose.ui.hapticfeedback.HapticFeedback
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalHapticFeedback
-import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.platform.LocalWindowInfo
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -58,13 +56,18 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.sty
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.GeneralButton
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.GeneralButtonStyle
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.spacers.MediumHorizontalSpacer
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.diagnostics.data.models.UsageAndDiagnosticsSettings
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.diagnostics.R
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.diagnostics.data.models.UsageAndDiagnosticsSettings
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.diagnostics.ui.views.dialogs.pages.AboutPage
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.diagnostics.ui.views.dialogs.pages.ConsentPage
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.diagnostics.ui.views.dialogs.pages.DetailsPage
 import kotlinx.coroutines.launch
 
+/**
+ * Displays the tabbed privacy choices dialog for analytics and advertising consent settings.
+ *
+ * The caller owns [settings] and persistence.
+ */
 @Composable
 fun FirebaseConsentDialog(
     settings: UsageAndDiagnosticsSettings,
@@ -78,7 +81,6 @@ fun FirebaseConsentDialog(
     onAdPersonalizationConsentChanged: (Boolean) -> Unit,
 ) {
     val hapticFeedback: HapticFeedback = LocalHapticFeedback.current
-    val view: View = LocalView.current
 
     val tabs = listOf(
         R.string.privacy_choices_tab_consent,
@@ -86,14 +88,14 @@ fun FirebaseConsentDialog(
         R.string.privacy_choices_tab_about,
     )
 
-    val pagerState = rememberPagerState(initialPage = 0, pageCount = { tabs.size })
+    val pagerState = rememberPagerState(initialPage = 0) { tabs.size }
     val scope = rememberCoroutineScope()
 
     val windowInfo = LocalWindowInfo.current
     val density = LocalDensity.current
 
-    val dialogHeight = with(density) {
-        (windowInfo.containerSize.height.toDp() * 0.78f).coerceAtLeast(SizeConstants.TwoHundredFiftySixSize)
+    val dialogHeight = with(receiver = density) {
+        (windowInfo.containerSize.height.toDp() * 0.78f).coerceAtLeast(minimumValue = SizeConstants.TwoHundredFiftySixSize)
     }
 
     Dialog(
@@ -103,7 +105,7 @@ fun FirebaseConsentDialog(
         Surface(
             modifier = Modifier
                 .fillMaxWidth()
-                .height(dialogHeight),
+                .height(height = dialogHeight),
             shape = MaterialTheme.shapes.extraLarge,
             color = MaterialTheme.colorScheme.surface,
             tonalElevation = SizeConstants.ExtraTinySize,
@@ -112,8 +114,8 @@ fun FirebaseConsentDialog(
             Column(
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(SizeConstants.LargeSize),
-                verticalArrangement = Arrangement.spacedBy(SizeConstants.MediumSize),
+                    .padding(all = SizeConstants.LargeSize),
+                verticalArrangement = Arrangement.spacedBy(space = SizeConstants.MediumSize),
             ) {
                 Row(
                     modifier = Modifier.fillMaxWidth(),
@@ -126,10 +128,10 @@ fun FirebaseConsentDialog(
                     )
                     MediumHorizontalSpacer()
                     Text(
-                        text = stringResource(R.string.privacy_choices_title),
+                        text = stringResource(id = R.string.privacy_choices_title),
                         style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.SemiBold),
                         color = MaterialTheme.colorScheme.onSurface,
-                        modifier = Modifier.weight(1f),
+                        modifier = Modifier.weight(weight = 1f),
                     )
                 }
 
@@ -143,15 +145,15 @@ fun FirebaseConsentDialog(
                         Tab(
                             modifier = Modifier
                                 .bounceClick()
-                                .clip(CircleShape),
+                                .clip(shape = CircleShape),
                             selected = pagerState.currentPage == index,
-                            onClick = { scope.launch { pagerState.animateScrollToPage(index) } },
+                            onClick = { scope.launch { pagerState.animateScrollToPage(page = index) } },
                             text = {
                                 Text(
                                     text = stringResource(id = labelResId),
                                     style = MaterialTheme.typography.titleSmall.copy(fontWeight = FontWeight.SemiBold),
                                 )
-                            }
+                            },
                         )
                     }
                 }
@@ -159,7 +161,7 @@ fun FirebaseConsentDialog(
                 Box(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .weight(1f, fill = true),
+                        .weight(weight = 1f, fill = true),
                 ) {
                     HorizontalPager(
                         state = pagerState,
@@ -185,37 +187,37 @@ fun FirebaseConsentDialog(
 
                 Column(
                     modifier = Modifier.fillMaxWidth(),
-                    verticalArrangement = Arrangement.spacedBy(SizeConstants.ExtraTinySize),
+                    verticalArrangement = Arrangement.spacedBy(space = SizeConstants.ExtraTinySize),
                 ) {
                     GeneralButton(
                         modifier = Modifier.fillMaxWidth(),
-                        label = stringResource(R.string.privacy_choices_allow_all),
+                        label = stringResource(id = R.string.privacy_choices_allow_all),
                         onClick = {
-                            hapticFeedback.performHapticFeedback(HapticFeedbackType.ContextClick)
+                            hapticFeedback.performHapticFeedback(hapticFeedbackType = HapticFeedbackType.ContextClick)
                             onAllowAll()
                         },
                     )
 
                     Row(
                         modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.spacedBy(SizeConstants.ExtraSmallSize),
+                        horizontalArrangement = Arrangement.spacedBy(space = SizeConstants.ExtraSmallSize),
                     ) {
                         GeneralButton(
                             style = GeneralButtonStyle.Outlined,
-                            modifier = Modifier.weight(1f),
-                            label = stringResource(R.string.privacy_choices_confirm),
+                            modifier = Modifier.weight(weight = 1f),
+                            label = stringResource(id = R.string.privacy_choices_confirm),
                             onClick = {
-                                hapticFeedback.performHapticFeedback(HapticFeedbackType.ContextClick)
+                                hapticFeedback.performHapticFeedback(hapticFeedbackType = HapticFeedbackType.ContextClick)
                                 onConfirmSelection()
                             },
                         )
 
                         GeneralButton(
                             style = GeneralButtonStyle.Outlined,
-                            modifier = Modifier.weight(1f),
-                            label = stringResource(R.string.privacy_choices_allow_essentials),
+                            modifier = Modifier.weight(weight = 1f),
+                            label = stringResource(id = R.string.privacy_choices_allow_essentials),
                             onClick = {
-                                hapticFeedback.performHapticFeedback(HapticFeedbackType.ContextClick)
+                                hapticFeedback.performHapticFeedback(hapticFeedbackType = HapticFeedbackType.ContextClick)
                                 onAllowEssentials()
                             },
                         )

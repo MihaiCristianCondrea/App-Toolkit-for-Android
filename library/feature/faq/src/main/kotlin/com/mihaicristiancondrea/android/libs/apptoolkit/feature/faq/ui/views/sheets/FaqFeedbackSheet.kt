@@ -38,7 +38,10 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.lists.Grou
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.R
 import kotlinx.collections.immutable.persistentListOf
 
-/** Dismisses the sheet before invoking the selected feedback action. */
+/**
+ * Shows the feedback bottom sheet. [onDismiss] runs only when dismissed without choosing an
+ * action; callers close the sheet from [onRequestFeature] and [onLeaveReview].
+ */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun FaqFeedbackSheet(
@@ -65,19 +68,13 @@ internal fun FaqFeedbackSheet(
                     title = stringResource(id = R.string.help_feedback_sheet_feature_request_title),
                     description = stringResource(id = R.string.help_feedback_sheet_feature_request_description),
                     icon = Icons.Outlined.Lightbulb,
-                    onClick = {
-                        onDismiss()
-                        onRequestFeature()
-                    },
+                    onClick = onRequestFeature,
                 ),
                 GroupedAction(
                     title = stringResource(id = R.string.help_feedback_sheet_review_title),
                     description = stringResource(id = R.string.help_feedback_sheet_review_description),
                     icon = Icons.Outlined.RateReview,
-                    onClick = {
-                        onDismiss()
-                        onLeaveReview()
-                    },
+                    onClick = onLeaveReview,
                 ),
             ),
         )

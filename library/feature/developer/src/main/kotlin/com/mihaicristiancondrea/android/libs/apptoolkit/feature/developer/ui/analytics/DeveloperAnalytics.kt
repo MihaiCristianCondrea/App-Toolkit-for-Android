@@ -19,8 +19,12 @@ package com.mihaicristiancondrea.android.libs.apptoolkit.feature.developer.ui.an
 
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.telemetry.models.AnalyticsEvent
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.telemetry.models.AnalyticsValue
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.telemetry.models.TrackedScreen
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.analytics.SettingsAnalytics
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.developer.ui.models.DeveloperOption
+
+internal val DEVELOPER_OPTIONS_SCREEN: TrackedScreen =
+    TrackedScreen(name = "DeveloperOptions", className = "DeveloperOptionsScreen")
 
 internal fun developerOptionKey(option: DeveloperOption): String = when (option) {
     DeveloperOption.Layout -> "layout"
@@ -43,16 +47,16 @@ internal fun developerOptionKey(option: DeveloperOption): String = when (option)
 internal fun developerOptionSavedEvent(option: DeveloperOption): AnalyticsEvent = AnalyticsEvent(
     name = SettingsAnalytics.Events.ACTION,
     params = mapOf(
-        SettingsAnalytics.Params.SCREEN to AnalyticsValue.Str("DeveloperOptions"),
-        SettingsAnalytics.Params.ACTION_NAME to AnalyticsValue.Str("save_developer_option"),
-        SettingsAnalytics.Params.PREFERENCE_KEY to AnalyticsValue.Str(developerOptionKey(option)),
+        SettingsAnalytics.Params.SCREEN to AnalyticsValue.Str(value = DEVELOPER_OPTIONS_SCREEN.name),
+        SettingsAnalytics.Params.ACTION_NAME to AnalyticsValue.Str(value = "save_developer_option"),
+        SettingsAnalytics.Params.PREFERENCE_KEY to AnalyticsValue.Str(value = developerOptionKey(option = option)),
     ),
 )
 
 internal fun developerOptionsResetEvent(): AnalyticsEvent = AnalyticsEvent(
     name = SettingsAnalytics.Events.ACTION,
     params = mapOf(
-        SettingsAnalytics.Params.SCREEN to AnalyticsValue.Str("DeveloperOptions"),
-        SettingsAnalytics.Params.ACTION_NAME to AnalyticsValue.Str("reset_developer_options"),
+        SettingsAnalytics.Params.SCREEN to AnalyticsValue.Str(value = DEVELOPER_OPTIONS_SCREEN.name),
+        SettingsAnalytics.Params.ACTION_NAME to AnalyticsValue.Str(value = "reset_developer_options"),
     ),
 )

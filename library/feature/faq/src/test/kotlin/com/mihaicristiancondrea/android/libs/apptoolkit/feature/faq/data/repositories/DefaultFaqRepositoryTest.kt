@@ -188,4 +188,76 @@ class DefaultFaqRepositoryTest {
         assertIs<NetworkException>(value = failure)
         assertEquals(expected = NetworkException.Reason.NO_INTERNET, actual = failure.reason)
     }
+
+    @Test
+    fun `throws the question source failure, translated, when every source fails and there is nothing to fall back to`() = runTest {
+        val remote = mockk<FaqRemoteDataSource>()
+        coEvery { remote.fetchCatalog(url = CATALOG_URL) } returns FaqCatalogDto(
+            schemaVersion = 1,
+            products = listOf(
+                FaqProductDto(
+                    name = "Product",
+                    productId = PRODUCT_ID,
+                    key = PRODUCT_ID,
+                    questionSources = listOf(
+                        FaqQuestionSourceDto(url = QUESTIONS_URL, category = "general"),
+                    ),
+                ),
+            ),
+        )
+        coEvery { remote.fetchQuestions(url = QUESTIONS_URL) } throws UnknownHostException()
+        val local = mockk<FaqLocalDataSource>()
+        every { local.loadLocalQuestions() } returns emptyList()
+
+        val repo = DefaultFaqRepository(
+            localDataSource = local,
+            remoteDataSource = remote,
+            catalogUrl = CATALOG_URL,
+            productId = PRODUCT_ID,
+            diagnostics = mockk(relaxed = true),
+        )
+
+        val failure = runCatching { repo.getFaq() }.exceptionOrNull()
+
+        assertIs<NetworkException>(value = failure)
+        assertEquals(expected = NetworkException.Reason.NO_INTERNET, actual = failure.reason)
+    }
+
+    @Test
+    fun `keeps questions from working sources when another question source fails`() = runTest {
+        val secondUrl = "https://example.test/questions-2"
+        val remote = mockk<FaqRemoteDataSource>()
+        coEvery { remote.fetchCatalog(url = CATALOG_URL) } returns FaqCatalogDto(
+            schemaVersion = 1,
+            products = listOf(
+                FaqProductDto(
+                    name = "Product",
+                    productId = PRODUCT_ID,
+                    key = PRODUCT_ID,
+                    questionSources = listOf(
+                        FaqQuestionSourceDto(url = QUESTIONS_URL, category = "general"),
+                        FaqQuestionSourceDto(url = secondUrl, category = "billing"),
+                    ),
+                ),
+            ),
+        )
+        coEvery { remote.fetchQuestions(url = QUESTIONS_URL) } throws UnknownHostException()
+        coEvery { remote.fetchQuestions(url = secondUrl) } returns listOf(
+            dto(id = "2", question = "From working source?", answer = "Yes."),
+        )
+        val local = mockk<FaqLocalDataSource>()
+        every { local.loadLocalQuestions() } returns emptyList()
+
+        val repo = DefaultFaqRepository(
+            localDataSource = local,
+            remoteDataSource = remote,
+            catalogUrl = CATALOG_URL,
+            productId = PRODUCT_ID,
+            diagnostics = mockk(relaxed = true),
+        )
+
+        val questions = repo.getFaq()
+
+        assertEquals(expected = listOf(element = "2"), actual = questions.map { it.id.value })
+    }
 }

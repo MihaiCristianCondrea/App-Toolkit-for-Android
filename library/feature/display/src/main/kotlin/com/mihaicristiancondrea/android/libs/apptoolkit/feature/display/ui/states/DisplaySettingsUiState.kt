@@ -24,8 +24,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.feature.display.ui.model
 /**
  * What the display settings screen renders.
  *
- * @property settings The stored display preferences, followed while the screen is open. The
- * shell's layout choices are not here: the screen reads them from the shell.
+ * @property settings The stored display preferences, followed while the screen is open.
  */
 @Immutable
 data class DisplaySettingsUiState(

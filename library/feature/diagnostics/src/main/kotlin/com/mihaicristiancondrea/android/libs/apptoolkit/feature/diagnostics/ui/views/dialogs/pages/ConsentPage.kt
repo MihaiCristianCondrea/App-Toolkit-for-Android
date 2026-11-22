@@ -34,39 +34,41 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.consta
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.layouts.sections.InfoMessageSection
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.spacers.SmallVerticalSpacer
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.diagnostics.R
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.diagnostics.ui.constants.DiagnosticsLinks
 
+/** Displays the introductory consent overview tab inside [com.mihaicristiancondrea.android.libs.apptoolkit.feature.diagnostics.ui.views.dialogs.FirebaseConsentDialog]. */
 @Composable
 fun ConsentPage() {
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .verticalScroll(rememberScrollState()),
-        verticalArrangement = Arrangement.spacedBy(SizeConstants.SmallSize),
+            .verticalScroll(state = rememberScrollState()),
+        verticalArrangement = Arrangement.spacedBy(space = SizeConstants.SmallSize),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         Text(
-            text = stringResource(R.string.privacy_choices_intro_1),
+            text = stringResource(id = R.string.privacy_choices_intro_1),
             style = MaterialTheme.typography.bodyMedium,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
             textAlign = TextAlign.Start,
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier.fillMaxWidth(),
         )
 
         Text(
-            text = stringResource(R.string.privacy_choices_intro_2),
+            text = stringResource(id = R.string.privacy_choices_intro_2),
             style = MaterialTheme.typography.bodyMedium,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
             textAlign = TextAlign.Start,
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier.fillMaxWidth(),
         )
 
         SmallVerticalSpacer()
 
         InfoMessageSection(
-            message = stringResource(R.string.privacy_choices_info_message),
+            message = stringResource(id = R.string.privacy_choices_info_message),
             modifier = Modifier.fillMaxWidth(),
-            learnMoreText = stringResource(R.string.privacy_choices_info_learn_more),
-            learnMoreUrl = "https://developers.google.com/tag-platform/security/guides/app-consent",
+            learnMoreText = stringResource(id = R.string.privacy_choices_info_learn_more),
+            learnMoreUrl = DiagnosticsLinks.GOOGLE_APP_CONSENT_GUIDE,
         )
     }
 }

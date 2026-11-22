@@ -79,9 +79,10 @@ flowchart TD
 - The catalog and screen share one feature module. `FaqViewModel` reads `FaqRepository`
   directly. The repository maps and normalizes both sources before checking for usable entries.
   Normalization trims the text, removes incomplete pairs and keeps the first occurrence of each ID.
-- The remote result takes precedence when it has usable questions. Individual question source
-  failures are skipped. If the catalog fetch fails and bundled content is unavailable, the
-  repository propagates the failure. A successful read with no usable content shows the empty state.
+- The remote result takes precedence when it has usable questions. Partial question source
+  failures are skipped so remaining sources still load. If the catalog fetch or every configured
+  question source fails and bundled content is unavailable, the repository propagates the failure.
+  A successful read with no usable content shows the empty state.
 - Ktor calls suspend and the fallback reads packaged strings. The repository is safe to call
   from the main thread.
 - The first load and Retry use `FaqEvent.Load`. Duplicate requests retain the active load.

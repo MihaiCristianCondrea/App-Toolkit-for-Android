@@ -15,26 +15,12 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.utils.extensions
+package com.mihaicristiancondrea.android.libs.apptoolkit.feature.display.ui.formatters
 
-import org.junit.jupiter.api.Test
-import kotlin.test.assertEquals
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.res.stringResource
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.display.ui.models.DisplayRow
 
-class TokenExtensionsTest {
-
-    @Test
-    fun `decodeBase64OrEmpty returns decoded value`() {
-        val encoded = "Z2l0aHViLXRva2Vu"
-
-        val decoded = encoded.toToken()
-
-        assertEquals("github-token", decoded)
-    }
-
-    @Test
-    fun `decodeBase64OrEmpty returns empty on invalid input`() {
-        val decoded = "not-base64%%%".toToken()
-
-        assertEquals("", decoded)
-    }
-}
+/** Resolves the optional summary resource of a [DisplayRow] into display text. */
+@Composable
+internal fun DisplayRow.summaryText(): String? = summary?.let { stringResource(id = it) }

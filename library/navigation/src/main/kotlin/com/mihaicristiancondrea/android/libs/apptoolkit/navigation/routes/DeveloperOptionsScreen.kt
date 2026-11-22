@@ -15,11 +15,10 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.ui.mappers
+package com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes
 
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.data.mappers.toDeviceInfoFields
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.data.models.DeviceInfo
+import kotlinx.serialization.Serializable
 
-/** The plain listing shown in the collapsible device-info panel on the report screen. */
-internal fun DeviceInfo.toDeviceInfoText(): String =
-    toDeviceInfoFields().joinToString(separator = "\n") { (label, value) -> "$label: $value" }
+/** The shell's developer options, registered by `:library:feature:developer`. */
+@Serializable
+data object DeveloperOptionsScreen : AppToolkitNavKey

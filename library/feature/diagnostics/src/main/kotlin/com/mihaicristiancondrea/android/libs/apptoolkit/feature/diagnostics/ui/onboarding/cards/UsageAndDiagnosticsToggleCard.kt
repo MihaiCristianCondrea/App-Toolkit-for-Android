@@ -17,8 +17,6 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.diagnostics.ui.onboarding.cards
 
-import android.view.View
-import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -39,7 +37,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.hapticfeedback.HapticFeedback
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.platform.LocalHapticFeedback
-import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
@@ -48,14 +45,18 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.spacers.La
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.switches.CustomSwitch
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.diagnostics.R
 
-@OptIn(ExperimentalAnimationApi::class)
+/**
+ * Displays the onboarding toggle card for usage and diagnostics reporting.
+ *
+ * @param switchState Whether reporting is currently enabled.
+ * @param onCheckedChange Invoked with the new toggle state when tapped.
+ */
 @Composable
 fun UsageAndDiagnosticsToggleCard(
-    switchState: Boolean, onCheckedChange: (Boolean) -> Unit
+    switchState: Boolean,
+    onCheckedChange: (Boolean) -> Unit,
 ) {
-
     val hapticFeedback: HapticFeedback = LocalHapticFeedback.current
-    val view: View = LocalView.current
 
     Card(
         modifier = Modifier
@@ -65,45 +66,48 @@ fun UsageAndDiagnosticsToggleCard(
             hapticFeedback.performHapticFeedback(hapticFeedbackType = HapticFeedbackType.ContextClick)
             onCheckedChange(!switchState)
         },
-        shape = RoundedCornerShape(SizeConstants.LargeSize),
+        shape = RoundedCornerShape(size = SizeConstants.LargeSize),
         colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.surfaceContainerHighest
+            containerColor = MaterialTheme.colorScheme.surfaceContainerHighest,
         ),
-        elevation = CardDefaults.cardElevation(defaultElevation = SizeConstants.ExtraSmallSize - SizeConstants.ExtraTinySize / 2)
+        elevation = CardDefaults.cardElevation(
+            defaultElevation = SizeConstants.ExtraSmallSize - (SizeConstants.ExtraTinySize / 2),
+        ),
     ) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(
                     horizontal = SizeConstants.LargeIncreasedSize,
-                    vertical = SizeConstants.LargeSize
+                    vertical = SizeConstants.LargeSize,
                 ),
             verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceBetween
+            horizontalArrangement = Arrangement.SpaceBetween,
         ) {
             Column(modifier = Modifier.weight(weight = 1f)) {
                 Text(
                     text = stringResource(id = R.string.usage_and_diagnostics),
                     style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.SemiBold),
-                    color = MaterialTheme.colorScheme.onSurface
+                    color = MaterialTheme.colorScheme.onSurface,
                 )
                 Text(
                     modifier = Modifier.animateContentSize(),
-                    text = if (switchState) stringResource(id = R.string.onboarding_crashlytics_enabled_desc)
-                    else stringResource(id = R.string.onboarding_crashlytics_disabled_desc),
+                    text = if (switchState) {
+                        stringResource(id = R.string.onboarding_crashlytics_enabled_desc)
+                    } else {
+                        stringResource(id = R.string.onboarding_crashlytics_disabled_desc)
+                    },
                     style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
                 )
             }
             LargeHorizontalSpacer()
 
             CustomSwitch(
                 checked = switchState,
-                onCheckedChange = { isChecked ->
-                    onCheckedChange(isChecked)
-                },
+                onCheckedChange = onCheckedChange,
                 checkIcon = Icons.Filled.Analytics,
-                uncheckIcon = Icons.Filled.Policy
+                uncheckIcon = Icons.Filled.Policy,
             )
         }
     }

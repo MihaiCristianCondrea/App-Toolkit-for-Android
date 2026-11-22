@@ -26,14 +26,14 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Home
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.di.AppToolkitDiConstants
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.di.AppToolkitDiConstants
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.R
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.dialogs.BasicAlertDialog
@@ -50,7 +50,6 @@ import org.koin.compose.koinInject
 import org.koin.core.qualifier.named
 import kotlin.math.min
 
-
 /**
  * A composable function that displays an [androidx.compose.material3.AlertDialog] allowing the user
  * to select the startup screen for the application.
@@ -61,25 +60,23 @@ import kotlin.math.min
  * @param onDismiss A callback invoked when the dialog is dismissed or the "Done" button is clicked.
  * @param onStartupSelected A callback invoked when a startup screen is selected, providing
  * the selected route string as a parameter.
+ * @param sizing Wraps the option list by default; hosts may supply a bounded modifier for a longer list.
  */
 @Composable
 fun SelectStartupScreenAlertDialog(
     currentRoute: String,
     onDismiss: () -> Unit,
     onStartupSelected: (String) -> Unit,
-    /**
-     * Wraps the option list by default; hosts may supply a bounded modifier for a longer list.
-     */
     sizing: DialogContentSizing = DialogContentSizing.WrapContent,
 ) {
-    val entriesRaw: List<String> = koinInject(qualifier = named(AppToolkitDiConstants.STARTUP_ENTRIES))
-    val valuesRaw: List<String> = koinInject(qualifier = named(AppToolkitDiConstants.STARTUP_VALUES))
+    val entriesRaw: List<String> = koinInject(qualifier = named(name = AppToolkitDiConstants.STARTUP_ENTRIES))
+    val valuesRaw: List<String> = koinInject(qualifier = named(name = AppToolkitDiConstants.STARTUP_VALUES))
 
-    val entries: ImmutableList<String> = remember(entriesRaw) { entriesRaw.toImmutableList() }
-    val values: ImmutableList<String> = remember(valuesRaw) { valuesRaw.toImmutableList() }
+    val entries: ImmutableList<String> = remember(key1 = entriesRaw) { entriesRaw.toImmutableList() }
+    val values: ImmutableList<String> = remember(key1 = valuesRaw) { valuesRaw.toImmutableList() }
 
     val initialRoute = currentRoute.ifBlank { values.firstOrNull().orEmpty() }
-    val selectedPageState = rememberSaveable(initialRoute) { mutableStateOf(initialRoute) }
+    val selectedPageState = rememberSaveable(initialRoute) { mutableStateOf(value = initialRoute) }
     var selectedPage by selectedPageState
 
     BasicAlertDialog(
@@ -100,10 +97,19 @@ fun SelectStartupScreenAlertDialog(
                 startupValues = values,
                 sizing = sizing,
             )
-        }
+        },
     )
 }
 
+/**
+ * Displays the startup destination option radio list inside [SelectStartupScreenAlertDialog].
+ *
+ * @param selectedPage Currently selected route value.
+ * @param onSelectedPageChange Invoked with the newly selected route value.
+ * @param startupEntries Display labels corresponding to [startupValues].
+ * @param startupValues Route values persisted when confirmed.
+ * @param sizing Height constraint applied to the dialog body.
+ */
 @Composable
 fun SelectStartupScreenAlertDialogContent(
     selectedPage: String,
@@ -115,30 +121,30 @@ fun SelectStartupScreenAlertDialogContent(
     val count = min(startupEntries.size, startupValues.size)
 
     Column(
-        modifier = Modifier.dialogContentHeight(sizing = sizing)
+        modifier = Modifier.dialogContentHeight(sizing = sizing),
     ) {
         Text(text = stringResource(id = R.string.dialog_startup_subtitle))
         Box(
             modifier = Modifier
-                .fillMaxWidth()
+                .fillMaxWidth(),
         ) {
             LazyColumn(
-                verticalArrangement = Arrangement.spacedBy(space = SizeConstants.ExtraTinySize)
+                verticalArrangement = Arrangement.spacedBy(space = SizeConstants.ExtraTinySize),
             ) {
-                items(count) { index ->
+                items(count = count) { index ->
                     val currentValue = startupValues[index]
                     RadioButtonPreferenceItem(
                         modifier = Modifier.groupedPreferenceItem(
                             position = groupedItemPosition(
                                 index = index,
-                                size = count
+                                size = count,
                             ),
                             outerRadius = SizeConstants.LargeMediumSize,
-                            horizontalPadding = SizeConstants.ZeroSize
+                            horizontalPadding = SizeConstants.ZeroSize,
                         ),
                         text = startupEntries[index],
                         isChecked = selectedPage == currentValue,
-                        onCheckedChange = { onSelectedPageChange(currentValue) }
+                        onCheckedChange = { onSelectedPageChange(currentValue) },
                     )
                 }
             }

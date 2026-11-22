@@ -17,9 +17,9 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.data.remote.mappers
 
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.data.remote.models.FaqQuestionDto
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.data.models.FaqId
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.data.models.FaqItem
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.data.remote.models.FaqQuestionDto
 
 /** Maps the question source entries to application models in source order. */
 internal fun Iterable<FaqQuestionDto>.toFaqItems(): List<FaqItem> = map(transform = FaqQuestionDto::toFaqItem)

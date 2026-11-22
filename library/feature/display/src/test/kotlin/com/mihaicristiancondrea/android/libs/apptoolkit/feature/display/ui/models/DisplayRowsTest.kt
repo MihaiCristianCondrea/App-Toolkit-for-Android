@@ -19,6 +19,7 @@ package com.mihaicristiancondrea.android.libs.apptoolkit.feature.display.ui.mode
 
 import android.os.Build
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.display.ui.providers.DisplaySettingsProvider
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.display.ui.transformers.displayRows
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.ShellCapabilities
 import org.junit.jupiter.api.Test
 import kotlin.test.assertEquals
@@ -57,7 +58,7 @@ class DisplayRowsTest {
 
     @Test
     fun `app A, three tabs with a startup page, shows every row`() {
-        assertEquals(DisplayRow.entries, rows(tabs = 3))
+        assertEquals(expected = DisplayRow.entries.toList(), actual = rows(tabs = 3))
     }
 
     @Test

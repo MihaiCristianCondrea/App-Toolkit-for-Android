@@ -29,6 +29,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Analytics
 import androidx.compose.material.icons.outlined.PrivacyTip
+import androidx.compose.material.icons.outlined.Refresh
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SnackbarHostState
@@ -43,11 +44,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.icons.ToolkitIcon
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.R as CoreUiR
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.Loadable
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.MessageHost
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.GeneralButton
@@ -98,7 +99,7 @@ fun TelemetryOnboardingPage(isSelected: Boolean) {
         if (drawsOwnHost) {
             DefaultSnackbarHost(
                 snackbarState = snackbarHostState,
-                modifier = Modifier.align(Alignment.BottomCenter),
+                modifier = Modifier.align(alignment = Alignment.BottomCenter),
             )
         }
     }
@@ -112,8 +113,9 @@ fun TelemetryOnboardingPage(isSelected: Boolean) {
 
 /**
  * The onboarding page for [state]. Until the stored choices arrive the toggle shows off and the
- * dialog waits. The dialog opens the first time the page is reached, and its visibility is saved
- * across rotation.
+ * dialog waits. A failed read replaces the consent controls with the error message and a retry
+ * action when retryable. The dialog opens the first time the page is reached, and its visibility
+ * is saved across rotation.
  *
  * @param onEvent Receives the events [UsageAndDiagnosticsViewModel] handles.
  */
@@ -124,69 +126,89 @@ internal fun TelemetryOnboardingPageContent(
     onEvent: (UsageAndDiagnosticsEvent) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    var isDetailsDialogVisible by rememberSaveable { mutableStateOf(true) }
+    var isDetailsDialogVisible by rememberSaveable { mutableStateOf(value = true) }
     val settings: UsageAndDiagnosticsSettings? = (state.settings as? Loadable.Ready)?.value
+    val failedState: Loadable.Failed? = state.settings as? Loadable.Failed
 
     Column(
         modifier = modifier
             .fillMaxSize()
             .padding(horizontal = SizeConstants.LargeSize)
-            .verticalScroll(rememberScrollState()),
+            .verticalScroll(state = rememberScrollState()),
         horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.SpaceBetween
+        verticalArrangement = Arrangement.SpaceBetween,
     ) {
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
             Icon(
                 imageVector = Icons.Outlined.Analytics,
                 contentDescription = null,
                 modifier = Modifier.size(size = SizeConstants.LauncherIconSize + SizeConstants.LargeSize),
-                tint = MaterialTheme.colorScheme.primary
+                tint = MaterialTheme.colorScheme.primary,
             )
 
             ExtraLargeVerticalSpacer()
 
             Text(
-                text = stringResource(R.string.onboarding_crashlytics_title),
+                text = stringResource(id = R.string.onboarding_crashlytics_title),
                 style = MaterialTheme.typography.headlineLarge.copy(
                     fontWeight = FontWeight.SemiBold,
                     fontSize = 30.sp,
-                    textAlign = TextAlign.Center
+                    textAlign = TextAlign.Center,
                 ),
-                color = MaterialTheme.colorScheme.onSurface
+                color = MaterialTheme.colorScheme.onSurface,
             )
 
             LargeVerticalSpacer()
 
             Text(
-                text = stringResource(R.string.onboarding_crashlytics_description),
+                text = stringResource(id = R.string.onboarding_crashlytics_description),
                 style = MaterialTheme.typography.bodyLarge,
                 textAlign = TextAlign.Center,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
-                modifier = Modifier.padding(horizontal = SizeConstants.LargeSize)
+                modifier = Modifier.padding(horizontal = SizeConstants.LargeSize),
             )
 
             ExtraLargeIncreasedVerticalSpacer()
             SmallVerticalSpacer()
 
-            UsageAndDiagnosticsToggleCard(
-                switchState = settings?.usageAndDiagnostics ?: false,
-                onCheckedChange = { isChecked ->
-                    onEvent(UsageAndDiagnosticsEvent.SetUsageAndDiagnostics(isChecked))
-                },
-            )
+            if (failedState != null) {
+                Text(
+                    text = failedState.message.asString(),
+                    style = MaterialTheme.typography.bodyMedium,
+                    textAlign = TextAlign.Center,
+                    color = MaterialTheme.colorScheme.error,
+                    modifier = Modifier.padding(horizontal = SizeConstants.LargeSize),
+                )
 
-            LargeVerticalSpacer()
+                if (failedState.retryable) {
+                    LargeVerticalSpacer()
+                    GeneralButton(
+                        style = GeneralButtonStyle.Outlined,
+                        onClick = { onEvent(UsageAndDiagnosticsEvent.Load) },
+                        modifier = Modifier.fillMaxWidth(),
+                        icon = ToolkitIcon.Vector(imageVector = Icons.Outlined.Refresh),
+                        label = stringResource(id = CoreUiR.string.try_again),
+                    )
+                }
+            } else {
+                UsageAndDiagnosticsToggleCard(
+                    switchState = settings?.usageAndDiagnostics ?: false,
+                    onCheckedChange = { isChecked ->
+                        onEvent(UsageAndDiagnosticsEvent.SetUsageAndDiagnostics(enabled = isChecked))
+                    },
+                )
 
-            GeneralButton(
-                style = GeneralButtonStyle.Outlined,
-                onClick = {
-                    isDetailsDialogVisible = true
-                },
-                modifier = Modifier.fillMaxWidth(),
-                icon = ToolkitIcon.Vector(imageVector = Icons.Outlined.PrivacyTip),
-                contentDescription = stringResource(id = R.string.onboarding_crashlytics_show_details_button_cd),
-                label = stringResource(id = R.string.onboarding_crashlytics_show_details_button)
-            )
+                LargeVerticalSpacer()
+
+                GeneralButton(
+                    style = GeneralButtonStyle.Outlined,
+                    onClick = { isDetailsDialogVisible = true },
+                    modifier = Modifier.fillMaxWidth(),
+                    icon = ToolkitIcon.Vector(imageVector = Icons.Outlined.PrivacyTip),
+                    contentDescription = stringResource(id = R.string.onboarding_crashlytics_show_details_button_cd),
+                    label = stringResource(id = R.string.onboarding_crashlytics_show_details_button),
+                )
+            }
 
             LargeVerticalSpacer()
 
@@ -194,12 +216,10 @@ internal fun TelemetryOnboardingPageContent(
         }
     }
 
-    if (isSelected && isDetailsDialogVisible && settings != null) {
+    if (isSelected && isDetailsDialogVisible && (settings != null)) {
         FirebaseConsentDialog(
             settings = settings,
-            onDismissRequest = {
-                isDetailsDialogVisible = false
-            },
+            onDismissRequest = { isDetailsDialogVisible = false },
             onAllowAll = {
                 onEvent(UsageAndDiagnosticsEvent.AllowAllConsent)
                 isDetailsDialogVisible = false
@@ -208,55 +228,19 @@ internal fun TelemetryOnboardingPageContent(
                 onEvent(UsageAndDiagnosticsEvent.AllowEssentialConsent)
                 isDetailsDialogVisible = false
             },
-            onConfirmSelection = {
-                isDetailsDialogVisible = false
+            onConfirmSelection = { isDetailsDialogVisible = false },
+            onAnalyticsConsentChanged = { granted ->
+                onEvent(UsageAndDiagnosticsEvent.SetAnalyticsConsent(granted = granted))
             },
-            onAnalyticsConsentChanged = {
-                onEvent(UsageAndDiagnosticsEvent.SetAnalyticsConsent(it))
+            onAdStorageConsentChanged = { granted ->
+                onEvent(UsageAndDiagnosticsEvent.SetAdStorageConsent(granted = granted))
             },
-            onAdStorageConsentChanged = {
-                onEvent(UsageAndDiagnosticsEvent.SetAdStorageConsent(it))
+            onAdUserDataConsentChanged = { granted ->
+                onEvent(UsageAndDiagnosticsEvent.SetAdUserDataConsent(granted = granted))
             },
-            onAdUserDataConsentChanged = {
-                onEvent(UsageAndDiagnosticsEvent.SetAdUserDataConsent(it))
+            onAdPersonalizationConsentChanged = { granted ->
+                onEvent(UsageAndDiagnosticsEvent.SetAdPersonalizationConsent(granted = granted))
             },
-            onAdPersonalizationConsentChanged = {
-                onEvent(UsageAndDiagnosticsEvent.SetAdPersonalizationConsent(it))
-            },
-        )
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-private fun TelemetryOnboardingPageContentPreview() {
-    MaterialTheme {
-        TelemetryOnboardingPageContent(
-            state = UsageAndDiagnosticsUiState(
-                settings = Loadable.Ready(
-                    UsageAndDiagnosticsSettings(
-                        usageAndDiagnostics = true,
-                        analyticsConsent = true,
-                        adStorageConsent = true,
-                        adUserDataConsent = true,
-                        adPersonalizationConsent = true,
-                    )
-                ),
-            ),
-            isSelected = false,
-            onEvent = {},
-        )
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-private fun TelemetryOnboardingPageContentLoadingPreview() {
-    MaterialTheme {
-        TelemetryOnboardingPageContent(
-            state = UsageAndDiagnosticsUiState(settings = Loadable.Loading),
-            isSelected = false,
-            onEvent = {},
         )
     }
 }

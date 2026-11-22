@@ -21,7 +21,7 @@ import androidx.annotation.StringRes
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.icons.ToolkitIcon
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.ui.navigation.aboutPages
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.advanced.ui.navigation.advancedSettingsPage
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.developer.ui.navigation.developerOptionsPage
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.developer.ui.navigation.developerOptionsScreen
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.diagnostics.ui.navigation.diagnosticsSettingsPage
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.display.ui.navigation.displaySettingsPage
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.ui.navigation.helpScreen
@@ -90,7 +90,7 @@ fun ShellGraphBuilder.toolkitPages() {
     licensesPage()
     helpScreen()
     supportPage()
-    developerOptionsPage()
+    developerOptionsScreen()
     startupPage()
     onboardingPages()
 }

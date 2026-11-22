@@ -31,12 +31,17 @@ internal fun availableDeveloperOptions(capabilities: ShellCapabilities): List<De
     DeveloperOption.entries.filter { option ->
         when (option) {
             DeveloperOption.Layout,
-            DeveloperOption.NavigationTint -> capabilities.hasTabs
+            DeveloperOption.NavigationTint,
+                -> capabilities.hasTabs
 
             DeveloperOption.NavigationBarStyle,
-            DeveloperOption.HideBottomBarOnScroll -> capabilities.hasBottomNavigationTabs
+            DeveloperOption.HideBottomBarOnScroll,
+                -> capabilities.hasBottomNavigationTabs
 
-            DeveloperOption.TopBarStyle, DeveloperOption.HideTopBarOnScroll -> capabilities.hasShellTopBars
+            DeveloperOption.TopBarStyle,
+            DeveloperOption.HideTopBarOnScroll,
+                -> capabilities.hasShellTopBars
+
             DeveloperOption.ContentWidth -> capabilities.hasContentWidthLimit
             DeveloperOption.StartOverride -> capabilities.hasMultipleStartOptions
             DeveloperOption.TabTransition -> capabilities.hasMultipleTabs
@@ -44,7 +49,9 @@ internal fun availableDeveloperOptions(capabilities: ShellCapabilities): List<De
             DeveloperOption.AnimationSpeed,
             DeveloperOption.EntranceStyle,
             DeveloperOption.MotionTempo,
-            DeveloperOption.EntranceReplay -> true
+            DeveloperOption.EntranceReplay,
+                -> true
+
             DeveloperOption.BottomAccessory -> capabilities.hasAccessories
         }
     }
@@ -60,5 +67,21 @@ internal fun accessoryModes(capabilities: ShellCapabilities): List<AccessoryMode
         listOf(AccessoryMode.AsDeclared, AccessoryMode.None)
     }
 
-internal fun developerOptionCategories(capabilities: ShellCapabilities): List<Pair<DeveloperCategory, List<DeveloperOption>>> =
-    availableDeveloperOptions(capabilities).groupBy { it.category }.toList()
+/**
+ * Normalizes a persisted [mode] onto the choices offered by [accessoryModes] so single-accessory
+ * hosts show the active radio option and label matching what the shell renders.
+ */
+internal fun effectiveAccessoryMode(
+    mode: AccessoryMode,
+    capabilities: ShellCapabilities,
+): AccessoryMode = when {
+    capabilities.hasBanner && capabilities.hasPlayer -> mode
+    capabilities.hasBanner -> if (mode.showsBanner) AccessoryMode.AsDeclared else AccessoryMode.None
+    capabilities.hasPlayer -> if (mode.showsPlayer) AccessoryMode.AsDeclared else AccessoryMode.None
+    else -> AccessoryMode.None
+}
+
+internal fun developerOptionCategories(
+    capabilities: ShellCapabilities,
+): List<Pair<DeveloperCategory, List<DeveloperOption>>> =
+    availableDeveloperOptions(capabilities = capabilities).groupBy { it.category }.toList()

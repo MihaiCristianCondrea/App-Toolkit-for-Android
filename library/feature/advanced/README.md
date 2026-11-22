@@ -23,7 +23,7 @@ options entry once it is unlocked.
 - The issue reporter sheet. It is the `IssueReporterSheet` contract of `:library:core:ui`, bound by
   `:library:feature:issuereporter`.
 - The developer options page, owned by [`:library:feature:developer`](../developer/README.md). This
-  page opens `DeveloperOptionsRoute` by key.
+  page opens `DeveloperOptionsScreen` by key.
 - The easter egg unlock, stored by `SeasonalThemeRepository` in `:library:core:datastore` and
   recorded by [`:library:feature:about`](../about/README.md).
 - The settings list whose row opens this page, owned by

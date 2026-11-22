@@ -32,7 +32,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.DrawerE
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.PaneRole
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.ShellGraph
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.AdsSettingsRoute
-import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.DeveloperOptionsRoute
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.DeveloperOptionsScreen
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.AboutRoute
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.AdvancedSettingsRoute
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.DiagnosticsSettingsRoute
@@ -123,7 +123,7 @@ class AppGraphTest {
             PermissionsRoute,
             LicensesRoute,
             LibraryExtrasRoute,
-            DeveloperOptionsRoute,
+            DeveloperOptionsScreen,
             ComponentsRoute,
         )
 
@@ -154,7 +154,7 @@ class AppGraphTest {
         assertEquals(AboutR.string.share, (footer[3] as DrawerEntry.Action).label)
         // The debug page comes first, and developer options are reached from Advanced.
         assertEquals(ComponentsRoute, (drawer.first() as DrawerEntry.Link).key)
-        assertFalse(DeveloperOptionsRoute in graph().drawerLinks())
+        assertFalse(DeveloperOptionsScreen in graph().drawerLinks())
     }
 
     @Test

@@ -17,7 +17,6 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.diagnostics.ui.views.dialogs
 
-import android.view.View
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.clickable
@@ -51,13 +50,20 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.hapticfeedback.HapticFeedback
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.platform.LocalHapticFeedback
-import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.switches.CustomSwitch
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.diagnostics.R
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.diagnostics.ui.constants.DiagnosticsLinks
 
+/**
+ * Displays one consent toggle with an expandable Google privacy link card.
+ *
+ * @param checked Whether this consent category is currently granted.
+ * @param onCheckedChange Invoked when the switch is toggled.
+ * @param onLearnMoreClick Invoked with the external documentation URL when the link card is tapped.
+ */
 @Composable
 fun ConsentExpandableItemCard(
     title: String,
@@ -71,9 +77,8 @@ fun ConsentExpandableItemCard(
     onLearnMoreClick: (String) -> Unit,
 ) {
     val hapticFeedback: HapticFeedback = LocalHapticFeedback.current
-    val view: View = LocalView.current
 
-    var expanded by rememberSaveable { mutableStateOf(defaultExpanded) }
+    var expanded by rememberSaveable { mutableStateOf(value = defaultExpanded) }
 
     Column(
         modifier = modifier
@@ -85,7 +90,7 @@ fun ConsentExpandableItemCard(
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(vertical = SizeConstants.SmallSize)
+                .padding(vertical = SizeConstants.SmallSize),
         ) {
             Row(
                 modifier = Modifier
@@ -139,8 +144,8 @@ fun ConsentExpandableItemCard(
             OutlinedCard(
                 modifier = Modifier.fillMaxWidth(),
                 onClick = {
-                    onLearnMoreClick("https://business.safety.google/privacy/")
-                }
+                    onLearnMoreClick(DiagnosticsLinks.GOOGLE_PRIVACY_SAFETY)
+                },
             ) {
                 Row(
                     modifier = Modifier

@@ -15,10 +15,14 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes
+package com.mihaicristiancondrea.android.libs.apptoolkit.feature.display.ui.constants
 
-import kotlinx.serialization.Serializable
-
-/** The shell's developer options, registered by `:library:feature:developer`. */
-@Serializable
-data object DeveloperOptionsRoute : AppToolkitNavKey
+internal object DisplaySettingsOperationNames {
+    const val OBSERVE_PREFERENCES: String = "observePreferences"
+    const val SET_THEME_MODE: String = "setThemeMode"
+    const val SET_DYNAMIC_COLORS: String = "setDynamicColors"
+    const val SET_BOUNCY_BUTTONS: String = "setBouncyButtons"
+    const val SET_SHOW_BOTTOM_BAR_LABELS: String = "setShowBottomBarLabels"
+    const val SET_LANGUAGE: String = "setLanguage"
+    const val SET_STARTUP_PAGE: String = "setStartupPage"
+}

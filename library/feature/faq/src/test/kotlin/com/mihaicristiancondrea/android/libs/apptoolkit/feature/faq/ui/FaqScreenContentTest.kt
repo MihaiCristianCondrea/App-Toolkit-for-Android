@@ -65,8 +65,14 @@ class FaqScreenContentTest {
                         showFeedbackSheet = false
                     },
                     onRetry = {},
-                    onRequestFeature = { calls += "feature" },
-                    onLeaveReview = { calls += "review" },
+                    onRequestFeature = {
+                        calls += "feature"
+                        showFeedbackSheet = false
+                    },
+                    onLeaveReview = {
+                        calls += "review"
+                        showFeedbackSheet = false
+                    },
                     onQuestionToggled = { question, position, expanded -> calls += "${question.id.value}@$position=$expanded" },
                     onShowMoreQuestions = { calls += "more" },
                     onContactUs = {},
@@ -105,7 +111,7 @@ class FaqScreenContentTest {
     }
 
     @Test
-    fun `a row of the feedback sheet closes it before running its choice`() {
+    fun `a row of the feedback sheet runs its choice without firing dismiss`() {
         setContent()
         compose.onNodeWithText(text = string(id = R.string.help_feedback_sheet_title)).assertDoesNotExist()
 
@@ -113,7 +119,7 @@ class FaqScreenContentTest {
         compose.onNodeWithText(text = string(id = R.string.help_feedback_sheet_feature_request_title)).performClick()
         compose.waitForIdle()
 
-        assertEquals(listOf("dismissed", "feature"), calls)
+        assertEquals(listOf(element = "feature"), calls)
         compose.onNodeWithText(text = string(id = R.string.help_feedback_sheet_title)).assertDoesNotExist()
     }
 }

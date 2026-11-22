@@ -17,57 +17,23 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.diagnostics.ui
 
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.diagnostics.ui.analytics.diagnosticsPrivacyChoicesEvent
-
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.diagnostics.ui.analytics.diagnosticsToggleEvent
-
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.diagnostics.ui.analytics.USAGE_DIAGNOSTICS_SCREEN_NAME
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.diagnostics.ui.analytics.UsageAndDiagnosticsPreferenceKeys
-
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.telemetry.models.TrackedScreen
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.links.AppLinks
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.Loadable
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.ScreenHost
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.ScreenStateHandler
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.layouts.sections.InfoMessageSection
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.PreferenceItem
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.SwitchCardItem
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.shell.contentPadding
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.spacers.LargeVerticalSpacer
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.diagnostics.R
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.R as CoreUiR
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.modifiers.animatedItem
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.diagnostics.data.models.UsageAndDiagnosticsSettings
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.diagnostics.ui.analytics.USAGE_DIAGNOSTICS_SCREEN
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.diagnostics.ui.contracts.UsageAndDiagnosticsEvent
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.diagnostics.ui.states.UsageAndDiagnosticsUiState
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.diagnostics.ui.views.dialogs.FirebaseConsentDialog
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.diagnostics.ui.views.lists.UsageAndDiagnosticsList
 import org.koin.compose.viewmodel.koinViewModel
-
-
-private const val USAGE_DIAGNOSTICS_SCREEN_CLASS = "UsageAndDiagnosticsScreen"
-private val USAGE_DIAGNOSTICS_SCREEN: TrackedScreen =
-    TrackedScreen(name = USAGE_DIAGNOSTICS_SCREEN_NAME, className = USAGE_DIAGNOSTICS_SCREEN_CLASS)
-
-
 
 /**
  * Usage and diagnostics settings: the reporting switch, and a row that opens
@@ -112,9 +78,7 @@ internal fun UsageAndDiagnosticsScreenContent(
         modifier = modifier,
         contentPadding = contentPadding,
         onRetry = { onEvent(UsageAndDiagnosticsEvent.Load) },
-    ) { ready ->
-        val settings: UsageAndDiagnosticsSettings = ready.value
-
+    ) { (settings) ->
         UsageAndDiagnosticsList(
             settings = settings,
             onEvent = onEvent,
@@ -135,107 +99,19 @@ internal fun UsageAndDiagnosticsScreenContent(
                     privacyChoicesVisible = false
                 },
                 onConfirmSelection = { privacyChoicesVisible = false },
-                onAnalyticsConsentChanged = {
-                    onEvent(UsageAndDiagnosticsEvent.SetAnalyticsConsent(it))
+                onAnalyticsConsentChanged = { granted ->
+                    onEvent(UsageAndDiagnosticsEvent.SetAnalyticsConsent(granted = granted))
                 },
-                onAdStorageConsentChanged = {
-                    onEvent(UsageAndDiagnosticsEvent.SetAdStorageConsent(it))
+                onAdStorageConsentChanged = { granted ->
+                    onEvent(UsageAndDiagnosticsEvent.SetAdStorageConsent(granted = granted))
                 },
-                onAdUserDataConsentChanged = {
-                    onEvent(UsageAndDiagnosticsEvent.SetAdUserDataConsent(it))
+                onAdUserDataConsentChanged = { granted ->
+                    onEvent(UsageAndDiagnosticsEvent.SetAdUserDataConsent(granted = granted))
                 },
-                onAdPersonalizationConsentChanged = {
-                    onEvent(UsageAndDiagnosticsEvent.SetAdPersonalizationConsent(it))
+                onAdPersonalizationConsentChanged = { granted ->
+                    onEvent(UsageAndDiagnosticsEvent.SetAdPersonalizationConsent(granted = granted))
                 },
             )
         }
-    }
-}
-
-@Composable
-private fun UsageAndDiagnosticsList(
-    settings: UsageAndDiagnosticsSettings,
-    onEvent: (UsageAndDiagnosticsEvent) -> Unit,
-    onOpenPrivacyChoices: () -> Unit,
-    contentPadding: PaddingValues,
-) {
-    LazyColumn(
-        contentPadding = contentPadding,
-        modifier = Modifier.fillMaxSize(),
-        verticalArrangement = Arrangement.spacedBy(SizeConstants.LargeSize),
-    ) {
-        animatedItem {
-            LargeVerticalSpacer()
-        }
-
-        animatedItem {
-            SwitchCardItem(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = SizeConstants.LargeSize),
-                title = stringResource(id = R.string.usage_and_diagnostics),
-                switchState = rememberUpdatedState(newValue = settings.usageAndDiagnostics),
-                onSwitchToggled = { isChecked ->
-                    onEvent(UsageAndDiagnosticsEvent.SetUsageAndDiagnostics(isChecked))
-                },
-                ga4EventProvider = { isChecked ->
-                    diagnosticsToggleEvent(isChecked)
-                }
-            )
-        }
-
-        animatedItem {
-            Box(modifier = Modifier.padding(horizontal = SizeConstants.SmallSize)) {
-                PreferenceItem(
-                    title = stringResource(id = R.string.advanced_privacy_settings),
-                    summary = stringResource(id = R.string.summary_advanced_privacy_settings),
-                    onClick = onOpenPrivacyChoices,
-                    ga4Event = diagnosticsPrivacyChoicesEvent()
-                )
-            }
-        }
-
-        animatedItem {
-            InfoMessageSection(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = SizeConstants.MediumSize * 2),
-                message = stringResource(id = R.string.summary_usage_and_diagnostics),
-                learnMoreText = stringResource(id = CoreUiR.string.learn_more),
-                learnMoreUrl = AppLinks.PRIVACY_POLICY,
-            )
-        }
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-private fun UsageAndDiagnosticsScreenContentPreview() {
-    MaterialTheme {
-        UsageAndDiagnosticsScreenContent(
-            state = UsageAndDiagnosticsUiState(
-                settings = Loadable.Ready(
-                    UsageAndDiagnosticsSettings(
-                        usageAndDiagnostics = true,
-                        analyticsConsent = true,
-                        adStorageConsent = true,
-                        adUserDataConsent = false,
-                        adPersonalizationConsent = false,
-                    )
-                ),
-            ),
-            onEvent = {},
-        )
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-private fun UsageAndDiagnosticsScreenContentLoadingPreview() {
-    MaterialTheme {
-        UsageAndDiagnosticsScreenContent(
-            state = UsageAndDiagnosticsUiState(settings = Loadable.Loading),
-            onEvent = {},
-        )
     }
 }

@@ -15,12 +15,10 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.utils.extensions
+package com.mihaicristiancondrea.android.libs.apptoolkit.feature.diagnostics.ui.constants
 
-import kotlin.io.encoding.Base64
-
-/**
- * Decodes a base64 string into UTF-8 text, returning an empty string on failure.
- */
-fun String.toToken(): String =
-    runCatching { String(Base64.decode(this), Charsets.UTF_8) }.getOrDefault("")
+internal object DiagnosticsLinks {
+    const val GOOGLE_APP_CONSENT_GUIDE: String =
+        "https://developers.google.com/tag-platform/security/guides/app-consent"
+    const val GOOGLE_PRIVACY_SAFETY: String = "https://business.safety.google/privacy/"
+}

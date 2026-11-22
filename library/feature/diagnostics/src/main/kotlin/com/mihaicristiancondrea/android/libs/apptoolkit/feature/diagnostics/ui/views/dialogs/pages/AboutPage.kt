@@ -31,30 +31,31 @@ import androidx.compose.ui.text.font.FontWeight
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.diagnostics.R
 
+/** Displays the informational about tab inside [com.mihaicristiancondrea.android.libs.apptoolkit.feature.diagnostics.ui.views.dialogs.FirebaseConsentDialog]. */
 @Composable
 fun AboutPage() {
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .verticalScroll(rememberScrollState()),
-        verticalArrangement = Arrangement.spacedBy(SizeConstants.SmallSize),
+            .verticalScroll(state = rememberScrollState()),
+        verticalArrangement = Arrangement.spacedBy(space = SizeConstants.SmallSize),
     ) {
         Text(
-            text = stringResource(R.string.privacy_choices_about_title),
+            text = stringResource(id = R.string.privacy_choices_about_title),
             style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.SemiBold),
-            color = MaterialTheme.colorScheme.onSurface
+            color = MaterialTheme.colorScheme.onSurface,
         )
 
         Text(
-            text = stringResource(R.string.privacy_choices_about_body_1),
+            text = stringResource(id = R.string.privacy_choices_about_body_1),
             style = MaterialTheme.typography.bodyMedium,
-            color = MaterialTheme.colorScheme.onSurfaceVariant
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
         )
 
         Text(
-            text = stringResource(R.string.privacy_choices_about_body_2),
+            text = stringResource(id = R.string.privacy_choices_about_body_2),
             style = MaterialTheme.typography.bodyMedium,
-            color = MaterialTheme.colorScheme.onSurfaceVariant
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
         )
     }
 }

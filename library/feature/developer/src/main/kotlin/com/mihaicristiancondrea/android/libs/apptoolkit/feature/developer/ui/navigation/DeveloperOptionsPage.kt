@@ -22,16 +22,16 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.feature.developer.R
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.developer.ui.DeveloperOptionsScreen
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.PaneRole
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.ShellGraphBuilder
-import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.DeveloperOptionsRoute
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.DeveloperOptionsScreen
 
 /**
- * Registers the developer options page for [DeveloperOptionsRoute], unless the app registered its
- * own. The app decides where to offer it, typically a drawer entry in debug builds only.
+ * Registers the developer options page for [DeveloperOptionsScreen], unless the app registered its
+ * own. Advanced settings offers this destination once unlocked, and hosts may link to it elsewhere.
  */
-fun ShellGraphBuilder.developerOptionsPage() {
-    pageIfAbsent<DeveloperOptionsRoute>(
+fun ShellGraphBuilder.developerOptionsScreen() {
+    pageIfAbsent<DeveloperOptionsScreen>(
         paneRole = PaneRole.None,
-        title = { stringResource(R.string.shell_developer_options) },
+        title = { stringResource(id = R.string.shell_developer_options) },
     ) {
         DeveloperOptionsScreen()
     }

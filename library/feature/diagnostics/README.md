@@ -30,8 +30,8 @@ analytics and advertising consents behind it, on a settings page and on an onboa
 
 ## Depends on
 
-- `:library:core:common`, `:library:core:datastore`, `:library:core:ui` (which exposes navigation)
-  and `:library:integration:consent`.
+- `:library:core:common`, `:library:core:datastore`, `:library:core:ui`,
+  [`:library:navigation`](../../navigation/README.md) and `:library:integration:consent`.
 - No other feature module.
 
 ## Used by
@@ -75,8 +75,9 @@ flowchart TD
   places that show the dialog agree on what "everything" and "essentials" cover. Both turn reporting
   on, cancel single-choice writes still in flight, and store the answer with `setAll`.
 - **The onboarding page waits for the stored choices.** Its toggle shows off and its dialog stays
-  closed until they arrive. It draws its messages through the page frame's snackbar host, or its
-  own at the bottom of the page outside a frame.
+  closed until they arrive. A failed read replaces the consent controls with the failure message
+  and a retry action when retryable. It draws write-failure messages through the page frame's
+  snackbar host, or its own at the bottom of the page outside a frame.
 
 ## Public contracts
 

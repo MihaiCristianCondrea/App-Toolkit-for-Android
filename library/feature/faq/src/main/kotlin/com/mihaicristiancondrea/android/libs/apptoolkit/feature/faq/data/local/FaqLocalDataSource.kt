@@ -18,9 +18,9 @@
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.data.local
 
 import android.content.Context
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.R
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.data.models.FaqId
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.data.models.FaqItem
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.R
 
 /** Reads the FAQ question and answer pairs supplied through host string resources. */
 class FaqLocalDataSource(private val context: Context) {
@@ -35,10 +35,10 @@ class FaqLocalDataSource(private val context: Context) {
             R.string.question_6 to R.string.summary_preference_faq_6,
             R.string.question_7 to R.string.summary_preference_faq_7,
             R.string.question_8 to R.string.summary_preference_faq_8,
-            R.string.question_9 to R.string.summary_preference_faq_9
-        ).map { (questionRes, answerRes) ->
+            R.string.question_9 to R.string.summary_preference_faq_9,
+        ).mapIndexed { index, (questionRes, answerRes) ->
             FaqItem(
-                id = FaqId(value = "local:$questionRes"),
+                id = FaqId(value = "local:${index + 1}"),
                 question = context.getString(questionRes),
                 answer = context.getString(answerRes),
             )

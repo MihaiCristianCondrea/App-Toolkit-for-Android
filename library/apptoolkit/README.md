@@ -152,7 +152,7 @@ app's own; see the shell README's [App defaults](../shell/README.md#app-defaults
 | `licensesPage()` | licenses | `LicensesRoute` | None |
 | `helpScreen()` | faq | `HelpScreen` | None |
 | `supportPage()` | support | `SupportRoute` | None |
-| `developerOptionsPage()` | developer | `DeveloperOptionsRoute` | None |
+| `developerOptionsPage()` | developer | `DeveloperOptionsScreen` | None |
 | `startupPage()` | startup | `StartupRoute`, as a start screen | None |
 | `onboardingPages()` | onboarding | `OnboardingRoute`, as a start screen | None |
 

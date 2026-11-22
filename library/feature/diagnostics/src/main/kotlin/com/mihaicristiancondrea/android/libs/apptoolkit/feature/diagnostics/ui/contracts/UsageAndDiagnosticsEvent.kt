@@ -21,10 +21,20 @@ package com.mihaicristiancondrea.android.libs.apptoolkit.feature.diagnostics.ui.
 sealed interface UsageAndDiagnosticsEvent {
     /** Follows the stored choices, on start and on retry. */
     data object Load : UsageAndDiagnosticsEvent
+
+    /** Updates whether usage and diagnostics reporting is enabled. */
     data class SetUsageAndDiagnostics(val enabled: Boolean) : UsageAndDiagnosticsEvent
+
+    /** Updates analytics storage consent. */
     data class SetAnalyticsConsent(val granted: Boolean) : UsageAndDiagnosticsEvent
+
+    /** Updates ad storage consent. */
     data class SetAdStorageConsent(val granted: Boolean) : UsageAndDiagnosticsEvent
+
+    /** Updates ad user data consent. */
     data class SetAdUserDataConsent(val granted: Boolean) : UsageAndDiagnosticsEvent
+
+    /** Updates ad personalization consent. */
     data class SetAdPersonalizationConsent(val granted: Boolean) : UsageAndDiagnosticsEvent
 
     /**

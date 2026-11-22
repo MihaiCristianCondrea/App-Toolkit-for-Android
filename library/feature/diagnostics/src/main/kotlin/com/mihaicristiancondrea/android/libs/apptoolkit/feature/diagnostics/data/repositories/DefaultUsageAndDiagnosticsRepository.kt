@@ -26,9 +26,9 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.feature.diagnostics.data
 import com.mihaicristiancondrea.android.libs.apptoolkit.integration.consent.data.local.UsageAndDiagnosticsPreferencesDataSource
 import com.mihaicristiancondrea.android.libs.apptoolkit.integration.consent.data.models.ConsentSettings
 import com.mihaicristiancondrea.android.libs.apptoolkit.integration.consent.data.repositories.ConsentRepository
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onStart
 
@@ -120,15 +120,9 @@ class DefaultUsageAndDiagnosticsRepository(
     ) {
         diagnostics.logBreadcrumb(message = message, attributes = attributes)
         storageCall { write() }
-        val stored: UsageAndDiagnosticsSettings = observeSettings().first()
-        consentRepository.applyConsentSettings(
-            ConsentSettings(
-                usageAndDiagnostics = stored.usageAndDiagnostics,
-                analyticsConsent = stored.analyticsConsent,
-                adStorageConsent = stored.adStorageConsent,
-                adUserDataConsent = stored.adUserDataConsent,
-                adPersonalizationConsent = stored.adPersonalizationConsent,
-            )
-        )
+        val stored: ConsentSettings = storageCall {
+            dataSource.settings(default = !buildInfoRepository.isDebugBuild).first()
+        }
+        consentRepository.applyConsentSettings(settings = stored)
     }
 }

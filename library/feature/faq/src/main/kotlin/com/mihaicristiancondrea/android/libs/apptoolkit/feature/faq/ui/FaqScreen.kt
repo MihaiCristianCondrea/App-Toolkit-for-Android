@@ -83,7 +83,6 @@ fun FaqScreen() {
     val activity = LocalActivity.current
     val reviewHost: ReviewHost? = remember(key1 = activity) { activity?.let(block = ::ReviewHost) }
     var showFeedbackSheet: Boolean by rememberSaveable { mutableStateOf(value = false) }
-    var feedbackActionSelected: Boolean by remember { mutableStateOf(value = false) }
 
     LaunchedEffect(key1 = state.openStoreListing) {
         if (state.openStoreListing) {
@@ -102,7 +101,6 @@ fun FaqScreen() {
                 icon = ToolkitIcon.Vector(imageVector = Icons.Outlined.RateReview),
                 label = stringResource(id = R.string.feedback),
                 onClick = {
-                    feedbackActionSelected = false
                     telemetry.logEvent(event = faqActionEvent(actionName = FaqActionNames.FEEDBACK_SHEET_OPENED))
                     showFeedbackSheet = true
                 },
@@ -113,9 +111,7 @@ fun FaqScreen() {
             state = state,
             showFeedbackSheet = showFeedbackSheet,
             onFeedbackSheetDismissed = {
-                if (!feedbackActionSelected) {
-                    telemetry.logEvent(event = faqActionEvent(actionName = FaqActionNames.FEEDBACK_SHEET_DISMISSED))
-                }
+                telemetry.logEvent(event = faqActionEvent(actionName = FaqActionNames.FEEDBACK_SHEET_DISMISSED))
                 showFeedbackSheet = false
             },
             onRetry = {
@@ -123,7 +119,7 @@ fun FaqScreen() {
                 viewModel.onEvent(event = FaqEvent.Load)
             },
             onRequestFeature = {
-                feedbackActionSelected = true
+                showFeedbackSheet = false
                 telemetry.logEvent(
                     event = faqSelectContentEvent(
                         contentType = FaqContentTypes.FEEDBACK_OPTION,
@@ -133,7 +129,7 @@ fun FaqScreen() {
                 context.openUrl(url = AppLinks.FEATURE_REQUESTS_FORM)
             },
             onLeaveReview = {
-                feedbackActionSelected = true
+                showFeedbackSheet = false
                 telemetry.logEvent(
                     event = faqSelectContentEvent(
                         contentType = FaqContentTypes.FEEDBACK_OPTION,

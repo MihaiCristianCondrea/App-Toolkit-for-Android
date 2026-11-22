@@ -47,7 +47,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.feature.advanced.ui.cont
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.advanced.ui.states.AdvancedSettingsUiState
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.advanced.ui.states.CacheClearStatus
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.LocalShellNavigator
-import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.DeveloperOptionsRoute
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.DeveloperOptionsScreen
 import org.koin.compose.getKoin
 import org.koin.compose.viewmodel.koinViewModel
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.R as CoreUiR
@@ -80,7 +80,7 @@ fun AdvancedSettingsScreen() {
             state = state,
             onEvent = viewModel::onEvent,
             onReportBug = { showIssueReporter = true },
-            onOpenDeveloperOptions = { navigator.navigate(key = DeveloperOptionsRoute) },
+            onOpenDeveloperOptions = { navigator.navigate(key = DeveloperOptionsScreen) },
             contentPadding = contentPadding(),
             showBugReport = issueReporterSheet != null,
         )

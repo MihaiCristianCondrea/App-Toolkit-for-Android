@@ -30,7 +30,7 @@ it in the activity; this module has no chrome of its own.
 - `AppToolkitNavKey`, one `@Serializable` key per Toolkit page: `SettingsRoute`, `HelpScreen`, `SupportRoute`, `AdsSettingsRoute`, `PermissionsRoute`,
   `LicensesRoute`, `LibraryExtrasRoute`, `AboutRoute`, `ThemeSettingsRoute`,
   `DisplaySettingsRoute`, `PrivacySettingsRoute`, `AdvancedSettingsRoute`,
-  `DiagnosticsSettingsRoute`, `DeveloperOptionsRoute`, `StartupRoute` and `OnboardingRoute`.
+  `DiagnosticsSettingsRoute`, `DeveloperOptionsScreen`, `StartupRoute` and `OnboardingRoute`.
 - The strings the graph's built-in entries use: settings, support us, navigate back and the pane
   separator's description.
 

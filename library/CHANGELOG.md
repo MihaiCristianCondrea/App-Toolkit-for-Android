@@ -623,7 +623,7 @@ every removed API to its replacement.
   offers. The startup page row shows only with more than one; while it is null, as before, with more
   than one tab.
 - Added `AboutRoute`, `ThemeSettingsRoute`, `DisplaySettingsRoute`, `PrivacySettingsRoute`,
-  `AdvancedSettingsRoute`, `DiagnosticsSettingsRoute`, `DeveloperOptionsRoute`, `StartupRoute` and
+  `AdvancedSettingsRoute`, `DiagnosticsSettingsRoute`, `DeveloperOptionsScreen`, `StartupRoute` and
   `OnboardingRoute`, one key per Toolkit page.
 - Added `FrameScrollTint`, `FrameTint`, `FollowScrollWithFrameTint` and
   `BesideNavigation.scrollTint` to `:library:navigation`, and `TopAppBarScrollBehavior.frameTint` to

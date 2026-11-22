@@ -17,7 +17,6 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.ui.views.dropdowns
 
-import androidx.compose.runtime.setValue
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.MoreVert
@@ -28,23 +27,19 @@ import androidx.compose.material.icons.outlined.PrivacyTip
 import androidx.compose.material.icons.outlined.Science
 import androidx.compose.material.icons.outlined.Shop
 import androidx.compose.material3.DropdownMenu
-import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.icons.ToolkitIcon
-import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.LocalShellNavigator
-import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.LicensesRoute
-import org.koin.compose.koinInject
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.R as CommonR
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.links.AppLinks
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.context.openUrl
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.icons.ToolkitIcon
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.AppVersionInfo
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.analytics.LocalTelemetry
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.AnimatedIconButtonDirection
@@ -53,6 +48,11 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.dropdown.C
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.R
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.ui.analytics.FaqActionNames
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.ui.analytics.faqActionEvent
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.LocalShellNavigator
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.LicensesRoute
+import org.koin.compose.koinInject
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.R as CommonR
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.R as CoreUiR
 
 /**
  * Displays the help destination's app bar actions with saveable version dialog state.
@@ -76,7 +76,6 @@ fun FaqMenuActions() {
  * @param showDialog Whether the version dialog is currently shown.
  * @param onShowDialogChange Requests a change to the version dialog's visibility.
  */
-@OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
 fun FaqScreenMenuActions(
     config: AppVersionInfo,
@@ -90,21 +89,21 @@ fun FaqScreenMenuActions(
 
     val rotation by animateFloatAsState(
         targetValue = if (showMenu.value) 90f else 0f,
-        label = "FaqScreenMenuRotation"
+        label = "FaqScreenMenuRotation",
     )
 
     AnimatedIconButtonDirection(
         modifier = Modifier.graphicsLayer { rotationZ = rotation },
         fromRight = true,
-        contentDescription = stringResource(id = com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.R.string.content_description_more_options),
+        contentDescription = stringResource(id = CoreUiR.string.content_description_more_options),
         icon = ToolkitIcon.Vector(imageVector = Icons.Default.MoreVert),
-        onClick = { showMenu.value = true }
+        onClick = { showMenu.value = true },
     )
 
     DropdownMenu(
         expanded = showMenu.value,
         shape = MaterialTheme.shapes.largeIncreased,
-        onDismissRequest = { showMenu.value = false }
+        onDismissRequest = { showMenu.value = false },
     ) {
         fun closeMenu() {
             showMenu.value = false

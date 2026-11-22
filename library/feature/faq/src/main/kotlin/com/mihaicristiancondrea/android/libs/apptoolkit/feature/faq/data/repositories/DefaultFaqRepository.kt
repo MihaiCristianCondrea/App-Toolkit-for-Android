@@ -17,7 +17,6 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.data.repositories
 
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.data.transformers.normalizeFaqItems
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.telemetry.DiagnosticsReporter
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.result.runSuspendCatching
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.network.data.remote.networkCall
@@ -26,6 +25,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.data.models.
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.data.remote.FaqRemoteDataSource
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.data.remote.mappers.toFaqItems
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.data.remote.models.FaqQuestionDto
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.data.transformers.normalizeFaqItems
 
 /**
  * Resolves the host product from the remote catalog and normalizes both sources before selection.
@@ -60,16 +60,38 @@ class DefaultFaqRepository(
         return emptyList()
     }
 
-    /** Reads the host product's question sources and keeps results from sources that succeed. */
+    /**
+     * Reads the host product's question sources and keeps results from sources that succeed.
+     * Propagates the first source failure when every configured source fails.
+     */
     private suspend fun fetchRemoteFaqItems(): List<FaqItem> {
         val catalog = networkCall { remoteDataSource.fetchCatalog(url = catalogUrl) }
         val product = catalog.products.firstOrNull { it.productId == productId || it.key == productId }
             ?: return emptyList()
 
-        val questions: List<FaqQuestionDto> = product.questionSources.flatMap { source ->
-            runSuspendCatching {
+        val questions = mutableListOf<FaqQuestionDto>()
+        var succeededSourceCount = 0
+        var firstFailure: Throwable? = null
+
+        for (source in product.questionSources) {
+            val result = runSuspendCatching {
                 networkCall { remoteDataSource.fetchQuestions(url = source.url) }
-            }.getOrDefault(defaultValue = emptyList())
+            }
+            result.fold(
+                onSuccess = { fetched ->
+                    succeededSourceCount += 1
+                    questions.addAll(elements = fetched)
+                },
+                onFailure = { failure ->
+                    if (firstFailure == null) {
+                        firstFailure = failure
+                    }
+                },
+            )
+        }
+
+        if (succeededSourceCount == 0 && firstFailure != null) {
+            throw firstFailure
         }
 
         return questions.toFaqItems()
