@@ -38,9 +38,9 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.feature.support.ui.contr
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.support.ui.mappers.toDonationOptions
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.support.ui.models.DonationOption
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.support.ui.states.SupportUiState
+import com.mihaicristiancondrea.android.libs.apptoolkit.integration.billing.data.extensions.isValidForBilling
 import com.mihaicristiancondrea.android.libs.apptoolkit.integration.billing.data.models.PurchaseResult
 import com.mihaicristiancondrea.android.libs.apptoolkit.integration.billing.data.repositories.BillingRepository
-import com.mihaicristiancondrea.android.libs.apptoolkit.integration.billing.utils.extensions.isValidForBilling
 import java.util.concurrent.atomic.AtomicReference
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay

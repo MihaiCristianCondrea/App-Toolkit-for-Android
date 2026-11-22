@@ -15,12 +15,12 @@ Wraps Google Play Billing behind a reusable repository and Koin module.
 ## Does not own
 
 - Donation product IDs or support-screen behavior, owned by `:library:feature:support`.
-- Generic purchase models/contracts, owned by `:library:core:common`.
+- Narrow teardown contract `BillingCore`, owned by `:library:core:common`.
 
 ## Depends on
 
-- [`:library:core:common`](../../core/common/README.md) for `BillingCore`, purchase results, and
-  shared lifecycle helpers.
+- [`:library:core:common`](../../core/common/README.md) for `BillingCore`, `DispatcherProvider`,
+  and `DiagnosticsReporter`.
   `BillingRepository` extends `BillingCore`, so the core manager can close billing without seeing
   the purchase surface.
 
@@ -66,22 +66,28 @@ flowchart TD
   type of each product it launches, and past-purchase recovery queries one-time products and
   subscriptions separately. Completed unsettled purchases are recovered on setup/reconnect and
   settled before success is emitted.
-- Product details replay the latest query result; purchase outcomes do not replay because they are
-  one-off events.
+- Product details replay the latest query result; purchase outcomes are buffered one-off events
+  that do not replay or park coroutines when no UI is collecting.
+- `launchInAppDonationFlow` and `launchSubscriptionFlow` validate `Activity.isValidForBilling()`
+  before launching and again on `dispatchers.main` after a reconnect (holding the host `Activity`
+  via `WeakReference`), resolve Play Billing 8/9 offer tokens from both `oneTimePurchaseOfferDetails`
+  and `oneTimePurchaseOfferDetailsList`, and reject missing subscription offer tokens before calling
+  the SDK.
 - `BillingRepository` extends the narrow `BillingCore` teardown contract so common lifecycle code
-  can close billing without depending on Play Billing APIs.
+  can close billing without depending on Play Billing APIs. `billingModule` also registers
+  `onClose { it?.close() }` so Koin teardown closes the client and scope cleanly.
 
 ## Public contracts
 
-- `BillingRepository` and `BillingModule`. Consumers inject the interface: the implementation is a
-  process-wide singleton behind a private constructor, which a feature module can neither substitute
-  nor fake in a test.
+- `BillingRepository`, `PurchaseResult`, `Activity.isValidForBilling()`, and `billingModule`.
+  Consumers inject `BillingRepository`: the implementation is a process-wide singleton behind an
+  internal constructor and `DefaultBillingRepository.getInstance(...)`.
 
 ## Internal implementations
 
-- `DefaultBillingRepository`: BillingClient callbacks, connection management, product-detail
-  replay, retry policy, past-purchase queries, donation consumption, and subscription
-  acknowledgement.
+- `DefaultBillingRepository`: BillingClient callbacks, mutex-guarded connection retries via
+  `awaitBillingCallback`, product-detail replay, retry policy, past-purchase queries, donation
+  consumption, and subscription acknowledgement.
 
 ## Current risks
 

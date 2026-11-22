@@ -15,22 +15,20 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.mihaicristiancondrea.android.libs.apptoolkit.integration.billing.utils.extensions
+package com.mihaicristiancondrea.android.libs.apptoolkit.integration.billing.data.extensions
 
 import android.app.Activity
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
 
 /**
- * Checks if the current Activity is in a valid state to perform billing operations.
+ * Returns `true` when this [Activity] is in a safe state to start a Play Billing UI flow.
  *
- * This typically verifies that the Activity is not finishing or destroyed to ensure
- * that UI interactions related to the billing flow can be safely initiated.
- *
- * @return `true` if the Activity is valid for billing operations, `false` otherwise.
+ * Rejects activities that are finishing, destroyed, or undergoing a configuration change, and
+ * requires [Lifecycle.State.RESUMED] when the activity implements [LifecycleOwner].
  */
 fun Activity.isValidForBilling(): Boolean {
-    if (isFinishing || isDestroyed) return false
-    val lifecycleOwner = this as? LifecycleOwner ?: return true
+    if (isFinishing || isDestroyed || isChangingConfigurations) return false
+    val lifecycleOwner: LifecycleOwner = this as? LifecycleOwner ?: return true
     return lifecycleOwner.lifecycle.currentState.isAtLeast(Lifecycle.State.RESUMED)
 }

@@ -57,6 +57,15 @@
   `AppOpenAd.show`, or `observeReduceAds()` throws, and notifies completion listeners whenever an
   ad is skipped or unavailable. `DefaultAdsPreferencesDataSource` logs breadcrumbs on transient IO
   retries and records non-fatal diagnostics on unexpected read failures.
+- Billing rejects activities undergoing configuration changes in `Activity.isValidForBilling()`
+  and enforces host activity validation inside `DefaultBillingRepository` before launching and after
+  reconnecting (using a `WeakReference` on the main dispatcher). `DefaultBillingRepository` also
+  resolves Play Billing 8/9 one-time offer tokens from `oneTimePurchaseOfferDetailsList`, rejects
+  missing subscription offer tokens upfront, guards empty `queryProductDetails` lists, uses
+  `awaitBillingCallback` with a mutex in `retryBillingConnection`, buffers `purchaseResult` without
+  parking emissions when no collector is active, stops retrying non-transient `ITEM_ALREADY_OWNED`
+  / `ITEM_NOT_OWNED` responses, emits a failure when retryable purchase updates settle nothing, and
+  registers `onClose` cleanup in `billingModule`.
 
 ### Changed
 
@@ -98,6 +107,8 @@
   an optional `diagnostics: DiagnosticsReporter? = null` parameter to `AppOpenAdController` and
   `DefaultAdsPreferencesDataSource`, and removed the unused `:library:core:network` dependency from
   `:library:integration:ads`.
+- Moved `Activity.isValidForBilling()` from `integration.billing.utils.extensions` to
+  `integration.billing.data.extensions` (`ActivityBillingExtensions.kt`).
 
 ### Removed
 
