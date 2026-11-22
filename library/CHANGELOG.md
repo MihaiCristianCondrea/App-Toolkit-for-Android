@@ -31,6 +31,10 @@
 - Permissions uses locale-independent list keys so live locale changes keep scroll position, omits
   empty category header spacers, forwards host-supplied row icons in `PermissionsContent`, and
   renders rows without an action as non-clickable descriptive cards.
+- Settings renders non-blank `SettingsCategory.title` headings in `SettingsList`, treats configs
+  whose categories have no preferences as `Loadable.Empty`, refreshes already-loaded settings in
+  place without flashing `Loadable.Loading`, and normalizes settings search case folding across all
+  locales and whitespace separators.
 
 ### Changed
 
@@ -52,6 +56,9 @@
 - `OnboardingPage` exposes `key` and `isEnabled` directly on the sealed base class,
   `FinishOnboardingPage` accepts an optional `isSelected` parameter, and `OnboardingFooter` accepts
   an optional `enabled` parameter.
+- `SettingsList` and `SettingsDetailPlaceholder` accept an optional `modifier: Modifier = Modifier`
+  parameter, and `:library:feature:settings` removes unused `:library:core:datastore` and
+  `:library:core:network` dependencies.
 
 ### Removed
 

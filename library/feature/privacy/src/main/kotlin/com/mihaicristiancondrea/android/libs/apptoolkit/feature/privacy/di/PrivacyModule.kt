@@ -18,15 +18,16 @@
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.privacy.di
 
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.settings.SettingsSearchProvider
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.privacy.ui.search.privacySettingsSearch
-import org.koin.core.qualifier.named
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.privacy.ui.PrivacyViewModel
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.privacy.ui.search.privacySettingsSearch
 import org.koin.core.module.Module
 import org.koin.core.module.dsl.viewModel
+import org.koin.core.qualifier.named
 import org.koin.dsl.module
 
+/** Koin module binding [PrivacyViewModel] and the privacy settings search provider. */
 val privacyModule: Module = module {
-    single<SettingsSearchProvider>(named("privacy")) { privacySettingsSearch }
+    single<SettingsSearchProvider>(qualifier = named(name = "privacy")) { privacySettingsSearch }
     viewModel {
         PrivacyViewModel(
             provider = get(),

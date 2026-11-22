@@ -32,10 +32,18 @@ internal val privacySettingsSearch = settingsSearchProvider(
     section = R.string.security_and_privacy,
     destination = PrivacySettingsRoute,
 ) {
-    preference(R.string.permissions, summary = R.string.summary_preference_settings_permissions, destination = PermissionsRoute)
-    preference(R.string.ads, summary = R.string.summary_preference_settings_ads, destination = AdsSettingsRoute)
     preference(
-        R.string.usage_and_diagnostics,
+        title = R.string.permissions,
+        summary = R.string.summary_preference_settings_permissions,
+        destination = PermissionsRoute,
+    )
+    preference(
+        title = R.string.ads,
+        summary = R.string.summary_preference_settings_ads,
+        destination = AdsSettingsRoute,
+    )
+    preference(
+        title = R.string.usage_and_diagnostics,
         summary = R.string.summary_preference_settings_usage_and_diagnostics,
         destination = DiagnosticsSettingsRoute,
     )

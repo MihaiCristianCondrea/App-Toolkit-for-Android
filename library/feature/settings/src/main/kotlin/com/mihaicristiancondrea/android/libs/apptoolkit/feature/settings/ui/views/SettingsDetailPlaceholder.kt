@@ -20,6 +20,7 @@ package com.mihaicristiancondrea.android.libs.apptoolkit.feature.settings.ui.vie
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -42,7 +43,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.consta
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.icons.ToolkitIcon
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.GeneralButton
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.GeneralButtonStyle
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.shell.LocalContentPadding
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.shell.contentPadding
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.spacers.LargeVerticalSpacer
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.spacers.SmallVerticalSpacer
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.settings.R
@@ -55,14 +56,19 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.R as CommonR
  * illustration, the app's name, a hint, and a way to Help and feedback.
  */
 @Composable
-fun SettingsDetailPlaceholder() {
+fun SettingsDetailPlaceholder(
+    modifier: Modifier = Modifier,
+) {
     val navigator = LocalShellNavigator.current
     Box(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxSize()
-            .padding(LocalContentPadding.current)
-            .verticalScroll(rememberScrollState())
-            .padding(SizeConstants.LargeSize),
+            .verticalScroll(state = rememberScrollState())
+            .padding(
+                paddingValues = contentPadding(
+                    extra = PaddingValues(all = SizeConstants.LargeSize),
+                ),
+            ),
         contentAlignment = Alignment.Center,
     ) {
         Card(
@@ -74,19 +80,19 @@ fun SettingsDetailPlaceholder() {
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
                 Image(
-                    painter = painterResource(R.drawable.il_settings),
+                    painter = painterResource(id = R.drawable.il_settings),
                     contentDescription = null,
-                    modifier = Modifier.size(SizeConstants.TwoHundredFiftyEightSize),
+                    modifier = Modifier.size(size = SizeConstants.TwoHundredFiftyEightSize),
                 )
                 LargeVerticalSpacer()
                 Text(
-                    text = stringResource(CommonR.string.app_name),
+                    text = stringResource(id = CommonR.string.app_name),
                     style = MaterialTheme.typography.titleMedium,
                     textAlign = TextAlign.Center,
                 )
                 SmallVerticalSpacer()
                 Text(
-                    text = stringResource(R.string.settings_placeholder_description),
+                    text = stringResource(id = R.string.settings_placeholder_description),
                     style = MaterialTheme.typography.bodyMedium,
                     textAlign = TextAlign.Center,
                 )
@@ -99,10 +105,10 @@ fun SettingsDetailPlaceholder() {
                         end = SizeConstants.MediumSize * 2,
                         bottom = SizeConstants.MediumSize * 2,
                     )
-                    .align(Alignment.Start),
-                onClick = { navigator.navigate(HelpScreen) },
-                icon = ToolkitIcon.Vector(Icons.AutoMirrored.Outlined.ContactSupport),
-                label = stringResource(R.string.get_help),
+                    .align(alignment = Alignment.Start),
+                onClick = { navigator.navigate(key = HelpScreen) },
+                icon = ToolkitIcon.Vector(imageVector = Icons.AutoMirrored.Outlined.ContactSupport),
+                label = stringResource(id = R.string.get_help),
             )
         }
     }

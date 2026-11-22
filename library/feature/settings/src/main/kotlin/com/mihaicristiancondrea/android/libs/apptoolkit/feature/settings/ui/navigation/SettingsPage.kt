@@ -35,7 +35,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.Settin
 fun ShellGraphBuilder.settingsPage() {
     pageIfAbsent<SettingsRoute>(
         paneRole = PaneRole.List,
-        title = { stringResource(R.string.settings) },
+        title = { stringResource(id = R.string.settings) },
         actions = { SettingsMenuActions() },
         placeholder = { SettingsDetailPlaceholder() },
     ) {

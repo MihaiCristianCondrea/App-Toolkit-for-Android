@@ -18,31 +18,35 @@
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.settings.ui.analytics
 
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.telemetry.models.AnalyticsValue
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.telemetry.models.TrackedScreen
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.analytics.SettingsAnalytics
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.analytics.Ga4EventData
 
-internal const val SETTINGS_SCREEN_NAME = "Settings"
+internal val SETTINGS_SCREEN: TrackedScreen = TrackedScreen(
+    name = "Settings",
+    className = "SettingsScreen",
+)
+
+private const val UNKNOWN_PREFERENCE_KEY: String = "unknown"
 
 internal fun settingsActionGa4Event(actionName: String): Ga4EventData {
     return Ga4EventData(
         name = SettingsAnalytics.Events.ACTION,
         params = mapOf(
-            SettingsAnalytics.Params.SCREEN to AnalyticsValue.Str(SETTINGS_SCREEN_NAME),
-            SettingsAnalytics.Params.ACTION_NAME to AnalyticsValue.Str(actionName),
+            SettingsAnalytics.Params.SCREEN to AnalyticsValue.Str(value = SETTINGS_SCREEN.name),
+            SettingsAnalytics.Params.ACTION_NAME to AnalyticsValue.Str(value = actionName),
         ),
     )
 }
 
-internal const val UNKNOWN_PREFERENCE_KEY = "unknown"
-
-internal fun settingsPreferenceTapEvent(preferenceKey: String?): Ga4EventData = Ga4EventData(
-    name = SettingsAnalytics.Events.PREFERENCE_VIEW,
-    params = mapOf(
-        SettingsAnalytics.Params.SCREEN to AnalyticsValue.Str(
-            SETTINGS_SCREEN_NAME
+internal fun settingsPreferenceTapEvent(preferenceKey: String?): Ga4EventData {
+    return Ga4EventData(
+        name = SettingsAnalytics.Events.PREFERENCE_VIEW,
+        params = mapOf(
+            SettingsAnalytics.Params.SCREEN to AnalyticsValue.Str(value = SETTINGS_SCREEN.name),
+            SettingsAnalytics.Params.PREFERENCE_KEY to AnalyticsValue.Str(
+                value = preferenceKey ?: UNKNOWN_PREFERENCE_KEY,
+            ),
         ),
-        SettingsAnalytics.Params.PREFERENCE_KEY to AnalyticsValue.Str(
-            preferenceKey ?: UNKNOWN_PREFERENCE_KEY
-        ),
-    ),
-)
+    )
+}

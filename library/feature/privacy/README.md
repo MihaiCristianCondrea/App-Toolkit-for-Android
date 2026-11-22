@@ -79,12 +79,14 @@ flowchart TD
 ## Public contracts
 
 - `PrivacySettingsProvider`, `PrivacyScreen`, `PrivacyViewModel`, `PrivacyUiState`,
-  `PrivacyItem`, `PrivacyItemAction`, `PrivacyEvent`, `privacySettingsPage()` and `privacyModule`.
-  `PrivacyScreenContent` is internal.
+  `PrivacyItem`, `PrivacyItemKey`, `PrivacyItemAction`, `PrivacyEvent`, `privacySettingsPage()`
+  and `privacyModule`. `PrivacyScreenContent` is internal.
 
 ## Internal implementations
 
-- Privacy item assembly with grouped card position calculation, and preference tap analytics.
+- Privacy item assembly with grouped card position calculation (`PrivacyMappers`), operation
+  identifiers (`PrivacyOperationNames`), preference tap analytics (`PrivacyAnalytics`), and
+  Compose previews (`PrivacyScreenPreview`).
 
 ## Current risks
 

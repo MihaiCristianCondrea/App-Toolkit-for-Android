@@ -17,16 +17,13 @@
 
 package com.mihaicristiancondrea.android.apps.apptoolkit.feature.settings.ui.providers
 
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.settings.utils.constants.SettingsConstants
-
+import android.content.Context
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.settings.ui.constants.SettingsConstants
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.context.openAppNotificationSettings
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.AboutRoute
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.AdvancedSettingsRoute
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.DisplaySettingsRoute
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.PrivacySettingsRoute
-import kotlin.test.assertTrue
-import kotlin.test.assertFalse
-import android.content.Context
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.context.openAppNotificationSettings
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.mockkStatic
@@ -36,7 +33,9 @@ import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertDoesNotThrow
 import kotlin.test.assertEquals
+import kotlin.test.assertFalse
 import kotlin.test.assertNull
+import kotlin.test.assertTrue
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.R as CoreUiR
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.settings.R as SettingsR
 

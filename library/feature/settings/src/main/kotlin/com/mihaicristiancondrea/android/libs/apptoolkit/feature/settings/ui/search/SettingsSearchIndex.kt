@@ -22,7 +22,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Stable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.platform.LocalConfiguration
-import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalResources
 import androidx.navigation3.runtime.NavKey
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.settings.SettingsConfig
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.settings.SettingsPreference
@@ -30,8 +30,9 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.settings.
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.settings.SettingsSearchProvider
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.LocalShellGraph
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.LocalShellCapabilities
-import java.text.Normalizer
 import org.koin.compose.getKoin
+import java.text.Normalizer
+import java.util.Locale
 
 /**
  * Everything the settings search looks through, resolved to text once: the host's own rows, and
@@ -43,7 +44,7 @@ import org.koin.compose.getKoin
 @Stable
 internal class SettingsSearchIndex(buildRows: () -> List<Row>) {
 
-    private val rows: List<Row> by lazy(LazyThreadSafetyMode.NONE, buildRows)
+    private val rows: List<Row> by lazy(mode = LazyThreadSafetyMode.NONE, initializer = buildRows)
 
     /** One searchable row, drawn as [preference], found by [text]. */
     class Row(val preference: SettingsPreference, val text: String)
@@ -53,7 +54,7 @@ internal class SettingsSearchIndex(buildRows: () -> List<Row>) {
      * accents, in the order the pages list them.
      */
     fun matching(query: String): List<SettingsPreference> {
-        val words = query.normalizedForSearch().split(' ').filter { it.isNotEmpty() }
+        val words = query.normalizedForSearch().split(regex = Whitespace).filter { it.isNotEmpty() }
         if (words.isEmpty()) return emptyList()
         return rows.filter { row -> words.all { it in row.text } }.map { it.preference }
     }
@@ -69,14 +70,14 @@ internal fun rememberSettingsSearchIndex(config: SettingsConfig): SettingsSearch
     val graph = LocalShellGraph.current
     val capabilities = LocalShellCapabilities.current
     val koin = getKoin()
-    val resources = LocalContext.current.resources
+    val resources = LocalResources.current
     val configuration = LocalConfiguration.current
-    return remember(config, graph, capabilities, koin, configuration) {
+    return remember(config, graph, capabilities, koin, resources, configuration) {
         SettingsSearchIndex {
             searchRows(
                 config = config,
                 providers = koin.getAll<SettingsSearchProvider>(),
-                context = SettingsSearchContext(graph, capabilities),
+                context = SettingsSearchContext(graph = graph, capabilities = capabilities),
                 string = resources::getString,
                 onUnregistered = ::logUnregistered,
             )
@@ -90,7 +91,8 @@ internal fun rememberSettingsSearchIndex(config: SettingsConfig): SettingsSearch
  * Every provider lists its rows for [context]. No result navigates to a destination the context's
  * graph does not register. A provider's row for one is left out, and so is a host row that only
  * opens one. A host row with an action keeps it, since the action may handle the click, but loses
- * the unregistered fallback in its search result; the list itself is unchanged. Each such row is reported to [onUnregistered], with whether it was kept.
+ * the unregistered fallback in its search result; the list itself is unchanged. Each such row is
+ * reported to [onUnregistered], with whether it was kept.
  *
  * Provider rows with the same title and destination appear once, the first provider's.
  */
@@ -105,20 +107,28 @@ internal fun searchRows(
     val hostRows = config.categories.flatMap { it.preferences }.mapNotNull { preference ->
         val destination = preference.destination
         val searchable = when {
-            destination == null || graph.contains(destination) -> preference
+            destination == null || graph.contains(key = destination) -> preference
             preference.action != null -> preference.copy(destination = null)
             else -> null
         }
         if (destination != null && searchable !== preference) {
             onUnregistered(destination, preference.title, searchable != null)
         }
-        searchable?.let { SettingsSearchIndex.Row(it, searchText(it.title, it.summary)) }
+        searchable?.let { row ->
+            SettingsSearchIndex.Row(
+                preference = row,
+                text = searchText(row.title, row.summary),
+            )
+        }
     }
     val pageRows = providers
-        .flatMap { it.entries(context) }
+        .flatMap { it.entries(context = context) }
         .filter { entry ->
-            graph.contains(entry.destination).also { registered ->
-                if (!registered) onUnregistered(entry.destination, string(entry.title), false)
+            graph.contains(key = entry.destination).also { registered ->
+                if (!registered) {
+                    val title = runCatching { string(entry.title) }.getOrNull()
+                    onUnregistered(entry.destination, title, false)
+                }
             }
         }
         .distinctBy { it.title to it.destination }
@@ -141,16 +151,26 @@ internal fun searchRows(
 
 private fun logUnregistered(destination: NavKey, title: String?, keptForAction: Boolean) {
     val outcome = if (keptForAction) "kept for its action, without the fallback" else "left out"
-    Log.w(LOG_TAG, "Settings search result \"$title\" opens ${destination::class.qualifiedName}, which the graph does not register: $outcome.")
+    Log.w(
+        LOG_TAG,
+        "Settings search result \"$title\" opens ${destination::class.qualifiedName}, which the graph does not register: $outcome.",
+    )
 }
 
-private const val LOG_TAG = "SettingsSearch"
+private const val LOG_TAG: String = "SettingsSearch"
 
 private fun searchText(vararg parts: String?): String =
-    parts.filterNotNull().joinToString(" ").normalizedForSearch()
+    parts.filterNotNull().joinToString(separator = " ").normalizedForSearch()
 
-/** Lower case, without accents, so "ecran" finds "Écran". */
+/**
+ * Lower case, without accents, so "ecran" finds "Écran". Uses [Locale.ROOT] after NFD
+ * decomposition so uppercase `I` folds consistently across locales such as Turkish.
+ */
 private fun String.normalizedForSearch(): String =
-    Normalizer.normalize(lowercase(), Normalizer.Form.NFD).replace(CombiningMarks, "").trim()
+    Normalizer.normalize(this, Normalizer.Form.NFD)
+        .replace(regex = CombiningMarks, replacement = "")
+        .lowercase(locale = Locale.ROOT)
+        .trim()
 
-private val CombiningMarks = Regex("\\p{Mn}+")
+private val CombiningMarks = Regex(pattern = "\\p{Mn}+")
+private val Whitespace = Regex(pattern = "\\s+")

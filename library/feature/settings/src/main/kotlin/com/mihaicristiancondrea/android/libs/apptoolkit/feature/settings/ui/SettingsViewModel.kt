@@ -23,6 +23,8 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.Loadable
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.LoggedScreenViewModel
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.toFailed
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.settings.R
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.settings.ui.analytics.SETTINGS_SCREEN
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.settings.ui.constants.SettingsOperationNames
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.settings.ui.contracts.SettingsEvent
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.settings.ui.providers.SettingsProvider
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.settings.ui.states.SettingsUiState
@@ -32,8 +34,9 @@ import kotlinx.coroutines.Job
  * Loads the host's settings for the settings list.
  *
  * The [SettingsProvider] builds its config from resources, which is main-safe, so it needs no
- * dispatcher. A config with no category is [Loadable.Empty]; a provider that throws is
- * [Loadable.Failed], reported to telemetry.
+ * dispatcher. A config with no categories or no preferences is [Loadable.Empty]; a provider that
+ * throws is [Loadable.Failed], reported to telemetry. Reloading when already [Loadable.Ready]
+ * refreshes rows in place without flashing [Loadable.Loading].
  */
 class SettingsViewModel(
     private val settingsProvider: SettingsProvider,
@@ -41,40 +44,37 @@ class SettingsViewModel(
 ) : LoggedScreenViewModel<SettingsUiState, SettingsEvent>(
     initialState = SettingsUiState(),
     telemetryRepository = telemetryRepository,
-    screenName = "Settings",
+    screenName = SETTINGS_SCREEN.name,
     viewModelName = "SettingsViewModel",
 ) {
     private var loadJob: Job? = null
 
     override fun handleEvent(event: SettingsEvent) {
         when (event) {
-            SettingsEvent.Load -> loadSettings()
+            is SettingsEvent.Load -> loadSettings()
         }
     }
 
+    /** Loads or refreshes the settings config from [settingsProvider]. */
     private fun loadSettings() {
         loadJob = loadJob.restart {
             launchReport(
-                action = Actions.LOAD_SETTINGS,
+                action = SettingsOperationNames.LOAD_SETTINGS,
                 onError = { error -> setState { copy(config = error.toFailed()) } },
             ) {
-                setState { copy(config = Loadable.Loading) }
+                if (state.value.config !is Loadable.Ready) {
+                    setState { copy(config = Loadable.Loading) }
+                }
                 val loaded = settingsProvider.provideSettingsConfig()
-                val content = if (loaded.categories.isEmpty()) {
-                    Loadable.Empty(NoSettingsText)
+                val content = if (loaded.categories.none { it.preferences.isNotEmpty() }) {
+                    Loadable.Empty(
+                        message = UiText.StringResource(resourceId = R.string.error_no_settings_found),
+                    )
                 } else {
-                    Loadable.Ready(loaded)
+                    Loadable.Ready(value = loaded)
                 }
                 setState { copy(config = content) }
             }
         }
-    }
-
-    private object Actions {
-        const val LOAD_SETTINGS: String = "loadSettings"
-    }
-
-    private companion object {
-        val NoSettingsText = UiText.StringResource(R.string.error_no_settings_found)
     }
 }

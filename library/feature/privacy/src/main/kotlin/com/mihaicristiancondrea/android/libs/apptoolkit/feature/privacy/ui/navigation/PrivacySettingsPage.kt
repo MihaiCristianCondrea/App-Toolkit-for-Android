@@ -31,7 +31,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.Privac
 fun ShellGraphBuilder.privacySettingsPage() {
     pageIfAbsent<PrivacySettingsRoute>(
         paneRole = PaneRole.Detail,
-        title = { stringResource(R.string.security_and_privacy) },
+        title = { stringResource(id = R.string.security_and_privacy) },
     ) {
         PrivacyScreen()
     }

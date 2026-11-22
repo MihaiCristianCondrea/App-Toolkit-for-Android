@@ -35,8 +35,8 @@ each row opening its destination in the shell.
 
 ## Depends on
 
-- `:library:core:common`, `:library:core:datastore`, `:library:core:network`, `:library:core:ui`,
-  and [`:library:navigation`](../../navigation/README.md) for the keys and the graph builder.
+- `:library:core:common`, `:library:core:ui`, and [`:library:navigation`](../../navigation/README.md)
+  for shared state, Compose views, keys, and the graph builder.
 - No other feature module.
 
 ## Used by
@@ -57,7 +57,7 @@ flowchart TD
     Action -->|yes| Done[App's own action]
     Action -->|no| Navigate[navigator.navigate: preference.destination]
     Navigate --> Pages[Display, privacy, advanced, about... pages beside the list]
-    Screen --> Menu[SettingsMenuActions] --> Help[HelpRoute]
+    Screen --> Menu[SettingsMenuActions] --> Help[HelpScreen]
 ```
 
 ## Using it
@@ -208,9 +208,11 @@ and is checked the same way.
   button that opens `HelpScreen`.
 - **On `core.ui.screen`.** `SettingsViewModel` loads the provider's config on each `Load`, which
   the screen sends each time the list is shown so a row's summary follows a change made on its
-  page. A config with no category is `Loadable.Empty` with "No settings found"; a provider that
-  throws is `Loadable.Failed`, reported to telemetry. The provider builds from resources, which is
-  main-safe, so the ViewModel takes no dispatcher.
+  page. Reloads while already `Loadable.Ready` refresh in place without flashing `Loadable.Loading`.
+  A config with no categories or no preferences is `Loadable.Empty` with "No settings found"; a
+  provider that throws is `Loadable.Failed`, reported to telemetry. Categories with a non-blank
+  `title` render a `PreferenceCategoryItem` heading; untitled categories render spacing. The
+  provider builds from resources, which is main-safe, so the ViewModel takes no dispatcher.
 - **The screen owns the search.** The query and the search index live in `SettingsScreen`, because
   the index reads the shell graph and Koin; `SettingsScreenContent` receives the query and the
   results and stays previewable. The rows themselves come from `searchRows`, a plain function of
