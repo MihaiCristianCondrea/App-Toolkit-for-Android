@@ -131,7 +131,7 @@ Classify by responsibility first and Kotlin syntax second.
 | DTO                 | `data/remote/models/`                 | **checked** (`*Dto.kt`)                                       |
 | Entity              | `data/local/models/`                  |                                                               |
 | Application model   | `data/models/`                        | never `domain/models/` without a use case                     |
-| Repository          | `data/repositories/`                  | **checked** (`*Repository.kt`), interface and implementation  |
+| Repository          | `data/repositories/`                  | **checked** (`*Repository.kt`), interface and implementation; App Toolkit's `TelemetryRepository` family stays in `core.common.telemetry`, a cross-cutting contract the UI reports through |
 | Data source         | `data/local/` or `data/remote/`       | no `datasource` package, **checked**                          |
 | Use case            | `domain/usecases/`                    | **checked** (`*UseCase.kt`)                                   |
 | Domain package      | `domain/`                             | exists only with a use case, **checked**                      |

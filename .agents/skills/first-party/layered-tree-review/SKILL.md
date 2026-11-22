@@ -3,7 +3,7 @@ name: layered-tree-review
 description: Review and decide Android/Kotlin file, package, and module placement and naming. Use when creating or moving screens, ViewModels, repositories, data sources, DTOs, entities, models, mappers, reducers, transformers, validators, formatters, converters, adapters, extensions, layer-local constants, use cases, navigation, DI modules, or UI state, when deciding package ownership or naming, whether a domain package should exist, or when auditing a project tree. Structure and naming only; the data, domain and UI layer skills own behavior.
 metadata:
   author: Mihai-Cristian Condrea
-  last-updated: '2026-11-20'
+  last-updated: '2026-11-22'
   keywords:
   - android
   - feature organization
