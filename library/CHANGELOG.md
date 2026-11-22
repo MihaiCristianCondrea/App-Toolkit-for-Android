@@ -37,8 +37,11 @@
   listing modules manually add it to open `DeveloperOptionsScreen`.
 - App bar search uses a state-based Compose text field. `ShellSearch.query` remains readable and writable.
 - `SettingsPreferenceItem` accepts an `enabled` argument for actions that need a disabled state.
-- `ui.features.libraries.AboutLibrariesScreen()` replaces `ui.views.extras.LibraryExtrasScreen()`.
-  The destination continues to use `LibraryExtrasRoute` and reports visits through Toolkit telemetry.
+
+### Removed
+
+- Remove the unused `LibraryExtrasScreen` placeholder and `LibraryExtrasRoute` key. Use
+  `LicensesScreen` and `LicensesRoute` from `:library:feature:licenses` instead.
 
 ---
 

@@ -15,16 +15,11 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.ui.features.libraries
+package com.mihaicristiancondrea.android.libs.apptoolkit.feature.licenses.ui.analytics
 
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.tooling.preview.Preview
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.telemetry.models.TrackedScreen
 
-@Preview(showBackground = true)
-@Composable
-private fun AboutLibrariesScreenContentPreview() {
-    MaterialTheme {
-        AboutLibrariesScreenContent()
-    }
-}
+internal val LICENSES_SCREEN: TrackedScreen = TrackedScreen(
+    name = "Licenses",
+    className = "LicensesScreen",
+)

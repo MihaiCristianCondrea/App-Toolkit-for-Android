@@ -19,6 +19,10 @@ package com.mihaicristiancondrea.android.libs.apptoolkit.feature.licenses.ui.con
 
 /** What the licenses screen tells its ViewModel. */
 sealed interface LicensesEvent {
-    /** Parsing of the bundled library metadata has finished. */
+    /**
+     * Parsing of the bundled library metadata has finished.
+     *
+     * @property libraryCount The number of libraries parsed from the bundled metadata.
+     */
     data class LibrariesLoaded(val libraryCount: Int) : LicensesEvent
 }

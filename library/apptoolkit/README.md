@@ -148,7 +148,7 @@ app's own; see the shell README's [App defaults](../shell/README.md#app-defaults
 | `permissionsPage()` | permissions | `PermissionsRoute` | None |
 | `adsSettingsPage()` | integration:ads | `AdsSettingsRoute` | None |
 | `advancedSettingsPage()` | advanced | `AdvancedSettingsRoute` | Detail |
-| `aboutPages()` | about | `AboutRoute`, `LibraryExtrasRoute` | Detail, None |
+| `aboutPages()` | about | `AboutRoute` | Detail |
 | `licensesPage()` | licenses | `LicensesRoute` | None |
 | `helpScreen()` | faq | `HelpScreen` | None |
 | `supportPage()` | support | `SupportRoute` | None |

@@ -20,17 +20,13 @@ package com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.ui.naviga
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.ui.AboutScreen
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.ui.features.libraries.AboutLibrariesScreen
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.PaneRole
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.ShellGraphBuilder
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.AboutRoute
-import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.LibraryExtrasRoute
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.R as CommonR
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.R as CoreUiR
 
 /**
- * Registers the About page, a detail of the settings list, and the About Libraries page, unless
- * the app registered its own.
+ * Registers the About page, a detail of the settings list, unless the app registered its own.
  *
  * An app that wants more from About, such as reacting to taps on the version, calls this itself
  * before the Toolkit's pages are added, with its own [about] content:
@@ -45,11 +41,5 @@ fun ShellGraphBuilder.aboutPages(about: @Composable () -> Unit = { AboutScreen()
         title = { stringResource(id = CoreUiR.string.about) },
     ) {
         about()
-    }
-    pageIfAbsent<LibraryExtrasRoute>(
-        paneRole = PaneRole.None,
-        title = { stringResource(id = CommonR.string.app_name) },
-    ) {
-        AboutLibrariesScreen()
     }
 }

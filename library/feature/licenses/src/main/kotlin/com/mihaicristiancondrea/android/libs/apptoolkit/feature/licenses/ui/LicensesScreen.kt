@@ -19,17 +19,15 @@ package com.mihaicristiancondrea.android.libs.apptoolkit.feature.licenses.ui
 
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.telemetry.models.TrackedScreen
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.ScreenHost
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.shell.contentPadding
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.licenses.R
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.licenses.ui.analytics.LICENSES_SCREEN
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.licenses.ui.contracts.LicensesEvent
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.licenses.ui.states.LicensesUiState
 import com.mikepenz.aboutlibraries.Libs
@@ -38,18 +36,12 @@ import com.mikepenz.aboutlibraries.ui.compose.m3.LibrariesContainer
 import com.mikepenz.aboutlibraries.ui.compose.variant.LibraryBadges
 import org.koin.compose.viewmodel.koinViewModel
 
-private const val LICENSES_SCREEN_NAME = "Licenses"
-private const val LICENSES_SCREEN_CLASS = "LicensesScreen"
-private val LICENSES_SCREEN: TrackedScreen =
-    TrackedScreen(name = LICENSES_SCREEN_NAME, className = LICENSES_SCREEN_CLASS)
-
 /**
  * Lists the open-source libraries bundled with the host application.
  *
  * The body of the licenses page, which `licensesPage()` registers; the page frame draws the app bar.
- * This is the stateful half. It parses the bundled metadata with the library's own producer, tells
- * the [LicensesViewModel] when that is done, tracks the screen, and hands the list to
- * [LicensesScreenContent].
+ * Parses the bundled metadata with AboutLibraries, notifies [LicensesViewModel] once loaded, and
+ * tracks screen visits through [ScreenHost].
  */
 @Composable
 fun LicensesScreen() {
@@ -57,9 +49,11 @@ fun LicensesScreen() {
     val state: LicensesUiState by viewModel.state.collectAsStateWithLifecycle()
     val libraries: Libs? by produceLibraries(resId = R.raw.aboutlibraries)
 
-    LaunchedEffect(libraries) {
+    LaunchedEffect(key1 = libraries) {
         libraries?.let { loaded ->
-            viewModel.onEvent(LicensesEvent.LibrariesLoaded(libraryCount = loaded.libraries.size))
+            viewModel.onEvent(
+                event = LicensesEvent.LibrariesLoaded(libraryCount = loaded.libraries.size),
+            )
         }
     }
 
@@ -74,7 +68,7 @@ fun LicensesScreen() {
 /**
  * Draws [libraries], the parsed metadata of the bundled open-source libraries.
  *
- * The stateless half of [LicensesScreen]. While [libraries] is `null` the container shows its own
+ * The stateless half of [LicensesScreen]. While [libraries] is `null`, the container shows its own
  * progress indicator, so there is no separate loading state to draw.
  */
 @Composable
@@ -92,12 +86,4 @@ internal fun LicensesScreenContent(
             funding = true,
         ),
     )
-}
-
-@Preview(showBackground = true)
-@Composable
-private fun LicensesScreenContentLoadingPreview() {
-    MaterialTheme {
-        LicensesScreenContent(libraries = null)
-    }
 }

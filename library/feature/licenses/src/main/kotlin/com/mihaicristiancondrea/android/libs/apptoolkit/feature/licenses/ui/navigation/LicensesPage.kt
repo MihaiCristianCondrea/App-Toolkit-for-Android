@@ -33,7 +33,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.Licens
 fun ShellGraphBuilder.licensesPage() {
     pageIfAbsent<LicensesRoute>(
         paneRole = PaneRole.None,
-        title = { stringResource(R.string.oss_license_title) },
+        title = { stringResource(id = R.string.oss_license_title) },
     ) {
         LicensesScreen()
     }

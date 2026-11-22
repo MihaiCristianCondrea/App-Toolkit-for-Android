@@ -42,7 +42,6 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.Privac
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.StartupRoute
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.ThemeSettingsRoute
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.HelpScreen
-import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.LibraryExtrasRoute
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.LicensesRoute
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.PermissionsRoute
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.SettingsRoute
@@ -122,7 +121,6 @@ class AppGraphTest {
             AdsSettingsRoute,
             PermissionsRoute,
             LicensesRoute,
-            LibraryExtrasRoute,
             DeveloperOptionsScreen,
             ComponentsRoute,
         )

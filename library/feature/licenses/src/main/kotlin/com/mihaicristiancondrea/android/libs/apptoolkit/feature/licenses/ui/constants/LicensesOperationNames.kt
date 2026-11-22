@@ -15,9 +15,13 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.ui.features.libraries.analytics
+package com.mihaicristiancondrea.android.libs.apptoolkit.feature.licenses.ui.constants
 
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.telemetry.models.TrackedScreen
+/** Stable identifiers for licenses operation reporting. */
+internal object LicensesOperationNames {
+    const val LOAD_LIBRARIES: String = "loadLibraries"
 
-internal val ABOUT_LIBRARIES_SCREEN =
-    TrackedScreen(name = "Library Extras", className = "LibraryExtrasScreen")
+    object ExtraKeys {
+        const val LIBRARY_COUNT: String = "libraryCount"
+    }
+}

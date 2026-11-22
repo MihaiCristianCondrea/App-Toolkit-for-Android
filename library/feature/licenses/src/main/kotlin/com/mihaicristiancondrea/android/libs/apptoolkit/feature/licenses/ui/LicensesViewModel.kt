@@ -20,6 +20,8 @@ package com.mihaicristiancondrea.android.libs.apptoolkit.feature.licenses.ui
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.telemetry.TelemetryRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.Loadable
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.LoggedScreenViewModel
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.licenses.ui.analytics.LICENSES_SCREEN
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.licenses.ui.constants.LicensesOperationNames
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.licenses.ui.contracts.LicensesEvent
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.licenses.ui.states.LicensesUiState
 
@@ -35,7 +37,7 @@ class LicensesViewModel(
 ) : LoggedScreenViewModel<LicensesUiState, LicensesEvent>(
     initialState = LicensesUiState(),
     telemetryRepository = telemetryRepository,
-    screenName = "Licenses",
+    screenName = LICENSES_SCREEN.name,
     viewModelName = "LicensesViewModel",
 ) {
 
@@ -46,18 +48,17 @@ class LicensesViewModel(
     }
 
     private fun onLibrariesLoaded(libraryCount: Int) {
+        val nextState = if (libraryCount > 0) {
+            Loadable.Ready(value = libraryCount)
+        } else {
+            Loadable.Empty()
+        }
+        if (state.value.libraryCount == nextState) return
+
         startOperation(
-            action = Actions.LOAD_LIBRARIES,
-            extra = mapOf(ExtraKeys.LIBRARY_COUNT to libraryCount.toString()),
+            action = LicensesOperationNames.LOAD_LIBRARIES,
+            extra = mapOf(LicensesOperationNames.ExtraKeys.LIBRARY_COUNT to libraryCount.toString()),
         )
-        setState { copy(libraryCount = Loadable.Ready(libraryCount)) }
-    }
-
-    private object Actions {
-        const val LOAD_LIBRARIES: String = "loadLibraries"
-    }
-
-    private object ExtraKeys {
-        const val LIBRARY_COUNT: String = "libraryCount"
+        setState { copy(libraryCount = nextState) }
     }
 }

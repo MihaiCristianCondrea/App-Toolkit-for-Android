@@ -15,10 +15,16 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes
+package com.mihaicristiancondrea.android.libs.apptoolkit.feature.licenses.ui
 
-import kotlinx.serialization.Serializable
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.tooling.preview.Preview
 
-/** The library extras page, registered by `:library:feature:about`. */
-@Serializable
-data object LibraryExtrasRoute : AppToolkitNavKey
+@Preview(showBackground = true)
+@Composable
+private fun LicensesScreenContentLoadingPreview() {
+    MaterialTheme {
+        LicensesScreenContent(libraries = null)
+    }
+}

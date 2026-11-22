@@ -22,6 +22,7 @@ import org.koin.core.module.Module
 import org.koin.core.module.dsl.viewModel
 import org.koin.dsl.module
 
+/** Registers [LicensesViewModel] for the open-source licenses screen. */
 val licensesModule: Module = module {
     viewModel {
         LicensesViewModel(

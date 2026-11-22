@@ -13,10 +13,7 @@ plus the tap-to-copy interaction for the entries it renders and the version-tap 
   info and the open-source licenses, which opens the licenses page.
 - Tap-to-copy for About entries, including the clipboard write and its in-app confirmation.
 - The version-tap easter egg: konfetti on the fifth tap, and the seasonal themes unlock it records.
-- The About Libraries destination keeps its content in `AboutLibrariesScreen.kt` and reports
-  visits through `ScreenHost` using its own analytics identifier.
-- `aboutPages()`, the registration of `AboutRoute` (a detail of the settings list) and
-  `LibraryExtrasRoute`.
+- `aboutPages()`, the registration of `AboutRoute` (a detail of the settings list).
 
 ## Does not own
 
@@ -58,7 +55,6 @@ copying. Its `deviceInfo` property is read on the main thread. A blank report is
 ```mermaid
 flowchart TD
     Entry["aboutPages()"] -->|"AboutRoute"| Screen["AboutScreen"]
-    Entry -->|"LibraryExtrasRoute"| Libraries["AboutLibrariesScreen"]
     Screen --> Host["ScreenHost"]
     Host --> Content["AboutScreenContent"]
     Content -->|"Version gesture, copy or retry"| VM["AboutViewModel"]
@@ -129,7 +125,7 @@ Verify on a physical device, where the preview appears on every tap, or switch o
 
 - `AboutDeviceInfoDataSource`, `AboutRepository`, `AboutInfo`, `AboutItem`, `AboutItemAction`,
   `AboutItemKey`, `AboutEvent`, `AboutUiState`, `AboutViewModel`, `DefaultAboutRepository`,
-  `AboutScreen`, `AboutLibrariesScreen`, `aboutPages()`, and `aboutModule`.
+  `AboutScreen`, `aboutPages()`, and `aboutModule`.
 
 ## Internal implementations
 

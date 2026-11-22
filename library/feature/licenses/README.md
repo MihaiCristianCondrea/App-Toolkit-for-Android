@@ -49,10 +49,12 @@ flowchart TD
 ## Architectural decisions
 
 - Metadata is parsed by the AboutLibraries Compose producer, which is inherently a composition-side
-  API. The screen reports when parsing finishes and `LicensesViewModel` turns that into a
-  `Loadable` library count, the status `ScreenHost` reports, instead of the screen building
-  one inline. The list itself is drawn straight from the producer's result, which
-  `LibrariesContainer` already shows as loading while it is `null`.
+  API. The screen reports when parsing finishes and `LicensesViewModel` turns positive counts into
+  `Loadable.Ready` and zero counts into `Loadable.Empty`, the status `ScreenHost` reports, instead
+  of the screen building one inline. Repeated notifications with the same result (such as after
+  configuration changes) are ignored so `loadLibraries` is not logged twice. The list itself is
+  drawn straight from the producer's result, which `LibrariesContainer` already shows as loading
+  while it is `null`.
 - The module carries the AboutLibraries plugin so the generated metadata resource stays next to the
   screen that reads it, and so modules that only link to licenses do not inherit the plugin.
 - The page is `PaneRole.None`, not a detail: it opens from About, itself a detail beside the
@@ -67,7 +69,9 @@ flowchart TD
 
 ## Internal implementations
 
-- AboutLibraries metadata production and badge configuration.
+- AboutLibraries metadata production and badge configuration, screen tracking in
+  `ui/analytics/LicensesAnalytics.kt`, stable operation names in
+  `ui/constants/LicensesOperationNames.kt`, and previews in `ui/LicensesScreenPreview.kt`.
 
 ## Current risks
 
