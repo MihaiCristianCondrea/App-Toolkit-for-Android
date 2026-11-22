@@ -59,7 +59,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.feature.settings.di.sett
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.settings.ui.providers.SettingsProvider
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.LocalShellNavigator
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.PaneRole
-import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.SettingsScreen
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.keys.SettingsScreen
 import com.mihaicristiancondrea.android.libs.apptoolkit.shell.ShellHost
 import com.mihaicristiancondrea.android.libs.apptoolkit.shell.data.repositories.InMemoryShellPreferencesRepository
 import io.mockk.mockk

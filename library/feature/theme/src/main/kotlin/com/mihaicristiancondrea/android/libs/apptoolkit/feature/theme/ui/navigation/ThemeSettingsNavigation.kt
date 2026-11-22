@@ -23,7 +23,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.feature.theme.ui.ThemeSe
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.theme.ui.WeatherEffectAction
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.PaneRole
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.ShellGraphBuilder
-import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.ThemeSettingsScreen
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.keys.ThemeSettingsScreen
 
 /**
  * Registers the theme settings page for [ThemeSettingsScreen], unless the app registered its own.

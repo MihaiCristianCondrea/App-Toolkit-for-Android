@@ -19,7 +19,7 @@ package com.mihaicristiancondrea.android.libs.apptoolkit.feature.permissions.ui.
 
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.PaneRole
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.shellGraph
-import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.PermissionsScreen
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.keys.PermissionsScreen
 import org.junit.jupiter.api.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNotNull

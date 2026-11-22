@@ -24,9 +24,9 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.settings.
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.settings.SettingsSearchEntry
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.privacy.R
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.shellGraph
-import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.AdsSettingsScreen
-import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.DiagnosticsSettingsScreen
-import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.PermissionsScreen
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.keys.AdsSettingsScreen
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.keys.DiagnosticsSettingsScreen
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.keys.PermissionsScreen
 import org.junit.jupiter.api.Test
 import kotlin.test.assertEquals
 

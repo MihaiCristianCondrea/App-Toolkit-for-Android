@@ -20,10 +20,10 @@ package com.mihaicristiancondrea.android.apps.apptoolkit.feature.settings.ui.pro
 import android.content.Context
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.settings.ui.constants.SettingsConstants
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.context.openAppNotificationSettings
-import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.AboutScreen
-import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.AdvancedSettingsScreen
-import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.DisplaySettingsScreen
-import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.PrivacySettingsScreen
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.keys.AboutScreen
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.keys.AdvancedSettingsScreen
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.keys.DisplaySettingsScreen
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.keys.PrivacySettingsScreen
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.mockkStatic

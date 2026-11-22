@@ -22,7 +22,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.feature.developer.R
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.developer.ui.DeveloperOptionsScreen
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.PaneRole
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.ShellGraphBuilder
-import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.DeveloperOptionsScreen
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.keys.DeveloperOptionsScreen
 
 /**
  * Registers the developer options page for [DeveloperOptionsScreen], unless the app registered its

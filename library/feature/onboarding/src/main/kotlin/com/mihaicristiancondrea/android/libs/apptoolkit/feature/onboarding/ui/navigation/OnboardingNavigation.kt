@@ -20,7 +20,7 @@ package com.mihaicristiancondrea.android.libs.apptoolkit.feature.onboarding.ui.n
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.onboarding.ui.OnboardingScreen
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.PaneRole
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.ShellGraphBuilder
-import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.OnboardingScreen
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.keys.OnboardingScreen
 
 /**
  * Registers [OnboardingScreen], the onboarding start screen, unless the app registered its own. It

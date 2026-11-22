@@ -15,10 +15,10 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes
+package com.mihaicristiancondrea.android.libs.apptoolkit.navigation.keys
 
 import kotlinx.serialization.Serializable
 
-/** Advertising settings, registered by `:library:integration:ads`. */
+/** Usage and diagnostics settings, registered by `:library:feature:diagnostics`. */
 @Serializable
-data object AdsSettingsScreen : AppToolkitNavKey
+data object DiagnosticsSettingsScreen : AppToolkitNavKey

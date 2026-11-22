@@ -20,8 +20,8 @@ package com.mihaicristiancondrea.android.libs.apptoolkit.feature.startup.ui.navi
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.startup.ui.StartupScreen
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.PaneRole
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.ShellGraphBuilder
-import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.OnboardingScreen
-import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.StartupScreen
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.keys.OnboardingScreen
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.keys.StartupScreen
 
 /**
  * Registers [StartupScreen], the first-launch start screen (consent and runtime permissions),

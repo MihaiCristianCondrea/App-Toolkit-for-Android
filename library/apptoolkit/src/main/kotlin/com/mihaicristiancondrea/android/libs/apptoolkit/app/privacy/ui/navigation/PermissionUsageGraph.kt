@@ -23,7 +23,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.feature.privacy.ui.navig
 import com.mihaicristiancondrea.android.libs.apptoolkit.integration.ads.ui.navigation.adsSettingsScreen
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.ShellGraph
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.ShellGraphBuilder
-import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.PrivacySettingsScreen
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.keys.PrivacySettingsScreen
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.R as CommonR
 
 /**

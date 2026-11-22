@@ -22,7 +22,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.R as CoreUiR
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.support.ui.SupportScreen
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.PaneRole
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.ShellGraphBuilder
-import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.SupportScreen
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.keys.SupportScreen
 
 /**
  * Registers the support page for [SupportScreen], unless the app registered its own. The overflow

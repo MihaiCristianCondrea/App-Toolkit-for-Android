@@ -26,7 +26,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.shellGr
 import org.junit.jupiter.api.Test
 import kotlin.test.assertEquals
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.theme.R
-import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.ThemeSettingsScreen
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.keys.ThemeSettingsScreen
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.R as CoreUiR
 
 class ThemeSettingsSearchTest {

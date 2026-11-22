@@ -32,7 +32,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.ShellCa
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.ShellGraph
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.shellGraph
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.layout.ShellLayoutPolicy
-import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.DisplaySettingsScreen
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.keys.DisplaySettingsScreen
 import org.junit.jupiter.api.Test
 import kotlin.test.assertEquals
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.R as CoreUiR

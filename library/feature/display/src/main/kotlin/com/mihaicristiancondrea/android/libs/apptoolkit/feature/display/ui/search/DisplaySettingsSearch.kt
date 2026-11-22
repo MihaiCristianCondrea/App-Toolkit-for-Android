@@ -23,7 +23,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.settings.
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.display.R
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.display.ui.providers.DisplaySettingsProvider
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.display.ui.transformers.displayRows
-import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.DisplaySettingsScreen
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.keys.DisplaySettingsScreen
 
 /**
  * The display settings rows the settings search finds: exactly the rows the page shows in this

@@ -25,8 +25,8 @@ import androidx.compose.runtime.Composable
 import androidx.navigation3.runtime.NavKey
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.icons.ToolkitIcon
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.R
-import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.SettingsScreen
-import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.SupportScreen
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.keys.SettingsScreen
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.keys.SupportScreen
 
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.R as DesignSystemR
 

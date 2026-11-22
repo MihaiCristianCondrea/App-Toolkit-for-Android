@@ -26,7 +26,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.feature.developer.ui.mod
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.developer.ui.navigation.developerOptionsScreen
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.ShellCapabilities
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.ShellGraphBuilder
-import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.DeveloperOptionsScreen
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.keys.DeveloperOptionsScreen
 import com.mihaicristiancondrea.android.libs.apptoolkit.shell.settings.ShellSettings
 import kotlinx.collections.immutable.persistentListOf
 

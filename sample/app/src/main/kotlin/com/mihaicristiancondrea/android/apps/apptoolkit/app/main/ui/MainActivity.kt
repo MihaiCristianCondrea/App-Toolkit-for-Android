@@ -24,7 +24,7 @@ import androidx.compose.ui.Modifier
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.github.GithubConstants
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.MessageHost
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.analytics.ProvideTelemetry
-import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.StartupScreen
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.keys.StartupScreen
 import android.os.Bundle
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge

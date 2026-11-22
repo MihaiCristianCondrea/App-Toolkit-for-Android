@@ -47,7 +47,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.ui.navigat
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.ShellGraph
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.TabSearch
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.TopBarStyle
-import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.SettingsScreen
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.keys.SettingsScreen
 import org.koin.compose.koinInject
 import org.koin.core.qualifier.named
 

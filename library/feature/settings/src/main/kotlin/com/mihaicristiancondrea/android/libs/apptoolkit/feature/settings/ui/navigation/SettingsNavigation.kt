@@ -24,7 +24,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.feature.settings.ui.view
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.settings.ui.views.dropdowns.SettingsMenuActions
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.PaneRole
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.ShellGraphBuilder
-import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.SettingsScreen
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.keys.SettingsScreen
 
 /**
  * Registers the settings list for [SettingsScreen], unless the app registered its own.

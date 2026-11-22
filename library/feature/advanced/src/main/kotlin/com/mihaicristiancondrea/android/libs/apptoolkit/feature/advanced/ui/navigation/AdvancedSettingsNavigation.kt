@@ -22,7 +22,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.feature.advanced.R
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.advanced.ui.AdvancedSettingsScreen
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.PaneRole
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.ShellGraphBuilder
-import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.AdvancedSettingsScreen
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.keys.AdvancedSettingsScreen
 
 /**
  * Registers the advanced settings page for [AdvancedSettingsScreen], a detail of the settings list,

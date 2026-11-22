@@ -71,7 +71,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.LocalShellNav
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.PaneRole
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.ShellGraph
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.TopBarStyle
-import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.SupportScreen
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.keys.SupportScreen
 import com.mihaicristiancondrea.android.libs.apptoolkit.shell.settings.BackEdgeStyle
 import com.mihaicristiancondrea.android.libs.apptoolkit.shell.settings.NavigationBarStyle
 import com.mihaicristiancondrea.android.libs.apptoolkit.shell.settings.NavigationTint

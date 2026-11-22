@@ -32,10 +32,10 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.settings.
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.settings.SettingsConfig
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.settings.SettingsPreference
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.settings.ui.providers.SettingsProvider
-import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.AboutScreen
-import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.AdvancedSettingsScreen
-import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.DisplaySettingsScreen
-import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.PrivacySettingsScreen
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.keys.AboutScreen
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.keys.AdvancedSettingsScreen
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.keys.DisplaySettingsScreen
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.keys.PrivacySettingsScreen
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.R as CoreUiR
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.settings.R as SettingsR
 

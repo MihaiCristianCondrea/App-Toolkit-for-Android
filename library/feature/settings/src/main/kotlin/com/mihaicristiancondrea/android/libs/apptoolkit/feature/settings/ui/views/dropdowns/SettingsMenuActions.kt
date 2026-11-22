@@ -34,7 +34,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.ico
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.AnimatedIconButtonDirection
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.dropdown.CommonDropdownMenuItem
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.LocalShellNavigator
-import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.HelpScreen
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.keys.HelpScreen
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.R as CoreUiR
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.R as NavigationR
 

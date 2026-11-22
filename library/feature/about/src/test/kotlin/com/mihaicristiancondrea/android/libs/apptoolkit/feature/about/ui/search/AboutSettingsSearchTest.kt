@@ -24,8 +24,8 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.settings.
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.settings.SettingsSearchEntry
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.R
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.shellGraph
-import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.AboutScreen
-import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.LicensesScreen
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.keys.AboutScreen
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.keys.LicensesScreen
 import org.junit.jupiter.api.Test
 import kotlin.test.assertEquals
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.R as CoreUiR

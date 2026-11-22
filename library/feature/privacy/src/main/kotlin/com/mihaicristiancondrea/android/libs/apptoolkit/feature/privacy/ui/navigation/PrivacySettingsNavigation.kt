@@ -22,7 +22,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.feature.privacy.R
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.privacy.ui.PrivacyScreen
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.PaneRole
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.ShellGraphBuilder
-import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.PrivacySettingsScreen
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.keys.PrivacySettingsScreen
 
 /**
  * Registers the security and privacy page for [PrivacySettingsScreen], a detail of the settings

@@ -75,7 +75,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.feature.startup.ui.state
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.startup.ui.states.StartupUiState
 import com.mihaicristiancondrea.android.libs.apptoolkit.integration.consent.data.models.ConsentHost
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.LocalShellNavigator
-import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.OnboardingScreen
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.keys.OnboardingScreen
 import org.koin.compose.koinInject
 import org.koin.compose.viewmodel.koinViewModel
 

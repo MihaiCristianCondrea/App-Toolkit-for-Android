@@ -22,7 +22,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.integration.ads.R
 import com.mihaicristiancondrea.android.libs.apptoolkit.integration.ads.ui.AdsSettingsScreen
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.PaneRole
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.ShellGraphBuilder
-import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.AdsSettingsScreen
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.keys.AdsSettingsScreen
 
 /**
  * Registers the ads settings page for [AdsSettingsScreen], unless the app registered its own.

@@ -17,11 +17,11 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.app.privacy.ui.navigation
 
-import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.AdsSettingsScreen
-import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.DiagnosticsSettingsScreen
-import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.PermissionsScreen
-import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.PrivacySettingsScreen
-import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.SettingsScreen
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.keys.AdsSettingsScreen
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.keys.DiagnosticsSettingsScreen
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.keys.PermissionsScreen
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.keys.PrivacySettingsScreen
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.keys.SettingsScreen
 import org.junit.jupiter.api.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse

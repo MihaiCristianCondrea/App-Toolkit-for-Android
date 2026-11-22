@@ -22,7 +22,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.feature.licenses.R
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.licenses.ui.LicensesScreen
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.PaneRole
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.ShellGraphBuilder
-import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.LicensesScreen
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.keys.LicensesScreen
 
 /**
  * Registers the licenses page for [LicensesScreen], unless the app registered its own.

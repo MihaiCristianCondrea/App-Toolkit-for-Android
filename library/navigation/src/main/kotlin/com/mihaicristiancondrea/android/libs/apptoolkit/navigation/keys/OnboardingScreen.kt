@@ -15,10 +15,10 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes
+package com.mihaicristiancondrea.android.libs.apptoolkit.navigation.keys
 
 import kotlinx.serialization.Serializable
 
-/** Open-source licenses, registered by `:library:feature:licenses`. */
+/** The onboarding start screen that follows [StartupScreen], registered by `:library:feature:onboarding`. */
 @Serializable
-data object LicensesScreen : AppToolkitNavKey
+data object OnboardingScreen : AppToolkitNavKey

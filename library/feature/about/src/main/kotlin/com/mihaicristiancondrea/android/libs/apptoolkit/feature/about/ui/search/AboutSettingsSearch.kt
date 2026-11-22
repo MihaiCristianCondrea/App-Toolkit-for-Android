@@ -19,8 +19,8 @@ package com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.ui.search
 
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.settings.settingsSearchProvider
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.R
-import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.AboutScreen
-import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.LicensesScreen
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.keys.AboutScreen
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.keys.LicensesScreen
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.R as CoreUiR
 
 /**

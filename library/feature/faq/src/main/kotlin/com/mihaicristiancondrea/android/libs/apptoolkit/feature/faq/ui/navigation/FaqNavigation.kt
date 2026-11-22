@@ -23,7 +23,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.ui.FaqScreen
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.ui.views.dropdowns.FaqMenuActions
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.PaneRole
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.ShellGraphBuilder
-import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.HelpScreen
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.keys.HelpScreen
 
 /** Registers the help and feedback page for [HelpScreen], unless the app registered its own. */
 fun ShellGraphBuilder.helpScreen() {

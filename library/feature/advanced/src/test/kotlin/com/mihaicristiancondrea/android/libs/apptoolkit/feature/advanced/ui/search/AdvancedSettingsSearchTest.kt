@@ -24,7 +24,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.settings.
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.settings.SettingsSearchEntry
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.advanced.R
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.shellGraph
-import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.AdvancedSettingsScreen
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.keys.AdvancedSettingsScreen
 import org.junit.jupiter.api.Test
 import kotlin.test.assertEquals
 

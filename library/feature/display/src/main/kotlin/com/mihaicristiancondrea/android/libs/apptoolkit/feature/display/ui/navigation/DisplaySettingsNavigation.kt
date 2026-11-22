@@ -22,7 +22,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.feature.display.R
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.display.ui.DisplaySettingsScreen
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.PaneRole
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.ShellGraphBuilder
-import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.DisplaySettingsScreen
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.keys.DisplaySettingsScreen
 
 /**
  * Registers the display settings page for [DisplaySettingsScreen], a detail of the settings list,

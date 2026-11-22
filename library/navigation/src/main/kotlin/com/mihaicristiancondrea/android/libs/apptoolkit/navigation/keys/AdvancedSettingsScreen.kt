@@ -15,10 +15,10 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes
+package com.mihaicristiancondrea.android.libs.apptoolkit.navigation.keys
 
 import kotlinx.serialization.Serializable
 
-/** The first-launch start screen (consent and permissions), registered by `:library:feature:startup`. */
+/** Advanced settings, registered by `:library:feature:advanced`. */
 @Serializable
-data object StartupScreen : AppToolkitNavKey
+data object AdvancedSettingsScreen : AppToolkitNavKey

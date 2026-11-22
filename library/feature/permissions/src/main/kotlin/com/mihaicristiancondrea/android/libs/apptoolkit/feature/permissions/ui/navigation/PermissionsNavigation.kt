@@ -22,7 +22,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.feature.permissions.R
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.permissions.ui.PermissionsScreen
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.PaneRole
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.ShellGraphBuilder
-import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.PermissionsScreen
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.keys.PermissionsScreen
 
 /**
  * Registers the permissions page for [PermissionsScreen], unless the app registered its own.

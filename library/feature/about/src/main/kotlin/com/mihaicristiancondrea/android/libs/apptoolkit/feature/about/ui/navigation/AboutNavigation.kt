@@ -22,7 +22,7 @@ import androidx.compose.ui.res.stringResource
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.ui.AboutScreen
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.PaneRole
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.ShellGraphBuilder
-import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.AboutScreen
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.keys.AboutScreen
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.R as CoreUiR
 
 /**

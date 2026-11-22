@@ -48,7 +48,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.spacers.La
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.spacers.SmallVerticalSpacer
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.settings.R
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.LocalShellNavigator
-import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.HelpScreen
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.keys.HelpScreen
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.R as CommonR
 
 /**

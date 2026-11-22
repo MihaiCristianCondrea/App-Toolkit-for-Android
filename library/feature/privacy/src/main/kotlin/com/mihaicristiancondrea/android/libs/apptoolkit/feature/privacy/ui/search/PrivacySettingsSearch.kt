@@ -19,10 +19,10 @@ package com.mihaicristiancondrea.android.libs.apptoolkit.feature.privacy.ui.sear
 
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.settings.settingsSearchProvider
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.privacy.R
-import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.AdsSettingsScreen
-import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.DiagnosticsSettingsScreen
-import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.PermissionsScreen
-import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.PrivacySettingsScreen
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.keys.AdsSettingsScreen
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.keys.DiagnosticsSettingsScreen
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.keys.PermissionsScreen
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.keys.PrivacySettingsScreen
 
 /**
  * The privacy page's rows the settings search finds. Each opens the page the row opens, rather

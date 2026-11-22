@@ -43,9 +43,9 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.feature.privacy.ui.contr
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.privacy.ui.models.PrivacyItem
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.privacy.ui.states.PrivacyUiState
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.LocalShellNavigator
-import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.AdsSettingsScreen
-import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.DiagnosticsSettingsScreen
-import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.PermissionsScreen
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.keys.AdsSettingsScreen
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.keys.DiagnosticsSettingsScreen
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.keys.PermissionsScreen
 import org.koin.compose.viewmodel.koinViewModel
 
 /**

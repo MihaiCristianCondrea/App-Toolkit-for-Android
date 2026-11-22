@@ -119,7 +119,8 @@
   `AdsSettingsScreen`, `AdvancedSettingsScreen`, `DiagnosticsSettingsScreen`,
   `DisplaySettingsScreen`, `LicensesScreen`, `OnboardingScreen`, `PermissionsScreen`,
   `PrivacySettingsScreen`, `SettingsScreen`, `StartupScreen`, `SupportScreen`, and
-  `ThemeSettingsScreen`) and renamed `ShellHomeRoute` to `ShellHomeScreen`.
+  `ThemeSettingsScreen`) and renamed `ShellHomeRoute` to `ShellHomeScreen`. The keys and
+  `AppToolkitNavKey` moved from `navigation.routes` to `navigation.keys`.
 - Renamed `ShellGraphBuilder` registration extensions from `*Page()`/`*Pages()` to `*Screen()`
   (`toolkitScreens()`, `aboutScreen()`, `adsSettingsScreen()`, `advancedSettingsScreen()`,
   `diagnosticsSettingsScreen()`, `displaySettingsScreen()`, `licensesScreen()`,

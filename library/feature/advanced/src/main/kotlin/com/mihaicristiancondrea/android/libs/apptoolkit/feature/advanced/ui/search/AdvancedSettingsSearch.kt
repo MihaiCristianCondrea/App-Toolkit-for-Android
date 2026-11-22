@@ -19,7 +19,7 @@ package com.mihaicristiancondrea.android.libs.apptoolkit.feature.advanced.ui.sea
 
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.settings.settingsSearchProvider
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.advanced.R
-import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.AdvancedSettingsScreen
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.keys.AdvancedSettingsScreen
 
 /**
  * The advanced page's rows the settings search finds. The bug report shows only where an issue

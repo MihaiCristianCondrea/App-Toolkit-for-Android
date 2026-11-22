@@ -15,10 +15,18 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes
+package com.mihaicristiancondrea.android.libs.apptoolkit.navigation.keys
 
+import androidx.compose.runtime.Immutable
+import androidx.navigation3.runtime.NavKey
 import kotlinx.serialization.Serializable
 
-/** The shell's developer options, registered by `:library:feature:developer`. */
-@Serializable
-data object DeveloperOptionsScreen : AppToolkitNavKey
+/**
+ * The Toolkit's own destinations. `toolkitGraph { }` in `:library:apptoolkit` registers a page for
+ * each, which an app can replace by registering the same key itself.
+ *
+ * Every key is `@Serializable`: the shell's back stacks save their keys through
+ * kotlinx.serialization, so they survive rotation and process death.
+ */
+@Immutable
+sealed interface AppToolkitNavKey : NavKey

@@ -15,10 +15,10 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes
+package com.mihaicristiancondrea.android.libs.apptoolkit.navigation.keys
 
 import kotlinx.serialization.Serializable
 
-/** Privacy settings, registered by `:library:feature:privacy`. */
+/** Support and donations, registered by `:library:feature:support`. */
 @Serializable
-data object PrivacySettingsScreen : AppToolkitNavKey
+data object SupportScreen : AppToolkitNavKey
