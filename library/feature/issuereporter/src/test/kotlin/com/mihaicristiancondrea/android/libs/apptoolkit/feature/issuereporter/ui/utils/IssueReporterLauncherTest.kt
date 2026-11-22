@@ -15,15 +15,15 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.ui
+package com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.ui.utils
 
 import android.app.Activity
 import androidx.activity.ComponentActivity
 import io.mockk.every
 import io.mockk.mockk
+import kotlin.test.assertFalse
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Test
-import kotlin.test.assertFalse
 
 /**
  * Covers the cases the launcher has to survive rather than crash on.

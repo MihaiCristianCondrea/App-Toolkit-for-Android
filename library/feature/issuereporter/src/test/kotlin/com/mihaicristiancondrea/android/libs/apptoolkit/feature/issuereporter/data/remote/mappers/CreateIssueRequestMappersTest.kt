@@ -67,12 +67,28 @@ class CreateIssueRequestMappersTest {
     }
 
     @Test
-    fun extraFieldsEscapeTableSeparators() {
+    fun extraFieldsEscapeTableSeparatorsAndLineBreaks() {
         val body = report(email = null)
-            .copy(extraInfo = ExtraInfo(mapOf("Host|field" to "Value|detail")))
+            .copy(
+                extraInfo = ExtraInfo(
+                    values = mapOf(
+                        "Host|field" to "Value|detail",
+                        "Multi\nline" to "Line 1\r\nLine 2\rLine 3",
+                    ),
+                ),
+            )
             .toCreateIssueRequest().body
 
         assertTrue(body.contains("| Host\\|field | Value\\|detail |\n"))
+        assertTrue(body.contains("| Multi<br>line | Line 1<br>Line 2<br>Line 3 |\n"))
+    }
+
+    @Test
+    fun extraInfoUsesValueEquality() {
+        assertEquals(
+            expected = ExtraInfo(values = mapOf("k" to "v")),
+            actual = ExtraInfo(values = mapOf("k" to "v")),
+        )
     }
 
     private fun report(email: String?): Report = Report(

@@ -20,6 +20,14 @@ package com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.d
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
+/**
+ * Request body posted to the GitHub REST API to create a new issue.
+ *
+ * @property title Issue title.
+ * @property body Formatted Markdown issue body.
+ * @property labels Optional labels attached to the created issue.
+ * @property assignees Optional GitHub usernames assigned to the created issue.
+ */
 @Serializable
 data class CreateIssueRequest(
     @SerialName("title") val title: String,

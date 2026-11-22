@@ -39,7 +39,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.do
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.domain.usecases.ValidateIssueReportUseCase
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.R
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.ui.contracts.IssueReporterEvent
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.ui.mappers.toDeviceInfoText
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.ui.formatters.toDeviceInfoText
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.ui.states.IssueReporterUiState
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.ui.states.IssueSubmissionState
 import kotlin.test.assertEquals

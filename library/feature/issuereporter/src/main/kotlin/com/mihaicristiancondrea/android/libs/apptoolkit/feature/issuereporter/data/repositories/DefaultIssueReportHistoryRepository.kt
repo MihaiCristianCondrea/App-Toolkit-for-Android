@@ -46,12 +46,13 @@ class DefaultIssueReportHistoryRepository(
         val now: Long = currentTimeMillis()
 
         val lastSubmittedAt: Long? = history.lastSubmittedAt
-        if (lastSubmittedAt != null && now - lastSubmittedAt in 0 until COOLDOWN_MILLIS) {
+        if ((lastSubmittedAt != null) && ((now - lastSubmittedAt) in 0 until COOLDOWN_MILLIS)) {
             return IssueReportRefusal.COOLDOWN
         }
 
         val fingerprint: String = fingerprint(title = title, description = description)
-        val duplicate: Boolean = history.recentReports(now = now).any { it.fingerprint == fingerprint }
+        val duplicate: Boolean = recentReports(history = history, now = now)
+            .any { report -> report.fingerprint == fingerprint }
         return if (duplicate) IssueReportRefusal.DUPLICATE else null
     }
 
@@ -65,9 +66,9 @@ class DefaultIssueReportHistoryRepository(
             preferences.update { history ->
                 IssueReportHistory(
                     lastSubmittedAt = now,
-                    reports = (history.recentReports(now = now) + filed)
-                        .sortedByDescending { it.submittedAt }
-                        .take(MAX_RECENT_REPORTS),
+                    reports = (recentReports(history = history, now = now) + filed)
+                        .sortedByDescending { report -> report.submittedAt }
+                        .take(n = MAX_RECENT_REPORTS),
                 )
             }
         } catch (_: IOException) {
@@ -76,21 +77,22 @@ class DefaultIssueReportHistoryRepository(
     }
 
     /** The stored reports filed within the duplicate window before [now]. */
-    private fun IssueReportHistory.recentReports(now: Long): List<FiledIssueReport> =
-        reports.filter { now - it.submittedAt in 0 until DUPLICATE_WINDOW_MILLIS }
+    private fun recentReports(history: IssueReportHistory, now: Long): List<FiledIssueReport> =
+        history.reports.filter { report -> (now - report.submittedAt) in 0 until DUPLICATE_WINDOW_MILLIS }
 
     /**
      * The report reduced to what makes it the same report: trimmed, lowercased, with runs of
      * whitespace collapsed, then hashed so the text itself is never stored.
      */
     private fun fingerprint(title: String, description: String): String {
-        val normalized = "${title.normalized()}\n${description.normalized()}"
+        val normalized = "${normalizeText(text = title)}\n${normalizeText(text = description)}"
         return MessageDigest.getInstance(HASH_ALGORITHM)
-            .digest(normalized.toByteArray(Charsets.UTF_8))
+            .digest(normalized.toByteArray(charset = Charsets.UTF_8))
             .joinToString(separator = "") { byte -> "%02x".format(byte) }
     }
 
-    private fun String.normalized(): String = trim().lowercase().replace(Whitespace, " ")
+    private fun normalizeText(text: String): String =
+        text.trim().lowercase().replace(regex = Whitespace, replacement = " ")
 
     companion object {
         /** How long after a filed report the next one is held back. */
@@ -103,6 +105,6 @@ class DefaultIssueReportHistoryRepository(
         const val MAX_RECENT_REPORTS: Int = 10
 
         private const val HASH_ALGORITHM: String = "SHA-256"
-        private val Whitespace = Regex("""\s+""")
+        private val Whitespace = Regex(pattern = """\s+""")
     }
 }

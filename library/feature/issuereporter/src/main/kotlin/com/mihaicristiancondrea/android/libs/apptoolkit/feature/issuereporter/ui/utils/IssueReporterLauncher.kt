@@ -15,7 +15,7 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.ui
+package com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.ui.utils
 
 import android.app.Activity
 import android.view.View
@@ -28,6 +28,8 @@ import androidx.lifecycle.setViewTreeViewModelStoreOwner
 import androidx.savedstate.setViewTreeSavedStateRegistryOwner
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.style.AppTheme
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.analytics.ProvideTelemetry
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.ui.IssueReporterBottomSheet
+
 /**
  * Opens the report sheet for a caller that has an `Activity` but no composition.
  *

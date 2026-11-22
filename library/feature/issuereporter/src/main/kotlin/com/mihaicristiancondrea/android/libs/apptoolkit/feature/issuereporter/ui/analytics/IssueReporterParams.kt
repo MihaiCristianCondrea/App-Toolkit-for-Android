@@ -18,8 +18,8 @@
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.ui.analytics
 
 /**
- * Parameters of the send event. They describe the attempt, never its content: no text and no
- * email is ever logged.
+ * Parameters of issue reporter analytics events. They describe bounded actions and attempt
+ * metadata, never the report text or contact email.
  */
 internal object IssueReporterParams {
     const val TITLE_LENGTH: String = "title_length"
@@ -33,4 +33,6 @@ internal object IssueReporterParams {
     const val VALIDATION_FAILURE: String = "validation_failure"
 
     const val VALIDATION_PASSED: String = "none"
+    const val EXPANDED: String = "expanded"
+    const val FORMAT: String = "format"
 }

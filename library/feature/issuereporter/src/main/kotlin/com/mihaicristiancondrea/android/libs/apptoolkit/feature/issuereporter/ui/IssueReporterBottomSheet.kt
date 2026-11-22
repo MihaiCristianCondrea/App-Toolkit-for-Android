@@ -17,27 +17,17 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.ui
 
-import android.content.Context
-import android.widget.Toast
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.togetherWith
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.BugReport
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.SheetValue
-import androidx.compose.material3.Text
 import androidx.compose.material3.rememberBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
@@ -47,51 +37,33 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusManager
 import androidx.compose.ui.hapticfeedback.HapticFeedback
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.platform.SoftwareKeyboardController
-import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.telemetry.models.AnalyticsValue
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.telemetry.models.TrackedScreen
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.icons.ToolkitIcon
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.Loadable
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.MessageToastHost
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.ScreenHost
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.StateContent
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.UiMessage
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.analytics.LocalTelemetry
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.ButtonMeasurements
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.GeneralButton
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.GeneralButtonStyle
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.fields.markdown.MarkdownFormatAction
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.spacers.LargeVerticalSpacer
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.R
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.domain.models.IssueReportFieldError
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.domain.models.IssueReportValidation
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.ui.analytics.ISSUE_REPORTER_SCREEN_NAME
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.ui.analytics.IssueReporterActionNames
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.ui.analytics.issueReporterActionEvent
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.ui.analytics.ISSUE_REPORTER_SCREEN
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.ui.analytics.issueReporterFormatDescriptionEvent
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.ui.analytics.issueReporterToggleDeviceInfoEvent
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.ui.contracts.IssueReporterEvent
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.ui.states.IssueReporterUiState
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.ui.states.IssueSubmissionState
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.ui.views.DeviceInfoSection
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.ui.views.IssueReportForm
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.ui.utils.IssueReporterPresence
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.ui.views.IssueReportEditor
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.ui.views.IssueSubmittedContent
 import kotlinx.collections.immutable.ImmutableList
 import org.koin.compose.viewmodel.koinViewModel
 
-private const val ISSUE_REPORTER_SCREEN_CLASS = "IssueReporterContent"
-private val ISSUE_REPORTER_SCREEN: TrackedScreen =
-    TrackedScreen(name = ISSUE_REPORTER_SCREEN_NAME, className = ISSUE_REPORTER_SCREEN_CLASS)
-
 /**
  * Shared report sheet for Compose hosts and
- * [IssueReporterLauncher][com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.ui.IssueReporterLauncher].
+ * [IssueReporterLauncher][com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.ui.utils.IssueReporterLauncher].
  * It opens fully expanded so the editor remains usable above the keyboard.
  *
  * Presence is registered for the composition lifetime to prevent duplicate sheets across entry
@@ -102,7 +74,7 @@ private val ISSUE_REPORTER_SCREEN: TrackedScreen =
  * [onDismissRequest] runs after the sheet settles out of view, allowing removal from
  * composition without cutting the exit animation.
  */
-@OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterial3ExpressiveApi::class)
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun IssueReporterBottomSheet(
     onDismissRequest: () -> Unit,
@@ -124,7 +96,7 @@ fun IssueReporterBottomSheet(
     }
 
     val dismiss: () -> Unit = {
-        viewModel.onEvent(IssueReporterEvent.Reset)
+        viewModel.onEvent(event = IssueReporterEvent.Reset)
         onDismissRequest()
     }
 
@@ -138,22 +110,14 @@ fun IssueReporterBottomSheet(
             IssueReporterBottomSheetContent(
                 state = state,
                 onEvent = viewModel::onEvent,
-                onSend = { viewModel.onEvent(IssueReporterEvent.Send) },
+                onSend = { viewModel.onEvent(event = IssueReporterEvent.Send) },
                 onDeviceInfoExpandedChange = { expanded ->
-                    if (expanded) viewModel.onEvent(IssueReporterEvent.RequestDeviceInfo)
-                    telemetry.logEvent(
-                        issueReporterActionEvent(
-                            actionName = IssueReporterActionNames.TOGGLE_DEVICE_INFO,
-                            params = mapOf("expanded" to AnalyticsValue.Bool(expanded)),
-                        ),
-                    )
+                    if (expanded) viewModel.onEvent(event = IssueReporterEvent.RequestDeviceInfo)
+                    telemetry.logEvent(event = issueReporterToggleDeviceInfoEvent(expanded = expanded))
                 },
                 onMarkdownFormat = { action ->
                     telemetry.logEvent(
-                        issueReporterActionEvent(
-                            actionName = IssueReporterActionNames.FORMAT_DESCRIPTION,
-                            params = mapOf("format" to AnalyticsValue.Str(action.analyticsName)),
-                        ),
+                        event = issueReporterFormatDescriptionEvent(format = action.analyticsName),
                     )
                 },
                 onDone = dismiss,
@@ -224,61 +188,6 @@ internal fun IssueReporterBottomSheetContent(
 }
 
 /**
- * Editor with a fixed send action. The form wraps content until the sheet fills the screen,
- * then scrolls beneath the button, which is disabled while a send is in flight.
- */
-@Composable
-private fun IssueReportEditor(
-    state: IssueReporterUiState,
-    onEvent: (IssueReporterEvent) -> Unit,
-    onSend: () -> Unit,
-    onDeviceInfoExpandedChange: (expanded: Boolean) -> Unit,
-    onMarkdownFormat: (MarkdownFormatAction) -> Unit,
-    modifier: Modifier = Modifier,
-) {
-    Column(
-        modifier = modifier.fillMaxWidth(),
-        verticalArrangement = Arrangement.spacedBy(space = SizeConstants.MediumSize),
-    ) {
-        Text(
-            text = stringResource(id = R.string.bug_report),
-            style = MaterialTheme.typography.headlineSmall,
-        )
-
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .weight(weight = 1f, fill = false)
-                .verticalScroll(state = rememberScrollState()),
-            verticalArrangement = Arrangement.spacedBy(space = SizeConstants.ExtraTinySize),
-        ) {
-            IssueReportForm(
-                data = state,
-                onEvent = onEvent,
-                onMarkdownFormat = onMarkdownFormat,
-            )
-
-            LargeVerticalSpacer()
-
-            DeviceInfoSection(
-                deviceInfo = state.deviceInfo,
-                onExpandedChange = onDeviceInfoExpandedChange,
-            )
-        }
-
-        GeneralButton(
-            onClick = onSend,
-            style = GeneralButtonStyle.Filled,
-            enabled = state.submissionState !is IssueSubmissionState.Sending,
-            label = stringResource(id = R.string.issue_send),
-            icon = ToolkitIcon.Vector(imageVector = Icons.Outlined.BugReport),
-            measurements = ButtonMeasurements.Medium,
-            modifier = Modifier.fillMaxWidth(),
-        )
-    }
-}
-
-/**
  * Closes the editing session the moment the report lands: the keyboard goes down, focus clears,
  * and a confirm haptic marks a change that is easy to miss on a glance away.
  */
@@ -294,66 +203,5 @@ private fun SubmissionSucceeded(submissionState: IssueSubmissionState) {
         keyboardController?.hide()
         focusManager.clearFocus(force = true)
         hapticFeedback.performHapticFeedback(hapticFeedbackType = HapticFeedbackType.Confirm)
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-private fun IssueReporterBottomSheetContentPreview() {
-    MaterialTheme {
-        IssueReporterBottomSheetContent(
-            state = IssueReporterUiState(
-                title = "Sample Bug Title",
-                description = "This is a detailed description of the bug in the sample application.",
-                email = "user@example.com",
-                deviceInfo = Loadable.Ready("Device: Pixel 7\nOS: Android 14\nApp Version: 1.0.0"),
-            ),
-            onEvent = {},
-            onSend = {},
-            onDeviceInfoExpandedChange = {},
-            onMarkdownFormat = {},
-            onDone = {},
-        )
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-private fun IssueReporterBottomSheetContentInvalidPreview() {
-    MaterialTheme {
-        IssueReporterBottomSheetContent(
-            state = IssueReporterUiState(
-                title = "Crash",
-                description = "",
-                email = "user at example",
-                fieldErrors = IssueReportValidation(
-                    titleError = IssueReportFieldError.TooShort(minimumLength = 10),
-                    descriptionError = IssueReportFieldError.Missing,
-                    emailError = IssueReportFieldError.InvalidEmail,
-                ),
-            ),
-            onEvent = {},
-            onSend = {},
-            onDeviceInfoExpandedChange = {},
-            onMarkdownFormat = {},
-            onDone = {},
-        )
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-private fun IssueReporterBottomSheetContentSubmittedPreview() {
-    MaterialTheme {
-        IssueReporterBottomSheetContent(
-            state = IssueReporterUiState(
-                submissionState = IssueSubmissionState.Submitted(issueUrl = "https://github.com/example/1"),
-            ),
-            onEvent = {},
-            onSend = {},
-            onDeviceInfoExpandedChange = {},
-            onMarkdownFormat = {},
-            onDone = {},
-        )
     }
 }

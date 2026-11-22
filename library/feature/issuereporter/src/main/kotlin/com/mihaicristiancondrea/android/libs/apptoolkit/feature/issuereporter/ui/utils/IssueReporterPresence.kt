@@ -15,7 +15,7 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.ui
+package com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.ui.utils
 
 /**
  * Whether a report sheet is on screen anywhere in the process.

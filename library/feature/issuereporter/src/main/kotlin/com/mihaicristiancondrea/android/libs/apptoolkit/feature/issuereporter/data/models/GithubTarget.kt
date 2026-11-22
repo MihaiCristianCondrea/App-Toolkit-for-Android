@@ -17,4 +17,10 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.data.models
 
+/**
+ * GitHub repository that receives filed issue reports.
+ *
+ * @property username Repository owner or organization login.
+ * @property repository Repository name under [username].
+ */
 data class GithubTarget(val username: String, val repository: String)

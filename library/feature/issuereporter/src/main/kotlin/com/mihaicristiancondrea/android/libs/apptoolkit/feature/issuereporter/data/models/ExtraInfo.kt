@@ -18,4 +18,4 @@
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.data.models
 
 /** Host-supplied key/value pairs attached to a report. */
-class ExtraInfo(val values: Map<String, String> = emptyMap())
+data class ExtraInfo(val values: Map<String, String> = emptyMap())

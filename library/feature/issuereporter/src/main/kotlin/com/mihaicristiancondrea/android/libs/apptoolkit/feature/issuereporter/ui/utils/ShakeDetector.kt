@@ -125,7 +125,7 @@ class ShakeDetector(
         val z: Float = event.values[2]
 
         onAcceleration(
-            gForce = sqrt(x * x + y * y + z * z) / SensorManager.GRAVITY_EARTH,
+            gForce = sqrt(x = (x * x) + (y * y) + (z * z)) / SensorManager.GRAVITY_EARTH,
             now = elapsedRealtime(),
         )
     }
@@ -142,10 +142,10 @@ class ShakeDetector(
             aboveThreshold = false
             return
         }
-        if (gForce < threshold || aboveThreshold) return
+        if ((gForce < threshold) || aboveThreshold) return
         aboveThreshold = true
 
-        if (shakingSince == NO_TIMESTAMP || now - shakingSince > GESTURE_WINDOW_MILLIS) {
+        if ((shakingSince == NO_TIMESTAMP) || ((now - shakingSince) > GESTURE_WINDOW_MILLIS)) {
             shakingSince = now
             shakes = 1
             return
@@ -153,10 +153,12 @@ class ShakeDetector(
 
         shakes++
 
-        val sustained: Boolean = now - shakingSince >= minimumDurationMillis && shakes >= minimumShakes
+        val sustained: Boolean =
+            ((now - shakingSince) >= minimumDurationMillis) && (shakes >= minimumShakes)
         if (!sustained) return
 
-        val cooling: Boolean = lastShakeAt != NO_TIMESTAMP && now - lastShakeAt < cooldownMillis
+        val cooling: Boolean =
+            (lastShakeAt != NO_TIMESTAMP) && ((now - lastShakeAt) < cooldownMillis)
         resetGesture()
         if (cooling) return
 

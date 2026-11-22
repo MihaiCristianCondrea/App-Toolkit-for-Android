@@ -23,7 +23,6 @@ import android.content.Context
 import android.hardware.SensorManager
 import android.os.Bundle
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.data.models.IssueReporterConfig
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.ui.IssueReporterLauncher
 
 /**
  * Turns a shake of the device into the issue reporter, for every activity in the app.

@@ -19,6 +19,7 @@ package com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.u
 
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.telemetry.models.AnalyticsEvent
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.telemetry.models.AnalyticsValue
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.telemetry.models.TrackedScreen
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.analytics.SettingsAnalytics
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.data.models.IssueReportRefusal
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.domain.models.IssueReportFieldError
@@ -27,6 +28,12 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.do
 /** The screen name the sheet and its ViewModel report under. */
 internal const val ISSUE_REPORTER_SCREEN_NAME: String = "IssueReporter"
 
+/** The tracked screen identity reported by the issue reporter sheet. */
+internal val ISSUE_REPORTER_SCREEN: TrackedScreen = TrackedScreen(
+    name = ISSUE_REPORTER_SCREEN_NAME,
+    className = "IssueReporterContent",
+)
+
 /** A tap in the sheet, in the shared settings action shape. */
 internal fun issueReporterActionEvent(
     actionName: String,
@@ -34,10 +41,43 @@ internal fun issueReporterActionEvent(
 ): AnalyticsEvent = AnalyticsEvent(
     name = SettingsAnalytics.Events.ACTION,
     params = buildMap {
-        put(SettingsAnalytics.Params.SCREEN, AnalyticsValue.Str(ISSUE_REPORTER_SCREEN_NAME))
-        put(SettingsAnalytics.Params.ACTION_NAME, AnalyticsValue.Str(actionName))
-        putAll(params)
+        put(key = SettingsAnalytics.Params.SCREEN, value = AnalyticsValue.Str(value = ISSUE_REPORTER_SCREEN_NAME))
+        put(key = SettingsAnalytics.Params.ACTION_NAME, value = AnalyticsValue.Str(value = actionName))
+        putAll(from = params)
     },
+)
+
+/** Logs expanding or collapsing the device details panel. */
+internal fun issueReporterToggleDeviceInfoEvent(expanded: Boolean): AnalyticsEvent =
+    issueReporterActionEvent(
+        actionName = IssueReporterActionNames.TOGGLE_DEVICE_INFO,
+        params = mapOf(
+            IssueReporterParams.EXPANDED to AnalyticsValue.Bool(value = expanded),
+        ),
+    )
+
+/** Logs using a Markdown formatting control in the description editor. */
+internal fun issueReporterFormatDescriptionEvent(format: String): AnalyticsEvent =
+    issueReporterActionEvent(
+        actionName = IssueReporterActionNames.FORMAT_DESCRIPTION,
+        params = mapOf(
+            IssueReporterParams.FORMAT to AnalyticsValue.Str(value = format),
+        ),
+    )
+
+/** Logs a send attempt with field lengths and the gate that stopped it, never the report content. */
+internal fun issueReporterSendAttemptEvent(
+    titleLength: Int,
+    descriptionLength: Int,
+    validationFailure: String?,
+): AnalyticsEvent = issueReporterActionEvent(
+    actionName = IssueReporterActionNames.SEND_ISSUE,
+    params = mapOf(
+        IssueReporterParams.TITLE_LENGTH to AnalyticsValue.LongVal(value = titleLength.toLong()),
+        IssueReporterParams.DESCRIPTION_LENGTH to AnalyticsValue.LongVal(value = descriptionLength.toLong()),
+        IssueReporterParams.VALIDATION_FAILURE to
+            AnalyticsValue.Str(value = validationFailure ?: IssueReporterParams.VALIDATION_PASSED),
+    ),
 )
 
 /** The first invalid field, top first, as `field_reason`, or null when the report is valid. */

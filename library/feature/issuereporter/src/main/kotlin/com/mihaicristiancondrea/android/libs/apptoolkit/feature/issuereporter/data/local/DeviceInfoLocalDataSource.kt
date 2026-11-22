@@ -42,7 +42,7 @@ class DeviceInfoLocalDataSource(
 
         DeviceInfo(
             appVersionName = versionInfo?.versionName,
-            appVersionCode = versionInfo?.versionCode ?: UNKNOWN_VERSION_CODE,
+            appVersionCode = versionInfo?.versionCode ?: -1L,
             buildVersion = Build.VERSION.INCREMENTAL ?: Build.UNKNOWN,
             releaseVersion = Build.VERSION.RELEASE ?: Build.UNKNOWN,
             sdkVersion = Build.VERSION.SDK_INT,
@@ -57,9 +57,5 @@ class DeviceInfoLocalDataSource(
             abis32Bit = Build.SUPPORTED_32_BIT_ABIS.orEmpty().toList(),
             abis64Bit = Build.SUPPORTED_64_BIT_ABIS.orEmpty().toList(),
         )
-    }
-
-    private companion object {
-        const val UNKNOWN_VERSION_CODE: Long = -1
     }
 }

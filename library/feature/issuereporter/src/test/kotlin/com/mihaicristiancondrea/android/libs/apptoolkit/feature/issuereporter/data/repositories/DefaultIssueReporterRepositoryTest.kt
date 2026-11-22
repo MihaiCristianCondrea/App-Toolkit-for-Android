@@ -111,6 +111,19 @@ class DefaultIssueReporterRepositoryTest {
     }
 
     @Test
+    fun `a report with a blank token sends no authorization header`() = runTest {
+        var request: HttpRequestData? = null
+        val repository = createRepository { captured ->
+            request = captured
+            respond("""{"html_url":"https://example.com/issue/3"}""", HttpStatusCode.Created)
+        }
+
+        repository.sendReport(report(), target, token = "   ")
+
+        assertNull(request?.headers?.get(HttpHeaders.Authorization))
+    }
+
+    @Test
     fun `a filed report without a url returns an empty one`() = runTest {
         val repository = createRepository { respond("{}", HttpStatusCode.Created) }
 

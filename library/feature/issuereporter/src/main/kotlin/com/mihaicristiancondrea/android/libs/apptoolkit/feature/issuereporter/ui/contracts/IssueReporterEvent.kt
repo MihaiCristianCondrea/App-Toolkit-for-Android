@@ -21,15 +21,20 @@ package com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.u
  * What the author can ask the issue reporter's ViewModel to do.
  */
 sealed interface IssueReporterEvent {
+
+    /** Replaces the draft title with [value] and clears any title validation error. */
     data class UpdateTitle(val value: String) : IssueReporterEvent
 
+    /** Replaces the draft description with [value] and clears any description validation error. */
     data class UpdateDescription(val value: String) : IssueReporterEvent
 
+    /** Replaces the contact email with [value] and clears any email validation error. */
     data class UpdateEmail(val value: String) : IssueReporterEvent
 
     /** Captures the device details for the panel, unless they are already shown or loading. */
     data object RequestDeviceInfo : IssueReporterEvent
 
+    /** Validates the current draft and submits it when all report checks pass. */
     data object Send : IssueReporterEvent
 
     /**

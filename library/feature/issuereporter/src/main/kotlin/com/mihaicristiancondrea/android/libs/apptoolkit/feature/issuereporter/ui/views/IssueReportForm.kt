@@ -37,12 +37,10 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.fields.Gen
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.fields.markdown.MarkdownFormatAction
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.GroupedItemPosition
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.R
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.ui.constants.IssueReporterUiConstants
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.ui.contracts.IssueReporterEvent
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.ui.mappers.toUiText
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.ui.states.IssueReporterUiState
-
-/** Outward-facing corner radius shared by every grouped block on the report screen. */
-internal val ISSUE_GROUP_OUTER_RADIUS = SizeConstants.LargeMediumSize
 
 /**
  * Form inputs for the issue report: `GeneralTextField` in its grouped style, with tight spacing.
@@ -69,18 +67,20 @@ internal fun IssueReportForm(
 ) {
     Column(
         modifier = modifier.fillMaxWidth(),
-        verticalArrangement = Arrangement.spacedBy(SizeConstants.ExtraTinySize)
+        verticalArrangement = Arrangement.spacedBy(space = SizeConstants.ExtraTinySize),
     ) {
         GeneralTextField(
             value = data.title,
-            onValueChange = { onEvent(IssueReporterEvent.UpdateTitle(it)) },
+            onValueChange = { value -> onEvent(IssueReporterEvent.UpdateTitle(value = value)) },
             style = GeneralTextFieldStyle.Grouped,
             position = GroupedItemPosition.FIRST,
-            groupedOuterRadius = ISSUE_GROUP_OUTER_RADIUS,
+            groupedOuterRadius = IssueReporterUiConstants.GROUP_OUTER_RADIUS,
             placeholder = stringResource(id = R.string.issue_title_label),
             leadingIcon = ToolkitIcon.Vector(imageVector = Icons.Outlined.Title),
             leadingIconContentDescription = stringResource(id = R.string.issue_title_label),
-            errorText = data.fieldErrors.titleError?.toUiText(missingText = R.string.error_title_missing)?.asString(),
+            errorText = data.fieldErrors.titleError
+                ?.toUiText(missingText = R.string.error_title_missing)
+                ?.asString(),
             singleLine = true,
             keyboardOptions = KeyboardOptions(
                 capitalization = KeyboardCapitalization.Sentences,
@@ -90,7 +90,9 @@ internal fun IssueReportForm(
 
         IssueDescriptionField(
             description = data.description,
-            onDescriptionChange = { onEvent(IssueReporterEvent.UpdateDescription(it)) },
+            onDescriptionChange = { value ->
+                onEvent(IssueReporterEvent.UpdateDescription(value = value))
+            },
             onMarkdownFormat = onMarkdownFormat,
             errorText = data.fieldErrors.descriptionError
                 ?.toUiText(missingText = R.string.error_description_missing)
@@ -99,14 +101,16 @@ internal fun IssueReportForm(
 
         GeneralTextField(
             value = data.email,
-            onValueChange = { onEvent(IssueReporterEvent.UpdateEmail(it)) },
+            onValueChange = { value -> onEvent(IssueReporterEvent.UpdateEmail(value = value)) },
             style = GeneralTextFieldStyle.Grouped,
             position = GroupedItemPosition.LAST,
-            groupedOuterRadius = ISSUE_GROUP_OUTER_RADIUS,
+            groupedOuterRadius = IssueReporterUiConstants.GROUP_OUTER_RADIUS,
             placeholder = stringResource(id = R.string.issue_email_label),
             leadingIcon = ToolkitIcon.Vector(imageVector = Icons.Outlined.Email),
             leadingIconContentDescription = stringResource(id = R.string.issue_email_label),
-            errorText = data.fieldErrors.emailError?.toUiText(missingText = R.string.error_email_missing)?.asString(),
+            errorText = data.fieldErrors.emailError
+                ?.toUiText(missingText = R.string.error_email_missing)
+                ?.asString(),
             singleLine = true,
             keyboardOptions = KeyboardOptions(
                 keyboardType = KeyboardType.Email,

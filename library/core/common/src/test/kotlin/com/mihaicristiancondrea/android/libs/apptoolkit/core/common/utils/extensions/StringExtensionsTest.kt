@@ -19,10 +19,11 @@ package com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.exten
 
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.string.normalizeRoute
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.string.sanitizeUrlOrNull
-import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.assertAll
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.string.toToken
 import kotlin.test.assertEquals
 import kotlin.test.assertNull
+import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertAll
 
 class StringExtensionsTest {
 
@@ -47,6 +48,14 @@ class StringExtensionsTest {
             { assertNull("".normalizeRoute()) },
             { assertNull("   ".normalizeRoute()) },
             { assertNull(null.normalizeRoute()) },
+        )
+    }
+
+    @Test
+    fun `toToken decodes valid base64 and returns empty on invalid input`() {
+        assertAll(
+            { assertEquals("github-token", "Z2l0aHViLXRva2Vu".toToken()) },
+            { assertEquals("", "not-base64%%%".toToken()) },
         )
     }
 }

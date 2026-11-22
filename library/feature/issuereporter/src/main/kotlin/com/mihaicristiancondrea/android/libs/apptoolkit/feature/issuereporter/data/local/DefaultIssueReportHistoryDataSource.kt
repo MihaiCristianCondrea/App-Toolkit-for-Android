@@ -21,13 +21,13 @@ import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.emptyPreferences
-import androidx.datastore.preferences.core.longPreferencesKey
-import androidx.datastore.preferences.core.stringSetPreferencesKey
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.data.models.FiledIssueReport
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.data.constants.IssueReportHistoryConstants
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.data.local.converters.encode
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.data.local.converters.toIssueReportHistory
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.data.models.IssueReportHistory
+import java.io.IOException
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.first
-import java.io.IOException
 
 /**
  * Keeps the history in [dataStore]: the time of the last filed report, and each report as
@@ -40,40 +40,19 @@ class DefaultIssueReportHistoryDataSource(
     override suspend fun read(): IssueReportHistory = dataStore.data
         .catch { throwable -> if (throwable is IOException) emit(emptyPreferences()) else throw throwable }
         .first()
-        .toHistory()
+        .toIssueReportHistory()
 
     override suspend fun update(transform: (IssueReportHistory) -> IssueReportHistory) {
         dataStore.edit { preferences ->
-            val next: IssueReportHistory = transform(preferences.toHistory())
+            val next: IssueReportHistory = transform(preferences.toIssueReportHistory())
             val lastSubmittedAt: Long? = next.lastSubmittedAt
             if (lastSubmittedAt == null) {
-                preferences.remove(Keys.lastSubmittedAt)
+                preferences.remove(key = IssueReportHistoryConstants.LAST_SUBMITTED_AT_KEY)
             } else {
-                preferences[Keys.lastSubmittedAt] = lastSubmittedAt
+                preferences[IssueReportHistoryConstants.LAST_SUBMITTED_AT_KEY] = lastSubmittedAt
             }
-            preferences[Keys.recentReports] = next.reports.mapTo(mutableSetOf()) { report -> report.encode() }
+            preferences[IssueReportHistoryConstants.RECENT_REPORTS_KEY] =
+                next.reports.mapTo(destination = mutableSetOf()) { report -> report.encode() }
         }
-    }
-
-    private fun Preferences.toHistory(): IssueReportHistory = IssueReportHistory(
-        lastSubmittedAt = this[Keys.lastSubmittedAt],
-        reports = this[Keys.recentReports].orEmpty().mapNotNull { value -> value.decodeReport() },
-    )
-
-    private fun FiledIssueReport.encode(): String = "$submittedAt$SEPARATOR$fingerprint"
-
-    private fun String.decodeReport(): FiledIssueReport? {
-        val submittedAt: Long = substringBefore(SEPARATOR).toLongOrNull() ?: return null
-        val fingerprint: String = substringAfter(SEPARATOR, missingDelimiterValue = "")
-        return if (fingerprint.isEmpty()) null else FiledIssueReport(submittedAt, fingerprint)
-    }
-
-    private object Keys {
-        val lastSubmittedAt = longPreferencesKey("issue_reporter_last_submitted_at")
-        val recentReports = stringSetPreferencesKey("issue_reporter_recent_reports")
-    }
-
-    private companion object {
-        const val SEPARATOR: Char = ':'
     }
 }

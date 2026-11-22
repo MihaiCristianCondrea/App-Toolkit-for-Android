@@ -15,12 +15,12 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.ui
+package com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.ui.utils
 
-import org.junit.jupiter.api.AfterEach
-import org.junit.jupiter.api.Test
 import kotlin.test.assertFalse
 import kotlin.test.assertTrue
+import org.junit.jupiter.api.AfterEach
+import org.junit.jupiter.api.Test
 
 /** Covers the latch that keeps the reporter's two entry points from stacking sheets. */
 class IssueReporterPresenceTest {
