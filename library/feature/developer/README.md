@@ -45,7 +45,7 @@ be restarted into a variation. The person's own preferences are display settings
 - Screen identity (`DEVELOPER_OPTIONS_SCREEN`) and successful option/reset event builders live in
   `ui/analytics/`. Parameters contain bounded option keys, with no host names, stack text or
   selected values.
-- `developerOptionsPage()`, the registration of `DeveloperOptionsScreen`, and
+- `developerOptionsScreen()`, the registration of `DeveloperOptionsScreen`, and
   `developerOptionsModule`.
 - Its strings, in every supported locale, including the page title `shell_developer_options` and
   the override rows' titles and options.
@@ -56,7 +56,7 @@ be restarted into a variation. The person's own preferences are display settings
   `ShellPreferencesRepository`).
 - What the app's shell can show, `ShellCapabilities`, owned by
   [`:library:navigation`](../../navigation/README.md) and provided by `ShellHost`.
-- Adding the page to a graph, done by `toolkitPages()` in
+- Adding the page to a graph, done by `toolkitScreens()` in
   [`:library:apptoolkit`](../../apptoolkit/README.md). An app replaces the page by registering
   `DeveloperOptionsScreen` itself.
 - Where the page is offered. The advanced settings of
@@ -84,7 +84,7 @@ Render `DeveloperOptionsScreen` inside a `ShellHost` so the shell composition lo
 
 ```mermaid
 flowchart TD
-    Entry["developerOptionsPage(): DeveloperOptionsRoute"] --> Screen["DeveloperOptionsScreen"]
+    Entry["developerOptionsScreen(): DeveloperOptionsScreen"] --> Screen["DeveloperOptionsScreen"]
     Screen -->|"LocalShellPreferences"| VM["DeveloperOptionsViewModel"]
     Screen -->|"LocalShellLayout, Graph, Navigator, Capabilities"| Host["ScreenHost"]
     Host --> Content["DeveloperOptionsScreenContent"]
@@ -131,7 +131,7 @@ flowchart TD
 
 ## Public contracts
 
-- `DeveloperOptionsScreen()`, `developerOptionsPage()`, `developerOptionsModule`,
+- `DeveloperOptionsScreen()`, `developerOptionsScreen()`, `developerOptionsModule`,
   `DeveloperOptionsViewModel`, `DeveloperOptionsUiState`, and `DeveloperOptionsEvent`. The
   assembled Toolkit graph includes the module. Hosts assembling modules manually include it before
   opening the page. `DeveloperOptionsScreenContent`, option models, transformers, formatters, and

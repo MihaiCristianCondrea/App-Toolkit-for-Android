@@ -17,14 +17,6 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.theme.ui
 
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.theme.ui.analytics.THEME_SCREEN_NAME
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.theme.ui.analytics.paletteTabSelectEvent
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.theme.ui.analytics.dynamicPaletteSelectEvent
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.theme.ui.analytics.staticPaletteSelectEvent
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.theme.ui.analytics.themeModeSelectEvent
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.theme.ui.analytics.amoledToggleEvent
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.theme.ui.analytics.openDisplaySettingsEvent
-
 import android.content.Context
 import android.os.Build
 import android.util.Log
@@ -51,16 +43,12 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.models.ThemePreferencesState
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.telemetry.models.TrackedScreen
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.colorscheme.StaticPaletteIds
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.logging.THEME_SETTINGS_LOG_TAG
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.context.openDisplaySettings
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.R
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.Loadable
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.ScreenHost
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.ScreenStateHandler
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.analytics.LocalTelemetry
@@ -72,14 +60,16 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.shell.cont
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.theme.ThemeModePicker
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.theme.ThemePalettePicker
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.theme.isAmoledAllowed
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.theme.ui.analytics.THEME_SCREEN
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.theme.ui.analytics.amoledToggleEvent
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.theme.ui.analytics.dynamicPaletteSelectEvent
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.theme.ui.analytics.openDisplaySettingsEvent
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.theme.ui.analytics.paletteTabSelectEvent
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.theme.ui.analytics.staticPaletteSelectEvent
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.theme.ui.analytics.themeModeSelectEvent
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.theme.ui.contracts.ThemeSettingsEvent
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.theme.ui.states.ThemeSettingsUiState
 import org.koin.compose.viewmodel.koinViewModel
-
-
-private const val THEME_SCREEN_CLASS = "ThemeSettingsScreen"
-private val THEME_SCREEN: TrackedScreen =
-    TrackedScreen(name = THEME_SCREEN_NAME, className = THEME_SCREEN_CLASS)
 
 /**
  * The theme settings page: the color palette, the theme mode, AMOLED, and a link to the system
@@ -104,19 +94,19 @@ fun ThemeSettingsScreen() {
             },
             onDynamicPaletteSelected = { variant ->
                 telemetry.logEvent(dynamicPaletteSelectEvent(variant = variant))
-                viewModel.onEvent(ThemeSettingsEvent.SelectDynamicPalette(variant))
+                viewModel.onEvent(ThemeSettingsEvent.SelectDynamicPalette(variant = variant))
             },
             onStaticPaletteSelected = { id, seasonal ->
                 telemetry.logEvent(staticPaletteSelectEvent(id = id, seasonal = seasonal))
-                viewModel.onEvent(ThemeSettingsEvent.SelectStaticPalette(id))
+                viewModel.onEvent(ThemeSettingsEvent.SelectStaticPalette(id = id))
             },
             onThemeModeSelected = { mode ->
                 telemetry.logEvent(themeModeSelectEvent(mode = mode))
-                viewModel.onEvent(ThemeSettingsEvent.SelectThemeMode(mode))
+                viewModel.onEvent(ThemeSettingsEvent.SelectThemeMode(mode = mode))
             },
             onAmoledModeChanged = { enabled ->
                 telemetry.logEvent(amoledToggleEvent(enabled = enabled))
-                viewModel.onEvent(ThemeSettingsEvent.SetAmoledMode(enabled))
+                viewModel.onEvent(ThemeSettingsEvent.SetAmoledMode(enabled = enabled))
             },
             onOpenDisplaySettings = {
                 val opened: Boolean = context.openDisplaySettings()
@@ -193,13 +183,14 @@ private fun ThemeSettingsList(
     onThemeModeSelected: (mode: String) -> Unit,
     onAmoledModeChanged: (enabled: Boolean) -> Unit,
     onOpenDisplaySettings: () -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     LazyColumn(
         contentPadding = contentPadding,
         verticalArrangement = Arrangement.spacedBy(SizeConstants.LargeSize),
-        modifier = Modifier.fillMaxSize(),
+        modifier = modifier.fillMaxSize(),
     ) {
-        animatedItem {
+        animatedItem(key = "theme_preview_illustration") {
             Image(
                 imageVector = rememberPaletteImageVector(),
                 contentDescription = null,
@@ -210,11 +201,11 @@ private fun ThemeSettingsList(
             )
         }
 
-        animatedItem { SectionDivider() }
+        animatedItem(key = "theme_palette_divider") { SectionDivider() }
 
-        animatedItem { SectionTitle(title = R.string.color_palette) }
+        animatedItem(key = "theme_palette_title") { SectionTitle(title = R.string.color_palette) }
 
-        animatedItem {
+        animatedItem(key = "theme_palette_picker") {
             ThemePalettePicker(
                 preferences = preferences,
                 seasonalThemesUnlocked = seasonalThemesUnlocked,
@@ -225,11 +216,11 @@ private fun ThemeSettingsList(
             )
         }
 
-        animatedItem { SectionDivider() }
+        animatedItem(key = "theme_mode_divider") { SectionDivider() }
 
-        animatedItem { SectionTitle(title = R.string.theme_mode) }
+        animatedItem(key = "theme_mode_title") { SectionTitle(title = R.string.theme_mode) }
 
-        animatedItem {
+        animatedItem(key = "theme_mode_picker") {
             ThemeModePicker(
                 selectedMode = preferences.themeMode,
                 onSelected = onThemeModeSelected,
@@ -237,7 +228,7 @@ private fun ThemeSettingsList(
             )
         }
 
-        animatedItem {
+        animatedItem(key = "theme_amoled_card") {
             SwitchCardItem(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -250,7 +241,7 @@ private fun ThemeSettingsList(
             )
         }
 
-        animatedItem {
+        animatedItem(key = "theme_display_settings_info") {
             InfoMessageSection(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -277,67 +268,4 @@ private fun SectionTitle(@StringRes title: Int) {
         style = MaterialTheme.typography.titleLarge,
         fontWeight = FontWeight.SemiBold,
     )
-}
-
-
-private val PreviewPreferences = ThemePreferencesState(
-    dynamicColors = false,
-    staticPaletteId = StaticPaletteIds.GOOGLE_BLUE,
-)
-
-/** Ready and Loading only: the default empty and failure screens inject Koin bindings. */
-@Preview(showBackground = true)
-@Composable
-private fun ThemeSettingsScreenContentPreview() {
-    MaterialTheme {
-        ThemeSettingsScreenContent(
-            state = ThemeSettingsUiState(preferences = Loadable.Ready(PreviewPreferences)),
-            onEvent = {},
-            onPaletteTabSelected = {},
-            onDynamicPaletteSelected = {},
-            onStaticPaletteSelected = { _, _ -> },
-            onThemeModeSelected = {},
-            onAmoledModeChanged = {},
-            onOpenDisplaySettings = {},
-            supportsDynamicColors = false,
-        )
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-private fun ThemeSettingsScreenContentWallpaperColorsPreview() {
-    MaterialTheme {
-        ThemeSettingsScreenContent(
-            state = ThemeSettingsUiState(
-                preferences = Loadable.Ready(PreviewPreferences.copy(dynamicColors = true)),
-                seasonalThemesUnlocked = true,
-            ),
-            onEvent = {},
-            onPaletteTabSelected = {},
-            onDynamicPaletteSelected = {},
-            onStaticPaletteSelected = { _, _ -> },
-            onThemeModeSelected = {},
-            onAmoledModeChanged = {},
-            onOpenDisplaySettings = {},
-            supportsDynamicColors = true,
-        )
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-private fun ThemeSettingsScreenContentLoadingPreview() {
-    MaterialTheme {
-        ThemeSettingsScreenContent(
-            state = ThemeSettingsUiState(),
-            onEvent = {},
-            onPaletteTabSelected = {},
-            onDynamicPaletteSelected = {},
-            onStaticPaletteSelected = { _, _ -> },
-            onThemeModeSelected = {},
-            onAmoledModeChanged = {},
-            onOpenDisplaySettings = {},
-        )
-    }
 }

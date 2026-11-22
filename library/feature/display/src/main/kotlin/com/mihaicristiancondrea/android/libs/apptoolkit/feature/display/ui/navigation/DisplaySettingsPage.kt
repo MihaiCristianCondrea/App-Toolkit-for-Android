@@ -22,14 +22,14 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.feature.display.R
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.display.ui.DisplaySettingsScreen
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.PaneRole
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.ShellGraphBuilder
-import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.DisplaySettingsRoute
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.DisplaySettingsScreen
 
 /**
- * Registers the display settings page for [DisplaySettingsRoute], a detail of the settings list,
+ * Registers the display settings page for [DisplaySettingsScreen], a detail of the settings list,
  * unless the app registered its own.
  */
-fun ShellGraphBuilder.displaySettingsPage() {
-    pageIfAbsent<DisplaySettingsRoute>(
+fun ShellGraphBuilder.displaySettingsScreen() {
+    pageIfAbsent<DisplaySettingsScreen>(
         paneRole = PaneRole.Detail,
         title = { stringResource(R.string.display) },
     ) {

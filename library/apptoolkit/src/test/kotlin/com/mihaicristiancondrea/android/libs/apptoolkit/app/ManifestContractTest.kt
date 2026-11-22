@@ -118,7 +118,7 @@ class ManifestContractTest {
         assertContains(buildScript, "resValue(\"string\", \"app_package_name\", releasedApplicationId)")
         assertContains(mainActivity, "ShellHost(")
         assertContains(appGraph, "\"$OPEN_SETTINGS_ACTION\"")
-        assertContains(appGraph, "deepLinks { action(ACTION_OPEN_SETTINGS) { SettingsRoute } }")
+        assertContains(appGraph, "deepLinks { action(ACTION_OPEN_SETTINGS) { SettingsScreen } }")
     }
 
     /**

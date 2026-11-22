@@ -22,16 +22,16 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.integration.ads.R
 import com.mihaicristiancondrea.android.libs.apptoolkit.integration.ads.ui.AdsSettingsScreen
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.PaneRole
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.ShellGraphBuilder
-import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.AdsSettingsRoute
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.AdsSettingsScreen
 
 /**
- * Registers the ads settings page for [AdsSettingsRoute], unless the app registered its own.
+ * Registers the ads settings page for [AdsSettingsScreen], unless the app registered its own.
  *
  * It opens from the privacy page, itself a detail beside the settings list, so it is a page of its
  * own rather than a detail, which would replace the privacy page instead of stacking.
  */
-fun ShellGraphBuilder.adsSettingsPage() {
-    pageIfAbsent<AdsSettingsRoute>(
+fun ShellGraphBuilder.adsSettingsScreen() {
+    pageIfAbsent<AdsSettingsScreen>(
         paneRole = PaneRole.None,
         title = { stringResource(R.string.ads) },
     ) {

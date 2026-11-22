@@ -19,10 +19,10 @@ package com.mihaicristiancondrea.android.libs.apptoolkit.feature.privacy.ui.sear
 
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.settings.settingsSearchProvider
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.privacy.R
-import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.AdsSettingsRoute
-import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.DiagnosticsSettingsRoute
-import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.PermissionsRoute
-import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.PrivacySettingsRoute
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.AdsSettingsScreen
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.DiagnosticsSettingsScreen
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.PermissionsScreen
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.PrivacySettingsScreen
 
 /**
  * The privacy page's rows the settings search finds. Each opens the page the row opens, rather
@@ -30,21 +30,21 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.Privac
  */
 internal val privacySettingsSearch = settingsSearchProvider(
     section = R.string.security_and_privacy,
-    destination = PrivacySettingsRoute,
+    destination = PrivacySettingsScreen,
 ) {
     preference(
         title = R.string.permissions,
         summary = R.string.summary_preference_settings_permissions,
-        destination = PermissionsRoute,
+        destination = PermissionsScreen,
     )
     preference(
         title = R.string.ads,
         summary = R.string.summary_preference_settings_ads,
-        destination = AdsSettingsRoute,
+        destination = AdsSettingsScreen,
     )
     preference(
         title = R.string.usage_and_diagnostics,
         summary = R.string.summary_preference_settings_usage_and_diagnostics,
-        destination = DiagnosticsSettingsRoute,
+        destination = DiagnosticsSettingsScreen,
     )
 }

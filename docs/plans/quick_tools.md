@@ -41,6 +41,6 @@ Instead of adding new unrelated features, we split our existing 17 tools into fo
 
 | Destination Screen | Tools Hosted | Status | UI & Interaction Pattern |
 | :--- | :--- | :--- | :--- |
-| **1. Numbers Screen (`NumbersRoute`, `NumbersScreen`)** | • **Calculate & convert**: `BILL_SPLITTER`, `UNIT_CONVERTER`<br>• **Count & chance**: Live `COUNTER`, `RANDOM_NUMBER`, `DICE_ROLL` | **Completed** | Warm gold hero banner ("Count, split & convert"), clickable cards for Bill Splitter & Unit Converter, live interactive Counter card, and clickable cards for Random Number Picker & Dice Roll. |
+| **1. Numbers Screen (`NumbersScreen`)** | • **Calculate & convert**: `BILL_SPLITTER`, `UNIT_CONVERTER`<br>• **Count & chance**: Live `COUNTER`, `RANDOM_NUMBER`, `DICE_ROLL` | **Completed** | Warm gold hero banner ("Count, split & convert"), clickable cards for Bill Splitter & Unit Converter, live interactive Counter card, and clickable cards for Random Number Picker & Dice Roll. |
 | **2. Quick Tools** *(Remains)* | `COIN_FLIP`, `DICE_ROLL`, `COUNTER`, `FLASH_DIMMER`, `SOS`, `MORSE`, `SCREEN_LIGHT`, `BREATHING`, `REACTION_TEST`, `RULER`, `BUBBLE_LEVEL`, `COMPASS`, `PROTRACTOR`, `material_colors` | **Active** | Tile-ready tools and hardware/system/wellbeing controls. |
 | **3. Apps** *(Untouched)* | Existing developer portfolio catalog | **Active** | Untouched 2-column app grid with Installed/Not installed filters and random app FAB. |

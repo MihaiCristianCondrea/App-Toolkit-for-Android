@@ -19,20 +19,20 @@ package com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.ui.search
 
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.settings.settingsSearchProvider
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.R
-import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.AboutRoute
-import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.LicensesRoute
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.AboutScreen
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.LicensesScreen
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.R as CoreUiR
 
 /**
  * The About page's rows the settings search finds. The licenses row opens the licenses page.
  */
 internal val aboutSettingsSearch =
-    settingsSearchProvider(section = CoreUiR.string.about, destination = AboutRoute) {
+    settingsSearchProvider(section = CoreUiR.string.about, destination = AboutScreen) {
         preference(title = R.string.app_info)
         preference(title = R.string.device_info)
         preference(
             title = R.string.oss_license_title,
             summary = R.string.summary_preference_settings_oss,
-            destination = LicensesRoute
+            destination = LicensesScreen
         )
     }

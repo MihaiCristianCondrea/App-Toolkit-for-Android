@@ -24,9 +24,9 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.settings.
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.settings.SettingsSearchEntry
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.privacy.R
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.shellGraph
-import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.AdsSettingsRoute
-import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.DiagnosticsSettingsRoute
-import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.PermissionsRoute
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.AdsSettingsScreen
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.DiagnosticsSettingsScreen
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.PermissionsScreen
 import org.junit.jupiter.api.Test
 import kotlin.test.assertEquals
 
@@ -53,17 +53,17 @@ class PrivacySettingsSearchTest {
                 entry(
                     title = R.string.permissions,
                     summary = R.string.summary_preference_settings_permissions,
-                    destination = PermissionsRoute,
+                    destination = PermissionsScreen,
                 ),
                 entry(
                     title = R.string.ads,
                     summary = R.string.summary_preference_settings_ads,
-                    destination = AdsSettingsRoute,
+                    destination = AdsSettingsScreen,
                 ),
                 entry(
                     title = R.string.usage_and_diagnostics,
                     summary = R.string.summary_preference_settings_usage_and_diagnostics,
-                    destination = DiagnosticsSettingsRoute,
+                    destination = DiagnosticsSettingsScreen,
                 ),
             ),
             privacySettingsSearch.entries(context = SettingsSearchContext(graph = graph)),

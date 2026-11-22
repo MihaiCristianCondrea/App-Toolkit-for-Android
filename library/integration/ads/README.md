@@ -9,8 +9,8 @@ Owns ad enablement settings and Google Mobile Ads integration UI used by AppTool
 - Ads settings event builders and keys in `ui/analytics/AdsSettingsAnalytics.kt`.
 - `di.adsIntegrationModule()` binds the ads manager, settings repository, and ViewModel. The main toolkit
   module composes it; hosts supply their placement configuration and foundation providers.
-- Ads settings repository, ViewModel and screen, and `adsSettingsPage()`, the registration of
-  `AdsSettingsRoute` (opened from the privacy page).
+- Ads settings repository, ViewModel and screen, and `adsSettingsScreen()`, the registration of
+  `AdsSettingsScreen` (opened from the privacy page).
 - `AppOpenAdController`, `AdsSdkInitializer`, and Google Mobile Ads SDK initialization.
 - `OnShowAdCompleteListener`, called once an app-open ad has been shown.
 - App-open ad lifecycle; the `INTERNET`, `ACCESS_NETWORK_STATE`, and `AD_ID` permissions required by
@@ -580,7 +580,7 @@ so none of them need a `NativeAdView`.
 
 ## Public contracts
 
-- `AdsSettingsScreen`, `adsSettingsPage()`, the repository contract, and the UI event, action and
+- `AdsSettingsScreen`, `adsSettingsScreen()`, the repository contract, and the UI event, action and
   state contracts.
 - `AppOpenAdController` and its replaceable `AdsSdkInitializer` test seam.
 

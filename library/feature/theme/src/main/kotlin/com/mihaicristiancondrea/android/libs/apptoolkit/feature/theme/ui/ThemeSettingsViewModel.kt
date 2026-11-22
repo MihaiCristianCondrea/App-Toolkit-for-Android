@@ -24,6 +24,8 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.Loadable
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.LoggedScreenViewModel
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.toErrorMessage
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.toFailed
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.theme.ui.analytics.THEME_SCREEN
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.theme.ui.constants.ThemeOperationNames
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.theme.ui.contracts.ThemeSettingsEvent
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.theme.ui.states.ThemeSettingsUiState
 import kotlinx.coroutines.Job
@@ -45,7 +47,7 @@ class ThemeSettingsViewModel(
 ) : LoggedScreenViewModel<ThemeSettingsUiState, ThemeSettingsEvent>(
     initialState = ThemeSettingsUiState(),
     telemetryRepository = telemetryRepository,
-    screenName = "Theme",
+    screenName = THEME_SCREEN.name,
     viewModelName = "ThemeSettingsViewModel",
 ) {
     private var observeJob: Job? = null
@@ -56,32 +58,38 @@ class ThemeSettingsViewModel(
 
     override fun handleEvent(event: ThemeSettingsEvent) {
         when (event) {
-            ThemeSettingsEvent.Load -> observePreferences()
+            is ThemeSettingsEvent.Load -> observePreferences()
 
-            is ThemeSettingsEvent.SelectThemeMode -> persist(setting = Settings.THEME_MODE) {
-                preferences.selectThemeMode(event.mode)
+            is ThemeSettingsEvent.SelectThemeMode -> persist(setting = ThemeOperationNames.Settings.THEME_MODE) {
+                preferences.selectThemeMode(mode = event.mode)
             }
 
-            is ThemeSettingsEvent.SetAmoledMode -> persist(setting = Settings.AMOLED_MODE) {
-                preferences.setAmoledMode(event.enabled)
+            is ThemeSettingsEvent.SetAmoledMode -> persist(setting = ThemeOperationNames.Settings.AMOLED_MODE) {
+                preferences.setAmoledMode(enabled = event.enabled)
             }
 
-            is ThemeSettingsEvent.SetWeatherEffect -> persist(setting = Settings.WEATHER_EFFECT) {
-                seasonal.setWeatherEffect(event.effect)
+            is ThemeSettingsEvent.SetWeatherEffect -> persist(setting = ThemeOperationNames.Settings.WEATHER_EFFECT) {
+                seasonal.setWeatherEffect(effect = event.effect)
             }
 
-            is ThemeSettingsEvent.SelectDynamicPalette -> persist(setting = Settings.DYNAMIC_PALETTE) {
-                preferences.selectDynamicPalette(event.variant)
+            is ThemeSettingsEvent.SelectDynamicPalette -> persist(setting = ThemeOperationNames.Settings.DYNAMIC_PALETTE) {
+                preferences.selectDynamicPalette(variant = event.variant)
             }
 
-            is ThemeSettingsEvent.SelectStaticPalette -> persist(setting = Settings.STATIC_PALETTE) {
-                preferences.selectStaticPalette(event.id)
+            is ThemeSettingsEvent.SelectStaticPalette -> persist(setting = ThemeOperationNames.Settings.STATIC_PALETTE) {
+                preferences.selectStaticPalette(id = event.id)
             }
         }
     }
 
     private fun observePreferences() {
-        setState { copy(preferences = Loadable.Loading) }
+        setState {
+            if (preferences is Loadable.Ready) {
+                this
+            } else {
+                copy(preferences = Loadable.Loading)
+            }
+        }
         observeJob = observeJob.restart {
             combine(
                 preferences.preferencesState,
@@ -93,7 +101,7 @@ class ThemeSettingsViewModel(
                     weatherEffect = weatherEffect,
                 )
             }.collectReport(
-                action = Actions.OBSERVE_PREFERENCES,
+                action = ThemeOperationNames.OBSERVE_PREFERENCES,
                 onError = { error -> setState { copy(preferences = error.toFailed()) } },
             ) { loaded ->
                 setState { loaded }
@@ -102,32 +110,15 @@ class ThemeSettingsViewModel(
     }
 
     /**
-     * Saves one theme setting as the [Actions.PERSIST_THEME_SETTING] operation. Every write runs to
-     * completion, so a quick second tap never cancels the first.
+     * Saves one theme setting as the [ThemeOperationNames.PERSIST_THEME_SETTING] operation. Every
+     * write runs to completion, so a quick second tap never cancels the first.
      */
     private fun persist(setting: String, write: suspend () -> Unit) {
         launchReport(
-            action = Actions.PERSIST_THEME_SETTING,
-            extra = mapOf(ExtraKeys.SETTING to setting),
+            action = ThemeOperationNames.PERSIST_THEME_SETTING,
+            extra = mapOf(ThemeOperationNames.ExtraKeys.SETTING to setting),
             onError = { error -> showMessage(error.toErrorMessage()) },
             block = write,
         )
-    }
-
-    private object Actions {
-        const val OBSERVE_PREFERENCES: String = "observePreferences"
-        const val PERSIST_THEME_SETTING: String = "persistThemeSetting"
-    }
-
-    private object ExtraKeys {
-        const val SETTING: String = "setting"
-    }
-
-    private object Settings {
-        const val THEME_MODE: String = "theme_mode"
-        const val AMOLED_MODE: String = "amoled_mode"
-        const val WEATHER_EFFECT: String = "weather_effect"
-        const val DYNAMIC_PALETTE: String = "dynamic_palette"
-        const val STATIC_PALETTE: String = "static_palette"
     }
 }

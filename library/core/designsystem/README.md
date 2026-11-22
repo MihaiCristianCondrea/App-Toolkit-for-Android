@@ -482,7 +482,7 @@ replay mode.
 
 ```kotlin
 tab(
-    key = ToolkitTilesRoute,
+    key = ToolkitTilesScreen,
     label = R.string.tiles_title,
     icon = ToolkitIcon.AnimatedVector(
         resId = DesignSystemR.drawable.anim_grid_select,

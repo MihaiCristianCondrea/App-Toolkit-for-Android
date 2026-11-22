@@ -22,14 +22,14 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.feature.advanced.R
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.advanced.ui.AdvancedSettingsScreen
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.PaneRole
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.ShellGraphBuilder
-import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.AdvancedSettingsRoute
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.AdvancedSettingsScreen
 
 /**
- * Registers the advanced settings page for [AdvancedSettingsRoute], a detail of the settings list,
+ * Registers the advanced settings page for [AdvancedSettingsScreen], a detail of the settings list,
  * unless the app registered its own.
  */
-fun ShellGraphBuilder.advancedSettingsPage() {
-    pageIfAbsent<AdvancedSettingsRoute>(
+fun ShellGraphBuilder.advancedSettingsScreen() {
+    pageIfAbsent<AdvancedSettingsScreen>(
         paneRole = PaneRole.Detail,
         title = { stringResource(id = R.string.advanced) },
     ) {

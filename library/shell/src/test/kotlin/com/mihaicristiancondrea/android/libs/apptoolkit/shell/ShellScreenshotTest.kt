@@ -71,7 +71,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.LocalShellNav
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.PaneRole
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.ShellGraph
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.TopBarStyle
-import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.SupportRoute
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.SupportScreen
 import com.mihaicristiancondrea.android.libs.apptoolkit.shell.settings.BackEdgeStyle
 import com.mihaicristiancondrea.android.libs.apptoolkit.shell.settings.NavigationBarStyle
 import com.mihaicristiancondrea.android.libs.apptoolkit.shell.settings.NavigationTint
@@ -572,12 +572,12 @@ private val TestGraph: ShellGraph = shellGraph(appTitle = CommonR.string.app_nam
     page<SettingsDetailKey>(paneRole = PaneRole.Detail, title = { it.name }) { key ->
         Text("${key.name} settings", Modifier.padding(16.dp))
     }
-    page<SupportRoute>(title = { "Support" }) { Text("Support", Modifier.padding(16.dp)) }
+    page<SupportScreen>(title = { "Support" }) { Text("Support", Modifier.padding(16.dp)) }
     drawer {
         link(SettingsListKey, NavigationR.string.settings, ToolkitIcon.AnimatedVector(DesignSystemR.drawable.anim_settings))
-        link(SupportRoute, NavigationR.string.help_and_feedback, ToolkitIcon.Vector(Icons.AutoMirrored.Outlined.HelpOutline))
+        link(SupportScreen, NavigationR.string.help_and_feedback, ToolkitIcon.Vector(Icons.AutoMirrored.Outlined.HelpOutline))
         spacer()
-        link(SupportRoute, CoreUiR.string.about, ToolkitIcon.Vector(Icons.Outlined.Info))
+        link(SupportScreen, CoreUiR.string.about, ToolkitIcon.Vector(Icons.Outlined.Info))
     }
     overflow { supportUs() }
     banner {

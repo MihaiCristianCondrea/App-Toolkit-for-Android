@@ -22,7 +22,7 @@ it means something in the app. The shell's own variations are developer options,
 - Its rows in the settings search, `displaySettingsSearch(startup, sdkInt)`, a
   `settingsSearchProvider` bound as `display` that lists exactly `displayRows`. And
   `displaySettingsModule`.
-- `displaySettingsPage()`, the registration of `DisplaySettingsRoute` as a detail of the settings
+- `displaySettingsScreen()`, the registration of `DisplaySettingsScreen` as a detail of the settings
   list.
 - Localized display settings resources.
 
@@ -35,7 +35,7 @@ it means something in the app. The shell's own variations are developer options,
 - The shell's overrides and their store, owned by [`:library:shell`](../../shell/README.md) and
   offered by [`:library:feature:developer`](../developer/README.md).
 - The theme page the dark theme row opens, owned by [`:library:feature:theme`](../theme/README.md)
-  and reached through `ThemeSettingsRoute`.
+  and reached through `ThemeSettingsScreen`.
 - Which startup pages exist, owned by the host's `DisplaySettingsProvider`.
 
 ## Depends on
@@ -46,7 +46,7 @@ it means something in the app. The shell's own variations are developer options,
 
 ## Used by
 
-- [`:library:apptoolkit`](../../apptoolkit/README.md), which calls `displaySettingsPage()` and
+- [`:library:apptoolkit`](../../apptoolkit/README.md), which calls `displaySettingsScreen()` and
   includes `displaySettingsModule`.
 - `:sample:feature:display`, which provides the sample's `DisplaySettingsProvider`.
 
@@ -73,13 +73,13 @@ flowchart TD
     Provider[DisplaySettingsProvider] --> Rows
     Rows --> Content[DisplaySettingsScreenContent]
     Rows --> Search[displaySettingsSearch]
-    Page[displaySettingsPage: DisplaySettingsRoute] --> Screen[DisplaySettingsScreen]
+    Page[displaySettingsScreen: DisplaySettingsScreen] --> Screen[DisplaySettingsScreen]
     Screen --> VM[DisplaySettingsViewModel]
     Screen --> Content
     VM --> Display[DisplayPreferencesRepository]
     VM --> Theme[ThemePreferencesRepository]
     Content -->|preference changed| VM
-    Screen -->|dark theme row| ThemeRoute[navigate ThemeSettingsRoute]
+    Screen -->|dark theme row| ThemeRoute[navigate ThemeSettingsScreen]
     Screen -->|startup page row| Dialog[DisplaySettingsProvider.StartupPageDialog]
     Screen -->|language row| Language[system language settings or SelectLanguageAlertDialog]
     VM -->|failed write| Messages[MessageHost snackbar]
@@ -112,7 +112,7 @@ flowchart TD
 
 ## Public contracts
 
-- `DisplaySettingsScreen()`, `displaySettingsPage()`, `DisplaySettingsViewModel`,
+- `DisplaySettingsScreen()`, `displaySettingsScreen()`, `DisplaySettingsViewModel`,
   `DisplaySettingsUiState`, `DisplaySettings`, `DisplaySettingsEvent`, `DisplaySettingsProvider`
   (`supportsStartupPage`, `startupPageChoices`, `StartupPageDialog`), `SelectLanguageAlertDialog`,
   `SelectStartupScreenAlertDialog` and `displaySettingsModule`. `DisplaySettingsScreenContent`,

@@ -23,7 +23,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
 import androidx.navigation3.runtime.NavKey
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.icons.ToolkitIcon
-import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.ShellHomeRoute
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.ShellHomeScreen
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.layout.ShellLayoutMode
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.motion.ScreenTransition
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.motion.ShellTransitions
@@ -87,7 +87,7 @@ class ShellGraph internal constructor(
      * when none does or the destination is not registered.
      */
     fun keyFor(intent: Intent): NavKey? =
-        deepLinks.firstNotNullOfOrNull { it(intent) }?.takeIf { it == ShellHomeRoute || contains(it) }
+        deepLinks.firstNotNullOfOrNull { it(intent) }?.takeIf { it == ShellHomeScreen || contains(it) }
 
     /** Every place the app can start: the tabs, then the start screens. */
     val startOptions: List<NavKey> get() = tabs.map { it.key } + startScreens
@@ -121,7 +121,7 @@ class ShellGraph internal constructor(
     }
 
     private fun destinationOrNull(key: NavKey): Destination<*>? =
-        if (key == ShellHomeRoute) null else destinations[key::class]
+        if (key == ShellHomeScreen) null else destinations[key::class]
 }
 
 /**
@@ -130,9 +130,9 @@ class ShellGraph internal constructor(
  *
  * ```
  * val graph = shellGraph(appTitle = R.string.app_name) {
- *     tab(HomeRoute, R.string.home, ToolkitIcon.Vector(Icons.Outlined.Home)) { HomeScreen() }
- *     child<ItemRoute>(title = { it.name }) { ItemScreen(it) }
- *     drawer { settings(); spacer(); link(HelpRoute, R.string.help, ToolkitIcon.Vector(Icons.Outlined.Help)) }
+ *     tab(HomeScreen, R.string.home, ToolkitIcon.Vector(Icons.Outlined.Home)) { HomeScreen() }
+ *     child<ItemScreen>(title = { it.name }) { ItemScreen(it) }
+ *     drawer { settings(); spacer(); link(HelpScreen, R.string.help, ToolkitIcon.Vector(Icons.Outlined.Help)) }
  * }
  * ```
  *

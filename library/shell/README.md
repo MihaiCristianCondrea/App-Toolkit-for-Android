@@ -77,7 +77,7 @@ flowchart TD
     Host --> Prefs[ShellPreferencesRepository]
     Host --> Start[resolveStart, then onReady]
     Host --> Outer[Outer ShellNavDisplay: shell and pages]
-    Outer -->|ShellHomeRoute| Chrome[ShellChrome]
+    Outer -->|ShellHomeScreen| Chrome[ShellChrome]
     Chrome --> Layout{Window width}
     Layout --> Bar[Bottom bar + modal drawer]
     Layout --> Rail[Rail, modal when opened]

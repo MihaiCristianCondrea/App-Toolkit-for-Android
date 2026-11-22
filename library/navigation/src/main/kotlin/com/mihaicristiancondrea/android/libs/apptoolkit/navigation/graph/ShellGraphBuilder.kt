@@ -268,8 +268,8 @@ class ShellGraphBuilder(
      *
      * ```
      * deepLinks {
-     *     action("com.example.action.OPEN_SETTINGS") { SettingsRoute }
-     *     match { intent -> intent.data?.lastPathSegment?.toIntOrNull()?.let(::ItemRoute) }
+     *     action("com.example.action.OPEN_SETTINGS") { SettingsScreen }
+     *     match { intent -> intent.data?.lastPathSegment?.toIntOrNull()?.let(::ItemScreen) }
      * }
      * ```
      */

@@ -72,7 +72,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.R as CoreUiR
  * every override back as the app declares it.
  *
  * It reads the shell's own locals, so it only works as a page of a `ShellHost`. The page is
- * registered by `developerOptionsPage()`, which `toolkitPages()` in `:library:apptoolkit` calls.
+ * registered by `developerOptionsScreen()`, which `toolkitScreens()` in `:library:apptoolkit` calls.
  * The settings search does not list these options because the page is reached once unlocked.
  */
 @Composable

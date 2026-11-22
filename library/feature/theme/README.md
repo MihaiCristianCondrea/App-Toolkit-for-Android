@@ -14,7 +14,7 @@ screen's easter egg unlocks.
 - `ThemeSettingsScreenContent`, the stateless page with its loading and failure states, in
   `ThemeSettingsScreen.kt`.
 - `WeatherEffectAction`, the weather effect button in the page's app bar, and its dialog.
-- `themeSettingsPage()`, the registration of `ThemeSettingsRoute`. The display settings' dark theme
+- `themeSettingsScreen()`, the registration of `ThemeSettingsScreen`. The display settings' dark theme
   row opens it by key. The page is `PaneRole.None`: display is itself a detail beside the settings
   list, and a detail opened from a detail would replace it instead of stacking on it.
 - Its rows in the settings search, a `settingsSearchProvider` bound as `theme`: theme mode, AMOLED,
@@ -39,14 +39,14 @@ screen's easter egg unlocks.
 
 ## Depends on
 
-- `:library:core:common`, `:library:core:datastore`, `:library:core:ui` and
-  `:library:core:designsystem`.
+- `:library:core:common`, `:library:core:datastore`, `:library:core:ui`,
+  `:library:core:designsystem` and [`:library:navigation`](../../navigation/README.md).
 - No other feature module. Only the ui and di layers are needed; there is no duplicate data layer
   or pass-through domain layer.
 
 ## Used by
 
-- [`:library:apptoolkit`](../../apptoolkit/README.md), which calls `themeSettingsPage()` from the
+- [`:library:apptoolkit`](../../apptoolkit/README.md), which calls `themeSettingsScreen()` from the
   Toolkit graph and assembles `themeSettingsModule`.
 - `:sample:app`, which installs `SeasonalThemeManager`.
 
@@ -54,7 +54,7 @@ screen's easter egg unlocks.
 
 ```mermaid
 flowchart TD
-    Page[themeSettingsPage: ThemeSettingsRoute] --> Screen[ThemeSettingsScreen]
+    Page[themeSettingsScreen: ThemeSettingsScreen] --> Screen[ThemeSettingsScreen]
     Page --> Action[WeatherEffectAction]
     Screen --> Content[ThemeSettingsScreenContent]
     Screen -->|tap, logged to GA4| VM[ThemeSettingsViewModel]
@@ -144,7 +144,7 @@ What people see:
 
 ## Public contracts
 
-- `ThemeSettingsScreen`, `themeSettingsPage()`, `ThemeSettingsViewModel`, `ThemeSettingsUiState`,
+- `ThemeSettingsScreen`, `themeSettingsScreen()`, `ThemeSettingsViewModel`, `ThemeSettingsUiState`,
   `ThemeSettingsEvent` and `themeSettingsModule`. `ThemeSettingsScreenContent` is internal.
 - `SeasonalThemeManager`, `SeasonalThemeOverlay`, `SeasonalThemeOverlayViewModel`,
   `SeasonalThemeOverlayUiState`, `SeasonalThemeOverlayEvent` and `HolidayGreetingDialog`.

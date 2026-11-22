@@ -19,7 +19,7 @@ package com.mihaicristiancondrea.android.libs.apptoolkit.feature.settings.ui.nav
 
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.PaneRole
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.shellGraph
-import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.SettingsRoute
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.SettingsScreen
 import org.junit.jupiter.api.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
@@ -28,14 +28,14 @@ import kotlin.test.assertTrue
 class SettingsPageTest {
 
     @Test
-    fun `registers SettingsRoute as a list page with title, actions and placeholder`() {
+    fun `registers SettingsScreen as a list page with title, actions and placeholder`() {
         val graph = shellGraph(appTitle = 0) {
-            settingsPage()
-            start(key = SettingsRoute)
+            settingsScreen()
+            start(key = SettingsScreen)
         }
 
-        assertTrue(graph.contains(key = SettingsRoute))
-        val destination = graph.destination(key = SettingsRoute)
+        assertTrue(graph.contains(key = SettingsScreen))
+        val destination = graph.destination(key = SettingsScreen)
         assertEquals(PaneRole.List, destination.paneRole)
         assertNotNull(destination.title)
         assertNotNull(destination.actions)
@@ -43,13 +43,13 @@ class SettingsPageTest {
     }
 
     @Test
-    fun `keeps an existing host registration for SettingsRoute`() {
+    fun `keeps an existing host registration for SettingsScreen`() {
         val graph = shellGraph(appTitle = 0) {
-            page<SettingsRoute>(paneRole = PaneRole.None, title = null) {}
-            settingsPage()
-            start(key = SettingsRoute)
+            page<SettingsScreen>(paneRole = PaneRole.None, title = null) {}
+            settingsScreen()
+            start(key = SettingsScreen)
         }
 
-        assertEquals(PaneRole.None, graph.destination(key = SettingsRoute).paneRole)
+        assertEquals(PaneRole.None, graph.destination(key = SettingsScreen).paneRole)
     }
 }

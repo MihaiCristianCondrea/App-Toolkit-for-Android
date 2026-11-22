@@ -7,9 +7,9 @@ The components showcase, a debug-only page for checking the Toolkit's components
 ## Owns
 
 - `ComponentsScreen` and its analytics contract and event builder in `ui/analytics`.
-  `ComponentsRoute` belongs to app/navigation.
+  `ComponentsScreen` (navigation key) belongs to app/navigation.
 - Localized strings for the component showcase.
-- The article app bar demo: `ArticleBarShowcase` opens `ArticleDemoRoute`, a made-up article
+- The article app bar demo: `ArticleBarShowcase` opens `ArticleDemoScreen`, a made-up article
   (`ArticleDemoScreen`) that declares `ScaffoldArticleTopBar`, without a brand or with
   `components_article_brand`, a multicoloured vector mark drawn for this sample.
 - The `GeneralTextField` gallery: one card per variant, including the error state and the Markdown
@@ -44,7 +44,7 @@ The components showcase, a debug-only page for checking the Toolkit's components
 flowchart TD
     Debug{Debug build?} -->|yes| Drawer[":sample:app" drawer entry]
     Debug -->|no| None[No page, no entry]
-    Drawer --> Page[ComponentsRoute page]
+    Drawer --> Page[ComponentsScreen page]
     Page --> Screen[ComponentsScreen]
     Screen --> Sections[Button / FAB / text field / filter / input / layout / preference showcases]
 ```

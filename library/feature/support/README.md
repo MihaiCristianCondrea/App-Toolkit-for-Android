@@ -9,9 +9,9 @@ Presents donation/support products and coordinates purchases through the billing
 - Feature event builders and their bounded keys in `ui/analytics`; screens only report events.
 - `SupportScreen` and the stateless `SupportScreenContent`, `SupportViewModel`, and their state
   (`SupportUiState`, `DonationOption`) and event (`SupportEvent`) contracts.
-- `supportPage()`, the registration of `SupportRoute`, which the overflow menu's `supportUs()`
+- `supportScreen()`, the registration of `SupportScreen`, which the overflow menu's `supportUs()`
   entry opens.
-- Donation product IDs, the `ProductDetails` helpers in `ui/utils`, and the mapping of Play's
+- Donation product IDs, the `ProductDetails` helpers in `ui/extensions`, and the mapping of Play's
   products to `DonationOption` in `ui/mappers`.
 
 ## Does not own
@@ -21,21 +21,21 @@ Presents donation/support products and coordinates purchases through the billing
 
 ## Depends on
 
-- `:library:core:common`, `:library:core:network`, and `:library:core:ui` for shared
-  billing/Firebase contracts, errors, and Compose foundations.
+- `:library:core:common` and `:library:core:ui` for shared billing/Firebase contracts, errors, and
+  Compose foundations.
 - [`:library:integration:billing`](../../integration/billing/README.md) for Play Billing access.
 - [`:library:navigation`](../../navigation/README.md) for the key and the graph builder.
 
 ## Used by
 
-- [`:library:apptoolkit`](../../apptoolkit/README.md), which calls `supportPage()` from
-  `toolkitPages()`.
+- [`:library:apptoolkit`](../../apptoolkit/README.md), which calls `supportScreen()` from
+  `toolkitScreens()`.
 
 ## Flow chart
 
 ```mermaid
 flowchart TD
-    Page[supportPage: SupportRoute] --> Screen[SupportScreen]
+    Page[supportScreen: SupportScreen] --> Screen[SupportScreen]
     Screen --> VM[SupportViewModel]
     Screen --> Content[SupportScreenContent]
     VM -->|query donation IDs| Billing[BillingRepository]
@@ -57,8 +57,9 @@ flowchart TD
 
 ## Architectural decisions
 
-- Donation product IDs live in `data/models`, billing-SDK mapping lives in `data`, presentation
-  constants and rendering live in `ui`, and feature bindings live in `di`.
+- Donation product IDs live in `data/models`, Play product-to-UI mapping and extensions live in
+  `ui/mappers` and `ui/extensions`, presentation constants and rendering live in `ui`, and feature
+  bindings live in `di`.
 - The support feature depends on the billing contract, not `BillingClient`. `BillingRepository`
   exposes Play's `ProductDetails`, so `SupportViewModel` keeps them privately for the launch and
   maps them to `DonationOption`, which is all the screen sees.
@@ -84,7 +85,7 @@ flowchart TD
 
 ## Public contracts
 
-- `SupportScreen`, `SupportComposable`, `supportPage()`, `SupportViewModel`, `SupportUiState`,
+- `SupportScreen`, `SupportComposable`, `supportScreen()`, `SupportViewModel`, `SupportUiState`,
   `DonationOption`, `SupportEvent`, `SupportNativeAdCard`, `supportModule` and the donation product
   IDs. `SupportScreenContent` is internal.
 

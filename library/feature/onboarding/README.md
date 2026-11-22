@@ -8,7 +8,7 @@ screen of [`:library:feature:startup`](../startup/README.md).
 
 ## Owns
 
-- `onboardingPages()`, which registers `OnboardingRoute` as a page without a title and offers it
+- `onboardingScreen()`, which registers `OnboardingScreen` as a page without a title and offers it
   as a start screen (`startScreens`).
 - `OnboardingScreen`, with `OnboardingScreenContent` in the same file, `OnboardingViewModel`, its
   state (`OnboardingUiState`, `OnboardingCompletion`) and `OnboardingEvent`. The screen asks for
@@ -29,8 +29,8 @@ screen of [`:library:feature:startup`](../startup/README.md).
 ## Does not own
 
 - The startup screen before it, `StartupProvider` and the permission request, owned by
-  [`:library:feature:startup`](../startup/README.md), which hands over to `OnboardingRoute` by key.
-- Deciding whether the first launch runs. The app starts on `StartupRoute` from
+  [`:library:feature:startup`](../startup/README.md), which hands over to `OnboardingScreen` by key.
+- Deciding whether the first launch runs. The app starts on `StartupScreen` from
   `ShellHost(resolveStart = ...)` while its startup flag is set; see [Using it](#using-it).
 - Host-specific onboarding provider implementations, owned by `:sample:feature:onboarding`.
 - Consent SDK orchestration, owned by `:library:integration:consent`.
@@ -51,22 +51,22 @@ screen of [`:library:feature:startup`](../startup/README.md).
 
 ## Used by
 
-- [`:library:apptoolkit`](../../apptoolkit/README.md), which calls `onboardingPages()` from
-  `toolkitPages()`, and `:sample:feature:onboarding`, which provides the pages.
+- [`:library:apptoolkit`](../../apptoolkit/README.md), which calls `onboardingScreen()` from
+  `toolkitScreens()`, and `:sample:feature:onboarding`, which provides the pages.
 
 ## Using it
 
 ```kotlin
 ShellHost(
     graph = graph,
-    resolveStart = { if (dataStore.startup.first()) StartupRoute else startKeyFor(storedTab) },
+    resolveStart = { if (dataStore.startup.first()) StartupScreen else startKeyFor(storedTab) },
     onReady = { keepSplashVisible = false },
 )
 ```
 
 The startup screen hands over to onboarding. Neither has the shell under it, so back from either
 leaves the app. Finishing onboarding writes completion and enters the shell on its start tab; the
-next launch then resolves past `StartupRoute`.
+next launch then resolves past `StartupScreen`.
 
 The host binds `OnboardingProvider`, as `:sample:feature:onboarding` does. `onboardingModule`
 supplies the preference source, repository, and ViewModel bindings:
@@ -79,7 +79,7 @@ single<OnboardingProvider> { AppOnboardingProvider() }
 
 ```mermaid
 flowchart TD
-    Host[ShellHost resolveStart] -->|startup flag set| Startup[StartupRoute page, feature:startup]
+    Host[ShellHost resolveStart] -->|startup flag set| Startup[StartupScreen page, feature:startup]
     Host -->|otherwise| Tabs[Shell tabs]
     Startup -->|continueStart| Screen[OnboardingScreen]
     Screen -->|each resume: RequestConsent host| VM[OnboardingViewModel]
@@ -102,7 +102,7 @@ flowchart TD
   permission requests go through `LocalActivity.current`, and the shell's start is decided once in
   `resolveStart` instead of by a launcher activity that forwarded to the main one.
 - Startup and onboarding are separate modules: startup asks for permissions and consent, while
-  onboarding owns page progress and completion. They meet only at `OnboardingRoute`, a key in
+  onboarding owns page progress and completion. They meet only at `OnboardingScreen`, a key in
   `:library:navigation`.
 - `OnboardingScreen` owns the ViewModel, tracking, the consent host, navigation, back handling
   through `ShellBackHandler`, and the snackbar host. `OnboardingScreenContent` renders the pager
@@ -140,7 +140,7 @@ flowchart TD
 
 ## Public contracts
 
-- `onboardingPages()` and `onboardingModule`.
+- `onboardingScreen()` and `onboardingModule`.
 - `OnboardingScreen()`, `ThemeOnboardingPageTab()`, `DefaultOnboardingPage`,
   `FinishOnboardingPage(isSelected = true)`, and `OnboardingFooter(..., enabled = true)`.
 - `OnboardingViewModel(onboardingRepository, consentRepository, telemetryRepository)`, bound by

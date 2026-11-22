@@ -73,7 +73,7 @@ private val ADS_SETTINGS_SCREEN: TrackedScreen =
     TrackedScreen(name = ADS_SETTINGS_SCREEN_NAME, className = ADS_SETTINGS_SCREEN_CLASS)
 
 /**
- * The ad preferences page, which `adsSettingsPage()` registers and the privacy page opens. Debug
+ * The ad preferences page, which `adsSettingsScreen()` registers and the privacy page opens. Debug
  * builds show the display ads switch, release builds the reduce ads switch.
  *
  * Owns [AdsSettingsViewModel], tracking and its messages, such as a failed write or consent

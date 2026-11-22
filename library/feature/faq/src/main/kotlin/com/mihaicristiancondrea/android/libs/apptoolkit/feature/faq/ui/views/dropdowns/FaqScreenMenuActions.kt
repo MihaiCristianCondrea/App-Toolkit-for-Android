@@ -49,7 +49,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.R
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.ui.analytics.FaqActionNames
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.ui.analytics.faqActionEvent
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.LocalShellNavigator
-import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.LicensesRoute
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.LicensesScreen
 import org.koin.compose.koinInject
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.R as CommonR
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.R as CoreUiR
@@ -169,7 +169,7 @@ fun FaqScreenMenuActions(
             onClick = {
                 closeMenu()
                 telemetry.logEvent(event = faqActionEvent(actionName = FaqActionNames.MENU_LICENSES))
-                navigator.navigate(key = LicensesRoute)
+                navigator.navigate(key = LicensesScreen)
             }
         )
     }

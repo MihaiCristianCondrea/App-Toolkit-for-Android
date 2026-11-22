@@ -20,13 +20,13 @@ package com.mihaicristiancondrea.android.libs.apptoolkit.feature.theme.ui.search
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.R as CoreUiR
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.settings.settingsSearchProvider
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.theme.R
-import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.ThemeSettingsRoute
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.ThemeSettingsScreen
 
 /**
  * The theme page's rows the settings search finds. Their labels are the ones the page draws, from
  * `:library:core:ui`; only the page's own title lives in this module.
  */
-internal val themeSettingsSearch = settingsSearchProvider(section = R.string.dark_theme, destination = ThemeSettingsRoute) {
+internal val themeSettingsSearch = settingsSearchProvider(section = R.string.dark_theme, destination = ThemeSettingsScreen) {
     preference(CoreUiR.string.theme_mode, summary = CoreUiR.string.summary_dark_theme)
     preference(CoreUiR.string.amoled_mode)
     preference(CoreUiR.string.wallpaper_colors)

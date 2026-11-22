@@ -17,15 +17,13 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.theme.di
 
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.settings.SettingsSearchProvider
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.theme.ui.search.themeSettingsSearch
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.di.AppToolkitDiConstants
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.style.colors.ColorPalette
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.style.colors.google.android.androidPalette
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.style.colors.google.blue.bluePalette
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.style.colors.google.purple.purplePalette
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.style.colors.google.green.greenPalette
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.style.colors.google.orange.orangePalette
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.style.colors.google.purple.purplePalette
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.style.colors.google.red.redPalette
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.style.colors.google.yellow.yellowPalette
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.style.colors.monochrome.monochromePalette
@@ -33,15 +31,21 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.sty
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.style.colors.special.christmas.christmasPalette
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.style.colors.special.halloween.halloweenPalette
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.style.colors.special.skin.skinPalette
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.settings.SettingsSearchProvider
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.theme.ui.ThemeSettingsViewModel
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.theme.ui.features.seasonal.SeasonalThemeManager
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.theme.ui.features.seasonal.SeasonalThemeOverlayViewModel
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.theme.ui.search.themeSettingsSearch
 import org.koin.android.ext.koin.androidApplication
 import org.koin.core.module.Module
 import org.koin.core.module.dsl.viewModel
 import org.koin.core.qualifier.named
 import org.koin.dsl.module
 
+/**
+ * Binds theme settings search entries, [ThemeSettingsViewModel], [SeasonalThemeOverlayViewModel],
+ * [SeasonalThemeManager], and the qualified built-in color palettes.
+ */
 val themeSettingsModule: Module = module {
     single<SettingsSearchProvider>(named("theme")) { themeSettingsSearch }
     viewModel {

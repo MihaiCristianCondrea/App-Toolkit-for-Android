@@ -17,9 +17,11 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.theme.ui.analytics
 
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.models.HolidaySeason
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.telemetry.models.AnalyticsEvent
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.telemetry.models.AnalyticsValue
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.models.HolidaySeason
+
+internal const val SEASONAL_THEME_OVERLAY_SCREEN_NAME: String = "SeasonalThemeOverlay"
 
 /** GA4 vocabulary for the seasonal themes: the holiday greeting. */
 internal object SeasonalThemeAnalytics {

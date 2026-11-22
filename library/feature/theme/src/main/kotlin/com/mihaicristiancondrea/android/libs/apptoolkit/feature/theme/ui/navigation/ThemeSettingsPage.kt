@@ -23,16 +23,16 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.feature.theme.ui.ThemeSe
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.theme.ui.WeatherEffectAction
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.PaneRole
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.ShellGraphBuilder
-import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.ThemeSettingsRoute
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.ThemeSettingsScreen
 
 /**
- * Registers the theme settings page for [ThemeSettingsRoute], unless the app registered its own.
+ * Registers the theme settings page for [ThemeSettingsScreen], unless the app registered its own.
  *
  * It opens from the display settings, itself a detail beside the settings list, so it is a page
  * of its own rather than a detail, which would replace the display settings instead of stacking.
  */
-fun ShellGraphBuilder.themeSettingsPage() {
-    pageIfAbsent<ThemeSettingsRoute>(
+fun ShellGraphBuilder.themeSettingsScreen() {
+    pageIfAbsent<ThemeSettingsScreen>(
         paneRole = PaneRole.None,
         title = { stringResource(R.string.dark_theme) },
         // The weather effect, for those who found the About screen's easter egg.

@@ -22,14 +22,14 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.R as CoreUiR
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.support.ui.SupportScreen
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.PaneRole
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.ShellGraphBuilder
-import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.SupportRoute
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.SupportScreen
 
 /**
- * Registers the support page for [SupportRoute], unless the app registered its own. The overflow
+ * Registers the support page for [SupportScreen], unless the app registered its own. The overflow
  * menu's `supportUs()` entry opens it.
  */
-fun ShellGraphBuilder.supportPage() {
-    pageIfAbsent<SupportRoute>(
+fun ShellGraphBuilder.supportScreen() {
+    pageIfAbsent<SupportScreen>(
         paneRole = PaneRole.None,
         title = { stringResource(CoreUiR.string.support_us) },
     ) {

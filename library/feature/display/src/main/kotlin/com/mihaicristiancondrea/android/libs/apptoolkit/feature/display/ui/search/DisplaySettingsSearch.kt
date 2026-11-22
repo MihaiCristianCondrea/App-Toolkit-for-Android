@@ -23,7 +23,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.settings.
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.display.R
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.display.ui.providers.DisplaySettingsProvider
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.display.ui.transformers.displayRows
-import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.DisplaySettingsRoute
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.DisplaySettingsScreen
 
 /**
  * The display settings rows the settings search finds: exactly the rows the page shows in this
@@ -35,7 +35,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.Displa
 internal fun displaySettingsSearch(
     startup: DisplaySettingsProvider?,
     sdkInt: Int = Build.VERSION.SDK_INT,
-): SettingsSearchProvider = settingsSearchProvider(section = R.string.display, destination = DisplaySettingsRoute) {
+): SettingsSearchProvider = settingsSearchProvider(section = R.string.display, destination = DisplaySettingsScreen) {
     displayRows(capabilities = capabilities, startup = startup, sdkInt = sdkInt).forEach { row ->
         preference(title = row.title, summary = row.summary)
     }

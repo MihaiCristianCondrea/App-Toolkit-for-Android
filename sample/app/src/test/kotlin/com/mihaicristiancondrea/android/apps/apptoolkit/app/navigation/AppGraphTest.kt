@@ -31,21 +31,21 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.utils.ext
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.DrawerEntry
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.PaneRole
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.ShellGraph
-import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.AdsSettingsRoute
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.AdsSettingsScreen
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.DeveloperOptionsScreen
-import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.AboutRoute
-import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.AdvancedSettingsRoute
-import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.DiagnosticsSettingsRoute
-import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.DisplaySettingsRoute
-import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.OnboardingRoute
-import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.PrivacySettingsRoute
-import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.StartupRoute
-import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.ThemeSettingsRoute
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.AboutScreen
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.AdvancedSettingsScreen
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.DiagnosticsSettingsScreen
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.DisplaySettingsScreen
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.OnboardingScreen
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.PrivacySettingsScreen
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.StartupScreen
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.ThemeSettingsScreen
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.HelpScreen
-import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.LicensesRoute
-import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.PermissionsRoute
-import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.SettingsRoute
-import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.SupportRoute
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.LicensesScreen
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.PermissionsScreen
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.SettingsScreen
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.SupportScreen
 import io.mockk.every
 import io.mockk.mockk
 import kotlinx.coroutines.flow.first
@@ -82,47 +82,47 @@ class AppGraphTest {
     fun `the tabs are tiles, numbers, then apps, and a launch opens on tiles`() {
         val graph = graph()
 
-        assertEquals(listOf(ToolkitTilesRoute, NumbersRoute, PlayRoute), graph.tabs.map { it.key })
-        assertEquals(ToolkitTilesRoute, graph.start)
+        assertEquals(listOf(ToolkitTilesScreen, NumbersScreen, PlayScreen), graph.tabs.map { it.key })
+        assertEquals(ToolkitTilesScreen, graph.start)
     }
 
     @Test
     fun `the stored start page maps to its tab`() = runTest {
         suspend fun startFor(stored: String): Any {
             val dataStore = mockk<DisplayPreferencesRepository>()
-            every { dataStore.startupPage(default = ToolkitTilesRoute.ROUTE_ID) } returns flowOf(stored)
-            return dataStore.startupValueFlow(ToolkitTilesRoute.ROUTE_ID, ::startKeyFor).first()
+            every { dataStore.startupPage(default = ToolkitTilesScreen.ROUTE_ID) } returns flowOf(stored)
+            return dataStore.startupValueFlow(ToolkitTilesScreen.ROUTE_ID, ::startKeyFor).first()
         }
 
-        assertEquals(ToolkitTilesRoute, startFor(LEGACY_APPS_ROUTE_ID))
-        assertEquals(PlayRoute, startFor(PlayRoute.ROUTE_ID))
-        assertEquals(NumbersRoute, startFor(NumbersRoute.ROUTE_ID))
-        assertEquals(ToolkitTilesRoute, startFor(ToolkitTilesRoute.ROUTE_ID))
+        assertEquals(ToolkitTilesScreen, startFor(LEGACY_APPS_ROUTE_ID))
+        assertEquals(PlayScreen, startFor(PlayScreen.ROUTE_ID))
+        assertEquals(NumbersScreen, startFor(NumbersScreen.ROUTE_ID))
+        assertEquals(ToolkitTilesScreen, startFor(ToolkitTilesScreen.ROUTE_ID))
         // A blank value, or one a removed page left behind, opens the default tab.
-        assertEquals(ToolkitTilesRoute, startFor(""))
-        assertEquals(ToolkitTilesRoute, startFor("favorite_apps"))
+        assertEquals(ToolkitTilesScreen, startFor(""))
+        assertEquals(ToolkitTilesScreen, startFor("favorite_apps"))
     }
 
     @Test
     fun `every page the app opens is registered`() {
         val graph = graph(showDebugPages = true)
         val pages = listOf(
-            SettingsRoute,
-            DisplaySettingsRoute,
-            ThemeSettingsRoute,
-            PrivacySettingsRoute,
-            DiagnosticsSettingsRoute,
-            AdvancedSettingsRoute,
-            AboutRoute,
-            StartupRoute,
-            OnboardingRoute,
+            SettingsScreen,
+            DisplaySettingsScreen,
+            ThemeSettingsScreen,
+            PrivacySettingsScreen,
+            DiagnosticsSettingsScreen,
+            AdvancedSettingsScreen,
+            AboutScreen,
+            StartupScreen,
+            OnboardingScreen,
             HelpScreen,
-            SupportRoute,
-            AdsSettingsRoute,
-            PermissionsRoute,
-            LicensesRoute,
+            SupportScreen,
+            AdsSettingsScreen,
+            PermissionsScreen,
+            LicensesScreen,
             DeveloperOptionsScreen,
-            ComponentsRoute,
+            ComponentsScreen,
         )
 
         pages.forEach { key -> assertTrue(graph.contains(key), "$key is not registered") }
@@ -133,11 +133,11 @@ class AppGraphTest {
     @Test
     fun `the components showcase is a debug page`() {
         val release = graph(showDebugPages = false)
-        listOf(ComponentsRoute, ArticleDemoRoute(branded = false)).forEach { key ->
+        listOf(ComponentsScreen, ArticleDemoScreen(branded = false)).forEach { key ->
             assertFalse(release.contains(key), "$key is registered outside debug")
         }
-        assertFalse(ComponentsRoute in release.drawerLinks())
-        assertTrue(ComponentsRoute in graph(showDebugPages = true).drawerLinks())
+        assertFalse(ComponentsScreen in release.drawerLinks())
+        assertTrue(ComponentsScreen in graph(showDebugPages = true).drawerLinks())
     }
 
     @Test
@@ -146,12 +146,12 @@ class AppGraphTest {
         val footer = drawer.takeLast(4)
 
         assertEquals(DrawerEntry.Spacer, drawer[drawer.size - 5])
-        assertEquals(SettingsRoute, (footer[0] as DrawerEntry.Link).key)
+        assertEquals(SettingsScreen, (footer[0] as DrawerEntry.Link).key)
         assertEquals(HelpScreen, (footer[1] as DrawerEntry.Link).key)
         assertEquals(AboutR.string.updates, (footer[2] as DrawerEntry.Action).label)
         assertEquals(AboutR.string.share, (footer[3] as DrawerEntry.Action).label)
         // The debug page comes first, and developer options are reached from Advanced.
-        assertEquals(ComponentsRoute, (drawer.first() as DrawerEntry.Link).key)
+        assertEquals(ComponentsScreen, (drawer.first() as DrawerEntry.Link).key)
         assertFalse(DeveloperOptionsScreen in graph().drawerLinks())
     }
 
@@ -170,7 +170,7 @@ class AppGraphTest {
     @Test
     fun `the overflow menu offers support`() {
         assertEquals(
-            listOf(SupportRoute),
+            listOf(SupportScreen),
             graph().overflow.filterIsInstance<DrawerEntry.Link>().map { it.key },
         )
     }
@@ -179,8 +179,8 @@ class AppGraphTest {
     fun `the settings list is a list page and its categories open beside it`() {
         val graph = graph()
 
-        assertEquals(PaneRole.List, graph.destination(SettingsRoute).paneRole)
-        listOf(DisplaySettingsRoute, PrivacySettingsRoute, AdvancedSettingsRoute, AboutRoute).forEach { key ->
+        assertEquals(PaneRole.List, graph.destination(SettingsScreen).paneRole)
+        listOf(DisplaySettingsScreen, PrivacySettingsScreen, AdvancedSettingsScreen, AboutScreen).forEach { key ->
             assertEquals(PaneRole.Detail, graph.destination(key).paneRole, "$key")
         }
     }
@@ -199,7 +199,7 @@ class AppGraphTest {
 
     @Test
     fun `the first-launch screens are start screens`() {
-        assertTrue(graph().startOptions.containsAll(listOf(StartupRoute, OnboardingRoute)))
+        assertTrue(graph().startOptions.containsAll(listOf(StartupScreen, OnboardingScreen)))
     }
 
     @Test
@@ -207,7 +207,7 @@ class AppGraphTest {
         val shortcut = mockk<Intent> { every { action } returns ACTION_OPEN_SETTINGS }
         val launcher = mockk<Intent> { every { action } returns Intent.ACTION_MAIN }
 
-        assertEquals(SettingsRoute, graph().keyFor(shortcut))
+        assertEquals(SettingsScreen, graph().keyFor(shortcut))
         assertNull(graph().keyFor(launcher))
     }
 }

@@ -102,6 +102,7 @@ class SeasonalThemeManager(
     private fun watchContent(activity: Activity, content: ViewGroup) {
         if (content.getTag(R.id.seasonal_theme_overlay_watcher) != null) return
         val listener = View.OnLayoutChangeListener { _, _, _, _, _, _, _, _, _ ->
+            if (hasOverlay(content)) return@OnLayoutChangeListener
             // Adding a view from inside a layout pass would request another layout mid-pass.
             content.post {
                 if (isEligible(activity)) attachOverlay(activity = activity, content = content)

@@ -13,12 +13,12 @@ plus the tap-to-copy interaction for the entries it renders and the version-tap 
   info and the open-source licenses, which opens the licenses page.
 - Tap-to-copy for About entries, including the clipboard write and its in-app confirmation.
 - The version-tap easter egg: konfetti on the fifth tap, and the seasonal themes unlock it records.
-- `aboutPages()`, the registration of `AboutRoute` (a detail of the settings list).
+- `aboutScreen()`, the registration of `AboutScreen` (a detail of the settings list).
 
 ## Does not own
 
 - Open-source licenses, owned by [`:library:feature:licenses`](../licenses/README.md); the About
-  list only navigates to `LicensesRoute`.
+  list only navigates to `LicensesScreen`.
 - Privacy and legal entries, owned by [`:library:feature:privacy`](../privacy/README.md).
 - Changelog retrieval, presentation, and in-app-update triggering, owned by
   [`:library:feature:changelog`](../changelog/README.md).
@@ -45,20 +45,20 @@ copying. Its `deviceInfo` property is read on the main thread. A blank report is
 
 ## Used by
 
-- [`:library:apptoolkit`](../../apptoolkit/README.md), which calls `aboutPages()` from
-  `toolkitPages()`.
-- `:sample:app`, which registers `aboutPages { AboutScreen() }` before the Toolkit adds its pages.
+- [`:library:apptoolkit`](../../apptoolkit/README.md), which calls `aboutScreen()` from
+  `toolkitScreens()`.
+- `:sample:app`, which registers `aboutScreen { AboutScreen() }` before the Toolkit adds its pages.
 - `:sample:feature:about`, which provides the formatted device report.
 
 ## Flow chart
 
 ```mermaid
 flowchart TD
-    Entry["aboutPages()"] -->|"AboutRoute"| Screen["AboutScreen"]
+    Entry["aboutScreen()"] -->|"AboutScreen"| Screen["AboutScreen"]
     Screen --> Host["ScreenHost"]
     Host --> Content["AboutScreenContent"]
     Content -->|"Version gesture, copy or retry"| VM["AboutViewModel"]
-    Content -->|"Licenses action"| Licenses["LicensesRoute"]
+    Content -->|"Licenses action"| Licenses["LicensesScreen"]
     VM -->|"AboutUiState and messages"| Host
     VM --> Repo["AboutRepository / DefaultAboutRepository"]
     Repo --> Build["BuildInfoRepository"]
@@ -88,12 +88,12 @@ flowchart TD
   `UiText`, so a row whose value is a string resource copies as readily as one holding a
   formatted value.
 - The build-version row counts taps toward the easter egg. Clipboard actions on other rows copy the
-  displayed value. The licenses row opens `LicensesRoute`.
+  displayed value. The licenses row opens `LicensesScreen`.
 - The fifth tap plays konfetti when system animations are enabled and raises
   `AboutEvent.EasterEggFound`. `AboutViewModel` records the unlock through
   `SeasonalThemeRepository`, which keeps the holiday palettes and snowfall available all year.
   Only the first unlock shows a snackbar.
-- The page takes its content as a parameter. `aboutPages(about = ...)` lets an app wrap
+- The page takes its content as a parameter. `aboutScreen(about = ...)` lets an app wrap
   `AboutScreen` (to react to version taps, say) and keep the Toolkit's key and pane role, instead of
   re-declaring the page.
 - Confirmations go to the page's snackbar host (`rememberPageSnackbarHostState()`), so they sit
@@ -125,7 +125,7 @@ Verify on a physical device, where the preview appears on every tap, or switch o
 
 - `AboutDeviceInfoDataSource`, `AboutRepository`, `AboutInfo`, `AboutItem`, `AboutItemAction`,
   `AboutItemKey`, `AboutEvent`, `AboutUiState`, `AboutViewModel`, `DefaultAboutRepository`,
-  `AboutScreen`, `aboutPages()`, and `aboutModule`.
+  `AboutScreen`, `aboutScreen()`, and `aboutModule`.
 
 ## Internal implementations
 

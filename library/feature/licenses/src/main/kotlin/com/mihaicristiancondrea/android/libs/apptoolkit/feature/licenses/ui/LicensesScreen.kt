@@ -39,7 +39,7 @@ import org.koin.compose.viewmodel.koinViewModel
 /**
  * Lists the open-source libraries bundled with the host application.
  *
- * The body of the licenses page, which `licensesPage()` registers; the page frame draws the app bar.
+ * The body of the licenses page, which `licensesScreen()` registers; the page frame draws the app bar.
  * Parses the bundled metadata with AboutLibraries, notifies [LicensesViewModel] once loaded, and
  * tracks screen visits through [ScreenHost].
  */

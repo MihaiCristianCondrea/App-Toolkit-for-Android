@@ -24,8 +24,8 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.settings.
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.settings.SettingsSearchEntry
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.R
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.shellGraph
-import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.AboutRoute
-import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.LicensesRoute
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.AboutScreen
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.LicensesScreen
 import org.junit.jupiter.api.Test
 import kotlin.test.assertEquals
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.R as CoreUiR
@@ -44,17 +44,17 @@ class AboutSettingsSearchTest {
                 SettingsSearchEntry(
                     title = R.string.app_info,
                     section = CoreUiR.string.about,
-                    destination = AboutRoute
+                    destination = AboutScreen
                 ),
                 SettingsSearchEntry(
                     title = R.string.device_info,
                     section = CoreUiR.string.about,
-                    destination = AboutRoute
+                    destination = AboutScreen
                 ),
                 SettingsSearchEntry(
                     title = R.string.oss_license_title,
                     section = CoreUiR.string.about,
-                    destination = LicensesRoute,
+                    destination = LicensesScreen,
                     summary = R.string.summary_preference_settings_oss,
                 ),
             ),

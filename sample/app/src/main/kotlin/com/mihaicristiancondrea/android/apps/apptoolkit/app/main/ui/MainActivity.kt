@@ -24,7 +24,7 @@ import androidx.compose.ui.Modifier
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.github.GithubConstants
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.MessageHost
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.analytics.ProvideTelemetry
-import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.StartupRoute
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.StartupScreen
 import android.os.Bundle
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -46,7 +46,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.reposit
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.repositories.DisplayPreferencesRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.utils.extensions.startupValueFlow
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.navigation.AppDefaults
-import com.mihaicristiancondrea.android.apps.apptoolkit.app.navigation.ToolkitTilesRoute
+import com.mihaicristiancondrea.android.apps.apptoolkit.app.navigation.ToolkitTilesScreen
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.style.AppTheme
 import com.mihaicristiancondrea.android.libs.apptoolkit.integration.consent.data.models.ConsentHost
 import com.mihaicristiancondrea.android.libs.apptoolkit.integration.review.domain.models.ReviewHost
@@ -112,10 +112,10 @@ class MainActivity : AppCompatActivity() {
                             // DataStore reads are main-safe, so no dispatcher switch is needed.
                             resolveStart = {
                                 if (!onboardingRepository.observeOnboardingCompletion().first()) {
-                                    StartupRoute
+                                    StartupScreen
                                 } else {
                                     displayPreferences.startupValueFlow(
-                                        defaultRoute = ToolkitTilesRoute.ROUTE_ID,
+                                        defaultRoute = ToolkitTilesScreen.ROUTE_ID,
                                         mapToValue = ::startKeyFor,
                                     ).first()
                                 }

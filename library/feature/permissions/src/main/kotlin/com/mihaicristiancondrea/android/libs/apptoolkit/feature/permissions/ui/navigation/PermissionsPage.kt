@@ -22,16 +22,16 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.feature.permissions.R
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.permissions.ui.PermissionsScreen
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.PaneRole
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.ShellGraphBuilder
-import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.PermissionsRoute
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.PermissionsScreen
 
 /**
- * Registers the permissions page for [PermissionsRoute], unless the app registered its own.
+ * Registers the permissions page for [PermissionsScreen], unless the app registered its own.
  *
  * It opens from the privacy page, itself a detail beside the settings list, so it is a page of its
  * own rather than a detail, which would replace the privacy page instead of stacking.
  */
-fun ShellGraphBuilder.permissionsPage() {
-    pageIfAbsent<PermissionsRoute>(
+fun ShellGraphBuilder.permissionsScreen() {
+    pageIfAbsent<PermissionsScreen>(
         paneRole = PaneRole.None,
         title = { stringResource(id = R.string.permissions) },
     ) {

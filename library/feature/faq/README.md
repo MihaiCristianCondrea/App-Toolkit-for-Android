@@ -45,7 +45,7 @@ Displays the host's FAQ and provides contact, feedback and review actions. The m
 ## Used by
 
 - [`:library:apptoolkit`](../../apptoolkit/README.md), which calls `helpScreen()` from
-  `toolkitPages()` and loads the FAQ bindings.
+  `toolkitScreens()` and loads the FAQ bindings.
 - The sample host supplies product configuration, fallback resources and the native ad binding.
 
 ## Flow chart
@@ -54,7 +54,7 @@ Displays the host's FAQ and provides contact, feedback and review actions. The m
 flowchart TD
     Entry["helpScreen(): HelpScreen"] --> Screen["FaqScreen"]
     Entry --> Menu["FaqMenuActions / FaqScreenMenuActions"]
-    Menu -->|"Licenses action"| Licenses["LicensesRoute"]
+    Menu -->|"Licenses action"| Licenses["LicensesScreen"]
     Screen --> Host["ScreenHost"]
     Host --> Content["FaqScreenContent"]
     Content --> List["FaqList"]

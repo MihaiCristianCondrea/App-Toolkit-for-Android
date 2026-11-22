@@ -52,7 +52,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.ui.contrac
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.ui.models.AboutItem
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.ui.states.AboutUiState
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.LocalShellNavigator
-import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.LicensesRoute
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.LicensesScreen
 import kotlinx.coroutines.delay
 import nl.dionsegijn.konfetti.compose.KonfettiView
 import nl.dionsegijn.konfetti.core.Angle
@@ -81,7 +81,7 @@ fun AboutScreen(
         AboutScreenContent(
             state = state,
             onEvent = viewModel::onEvent,
-            onOpenLicenses = { navigator.navigate(key = LicensesRoute) },
+            onOpenLicenses = { navigator.navigate(key = LicensesScreen) },
             contentPadding = contentPadding(),
             onVersionTap = onVersionTap,
         )

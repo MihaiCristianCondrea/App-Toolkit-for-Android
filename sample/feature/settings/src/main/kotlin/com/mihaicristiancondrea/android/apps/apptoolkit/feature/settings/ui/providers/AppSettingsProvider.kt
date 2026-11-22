@@ -32,10 +32,10 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.settings.
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.settings.SettingsConfig
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.settings.SettingsPreference
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.settings.ui.providers.SettingsProvider
-import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.AboutRoute
-import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.AdvancedSettingsRoute
-import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.DisplaySettingsRoute
-import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.PrivacySettingsRoute
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.AboutScreen
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.AdvancedSettingsScreen
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.DisplaySettingsScreen
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.PrivacySettingsScreen
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.R as CoreUiR
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.settings.R as SettingsR
 
@@ -62,7 +62,7 @@ class AppSettingsProvider(context: Context) : SettingsProvider {
                             iconContainerColor = Color(color = 0xFFFFD8EF),
                             title = context.getString(SettingsR.string.notifications),
                             summary = context.getString(SettingsR.string.summary_preference_settings_notifications),
-                            destination = PrivacySettingsRoute,
+                            destination = PrivacySettingsScreen,
                             action = { context.openAppNotificationSettings() },
                         ),
                         SettingsPreference(
@@ -73,7 +73,7 @@ class AppSettingsProvider(context: Context) : SettingsProvider {
                             iconContainerColor = Color(color = 0xFFFFDCC3),
                             title = context.getString(SettingsR.string.display),
                             summary = context.getString(SettingsR.string.summary_preference_settings_display),
-                            destination = DisplaySettingsRoute,
+                            destination = DisplaySettingsScreen,
                         ),
                     ),
                 ),
@@ -87,7 +87,7 @@ class AppSettingsProvider(context: Context) : SettingsProvider {
                             iconContainerColor = Color(color = 0xFFBDE9FF),
                             title = context.getString(SettingsR.string.security_and_privacy),
                             summary = context.getString(SettingsR.string.summary_preference_settings_privacy_and_security),
-                            destination = PrivacySettingsRoute,
+                            destination = PrivacySettingsScreen,
                         ),
                         SettingsPreference(
                             key = SettingsConstants.KEY_SETTINGS_ADVANCED,
@@ -97,7 +97,7 @@ class AppSettingsProvider(context: Context) : SettingsProvider {
                             iconContainerColor = Color(color = 0xFFEEDCFE),
                             title = context.getString(SettingsR.string.advanced),
                             summary = context.getString(SettingsR.string.summary_preference_settings_advanced),
-                            destination = AdvancedSettingsRoute,
+                            destination = AdvancedSettingsScreen,
                         ),
                         SettingsPreference(
                             key = SettingsConstants.KEY_SETTINGS_ABOUT,
@@ -107,7 +107,7 @@ class AppSettingsProvider(context: Context) : SettingsProvider {
                             iconContainerColor = Color(color = 0xFFE3E3E3),
                             title = context.getString(CoreUiR.string.about),
                             summary = context.getString(SettingsR.string.summary_preference_settings_about),
-                            destination = AboutRoute,
+                            destination = AboutScreen,
                         ),
                     ),
                 ),

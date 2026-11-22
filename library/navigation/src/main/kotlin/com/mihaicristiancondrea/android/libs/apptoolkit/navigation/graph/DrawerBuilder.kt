@@ -25,8 +25,8 @@ import androidx.compose.runtime.Composable
 import androidx.navigation3.runtime.NavKey
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.icons.ToolkitIcon
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.R
-import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.SettingsRoute
-import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.SupportRoute
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.SettingsScreen
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.SupportScreen
 
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.R as DesignSystemR
 
@@ -71,7 +71,7 @@ class DrawerBuilder internal constructor() {
     /** The Support page: rating, sharing and donations. The support feature registers it. */
     fun supportUs() {
         link(
-            key = SupportRoute,
+            key = SupportScreen,
             label = R.string.shell_support_us,
             icon = ToolkitIcon.Vector(Icons.Outlined.VolunteerActivism),
             shortLabel = R.string.shell_support_short,
@@ -88,6 +88,6 @@ class DrawerBuilder internal constructor() {
      * settings feature registers the page.
      */
     fun settings() {
-        link(SettingsRoute, R.string.settings, ToolkitIcon.AnimatedVector(DesignSystemR.drawable.anim_settings))
+        link(SettingsScreen, R.string.settings, ToolkitIcon.AnimatedVector(DesignSystemR.drawable.anim_settings))
     }
 }

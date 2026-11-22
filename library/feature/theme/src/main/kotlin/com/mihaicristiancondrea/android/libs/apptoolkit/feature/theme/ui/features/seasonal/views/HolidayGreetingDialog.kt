@@ -26,7 +26,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -40,8 +39,6 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
-import androidx.compose.material3.darkColorScheme
-import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.Immutable
@@ -65,7 +62,6 @@ import androidx.compose.ui.semantics.paneTitle
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Constraints
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
@@ -278,7 +274,6 @@ private fun GreetingHeader(style: HolidayGreetingStyle, title: String, compact: 
  * moving to a line of their own only when long translations or large fonts leave no room beside
  * each other.
  */
-@OptIn(ExperimentalLayoutApi::class)
 @Composable
 private fun GreetingActions(
     style: HolidayGreetingStyle,
@@ -431,67 +426,3 @@ private val MinCardWidth: Dp = 280.dp
 private val MaxPreferredCardHeight: Dp = 500.dp
 private val MinCardHeight: Dp = 240.dp
 private val CardShape = RoundedCornerShape(28.dp)
-
-@Preview(name = "Christmas", widthDp = 411, heightDp = 891)
-@Composable
-private fun ChristmasGreetingPreview() {
-    MaterialTheme(colorScheme = lightColorScheme()) {
-        HolidayGreetingContent(season = HolidaySeason.CHRISTMAS, onAnswer = {})
-    }
-}
-
-@Preview(name = "Christmas, dark", widthDp = 411, heightDp = 891)
-@Composable
-private fun ChristmasGreetingDarkPreview() {
-    MaterialTheme(colorScheme = darkColorScheme()) {
-        HolidayGreetingContent(season = HolidaySeason.CHRISTMAS, onAnswer = {})
-    }
-}
-
-@Preview(name = "Halloween", widthDp = 411, heightDp = 891)
-@Composable
-private fun HalloweenGreetingPreview() {
-    MaterialTheme(colorScheme = lightColorScheme()) {
-        HolidayGreetingContent(season = HolidaySeason.HALLOWEEN, onAnswer = {})
-    }
-}
-
-@Preview(name = "Halloween, dark", widthDp = 411, heightDp = 891)
-@Composable
-private fun HalloweenGreetingDarkPreview() {
-    MaterialTheme(colorScheme = darkColorScheme()) {
-        HolidayGreetingContent(season = HolidaySeason.HALLOWEEN, onAnswer = {})
-    }
-}
-
-@Preview(name = "Christmas, compact phone", widthDp = 320, heightDp = 568)
-@Composable
-private fun ChristmasGreetingCompactPreview() {
-    MaterialTheme {
-        HolidayGreetingContent(season = HolidaySeason.CHRISTMAS, onAnswer = {})
-    }
-}
-
-@Preview(name = "Halloween, landscape", widthDp = 891, heightDp = 411)
-@Composable
-private fun HalloweenGreetingLandscapePreview() {
-    MaterialTheme {
-        HolidayGreetingContent(season = HolidaySeason.HALLOWEEN, onAnswer = {})
-    }
-}
-
-@Preview(name = "Christmas, tablet", widthDp = 800, heightDp = 1280)
-@Composable
-private fun ChristmasGreetingTabletPreview() {
-    MaterialTheme {
-        HolidayGreetingContent(season = HolidaySeason.CHRISTMAS, onAnswer = {})
-    }
-}
-
-@Preview(name = "Halloween, large font", widthDp = 411, heightDp = 891, fontScale = 2f)
-@Composable
-private fun HalloweenGreetingLargeFontPreview() {
-    MaterialTheme {
-        HolidayGreetingContent(season = HolidaySeason.HALLOWEEN, onAnswer = {})
-    }
-}

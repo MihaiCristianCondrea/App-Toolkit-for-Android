@@ -43,9 +43,9 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.feature.privacy.ui.contr
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.privacy.ui.models.PrivacyItem
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.privacy.ui.states.PrivacyUiState
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.LocalShellNavigator
-import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.AdsSettingsRoute
-import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.DiagnosticsSettingsRoute
-import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.PermissionsRoute
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.AdsSettingsScreen
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.DiagnosticsSettingsScreen
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.PermissionsScreen
 import org.koin.compose.viewmodel.koinViewModel
 
 /**
@@ -67,9 +67,9 @@ fun PrivacyScreen() {
             state = state,
             onEvent = viewModel::onEvent,
             onOpenUrl = { url -> context.openUrl(url = url) },
-            onOpenPermissions = { navigator.navigate(key = PermissionsRoute) },
-            onOpenAds = { navigator.navigate(key = AdsSettingsRoute) },
-            onOpenUsageAndDiagnostics = { navigator.navigate(key = DiagnosticsSettingsRoute) },
+            onOpenPermissions = { navigator.navigate(key = PermissionsScreen) },
+            onOpenAds = { navigator.navigate(key = AdsSettingsScreen) },
+            onOpenUsageAndDiagnostics = { navigator.navigate(key = DiagnosticsSettingsScreen) },
             contentPadding = contentPadding(),
         )
     }

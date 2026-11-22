@@ -8,7 +8,7 @@ AboutLibraries metadata that backs them.
 ## Owns
 
 - `LicensesScreen`, drawn inside the shell's page frame, and the stateless `LicensesScreenContent`.
-- `licensesPage()`, the registration of `LicensesRoute`, opened from About and Help.
+- `licensesScreen()`, the registration of `LicensesScreen`, opened from About and Help.
 - `LicensesViewModel` and `LicensesUiState`, which turn metadata parsing into a loading and then
   ready `Loadable` library count, for tracking and the `loadLibraries` report.
 - The AboutLibraries Gradle plugin and its generated `raw/aboutlibraries` resource.
@@ -19,7 +19,7 @@ AboutLibraries metadata that backs them.
   [`:library:feature:about`](../about/README.md).
 - The Help overflow entry that opens this screen, owned by
   [`:library:feature:faq`](../faq/README.md).
-- The `LicensesRoute` key, owned by [`:library:navigation`](../../navigation/README.md). Pages that
+- The `LicensesScreen` key, owned by [`:library:navigation`](../../navigation/README.md). Pages that
   open this one navigate to the key, so neither About nor Help depends on this module.
 
 ## Depends on
@@ -30,14 +30,14 @@ AboutLibraries metadata that backs them.
 
 ## Used by
 
-- [`:library:apptoolkit`](../../apptoolkit/README.md), which calls `licensesPage()` from
-  `toolkitPages()`.
+- [`:library:apptoolkit`](../../apptoolkit/README.md), which calls `licensesScreen()` from
+  `toolkitScreens()`.
 
 ## Flow chart
 
 ```mermaid
 flowchart TD
-    Entry[About / Help: navigate LicensesRoute] --> Page[licensesPage]
+    Entry[About / Help: navigate LicensesScreen] --> Page[licensesScreen]
     Page --> Screen[LicensesScreen]
     Screen --> Producer[produceLibraries on raw metadata]
     Producer --> VM[LicensesViewModel]
@@ -64,7 +64,7 @@ flowchart TD
 
 ## Public contracts
 
-- `LicensesScreen`, `licensesPage()`, `LicensesViewModel`, `LicensesUiState`, `LicensesEvent`, and
+- `LicensesScreen`, `licensesScreen()`, `LicensesViewModel`, `LicensesUiState`, `LicensesEvent`, and
   `licensesModule`. `LicensesScreenContent` is internal.
 
 ## Internal implementations

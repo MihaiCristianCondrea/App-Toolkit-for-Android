@@ -37,7 +37,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.ShellTa
 /**
  * The shell's navigation state and the only way screens move through it.
  *
- * There is one outer stack, [pages], whose bottom is [ShellHomeRoute], the shell, and one inner
+ * There is one outer stack, [pages], whose bottom is [ShellHomeScreen], the shell, and one inner
  * stack per tab. Every tab keeps its own stack while another is selected, so returning to a tab
  * finds it where it was left.
  *
@@ -80,17 +80,17 @@ class ShellNavigator internal constructor(
 
     val currentTab: ShellTab get() = graph.tabs[currentTabIndex]
 
-    /** The outer stack: [ShellHomeRoute], or a start page, followed by every open page. */
+    /** The outer stack: [ShellHomeScreen], or a start page, followed by every open page. */
     val pages: List<NavKey> get() = pageStack
 
     /** Whether the shell is on the outer stack, rather than a start page in its place. */
-    val inShell: Boolean get() = pageStack.first() == ShellHomeRoute
+    val inShell: Boolean get() = pageStack.first() == ShellHomeScreen
 
     /**
      * The destination on top: the top page, or, with the shell on top, the current tab's top
      * screen. What a person is looking at, for analytics and the like.
      */
-    val currentKey: NavKey get() = pageStack.last().takeIf { it != ShellHomeRoute } ?: currentTabStack.last()
+    val currentKey: NavKey get() = pageStack.last().takeIf { it != ShellHomeScreen } ?: currentTabStack.last()
 
     /** The stack of the selected tab, its root first. */
     val currentTabStack: List<NavKey> get() = tabStacks[currentTabIndex]
@@ -118,7 +118,7 @@ class ShellNavigator internal constructor(
      * replaces the current detail so one Back returns to the list.
      */
     fun navigate(key: NavKey) {
-        if (key == ShellHomeRoute) {
+        if (key == ShellHomeScreen) {
             enterShell()
             return
         }
@@ -180,7 +180,7 @@ class ShellNavigator internal constructor(
             inShell -> closePages()
             // A graph of pages only has no shell to enter: the entry point is done.
             graph.tabs.isEmpty() -> onExit()
-            else -> replaceStart(ShellHomeRoute)
+            else -> replaceStart(ShellHomeScreen)
         }
     }
 
@@ -253,7 +253,7 @@ class ShellNavigator internal constructor(
     }
 
     private fun NavKey.isDetail(): Boolean =
-        this != ShellHomeRoute && graph.destination(this).paneRole == PaneRole.Detail
+        this != ShellHomeScreen && graph.destination(this).paneRole == PaneRole.Detail
 }
 
 /**
@@ -266,7 +266,7 @@ class ShellNavigator internal constructor(
 @Composable
 fun rememberShellNavigator(graph: ShellGraph, onExit: () -> Unit, start: NavKey = graph.start): ShellNavigator {
     val startsOnTab = graph.tabIndexOf(start) >= 0
-    val pageStack = rememberNavBackStack(if (startsOnTab) ShellHomeRoute else start)
+    val pageStack = rememberNavBackStack(if (startsOnTab) ShellHomeScreen else start)
     val tabStacks = graph.tabs.map { tab -> rememberNavBackStack(tab.key) }
     val tabHistory = rememberSaveable(
         saver = listSaver(save = { it.toList() }, restore = { it.toMutableStateList() }),

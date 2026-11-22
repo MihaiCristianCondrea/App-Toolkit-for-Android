@@ -80,6 +80,25 @@ class SeasonalThemeManagerTest {
     }
 
     @Test
+    fun `a layout pass after the overlay is attached does not post redundant work`() {
+        val listener = slot<View.OnLayoutChangeListener>()
+        val overlay = mockk<View>(relaxed = true) {
+            every { tag } returns "com.mihaicristiancondrea.android.libs.apptoolkit.feature.theme.SeasonalOverlay"
+        }
+        val screen = mockk<View>(relaxed = true) { every { tag } returns null }
+        val content = contentView(childCount = 2)
+        every { content.getChildAt(0) } returns screen
+        every { content.getChildAt(1) } returns overlay
+        every { content.addOnLayoutChangeListener(capture(listener)) } returns Unit
+        val activity = activityWith(content)
+
+        manager.onActivityResumed(activity)
+        listener.captured.onLayoutChange(content, 0, 0, 0, 0, 0, 0, 0, 0)
+
+        verify(exactly = 0) { content.post(any()) }
+    }
+
+    @Test
     fun `the content view is watched once however often the activity resumes`() {
         val content = contentView(childCount = 0)
         var watcher: Any? = null

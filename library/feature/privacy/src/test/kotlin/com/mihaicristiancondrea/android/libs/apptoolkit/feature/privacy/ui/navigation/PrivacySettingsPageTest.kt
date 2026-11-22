@@ -19,7 +19,7 @@ package com.mihaicristiancondrea.android.libs.apptoolkit.feature.privacy.ui.navi
 
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.PaneRole
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.shellGraph
-import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.PrivacySettingsRoute
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.PrivacySettingsScreen
 import org.junit.jupiter.api.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
@@ -28,26 +28,26 @@ import kotlin.test.assertTrue
 class PrivacySettingsPageTest {
 
     @Test
-    fun `registers PrivacySettingsRoute as a detail page with a title`() {
+    fun `registers PrivacySettingsScreen as a detail page with a title`() {
         val graph = shellGraph(appTitle = 0) {
-            privacySettingsPage()
-            start(key = PrivacySettingsRoute)
+            privacySettingsScreen()
+            start(key = PrivacySettingsScreen)
         }
 
-        assertTrue(graph.contains(key = PrivacySettingsRoute))
-        val destination = graph.destination(key = PrivacySettingsRoute)
+        assertTrue(graph.contains(key = PrivacySettingsScreen))
+        val destination = graph.destination(key = PrivacySettingsScreen)
         assertEquals(PaneRole.Detail, destination.paneRole)
         assertNotNull(destination.title)
     }
 
     @Test
-    fun `keeps an existing host registration for PrivacySettingsRoute`() {
+    fun `keeps an existing host registration for PrivacySettingsScreen`() {
         val graph = shellGraph(appTitle = 0) {
-            page<PrivacySettingsRoute>(paneRole = PaneRole.None, title = null) {}
-            privacySettingsPage()
-            start(key = PrivacySettingsRoute)
+            page<PrivacySettingsScreen>(paneRole = PaneRole.None, title = null) {}
+            privacySettingsScreen()
+            start(key = PrivacySettingsScreen)
         }
 
-        assertEquals(PaneRole.None, graph.destination(key = PrivacySettingsRoute).paneRole)
+        assertEquals(PaneRole.None, graph.destination(key = PrivacySettingsScreen).paneRole)
     }
 }

@@ -22,14 +22,14 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.feature.privacy.R
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.privacy.ui.PrivacyScreen
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.PaneRole
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.ShellGraphBuilder
-import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.PrivacySettingsRoute
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.PrivacySettingsScreen
 
 /**
- * Registers the security and privacy page for [PrivacySettingsRoute], a detail of the settings
+ * Registers the security and privacy page for [PrivacySettingsScreen], a detail of the settings
  * list, unless the app registered its own.
  */
-fun ShellGraphBuilder.privacySettingsPage() {
-    pageIfAbsent<PrivacySettingsRoute>(
+fun ShellGraphBuilder.privacySettingsScreen() {
+    pageIfAbsent<PrivacySettingsScreen>(
         paneRole = PaneRole.Detail,
         title = { stringResource(id = R.string.security_and_privacy) },
     ) {

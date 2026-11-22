@@ -70,7 +70,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.snackbar.D
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.LocalPageKey
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.LocalShellGraph
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.LocalShellNavigator
-import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.ShellHomeRoute
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.ShellHomeScreen
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.ShellNavDisplay
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.ShellNavigator
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.DestinationKind
@@ -326,7 +326,7 @@ private fun swapsInPlace(from: Scene<*>, to: Scene<*>, layout: ShellLayoutMode, 
 private val Scene<*>.depth: Int get() = previousEntries.size - (entries.size - 1)
 
 private fun pageEntry(graph: ShellGraph, navigator: ShellNavigator, key: NavKey): NavEntry<NavKey> {
-    if (key == ShellHomeRoute) {
+    if (key == ShellHomeScreen) {
         return NavEntry(
             key = key,
             contentKey = key.toString(),

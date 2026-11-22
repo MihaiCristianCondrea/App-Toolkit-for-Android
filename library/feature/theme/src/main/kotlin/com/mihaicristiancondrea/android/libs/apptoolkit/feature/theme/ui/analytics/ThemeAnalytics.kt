@@ -19,14 +19,22 @@ package com.mihaicristiancondrea.android.libs.apptoolkit.feature.theme.ui.analyt
 
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.telemetry.models.AnalyticsEvent
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.telemetry.models.AnalyticsValue
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.telemetry.models.TrackedScreen
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.analytics.SettingsAnalytics
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.theme.WALLPAPER_PALETTE_PAGE
 
-internal const val THEME_SCREEN_NAME = "Theme"
+internal const val THEME_SCREEN_NAME: String = "Theme"
+
+private const val THEME_SCREEN_CLASS: String = "ThemeSettingsScreen"
+
+internal val THEME_SCREEN: TrackedScreen = TrackedScreen(
+    name = THEME_SCREEN_NAME,
+    className = THEME_SCREEN_CLASS,
+)
 
 private fun themeEvent(name: String, vararg params: Pair<String, String>): AnalyticsEvent = AnalyticsEvent(
     name = name,
-    params = buildMap<String, AnalyticsValue> {
+    params = buildMap {
         put(SettingsAnalytics.Params.SCREEN, AnalyticsValue.Str(THEME_SCREEN_NAME))
         params.forEach { (key, value) -> put(key, AnalyticsValue.Str(value)) }
     },

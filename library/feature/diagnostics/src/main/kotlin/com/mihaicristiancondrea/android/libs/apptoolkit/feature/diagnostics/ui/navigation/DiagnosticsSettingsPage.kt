@@ -22,17 +22,17 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.feature.diagnostics.R
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.diagnostics.ui.UsageAndDiagnosticsScreen
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.PaneRole
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.ShellGraphBuilder
-import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.DiagnosticsSettingsRoute
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.DiagnosticsSettingsScreen
 
 /**
- * Registers the usage and diagnostics page for [DiagnosticsSettingsRoute], unless the app
+ * Registers the usage and diagnostics page for [DiagnosticsSettingsScreen], unless the app
  * registered its own.
  *
  * It opens from the privacy page, itself a detail beside the settings list, so it is a page of
  * its own rather than a detail, which would replace the privacy page instead of stacking.
  */
-fun ShellGraphBuilder.diagnosticsSettingsPage() {
-    pageIfAbsent<DiagnosticsSettingsRoute>(
+fun ShellGraphBuilder.diagnosticsSettingsScreen() {
+    pageIfAbsent<DiagnosticsSettingsScreen>(
         paneRole = PaneRole.None,
         title = { stringResource(R.string.usage_and_diagnostics) },
     ) {

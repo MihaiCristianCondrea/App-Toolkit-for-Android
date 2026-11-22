@@ -15,7 +15,7 @@ and the strings that name them.
 - `PrivacyViewModel`, `PrivacyUiState` (whose `items` is a `Loadable`), `PrivacyEvent` and
   `PrivacyItem`.
 - `PrivacySettingsProvider`, the host contract supplying the legal URLs.
-- `privacySettingsPage()`, the registration of `PrivacySettingsRoute` as a detail of the settings
+- `privacySettingsScreen()`, the registration of `PrivacySettingsScreen` as a detail of the settings
   list.
 - Being the page Android's permission manager and privacy dashboard open from the information icon
   beside the app. `PermissionUsageActivity` in [`:library:apptoolkit`](../../apptoolkit/README.md)
@@ -39,14 +39,14 @@ and the strings that name them.
 
 ## Used by
 
-- [`:library:apptoolkit`](../../apptoolkit/README.md), which calls `privacySettingsPage()` from
-  `toolkitPages()`, and `:sample:core:apptoolkit`, which binds a default provider.
+- [`:library:apptoolkit`](../../apptoolkit/README.md), which calls `privacySettingsScreen()` from
+  `toolkitScreens()`, and `:sample:core:apptoolkit`, which binds a default provider.
 
 ## Flow chart
 
 ```mermaid
 flowchart TD
-    Page[privacySettingsPage: PrivacySettingsRoute] --> Screen[PrivacyScreen]
+    Page[privacySettingsScreen: PrivacySettingsScreen] --> Screen[PrivacyScreen]
     Screen --> VM[PrivacyViewModel]
     VM --> Provider[PrivacySettingsProvider]
     VM --> Mapper[PrivacyMappers to PrivacyItem list]
@@ -79,7 +79,7 @@ flowchart TD
 ## Public contracts
 
 - `PrivacySettingsProvider`, `PrivacyScreen`, `PrivacyViewModel`, `PrivacyUiState`,
-  `PrivacyItem`, `PrivacyItemKey`, `PrivacyItemAction`, `PrivacyEvent`, `privacySettingsPage()`
+  `PrivacyItem`, `PrivacyItemKey`, `PrivacyItemAction`, `PrivacyEvent`, `privacySettingsScreen()`
   and `privacyModule`. `PrivacyScreenContent` is internal.
 
 ## Internal implementations

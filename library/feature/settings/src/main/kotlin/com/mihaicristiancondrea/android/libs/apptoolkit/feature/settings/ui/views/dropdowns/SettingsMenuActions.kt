@@ -42,7 +42,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.R as Navigati
  * Top-app-bar actions for the settings root.
  *
  * Help belongs to the screen the settings tree starts at, not to each page inside it, so only the
- * settings list's app bar carries it; `settingsPage()` puts it there. It opens [HelpScreen].
+ * settings list's app bar carries it; `settingsScreen()` puts it there. It opens [HelpScreen].
  */
 @Composable
 fun SettingsMenuActions() {

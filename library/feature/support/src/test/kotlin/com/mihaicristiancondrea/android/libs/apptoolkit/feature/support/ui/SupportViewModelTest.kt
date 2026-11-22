@@ -223,6 +223,21 @@ class SupportViewModelTest {
         }
 
     @Test
+    fun `a failed purchase with a blank reason falls back to the generic error text`() =
+        runTest(dispatcherExtension.testDispatcher) {
+            val billing = FakeBillingRepository()
+            val viewModel = createViewModel(billingRepository = billing)
+            advance()
+
+            billing.purchaseResults.emit(PurchaseResult.Failed("   "))
+
+            assertTrue(viewModel.readyOptions().isNotEmpty())
+            val message = viewModel.onlyMessage()
+            assertEquals(GenericErrorText, message.text)
+            assertTrue(message.isError)
+        }
+
+    @Test
     fun `a failed purchase after an empty result is a message`() = runTest(dispatcherExtension.testDispatcher) {
         val billing = FakeBillingRepository(products = emptyMap())
         val viewModel = createViewModel(billingRepository = billing)

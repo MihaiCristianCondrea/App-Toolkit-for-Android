@@ -31,7 +31,7 @@ completion logic to the App Toolkit's onboarding infrastructure.
 flowchart TD
     App[":sample:app"] -->|initializes Koin| Module[onboardingModule]
     Module --> Provider[AppOnboardingProvider]
-    App -->|resolveStart: startup flag set| Start[StartupRoute, then OnboardingRoute]
+    App -->|resolveStart: startup flag set| Start[StartupScreen, then OnboardingScreen]
     Start --> Screen[OnboardingScreen]
     Screen -->|requests pages| Provider
     Provider -->|returns| Pages[List of OnboardingPage]

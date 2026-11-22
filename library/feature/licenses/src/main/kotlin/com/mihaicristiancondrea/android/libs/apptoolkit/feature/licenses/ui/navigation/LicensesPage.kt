@@ -22,16 +22,16 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.feature.licenses.R
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.licenses.ui.LicensesScreen
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.PaneRole
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.ShellGraphBuilder
-import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.LicensesRoute
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.LicensesScreen
 
 /**
- * Registers the licenses page for [LicensesRoute], unless the app registered its own.
+ * Registers the licenses page for [LicensesScreen], unless the app registered its own.
  *
  * It opens from About, itself a detail beside the settings list, so it is a page of its own
  * rather than a detail: a detail opened from a detail would replace it instead of stacking on it.
  */
-fun ShellGraphBuilder.licensesPage() {
-    pageIfAbsent<LicensesRoute>(
+fun ShellGraphBuilder.licensesScreen() {
+    pageIfAbsent<LicensesScreen>(
         paneRole = PaneRole.None,
         title = { stringResource(id = R.string.oss_license_title) },
     ) {

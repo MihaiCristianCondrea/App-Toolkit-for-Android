@@ -441,7 +441,7 @@ class AboutViewModel(/* ... */) : LoggedScreenViewModel<AboutUiState, AboutEvent
 // AboutScreen, stateful: ViewModel, the screen's boundary, navigation.
 val state by viewModel.state.collectAsStateWithLifecycle()
 ScreenHost(screen = ABOUT_SCREEN, status = state.items, viewModel = viewModel) {
-    AboutScreenContent(state, onEvent = viewModel::onEvent, onOpenLicenses = { navigator.navigate(LicensesRoute) })
+    AboutScreenContent(state, onEvent = viewModel::onEvent, onOpenLicenses = { navigator.navigate(LicensesScreen) })
 }
 
 // AboutScreenContent, stateless and previewable: renders the state, reports through callbacks.

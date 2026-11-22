@@ -17,7 +17,7 @@ analytics and advertising consents behind it, on a settings page and on an onboa
   strings.
 - `UsageAndDiagnosticsSettings`, `UsageAndDiagnosticsRepository`,
   `DefaultUsageAndDiagnosticsRepository` and `diagnosticsSettingsModule`.
-- `diagnosticsSettingsPage()`, the registration of `DiagnosticsSettingsRoute`.
+- `diagnosticsSettingsScreen()`, the registration of `DiagnosticsSettingsScreen`.
 
 ## Does not own
 
@@ -36,7 +36,7 @@ analytics and advertising consents behind it, on a settings page and on an onboa
 
 ## Used by
 
-- [`:library:apptoolkit`](../../apptoolkit/README.md), which calls `diagnosticsSettingsPage()` and
+- [`:library:apptoolkit`](../../apptoolkit/README.md), which calls `diagnosticsSettingsScreen()` and
   includes `diagnosticsSettingsModule`.
 - `:sample:feature:onboarding`, which lists `TelemetryOnboardingPage`.
 
@@ -44,7 +44,7 @@ analytics and advertising consents behind it, on a settings page and on an onboa
 
 ```mermaid
 flowchart TD
-    Page[diagnosticsSettingsPage: DiagnosticsSettingsRoute] --> Screen[UsageAndDiagnosticsScreen]
+    Page[diagnosticsSettingsScreen: DiagnosticsSettingsScreen] --> Screen[UsageAndDiagnosticsScreen]
     Onboarding[TelemetryOnboardingPage] --> VM
     Screen --> VM[UsageAndDiagnosticsViewModel]
     Screen --> Content[UsageAndDiagnosticsScreenContent]
@@ -81,7 +81,7 @@ flowchart TD
 
 ## Public contracts
 
-- `UsageAndDiagnosticsScreen()`, `diagnosticsSettingsPage()`, `TelemetryOnboardingPage(isSelected)`,
+- `UsageAndDiagnosticsScreen()`, `diagnosticsSettingsScreen()`, `TelemetryOnboardingPage(isSelected)`,
   `FirebaseConsentDialog(settings, ...)`, `UsageAndDiagnosticsViewModel`, `UsageAndDiagnosticsUiState`,
   `UsageAndDiagnosticsEvent`, `UsageAndDiagnosticsSettings`, `UsageAndDiagnosticsRepository` and
   `diagnosticsSettingsModule`. `UsageAndDiagnosticsScreenContent` and

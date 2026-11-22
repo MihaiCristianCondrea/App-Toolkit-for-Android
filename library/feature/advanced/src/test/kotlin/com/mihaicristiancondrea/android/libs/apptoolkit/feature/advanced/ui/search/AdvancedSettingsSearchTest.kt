@@ -24,7 +24,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.settings.
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.settings.SettingsSearchEntry
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.advanced.R
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.shellGraph
-import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.AdvancedSettingsRoute
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.AdvancedSettingsScreen
 import org.junit.jupiter.api.Test
 import kotlin.test.assertEquals
 
@@ -41,7 +41,7 @@ class AdvancedSettingsSearchTest {
                 SettingsSearchEntry(
                     title = R.string.clear_cache,
                     section = R.string.advanced,
-                    destination = AdvancedSettingsRoute,
+                    destination = AdvancedSettingsScreen,
                     summary = R.string.summary_preference_settings_clear_cache,
                 ),
             ),

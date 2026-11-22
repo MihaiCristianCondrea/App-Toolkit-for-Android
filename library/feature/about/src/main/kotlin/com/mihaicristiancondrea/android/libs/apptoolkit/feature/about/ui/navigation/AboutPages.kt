@@ -22,7 +22,7 @@ import androidx.compose.ui.res.stringResource
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.ui.AboutScreen
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.PaneRole
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.ShellGraphBuilder
-import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.AboutRoute
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.AboutScreen
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.R as CoreUiR
 
 /**
@@ -32,11 +32,11 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.R as CoreUiR
  * before the Toolkit's pages are added, with its own [about] content:
  *
  * ```
- * aboutPages { AboutScreen(onVersionTap = { taps -> unlockAfter(taps) }) }
+ * aboutScreen { AboutScreen(onVersionTap = { taps -> unlockAfter(taps) }) }
  * ```
  */
-fun ShellGraphBuilder.aboutPages(about: @Composable () -> Unit = { AboutScreen() }) {
-    pageIfAbsent<AboutRoute>(
+fun ShellGraphBuilder.aboutScreen(about: @Composable () -> Unit = { AboutScreen() }) {
+    pageIfAbsent<AboutScreen>(
         paneRole = PaneRole.Detail,
         title = { stringResource(id = CoreUiR.string.about) },
     ) {

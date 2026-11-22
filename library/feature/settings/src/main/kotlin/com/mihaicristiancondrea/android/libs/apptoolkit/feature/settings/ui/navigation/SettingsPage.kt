@@ -24,16 +24,16 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.feature.settings.ui.view
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.settings.ui.views.dropdowns.SettingsMenuActions
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.PaneRole
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.ShellGraphBuilder
-import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.SettingsRoute
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.SettingsScreen
 
 /**
- * Registers the settings list for [SettingsRoute], unless the app registered its own.
+ * Registers the settings list for [SettingsScreen], unless the app registered its own.
  *
  * A list page: the detail pages its rows open (display, privacy, advanced, about) sit beside it
  * on wide windows. The drawer's `settings()` entry links to it.
  */
-fun ShellGraphBuilder.settingsPage() {
-    pageIfAbsent<SettingsRoute>(
+fun ShellGraphBuilder.settingsScreen() {
+    pageIfAbsent<SettingsScreen>(
         paneRole = PaneRole.List,
         title = { stringResource(id = R.string.settings) },
         actions = { SettingsMenuActions() },

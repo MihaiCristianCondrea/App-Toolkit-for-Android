@@ -35,6 +35,16 @@
   whose categories have no preferences as `Loadable.Empty`, refreshes already-loaded settings in
   place without flashing `Loadable.Loading`, and normalizes settings search case folding across all
   locales and whitespace separators.
+- Startup applies scaffold insets through `LazyColumn` `contentPadding` without double-padding
+  system bars, clears the Agree FAB for scrolled terms content, and pauses the welcome Lottie
+  animation when system animations are disabled.
+- Support marks INAPP donation products eligible when Play Billing returns offers only through
+  `oneTimePurchaseOfferDetailsList`, falls back to the generic error text when Play reports a blank
+  failure message, and skips rendering the native ad list item when `bannerAdUnitId` is blank.
+- Theme updates `baseline-prof.txt` to match the `feature.theme.ui.features.seasonal` package,
+  keeps loaded theme preferences visible when `ThemeSettingsEvent.Load` re-runs, skips redundant
+  weather effect writes when Done confirms the current effect, and avoids posting redundant
+  layout callbacks in `SeasonalThemeManager` once the overlay is attached.
 
 ### Changed
 
@@ -59,11 +69,24 @@
 - `SettingsList` and `SettingsDetailPlaceholder` accept an optional `modifier: Modifier = Modifier`
   parameter, and `:library:feature:settings` removes unused `:library:core:datastore` and
   `:library:core:network` dependencies.
+- `:library:feature:startup` and `:library:feature:support` remove unused `:library:core:network`
+  dependencies, and `:library:feature:theme` declares its direct `:library:navigation` dependency
+  explicitly.
+- Renamed all Toolkit `AppToolkitNavKey` route keys from `*Route` to `*Screen` (`AboutScreen`,
+  `AdsSettingsScreen`, `AdvancedSettingsScreen`, `DiagnosticsSettingsScreen`,
+  `DisplaySettingsScreen`, `LicensesScreen`, `OnboardingScreen`, `PermissionsScreen`,
+  `PrivacySettingsScreen`, `SettingsScreen`, `StartupScreen`, `SupportScreen`, and
+  `ThemeSettingsScreen`) and renamed `ShellHomeRoute` to `ShellHomeScreen`.
+- Renamed `ShellGraphBuilder` registration extensions from `*Page()`/`*Pages()` to `*Screen()`
+  (`toolkitScreens()`, `aboutScreen()`, `adsSettingsScreen()`, `advancedSettingsScreen()`,
+  `diagnosticsSettingsScreen()`, `displaySettingsScreen()`, `licensesScreen()`,
+  `onboardingScreen()`, `permissionsScreen()`, `privacySettingsScreen()`, `settingsScreen()`,
+  `startupScreen()`, `supportScreen()`, and `themeSettingsScreen()`).
 
 ### Removed
 
 - Remove the unused `LibraryExtrasScreen` placeholder and `LibraryExtrasRoute` key. Use
-  `LicensesScreen` and `LicensesRoute` from `:library:feature:licenses` instead.
+  `LicensesScreen` from `:library:feature:licenses` and `:library:navigation` instead.
 
 ---
 

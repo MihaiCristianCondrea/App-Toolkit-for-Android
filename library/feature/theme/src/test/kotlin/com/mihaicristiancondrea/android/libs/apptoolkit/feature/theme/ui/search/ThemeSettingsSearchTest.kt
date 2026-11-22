@@ -26,7 +26,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.shellGr
 import org.junit.jupiter.api.Test
 import kotlin.test.assertEquals
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.theme.R
-import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.ThemeSettingsRoute
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.ThemeSettingsScreen
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.R as CoreUiR
 
 class ThemeSettingsSearchTest {
@@ -38,7 +38,7 @@ class ThemeSettingsSearchTest {
     @Test
     fun `the theme page's rows open the theme page`() {
         fun entry(title: Int, summary: Int? = null) =
-            SettingsSearchEntry(title = title, section = R.string.dark_theme, destination = ThemeSettingsRoute, summary = summary)
+            SettingsSearchEntry(title = title, section = R.string.dark_theme, destination = ThemeSettingsScreen, summary = summary)
 
         assertEquals(
             listOf(
@@ -49,4 +49,5 @@ class ThemeSettingsSearchTest {
             ),
             themeSettingsSearch.entries(SettingsSearchContext(graph)),
         )
-    }}
+    }
+}

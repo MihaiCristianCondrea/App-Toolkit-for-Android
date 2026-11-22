@@ -15,7 +15,7 @@ it in the activity; this module has no chrome of its own.
   `DeepLinkBuilder`, `Destination`, `DestinationKind`, `ShellTab`, `DrawerEntry`, `PaneRole`,
   `TopBarStyle`, `TopBarScrollMode`, `ContentWidth` and `ShellPlayer`, in the `graph` package, and
   `shellGraph { }`.
-- `ShellNavigator`, `rememberShellNavigator`, `ShellHomeRoute`, `ShellNavDisplay`,
+- `ShellNavigator`, `rememberShellNavigator`, `ShellHomeScreen`, `ShellNavDisplay`,
   `ShellBackHandler` and `ShellSearch`, in the root package.
 - The page and list-detail scenes and their strategies, in `scenes`.
 - `ScreenTransition`, `ShellTransitions`, the tab transitions and `CrossActivityBackMotion`, in
@@ -27,10 +27,11 @@ it in the activity; this module has no chrome of its own.
   (`ArticleTopBarTitle`, `ArticleReadingProgress`), and `readingProgress()` for `ScrollState` and
   `LazyListState`. It is here, not in `:library:core:ui`, because the list-detail scene draws it
   too.
-- `AppToolkitNavKey`, one `@Serializable` key per Toolkit page: `SettingsRoute`, `HelpScreen`, `SupportRoute`, `AdsSettingsRoute`, `PermissionsRoute`,
-  `LicensesRoute`, `AboutRoute`, `ThemeSettingsRoute`,
-  `DisplaySettingsRoute`, `PrivacySettingsRoute`, `AdvancedSettingsRoute`,
-  `DiagnosticsSettingsRoute`, `DeveloperOptionsScreen`, `StartupRoute` and `OnboardingRoute`.
+- `AppToolkitNavKey`, one `@Serializable` key per Toolkit page: `SettingsScreen`, `HelpScreen`,
+  `SupportScreen`, `AdsSettingsScreen`, `PermissionsScreen`, `LicensesScreen`, `AboutScreen`,
+  `ThemeSettingsScreen`, `DisplaySettingsScreen`, `PrivacySettingsScreen`,
+  `AdvancedSettingsScreen`, `DiagnosticsSettingsScreen`, `DeveloperOptionsScreen`,
+  `StartupScreen` and `OnboardingScreen`.
 - The strings the graph's built-in entries use: settings, support us, navigate back and the pane
   separator's description.
 
@@ -95,13 +96,13 @@ val graph = shellGraph(appTitle = R.string.app_name) {
         fabs = { listOf(ToolkitFab(ToolkitIcon.Vector(Icons.Outlined.Add), onClick = ::add, label = "New")) },
     ) { HomeScreen() }
     child<ItemRoute>(title = { it.name }) { ItemScreen(it) }
-    page<LicensesRoute>(paneRole = PaneRole.Detail, title = { stringResource(R.string.licenses) }) { LicensesScreen() }
+    page<LicensesScreen>(paneRole = PaneRole.Detail, title = { stringResource(R.string.licenses) }) { LicensesScreen() }
     drawer {
         link(LibraryRoute, R.string.library, ToolkitIcon.Vector(Icons.Outlined.VideoLibrary))
-        footer { settings(); link(HelpRoute, R.string.help_and_feedback, ToolkitIcon.Vector(Icons.Outlined.HelpOutline)) }
+        footer { settings(); link(HelpScreen, R.string.help_and_feedback, ToolkitIcon.Vector(Icons.Outlined.HelpOutline)) }
     }
     overflow { supportUs() }
-    deepLinks { action(ACTION_OPEN_SETTINGS) { SettingsRoute } }
+    deepLinks { action(ACTION_OPEN_SETTINGS) { SettingsScreen } }
 }
 ```
 
@@ -124,7 +125,7 @@ Screens then call `LocalShellNavigator.current.navigate(key)` with any registere
 - **Tabs keep a true back stack.** Back from a tab's root returns to the tab visited before it,
   each tab remembered once and moved to the top when revisited, the first tab included. When the
   history runs out on another tab, back goes to the first tab, from which the app closes.
-- **An app starts on a tab or on a screen of its own.** A start screen, such as `StartupRoute`,
+- **An app starts on a tab or on a screen of its own.** A start screen, such as `StartupScreen`,
   has no shell under it, so back from it leaves the app. `continueStart(next)` hands over to the
   next start screen, and navigating to a tab, or `enterShell()`, replaces the last with the shell
   for good.
@@ -203,7 +204,7 @@ Screens then call `LocalShellNavigator.current.navigate(key)` with any registere
   page and tab stacks) and `rememberShellNavigator`.
 - `ShellSearch.query` reads and updates the tab's search text. The app bar edits the same
   `ShellSearch.textFieldState`, which also owns the editor selection.
-- `ShellNavDisplay`, `ShellBackHandler`, `ShellHomeRoute`, the scenes and their strategies,
+- `ShellNavDisplay`, `ShellBackHandler`, `ShellHomeScreen`, the scenes and their strategies,
   `ScreenTransition`, `ShellTransitions`, `CrossActivityBackMotion` and `ShellLayoutPolicy`.
 - The composition locals `LocalShellNavigator`, `LocalShellGraph`, `LocalPageKey`,
   `LocalPaneRole`, `LocalSelectedDetail`, `LocalShellSearch`, `LocalShellLayout`,

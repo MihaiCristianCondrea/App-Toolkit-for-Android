@@ -53,7 +53,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.feature.display.ui.views
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.display.ui.views.lists.DisplaySettingsList
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.LocalShellNavigator
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.LocalShellCapabilities
-import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.ThemeSettingsRoute
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.ThemeSettingsScreen
 import kotlinx.collections.immutable.ImmutableList
 import org.koin.compose.getKoin
 import org.koin.compose.viewmodel.koinViewModel
@@ -106,7 +106,7 @@ fun DisplaySettingsScreen() {
                         value = DisplayActionNames.THEME_REDIRECT,
                     ),
                 )
-                navigator.navigate(key = ThemeSettingsRoute)
+                navigator.navigate(key = ThemeSettingsScreen)
             },
             onOpenStartupPage = { showStartupDialog = true },
             onOpenLanguage = {

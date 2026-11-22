@@ -13,7 +13,7 @@ options entry once it is unlocked.
 - `AdvancedSettingsViewModel`, `AdvancedSettingsUiState`, `CacheClearStatus` and
   `AdvancedSettingsEvent`.
 - `CacheRepository` and `DefaultCacheRepository`, which delete the app's cache directories.
-- `advancedSettingsPage()`, the registration of `AdvancedSettingsRoute` as a detail of the settings
+- `advancedSettingsScreen()`, the registration of `AdvancedSettingsScreen` as a detail of the settings
   list, and `advancedSettingsModule`.
 - Its clear cache row in the settings search, a `settingsSearchProvider` bound as `advanced`.
 - The page's localized strings, including the cache confirmation and failure texts.
@@ -43,19 +43,19 @@ to enable bug reporting. With no sheet binding, Advanced Settings omits the bug 
 
 ## Used by
 
-- [`:library:apptoolkit`](../../apptoolkit/README.md), which calls `advancedSettingsPage()` from
-  `toolkitPages()` and assembles `advancedSettingsModule`.
+- [`:library:apptoolkit`](../../apptoolkit/README.md), which calls `advancedSettingsScreen()` from
+  `toolkitScreens()` and assembles `advancedSettingsModule`.
 
 ## Flow chart
 
 ```mermaid
 flowchart TD
-    Entry["advancedSettingsPage(): AdvancedSettingsRoute"] --> Screen["AdvancedSettingsScreen"]
+    Entry["advancedSettingsScreen(): AdvancedSettingsScreen"] --> Screen["AdvancedSettingsScreen"]
     Screen --> Host["ScreenHost"]
     Host --> Content["AdvancedSettingsScreenContent"]
     Content -->|"Bug report action"| Sheet["IssueReporterSheet from Koin"]
     Content -->|"AdvancedSettingsEvent.ClearCache"| VM["AdvancedSettingsViewModel"]
-    Content -->|"Developer options action"| Developer["DeveloperOptionsRoute"]
+    Content -->|"Developer options action"| Developer["DeveloperOptionsScreen"]
     VM --> Repo["CacheRepository / DefaultCacheRepository"]
     Repo --> IO["App cache directories on IO"]
     Unlock["SeasonalThemeRepository"] --> Transformer["toDeveloperOptionsUnlocked()"]
@@ -91,7 +91,7 @@ flowchart TD
 
 ## Public contracts
 
-- `AdvancedSettingsScreen`, `advancedSettingsPage()`, `AdvancedSettingsViewModel`,
+- `AdvancedSettingsScreen`, `advancedSettingsScreen()`, `AdvancedSettingsViewModel`,
   `AdvancedSettingsUiState`, `CacheClearStatus`, `AdvancedSettingsEvent`, `CacheRepository`,
   `DefaultCacheRepository` and `advancedSettingsModule`. `AdvancedSettingsScreenContent` is
   internal.

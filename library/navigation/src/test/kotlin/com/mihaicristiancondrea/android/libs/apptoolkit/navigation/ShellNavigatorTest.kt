@@ -23,7 +23,7 @@ import androidx.navigation3.runtime.NavKey
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.icons.ToolkitIcon
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.PaneRole
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.ShellGraphBuilder
-import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.SettingsRoute
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.SettingsScreen
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Assertions.assertTrue
@@ -53,7 +53,7 @@ class ShellNavigatorTest {
         page<OtherPage> {}
         page<Detail>(paneRole = PaneRole.Detail) {}
         page<OtherDetail>(paneRole = PaneRole.Detail) {}
-        page<SettingsRoute>(paneRole = PaneRole.List) {}
+        page<SettingsScreen>(paneRole = PaneRole.List) {}
     }.build()
 
     private lateinit var pages: MutableList<NavKey>
@@ -63,7 +63,7 @@ class ShellNavigatorTest {
 
     @BeforeEach
     fun setUp() {
-        pages = mutableListOf(ShellHomeRoute)
+        pages = mutableListOf(ShellHomeScreen)
         tabs = graph.tabs.map { mutableListOf(it.key) }
         exits = 0
         navigator = ShellNavigator(graph, pages, tabs, mutableListOf(0)) { exits++ }
@@ -92,7 +92,7 @@ class ShellNavigatorTest {
 
         startNavigator.navigate(Second)
 
-        assertEquals(listOf<NavKey>(ShellHomeRoute), startPages)
+        assertEquals(listOf<NavKey>(ShellHomeScreen), startPages)
         assertTrue(startNavigator.inShell)
         assertEquals(1, startNavigator.currentTabIndex)
         startNavigator.goBack() // Second → First
@@ -117,7 +117,7 @@ class ShellNavigatorTest {
     fun `continuing the start from the shell opens a page`() {
         navigator.continueStart(Page)
 
-        assertEquals(listOf(ShellHomeRoute, Page), pages)
+        assertEquals(listOf(ShellHomeScreen, Page), pages)
     }
 
     @Test
@@ -262,11 +262,11 @@ class ShellNavigatorTest {
         navigator.navigate(Page)
         navigator.navigate(OtherPage)
 
-        assertEquals(listOf(ShellHomeRoute, Page, OtherPage), navigator.pages)
+        assertEquals(listOf(ShellHomeScreen, Page, OtherPage), navigator.pages)
 
         navigator.goBack()
         navigator.goBack()
-        assertEquals(listOf<NavKey>(ShellHomeRoute), navigator.pages)
+        assertEquals(listOf<NavKey>(ShellHomeScreen), navigator.pages)
         assertEquals(listOf(First, Child(1)), navigator.currentTabStack)
     }
 
@@ -275,26 +275,26 @@ class ShellNavigatorTest {
         navigator.navigate(Page)
         navigator.navigate(Page)
 
-        assertEquals(listOf(ShellHomeRoute, Page), navigator.pages)
+        assertEquals(listOf(ShellHomeScreen, Page), navigator.pages)
     }
 
     @Test
     fun `a detail replaces the detail already open`() {
-        navigator.navigate(SettingsRoute)
+        navigator.navigate(SettingsScreen)
         navigator.navigate(Detail)
         navigator.navigate(OtherDetail)
 
-        assertEquals(listOf(ShellHomeRoute, SettingsRoute, OtherDetail), navigator.pages)
+        assertEquals(listOf(ShellHomeScreen, SettingsScreen, OtherDetail), navigator.pages)
     }
 
     @Test
     fun `closing a list closes the detail beside it`() {
-        navigator.navigate(SettingsRoute)
+        navigator.navigate(SettingsScreen)
         navigator.navigate(Detail)
 
-        navigator.close(SettingsRoute)
+        navigator.close(SettingsScreen)
 
-        assertEquals(listOf<NavKey>(ShellHomeRoute), navigator.pages)
+        assertEquals(listOf<NavKey>(ShellHomeScreen), navigator.pages)
     }
 
     @Test
@@ -302,12 +302,12 @@ class ShellNavigatorTest {
         navigator.navigate(Page)
         navigator.navigate(Child(3))
 
-        assertEquals(listOf<NavKey>(ShellHomeRoute), navigator.pages)
+        assertEquals(listOf<NavKey>(ShellHomeScreen), navigator.pages)
         assertEquals(listOf(First, Child(3)), navigator.currentTabStack)
 
         navigator.navigate(Page)
         navigator.navigate(Second)
-        assertEquals(listOf<NavKey>(ShellHomeRoute), navigator.pages)
+        assertEquals(listOf<NavKey>(ShellHomeScreen), navigator.pages)
         assertEquals(1, navigator.currentTabIndex)
     }
 
@@ -316,7 +316,7 @@ class ShellNavigatorTest {
         assertFalse(navigator.popPage())
         navigator.navigate(Page)
         assertTrue(navigator.popPage())
-        assertEquals(listOf<NavKey>(ShellHomeRoute), navigator.pages)
+        assertEquals(listOf<NavKey>(ShellHomeScreen), navigator.pages)
     }
 
     @Test
@@ -324,9 +324,9 @@ class ShellNavigatorTest {
         navigator.navigate(Page)
         navigator.navigate(OtherPage)
 
-        navigator.navigate(ShellHomeRoute)
+        navigator.navigate(ShellHomeScreen)
 
-        assertEquals(listOf<NavKey>(ShellHomeRoute), navigator.pages)
+        assertEquals(listOf<NavKey>(ShellHomeScreen), navigator.pages)
     }
 
     @Test
