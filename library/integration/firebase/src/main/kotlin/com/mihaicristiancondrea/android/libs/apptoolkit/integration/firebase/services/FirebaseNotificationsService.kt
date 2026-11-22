@@ -15,7 +15,7 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.mihaicristiancondrea.android.libs.apptoolkit.integration.firebase.data.notifications
+package com.mihaicristiancondrea.android.libs.apptoolkit.integration.firebase.services
 
 import android.util.Log
 import com.google.firebase.messaging.FirebaseMessagingService
@@ -23,30 +23,26 @@ import com.google.firebase.messaging.RemoteMessage
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.logging.FCM_LOG_TAG
 
 /**
- * A service that extends [com.google.firebase.messaging.FirebaseMessagingService] to handle Firebase Cloud Messaging (FCM) events.
+ * Default [FirebaseMessagingService] entry point registered by `:library:integration:firebase`.
  *
- * This service is responsible for receiving new FCM registration tokens and handling incoming
- * push notifications.
- *
- * @see com.google.firebase.messaging.FirebaseMessagingService
- * @see com.google.firebase.messaging.RemoteMessage
+ * Receives FCM registration callbacks and foreground messages without logging installation
+ * identifiers to Logcat. This service does not render notifications on its own; hosts that handle
+ * custom data payloads or foreground notifications can subclass or replace it in their manifest.
  */
 class FirebaseNotificationsService : FirebaseMessagingService() {
+
     override fun onRegistered(installationId: String) {
         super.onRegistered(installationId)
-        Log.d(FCM_LOG_TAG, "Registered installation: $installationId")
+        Log.d(FCM_LOG_TAG, "FCM installation registered.")
     }
 
     override fun onUnregistered(installationId: String) {
         super.onUnregistered(installationId)
-        Log.d(FCM_LOG_TAG, "Unregistered installation: $installationId")
+        Log.d(FCM_LOG_TAG, "FCM installation unregistered.")
     }
 
     override fun onMessageReceived(message: RemoteMessage) {
         super.onMessageReceived(message)
-        Log.d(FCM_LOG_TAG, "Received FCM message from ${message.from}")
-        if (message.data.isNotEmpty()) {
-            Log.d(FCM_LOG_TAG, "Message data payload size=${message.data.size}")
-        }
+        Log.d(FCM_LOG_TAG, "Received FCM message (dataKeys=${message.data.size}).")
     }
 }

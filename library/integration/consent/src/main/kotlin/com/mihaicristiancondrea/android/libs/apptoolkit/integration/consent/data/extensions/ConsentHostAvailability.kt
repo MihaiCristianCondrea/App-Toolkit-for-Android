@@ -15,17 +15,19 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.mihaicristiancondrea.android.libs.apptoolkit.integration.consent.data.models
+package com.mihaicristiancondrea.android.libs.apptoolkit.integration.consent.data.extensions
 
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
+import com.mihaicristiancondrea.android.libs.apptoolkit.integration.consent.data.models.ConsentHost
 
 /**
- * Whether the activity can still serve as the context for a UMP request. Reject finishing or
- * destroyed activities because UMP retains the host through its asynchronous work.
+ * Whether the activity can still serve as the context for a UMP request. Reject finishing,
+ * destroyed, or configuration-changing activities because UMP retains the host through its
+ * asynchronous work.
  */
 val ConsentHost.isAlive: Boolean
-    get() = !activity.isFinishing && !activity.isDestroyed
+    get() = !activity.isFinishing && !activity.isDestroyed && !activity.isChangingConfigurations
 
 /**
  * Whether the host is on screen and can legally host a consent form.
@@ -36,6 +38,6 @@ val ConsentHost.isAlive: Boolean
 val ConsentHost.canShowConsentForm: Boolean
     get() {
         if (!isAlive) return false
-        val lifecycleOwner: LifecycleOwner = activity as? LifecycleOwner ?: return true
+        val lifecycleOwner: LifecycleOwner = (activity as? LifecycleOwner) ?: return true
         return lifecycleOwner.lifecycle.currentState.isAtLeast(Lifecycle.State.STARTED)
     }

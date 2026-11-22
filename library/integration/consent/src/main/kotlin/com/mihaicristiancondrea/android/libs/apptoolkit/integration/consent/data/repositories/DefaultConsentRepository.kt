@@ -17,25 +17,29 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.integration.consent.data.repositories
 
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.coroutines.dispatchers.DispatcherProvider
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.coroutines.dispatchers.StandardDispatchers
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.BuildInfoRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.telemetry.DiagnosticsReporter
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.telemetry.TelemetryCollection
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.local.storageCall
 import com.mihaicristiancondrea.android.libs.apptoolkit.integration.consent.data.exceptions.ConsentException
+import com.mihaicristiancondrea.android.libs.apptoolkit.integration.consent.data.extensions.isAlive
 import com.mihaicristiancondrea.android.libs.apptoolkit.integration.consent.data.local.ConsentPreferencesDataSource
 import com.mihaicristiancondrea.android.libs.apptoolkit.integration.consent.data.models.ConsentHost
 import com.mihaicristiancondrea.android.libs.apptoolkit.integration.consent.data.models.ConsentSettings
-import com.mihaicristiancondrea.android.libs.apptoolkit.integration.consent.data.models.isAlive
 import com.mihaicristiancondrea.android.libs.apptoolkit.integration.consent.data.remote.ConsentRemoteDataSource
+import java.io.Closeable
+import java.lang.ref.WeakReference
 import kotlin.time.Duration.Companion.milliseconds
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.NonCancellable
 import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.cancel
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
@@ -47,9 +51,11 @@ import kotlinx.coroutines.withTimeoutOrNull
  * @param diagnostics breadcrumbs that trace the consent lifecycle; the repository reports no
  * analytics events.
  * @param collection applies the person's consent to the telemetry SDKs' collection switches.
- * @param requestScope scope that owns the shared, process-wide consent round trip. It defaults to
- * the immediate main dispatcher because UMP requires its entry points to be called from the main
- * thread.
+ * @param dispatchers supplies the main dispatcher for the owned consent round-trip scope when
+ * [requestScope] is not provided.
+ * @param requestScope optional caller-owned scope for shared consent round trips (typically used
+ * in tests). When `null`, the repository owns a `SupervisorJob` scope on `dispatchers.main` and
+ * cancels it in [close].
  */
 class DefaultConsentRepository(
     private val remote: ConsentRemoteDataSource,
@@ -57,17 +63,23 @@ class DefaultConsentRepository(
     private val buildInfoRepository: BuildInfoRepository,
     private val diagnostics: DiagnosticsReporter,
     private val collection: TelemetryCollection,
+    dispatchers: DispatcherProvider = StandardDispatchers(),
+    requestScope: CoroutineScope? = null,
+) : ConsentRepository, Closeable {
+
+    private val ownsScope: Boolean = requestScope == null
     private val requestScope: CoroutineScope =
-        CoroutineScope(context = SupervisorJob() + Dispatchers.Main.immediate),
-) : ConsentRepository {
+        requestScope ?: CoroutineScope(context = SupervisorJob() + dispatchers.main)
 
     private val requestMutex = Mutex()
+    @Volatile
     private var inFlightRequest: InFlightConsentRequest? = null
 
     /**
      * Requests consent, sharing one UMP round trip between callers that ask at the same time, since
      * overlapping requests drive the SDK into the failure path that crashes the process from its
-     * own executor. A host that is finishing or destroyed is rejected before UMP is called.
+     * own executor. A host that is finishing, destroyed, or rotating is rejected before UMP is
+     * called.
      *
      * The flight is keyed on [showIfRequired], so an explicit request for the form never takes the
      * answer of one that shows it only when required. A caller joins only a request whose host is
@@ -94,7 +106,7 @@ class DefaultConsentRepository(
             )
             throw ConsentException(
                 reason = ConsentException.Reason.HOST_UNAVAILABLE,
-                message = "Consent host is finishing or destroyed.",
+                message = "Consent host is finishing, destroyed, or changing configurations.",
             )
         }
 
@@ -102,7 +114,7 @@ class DefaultConsentRepository(
             if (!host.isAlive) {
                 throw ConsentException(
                     reason = ConsentException.Reason.HOST_UNAVAILABLE,
-                    message = "Consent host is finishing or destroyed.",
+                    message = "Consent host is finishing, destroyed, or changing configurations.",
                 )
             }
             val (request, canJoin) = requestMutex.withLock {
@@ -110,7 +122,7 @@ class DefaultConsentRepository(
                 if (current == null) {
                     startRequest(host = host, showIfRequired = showIfRequired) to true
                 } else {
-                    current to (current.showIfRequired == showIfRequired && current.host.isAlive)
+                    current to ((current.showIfRequired == showIfRequired) && current.isHostAlive)
                 }
             }
             if (canJoin) {
@@ -119,7 +131,7 @@ class DefaultConsentRepository(
             }
 
             // A distinct request needs its own result, but must wait for the active SDK operation.
-            if (request.host.isAlive) {
+            if (request.isHostAlive) {
                 request.result.join()
             } else {
                 val finished = withTimeoutOrNull(STALE_REQUEST_WAIT_MS.milliseconds) {
@@ -139,7 +151,8 @@ class DefaultConsentRepository(
     /**
      * Starts a shared UMP round trip in [requestScope] and publishes its outcome through
      * [InFlightConsentRequest.result], so a caller that stops waiting never cancels it for the
-     * others. A round trip cancelled with its scope ends as [ConsentException.Reason.REQUEST_FAILED].
+     * others. A round trip cancelled with its scope (including when [requestScope] was already
+     * cancelled) ends as [ConsentException.Reason.REQUEST_FAILED].
      *
      * The caller must hold [requestMutex].
      */
@@ -148,13 +161,13 @@ class DefaultConsentRepository(
         showIfRequired: Boolean,
     ): InFlightConsentRequest {
         val request = InFlightConsentRequest(
-            host = host,
+            hostRef = WeakReference(host),
             showIfRequired = showIfRequired,
             result = CompletableDeferred(),
         )
         inFlightRequest = request
 
-        requestScope.launch {
+        val job = requestScope.launch {
             try {
                 remote.requestConsent(host = host, showIfRequired = showIfRequired)
                 request.result.complete(Unit)
@@ -164,7 +177,7 @@ class DefaultConsentRepository(
                         reason = ConsentException.Reason.REQUEST_FAILED,
                         message = "Consent round trip was cancelled before UMP answered.",
                         cause = cancellation,
-                    )
+                    ),
                 )
                 throw cancellation
             } catch (throwable: Throwable) {
@@ -179,16 +192,39 @@ class DefaultConsentRepository(
                 }
             }
         }
+        job.invokeOnCompletion { cause ->
+            if (!request.result.isCompleted) {
+                request.result.completeExceptionally(
+                    ConsentException(
+                        reason = ConsentException.Reason.REQUEST_FAILED,
+                        message = "Consent round trip was cancelled before UMP answered.",
+                        cause = cause,
+                    ),
+                )
+            }
+            if (inFlightRequest === request) {
+                inFlightRequest = null
+            }
+        }
 
         return request
     }
 
-    /** A consent round trip that later callers can attach to while its [host] is alive. */
+    override fun close() {
+        if (ownsScope) {
+            requestScope.cancel()
+        }
+    }
+
+    /** A consent round trip that later callers can attach to while its host is alive. */
     private class InFlightConsentRequest(
-        val host: ConsentHost,
+        private val hostRef: WeakReference<ConsentHost>,
         val showIfRequired: Boolean,
         val result: CompletableDeferred<Unit>,
-    )
+    ) {
+        val isHostAlive: Boolean
+            get() = hostRef.get()?.isAlive == true
+    }
 
     override suspend fun applyInitialConsent() {
         diagnostics.logBreadcrumb(message = "Applying initial consent")

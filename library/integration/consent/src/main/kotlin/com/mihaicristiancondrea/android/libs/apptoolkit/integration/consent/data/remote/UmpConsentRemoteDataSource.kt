@@ -22,12 +22,17 @@ import com.google.android.ump.ConsentForm
 import com.google.android.ump.ConsentRequestParameters
 import com.google.android.ump.FormError
 import com.google.android.ump.UserMessagingPlatform
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.logging.CONSENT_LOG_TAG
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.coroutines.dispatchers.DispatcherProvider
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.coroutines.dispatchers.StandardDispatchers
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.local.AdMobAppIdDataSource
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.logging.CONSENT_LOG_TAG
 import com.mihaicristiancondrea.android.libs.apptoolkit.integration.consent.data.exceptions.ConsentException
+import com.mihaicristiancondrea.android.libs.apptoolkit.integration.consent.data.extensions.canShowConsentForm
+import com.mihaicristiancondrea.android.libs.apptoolkit.integration.consent.data.extensions.isAlive
 import com.mihaicristiancondrea.android.libs.apptoolkit.integration.consent.data.models.ConsentHost
-import com.mihaicristiancondrea.android.libs.apptoolkit.integration.consent.data.models.canShowConsentForm
+import java.util.concurrent.atomic.AtomicBoolean
 import kotlinx.coroutines.suspendCancellableCoroutine
+import kotlinx.coroutines.withContext
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
 
@@ -40,46 +45,60 @@ import kotlin.coroutines.resumeWithException
  * @param adMobAppIdDataSource resolves the *host* app's AdMob application id. Passing a foreign id to
  * UMP produces consent requests against a publisher account that does not own the running app,
  * which is the failure mode that precedes the SDK's metrics-ping crash.
+ * @param dispatchers supplies the main dispatcher required by UMP entry points.
  */
 class UmpConsentRemoteDataSource(
     private val adMobAppIdDataSource: AdMobAppIdDataSource,
+    private val dispatchers: DispatcherProvider = StandardDispatchers(),
 ) : ConsentRemoteDataSource {
 
     override suspend fun requestConsent(
         host: ConsentHost,
         showIfRequired: Boolean,
-    ): Unit {
+    ) {
         val parameters = buildRequestParameters()
-        suspendCancellableCoroutine<Unit> { continuation ->
-            val finish: (ConsentException?) -> Unit = { failure ->
-                if (continuation.isActive) {
-                    if (failure == null) continuation.resume(Unit) else continuation.resumeWithException(failure)
-                }
+        withContext(dispatchers.main) {
+            if (!host.isAlive) {
+                throw consentFailure(
+                    reason = ConsentException.Reason.HOST_UNAVAILABLE,
+                    message = "Consent host is finishing, destroyed, or changing configurations.",
+                )
             }
+            suspendCancellableCoroutine { continuation ->
+                val completed = AtomicBoolean(false)
+                val finish: (ConsentException?) -> Unit = { failure ->
+                    if (completed.compareAndSet(false, true) && continuation.isActive) {
+                        if (failure == null) {
+                            continuation.resume(Unit)
+                        } else {
+                            continuation.resumeWithException(failure)
+                        }
+                    }
+                }
 
-            try {
-                val consentInfo = UserMessagingPlatform.getConsentInformation(host.activity)
-                consentInfo.requestConsentInfoUpdate(
-                    host.activity,
-                    parameters,
-                    { showForm(host = host, showIfRequired = showIfRequired, finish = finish) },
-                    { requestError: FormError ->
+                try {
+                    val consentInfo = UserMessagingPlatform.getConsentInformation(host.activity)
+                    consentInfo.requestConsentInfoUpdate(
+                        host.activity,
+                        parameters,
+                        { showForm(host = host, showIfRequired = showIfRequired, finish = finish) },
+                    ) { requestError: FormError ->
                         finish(
                             consentFailure(
                                 reason = ConsentException.Reason.REQUEST_FAILED,
                                 message = "Failed to request consent info: ${requestError.message}",
-                            )
+                            ),
                         )
-                    },
-                )
-            } catch (exception: Exception) {
-                finish(
-                    consentFailure(
-                        reason = ConsentException.Reason.REQUEST_FAILED,
-                        message = "Failed to request consent info.",
-                        cause = exception,
+                    }
+                } catch (exception: Exception) {
+                    finish(
+                        consentFailure(
+                            reason = ConsentException.Reason.REQUEST_FAILED,
+                            message = "Failed to request consent info.",
+                            cause = exception,
+                        ),
                     )
-                )
+                }
             }
         }
     }
@@ -99,26 +118,38 @@ class UmpConsentRemoteDataSource(
                 consentFailure(
                     reason = ConsentException.Reason.HOST_UNAVAILABLE,
                     message = "Consent host is no longer able to show a form.",
-                )
+                ),
             )
             return
         }
-        if (showIfRequired) {
-            UserMessagingPlatform.loadAndShowConsentFormIfRequired(host.activity) { formError: FormError? ->
-                finish(formError?.toFormFailure())
-            }
-        } else {
-            UserMessagingPlatform.loadConsentForm(
-                host.activity,
-                { consentForm: ConsentForm -> showLoadedForm(host = host, consentForm = consentForm, finish = finish) },
-                { formError: FormError ->
-                    finish(
-                        consentFailure(
-                            reason = ConsentException.Reason.FORM_FAILED,
-                            message = "Failed to load consent form: ${formError.message}",
+        try {
+            if (showIfRequired) {
+                UserMessagingPlatform.loadAndShowConsentFormIfRequired(host.activity) { formError: FormError? ->
+                    finish(formError?.toFormFailure())
+                }
+            } else {
+                UserMessagingPlatform.loadConsentForm(
+                    host.activity,
+                    { consentForm: ConsentForm ->
+                        showLoadedForm(host = host, consentForm = consentForm, finish = finish)
+                    },
+                    { formError: FormError ->
+                        finish(
+                            consentFailure(
+                                reason = ConsentException.Reason.FORM_FAILED,
+                                message = "Failed to load consent form: ${formError.message}",
+                            ),
                         )
-                    )
-                },
+                    },
+                )
+            }
+        } catch (exception: Exception) {
+            finish(
+                consentFailure(
+                    reason = ConsentException.Reason.FORM_FAILED,
+                    message = "Failed to launch consent form.",
+                    cause = exception,
+                ),
             )
         }
     }
@@ -134,7 +165,7 @@ class UmpConsentRemoteDataSource(
                 consentFailure(
                     reason = ConsentException.Reason.HOST_UNAVAILABLE,
                     message = "Consent form loaded after the host stopped; not showing.",
-                )
+                ),
             )
             return
         }
@@ -146,7 +177,7 @@ class UmpConsentRemoteDataSource(
                     reason = ConsentException.Reason.FORM_FAILED,
                     message = "Failed to show consent form.",
                     cause = exception,
-                )
+                ),
             )
         }
     }

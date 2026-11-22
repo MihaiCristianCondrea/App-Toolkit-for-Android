@@ -66,6 +66,22 @@
   parking emissions when no collector is active, stops retrying non-transient `ITEM_ALREADY_OWNED`
   / `ITEM_NOT_OWNED` responses, emits a failure when retryable purchase updates settle nothing, and
   registers `onClose` cleanup in `billingModule`.
+- Consent rejects activities undergoing configuration changes in `ConsentHost.isAlive`, re-checks
+  host liveness after loading the AdMob app id, runs UMP SDK calls on `DispatcherProvider.main`,
+  guards UMP callbacks with an atomic single-completion flag, catches synchronous exceptions from
+  `loadAndShowConsentFormIfRequired` and `loadConsentForm`, holds the active host via
+  `WeakReference`, prevents cancelled `requestScope` launches from hanging callers, and registers
+  `onClose` teardown in `consentModule()`.
+- Firebase stops enabling `firebase_performance_logcat_enabled` in release manifests, disables
+  automatic GA4 Activity screen reporting so it does not duplicate `ScreenHost` screen views,
+  defaults Crashlytics and Analytics manifest consent metadata to `false` until
+  `ConsentRepository.applyInitialConsent()` applies stored choices, stops logging raw FCM
+  installation IDs in `FirebaseNotificationsService`, fails closed when `FirebaseApp` is not
+  initialized, rejects overlong user property names instead of truncating them, drops blank screen
+  names and non-finite `DoubleVal` parameters, and preserves canonical `view_model` and `action`
+  keys in `reportViewModelError`.
+- Google Play services version lookup in `DefaultGooglePlayServicesRepository` falls back to the
+  platform version code when `versionName` is blank.
 
 ### Changed
 
@@ -109,6 +125,14 @@
   `:library:integration:ads`.
 - Moved `Activity.isValidForBilling()` from `integration.billing.utils.extensions` to
   `integration.billing.data.extensions` (`ActivityBillingExtensions.kt`).
+- Moved `ConsentHost.isAlive` and `ConsentHost.canShowConsentForm` from
+  `integration.consent.data.models` to `integration.consent.data.extensions`, removed the unused
+  `:library:core:network` dependency from `:library:integration:consent`, and changed its
+  `user-messaging-platform` dependency from `api` to `implementation`.
+- Moved `FirebaseNotificationsService` from `integration.firebase.data.notifications` to
+  `integration.firebase.services`, removed redundant `POST_NOTIFICATIONS` and `WAKE_LOCK`
+  declarations from `:library:integration:firebase`'s manifest, and removed `Boolean.asConsentStatus()`
+  from `:library:core:common` (now mapped internally in `:library:integration:firebase`).
 
 ### Removed
 

@@ -25,9 +25,11 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.integration.consent.data
 import com.mihaicristiancondrea.android.libs.apptoolkit.integration.consent.data.remote.UmpConsentRemoteDataSource
 import com.mihaicristiancondrea.android.libs.apptoolkit.integration.consent.data.repositories.ConsentRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.integration.consent.data.repositories.DefaultConsentRepository
+import java.io.Closeable
 import org.koin.core.module.Module
 import org.koin.core.qualifier.named
 import org.koin.dsl.module
+import org.koin.dsl.onClose
 
 /**
  * Binds the stored consent choices, consent persistence coordination and the UMP remote source.
@@ -40,7 +42,12 @@ fun consentModule(): Module = module {
     single { DefaultUsageAndDiagnosticsPreferencesDataSource(dataStore = get(qualifier = named(DataStoreQualifiers.SETTINGS))) }
     single<ConsentPreferencesDataSource> { get<DefaultUsageAndDiagnosticsPreferencesDataSource>() }
     single<UsageAndDiagnosticsPreferencesDataSource> { get<DefaultUsageAndDiagnosticsPreferencesDataSource>() }
-    single<ConsentRemoteDataSource> { UmpConsentRemoteDataSource(adMobAppIdDataSource = get()) }
+    single<ConsentRemoteDataSource> {
+        UmpConsentRemoteDataSource(
+            adMobAppIdDataSource = get(),
+            dispatchers = get(),
+        )
+    }
     single<ConsentRepository> {
         DefaultConsentRepository(
             remote = get(),
@@ -48,6 +55,7 @@ fun consentModule(): Module = module {
             buildInfoRepository = get(),
             diagnostics = get(),
             collection = get(),
+            dispatchers = get(),
         )
-    }
+    } onClose { repository -> (repository as? Closeable)?.close() }
 }

@@ -17,12 +17,9 @@
 
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
-    <uses-permission android:name="android.permission.WAKE_LOCK" />
-
     <application>
         <service
-            android:name="com.mihaicristiancondrea.android.libs.apptoolkit.integration.firebase.data.notifications.FirebaseNotificationsService"
+            android:name="com.mihaicristiancondrea.android.libs.apptoolkit.integration.firebase.services.FirebaseNotificationsService"
             android:directBootAware="true"
             android:exported="false">
             <intent-filter>
@@ -35,28 +32,24 @@
             android:value="true" />
 
         <meta-data
-            android:name="firebase_performance_logcat_enabled"
-            android:value="true" />
-
-        <meta-data
             android:name="firebase_crashlytics_collection_enabled"
-            android:value="true" />
+            android:value="false" />
 
         <meta-data
             android:name="google_analytics_automatic_screen_reporting_enabled"
-            android:value="true" />
+            android:value="false" />
 
         <meta-data
             android:name="google_analytics_default_allow_analytics_storage"
-            android:value="true" />
+            android:value="false" />
         <meta-data
             android:name="google_analytics_default_allow_ad_storage"
-            android:value="true" />
+            android:value="false" />
         <meta-data
             android:name="google_analytics_default_allow_ad_user_data"
-            android:value="eu_consent_policy" />
+            android:value="false" />
         <meta-data
             android:name="google_analytics_default_allow_ad_personalization_signals"
-            android:value="eu_consent_policy" />
+            android:value="false" />
     </application>
 </manifest>
