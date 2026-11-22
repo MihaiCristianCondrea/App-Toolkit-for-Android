@@ -35,4 +35,4 @@ New films start from here, so this project renders at the marketing standard ("R
 
 `src/UiScreensDemo.tsx` shows the pattern with three phones: the Compass sheet turns from 312° to 45°, the Counter sheet counts up one tap at a time, and the Tip & Bill Splitter adds a person to the split three times.
 
-For a full promo, combine these screens with the techniques in the [`motion-video`](../../../skills/built-in/motion-video/SKILL.md) skill: camera rigs, object-driven transitions, and a synthesized soundtrack.
+For a full promo, combine these screens with the techniques in the [`motion-video`](../../../.agents/skills/first-party/motion-video/SKILL.md) skill: camera rigs, object-driven transitions, and a synthesized soundtrack.
