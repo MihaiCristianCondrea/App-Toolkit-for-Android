@@ -22,10 +22,14 @@ import android.app.Application
 import android.content.Context
 import androidx.compose.material3.ColorScheme
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.di.models.AppToolkitHostBuildConfig
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.developer.ui.DeveloperOptionsViewModel
+import com.mihaicristiancondrea.android.libs.apptoolkit.shell.data.repositories.ShellPreferencesRepository
 import io.ktor.client.engine.HttpClientEngine
 import org.junit.jupiter.api.Test
 import org.koin.core.module.Module
 import org.koin.dsl.module
+import org.koin.test.verify.definition
+import org.koin.test.verify.injectedParameters
 import org.koin.test.verify.verify
 import org.koin.core.annotation.KoinExperimentalAPI
 
@@ -37,6 +41,11 @@ class HostKoinGraphTest {
 
     private val platformTypes = listOf(Context::class, Activity::class, Application::class)
     private val builtByFactoryFunction = listOf(HttpClientEngine::class, ColorScheme::class)
+
+    /** Values a screen passes with `parametersOf` when it asks Koin for its ViewModel. */
+    private val screenParameters = injectedParameters(
+        definition<DeveloperOptionsViewModel>(ShellPreferencesRepository::class),
+    )
     private val hostBuildConfig = AppToolkitHostBuildConfig(
         applicationId = "com.mihaicristiancondrea.android.apps.apptoolkit",
         isDebugBuild = true,
@@ -54,13 +63,13 @@ class HostKoinGraphTest {
     @Test
     fun `every host definition can be resolved`() {
         module { includes(hostModules()) }
-            .verify(extraTypes = platformTypes + builtByFactoryFunction)
+            .verify(extraTypes = platformTypes + builtByFactoryFunction, injections = screenParameters)
     }
 
     /** The app supplies feature provider modules to the core adapter. */
     @Test
     fun `sample adapter satisfies constructor-visible toolkit dependencies`() {
         module { includes(toolkitModules()) }
-            .verify(extraTypes = platformTypes + builtByFactoryFunction)
+            .verify(extraTypes = platformTypes + builtByFactoryFunction, injections = screenParameters)
     }
 }

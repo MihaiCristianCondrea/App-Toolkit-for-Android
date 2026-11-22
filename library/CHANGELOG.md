@@ -54,8 +54,9 @@
   instead of relying on the legacy `NATIVE_AD_DEBUGGER_ENABLED` manifest flag, measures the 4-hour
   App Open ad lifetime monotonically, initializes the SDK without registering an App Open loader
   when `appOpenUnitId` is blank, fails closed with non-fatal diagnostics when `AppOpenAd.load`,
-  `AppOpenAd.show`, or `observeReduceAds()` throws, and notifies completion listeners whenever an
-  ad is skipped or unavailable. `DefaultAdsPreferencesDataSource` logs breadcrumbs on transient IO
+  `AppOpenAd.show`, or `observeReduceAds()` throws, notifies completion listeners whenever an
+  ad is skipped or unavailable, and starts ads once per launch instead of again when it begins
+  observing the ads preference. `DefaultAdsPreferencesDataSource` logs breadcrumbs on transient IO
   retries and records non-fatal diagnostics on unexpected read failures.
 - Billing rejects activities undergoing configuration changes in `Activity.isValidForBilling()`
   and enforces host activity validation inside `DefaultBillingRepository` before launching and after

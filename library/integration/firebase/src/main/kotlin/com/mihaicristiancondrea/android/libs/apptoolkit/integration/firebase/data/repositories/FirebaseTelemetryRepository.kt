@@ -158,6 +158,7 @@ class FirebaseTelemetryRepository(
             )
             return
         }
+        val analytics: FirebaseAnalytics = analyticsOrNull() ?: return
 
         val bundle = Bundle()
         var count = 0
@@ -198,7 +199,7 @@ class FirebaseTelemetryRepository(
             count++
         }
 
-        analyticsOrNull()?.logEvent(name, bundle)
+        analytics.logEvent(name, bundle)
     }
 
     override fun logScreenView(screenName: String, screenClass: String?) {
@@ -207,6 +208,7 @@ class FirebaseTelemetryRepository(
             logBreadcrumb(message = "analytics_drop_invalid_screen_view")
             return
         }
+        val analytics: FirebaseAnalytics = analyticsOrNull() ?: return
 
         val bundle = Bundle().apply {
             putString(FirebaseAnalytics.Param.SCREEN_NAME, safeName)
@@ -217,7 +219,7 @@ class FirebaseTelemetryRepository(
                 )
             }
         }
-        analyticsOrNull()?.logEvent(FirebaseAnalytics.Event.SCREEN_VIEW, bundle)
+        analytics.logEvent(FirebaseAnalytics.Event.SCREEN_VIEW, bundle)
     }
 
     override fun setUserProperty(name: String, value: String?) {

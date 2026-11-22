@@ -19,6 +19,7 @@ package com.mihaicristiancondrea.android.libs.apptoolkit.integration.billing.dat
 
 import android.app.Activity
 import android.content.Context
+import android.text.TextUtils
 import com.android.billingclient.api.AcknowledgePurchaseResponseListener
 import com.android.billingclient.api.BillingClient
 import com.android.billingclient.api.BillingClientStateListener
@@ -36,7 +37,9 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.integration.billing.data
 import io.mockk.every
 import io.mockk.justRun
 import io.mockk.mockk
+import io.mockk.mockkStatic
 import io.mockk.slot
+import io.mockk.unmockkStatic
 import io.mockk.verify
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
@@ -48,13 +51,31 @@ import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runTest
+import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertTrue
+import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import kotlin.test.assertIs
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class DefaultBillingRepositoryTest {
+
+    /**
+     * Play Billing's real `BillingFlowParams` builders call `TextUtils.isEmpty`, which the JVM's
+     * android.jar stub throws from.
+     */
+    @BeforeEach
+    fun stubTextUtils() {
+        mockkStatic(TextUtils::class)
+        every { TextUtils.isEmpty(any()) } answers { firstArg<CharSequence?>().isNullOrEmpty() }
+    }
+
+    @AfterEach
+    fun unstubTextUtils() {
+        unmockkStatic(TextUtils::class)
+    }
+
 
     @Test
     fun `queryProductDetails with an empty list emits an empty map without querying Play`() = runTest {

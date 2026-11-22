@@ -40,6 +40,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancel
+import kotlinx.coroutines.flow.dropWhile
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Mutex
@@ -103,6 +104,7 @@ open class AppOpenAdController(
             )
         }
         observeAdsPreference(
+            initial = isAdsChecked,
             appOpenUnitId = appOpenUnitId,
             disableNativeValidator = disableNativeValidator,
         )
@@ -110,11 +112,19 @@ open class AppOpenAdController(
 
     /**
      * Keeps the SDK in step with the ads preference for the rest of the process's life.
+     *
+     * The preference is a `StateFlow`, so collecting it replays the [initial] value that
+     * [initializeAds] has already acted on. That replay is skipped; any later value, including one
+     * that changed between the read and the subscription, still starts ads.
      */
-    private fun observeAdsPreference(appOpenUnitId: String, disableNativeValidator: Boolean) {
+    private fun observeAdsPreference(
+        initial: Boolean,
+        appOpenUnitId: String,
+        disableNativeValidator: Boolean,
+    ) {
         if (adsPreferenceJob != null) return
         adsPreferenceJob = managerScope.launch {
-            adsSettingsRepository.adsEnabled.collect { isEnabled ->
+            adsSettingsRepository.adsEnabled.dropWhile { it == initial }.collect { isEnabled ->
                 if (isEnabled) {
                     startAds(
                         appOpenUnitId = appOpenUnitId,

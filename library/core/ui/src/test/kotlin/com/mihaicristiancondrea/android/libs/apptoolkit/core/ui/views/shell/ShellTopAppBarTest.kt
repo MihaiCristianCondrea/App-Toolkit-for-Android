@@ -20,9 +20,9 @@ package com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.shell
 import androidx.activity.ComponentActivity
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.test.assertTextEquals
 import androidx.compose.ui.test.hasSetTextAction
@@ -61,8 +61,8 @@ class ShellTopAppBarTest {
                 ShellTopAppBar(
                     style = style,
                     title = "Title",
-                    navigationIcon = { remember { navigationCompositions++ } },
-                    actions = { remember { actionCompositions++ } },
+                    navigationIcon = { DisposableEffect(Unit) { navigationCompositions++; onDispose {} } },
+                    actions = { DisposableEffect(Unit) { actionCompositions++; onDispose {} } },
                     scrollBehavior = null,
                 )
             }
