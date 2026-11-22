@@ -17,19 +17,43 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.onboarding.di
 
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.di.DataStoreQualifiers
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.onboarding.ui.OnboardingThemeViewModel
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.onboarding.data.local.OnboardingPreferencesDataSource
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.onboarding.data.local.DefaultOnboardingPreferencesDataSource
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.OnboardingRepository
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.di.DataStoreQualifiers
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.onboarding.data.local.DefaultOnboardingPreferencesDataSource
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.onboarding.data.local.OnboardingPreferencesDataSource
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.onboarding.data.repositories.DefaultOnboardingRepository
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.onboarding.ui.OnboardingViewModel
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.onboarding.ui.features.theme.OnboardingThemeViewModel
 import org.koin.core.module.Module
 import org.koin.core.module.dsl.viewModel
 import org.koin.core.qualifier.named
 import org.koin.dsl.module
 
+/**
+ * Registers the onboarding preference source, repository, [OnboardingViewModel], and
+ * [OnboardingThemeViewModel].
+ */
 val onboardingModule: Module = module {
-    single<OnboardingPreferencesDataSource> { DefaultOnboardingPreferencesDataSource(dataStore = get(qualifier = named(DataStoreQualifiers.SETTINGS))) }
-    single<OnboardingRepository> { DefaultOnboardingRepository(preferences = get()) }
-    viewModel { OnboardingThemeViewModel(preferences = get(), seasonal = get(), telemetryRepository = get()) }
+    single<OnboardingPreferencesDataSource> {
+        DefaultOnboardingPreferencesDataSource(
+            dataStore = get(qualifier = named(name = DataStoreQualifiers.SETTINGS)),
+        )
+    }
+    single<OnboardingRepository> {
+        DefaultOnboardingRepository(preferences = get())
+    }
+    viewModel {
+        OnboardingViewModel(
+            onboardingRepository = get(),
+            consentRepository = get(),
+            telemetryRepository = get(),
+        )
+    }
+    viewModel {
+        OnboardingThemeViewModel(
+            preferences = get(),
+            seasonal = get(),
+            telemetryRepository = get(),
+        )
+    }
 }

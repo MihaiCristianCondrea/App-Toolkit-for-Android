@@ -56,7 +56,6 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.models.ThemePreferencesState
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.telemetry.models.TrackedScreen
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.colorscheme.StaticPaletteIds
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.datastore.DataStoreNamesConstants
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.logging.THEME_SETTINGS_LOG_TAG
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.context.openDisplaySettings
@@ -282,10 +281,7 @@ private fun SectionTitle(@StringRes title: Int) {
 
 
 private val PreviewPreferences = ThemePreferencesState(
-    themeMode = DataStoreNamesConstants.THEME_MODE_FOLLOW_SYSTEM,
     dynamicColors = false,
-    amoledMode = false,
-    dynamicPaletteVariant = 0,
     staticPaletteId = StaticPaletteIds.GOOGLE_BLUE,
 )
 

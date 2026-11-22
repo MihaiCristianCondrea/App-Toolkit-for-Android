@@ -36,6 +36,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.feature.onboarding.ui.st
 import com.mihaicristiancondrea.android.libs.apptoolkit.integration.consent.data.repositories.ConsentRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.integration.consent.data.models.ConsentHost
 import com.mihaicristiancondrea.android.libs.apptoolkit.integration.consent.data.models.ConsentSettings
+import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -171,12 +172,13 @@ class OnboardingViewModelTest {
             val completeEvent = telemetryRepository.loggedEvents.single { it.name == "tutorial_complete" }
             assertEquals(AnalyticsValue.Str("skip"), completeEvent.params[OnboardingParams.METHOD])
             assertEquals(AnalyticsValue.LongVal(1L), completeEvent.params[OnboardingParams.STEP_INDEX])
+            assertEquals(AnalyticsValue.Str("theme"), completeEvent.params[OnboardingParams.PAGE_KEY])
 
-            assertTrue(
-                telemetryRepository.loggedEvents.any {
-                    it.name == "settings_action" && it.params["action_name"] == AnalyticsValue.Str(OnboardingActionNames.SKIP)
-                }
-            )
+            val skipAction = telemetryRepository.loggedEvents.single {
+                it.name == "settings_action" && it.params["action_name"] == AnalyticsValue.Str(OnboardingActionNames.SKIP)
+            }
+            assertEquals(AnalyticsValue.LongVal(1L), skipAction.params[OnboardingParams.STEP_INDEX])
+            assertEquals(AnalyticsValue.Str("theme"), skipAction.params[OnboardingParams.PAGE_KEY])
         }
 
     @Test
@@ -186,6 +188,7 @@ class OnboardingViewModelTest {
             val viewModel = createViewModel(repository = repository)
             advance()
 
+            viewModel.onEvent(OnboardingEvent.PageSelected(index = 2, pageKey = "finish"))
             viewModel.onEvent(OnboardingEvent.CompleteOnboarding)
             advance()
 
@@ -194,7 +197,46 @@ class OnboardingViewModelTest {
             assertTrue("tutorial_complete" in loggedEventNames)
             val completeEvent = telemetryRepository.loggedEvents.single { it.name == "tutorial_complete" }
             assertEquals(AnalyticsValue.Str("done"), completeEvent.params[OnboardingParams.METHOD])
+            assertEquals(AnalyticsValue.LongVal(2L), completeEvent.params[OnboardingParams.STEP_INDEX])
+            assertEquals(AnalyticsValue.Str("finish"), completeEvent.params[OnboardingParams.PAGE_KEY])
             assertTrue(viewModel.messages.value.isEmpty())
+        }
+
+    @Test
+    fun `a second completion tap while saving does not cancel or duplicate the write`() =
+        runTest(dispatcherExtension.testDispatcher) {
+            val gate = CompletableDeferred<Unit>()
+            val repository = FakeOnboardingRepository(saveGate = gate)
+            val viewModel = createViewModel(repository = repository)
+            advance()
+
+            viewModel.onEvent(OnboardingEvent.CompleteOnboarding)
+            assertEquals(OnboardingCompletion.Saving, viewModel.state.value.completion)
+
+            viewModel.onEvent(OnboardingEvent.CompleteOnboarding(method = OnboardingCompletionMethod.SKIP))
+            gate.complete(Unit)
+            advance()
+
+            assertEquals(1, repository.setCompletedCalls)
+            assertEquals(OnboardingCompletion.Saved, viewModel.state.value.completion)
+            assertEquals(1, telemetryRepository.loggedEvents.count { it.name == "tutorial_complete" })
+        }
+
+    @Test
+    fun `completing again after saved is ignored`() =
+        runTest(dispatcherExtension.testDispatcher) {
+            val repository = FakeOnboardingRepository()
+            val viewModel = createViewModel(repository = repository)
+            advance()
+
+            viewModel.onEvent(OnboardingEvent.CompleteOnboarding)
+            advance()
+            viewModel.onEvent(OnboardingEvent.CompleteOnboarding(method = OnboardingCompletionMethod.SKIP))
+            advance()
+
+            assertEquals(1, repository.setCompletedCalls)
+            assertEquals(OnboardingCompletion.Saved, viewModel.state.value.completion)
+            assertEquals(1, telemetryRepository.loggedEvents.count { it.name == "tutorial_complete" })
         }
 
     /** Finishing is the only way out of onboarding, so a failure has to say something. */
@@ -274,12 +316,19 @@ class OnboardingViewModelTest {
             assertTrue("vm_op_error" in loggedEventNames)
         }
 
-    private class FakeOnboardingRepository(var failure: Throwable? = null) : OnboardingRepository {
+    private class FakeOnboardingRepository(
+        var failure: Throwable? = null,
+        private val saveGate: CompletableDeferred<Unit>? = null,
+    ) : OnboardingRepository {
         val completion = MutableStateFlow(false)
+        var setCompletedCalls: Int = 0
+            private set
 
         override fun observeOnboardingCompletion(): Flow<Boolean> = completion
 
         override suspend fun setOnboardingCompleted() {
+            setCompletedCalls++
+            saveGate?.await()
             failure?.let { throw it }
             completion.value = true
         }

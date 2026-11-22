@@ -35,6 +35,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.feature.onboarding.ui.vi
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.spacers.LargeVerticalSpacer
 
+/** Renders a standard onboarding [page] with a centered icon, title, and description. */
 @Composable
 fun DefaultOnboardingPage(page: OnboardingPage.DefaultPage) {
     val scrollState = rememberScrollState()
@@ -42,24 +43,23 @@ fun DefaultOnboardingPage(page: OnboardingPage.DefaultPage) {
         modifier = Modifier
             .fillMaxSize()
             .padding(horizontal = SizeConstants.LargeSize)
-            .verticalScroll(scrollState),
+            .verticalScroll(state = scrollState),
         horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
+        verticalArrangement = Arrangement.Center,
     ) {
-
-        DefaultOnboardingIconContainer(page.imageVector)
+        DefaultOnboardingIconContainer(imageVector = page.imageVector)
 
         Text(
             text = page.title,
             style = MaterialTheme.typography.headlineLarge.copy(fontSize = 32.sp),
-            textAlign = TextAlign.Center
+            textAlign = TextAlign.Center,
         )
         LargeVerticalSpacer()
         Text(
             text = page.description,
             style = MaterialTheme.typography.bodyLarge,
             textAlign = TextAlign.Center,
-            modifier = Modifier.padding(horizontal = SizeConstants.ExtraLargeIncreasedSize)
+            modifier = Modifier.padding(horizontal = SizeConstants.ExtraLargeIncreasedSize),
         )
     }
 }

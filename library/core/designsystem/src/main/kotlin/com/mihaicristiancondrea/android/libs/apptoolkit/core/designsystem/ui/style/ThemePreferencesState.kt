@@ -20,28 +20,16 @@ package com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.st
 import androidx.compose.runtime.Composable
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.models.ThemePreferencesState
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.colorscheme.StaticPaletteIds
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.datastore.DataStoreNamesConstants
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.repositories.ThemePreferencesRepository
 import org.koin.compose.koinInject
 
 /** Collects the repository's stable appearance flow at the design-system boundary. */
 @Composable
 internal fun rememberThemePreferencesState(
-    themeModeDefault: String = DataStoreNamesConstants.THEME_MODE_FOLLOW_SYSTEM,
-    dynamicColorsDefault: Boolean = true,
-    amoledModeDefault: Boolean = false,
-    dynamicPaletteVariantDefault: Int = 0,
-    staticPaletteIdDefault: String = StaticPaletteIds.DEFAULT,
+    initialValue: ThemePreferencesState = ThemePreferencesState(),
 ): ThemePreferencesState {
     val repository: ThemePreferencesRepository = koinInject()
     return repository.preferencesState.collectAsStateWithLifecycle(
-        initialValue = ThemePreferencesState(
-            themeMode = themeModeDefault,
-            dynamicColors = dynamicColorsDefault,
-            amoledMode = amoledModeDefault,
-            dynamicPaletteVariant = dynamicPaletteVariantDefault,
-            staticPaletteId = staticPaletteIdDefault,
-        ),
+        initialValue = initialValue,
     ).value
 }

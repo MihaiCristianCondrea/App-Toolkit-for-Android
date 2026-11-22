@@ -20,14 +20,23 @@ package com.mihaicristiancondrea.android.libs.apptoolkit.feature.onboarding.ui.m
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.vector.ImageVector
 
+/**
+ * One page supplied by [OnboardingProvider][com.mihaicristiancondrea.android.libs.apptoolkit.feature.onboarding.ui.providers.OnboardingProvider].
+ *
+ * @property key Stable identifier reported in onboarding step and completion analytics.
+ * @property isEnabled When `false`, the onboarding screen omits this page.
+ */
 sealed class OnboardingPage {
+    abstract val key: String
+    abstract val isEnabled: Boolean
 
+    /** Standard icon, title, and description onboarding page. */
     data class DefaultPage(
-        val key: String,
+        override val key: String,
         val title: String,
         val description: String,
         val imageVector: ImageVector,
-        val isEnabled: Boolean = true
+        override val isEnabled: Boolean = true,
     ) : OnboardingPage()
 
     /**
@@ -36,17 +45,10 @@ sealed class OnboardingPage {
      * @property content Composable content for the page, notified when it is the active page.
      */
     data class CustomPage(
-        val key: String,
+        override val key: String,
         val content: @Composable (isSelected: Boolean) -> Unit,
-        val isEnabled: Boolean = true
+        override val isEnabled: Boolean = true,
     ) : OnboardingPage()
 }
-
-/** Stable identifier for the onboarding page. */
-val OnboardingPage.key: String
-    get() = when (this) {
-        is OnboardingPage.DefaultPage -> key
-        is OnboardingPage.CustomPage -> key
-    }
 
 

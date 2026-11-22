@@ -24,6 +24,13 @@
 - The changelog dialog shows all releases, marks the installed version as Current, and opens at
   its release. The scrolling body reaches the fixed Done action. Repeated requests keep the current
   fetch, and the dialog reports visits and load states.
+- Onboarding records `theme_customized` only after the theme preference write succeeds, ignores
+  repeated completion taps while saving or after completion is saved, disables pager actions while
+  saving, includes `page_key` on `tutorial_complete` and skip events, scrolls the theme and finish
+  pages on short screens, and skips finish confetti when system animations are disabled.
+- Permissions uses locale-independent list keys so live locale changes keep scroll position, omits
+  empty category header spacers, forwards host-supplied row icons in `PermissionsContent`, and
+  renders rows without an action as non-clickable descriptive cards.
 
 ### Changed
 
@@ -36,7 +43,15 @@
 - Developer options uses `developerOptionsModule`, included in the assembled Toolkit graph. Hosts
   listing modules manually add it to open `DeveloperOptionsScreen`.
 - App bar search uses a state-based Compose text field. `ShellSearch.query` remains readable and writable.
-- `SettingsPreferenceItem` accepts an `enabled` argument for actions that need a disabled state.
+- `SettingsPreferenceItem` and `PreferenceItem` accept an `enabled` argument and a nullable
+  `onClick` callback (`null` renders a non-clickable descriptive row without dimmed text).
+- `onboardingModule` now binds `OnboardingViewModel`; hosts only need to bind `OnboardingProvider`.
+- `ThemeOnboardingPageTab`, `OnboardingThemeViewModel`, `OnboardingThemeUiState`,
+  `OnboardingThemeEvent`, and `AmoledModeToggleCard` moved to `feature.onboarding.ui.features.theme`
+  and its subpackages (`contracts`, `states`, `views`).
+- `OnboardingPage` exposes `key` and `isEnabled` directly on the sealed base class,
+  `FinishOnboardingPage` accepts an optional `isSelected` parameter, and `OnboardingFooter` accepts
+  an optional `enabled` parameter.
 
 ### Removed
 

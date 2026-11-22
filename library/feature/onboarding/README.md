@@ -13,12 +13,14 @@ screen of [`:library:feature:startup`](../startup/README.md).
 - `OnboardingScreen`, with `OnboardingScreenContent` in the same file, `OnboardingViewModel`, its
   state (`OnboardingUiState`, `OnboardingCompletion`) and `OnboardingEvent`. The screen asks for
   consent on each resume and calls `enterShell()` once completion is saved.
-- `onboardingModule`, which binds `OnboardingThemeViewModel`.
-- `ThemeOnboardingPageTab`, `OnboardingThemeViewModel`, `OnboardingThemeUiState` and
-  `OnboardingThemeEvent`: the theme page reads the stored theme preferences and the seasonal
-  unlock, and saves each choice through `ThemePreferencesRepository`. Its theme mode and palette
-  choices are `ThemeModePicker` and `ThemePalettePicker` from `:library:core:ui`, the same ones the
-  theme settings page shows; only the title, subtitle and AMOLED card are this page's own.
+- `onboardingModule`, which binds `OnboardingPreferencesDataSource`, `OnboardingRepository`,
+  `OnboardingViewModel`, and `OnboardingThemeViewModel`.
+- `ui/features/theme` (`ThemeOnboardingPageTab`, `OnboardingThemeViewModel`,
+  `OnboardingThemeUiState`, `OnboardingThemeEvent`, and `AmoledModeToggleCard`): the theme page
+  reads the stored theme preferences and the seasonal unlock, and saves each choice through
+  `ThemePreferencesRepository`. Its theme mode and palette choices are `ThemeModePicker` and
+  `ThemePalettePicker` from `:library:core:ui`, the same ones the theme settings page shows; only
+  the title, subtitle and AMOLED card are this page's own.
 - The `OnboardingProvider` host extension contract.
 - `DefaultOnboardingRepository` and the onboarding preference sources in `data/local`.
 - Page models, controls, and the default
@@ -39,8 +41,8 @@ screen of [`:library:feature:startup`](../startup/README.md).
 
 ## Depends on
 
-- `:library:core:common`, `:library:core:datastore`, `:library:core:network`, and `:library:core:ui`
-  for shared contracts, completion persistence, errors, and UI.
+- `:library:core:common`, `:library:core:datastore`, and `:library:core:ui` for shared contracts,
+  completion persistence, errors, and UI.
 - [`:library:navigation`](../../navigation/README.md) for the keys, the graph builder and the
   shell navigator.
 - [`:library:integration:consent`](../../integration/consent/README.md) for `ConsentRepository`,
@@ -50,8 +52,7 @@ screen of [`:library:feature:startup`](../startup/README.md).
 ## Used by
 
 - [`:library:apptoolkit`](../../apptoolkit/README.md), which calls `onboardingPages()` from
-  `toolkitPages()`, and `:sample:feature:onboarding`, which provides the pages and binds the
-  ViewModel.
+  `toolkitPages()`, and `:sample:feature:onboarding`, which provides the pages.
 
 ## Using it
 
@@ -67,19 +68,11 @@ The startup screen hands over to onboarding. Neither has the shell under it, so 
 leaves the app. Finishing onboarding writes completion and enters the shell on its start tab; the
 next launch then resolves past `StartupRoute`.
 
-The host binds the provider, the repository and the onboarding ViewModel, as
-`:sample:feature:onboarding` does:
+The host binds `OnboardingProvider`, as `:sample:feature:onboarding` does. `onboardingModule`
+supplies the preference source, repository, and ViewModel bindings:
 
 ```kotlin
 single<OnboardingProvider> { AppOnboardingProvider() }
-// onboardingModule supplies the source and repository bindings.
-viewModel {
-    OnboardingViewModel(
-        onboardingRepository = get(),
-        consentRepository = get(),
-        telemetryRepository = get(),
-    )
-}
 ```
 
 ## Flow chart
@@ -111,18 +104,22 @@ flowchart TD
 - Startup and onboarding are separate modules: startup asks for permissions and consent, while
   onboarding owns page progress and completion. They meet only at `OnboardingRoute`, a key in
   `:library:navigation`.
-- `OnboardingScreen` owns the ViewModel, tracking, the consent host, navigation and the snackbar
-  host. `OnboardingScreenContent` renders the pager and reports through `OnboardingEvent`.
+- `OnboardingScreen` owns the ViewModel, tracking, the consent host, navigation, back handling
+  through `ShellBackHandler`, and the snackbar host. `OnboardingScreenContent` renders the pager
+  and reports through `OnboardingEvent`.
 - The ViewModel runs the consent request with the `ConsentHost` the screen sends, for that request
   only, so it keeps no activity once the request ends. A resume restarts a request still waiting.
-- Completion is written only after Skip or Finish. The ViewModel marks it
-  `OnboardingCompletion.Saved` in state and the screen enters the shell when it sees that, so a
-  save that ends during a rotation still leaves. The stored flag, `isOnboardingCompleted`, is not
-  used to navigate: it is already true when onboarding is opened again from the developer options.
+- Completion is written only after Skip or Finish. Repeated taps while a save is active or after
+  `OnboardingCompletion.Saved` are ignored (`ifIsActive`), and the Skip, Back, and Next/Done
+  controls stay disabled while saving. The ViewModel marks completion `OnboardingCompletion.Saved`
+  in state and the screen enters the shell when it sees that, so a save that ends during a rotation
+  still leaves. The stored flag, `isOnboardingCompleted`, is not used to navigate: it is already
+  true when onboarding is opened again from the developer options.
 - The onboarding flow logs `tutorial_begin` on entry and `tutorial_complete` on completion,
-  distinguishing `method = "done"` from `method = "skip"`. Moving between pages logs
-  `onboarding_step_view` with the page index, stable page key and direction, while skipping and theme
-  edits record action events under the `Onboarding` screen.
+  distinguishing `method = "done"` from `method = "skip"` and including the settled `page_key` and
+  `step_index`. Moving between pages logs `onboarding_step_view` with the page index, stable page
+  key and direction, while skipping and confirmed theme writes record action events under the
+  `Onboarding` screen.
 - A failed completion write shows an error message and leaves the pages on screen, since finishing
   is the only way out. `screen_state` reports `success` while the pages show, `loading` while
   saving and `error` after a failed save.
@@ -132,25 +129,34 @@ flowchart TD
   choices. Presentation callbacks do not write DataStore directly.
 - Theme and consent pages use their owning repositories/ViewModels so onboarding does not become a
   second implementation of settings behavior. The theme page shows the Toolkit's default theme
-  until the stored preferences arrive, and a failed write shows an error message.
+  until the stored preferences arrive, logs `theme_customized` only after the DataStore write
+  succeeds, and shows an error message on write failure.
+- Both `ThemeOnboardingPageTab` and `FinishOnboardingPage` scroll vertically so controls remain
+  reachable on compact heights and large font scales. `FinishOnboardingPage` accepts an optional
+  `isSelected` flag so the celebration plays only when selected and when system animations are
+  enabled.
 - On large screens the pages keep to a column at most 640dp wide, centred, so a tablet shows them
   at a readable width instead of stretched across the window.
 
 ## Public contracts
 
 - `onboardingPages()` and `onboardingModule`.
-- `OnboardingScreen()` and `ThemeOnboardingPageTab()`, `DefaultOnboardingPage`,
-  `FinishOnboardingPage`.
-- `OnboardingViewModel(onboardingRepository, consentRepository, telemetryRepository)`, which the
-  host binds, with `OnboardingUiState`, `OnboardingCompletion` and `OnboardingEvent`.
-- `OnboardingThemeViewModel`, `OnboardingThemeUiState` and `OnboardingThemeEvent`.
-- `OnboardingProvider`, `OnboardingPage`, `OnboardingRepository` and `DefaultOnboardingRepository`,
-  whose `setOnboardingCompleted()` throws `StorageException` when the write fails.
+- `OnboardingScreen()`, `ThemeOnboardingPageTab()`, `DefaultOnboardingPage`,
+  `FinishOnboardingPage(isSelected = true)`, and `OnboardingFooter(..., enabled = true)`.
+- `OnboardingViewModel(onboardingRepository, consentRepository, telemetryRepository)`, bound by
+  `onboardingModule`, with `OnboardingUiState`, `OnboardingCompletion` and `OnboardingEvent`.
+- `OnboardingThemeViewModel`, `OnboardingThemeUiState`, `OnboardingThemeEvent`,
+  `ThemeOnboardingPageTab`, and `AmoledModeToggleCard` in `ui/features/theme`.
+- `OnboardingProvider`, `OnboardingPage` (with `key` and `isEnabled` properties),
+  `OnboardingRepository` and `DefaultOnboardingRepository`, whose `setOnboardingCompleted()` throws
+  `StorageException` when the write fails.
 
 ## Internal implementations
 
-- `OnboardingScreenContent` and `ThemeOnboardingPageTabContent`, page ordering and rendering, and
-  celebration state.
+- `OnboardingScreenContent`, `ThemeOnboardingPageTabContent`, sibling preview files
+  (`OnboardingScreenPreview`, `ThemeOnboardingPageTabPreview`), operation/setting identifier
+  constants (`OnboardingOperationNames`, `OnboardingThemeSettings`), page ordering and rendering,
+  and celebration state.
 
 ## Current risks
 

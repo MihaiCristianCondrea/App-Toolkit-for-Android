@@ -17,7 +17,6 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences
 
-import android.view.View
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -42,7 +41,6 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.hapticfeedback.HapticFeedback
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.platform.LocalHapticFeedback
-import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
@@ -75,22 +73,29 @@ fun PreferenceItem(
     iconContainerColor: Color? = null,
     enabled: Boolean = true,
     rippleEffectDp: Dp = SizeConstants.LargeSize,
-    onClick: () -> Unit = {},
+    onClick: (() -> Unit)? = {},
     ga4Event: Ga4EventData? = null,
     ga4EventProvider: (() -> Ga4EventData?)? = null,
 ) {
     val telemetry = LocalTelemetry.current
     val hapticFeedback: HapticFeedback = LocalHapticFeedback.current
-    val view: View = LocalView.current
+    val rowModifier = Modifier
+        .fillMaxWidth()
+        .clip(shape = RoundedCornerShape(size = rippleEffectDp))
+        .let { base ->
+            if (onClick != null) {
+                base.clickable(enabled = enabled) {
+                    hapticFeedback.performHapticFeedback(hapticFeedbackType = HapticFeedbackType.ContextClick)
+                    telemetry.logGa4Event(ga4EventProvider?.invoke() ?: ga4Event)
+                    onClick()
+                }
+            } else {
+                base
+            }
+        }
     Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .clip(shape = RoundedCornerShape(size = rippleEffectDp))
-            .clickable(enabled = enabled, onClick = {
-                hapticFeedback.performHapticFeedback(hapticFeedbackType = HapticFeedbackType.ContextClick)
-                telemetry.logGa4Event(ga4EventProvider?.invoke() ?: ga4Event)
-                onClick()
-            }), verticalAlignment = Alignment.CenterVertically
+        modifier = rowModifier,
+        verticalAlignment = Alignment.CenterVertically,
     ) {
         icon?.let {
             LargeHorizontalSpacer()
@@ -152,7 +157,7 @@ fun PreferenceItem(
     iconContainerColor: Color? = null,
     enabled: Boolean = true,
     rippleEffectDp: Dp = SizeConstants.LargeSize,
-    onClick: () -> Unit = {},
+    onClick: (() -> Unit)? = {},
     ga4Event: Ga4EventData? = null,
     ga4EventProvider: (() -> Ga4EventData?)? = null,
 ) {
@@ -184,7 +189,7 @@ fun SettingsPreferenceItem(
     iconColor: Color? = null,
     iconContainerColor: Color? = null,
     rippleEffectDp: Dp = SizeConstants.ExtraTinySize,
-    onClick: () -> Unit = {},
+    onClick: (() -> Unit)? = {},
     ga4Event: Ga4EventData? = null,
     ga4EventProvider: (() -> Ga4EventData?)? = null,
 ) {
@@ -216,7 +221,7 @@ fun SettingsPreferenceItem(
     iconColor: Color? = null,
     iconContainerColor: Color? = null,
     rippleEffectDp: Dp = SizeConstants.ExtraTinySize,
-    onClick: () -> Unit = {},
+    onClick: (() -> Unit)? = {},
     ga4Event: Ga4EventData? = null,
     ga4EventProvider: (() -> Ga4EventData?)? = null,
 ) {
@@ -252,7 +257,7 @@ fun SettingsPreferenceItem(
     iconColor: Color? = null,
     iconContainerColor: Color? = null,
     rippleEffectDp: Dp = SizeConstants.ExtraTinySize,
-    onClick: () -> Unit = {},
+    onClick: (() -> Unit)? = {},
     ga4Event: Ga4EventData? = null,
     ga4EventProvider: (() -> Ga4EventData?)? = null,
 ) {

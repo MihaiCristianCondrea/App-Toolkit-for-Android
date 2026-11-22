@@ -33,7 +33,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.Permis
 fun ShellGraphBuilder.permissionsPage() {
     pageIfAbsent<PermissionsRoute>(
         paneRole = PaneRole.None,
-        title = { stringResource(R.string.permissions) },
+        title = { stringResource(id = R.string.permissions) },
     ) {
         PermissionsScreen()
     }
