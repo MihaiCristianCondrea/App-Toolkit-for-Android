@@ -24,6 +24,7 @@ import android.os.Bundle
 import android.util.Log
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.coroutines.dispatchers.DispatcherProvider
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.coroutines.dispatchers.StandardDispatchers
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.constants.AdMobAppIdLogTags
 import kotlinx.coroutines.withContext
 
 /**
@@ -46,14 +47,14 @@ class ManifestAdMobAppIdDataSource(
     private fun resolveFromManifest(): String? {
         val metaData: Bundle? = runCatching { readApplicationMetaData() }
             .onFailure { throwable ->
-                Log.w(LOG_TAG, "Failed to read application metadata.", throwable)
+                Log.w(AdMobAppIdLogTags.AD_MOB_APP_ID_DATA_SOURCE, "Failed to read application metadata.", throwable)
             }
             .getOrNull()
 
         val rawValue: String? = metaData?.getString(AdMobAppIdDataSource.MANIFEST_METADATA_KEY)
         if (rawValue == null) {
             Log.w(
-                LOG_TAG,
+                AdMobAppIdLogTags.AD_MOB_APP_ID_DATA_SOURCE,
                 "No ${AdMobAppIdDataSource.MANIFEST_METADATA_KEY} meta-data declared by the host app."
             )
             return null
@@ -62,7 +63,7 @@ class ManifestAdMobAppIdDataSource(
         val sanitized: String? = AdMobAppIdDataSource.sanitize(rawValue)
         if (sanitized == null) {
             Log.w(
-                LOG_TAG,
+                AdMobAppIdLogTags.AD_MOB_APP_ID_DATA_SOURCE,
                 "Ignoring ${AdMobAppIdDataSource.MANIFEST_METADATA_KEY}: value does not match the " +
                         "canonical AdMob app id format."
             )
@@ -82,9 +83,5 @@ class ManifestAdMobAppIdDataSource(
         } else {
             packageManager.getApplicationInfo(packageName, PackageManager.GET_META_DATA).metaData
         }
-    }
-
-    private companion object {
-        const val LOG_TAG: String = "AdMobAppIdDataSource"
     }
 }

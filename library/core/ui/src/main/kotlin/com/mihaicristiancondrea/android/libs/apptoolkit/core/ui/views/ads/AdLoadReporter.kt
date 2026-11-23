@@ -20,6 +20,7 @@ package com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.ads
 import android.util.Log
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.BuildInfoRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.telemetry.DiagnosticsReporter
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.constants.CoreUiLogTags
 
 /**
  * The one place an ad that failed to load is written down.
@@ -59,7 +60,7 @@ class AdLoadReporter(
         val isNoFill = errorCode.contains(other = NO_FILL_CODE, ignoreCase = true)
         val isNetworkError = errorCode.contains(other = NETWORK_ERROR_CODE, ignoreCase = true)
         Log.w(
-            LOG_TAG,
+            CoreUiLogTags.AD_SLOT,
             "Ad slot '$slotName' got no ad for unit '$adUnitId'. code=$errorCode ($errorMessage)",
         )
 
@@ -98,7 +99,7 @@ class AdLoadReporter(
         adUnitId: String,
         throwable: Throwable? = null,
     ) {
-        Log.w(LOG_TAG, "Ad slot '$slotName' could not request unit '$adUnitId'.", throwable)
+        Log.w(CoreUiLogTags.AD_SLOT, "Ad slot '$slotName' could not request unit '$adUnitId'.", throwable)
 
         diagnostics.recordNonFatal(
             throwable = throwable ?: AdSlotNotRequestedException(
@@ -112,7 +113,6 @@ class AdLoadReporter(
     val showsDebugPlaceholder: Boolean get() = buildInfoRepository.isDebugBuild
 
     private companion object {
-        const val LOG_TAG: String = "AdSlot"
 
         /**
          * The `LoadAdError.ErrorCode` name that means no ad was available.

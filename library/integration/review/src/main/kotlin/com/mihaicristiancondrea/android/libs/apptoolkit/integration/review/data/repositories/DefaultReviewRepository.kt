@@ -25,6 +25,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.coroutines.d
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.result.runSuspendCatching
 import com.mihaicristiancondrea.android.libs.apptoolkit.integration.review.utils.extensions.hasPlayStore
 import com.mihaicristiancondrea.android.libs.apptoolkit.integration.review.utils.extensions.isInstalledFromPlayStore
+import com.mihaicristiancondrea.android.libs.apptoolkit.integration.review.data.constants.ReviewLogTags
 import com.mihaicristiancondrea.android.libs.apptoolkit.integration.review.data.local.ReviewPreferencesDataSource
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.tasks.await
@@ -72,7 +73,7 @@ class DefaultReviewRepository(
             val manager = ReviewManagerFactory.create(context)
             runSuspendCatching { manager.requestReviewFlow().await() }
                 .onSuccess { reviewInfo -> preparedReviewInfo = reviewInfo }
-                .onFailure { throwable -> Log.w(LOG_TAG, "Could not request the review flow.", throwable) }
+                .onFailure { throwable -> Log.w(ReviewLogTags.REVIEW_REPOSITORY, "Could not request the review flow.", throwable) }
                 .isSuccess
         }
 
@@ -84,9 +85,7 @@ class DefaultReviewRepository(
                     ?: reviewManager.requestReviewFlow().await()
                 reviewManager.launchReviewFlow(activity, reviewInfo).await()
             }
-                .onFailure { throwable -> Log.w(LOG_TAG, "Could not launch the review flow.", throwable) }
+                .onFailure { throwable -> Log.w(ReviewLogTags.REVIEW_REPOSITORY, "Could not launch the review flow.", throwable) }
                 .isSuccess
         }
 }
-
-private const val LOG_TAG: String = "ReviewRepository"

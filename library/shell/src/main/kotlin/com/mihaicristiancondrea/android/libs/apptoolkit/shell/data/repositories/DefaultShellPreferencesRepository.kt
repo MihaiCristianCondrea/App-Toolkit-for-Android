@@ -17,15 +17,16 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.shell.data.repositories
 
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.local.storageCall
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.MutablePreferences
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
-import androidx.datastore.preferences.core.emptyPreferences
 import androidx.datastore.preferences.core.intPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.exceptions.StorageException
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.local.mappers.toStorageException
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.local.storageCall
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.style.MotionTempo
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.EntranceReplay
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.modifiers.EntranceStyle
@@ -38,7 +39,6 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.shell.settings.Navigatio
 import com.mihaicristiancondrea.android.libs.apptoolkit.shell.settings.NavigationTint
 import com.mihaicristiancondrea.android.libs.apptoolkit.shell.settings.ShellSettings
 import com.mihaicristiancondrea.android.libs.apptoolkit.shell.settings.TopBarOverride
-import java.io.IOException
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.map
@@ -52,8 +52,8 @@ import kotlinx.coroutines.flow.onEach
  * defaults from overwriting what someone chose, while reaching everyone who did not.
  * [resetDeveloperOptions] removes every key. Unknown enum names read as the default.
  *
- * Corruption replaces the file with empty preferences; IO read failures use defaults for that
- * collection so the root composition can still start, without replacing [lastKnown].
+ * Corruption replaces the file with empty preferences; storage read failures are thrown to the
+ * collector as [StorageException] without replacing [lastKnown].
  */
 internal class DefaultShellPreferencesRepository(
     private val dataStore: DataStore<Preferences>,
@@ -64,12 +64,12 @@ internal class DefaultShellPreferencesRepository(
     @Volatile
     private var lastRead: ShellSettings? = null
 
-    // The catch comes after the read is remembered, so the defaults a failed read falls back to
-    // are shown but never taken for what the store holds.
+    // Storage failures are translated after successful reads update lastRead, so a failed read
+    // never replaces the last known settings.
     override val settings: Flow<ShellSettings> = dataStore.data
         .map { it.read() }
         .onEach { lastRead = it }
-        .catch { throwable -> if (throwable is IOException) emit(emptyPreferences().read()) else throw throwable }
+        .catch { throwable -> throw throwable.toStorageException() ?: throwable }
 
     override val lastKnown: ShellSettings? get() = lastRead
 

@@ -27,4 +27,5 @@ internal object IssueReportHistoryConstants {
     val RECENT_REPORTS_KEY: Preferences.Key<Set<String>> =
         stringSetPreferencesKey(name = "issue_reporter_recent_reports")
     const val ENTRY_SEPARATOR: Char = ':'
+    const val HASH_ALGORITHM: String = "SHA-256"
 }

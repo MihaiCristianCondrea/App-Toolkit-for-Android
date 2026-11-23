@@ -36,4 +36,10 @@ internal class CloseGuard(private val scope: CoroutineScope) {
         if (isRunning) return
         job = scope.launch { close() }
     }
+
+    /** Stops any running close animation so it cannot pop a screen that is already leaving. */
+    fun cancel() {
+        job?.cancel()
+        job = null
+    }
 }

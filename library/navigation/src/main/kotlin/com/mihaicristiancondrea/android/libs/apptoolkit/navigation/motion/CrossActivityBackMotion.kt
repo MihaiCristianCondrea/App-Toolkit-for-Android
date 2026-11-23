@@ -35,6 +35,7 @@ import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.input.pointer.util.VelocityTracker1D
 import androidx.compose.ui.util.lerp
 import androidx.navigationevent.NavigationEvent
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.motion.extensions.scaleCentered
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.first
@@ -301,9 +302,3 @@ private fun lerp(start: Rect, stop: Rect, fraction: Float) = Rect(
     right = lerp(start.right, stop.right, fraction),
     bottom = lerp(start.bottom, stop.bottom, fraction),
 )
-
-private fun Rect.scaleCentered(scale: Float): Rect {
-    val halfWidth = width * scale / 2f
-    val halfHeight = height * scale / 2f
-    return Rect(center.x - halfWidth, center.y - halfHeight, center.x + halfWidth, center.y + halfHeight)
-}

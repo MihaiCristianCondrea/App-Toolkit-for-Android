@@ -68,6 +68,7 @@ import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.data.models
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.data.models.AppSummary
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.ui.contracts.AppActionLauncher
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.ui.models.AppInfoChipUi
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.ui.parsers.toDisplayRatio
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.models.AppVersionMetadata
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.icons.ToolkitIcon
@@ -386,16 +387,5 @@ private fun AppSection(
         }
         ExtraSmallVerticalSpacer()
         content()
-    }
-}
-
-private fun String.toDisplayRatio(): Float {
-    val parts = split(':', limit = 2)
-    val width = parts.getOrNull(0)?.toFloatOrNull()
-    val height = parts.getOrNull(1)?.toFloatOrNull()
-    return if (width != null && height != null && width > 0f && height > 0f) {
-        width / height
-    } else {
-        9f / 16f
     }
 }

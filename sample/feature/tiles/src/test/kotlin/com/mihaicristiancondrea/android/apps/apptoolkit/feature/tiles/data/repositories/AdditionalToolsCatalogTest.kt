@@ -25,7 +25,6 @@ import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.models.
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.NumbersCalculateTools
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.NumbersChanceTools
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.NumbersSecondaryTools
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.mappers.toUiModels
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.utils.constants.ToolkitTileIds
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Test

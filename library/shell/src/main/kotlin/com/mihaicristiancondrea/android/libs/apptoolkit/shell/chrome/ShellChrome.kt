@@ -92,9 +92,16 @@ internal fun ShellChrome(graph: ShellGraph, navigator: ShellNavigator) {
     var bottomDock by remember { mutableStateOf(0.dp) }
     // An immutable list, so the bodies it is passed to can skip; each search is itself stable.
     val searches: ImmutableList<ShellSearch> = rememberSaveable(
+        graph.tabs.size,
         saver = listSaver(
             save = { list -> list.map { it.query } },
-            restore = { queries -> queries.map(::ShellSearch).toImmutableList() },
+            restore = { queries ->
+                if (queries.size == graph.tabs.size) {
+                    queries.map(::ShellSearch).toImmutableList()
+                } else {
+                    graph.tabs.map { ShellSearch() }.toImmutableList()
+                }
+            },
         ),
     ) { graph.tabs.map { ShellSearch() }.toImmutableList() }
     // Where each tab screen puts the floating action buttons and article bar it declares, by the

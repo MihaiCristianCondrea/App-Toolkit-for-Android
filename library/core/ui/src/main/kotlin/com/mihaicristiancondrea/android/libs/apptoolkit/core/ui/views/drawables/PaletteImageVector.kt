@@ -15,7 +15,7 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.drawable
+package com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.drawables
 
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable

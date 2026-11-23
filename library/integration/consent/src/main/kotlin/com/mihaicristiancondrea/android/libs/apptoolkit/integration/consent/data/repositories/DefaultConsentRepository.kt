@@ -23,6 +23,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.reposit
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.telemetry.DiagnosticsReporter
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.telemetry.TelemetryCollection
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.local.storageCall
+import com.mihaicristiancondrea.android.libs.apptoolkit.integration.consent.data.constants.ConsentTimeoutConstants
 import com.mihaicristiancondrea.android.libs.apptoolkit.integration.consent.data.exceptions.ConsentException
 import com.mihaicristiancondrea.android.libs.apptoolkit.integration.consent.data.extensions.isAlive
 import com.mihaicristiancondrea.android.libs.apptoolkit.integration.consent.data.local.ConsentPreferencesDataSource
@@ -84,7 +85,7 @@ class DefaultConsentRepository(
      * The flight is keyed on [showIfRequired], so an explicit request for the form never takes the
      * answer of one that shows it only when required. A caller joins only a request whose host is
      * still alive. Incompatible requests wait for the active SDK operation before starting.
-     * A stale host is waited for at most [STALE_REQUEST_WAIT_MS]; a timeout fails the new caller
+     * A stale host is waited for at most [ConsentTimeoutConstants.STALE_REQUEST_WAIT_MS]; a timeout fails the new caller
      * and leaves the active operation tracked, so it cannot overlap another SDK request.
      */
     override suspend fun requestConsent(
@@ -134,7 +135,7 @@ class DefaultConsentRepository(
             if (request.isHostAlive) {
                 request.result.join()
             } else {
-                val finished = withTimeoutOrNull(STALE_REQUEST_WAIT_MS.milliseconds) {
+                val finished = withTimeoutOrNull(ConsentTimeoutConstants.STALE_REQUEST_WAIT_MS.milliseconds) {
                     request.result.join()
                     true
                 } ?: false
@@ -258,12 +259,4 @@ class DefaultConsentRepository(
     private suspend fun readPersistedSettings(): ConsentSettings = storageCall {
         local.settings(default = !buildInfoRepository.isDebugBuild).first()
     }
-
 }
-
-/**
- * How long a new host waits for a consent request started by a host that has since gone. UMP
- * answers a request whose host can no longer show a form within moments, so this only matters
- * when it never answers.
- */
-private const val STALE_REQUEST_WAIT_MS: Long = 5_000L

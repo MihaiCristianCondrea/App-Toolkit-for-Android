@@ -18,13 +18,12 @@
 package com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.repositories
 
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.models.ThemePreferencesState
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.colorscheme.StaticPaletteIds
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.datastore.DataStoreNamesConstants
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.local.ThemePreferencesDataSource
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.local.storageCall
-import kotlinx.coroutines.flow.first
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.transformers.themePreferencesState
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.first
 
 /**
  * Reads and writes the appearance through the preference store. Writes throw
@@ -63,27 +62,4 @@ class DefaultThemePreferencesRepository(
     override suspend fun selectStaticPalette(id: String): Unit = storageCall {
         preferences.savePalette(dynamicColors = false, staticPaletteId = id)
     }
-}
-
-/**
- * Emits the stored theme preferences as one [ThemePreferencesState].
- *
- * The first emission is the stored state, so a collector never sees placeholder defaults
- * that it could act on, such as the theme page scrolling its palette row to the selection. The
- * source fills in its own default for a missing key. [themeModeDefault] and
- * [staticPaletteIdDefault] replace blank stored values.
- *
- * It follows [ThemePreferencesDataSource.storedPreferences], so with the Toolkit's data source a
- * write that changes several values, such as a palette choice, arrives as one state.
- */
-private fun ThemePreferencesDataSource.themePreferencesState(
-    themeModeDefault: String = DataStoreNamesConstants.THEME_MODE_FOLLOW_SYSTEM,
-    staticPaletteIdDefault: String = StaticPaletteIds.DEFAULT,
-): Flow<ThemePreferencesState> = storedPreferences.map { stored ->
-    stored.copy(
-        themeMode = stored.themeMode.ifBlank { themeModeDefault },
-        staticPaletteId = StaticPaletteIds.sanitize(stored.staticPaletteId).ifBlank {
-            StaticPaletteIds.sanitize(staticPaletteIdDefault)
-        },
-    )
 }

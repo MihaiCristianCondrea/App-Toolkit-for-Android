@@ -18,7 +18,6 @@
 package com.mihaicristiancondrea.android.apps.apptoolkit.widget.ui
 
 import android.content.Context
-import android.content.Intent
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -36,7 +35,6 @@ import androidx.glance.action.clickable
 import androidx.glance.appwidget.GlanceAppWidget
 import androidx.glance.appwidget.SizeMode
 import androidx.glance.appwidget.action.actionRunCallback
-import androidx.glance.appwidget.action.actionStartActivity
 import androidx.glance.appwidget.appWidgetBackground
 import androidx.glance.appwidget.cornerRadius
 import androidx.glance.appwidget.provideContent
@@ -55,6 +53,7 @@ import androidx.glance.text.Text
 import androidx.glance.text.TextStyle
 import com.mihaicristiancondrea.android.apps.apptoolkit.widget.R
 import com.mihaicristiancondrea.android.apps.apptoolkit.widget.data.repositories.WidgetAppsRepository
+import com.mihaicristiancondrea.android.apps.apptoolkit.widget.ui.extensions.appWidgetClickAction
 import com.mihaicristiancondrea.android.apps.apptoolkit.widget.ui.mappers.toWidgetAppEntry
 import com.mihaicristiancondrea.android.apps.apptoolkit.widget.ui.models.WidgetAppEntry
 import com.mihaicristiancondrea.android.apps.apptoolkit.widget.ui.models.WidgetStrings
@@ -255,6 +254,3 @@ private fun WidgetGrid(apps: ImmutableList<WidgetAppEntry>, title: String) {
         }
     }
 }
-
-private fun GlanceModifier.appWidgetClickAction(destination: Intent): GlanceModifier =
-    clickable(onClick = actionStartActivity(destination))

@@ -34,6 +34,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.reposit
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.telemetry.DiagnosticsReporter
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.ads.AdsSdkState
 import com.mihaicristiancondrea.android.libs.apptoolkit.integration.ads.data.remote.AdsSdkInitializer
+import com.mihaicristiancondrea.android.libs.apptoolkit.integration.ads.ui.constants.AdsUiLogTags
 import com.mihaicristiancondrea.android.libs.apptoolkit.integration.ads.ui.contracts.OnShowAdCompleteListener
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineScope
@@ -158,7 +159,7 @@ open class AppOpenAdController(
 
             val adMobAppId: String = adMobAppIdDataSource.adMobAppId() ?: run {
                 Log.e(
-                    LOG_TAG,
+                    AdsUiLogTags.APP_OPEN_AD_CONTROLLER,
                     "Skipping Mobile Ads initialization: the host app declares no valid " +
                         "${AdMobAppIdDataSource.MANIFEST_METADATA_KEY} meta-data.",
                 )
@@ -253,11 +254,11 @@ open class AppOpenAdController(
                 )
             } catch (error: Exception) {
                 isLoadingAd = false
-                Log.w(LOG_TAG, "Failed to request an App Open ad.", error)
+                Log.w(AdsUiLogTags.APP_OPEN_AD_CONTROLLER, "Failed to request an App Open ad.", error)
                 diagnostics?.recordNonFatal(
                     throwable = error,
                     attributes = mapOf(
-                        "source" to LOG_TAG,
+                        "source" to AdsUiLogTags.APP_OPEN_AD_CONTROLLER,
                         "action" to "loadAd",
                     ),
                 )
@@ -288,11 +289,11 @@ open class AppOpenAdController(
             } catch (error: CancellationException) {
                 throw error
             } catch (error: Exception) {
-                Log.w(LOG_TAG, "Cannot read reduce-ads preference; skipping App Open ad.", error)
+                Log.w(AdsUiLogTags.APP_OPEN_AD_CONTROLLER, "Cannot read reduce-ads preference; skipping App Open ad.", error)
                 diagnostics?.recordNonFatal(
                     throwable = error,
                     attributes = mapOf(
-                        "source" to LOG_TAG,
+                        "source" to AdsUiLogTags.APP_OPEN_AD_CONTROLLER,
                         "action" to "observeReduceAds",
                     ),
                 )
@@ -347,11 +348,11 @@ open class AppOpenAdController(
             } catch (error: Exception) {
                 appOpenAd = null
                 isShowingAd = false
-                Log.w(LOG_TAG, "Failed to display the App Open ad.", error)
+                Log.w(AdsUiLogTags.APP_OPEN_AD_CONTROLLER, "Failed to display the App Open ad.", error)
                 diagnostics?.recordNonFatal(
                     throwable = error,
                     attributes = mapOf(
-                        "source" to LOG_TAG,
+                        "source" to AdsUiLogTags.APP_OPEN_AD_CONTROLLER,
                         "action" to "showAd",
                     ),
                 )
@@ -359,9 +360,5 @@ open class AppOpenAdController(
                 loadAd()
             }
         }
-    }
-
-    private companion object {
-        const val LOG_TAG: String = "AppOpenAdController"
     }
 }

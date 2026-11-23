@@ -55,10 +55,6 @@ internal fun TabIcon(tab: ShellTab, selected: Boolean, clicks: Int) {
     }
 }
 
-/** The tab's badge now: its [ShellTab.badgeText] read in composition, or its fixed [ShellTab.badge]. */
-@Composable
-internal fun ShellTab.currentBadge(): String? = badgeText?.invoke() ?: badge
-
 /** A count or label, or a dot for an empty one. */
 @Composable
 internal fun TabBadge(text: String) {

@@ -54,6 +54,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.R
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.layout.ArticleReadingProgress
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.layout.ArticleTopBarHost
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.layout.ArticleTopBarTitle
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.layout.extensions.widthOf
 
 /**
  * One small app bar over both panes, each half titled after the page under it. A pane that declares

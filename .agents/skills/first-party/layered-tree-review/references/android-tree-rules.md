@@ -49,74 +49,74 @@ Kotlin file.
 Package names are lowercase plurals from this list. **Checked** for the singular forms and the
 banned names below.
 
-| Package                   | Holds                                                              |
-|---------------------------|--------------------------------------------------------------------|
-| `data/repositories/`      | repository interfaces and their implementations, side by side      |
-| `data/contracts/`         | data-layer contracts shared by independent data responsibilities   |
-| `data/models/`            | application models the repositories return                         |
-| `data/mappers/`           | mappings shared by several data sources                            |
-| `data/exceptions/`        | the module's own failures                                          |
-| `data/local/`             | local data sources: DataStore, Room, files, platform APIs          |
-| `data/local/models/`      | entities and stored representations                                |
-| `data/local/mappers/`     | entity to application model                                        |
-| `data/remote/`            | remote data sources: Ktor, Retrofit, SDK clients                   |
-| `data/remote/models/`     | DTOs and wire representations                                      |
-| `data/remote/mappers/`    | DTO to application model                                           |
-| `data/local/converters/`  | Room type converters and storage encodings                         |
-| `data/remote/converters/` | wire/API encoding and decoding when not a model mapper            |
-| `data/reducers/`          | pure data-owned state transitions                                  |
-| `data/transformers/`      | shared data streams and representation combinations                |
-| `data/validators/`        | storage or transport data constraints                              |
-| `data/formatters/`        | data-owned export or serialization text, not UI copy               |
-| `data/adapters/`          | data-layer API or legacy interface bridges                         |
-| `data/extensions/`        | data-layer extensions that are not mappers, formatters, etc.       |
-| `data/constants/`         | data-layer internal constants and keys                             |
-| `domain/usecases/`        | use cases                                                          |
-| `domain/models/`          | models only a use case produces, next to that use case             |
-| `domain/mappers/`         | domain to domain mappings                                          |
-| `domain/reducers/`        | business-state transitions, when a domain layer already exists    |
-| `domain/transformers/`    | domain-owned derivations for use cases                              |
-| `domain/validators/`      | business-rule validation for use cases                             |
-| `domain/formatters/`      | domain-owned representations, not UI display text                  |
-| `domain/adapters/`        | domain boundary adapters only when justified                       |
-| `domain/extensions/`      | domain-only extensions supporting use cases                        |
-| `domain/constants/`       | business constants belonging to existing use cases                |
-| `di/`                     | Koin, Hilt or provider bindings                                    |
-| `ui/`                     | screens and ViewModels, flat                                       |
-| `ui/contracts/`           | `XEvent` sealed interfaces                                         |
-| `ui/states/`              | `XUiState` classes                                                 |
-| `ui/models/`              | render models                                                      |
-| `ui/mappers/`             | application model to UI model, failures to UI text                 |
-| `ui/reducers/`            | pure `UiState` + action to next `UiState` operations                 |
-| `ui/transformers/`        | combined UI streams and derived presentation data                  |
-| `ui/validators/`          | input/form validation for UI feedback                              |
-| `ui/formatters/`          | display-ready dates, sizes, labels, and other UI text              |
-| `ui/adapters/`            | UI-specific API or component bridges                               |
-| `ui/extensions/`          | UI-layer extensions that are not mappers, formatters, etc.         |
-| `ui/constants/`           | UI-only constants such as presentation thresholds                  |
-| `ui/analytics/`           | feature analytics identifiers and event builders                   |
-| `ui/parsers/`             | encoded presentation content to structured UI content             |
-| `ui/search/`              | typed settings search providers                                   |
-| `ui/navigation/`          | keys and page registration                                         |
-| `ui/providers/`           | host-supplied content contracts                                    |
-| `ui/views/`               | stateless composables the screen uses                              |
-| `ui/utils/`               | UI-only helpers                                                    |
-| `ui/features/<name>/`     | a parent-owned destination or independently stateful surface (see below)          |
-| `workers/`                | WorkManager workers: framework entry points                        |
-| `services/`               | services, tile services and AppFunctions: framework entry points   |
-| `receivers/`              | broadcast receivers: framework entry points                        |
-| `utils/extensions/`       | extensions reused across the module's layers                       |
-| `utils/constants/`        | constants reused across the module's layers                        |
+| Package                   | Holds                                                                    |
+| ------------------------- | ------------------------------------------------------------------------ |
+| `data/repositories/`      | repository interfaces and their implementations, side by side            |
+| `data/contracts/`         | data-layer contracts shared by independent data responsibilities         |
+| `data/models/`            | application models the repositories return                               |
+| `data/mappers/`           | mappings shared by several data sources                                  |
+| `data/exceptions/`        | the module's own failures                                                |
+| `data/local/`             | local data sources: DataStore, Room, files, platform APIs                |
+| `data/local/models/`      | entities and stored representations                                      |
+| `data/local/mappers/`     | entity to application model                                              |
+| `data/remote/`            | remote data sources: Ktor, Retrofit, SDK clients                         |
+| `data/remote/models/`     | DTOs and wire representations                                            |
+| `data/remote/mappers/`    | DTO to application model                                                 |
+| `data/local/converters/`  | Room type converters and storage encodings                               |
+| `data/remote/converters/` | wire/API encoding and decoding when not a model mapper                   |
+| `data/reducers/`          | pure data-owned state transitions                                        |
+| `data/transformers/`      | shared data streams and representation combinations                      |
+| `data/validators/`        | storage or transport data constraints                                    |
+| `data/formatters/`        | data-owned export or serialization text, not UI copy                     |
+| `data/adapters/`          | data-layer API or legacy interface bridges                               |
+| `data/extensions/`        | data-layer extensions that are not mappers, formatters, etc.             |
+| `data/constants/`         | data-layer internal constants and keys                                   |
+| `domain/usecases/`        | use cases                                                                |
+| `domain/models/`          | models only a use case produces, next to that use case                   |
+| `domain/mappers/`         | domain to domain mappings                                                |
+| `domain/reducers/`        | business-state transitions, when a domain layer already exists           |
+| `domain/transformers/`    | domain-owned derivations for use cases                                   |
+| `domain/validators/`      | business-rule validation for use cases                                   |
+| `domain/formatters/`      | domain-owned representations, not UI display text                        |
+| `domain/adapters/`        | domain boundary adapters only when justified                             |
+| `domain/extensions/`      | domain-only extensions supporting use cases                              |
+| `domain/constants/`       | business constants belonging to existing use cases                       |
+| `di/`                     | Koin, Hilt or provider bindings                                          |
+| `ui/`                     | screens and ViewModels, flat                                             |
+| `ui/contracts/`           | `XEvent` sealed interfaces                                               |
+| `ui/states/`              | `XUiState` classes                                                       |
+| `ui/models/`              | render models                                                            |
+| `ui/mappers/`             | application model to UI model, failures to UI text                       |
+| `ui/reducers/`            | pure `UiState` + action to next `UiState` operations                     |
+| `ui/transformers/`        | combined UI streams and derived presentation data                        |
+| `ui/validators/`          | input/form validation for UI feedback                                    |
+| `ui/formatters/`          | display-ready dates, sizes, labels, and other UI text                    |
+| `ui/adapters/`            | UI-specific API or component bridges                                     |
+| `ui/extensions/`          | UI-layer extensions that are not mappers, formatters, etc.               |
+| `ui/constants/`           | UI-only constants such as presentation thresholds                        |
+| `ui/analytics/`           | feature analytics identifiers and event builders                         |
+| `ui/parsers/`             | encoded presentation content to structured UI content                    |
+| `ui/search/`              | typed settings search providers                                          |
+| `ui/navigation/`          | keys and page registration                                               |
+| `ui/providers/`           | host-supplied content contracts                                          |
+| `ui/views/`               | stateless composables the screen uses                                    |
+| `ui/utils/`               | UI-only helpers                                                          |
+| `ui/features/<name>/`     | a parent-owned destination or independently stateful surface (see below) |
+| `workers/`                | WorkManager workers: framework entry points                              |
+| `services/`               | services, tile services and AppFunctions: framework entry points         |
+| `receivers/`              | broadcast receivers: framework entry points                              |
+| `utils/extensions/`       | extensions reused across the module's layers                             |
+| `utils/constants/`        | constants reused across the module's layers                              |
 
 Never use, **checked**:
 
-| Name                          | Use instead                                         |
-|-------------------------------|-----------------------------------------------------|
-| `presentation`                | `ui`                                                |
-| `datasource`, `datasources`   | the data source directly in `data/local` or `data/remote` |
-| `base`                        | the shared screen parts of the UI layer             |
-| `helper`, `helpers`, `util`   | `utils`                                             |
-| `usecase`, `repository`, `mapper`, `model`, `state`, `view`, `contract` | the plural |
+| Name                                                                    | Use instead                                               |
+| ----------------------------------------------------------------------- | --------------------------------------------------------- |
+| `presentation`                                                          | `ui`                                                      |
+| `datasource`, `datasources`                                             | the data source directly in `data/local` or `data/remote` |
+| `base`                                                                  | the shared screen parts of the UI layer                   |
+| `helper`, `helpers`, `util`                                             | `utils`                                                   |
+| `usecase`, `repository`, `mapper`, `model`, `state`, `view`, `contract` | the plural                                                |
 
 A data source sits directly in `data/local/` or `data/remote/`. Several data sources for distinct
 platform sources may each get a subfolder named after the source, such as `data/local/torch/` and
@@ -126,34 +126,34 @@ platform sources may each get a subfolder named after the source, such as `data/
 
 Classify by responsibility first and Kotlin syntax second.
 
-| Kind                | Lives in                              | Rule                                                          |
-|---------------------|---------------------------------------|---------------------------------------------------------------|
-| DTO                 | `data/remote/models/`                 | **checked** (`*Dto.kt`)                                       |
-| Entity              | `data/local/models/`                  |                                                               |
-| Application model   | `data/models/`                        | never `domain/models/` without a use case                     |
-| Repository          | `data/repositories/`                  | **checked** (`*Repository.kt`), interface and implementation; App Toolkit's `TelemetryRepository` family stays in `core.common.telemetry`, a cross-cutting contract the UI reports through |
-| Data source         | `data/local/` or `data/remote/`       | no `datasource` package, **checked**                          |
-| Use case            | `domain/usecases/`                    | **checked** (`*UseCase.kt`)                                   |
-| Domain package      | `domain/`                             | exists only with a use case, **checked**                      |
-| Mapper              | `mappers/` next to the boundary       | see the mapper table                                          |
-| Reducer             | `ui/reducers/`, `data/reducers/`, or existing `domain/reducers/` | independently defined pure state transition |
-| Transformer         | owning layer's `transformers/`        | separate any transformation responsibility; size is irrelevant |
-| Validator           | owning layer's `validators/`          | distinguish UI input checks from business and storage rules   |
-| Formatter           | `ui/formatters/` for display text     | data/domain only when the text is their own contract          |
-| Converter           | `data/local/converters/` or `data/remote/converters/` | persistence/API encoding, not DTO-to-model mapping |
-| Adapter             | owning layer's `adapters/`            | bridges genuinely incompatible APIs or contracts             |
-| Layer extension     | owning layer's `extensions/`          | separate every extension that owns this responsibility       |
-| Layer constant      | owning layer's `constants/`           | shared layer-owned constants by concern                |
-| UI model            | `ui/models/`                          |                                                               |
-| UI state            | `ui/states/`                          | **checked** (`*UiState.kt`)                                   |
-| Event               | `ui/contracts/`                       |                                                               |
-| ViewModel           | `ui/`, or `ui/features/<name>/`       | **checked** (`*ViewModel.kt` in a `ui` package, not `views`)  |
-| Screen              | `ui/`, with its content in one file   | see `app-toolkit` for Toolkit screen contracts                                        |
-| Stateless piece     | `ui/views/`                           | child composable with a separate rendering responsibility                   |
-| DI bindings         | `di/`                                 |                                                               |
-| Worker              | `workers/`                            | an entry point; may report analytics on its outcome           |
-| Service or receiver | `services/` or `receivers/`           | an entry point; may report analytics on its outcome           |
-| Feature resources   | the feature's `src/main/res`          | shared modules only for genuinely shared text                 |
+| Kind                | Lives in                                                         | Rule                                                                                                                                                                                       |
+| ------------------- | ---------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| DTO                 | `data/remote/models/`                                            | **checked** (`*Dto.kt`)                                                                                                                                                                    |
+| Entity              | `data/local/models/`                                             |                                                                                                                                                                                            |
+| Application model   | `data/models/`                                                   | never `domain/models/` without a use case                                                                                                                                                  |
+| Repository          | `data/repositories/`                                             | **checked** (`*Repository.kt`), interface and implementation; App Toolkit's `TelemetryRepository` family stays in `core.common.telemetry`, a cross-cutting contract the UI reports through |
+| Data source         | `data/local/` or `data/remote/`                                  | no `datasource` package, **checked**                                                                                                                                                       |
+| Use case            | `domain/usecases/`                                               | **checked** (`*UseCase.kt`)                                                                                                                                                                |
+| Domain package      | `domain/`                                                        | exists only with a use case, **checked**                                                                                                                                                   |
+| Mapper              | `mappers/` next to the boundary                                  | see the mapper table                                                                                                                                                                       |
+| Reducer             | `ui/reducers/`, `data/reducers/`, or existing `domain/reducers/` | independently defined pure state transition                                                                                                                                                |
+| Transformer         | owning layer's `transformers/`                                   | separate any transformation responsibility; size is irrelevant                                                                                                                             |
+| Validator           | owning layer's `validators/`                                     | distinguish UI input checks from business and storage rules                                                                                                                                |
+| Formatter           | `ui/formatters/` for display text                                | data/domain only when the text is their own contract                                                                                                                                       |
+| Converter           | `data/local/converters/` or `data/remote/converters/`            | persistence/API encoding, not DTO-to-model mapping                                                                                                                                         |
+| Adapter             | owning layer's `adapters/`                                       | bridges genuinely incompatible APIs or contracts                                                                                                                                           |
+| Layer extension     | owning layer's `extensions/`                                     | separate every extension that owns this responsibility                                                                                                                                     |
+| Layer constant      | owning layer's `constants/`                                      | shared layer-owned constants by concern                                                                                                                                                    |
+| UI model            | `ui/models/`                                                     |                                                                                                                                                                                            |
+| UI state            | `ui/states/`                                                     | **checked** (`*UiState.kt`)                                                                                                                                                                |
+| Event               | `ui/contracts/`                                                  |                                                                                                                                                                                            |
+| ViewModel           | `ui/`, or `ui/features/<name>/`                                  | **checked** (`*ViewModel.kt` in a `ui` package, not `views`)                                                                                                                               |
+| Screen              | `ui/`, with its content in one file                              | see `app-toolkit` for Toolkit screen contracts                                                                                                                                             |
+| Stateless piece     | `ui/views/`                                                      | child composable with a separate rendering responsibility                                                                                                                                  |
+| DI bindings         | `di/`                                                            |                                                                                                                                                                                            |
+| Worker              | `workers/`                                                       | an entry point; may report analytics on its outcome                                                                                                                                        |
+| Service or receiver | `services/` or `receivers/`                                      | an entry point; may report analytics on its outcome                                                                                                                                        |
+| Feature resources   | the feature's `src/main/res`                                     | shared modules only for genuinely shared text                                                                                                                                              |
 
 ## Mappers
 
@@ -185,18 +185,18 @@ destination requires. Keep mappers `internal` unless another module needs them.
 The category describes the **operation's contract**, not whether it is a Kotlin extension,
 function, class, or Flow operator. Use only the category that clarifies actual ownership.
 
-| Kind | Responsibility | Example | Preferred package |
-| --- | --- | --- | --- |
-| Reducer | Calculates next state from current state and an action, without side effects | `reduce(state, action)` | `ui/reducers/` for UI state; data/domain equivalent only if it owns the state |
-| Mapper | Maps one model across a representation boundary | `ArticleDto.toArticle()` | the boundary's `mappers/` (see above) |
-| Extension | Adds useful operations to a type; placement follows the operation's meaning | `Context.isDarkMode()` | `ui/extensions/` if UI-only, otherwise owning layer's `extensions/` |
-| Parser | Reads encoded content into a structured form | `MarkdownReleaseParser.parse(markdown)` | `ui/parsers/` when the result is presentation-owned; otherwise the data source owns the format |
-| Transformer | Derives or combines information into a representation or stream | combining `Flow<Article>` streams for a UI model | owning layer's `transformers/` |
-| Validator | Checks rules and returns an outcome/violation | `EmailValidator.validate(input)` | `ui/validators/` for form feedback; `domain/validators/` for business rules; `data/validators/` for storage constraints |
-| Formatter | Produces display-ready text | `date.formatForDisplay()` | `ui/formatters/` for user-visible formatting |
-| Converter | Encodes/decodes storage or wire representations | Room `@TypeConverter` | `data/local/converters/`; `data/remote/converters/` for wire formats |
-| Adapter | Bridges incompatible APIs or interfaces | `LegacyApiAdapter` | `data/adapters/` for data integrations; another layer only if it owns the bridge |
-| Use case / interactor | Encapsulates a meaningful, reusable business operation | `GetArticlesUseCase` | `domain/usecases/` only when the optional domain layer is warranted |
+| Kind                  | Responsibility                                                               | Example                                          | Preferred package                                                                                                       |
+| --------------------- | ---------------------------------------------------------------------------- | ------------------------------------------------ | ----------------------------------------------------------------------------------------------------------------------- |
+| Reducer               | Calculates next state from current state and an action, without side effects | `reduce(state, action)`                          | `ui/reducers/` for UI state; data/domain equivalent only if it owns the state                                           |
+| Mapper                | Maps one model across a representation boundary                              | `ArticleDto.toArticle()`                         | the boundary's `mappers/` (see above)                                                                                   |
+| Extension             | Adds useful operations to a type; placement follows the operation's meaning  | `Context.isDarkMode()`                           | `ui/extensions/` if UI-only, otherwise owning layer's `extensions/`                                                     |
+| Parser                | Reads encoded content into a structured form                                 | `MarkdownReleaseParser.parse(markdown)`          | `ui/parsers/` when the result is presentation-owned; otherwise the data source owns the format                          |
+| Transformer           | Derives or combines information into a representation or stream              | combining `Flow<Article>` streams for a UI model | owning layer's `transformers/`                                                                                          |
+| Validator             | Checks rules and returns an outcome/violation                                | `EmailValidator.validate(input)`                 | `ui/validators/` for form feedback; `domain/validators/` for business rules; `data/validators/` for storage constraints |
+| Formatter             | Produces display-ready text                                                  | `date.formatForDisplay()`                        | `ui/formatters/` for user-visible formatting                                                                            |
+| Converter             | Encodes/decodes storage or wire representations                              | Room `@TypeConverter`                            | `data/local/converters/`; `data/remote/converters/` for wire formats                                                    |
+| Adapter               | Bridges incompatible APIs or interfaces                                      | `LegacyApiAdapter`                               | `data/adapters/` for data integrations; another layer only if it owns the bridge                                        |
+| Use case / interactor | Encapsulates a meaningful, reusable business operation                       | `GetArticlesUseCase`                             | `domain/usecases/` only when the optional domain layer is warranted                                                     |
 
 - **Reducers:** a UI reducer computes the next `UiState` from state and action without
   performing repository calls, navigation, GA4 logging, or persistence. The ViewModel or
@@ -303,28 +303,29 @@ feature/
 
 ## Kotlin declaration defaults
 
-| Responsibility | Filename | Declaration |
-| --- | --- | --- |
-| Screen and stateless content | `XScreen.kt` | Composable functions |
-| Preview | `XScreenPreview.kt` or `XViewPreview.kt` | Private composable functions |
-| ViewModel | `XViewModel.kt` | Class |
-| UI state | `XUiState.kt` | Immutable data class |
-| Events | `XEvent.kt` | Sealed interface |
-| Related constants | `XConstants.kt` | Object with named constants |
-| Operation names | `XOperationNames.kt` | Object with stable operation identifiers |
-| Preference analytics keys | `XPreferenceKeys.kt` | Object in `ui/analytics/` |
-| Repository | `XRepository.kt` | Interface |
-| Repository implementation | `DefaultXRepository.kt` | Class |
-| Mapper | `XMappers.kt` | Functions |
-| Reducer | `XReducer.kt` | Pure functions |
-| Transformer | `XTransformer.kt` | Functions |
-| Formatter | `XFormatter.kt` | Functions |
-| Parser | `XParser.kt` | Functions or a stateful class when parsing needs state |
-| Validator | `XValidator.kt` | Functions returning a validation result |
-| Settings search | `XSettingsSearchProvider.kt` | Typed property or factory function |
-| Navigation registration | `XNavigation.kt` | Graph builder extension functions |
-| DI | `XModule.kt` | Typed module property |
-| Use case | `XUseCase.kt` | Class |
+| Responsibility               | Filename                                 | Declaration                                            |
+| ---------------------------- | ---------------------------------------- | ------------------------------------------------------ |
+| Screen and stateless content | `XScreen.kt`                             | Composable functions                                   |
+| Preview                      | `XScreenPreview.kt` or `XViewPreview.kt` | Private composable functions                           |
+| ViewModel                    | `XViewModel.kt`                          | Class                                                  |
+| UI state                     | `XUiState.kt`                            | Immutable data class                                   |
+| Events                       | `XEvent.kt`                              | Sealed interface                                       |
+| Related constants            | `XConstants.kt`                          | Object with named constants                            |
+| Operation names              | `XOperationNames.kt`                     | Object with stable operation identifiers               |
+| Log tags                     | `XLogTags.kt`                            | Object with named log tag constants                    |
+| Preference analytics keys    | `XPreferenceKeys.kt`                     | Object in `ui/analytics/`                              |
+| Repository                   | `XRepository.kt`                         | Interface                                              |
+| Repository implementation    | `DefaultXRepository.kt`                  | Class                                                  |
+| Mapper                       | `XMappers.kt`                            | Functions                                              |
+| Reducer                      | `XReducer.kt`                            | Pure functions                                         |
+| Transformer                  | `XTransformer.kt`                        | Functions                                              |
+| Formatter                    | `XFormatter.kt`                          | Functions                                              |
+| Parser                       | `XParser.kt`                             | Functions or a stateful class when parsing needs state |
+| Validator                    | `XValidator.kt`                          | Functions returning a validation result                |
+| Settings search              | `XSettingsSearchProvider.kt`             | Typed property or factory function                     |
+| Navigation registration      | `XNavigation.kt`                         | Graph builder extension functions                      |
+| DI                           | `XModule.kt`                             | Typed module property                                  |
+| Use case                     | `XUseCase.kt`                            | Class                                                  |
 
 These defaults apply unless the responsibility requires a different declaration. Group related
 constants in a named object. Keep independent mappers, formatters and extensions as functions.
@@ -338,7 +339,6 @@ constants in a named object. Keep independent mappers, formatters and extensions
 - Keep a feature's endpoint configuration in its owning data package, and feature-specific
   extensions in the layer that uses them. Reserve module-level utils for code genuinely shared
   across layers. Use names that identify what the values or functions do.
-
 
 - One top-level class or interface per file, named after it. Private helpers may share the file.
 - An interface and its implementation are two files side by side. Name the implementation after
@@ -389,9 +389,8 @@ Report each problem with its file, the rule, and the smallest fix. Check for:
 2. a `domain/` package without a use case
 3. package names outside the vocabulary
 4. mappers named after a layer, or placed away from their boundary
-5. reducers mixing state transitions with I/O or navigation; transformations or validators in
-   the wrong layer; converters mistaken for mappers
-6. extensions or constants outside their layer-owned, concern-specific files
+5. reducers mixing state transitions with I/O or navigation; transformations or validators in the wrong layer; converters mistaken for mappers
+6. extensions, log tags, or constants outside their layer-owned, concern-specific files
 7. implementation types leaking across module ownership boundaries
 8. nested `ui/features/` that should be standalone modules
 9. folders with no real responsibility

@@ -20,8 +20,7 @@ package com.mihaicristiancondrea.android.libs.apptoolkit.integration.firebase.se
 import android.util.Log
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
-
-private const val FCM_LOG_TAG: String = "FirebaseNotifications"
+import com.mihaicristiancondrea.android.libs.apptoolkit.integration.firebase.utils.constants.FirebaseLogTags
 
 /**
  * Default [FirebaseMessagingService] entry point registered by `:library:integration:firebase`.
@@ -34,16 +33,16 @@ class FirebaseNotificationsService : FirebaseMessagingService() {
 
     override fun onRegistered(installationId: String) {
         super.onRegistered(installationId)
-        Log.d(FCM_LOG_TAG, "FCM installation registered.")
+        Log.d(FirebaseLogTags.FIREBASE_NOTIFICATIONS, "FCM installation registered.")
     }
 
     override fun onUnregistered(installationId: String) {
         super.onUnregistered(installationId)
-        Log.d(FCM_LOG_TAG, "FCM installation unregistered.")
+        Log.d(FirebaseLogTags.FIREBASE_NOTIFICATIONS, "FCM installation unregistered.")
     }
 
     override fun onMessageReceived(message: RemoteMessage) {
         super.onMessageReceived(message)
-        Log.d(FCM_LOG_TAG, "Received FCM message (dataKeys=${message.data.size}).")
+        Log.d(FirebaseLogTags.FIREBASE_NOTIFICATIONS, "Received FCM message (dataKeys=${message.data.size}).")
     }
 }

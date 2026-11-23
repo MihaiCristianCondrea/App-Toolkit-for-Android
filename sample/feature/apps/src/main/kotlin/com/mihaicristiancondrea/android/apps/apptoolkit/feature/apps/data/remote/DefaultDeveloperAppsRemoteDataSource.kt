@@ -19,16 +19,15 @@ package com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.data.remot
 
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.data.models.AppDetails
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.data.models.AppSummary
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.data.remote.extensions.requireSuccess
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.data.remote.mappers.toAppDetails
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.data.remote.mappers.toAppSummary
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.data.remote.models.AppDetailsResponseDto
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.data.remote.models.AppsListResponseDto
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.api.ApiHost
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.network.data.remote.mappers.toNetworkException
-import io.ktor.client.call.body
 import io.ktor.client.HttpClient
+import io.ktor.client.call.body
 import io.ktor.client.request.get
-import io.ktor.client.statement.HttpResponse
 
 class DefaultDeveloperAppsRemoteDataSource(
     private val client: HttpClient,
@@ -45,13 +44,4 @@ class DefaultDeveloperAppsRemoteDataSource(
             .requireSuccess()
         return response.body<AppDetailsResponseDto>().data.app.toAppDetails()
     }
-}
-
-/**
- * Throws the `NetworkException` an error status stands for. The client is not set to throw on
- * error statuses, so without this an error body would be decoded as a catalogue.
- */
-private fun HttpResponse.requireSuccess(): HttpResponse {
-    status.toNetworkException()?.let { failure -> throw failure }
-    return this
 }

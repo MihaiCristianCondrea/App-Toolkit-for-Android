@@ -49,7 +49,7 @@ class ShellPreferencesStorageFailureTest {
     }
 
     @Test
-    fun `a failed read falls back to defaults without replacing the last known settings`() = runTest {
+    fun `a failed read exposes a storage exception without replacing the last known settings`() = runTest {
         val chosen = booleanPreferencesKey("hide_top_bar_on_scroll")
         val store = object : DataStore<Preferences> {
             override val data = flow {
@@ -60,15 +60,18 @@ class ShellPreferencesStorageFailureTest {
                 emptyPreferences()
         }
         val repository = DefaultShellPreferencesRepository(store, ShellSettings())
+        val emitted = mutableListOf<ShellSettings>()
 
-        val emitted = repository.settings.toList()
+        assertFailsWith<StorageException> {
+            repository.settings.collect { emitted += it }
+        }
 
-        assertEquals(listOf(ShellSettings(hideTopBarOnScroll = true), ShellSettings()), emitted)
+        assertEquals(listOf(ShellSettings(hideTopBarOnScroll = true)), emitted)
         assertEquals(ShellSettings(hideTopBarOnScroll = true), repository.lastKnown)
     }
 
     @Test
-    fun `a read that fails first emits defaults and leaves nothing known`() = runTest {
+    fun `a read that fails first exposes a storage exception and leaves nothing known`() = runTest {
         val store = object : DataStore<Preferences> {
             override val data = flow<Preferences> { throw IOException("Read failed") }
             override suspend fun updateData(transform: suspend (t: Preferences) -> Preferences): Preferences =
@@ -76,7 +79,9 @@ class ShellPreferencesStorageFailureTest {
         }
         val repository = DefaultShellPreferencesRepository(store, ShellSettings())
 
-        assertEquals(listOf(ShellSettings()), repository.settings.toList())
+        assertFailsWith<StorageException> {
+            repository.settings.toList()
+        }
         assertNull(repository.lastKnown)
     }
 

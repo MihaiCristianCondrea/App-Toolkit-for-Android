@@ -34,8 +34,5 @@ object SettingsAnalytics {
         const val PREFERENCE_KEY: String = "preference_key"
         const val ENABLED: String = "enabled"
         const val THEME_MODE: String = "theme_mode"
-        const val FAQ_ID: String = "faq_id"
-        const val FAQ_POSITION: String = "faq_position"
-        const val EXPANDED: String = "expanded"
     }
 }

@@ -29,18 +29,18 @@ import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.utils.cons
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
 
-internal fun List<ToolkitTileCategoryData>.toUiModels(): ImmutableList<ToolkitTileCategory> =
+internal fun List<ToolkitTileCategoryData>.toToolkitTileCategories(): ImmutableList<ToolkitTileCategory> =
     map { category ->
         val categoryVisuals = category.id.categoryVisuals()
         ToolkitTileCategory(
             id = category.id,
             titleResId = categoryVisuals.titleResId,
             icon = categoryVisuals.icon,
-            tiles = category.tiles.map(ToolkitTileData::toUiModel).toImmutableList(),
+            tiles = category.tiles.map(ToolkitTileData::toToolkitTile).toImmutableList(),
         )
     }.toImmutableList()
 
-internal fun ToolkitTileData.toUiModel(): ToolkitTile {
+internal fun ToolkitTileData.toToolkitTile(): ToolkitTile {
     val visuals = id.tileVisuals()
     return ToolkitTile(
         id = id,

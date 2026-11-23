@@ -28,6 +28,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.settings.
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.settings.SettingsPreference
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.settings.SettingsSearchContext
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.settings.SettingsSearchProvider
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.settings.ui.constants.SettingsLogTags
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.LocalShellGraph
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.LocalShellCapabilities
 import org.koin.compose.getKoin
@@ -152,12 +153,10 @@ internal fun searchRows(
 private fun logUnregistered(destination: NavKey, title: String?, keptForAction: Boolean) {
     val outcome = if (keptForAction) "kept for its action, without the fallback" else "left out"
     Log.w(
-        LOG_TAG,
+        SettingsLogTags.SETTINGS_SEARCH,
         "Settings search result \"$title\" opens ${destination::class.qualifiedName}, which the graph does not register: $outcome.",
     )
 }
-
-private const val LOG_TAG: String = "SettingsSearch"
 
 private fun searchText(vararg parts: String?): String =
     parts.filterNotNull().joinToString(separator = " ").normalizedForSearch()

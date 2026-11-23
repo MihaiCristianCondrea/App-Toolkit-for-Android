@@ -36,6 +36,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.feature.support.ui.analy
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.support.ui.constants.SupportOperationNames
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.support.ui.contracts.SupportEvent
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.support.ui.mappers.toDonationOptions
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.support.ui.mappers.toUiText
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.support.ui.models.DonationOption
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.support.ui.states.SupportUiState
 import com.mihaicristiancondrea.android.libs.apptoolkit.integration.billing.data.extensions.isValidForBilling
@@ -46,7 +47,6 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.seconds
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.R as CoreUiR
 
 /**
  * ViewModel for the support page: the donation options, and the purchase of one.
@@ -235,15 +235,6 @@ class SupportViewModel(
         }
     }
 
-    private fun PurchaseResult.Failed.Reason.toUiText(): UiText = when (this) {
-        PurchaseResult.Failed.Reason.NETWORK -> UiText.StringResource(CoreUiR.string.screen_error_connection)
-        PurchaseResult.Failed.Reason.BILLING_UNAVAILABLE,
-        PurchaseResult.Failed.Reason.ITEM_UNAVAILABLE,
-        PurchaseResult.Failed.Reason.LAUNCH_UNAVAILABLE,
-        PurchaseResult.Failed.Reason.UNKNOWN,
-        -> GenericErrorText
-    }
-
     /** Options already on screen stay, with a message; otherwise the failure replaces the page. */
     private fun showLoadFailure(error: Throwable) {
         if (currentState.donationOptions is Loadable.Ready) {
@@ -284,7 +275,7 @@ class SupportViewModel(
 
         val BillingLaunchTimeout: Duration = 20.seconds
 
-        /** Shown for a failure with no text of its own; see `toUiText` for the ones that have one. */
+        /** Fallback shown when loading donation product details fails without a specific message. */
         val LoadFailedText = UiText.StringResource(R.string.error_failed_to_load_sku_details)
 
         val OfferUnavailableText = UiText.StringResource(R.string.support_offer_unavailable)

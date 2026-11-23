@@ -18,12 +18,16 @@
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.support.ui.mappers
 
 import com.android.billingclient.api.ProductDetails
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.UiText
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.GenericErrorText
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.support.data.models.DonationProductIds
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.support.ui.models.DonationOption
+import com.mihaicristiancondrea.android.libs.apptoolkit.integration.billing.data.models.PurchaseResult
 import io.mockk.every
 import io.mockk.mockk
 import org.junit.jupiter.api.Test
 import kotlin.test.assertEquals
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.R as CoreUiR
 
 class SupportMappersTest {
 
@@ -81,5 +85,21 @@ class SupportMappersTest {
             ),
             options[DonationProductIds.LOW_DONATION],
         )
+    }
+
+    @Test
+    fun `toUiText maps network failures to the connection error string and others to the generic error`() {
+        assertEquals(
+            UiText.StringResource(resourceId = CoreUiR.string.screen_error_connection),
+            PurchaseResult.Failed.Reason.NETWORK.toUiText(),
+        )
+        listOf(
+            PurchaseResult.Failed.Reason.BILLING_UNAVAILABLE,
+            PurchaseResult.Failed.Reason.ITEM_UNAVAILABLE,
+            PurchaseResult.Failed.Reason.LAUNCH_UNAVAILABLE,
+            PurchaseResult.Failed.Reason.UNKNOWN,
+        ).forEach { reason ->
+            assertEquals(GenericErrorText, reason.toUiText())
+        }
     }
 }

@@ -50,7 +50,6 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.graphics.Shape
@@ -62,15 +61,14 @@ import androidx.compose.ui.unit.Dp
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.icons.ToolkitIcon
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.icons.ToolkitIconContent
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.mappers.toTextFieldValue
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.analytics.Ga4EventData
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.analytics.LocalTelemetry
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.analytics.logGa4Event
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.GeneralButton
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.GeneralButtonStyle
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.fields.markdown.MarkdownFormatAction
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.fields.markdown.MarkdownFormattingBar
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.fields.markdown.rememberMarkdownVisualTransformation
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.fields.markdown.toTextFieldValue
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.modifiers.logFocusGain
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.GroupedItemPosition
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.getGroupedShape
 
@@ -602,19 +600,6 @@ private fun rememberFieldTransformation(
 ): VisualTransformation {
     if (markdown == GeneralTextFieldMarkdown.None) return visualTransformation
     return rememberMarkdownVisualTransformation()
-}
-
-/** Logs [ga4Event] the moment the field takes focus, and not again until focus comes back. */
-@Composable
-private fun Modifier.logFocusGain(
-    ga4Event: Ga4EventData?,
-): Modifier {
-    val telemetry = LocalTelemetry.current
-    var focused: Boolean by remember { mutableStateOf(value = false) }
-    return onFocusChanged { state ->
-        if (state.isFocused && !focused) telemetry.logGa4Event(ga4Event = ga4Event)
-        focused = state.isFocused
-    }
 }
 
 /**

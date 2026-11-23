@@ -17,6 +17,7 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.core.network.data.remote.client
 
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.network.data.constants.KtorClientConstants
 import io.ktor.client.HttpClient
 import io.ktor.client.HttpClientConfig
 import io.ktor.client.engine.android.Android
@@ -38,8 +39,6 @@ import kotlinx.serialization.json.Json
  * Creates Toolkit HTTP clients with shared serialization, timeout, and request defaults.
  */
 object KtorClient {
-
-    private const val REQUEST_TIMEOUT_LIMIT: Long = 30_000L
 
     /**
      * Creates a new [HttpClient] for making network requests.
@@ -65,9 +64,9 @@ object KtorClient {
             }
 
             install(plugin = HttpTimeout) {
-                requestTimeoutMillis = REQUEST_TIMEOUT_LIMIT
-                connectTimeoutMillis = REQUEST_TIMEOUT_LIMIT
-                socketTimeoutMillis = REQUEST_TIMEOUT_LIMIT
+                requestTimeoutMillis = KtorClientConstants.REQUEST_TIMEOUT_LIMIT
+                connectTimeoutMillis = KtorClientConstants.REQUEST_TIMEOUT_LIMIT
+                socketTimeoutMillis = KtorClientConstants.REQUEST_TIMEOUT_LIMIT
             }
 
             install(plugin = DefaultRequest) {

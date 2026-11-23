@@ -17,6 +17,7 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.data.repositories
 
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.data.constants.IssueReportHistoryConstants
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.data.local.IssueReportHistoryDataSource
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.data.models.FiledIssueReport
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.data.models.IssueReportHistory
@@ -86,7 +87,7 @@ class DefaultIssueReportHistoryRepository(
      */
     private fun fingerprint(title: String, description: String): String {
         val normalized = "${normalizeText(text = title)}\n${normalizeText(text = description)}"
-        return MessageDigest.getInstance(HASH_ALGORITHM)
+        return MessageDigest.getInstance(IssueReportHistoryConstants.HASH_ALGORITHM)
             .digest(normalized.toByteArray(charset = Charsets.UTF_8))
             .joinToString(separator = "") { byte -> "%02x".format(byte) }
     }
@@ -104,7 +105,6 @@ class DefaultIssueReportHistoryRepository(
         /** Fingerprints kept; older ones fall out even inside the duplicate window. */
         const val MAX_RECENT_REPORTS: Int = 10
 
-        private const val HASH_ALGORITHM: String = "SHA-256"
         private val Whitespace = Regex(pattern = """\s+""")
     }
 }

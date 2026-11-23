@@ -35,11 +35,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.only
-import androidx.compose.foundation.layout.requiredWidth
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
@@ -59,13 +54,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.draw.drawBehind
-import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
-import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
-import androidx.compose.ui.input.nestedscroll.NestedScrollSource
 import androidx.compose.ui.input.nestedscroll.nestedScroll
-import androidx.compose.ui.layout.layout
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.unit.Dp
@@ -90,6 +81,8 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.layout.FrameT
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.layout.LocalArticleTopBarHost
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.layout.LocalBesideNavigation
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.layout.besideNavigationTitle
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.layout.extensions.requiredWidthOf
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.layout.extensions.widthOf
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.layout.isTopLevelPage
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.motion.LocalShellMotion
 import kotlin.math.roundToInt
@@ -231,7 +224,10 @@ private fun <T : Any> ListDetailLayout(
     val slideToPop: suspend () -> Unit = {
         fraction.animateTo(1f, tween((200 * motion.durationScale).roundToInt()))
         closeDetail()
-        fraction.animateTo(restingFraction, tween((350 * motion.durationScale).roundToInt()))
+        // Settle outside the close guard so a quick back on a newly opened detail is not ignored.
+        scope.launch {
+            fraction.animateTo(restingFraction, tween((350 * motion.durationScale).roundToInt()))
+        }
     }
     val shrinkToPop: suspend (from: Float) -> Unit = { from ->
         val duration = (200 * motion.durationScale).roundToInt()
@@ -316,7 +312,10 @@ private fun <T : Any> ListDetailLayout(
                     listArticle = listArticle,
                     detailArticle = detailArticle,
                     listWidth = listWidth,
-                    onCloseList = closeList,
+                    onCloseList = {
+                        closeGuard.cancel()
+                        closeList()
+                    },
                     showsBack = !topLevel,
                     // Standing in for the tab, its title grows or shrinks from the one it replaces.
                     listTitleModifier = if (topLevel) besideNavigationTitle() else Modifier,
@@ -413,40 +412,6 @@ private fun <T : Any> ListDetailLayout(
                 }
             }
         }
-    }
-}
-
-/**
- * [Modifier.width] with a width read while measuring, so a width that moves every frame lays the
- * element out again without recomposing it.
- */
-internal fun Modifier.widthOf(width: () -> Dp): Modifier = layout { measurable, constraints ->
-    val px = width().roundToPx().coerceIn(constraints.minWidth, constraints.maxWidth)
-    val placeable = measurable.measure(constraints.copy(minWidth = px, maxWidth = px))
-    layout(placeable.width, placeable.height) { placeable.place(0, 0) }
-}
-
-/** [Modifier.requiredWidth] with a width read while measuring, as [widthOf] is. */
-private fun Modifier.requiredWidthOf(width: () -> Dp): Modifier = layout { measurable, constraints ->
-    val px = width().roundToPx().coerceAtLeast(0)
-    val placeable = measurable.measure(constraints.copy(minWidth = px, maxWidth = px))
-    layout(placeable.width, placeable.height) { placeable.place(0, 0) }
-}
-
-/**
- * How far a pane's content has scrolled from its top, as Material's pinned app bar counts it: what
- * the content consumed, back to zero once it is pulled past its top.
- */
-private class PaneScrollOffset : NestedScrollConnection {
-    var offset: Float by mutableFloatStateOf(0f)
-
-    /** Whether content has scrolled under the app bar. */
-    val scrolledUnder: Boolean
-        get() = offset < -1f
-
-    override fun onPostScroll(consumed: Offset, available: Offset, source: NestedScrollSource): Offset {
-        offset = if (consumed.y == 0f && available.y > 0f) 0f else offset + consumed.y
-        return Offset.Zero
     }
 }
 

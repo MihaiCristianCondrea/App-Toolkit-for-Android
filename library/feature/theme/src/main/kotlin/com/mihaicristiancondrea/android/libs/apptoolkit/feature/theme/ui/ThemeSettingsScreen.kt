@@ -51,7 +51,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.R
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.ScreenHost
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.ScreenStateHandler
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.analytics.LocalTelemetry
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.drawable.rememberPaletteImageVector
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.drawables.rememberPaletteImageVector
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.layouts.sections.InfoMessageSection
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.modifiers.animatedItem
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.SwitchCardItem
@@ -66,11 +66,10 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.feature.theme.ui.analyti
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.theme.ui.analytics.paletteTabSelectEvent
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.theme.ui.analytics.staticPaletteSelectEvent
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.theme.ui.analytics.themeModeSelectEvent
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.theme.ui.constants.ThemeLogTags
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.theme.ui.contracts.ThemeSettingsEvent
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.theme.ui.states.ThemeSettingsUiState
 import org.koin.compose.viewmodel.koinViewModel
-
-private const val THEME_SETTINGS_LOG_TAG: String = "ThemeSettingsScreen"
 
 /**
  * The theme settings page: the color palette, the theme mode, AMOLED, and a link to the system
@@ -113,7 +112,7 @@ fun ThemeSettingsScreen() {
                 val opened: Boolean = context.openDisplaySettings()
                 telemetry.logEvent(openDisplaySettingsEvent(opened = opened))
                 if (!opened) {
-                    Log.w(THEME_SETTINGS_LOG_TAG, "Failed to open display settings from theme page")
+                    Log.w(ThemeLogTags.THEME_SETTINGS_SCREEN, "Failed to open display settings from theme page")
                 }
             },
             contentPadding = contentPadding(),

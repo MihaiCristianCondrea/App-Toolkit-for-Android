@@ -17,6 +17,7 @@
 
 package com.mihaicristiancondrea.android.apps.apptoolkit.widget.ui
 
+import com.mihaicristiancondrea.android.apps.apptoolkit.widget.ui.extensions.isMissingGlanceAction
 import org.junit.jupiter.api.Test
 import kotlin.test.assertFalse
 import kotlin.test.assertTrue

@@ -26,6 +26,7 @@ import androidx.datastore.preferences.core.edit
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.coroutines.dispatchers.DispatcherProvider
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.telemetry.DiagnosticsReporter
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.datastore.DataStoreNamesConstants
+import com.mihaicristiancondrea.android.libs.apptoolkit.integration.ads.data.constants.AdsDataLogTags
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancel
@@ -68,7 +69,7 @@ class DefaultAdsPreferencesDataSource(
     override val adsEnabled: StateFlow<Boolean> = ads(default = defaultAdsEnabled)
         .retryWhen { failure, attempt ->
             if (failure !is IOException) return@retryWhen false
-            Log.w(LOG_TAG, "Cannot read ads preference; disabling ads until storage recovers.", failure)
+            Log.w(AdsDataLogTags.ADS_PREFERENCES, "Cannot read ads preference; disabling ads until storage recovers.", failure)
             diagnostics?.logBreadcrumb(
                 message = "Ads preference read failed; retrying",
                 attributes = mapOf("attempt" to attempt.toString()),
@@ -80,7 +81,7 @@ class DefaultAdsPreferencesDataSource(
             true
         }
         .catch { failure ->
-            Log.e(LOG_TAG, "Cannot observe ads preference; ads remain disabled.", failure)
+            Log.e(AdsDataLogTags.ADS_PREFERENCES, "Cannot observe ads preference; ads remain disabled.", failure)
             diagnostics?.recordNonFatal(
                 throwable = failure,
                 attributes = mapOf(
@@ -115,9 +116,5 @@ class DefaultAdsPreferencesDataSource(
 
     override fun close() {
         scope.cancel()
-    }
-
-    private companion object {
-        const val LOG_TAG: String = "AdsPreferences"
     }
 }

@@ -32,9 +32,6 @@ import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.gestures.Orientation
 import androidx.compose.foundation.gestures.draggable
 import androidx.compose.foundation.gestures.rememberDraggableState
-import androidx.compose.foundation.interaction.DragInteraction
-import androidx.compose.foundation.interaction.Interaction
-import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.WindowInsets
@@ -61,15 +58,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.graphics.graphicsLayer
-import androidx.compose.ui.layout.layout
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.dismiss
 import androidx.compose.ui.semantics.semantics
-import androidx.compose.ui.unit.Constraints
 import androidx.compose.ui.unit.Dp
-import androidx.compose.ui.unit.constrainHeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.lerp
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.context.isSystemAnimationDisabled
@@ -352,37 +346,6 @@ internal fun ShellPlayerOverlay(
     }
 }
 
-private enum class PlayerDragGesture {
-    Undecided,
-    ExpandOrCollapse,
-    Dismiss,
-}
-
-private class DragCancellationTracker(
-    private val delegate: MutableInteractionSource = MutableInteractionSource(),
-) : MutableInteractionSource by delegate {
-    var cancelled: Boolean = false
-        private set
-
-    override suspend fun emit(interaction: Interaction) {
-        update(interaction)
-        delegate.emit(interaction)
-    }
-
-    override fun tryEmit(interaction: Interaction): Boolean {
-        update(interaction)
-        return delegate.tryEmit(interaction)
-    }
-
-    private fun update(interaction: Interaction) {
-        when (interaction) {
-            is DragInteraction.Start -> cancelled = false
-            is DragInteraction.Stop -> cancelled = false
-            is DragInteraction.Cancel -> cancelled = true
-        }
-    }
-}
-
 private val PlayerEntranceRise = 96.dp
 private val FlingVelocity = 600.dp
 private val DismissDragThreshold = 48.dp
@@ -390,30 +353,3 @@ private val MinDismissFlingDistance = 12.dp
 private val DismissTravel = MiniPlayerHeight + 24.dp
 private const val DismissDragTranslationFactor = 0.6f
 private const val DismissMaxFade = 0.75f
-
-/**
- * Sizes and places the player between its docked pill and the full window, reading [progress] and
- * [dockBottom] while measuring. A dock that moves on every frame, as the bottom bar does while it
- * hides, and every frame of a drag or settle then lay the player out again without recomposing it.
- *
- * Docked, the pill is inset by [dockStart] plus a margin at the start, a margin at the end, and
- * sits above [dockBottom]; expanded, it fills the width and [fullHeight].
- */
-private fun Modifier.playerFrame(
-    progress: () -> Float,
-    dockStart: Dp,
-    dockBottom: () -> Dp,
-    fullHeight: Dp,
-): Modifier = layout { measurable, constraints ->
-    val fraction = progress()
-    val startPx = lerp(dockStart + 12.dp, 0.dp, fraction).roundToPx().coerceAtLeast(0)
-    val endPx = lerp(12.dp, 0.dp, fraction).roundToPx().coerceAtLeast(0)
-    val bottomPx = lerp(dockBottom() + 8.dp, 0.dp, fraction).roundToPx().coerceAtLeast(0)
-    val width = (constraints.maxWidth - startPx - endPx).coerceAtLeast(0)
-    val height = lerp(MiniPlayerHeight, fullHeight, fraction).roundToPx()
-        .coerceIn(0, (constraints.maxHeight - bottomPx).coerceAtLeast(0))
-    val placeable = measurable.measure(Constraints.fixed(width, height))
-    layout(constraints.maxWidth, constraints.constrainHeight(height + bottomPx)) {
-        placeable.place(startPx, 0)
-    }
-}

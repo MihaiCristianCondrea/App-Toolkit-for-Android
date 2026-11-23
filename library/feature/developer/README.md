@@ -123,9 +123,9 @@ flowchart TD
 - The page passes the `ShellHost`'s `LocalShellPreferences` repository to `DeveloperOptionsViewModel`
   as a Koin parameter so state and writes always use the same store. A read failure keeps the last
   settings visible and offers Try again in the error snackbar when `error.isRetryable` is true.
-  `Load` restarts observation, replacing the previous collector. Note that the default
-  `DefaultShellPreferencesRepository` falls back to defaults on `IOException`, so read retries
-  trigger for non-`IOException` errors or custom host repositories.
+  `Load` restarts observation, replacing the previous collector. `DefaultShellPreferencesRepository`
+  translates storage read failures to `StorageException`, so read retries trigger for both the
+  default store and custom host repositories.
 - It uses the Toolkit's grouped preference rows and `ChoicePreferenceItem`, so it looks like the
   Toolkit's other settings pages.
 

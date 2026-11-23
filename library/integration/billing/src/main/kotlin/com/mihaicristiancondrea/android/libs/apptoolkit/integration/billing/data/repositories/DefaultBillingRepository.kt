@@ -33,6 +33,7 @@ import com.android.billingclient.api.QueryProductDetailsParams
 import com.android.billingclient.api.QueryPurchasesParams
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.coroutines.dispatchers.DispatcherProvider
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.telemetry.DiagnosticsReporter
+import com.mihaicristiancondrea.android.libs.apptoolkit.integration.billing.data.constants.BillingRetryConstants
 import com.mihaicristiancondrea.android.libs.apptoolkit.integration.billing.data.extensions.isValidForBilling
 import com.mihaicristiancondrea.android.libs.apptoolkit.integration.billing.data.models.PurchaseResult
 import kotlinx.coroutines.CoroutineScope
@@ -51,11 +52,6 @@ import java.lang.ref.WeakReference
 import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.atomic.AtomicBoolean
 import kotlin.time.Duration.Companion.milliseconds
-
-private const val RETRY_DELAY_SIMPLE_MS: Long = 1_000L
-private const val RETRY_DELAY_EXPONENTIAL_MS: Long = 2_000L
-private const val RETRY_MAX_DELAY_MS: Long = 16_000L
-private const val PURCHASE_RESULT_BUFFER_CAPACITY: Int = 16
 
 /**
  * Process-scoped Play Billing implementation.
@@ -86,7 +82,7 @@ class DefaultBillingRepository internal constructor(
         _productDetails.asSharedFlow()
 
     private val _purchaseResult = MutableSharedFlow<PurchaseResult>(
-        extraBufferCapacity = PURCHASE_RESULT_BUFFER_CAPACITY,
+        extraBufferCapacity = BillingRetryConstants.PURCHASE_RESULT_BUFFER_CAPACITY,
         onBufferOverflow = BufferOverflow.DROP_OLDEST,
     )
     override val purchaseResult: Flow<PurchaseResult> =
@@ -602,7 +598,7 @@ class DefaultBillingRepository internal constructor(
                     }
                 }
                 if (!billingClient.isReady && (attempt < maxAttempts)) {
-                    delay(duration = RETRY_DELAY_SIMPLE_MS.milliseconds)
+                    delay(duration = BillingRetryConstants.RETRY_DELAY_SIMPLE_MS.milliseconds)
                 }
             }
         }
@@ -612,7 +608,7 @@ class DefaultBillingRepository internal constructor(
         billingResult: BillingResult,
         purchases: List<Purchase>?,
     ) {
-        delay(duration = RETRY_DELAY_SIMPLE_MS.milliseconds)
+        delay(duration = BillingRetryConstants.RETRY_DELAY_SIMPLE_MS.milliseconds)
         if (purchases.isNullOrEmpty()) {
             val handledAny: Boolean = processPastPurchasesAndReportHandled()
             if (!handledAny) {
@@ -630,14 +626,14 @@ class DefaultBillingRepository internal constructor(
 
         data class Simple(
             override val maxAttempts: Int = 3,
-            val delayMillis: Long = RETRY_DELAY_SIMPLE_MS,
+            val delayMillis: Long = BillingRetryConstants.RETRY_DELAY_SIMPLE_MS,
         ) : RetryStrategy
 
         data class Exponential(
             override val maxAttempts: Int = 3,
-            val initialDelayMillis: Long = RETRY_DELAY_EXPONENTIAL_MS,
+            val initialDelayMillis: Long = BillingRetryConstants.RETRY_DELAY_EXPONENTIAL_MS,
             val factor: Double = 2.0,
-            val maxDelayMillis: Long = RETRY_MAX_DELAY_MS,
+            val maxDelayMillis: Long = BillingRetryConstants.RETRY_MAX_DELAY_MS,
         ) : RetryStrategy
     }
 

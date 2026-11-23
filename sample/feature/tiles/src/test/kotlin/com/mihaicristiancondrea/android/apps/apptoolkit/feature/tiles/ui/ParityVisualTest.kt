@@ -39,7 +39,7 @@ import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.model
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.models.ToolkitTileCategoryData
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.models.ToolkitTileData
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.models.ToolkitTileStatus
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.mappers.toUiModels
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.mappers.toToolkitTileCategories
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.states.CoinFlipToolUiState
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.states.CounterToolUiState
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.states.DiceRollToolUiState
@@ -103,7 +103,7 @@ class ParityVisualTest {
         ToolkitTileCategoryData("sound", tiles = persistentListOf(ToolkitTileData("water_eject", status = ToolkitTileStatus.Available))),
         ToolkitTileCategoryData("wellbeing", tiles = persistentListOf(ToolkitTileData("breathing", status = ToolkitTileStatus.Available))),
         ToolkitTileCategoryData("colors", tiles = persistentListOf(ToolkitTileData("material_colors", status = ToolkitTileStatus.Available, quickTool = ToolkitQuickTool.MaterialColors))),
-    ).toUiModels()
+    ).toToolkitTileCategories()
 
     @Test @Config(sdk = [36], qualifiers = "w430dp-h1500dp")
     fun quickToolsDark() = render("quick-tools-dark", dark = true) {

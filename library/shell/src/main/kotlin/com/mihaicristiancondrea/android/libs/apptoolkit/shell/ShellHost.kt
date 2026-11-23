@@ -36,6 +36,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -106,8 +107,10 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.shell.settings.LocalShel
 import com.mihaicristiancondrea.android.libs.apptoolkit.shell.settings.LocalShellSettings
 import com.mihaicristiancondrea.android.libs.apptoolkit.shell.settings.NavigationTint
 import com.mihaicristiancondrea.android.libs.apptoolkit.shell.settings.ShellSettings
+import java.io.IOException
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.channels.ReceiveChannel
+import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.distinctUntilChanged
 
 /**
@@ -132,8 +135,8 @@ import kotlinx.coroutines.flow.distinctUntilChanged
  * @param start Where a fresh launch opens, instead of the graph's `start`: a tab, or a page shown
  * as a start screen before the shell.
  * @param resolveStart Decides [start] at launch from stored state, such as a welcome screen until
- * the person has seen it once. Nothing is drawn until it returns; null keeps [start]. Keep the
- * splash screen up until [onReady].
+ * the person has seen it once. Nothing is drawn until it returns; null or an [IOException] (including
+ * storage failures) keeps [start]. Keep the splash screen up until [onReady].
  * @param preferences Where the shell keeps its settings. By default a DataStore of its own; an app
  * with a settings store supplies its own implementation, which then owns its `defaults`. Pass a
  * remembered instance, not a new one on every composition.
@@ -171,17 +174,27 @@ fun ShellHost(
     val shellSnackbarHost = remember(shellSnackbars) { ShellSnackbarHost(shellSnackbars) }
     val store = preferences ?: remember(context, defaults) { ShellPreferencesRepository(context, defaults) }
     // A cold start waits a frame for the stored settings rather than drawing a layout it would
-    // replace a frame later.
-    val settings by store.settings.collectAsStateWithLifecycle(initialValue = store.lastKnown)
-    // The app's start decision, awaited alongside the settings. Once made it is saved, since the
-    // navigator restores its own stack after recreation and the start only matters to a fresh one:
-    // a rotation draws at once instead of deciding again.
+    // replace a frame later. A storage read failure falls back to the last known or default
+    // settings so the root shell still launches.
+    val settingsFlow = remember(store) {
+        store.settings.catch { throwable ->
+            if (throwable is IOException) emit(store.lastKnown ?: store.defaults) else throw throwable
+        }
+    }
+    val settings by settingsFlow.collectAsStateWithLifecycle(initialValue = store.lastKnown)
+    // The app's start decision, awaited alongside the settings. Once the navigator is composed with
+    // it, it is saved, since the navigator restores its own stack after recreation and the start
+    // only matters to a fresh one: a rotation draws at once instead of deciding again.
     var startDecided by rememberSaveable { mutableStateOf(resolveStart == null) }
     var decidedStart by remember { mutableStateOf(if (startDecided) StartDecision(key = start) else null) }
     if (!startDecided && resolveStart != null) {
         LaunchedEffect(Unit) {
-            decidedStart = StartDecision(key = resolveStart() ?: start)
-            startDecided = true
+            val resolved = try {
+                resolveStart()
+            } catch (_: IOException) {
+                null
+            }
+            decidedStart = StartDecision(key = resolved ?: start)
         }
     }
     // Registered before anything below can return, so an intent that arrives while the settings or
@@ -201,6 +214,9 @@ fun ShellHost(
     // The developer options' choice, then the app's choice at launch, then the graph's.
     val startKey = graph.startOptions.getOrNull(current.startOverride) ?: launchStart.key ?: graph.start
     val navigator = rememberShellNavigator(graph, onExit = { activity?.finish() }, start = startKey)
+    if (!startDecided) {
+        SideEffect { startDecided = true }
+    }
     val frameState = rememberShellFrameState(
         mode = layoutInfo.mode,
         // Already tinted on the first frame when the tint is always on, rather than snapped to it a frame later.

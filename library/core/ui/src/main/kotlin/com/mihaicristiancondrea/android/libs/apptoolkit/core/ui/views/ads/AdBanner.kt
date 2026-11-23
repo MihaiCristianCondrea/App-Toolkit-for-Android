@@ -46,6 +46,7 @@ import com.google.android.libraries.ads.mobile.sdk.banner.BannerAdRequest
 import com.google.android.libraries.ads.mobile.sdk.common.AdLoadCallback
 import com.google.android.libraries.ads.mobile.sdk.common.LoadAdError
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.ads.AdsSdkState
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.constants.CoreUiLogTags
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.ads.AdsConfig
 
 /**
@@ -89,7 +90,7 @@ fun AdBanner(
             null
         } else {
             runCatching { AdView(context) }
-                .onFailure { throwable -> Log.w(LOG_TAG, "Could not create an AdView.", throwable) }
+                .onFailure { throwable -> Log.w(CoreUiLogTags.AD_BANNER, "Could not create an AdView.", throwable) }
                 .getOrNull()
         }
     }
@@ -98,7 +99,7 @@ fun AdBanner(
         onDispose {
             adView?.let { view ->
                 runCatching { view.destroy() }
-                    .onFailure { throwable -> Log.w(LOG_TAG, "Could not destroy an AdView.", throwable) }
+                    .onFailure { throwable -> Log.w(CoreUiLogTags.AD_BANNER, "Could not destroy an AdView.", throwable) }
             }
         }
     }
@@ -129,7 +130,7 @@ fun AdBanner(
             )
         }.onFailure { throwable ->
             Log.w(
-                LOG_TAG,
+                CoreUiLogTags.AD_BANNER,
                 "Banner ad request for '${adsConfig.bannerAdUnitId}' could not be started.",
                 throwable,
             )
@@ -154,5 +155,3 @@ fun AdBanner(
         }
     }
 }
-
-private const val LOG_TAG: String = "AdBanner"

@@ -61,4 +61,28 @@ class CloseGuardTest {
 
         assertEquals(2, closes)
     }
+
+    @Test
+    fun `cancelling a running close prevents its pop and allows another close`() = runTest {
+        val guard = CloseGuard(this)
+        var closes = 0
+
+        guard.launch {
+            delay(200)
+            closes++
+        }
+        runCurrent()
+        assertTrue(guard.isRunning)
+
+        guard.cancel()
+        assertFalse(guard.isRunning)
+
+        advanceTimeBy(300)
+        runCurrent()
+        assertEquals(0, closes)
+
+        guard.launch { closes++ }
+        runCurrent()
+        assertEquals(1, closes)
+    }
 }

@@ -18,11 +18,15 @@
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.support.ui.mappers
 
 import com.android.billingclient.api.ProductDetails
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.UiText
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.GenericErrorText
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.support.ui.extensions.hasOneTimePurchaseOffer
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.support.ui.extensions.primaryFormattedPrice
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.support.ui.models.DonationOption
+import com.mihaicristiancondrea.android.libs.apptoolkit.integration.billing.data.models.PurchaseResult
 import kotlinx.collections.immutable.ImmutableMap
 import kotlinx.collections.immutable.toPersistentMap
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.R as CoreUiR
 
 /**
  * One [DonationOption] for each of [productIds], in that order, keyed by product id. A product Play
@@ -39,3 +43,13 @@ internal fun Map<String, ProductDetails>.toDonationOptions(
             isEligible = details?.hasOneTimePurchaseOffer() == true,
         )
     }.toPersistentMap()
+
+/** Maps a billing failure [PurchaseResult.Failed.Reason] to a user-facing [UiText]. */
+internal fun PurchaseResult.Failed.Reason.toUiText(): UiText = when (this) {
+    PurchaseResult.Failed.Reason.NETWORK -> UiText.StringResource(resourceId = CoreUiR.string.screen_error_connection)
+    PurchaseResult.Failed.Reason.BILLING_UNAVAILABLE,
+    PurchaseResult.Failed.Reason.ITEM_UNAVAILABLE,
+    PurchaseResult.Failed.Reason.LAUNCH_UNAVAILABLE,
+    PurchaseResult.Failed.Reason.UNKNOWN,
+    -> GenericErrorText
+}

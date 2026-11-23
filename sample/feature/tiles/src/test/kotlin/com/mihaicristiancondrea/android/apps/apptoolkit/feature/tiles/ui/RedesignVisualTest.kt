@@ -36,7 +36,7 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.tools.ProtractorTool
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.models.ToolkitTileCategoryData
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.models.ToolkitTileData
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.mappers.toUiModels
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.mappers.toToolkitTileCategories
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.states.CoinFlipToolUiState
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.states.CounterToolUiState
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.states.DiceRollToolUiState
@@ -113,7 +113,7 @@ class RedesignVisualTest {
             ToolkitTileCategoryData("sound", tiles = persistentListOf(ToolkitTileData("water_eject", status = com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.models.ToolkitTileStatus.Available))),
             ToolkitTileCategoryData("wellbeing", tiles = persistentListOf(ToolkitTileData("breathing", status = com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.models.ToolkitTileStatus.Available))),
             ToolkitTileCategoryData("colors", tiles = persistentListOf(ToolkitTileData("material_colors", status = com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.models.ToolkitTileStatus.Available, quickTool = com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.models.ToolkitQuickTool.MaterialColors))),
-        ).toUiModels()
+        ).toToolkitTileCategories()
         compose.setContent { MaterialTheme(colorScheme = if (dark) darkColorScheme() else androidx.compose.material3.lightColorScheme()) { Surface {
             CompositionLocalProvider(LocalAdsEnabled provides false, LocalTelemetry provides FakeTelemetryRepository()) {
                 ToolkitTilesScreenContent(ToolkitTilesUiState(categories = Loadable.Ready(categories)), PaddingValues(), {})
