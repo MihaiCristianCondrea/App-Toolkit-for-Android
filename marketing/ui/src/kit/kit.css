@@ -2008,3 +2008,88 @@ mnw-android-screen,
 .water-readout strong { font:400 45px/52px var(--md-ref-typeface-brand); }
 .water-eject md-filled-button { width:100%; --md-filled-button-container-height:56px; }
 .water-eject .water-note { font-size:12px; line-height:16px; }
+
+.play-bell-card { border: 0; border-radius: 28px; font: inherit; }
+.tk-sheet-content.tk-bell-sheet { max-inline-size: 640px; margin-inline: auto; }
+.tk-bell { container-type: inline-size; }
+.tk-bell__stage {
+  display: grid;
+  grid-template-areas: "bell" "action";
+  align-items: center;
+  gap: 12px;
+}
+.tk-bell__visual {
+  grid-area: bell;
+  display: grid;
+  justify-items: center;
+  text-align: center;
+}
+.tk-bell__face {
+  position: relative;
+  display: grid;
+  place-items: center;
+  justify-self: center;
+  inline-size: min(100%, 236px);
+  block-size: 176px;
+  color: var(--tk-gold-content);
+}
+.tk-bell__mask {
+  position: absolute;
+  inline-size: min(100%, 160px);
+  aspect-ratio: 1;
+  background: color-mix(in srgb, var(--tk-gold-container) 52%, var(--md-sys-color-surface-container-low));
+}
+.tk-bell__face md-icon {
+  position: relative;
+  --md-icon-size: 90px;
+  transform-origin: 50% 18%;
+}
+.tk-bell__waves {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+}
+.tk-bell__waves::before, .tk-bell__waves::after {
+  content: "";
+  grid-area: 1 / 1;
+  inline-size: 84%;
+  block-size: 74%;
+  border: 3px solid transparent;
+  border-inline-color: currentColor;
+  border-radius: 50%;
+  opacity: 0;
+}
+.tk-bell__waves::after {
+  inline-size: 97%;
+  block-size: 90%;
+}
+.tk-bell__status {
+  margin: 0;
+  color: var(--md-sys-color-on-surface-variant);
+}
+.tk-bell__status[data-visible="false"] {
+  position: absolute;
+  inline-size: 1px;
+  block-size: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+}
+.tk-bell md-filled-button {
+  grid-area: action;
+  --md-filled-button-container-height: 56px;
+}
+.tk-bell[data-ringing="true"] .tk-bell__waves::before { opacity: .75; }
+.tk-bell[data-ringing="true"] .tk-bell__waves::after { opacity: .45; }
+
+@container (min-width: 420px) {
+  .tk-bell__stage {
+    grid-template-areas: "bell action";
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 24px;
+  }
+  .tk-bell md-filled-button { inline-size: min(100%, 240px); justify-self: center; }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .tk-bell[data-capture="true"] .tk-bell__face md-icon { transform: rotate(17deg); }
+}

@@ -174,6 +174,129 @@ try {
     await waterPage.close();checks++;
   }
   {
+    const bellPage = await browser.newPage({viewport: {width: 1280, height: 1100}, reducedMotion: 'reduce'});
+    await bellPage.addInitScript(() => {
+      window.bellAudio = {opened: 0, closed: 0, strikes: [], stopped: 0};
+      const BrowserAudioContext = window.AudioContext;
+      window.AudioContext = class extends BrowserAudioContext {
+        constructor() {
+          super();
+          window.bellAudio.opened++;
+        }
+        createBufferSource() {
+          const source = super.createBufferSource();
+          const start = source.start.bind(source);
+          const stop = source.stop.bind(source);
+          source.start = (...args) => {
+            window.bellAudio.strikes.push({detune: source.detune.value, duration: source.buffer.duration});
+            return start(...args);
+          };
+          source.stop = (...args) => {
+            window.bellAudio.stopped++;
+            return stop(...args);
+          };
+          return source;
+        }
+        close() {
+          window.bellAudio.closed++;
+          return super.close();
+        }
+      };
+    });
+    await bellPage.clock.install();
+    const bellUrl = `${base}/screen.html?id=play`;
+    await bellPage.goto(`${base}/screen.html?id=quick-tools&panel=none`);
+    await bellPage.locator('[data-tool="water_eject"]').waitFor();
+    assert.equal(await bellPage.locator('[data-tool="bell"]').count(), 0);
+    await bellPage.goto(`${bellUrl}&panel=none&state=${encodeURIComponent(JSON.stringify({searchQuery: 'bell'}))}`);
+    await bellPage.getByRole('heading', {name: 'Toys'}).waitFor();
+    assert.equal(await bellPage.getByRole('heading', {name: 'Chance'}).count(), 0);
+    await bellPage.goto(bellUrl);
+    await bellPage.getByRole('heading', {name: 'Toys'}).waitFor();
+    await bellPage.locator('[data-tool="bell"]').click();
+    const bell = bellPage.locator('.tk-bell');
+    const status = bell.locator('.tk-bell__visual').getByRole('status');
+    const ringing = bellPage.locator('.tk-bell[data-ringing="true"]');
+    const bellHeader = bellPage.locator(SHEET_CONTENT).locator('.tk-sheet-title-row');
+    assert.equal(await bellHeader.getByRole('heading', {name: 'Bell'}).count(), 1);
+    assert.equal(await bellHeader.locator('.tk-sheet-sub').textContent(), 'Shake your phone to ring the bell.');
+    assert.equal(await bellPage.evaluate(() => window.bellAudio.opened), 0);
+
+    const simulate = bellPage.locator('mnw-screen-inspector').getByText('Simulate shake', {exact: true});
+    await simulate.click();
+    await ringing.waitFor();
+    assert.equal(await bell.locator('.tk-bell__face md-icon').evaluate(el => el.getAnimations().length), 0);
+    const reducedWave = await bell.locator('.tk-bell__waves').evaluate(el => ({
+      animations: el.getAnimations().length,
+      opacity: Number(getComputedStyle(el, '::before').opacity),
+    }));
+    assert.deepEqual(reducedWave, {animations: 0, opacity: 0.75});
+    assert.equal(await status.getAttribute('data-visible'), 'false');
+    assert.equal(await status.evaluate(el => getComputedStyle(el).clipPath), 'inset(50%)');
+    await bellPage.clock.fastForward(1800);
+    await ringing.waitFor({state: 'hidden'});
+    assert.equal(await bellPage.evaluate(() => window.bellAudio.closed), 0);
+
+    const ring = bell.getByRole('button', {name: 'Ring bell'});
+    await ring.focus();
+    await bellPage.keyboard.press('Enter');
+    await ringing.waitFor();
+    await ring.evaluate(el => {
+      for (let tap = 0; tap < 4; tap++) el.click();
+    });
+    await bellPage.waitForFunction(() => window.bellAudio.strikes.length === 6);
+    const audio = await bellPage.evaluate(() => window.bellAudio);
+    assert.equal(audio.opened, 1);
+    assert.ok(audio.stopped >= 1);
+    assert.ok(audio.strikes.every(({duration}) => duration > 1.4 && duration < 1.6));
+    assert.deepEqual(audio.strikes.map(({detune}) => detune), [-9, 9, -9, 9, -9, 9]);
+    await bellPage.locator(SHEET_CONTENT).getByRole('button', {name: 'Close'}).click();
+    await bellPage.waitForFunction(() => window.bellAudio.closed === 1);
+
+    const bellStateUrl = state => `${bellUrl}&panel=none&state=${encodeURIComponent(JSON.stringify({activeToolId: 'bell', ...state}))}`;
+    await bellPage.goto(bellStateUrl({bellMotionAvailable: false}));
+    await bellHeader.getByText('Shake detection is unavailable on this device.').waitFor();
+    await ring.click();
+    await ringing.waitFor();
+
+    await bellPage.goto(bellStateUrl({bellCapture: true}));
+    await ringing.waitFor();
+    await bellPage.clock.fastForward(600);
+    assert.equal(await status.textContent(), 'Ringing');
+    assert.equal(await bellPage.evaluate(() => window.bellAudio.opened), 0);
+    await bellPage.emulateMedia({reducedMotion: 'no-preference'});
+    for (const window of ['phone', 'fold', 'desktop']) {
+      for (const theme of ['light', 'dark']) {
+        await bellPage.goto(`${bellStateUrl({})}&window=${window}&theme=${theme}`);
+        await ring.click();
+        await ringing.waitFor();
+        const face = bell.locator('.tk-bell__face');
+        const timings = await bell.evaluate(el => {
+          const animatedParts = [
+            el.querySelector('.tk-bell__face md-icon'),
+            el.querySelector('.tk-bell__waves'),
+          ];
+          return animatedParts.flatMap(part => part.getAnimations()).map(animation => ({
+            id: animation.id,
+            duration: animation.effect.getTiming().duration,
+            delay: animation.effect.getTiming().delay,
+            lateImpact: animation.effect.getKeyframes().some(frame => frame.offset > 0.55 && frame.offset < 0.59),
+          }));
+        });
+        assert.deepEqual(timings.map(({id}) => id), ['bell-swing', 'bell-wave']);
+        assert.equal(await bellHeader.locator('.tk-shape-badge').evaluate(el => el.getAnimations({subtree: true}).length), 0);
+        assert.ok(timings.every(({duration, delay, lateImpact}) =>
+          duration > 1490 && duration < 1520 && delay === timings[0].delay && lateImpact));
+        const sheetBounds = await bellPage.locator(SHEET).boundingBox();
+        const faceBounds = await face.boundingBox();
+        assert.ok(faceBounds.x >= sheetBounds.x && faceBounds.x + faceBounds.width <= sheetBounds.x + sheetBounds.width);
+        checks++;
+      }
+    }
+    await bellPage.close();
+    checks++;
+  }
+  {
     const playPage=await browser.newPage({viewport:{width:1280,height:1100},reducedMotion:'reduce',hasTouch:true});
     await playPage.goto(`${base}/screen.html?id=play&panel=none`);
     await playPage.locator('[data-tool="decision_wheel"]').click();

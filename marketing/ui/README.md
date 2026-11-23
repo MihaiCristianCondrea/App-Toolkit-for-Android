@@ -150,6 +150,12 @@ Decision Wheel no longer has preset chips. SOS uses separate SOS and Morse-messa
 
 The prototype's Show ads switch reveals one shared sponsored-content layout on each overview: Quick Tools after Sensors, Measure between Convert & split and Count & time, and Play & Decide below Chance. Search hides these previews. They are static layout samples, not live ad requests, and are absent when Show ads is off.
 
+## Bell design preview
+
+Open Play & Decide and choose Bell under Toys. The tool sheet pairs a filled bell on the nine-sided cookie shape with the shake instruction and Ring bell button. The layout stacks on phones and places the bell beside the controls in wider windows. In the preview inspector, open the Bell sheet and use Simulate shake. The Bell without motion and Bell ringing (silent capture) presets cover the fallback and a fixed ringing pose. The browser uses a trimmed, mono edit of [Bell Ring by Universfield](https://pixabay.com/sound-effects/film-special-effects-bell-ring-123742/) under the [Pixabay Content License](https://pixabay.com/service/license-summary/).
+
+The design proposes one chime per deliberate shake while the sheet is open and the sample app is in the foreground. Rapid taps play immediately, with up to three overlapping strikes and small pitch and volume variations. Dismissal or backgrounding stops the audio. The large bell swings at the recorded impacts. The sound arcs pulse at each impact, and the motion settles with the playback tail. Reduced motion shows still sound arcs during the chime. A live status announces the ring to assistive technology. Keep the Ring bell button available on devices without a motion sensor.
+
 ## Water Eject captures
 
 `waterCapture: true` holds an explicit `waterRunning` / `waterSeconds` state without starting audio, creating a timer or resetting the running preview. Use it for stills and deterministic checks. The idle and running readouts, 200dp visual, button labels, guidance and note follow `WaterEjectTool.kt` and the sample's English resources. `scripts/check-water-eject.mjs` checks ready and running copy, a stable countdown and silent capture behavior.
