@@ -12,9 +12,14 @@
   active. Advanced settings uses it to ignore repeated Clear cache requests.
 - `AppOpenAdController.showAdIfAvailable(activity, scope, onShowAdCompleteListener)` exposes the
   completion callback directly, and `OnShowAdCompleteListener` is now a `fun interface`.
+- `BillingRepository.purchaseEvents` emits each billing outcome as a `PurchaseEvent` with the
+  product IDs it concerns. `purchaseResult` keeps emitting the same outcomes without IDs.
 
 ### Fixed
 
+- Support keeps the current checkout open when a different product settles, still reports a
+  donation's result when Play answers after the 20-second launch wait, and reports an already-owned
+  donation's recovery once.
 - The list-detail scene ignores a second close while one plays, so back no longer pops the list
   page too. Restored tab history is dropped when an update changed the tabs. The navigation display,
   beside-navigation and list-detail scenes no longer write state during composition.
@@ -190,10 +195,6 @@
 - `LocalSelectedDetail` from `:library:navigation`, which no screen read.
 - Remove the unused `LibraryExtrasScreen` placeholder and `LibraryExtrasRoute` key. Use
   `LicensesScreen` from `:library:feature:licenses` and `:library:navigation` instead.
-
-### Fixed
-
-- `BillingRepository.purchaseEvents` identifies the products in each outcome. Support keeps the current checkout open when another product settles. Recovering an already-owned donation reports its settlement once.
 
 ---
 

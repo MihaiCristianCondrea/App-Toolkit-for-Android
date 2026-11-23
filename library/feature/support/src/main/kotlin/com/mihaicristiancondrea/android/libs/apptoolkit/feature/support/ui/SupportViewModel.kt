@@ -129,8 +129,9 @@ class SupportViewModel(
                 showMessage(error.toErrorMessage(fallback = GenericErrorText))
             },
         ) { event ->
-            val activeProduct = checkoutProductId
-            if (activeProduct == null || event.productIds == null || activeProduct in event.productIds.orEmpty()) {
+            val activeProduct: String? = checkoutProductId
+            val productIds: List<String>? = event.productIds
+            if (activeProduct == null || productIds == null || activeProduct in productIds) {
                 onPurchaseResult(result = event.result)
             }
         }
@@ -198,7 +199,7 @@ class SupportViewModel(
                     details = details,
                 )
                 delay(BillingLaunchTimeout)
-                checkoutProductId = null
+                // The sheet may still be open, so keep the checkout and report its result when it arrives.
                 setState { copy(isBillingInProgress = false) }
             }
         }

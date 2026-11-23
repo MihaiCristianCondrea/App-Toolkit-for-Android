@@ -71,7 +71,10 @@ flowchart TD
   and settled before success is emitted.
 - `PurchaseResult.Failed` carries a typed `reason` for the screen to choose localized text, and
   Play's `debugMessage` for diagnostics only; Google documents that message as not meant for users.
-- `purchaseEvents` includes the product IDs for purchase callbacks and settlement. An empty list identifies an outcome without a product. `purchaseResult` exposes the same outcomes without product IDs for existing collectors.
+- `purchaseEvents` carries the product IDs of each outcome. A failure or cancel from Play's
+  callback belongs to the product whose sheet is open. An empty list marks an outcome that belongs
+  to no known product. A null list comes from the interface default, used by an implementation
+  that does not identify products. `purchaseResult` exposes the same outcomes without product IDs.
 - Product details replay the latest query result; purchase outcomes are buffered one-off events
   that do not replay or park coroutines when no UI is collecting.
 - `launchInAppDonationFlow` and `launchSubscriptionFlow` validate `Activity.isValidForBilling()`

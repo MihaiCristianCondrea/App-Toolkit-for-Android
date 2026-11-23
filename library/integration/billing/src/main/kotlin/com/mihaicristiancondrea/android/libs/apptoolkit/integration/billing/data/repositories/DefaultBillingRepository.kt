@@ -35,8 +35,8 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.coroutines.d
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.telemetry.DiagnosticsReporter
 import com.mihaicristiancondrea.android.libs.apptoolkit.integration.billing.data.constants.BillingRetryConstants
 import com.mihaicristiancondrea.android.libs.apptoolkit.integration.billing.data.extensions.isValidForBilling
-import com.mihaicristiancondrea.android.libs.apptoolkit.integration.billing.data.models.PurchaseResult
 import com.mihaicristiancondrea.android.libs.apptoolkit.integration.billing.data.models.PurchaseEvent
+import com.mihaicristiancondrea.android.libs.apptoolkit.integration.billing.data.models.PurchaseResult
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.SupervisorJob
@@ -45,8 +45,8 @@ import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.asSharedFlow
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
@@ -85,13 +85,28 @@ class DefaultBillingRepository internal constructor(
     override val purchaseEvents: Flow<PurchaseEvent> = _purchaseResult.asSharedFlow()
     override val purchaseResult: Flow<PurchaseResult> = purchaseEvents.map { it.result }
 
+    /**
+     * The product whose purchase sheet is open. Play's failure and cancel callbacks carry no
+     * product, so they are attributed to it. The next callback, or a launch that fails, clears it.
+     */
     @Volatile
     private var launchedProductId: String? = null
 
-    /** Keeps a token claimed during and after settlement so callbacks and recovery cannot settle it twice. */
+    /**
+     * Purchase tokens whose consumption or acknowledgement is in flight or has succeeded.
+     *
+     * One purchase can reach [handlePurchases] from the purchase callback and from
+     * [processPastPurchases] at the same time. Consuming a token twice fails the second call with
+     * `ITEM_NOT_OWNED`, which would show a failure right after the success. A token leaves the set
+     * only when settling it fails, so a later pass can retry it.
+     */
     private val settlingTokens: MutableSet<String> = ConcurrentHashMap.newKeySet()
 
-    /** Remembers the type at launch because Play's purchase callback omits it. */
+    /**
+     * Product type of every product launched here, keyed by product id. [Purchase] does not carry
+     * its type, yet consuming a subscription fails, and Play refunds a subscription that is not
+     * acknowledged within three days.
+     */
     private val launchedProductTypes: MutableMap<String, String> = ConcurrentHashMap()
 
     private val billingClient: BillingClient = billingClientFactory(context, this)
@@ -162,12 +177,14 @@ class DefaultBillingRepository internal constructor(
         purchases: MutableList<Purchase>?,
     ) {
         if ((billingResult.responseCode == BillingClient.BillingResponseCode.OK) && (purchases != null)) {
+            launchedProductId = null
             handlePurchases(purchases = purchases)
             return
         }
 
-        val productId = launchedProductId
-        val productIds = listOfNotNull(productId)
+        val productId: String? = launchedProductId
+        launchedProductId = null
+        val productIds: List<String> = listOfNotNull(productId)
         scope.launch {
             when (billingResult.responseCode) {
                 BillingClient.BillingResponseCode.USER_CANCELED ->
@@ -284,6 +301,7 @@ class DefaultBillingRepository internal constructor(
         }
     }
 
+    /** Play Billing answers through its own callbacks, so the queries need no dispatcher switch. */
     override suspend fun processPastPurchases() {
         processPastPurchasesAndReportHandled()
     }
@@ -313,7 +331,8 @@ class DefaultBillingRepository internal constructor(
                     handlePurchases(purchases = purchases, productType = productType, expectedProductId = expectedProductId)
                 } ?: false
 
-            // Play can omit subscription support while still returning one-time purchases.
+            // A device without subscription support has no subscriptions to recover, so this is
+            // not a failure to show the user.
             (productType == BillingClient.ProductType.SUBS) &&
                 (responseCode == BillingClient.BillingResponseCode.FEATURE_NOT_SUPPORTED) -> false
 
@@ -333,6 +352,7 @@ class DefaultBillingRepository internal constructor(
         }
     }
 
+    /** Play Billing answers through its own callbacks, so the query needs no dispatcher switch. */
     override suspend fun queryProductDetails(productIds: List<String>) {
         if (productIds.isEmpty()) {
             _productDetails.emit(value = emptyMap())
@@ -461,6 +481,7 @@ class DefaultBillingRepository internal constructor(
                     }
 
                     override fun onBillingServiceDisconnected() {
+                        // Handled by auto reconnection and retryBillingConnection.
                     }
                 },
             )
@@ -507,6 +528,7 @@ class DefaultBillingRepository internal constructor(
             )
 
             if (billingResult.responseCode != BillingClient.BillingResponseCode.OK) {
+                launchedProductId = null
                 val result: PurchaseResult = when (billingResult.responseCode) {
                     BillingClient.BillingResponseCode.USER_CANCELED -> PurchaseResult.UserCancelled
                     else -> billingResult.toFailureResult()
@@ -522,6 +544,7 @@ class DefaultBillingRepository internal constructor(
                 }
             }
         }.onFailure { throwable ->
+            launchedProductId = null
             diagnostics.recordNonFatal(
                 throwable = throwable,
                 attributes = mapOf(
@@ -537,6 +560,7 @@ class DefaultBillingRepository internal constructor(
     override fun close() {
         scope.cancel()
         billingClient.endConnection()
+        // A closed client cannot reconnect, so the next getInstance must build a new repository.
         clearInstance(closed = this)
     }
 

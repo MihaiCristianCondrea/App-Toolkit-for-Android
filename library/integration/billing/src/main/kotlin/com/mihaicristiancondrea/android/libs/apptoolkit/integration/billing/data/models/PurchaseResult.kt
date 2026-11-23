@@ -17,7 +17,13 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.integration.billing.data.models
 
-/** A billing outcome and the products it concerns. Null identifies a legacy unscoped event. */
+/**
+ * A billing outcome and the products it concerns.
+ *
+ * @property productIds The products [result] concerns. Empty when the outcome belongs to no known
+ * product, such as a callback that arrives without a launch in this process. Null when the
+ * implementation does not identify products, as the default `BillingRepository.purchaseEvents` does.
+ */
 data class PurchaseEvent(val result: PurchaseResult, val productIds: List<String>?)
 
 /**

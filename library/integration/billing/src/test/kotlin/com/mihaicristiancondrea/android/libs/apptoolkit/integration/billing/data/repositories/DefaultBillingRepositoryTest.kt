@@ -33,6 +33,7 @@ import com.android.billingclient.api.PurchasesUpdatedListener
 import com.android.billingclient.api.QueryProductDetailsResult
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.coroutines.dispatchers.DispatcherProvider
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.telemetry.DiagnosticsReporter
+import com.mihaicristiancondrea.android.libs.apptoolkit.integration.billing.data.models.PurchaseEvent
 import com.mihaicristiancondrea.android.libs.apptoolkit.integration.billing.data.models.PurchaseResult
 import io.mockk.every
 import io.mockk.justRun
@@ -441,6 +442,34 @@ class DefaultBillingRepositoryTest {
             harness.listener.onPurchasesUpdated(billingResult(BillingClient.BillingResponseCode.ITEM_ALREADY_OWNED), null)
             advanceUntilIdle()
             assertEquals(listOf(PurchaseResult.Success), results)
+        } finally {
+            collector.cancel()
+            harness.repository.close()
+        }
+    }
+
+    @Test
+    fun `a cancel is attributed to the launched product only once`() = runTest {
+        val harness = createHarness(isReady = true)
+        every { harness.client.launchBillingFlow(any(), any()) } returns
+            billingResult(code = BillingClient.BillingResponseCode.OK)
+        val events = mutableListOf<PurchaseEvent>()
+        val collector = launch { harness.repository.purchaseEvents.collect(events::add) }
+        advanceUntilIdle()
+        try {
+            harness.repository.launchInAppDonationFlow(validActivity(), mockInAppProduct())
+
+            harness.listener.onPurchasesUpdated(billingResult(BillingClient.BillingResponseCode.USER_CANCELED), null)
+            harness.listener.onPurchasesUpdated(billingResult(BillingClient.BillingResponseCode.USER_CANCELED), null)
+            advanceUntilIdle()
+
+            assertEquals(
+                listOf(
+                    PurchaseEvent(PurchaseResult.UserCancelled, listOf("donation_low")),
+                    PurchaseEvent(PurchaseResult.UserCancelled, emptyList()),
+                ),
+                events,
+            )
         } finally {
             collector.cancel()
             harness.repository.close()

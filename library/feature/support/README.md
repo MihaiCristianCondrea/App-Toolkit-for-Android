@@ -80,8 +80,9 @@ flowchart TD
 - The purchase needs the activity, which the screen reads from `LocalActivity.current` and sends
   in `SupportEvent.Donate`. The ViewModel drops its reference once Play has it.
 - A purchase launch is guarded against invalid activities and duplicate taps. The buttons stay
-  disabled until a result for the selected product arrives, or for 20 seconds so an absent SDK callback cannot leave the
-  page busy.
+  disabled until a result for the selected product arrives, or for 20 seconds so an absent SDK
+  callback cannot leave the page busy. A result that arrives after those 20 seconds is still
+  shown and reported.
 - `SupportScreenContent` opens nothing. The donation and web ad taps reach `SupportScreen` as
   callbacks, and each button logs the same GA4 tap event as before through its `ga4Event`.
 

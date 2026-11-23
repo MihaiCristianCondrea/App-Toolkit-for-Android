@@ -2,7 +2,7 @@ App Toolkit brings practical Android tools together in one simple, easy-to-use a
 
 Explore three main sections: Quick Tools for everyday utilities and live sensors, Measure for calculations and measurements, and Play & Decide for random choices and interactive tools.
 
-From a compass and bubble level to a flashlight, ruler, unit converter, counter, reaction test, and decision wheel, App Toolkit makes everyday tasks easier. Many tools can be used directly from their interactive widgets, while others offer additional controls when opened.
+From a compass and bubble level to a flashlight, ruler, unit converter, counter, reaction test, decision wheel, and a shake-to-ring bell, App Toolkit makes everyday tasks easier. Many tools can be used directly from their interactive widgets, while others offer additional controls when opened.
 
 Features
 
@@ -26,6 +26,7 @@ Features
 • Random Number Picker: Generate random numbers within a custom range or choose from quick presets.
 • Coin Flip: Flip an animated coin whenever you need a quick decision.
 • Dice Roll: Roll a 3D animated die directly from the app.
+• Bell: Shake your phone to ring a bell, or tap Ring bell on devices without a motion sensor.
 
 📱 Colors & Quick Access
 • Material Colors Explorer: Explore the app's color palette and supported Android system colors, with options to copy color values.
