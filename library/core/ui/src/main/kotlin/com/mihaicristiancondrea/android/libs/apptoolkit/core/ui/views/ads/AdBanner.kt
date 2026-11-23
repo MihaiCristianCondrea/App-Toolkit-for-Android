@@ -85,7 +85,7 @@ fun AdBanner(
     val isToolkitSdkReady: Boolean by AdsSdkState.isReady.collectAsStateWithLifecycle()
 
     val adView: AdView? = remember(adsConfig.bannerAdUnitId, adsConfig.adSize, isToolkitSdkReady) {
-        if (!AdsSdkState.canRequestAds()) {
+        if (!AdsSdkState.isSdkInitialized()) {
             null
         } else {
             runCatching { AdView(context) }

@@ -107,6 +107,8 @@
 
 ### Changed
 
+- `AdsSdkState.canRequestAds()` is renamed `isSdkInitialized()`, since it reports SDK
+  initialization, not consent.
 - `:library:navigation` makes `CrossActivityBackMotion`, `ActivityTransitions`, `ActivityMotion`,
   `PageScene`, `PageSurface`, `rememberDeviceCornerShape` and `ShellMotion.activity` internal, and
   shares one set of motion constants between the transitions and the back motion. `pageIfAbsent`
