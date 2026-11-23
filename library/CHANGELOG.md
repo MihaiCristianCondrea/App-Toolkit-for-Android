@@ -2,14 +2,6 @@
 
 ---
 
-# Unreleased
-
-### Fixed
-
-- `BillingRepository.purchaseEvents` identifies the products in each outcome. Support keeps the current checkout open when another product settles. Recovering an already-owned donation reports its settlement once.
-
----
-
 # November 23, 2026
 
 **Version:** `3.0.0-rc1`
@@ -198,6 +190,10 @@
 - `LocalSelectedDetail` from `:library:navigation`, which no screen read.
 - Remove the unused `LibraryExtrasScreen` placeholder and `LibraryExtrasRoute` key. Use
   `LicensesScreen` from `:library:feature:licenses` and `:library:navigation` instead.
+
+### Fixed
+
+- `BillingRepository.purchaseEvents` identifies the products in each outcome. Support keeps the current checkout open when another product settles. Recovering an already-owned donation reports its settlement once.
 
 ---
 
