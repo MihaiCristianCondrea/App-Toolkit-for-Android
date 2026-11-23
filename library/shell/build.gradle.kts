@@ -70,7 +70,6 @@ dependencies {
     // are part of what an app using the shell writes against.
     api(project(":library:navigation"))
     api(project(":library:core:ui"))
-    implementation(project(":library:core:datastore"))
 
     // The shell's own settings store, and the `storageCall` and `StorageException` it reports with.
     implementation(project(":library:core:common"))
