@@ -414,6 +414,40 @@ class DefaultBillingRepositoryTest {
     }
 
     @Test
+    fun `already owned donation emits only its recovered success`() = runTest {
+        val harness = createHarness()
+        val purchase: Purchase = mockPurchase(
+            token = "token-inapp-1",
+            products = listOf("donation_low"),
+        )
+        every { harness.client.queryPurchasesAsync(any(), any()) } answers {
+            secondArg<PurchasesResponseListener>().onQueryPurchasesResponse(
+                billingResult(code = BillingClient.BillingResponseCode.OK),
+                listOf(purchase),
+            )
+        }
+        every { harness.client.consumeAsync(any(), any()) } answers {
+            secondArg<ConsumeResponseListener>().onConsumeResponse(
+                billingResult(code = BillingClient.BillingResponseCode.OK),
+                "token-inapp-1",
+            )
+        }
+        val results = mutableListOf<PurchaseResult>()
+        val collector = launch { harness.repository.purchaseResult.collect(results::add) }
+        advanceUntilIdle()
+        try {
+            harness.repository.launchInAppDonationFlow(validActivity(), mockInAppProduct())
+
+            harness.listener.onPurchasesUpdated(billingResult(BillingClient.BillingResponseCode.ITEM_ALREADY_OWNED), null)
+            advanceUntilIdle()
+            assertEquals(listOf(PurchaseResult.Success), results)
+        } finally {
+            collector.cancel()
+            harness.repository.close()
+        }
+    }
+
+    @Test
     fun `close ends BillingClient connection`() = runTest {
         val harness = createHarness()
 

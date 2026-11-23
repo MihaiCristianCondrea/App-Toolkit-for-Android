@@ -68,6 +68,12 @@ import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.Reactio
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.RulerToolSheet
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.SosToolSheet
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.UnitConverterToolSheet
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.compose.LifecycleResumeEffect
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.BellToolViewModel
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.contracts.BellToolEvent
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.tools.BellTool
+import org.koin.compose.viewmodel.koinViewModel
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.WaterEjectToolSheet
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.DecisionWheelToolSheet
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.catalog.TileIconBadge
@@ -129,8 +135,22 @@ fun ToolkitToolBottomSheet(
                     .padding(SizeConstants.LargeSize),
                 verticalArrangement = Arrangement.spacedBy(SizeConstants.LargeSize),
             ) {
-                ToolSheetHeader(tile = tile, onClose = onClose)
-                ToolInteractiveContent(tile = tile, startReaction = startReaction)
+                if (tile.id == ToolkitTileIds.BELL) {
+                    val bell: BellToolViewModel = koinViewModel()
+                    val state = bell.state.collectAsStateWithLifecycle().value
+                    LifecycleResumeEffect(bell) {
+                        bell.onEvent(BellToolEvent.Open)
+                        onPauseOrDispose { bell.onEvent(BellToolEvent.Close) }
+                    }
+                    ToolSheetHeader(
+                        tile = if (state.motionAvailable) tile else tile.copy(summaryResId = R.string.bell_motion_unavailable),
+                        onClose = onClose,
+                    )
+                    BellTool(state = state, onRing = { bell.onEvent(BellToolEvent.Ring) })
+                } else {
+                    ToolSheetHeader(tile = tile, onClose = onClose)
+                    ToolInteractiveContent(tile = tile, startReaction = startReaction)
+                }
                 ToolIntegrationSection(
                     tile = tile,
                     onAddTile = onAddTile,

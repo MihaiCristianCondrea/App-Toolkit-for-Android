@@ -29,4 +29,5 @@ internal val MeasureTools = listOf(
 
 internal val PlayTools = listOf(
     ToolkitTileIds.DECISION_WHEEL, ToolkitTileIds.RANDOM_NUMBER, ToolkitTileIds.COIN_FLIP, ToolkitTileIds.DICE_ROLL,
+    ToolkitTileIds.BELL,
 ).map { ToolkitTileData(id = it, status = com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.models.ToolkitTileStatus.Available, requestKey = if (it == ToolkitTileIds.COIN_FLIP || it == ToolkitTileIds.DICE_ROLL) it else null).toToolkitTile() }.toImmutableList()

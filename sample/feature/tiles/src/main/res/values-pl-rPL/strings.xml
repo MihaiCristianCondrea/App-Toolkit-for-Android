@@ -261,4 +261,13 @@
     <string name="random_range">Zakres liczb</string>
     <string name="random_inclusive">Obie granice są uwzględnione.</string>
     <string name="tool_converter_unit">Jednostka</string>
+
+    <string name="section_toys">Zabawki</string>
+    <string name="bell_title">Dzwonek</string>
+    <string name="bell_summary">Potrząśnij telefonem, aby zadzwonić.</string>
+    <string name="bell_card_note">Potrząśnij, aby zadzwonić</string>
+    <string name="bell_ring">Zadzwoń</string>
+    <string name="bell_motion_unavailable">To urządzenie nie wykrywa potrząsania.</string>
+    <string name="bell_audio_unavailable">Dźwięk dzwonka jest niedostępny.</string>
+    <string name="bell_ringing">Dzwonek dzwoni</string>
 </resources>

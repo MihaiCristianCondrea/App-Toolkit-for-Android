@@ -2,6 +2,14 @@
 
 ---
 
+# Unreleased
+
+### Fixed
+
+- `BillingRepository.purchaseEvents` identifies the products in each outcome. Support keeps the current checkout open when another product settles. Recovering an already-owned donation reports its settlement once.
+
+---
+
 # November 23, 2026
 
 **Version:** `3.0.0-rc1`

@@ -20,8 +20,10 @@ package com.mihaicristiancondrea.android.libs.apptoolkit.integration.billing.dat
 import android.app.Activity
 import com.android.billingclient.api.ProductDetails
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.BillingCore
+import com.mihaicristiancondrea.android.libs.apptoolkit.integration.billing.data.models.PurchaseEvent
 import com.mihaicristiancondrea.android.libs.apptoolkit.integration.billing.data.models.PurchaseResult
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 
 /**
  * Public billing contract for the toolkit.
@@ -50,6 +52,10 @@ interface BillingRepository : BillingCore {
 
     /** Outcome of each purchase attempt, including failures reported by the Play Billing library. */
     val purchaseResult: Flow<PurchaseResult>
+
+    /** Outcomes with product identity when supplied by the billing implementation. */
+    val purchaseEvents: Flow<PurchaseEvent>
+        get() = purchaseResult.map { PurchaseEvent(it, null) }
 
     /** Loads details for [productIds] and publishes them through [productDetails]. */
     suspend fun queryProductDetails(productIds: List<String>)

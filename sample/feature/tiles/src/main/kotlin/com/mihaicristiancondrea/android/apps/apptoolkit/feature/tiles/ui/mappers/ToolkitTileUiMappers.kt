@@ -58,6 +58,7 @@ private fun String.categoryVisuals(): CategoryVisuals = when (this) {
     "sensors" -> CategoryVisuals(R.string.section_sensors, ToolkitTileIcon.Compass)
     "utilities" -> CategoryVisuals(R.string.tiles_category_utilities, ToolkitTileIcon.Dice)
     "chance" -> CategoryVisuals(R.string.section_chance, ToolkitTileIcon.Dice)
+    "toys" -> CategoryVisuals(R.string.section_toys, ToolkitTileIcon.Toys)
     "measure" -> CategoryVisuals(R.string.measure_title, ToolkitTileIcon.Ruler)
     "sound" -> CategoryVisuals(R.string.section_sound, ToolkitTileIcon.Water)
     "system" -> CategoryVisuals(R.string.section_light, ToolkitTileIcon.FlashDimmer)
@@ -69,6 +70,7 @@ private fun String.categoryVisuals(): CategoryVisuals = when (this) {
 private fun String.tileVisuals(): TileVisuals = when (this) {
     ToolkitTileIds.DECISION_WHEEL -> TileVisuals(R.string.wheel_title, R.string.wheel_summary, ToolkitTileIcon.Wheel)
     ToolkitTileIds.WATER_EJECT -> TileVisuals(R.string.water_title, R.string.water_summary, ToolkitTileIcon.Water)
+    ToolkitTileIds.BELL -> TileVisuals(R.string.bell_title, R.string.bell_summary, ToolkitTileIcon.Bell)
     ToolkitTileIds.BUBBLE_LEVEL -> TileVisuals(
         R.string.tile_bubble_level_title,
         R.string.tile_bubble_level_summary,

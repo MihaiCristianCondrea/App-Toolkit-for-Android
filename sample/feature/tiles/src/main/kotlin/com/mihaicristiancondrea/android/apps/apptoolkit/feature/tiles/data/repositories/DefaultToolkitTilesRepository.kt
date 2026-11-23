@@ -107,6 +107,7 @@ class DefaultToolkitTilesRepository(
             tile(ToolkitTileIds.COIN_FLIP, requestKey = ToolkitTileIds.COIN_FLIP),
             tile(ToolkitTileIds.DICE_ROLL, requestKey = ToolkitTileIds.DICE_ROLL),
         )),
+        ToolkitTileCategoryData(id = "toys", tiles = persistentListOf(tile(ToolkitTileIds.BELL))),
         ToolkitTileCategoryData(id = "measure", tiles = persistentListOf(
             tile(ToolkitTileIds.RULER), tile(ToolkitTileIds.PROTRACTOR), tile(ToolkitTileIds.UNIT_CONVERTER),
             tile(ToolkitTileIds.BILL_SPLITTER), tile(ToolkitTileIds.COUNTER, requestKey = ToolkitTileIds.COUNTER),

@@ -36,6 +36,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.telemetry.Di
 import com.mihaicristiancondrea.android.libs.apptoolkit.integration.billing.data.constants.BillingRetryConstants
 import com.mihaicristiancondrea.android.libs.apptoolkit.integration.billing.data.extensions.isValidForBilling
 import com.mihaicristiancondrea.android.libs.apptoolkit.integration.billing.data.models.PurchaseResult
+import com.mihaicristiancondrea.android.libs.apptoolkit.integration.billing.data.models.PurchaseEvent
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.SupervisorJob
@@ -44,6 +45,7 @@ import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Mutex
@@ -54,14 +56,9 @@ import java.util.concurrent.atomic.AtomicBoolean
 import kotlin.time.Duration.Companion.milliseconds
 
 /**
- * Process-scoped Play Billing implementation.
+ * Shares one Play Billing client per process and settles outstanding purchases on connection.
  *
- * The repository owns one [BillingClient], reconnects with bounded retries, replays the latest
- * product query, and emits purchase outcomes as one-off events. One-time donations are consumed and
- * subscriptions are acknowledged. Unsettled purchases of both types are recovered on initial
- * connection and later reconnects.
- *
- * Use [getInstance] rather than constructing a second callback/listener graph.
+ * Use [getInstance] to share the client and its purchase listener.
  */
 class DefaultBillingRepository internal constructor(
     context: Context,
@@ -81,32 +78,20 @@ class DefaultBillingRepository internal constructor(
     override val productDetails: Flow<Map<String, ProductDetails>> =
         _productDetails.asSharedFlow()
 
-    private val _purchaseResult = MutableSharedFlow<PurchaseResult>(
+    private val _purchaseResult = MutableSharedFlow<PurchaseEvent>(
         extraBufferCapacity = BillingRetryConstants.PURCHASE_RESULT_BUFFER_CAPACITY,
         onBufferOverflow = BufferOverflow.DROP_OLDEST,
     )
-    override val purchaseResult: Flow<PurchaseResult> =
-        _purchaseResult.asSharedFlow()
+    override val purchaseEvents: Flow<PurchaseEvent> = _purchaseResult.asSharedFlow()
+    override val purchaseResult: Flow<PurchaseResult> = purchaseEvents.map { it.result }
 
-    /**
-     * Purchase tokens whose consumption or acknowledgement is in flight or has succeeded.
-     *
-     * One unsettled purchase can reach [handlePurchases] from several paths at once: the purchase
-     * callback, and [processPastPurchases] on connection and whenever the app resumes, which
-     * returning from Play's purchase screen can trigger. Consuming the same token twice fails the
-     * second call with `ITEM_NOT_OWNED`, which would reach the UI as a failed purchase right after
-     * the successful one. A token leaves the set only when settling it fails, so a later pass can
-     * retry it.
-     */
+    @Volatile
+    private var launchedProductId: String? = null
+
+    /** Keeps a token claimed during and after settlement so callbacks and recovery cannot settle it twice. */
     private val settlingTokens: MutableSet<String> = ConcurrentHashMap.newKeySet()
 
-    /**
-     * Product type of every product launched through [launchBillingFlow], keyed by product id.
-     *
-     * [Purchase] does not carry its product type, yet a purchase reported through
-     * [onPurchasesUpdated] must be settled the way its type requires: consuming a subscription
-     * token fails, and Play refunds a subscription that is not acknowledged within three days.
-     */
+    /** Remembers the type at launch because Play's purchase callback omits it. */
     private val launchedProductTypes: MutableMap<String, String> = ConcurrentHashMap()
 
     private val billingClient: BillingClient = billingClientFactory(context, this)
@@ -181,23 +166,26 @@ class DefaultBillingRepository internal constructor(
             return
         }
 
+        val productId = launchedProductId
+        val productIds = listOfNotNull(productId)
         scope.launch {
             when (billingResult.responseCode) {
                 BillingClient.BillingResponseCode.USER_CANCELED ->
-                    emitPurchaseResult(result = PurchaseResult.UserCancelled)
+                    emitPurchaseResult(result = PurchaseResult.UserCancelled, productIds = productIds)
 
                 BillingClient.BillingResponseCode.ITEM_ALREADY_OWNED,
                 BillingClient.BillingResponseCode.ITEM_NOT_OWNED,
                 -> {
-                    processPastPurchases()
-                    emitPurchaseResult(result = billingResult.toFailureResult())
+                    if (!processPastPurchasesAndReportHandled(productId)) {
+                        emitPurchaseResult(result = billingResult.toFailureResult(), productIds = productIds)
+                    }
                 }
 
                 else -> {
                     if (billingResult.isRetryable()) {
-                        retryPurchaseUpdate(billingResult = billingResult, purchases = purchases)
+                        retryPurchaseUpdate(billingResult = billingResult, purchases = purchases, productId = productId)
                     } else {
-                        emitPurchaseResult(result = billingResult.toFailureResult())
+                        emitPurchaseResult(result = billingResult.toFailureResult(), productIds = productIds)
                     }
                 }
             }
@@ -205,23 +193,21 @@ class DefaultBillingRepository internal constructor(
     }
 
     /**
-     * Settles each completed purchase and reports pending ones.
+     * Reports pending purchases and settles completed ones. A typed query resolves purchases whose
+     * type is unknown.
      *
-     * @param productType The type of every purchase in [purchases], when the caller knows it from
-     * its query. When null the type is looked up in [launchedProductTypes]. A product never launched
-     * in this process, such as a pending purchase completing after a restart or one bought in the
-     * Play Store, is settled by [processPastPurchases], whose queries carry each purchase's type,
-     * rather than guessed: consuming a subscription fails, and an unacknowledged one is refunded.
-     * @return `true` when at least one purchase was queued for settlement or reported pending.
+     * @param productType Type supplied by the purchase query, if available.
+     * @param expectedProductId Limits the result to a specific product when supplied.
+     * @return Whether a matching purchase was pending or needed settlement.
      */
-    private fun handlePurchases(purchases: List<Purchase>, productType: String? = null): Boolean {
+    private fun handlePurchases(purchases: List<Purchase>, productType: String? = null, expectedProductId: String? = null): Boolean {
         var handledAny = false
         var hasUnknownType = false
         purchases.forEach { purchase ->
             when (purchase.purchaseState) {
                 Purchase.PurchaseState.PURCHASED -> {
                     if (!purchase.isAcknowledged) {
-                        handledAny = true
+                        handledAny = handledAny || expectedProductId == null || expectedProductId in purchase.products
                         when (productType ?: purchase.launchedProductType()) {
                             BillingClient.ProductType.SUBS -> acknowledgePurchase(purchase = purchase)
                             BillingClient.ProductType.INAPP -> consumePurchase(purchase = purchase)
@@ -231,8 +217,8 @@ class DefaultBillingRepository internal constructor(
                 }
 
                 Purchase.PurchaseState.PENDING -> {
-                    handledAny = true
-                    emitPurchaseResult(result = PurchaseResult.Pending)
+                    handledAny = handledAny || expectedProductId == null || expectedProductId in purchase.products
+                    emitPurchaseResult(result = PurchaseResult.Pending, productIds = purchase.products)
                 }
 
                 else -> Unit
@@ -269,10 +255,7 @@ class DefaultBillingRepository internal constructor(
         }
     }
 
-    /**
-     * Runs [settle], a consume or acknowledge call, at most once per purchase token at a time, with
-     * retries, and reports the outcome through [purchaseResult].
-     */
+    /** Claims the purchase token before settlement and releases the claim on failure for later recovery. */
     private fun settlePurchase(
         purchase: Purchase,
         settle: (complete: (BillingCallResult<Unit>) -> Unit) -> Unit,
@@ -294,30 +277,24 @@ class DefaultBillingRepository internal constructor(
             }
             when (billingResult.responseCode) {
                 BillingClient.BillingResponseCode.OK ->
-                    emitPurchaseResult(result = PurchaseResult.Success)
+                    emitPurchaseResult(result = PurchaseResult.Success, productIds = purchase.products)
 
-                BillingClient.BillingResponseCode.ITEM_NOT_OWNED -> {
-                    processPastPurchases()
-                    emitPurchaseResult(result = billingResult.toFailureResult())
-                }
-
-                else -> emitPurchaseResult(result = billingResult.toFailureResult())
+                else -> emitPurchaseResult(result = billingResult.toFailureResult(), productIds = purchase.products)
             }
         }
     }
 
-    /** Play Billing answers through its own callbacks, so the queries need no dispatcher switch. */
     override suspend fun processPastPurchases() {
         processPastPurchasesAndReportHandled()
     }
 
-    private suspend fun processPastPurchasesAndReportHandled(): Boolean {
-        val handledInApp: Boolean = processPastPurchases(productType = BillingClient.ProductType.INAPP)
-        val handledSubs: Boolean = processPastPurchases(productType = BillingClient.ProductType.SUBS)
+    private suspend fun processPastPurchasesAndReportHandled(expectedProductId: String? = null): Boolean {
+        val handledInApp: Boolean = processPastPurchases(productType = BillingClient.ProductType.INAPP, expectedProductId = expectedProductId)
+        val handledSubs: Boolean = processPastPurchases(productType = BillingClient.ProductType.SUBS, expectedProductId = expectedProductId)
         return handledInApp || handledSubs
     }
 
-    private suspend fun processPastPurchases(productType: String): Boolean {
+    private suspend fun processPastPurchases(productType: String, expectedProductId: String?): Boolean {
         val params: QueryPurchasesParams = QueryPurchasesParams.newBuilder()
             .setProductType(productType)
             .build()
@@ -333,11 +310,10 @@ class DefaultBillingRepository internal constructor(
         return when {
             responseCode == BillingClient.BillingResponseCode.OK ->
                 purchasesList?.let { purchases ->
-                    handlePurchases(purchases = purchases, productType = productType)
+                    handlePurchases(purchases = purchases, productType = productType, expectedProductId = expectedProductId)
                 } ?: false
 
-            // A device without subscription support has no subscriptions to recover, so this is
-            // not a failure to show the user.
+            // Play can omit subscription support while still returning one-time purchases.
             (productType == BillingClient.ProductType.SUBS) &&
                 (responseCode == BillingClient.BillingResponseCode.FEATURE_NOT_SUPPORTED) -> false
 
@@ -357,7 +333,6 @@ class DefaultBillingRepository internal constructor(
         }
     }
 
-    /** Play Billing answers through its own callbacks, so the query needs no dispatcher switch. */
     override suspend fun queryProductDetails(productIds: List<String>) {
         if (productIds.isEmpty()) {
             _productDetails.emit(value = emptyMap())
@@ -434,7 +409,7 @@ class DefaultBillingRepository internal constructor(
                     "isChangingConfigurations" to activity.isChangingConfigurations.toString(),
                 ),
             )
-            emitPurchaseResult(result = PurchaseResult.Failed(reason = PurchaseResult.Failed.Reason.LAUNCH_UNAVAILABLE))
+            emitPurchaseResult(result = PurchaseResult.Failed(reason = PurchaseResult.Failed.Reason.LAUNCH_UNAVAILABLE), productIds = listOf(details.productId))
             return
         }
 
@@ -443,13 +418,13 @@ class DefaultBillingRepository internal constructor(
                 message = "Billing flow skipped: missing subscription offer token",
                 attributes = mapOf("productId" to details.productId),
             )
-            emitPurchaseResult(result = PurchaseResult.Failed(reason = PurchaseResult.Failed.Reason.LAUNCH_UNAVAILABLE))
+            emitPurchaseResult(result = PurchaseResult.Failed(reason = PurchaseResult.Failed.Reason.LAUNCH_UNAVAILABLE), productIds = listOf(details.productId))
             return
         }
 
         if (!billingClient.isReady) {
             if (!allowReconnect) {
-                emitPurchaseResult(result = PurchaseResult.Failed(reason = PurchaseResult.Failed.Reason.LAUNCH_UNAVAILABLE))
+                emitPurchaseResult(result = PurchaseResult.Failed(reason = PurchaseResult.Failed.Reason.LAUNCH_UNAVAILABLE), productIds = listOf(details.productId))
                 return
             }
             val activityRef = WeakReference(activity)
@@ -468,6 +443,7 @@ class DefaultBillingRepository internal constructor(
                                     )
                                     emitPurchaseResult(
                                         result = PurchaseResult.Failed(reason = PurchaseResult.Failed.Reason.LAUNCH_UNAVAILABLE),
+                                        productIds = listOf(details.productId),
                                     )
                                     return@launch
                                 }
@@ -480,18 +456,18 @@ class DefaultBillingRepository internal constructor(
                                 )
                             }
                         } else {
-                            emitPurchaseResult(result = billingResult.toFailureResult())
+                            emitPurchaseResult(result = billingResult.toFailureResult(), productIds = listOf(details.productId))
                         }
                     }
 
                     override fun onBillingServiceDisconnected() {
-                        // Handled by auto reconnection and retryBillingConnection.
                     }
                 },
             )
             return
         }
 
+        launchedProductId = details.productId
         launchedProductTypes[details.productId] = productType
 
         diagnostics.logBreadcrumb(
@@ -535,7 +511,15 @@ class DefaultBillingRepository internal constructor(
                     BillingClient.BillingResponseCode.USER_CANCELED -> PurchaseResult.UserCancelled
                     else -> billingResult.toFailureResult()
                 }
-                emitPurchaseResult(result = result)
+                if (billingResult.responseCode == BillingClient.BillingResponseCode.ITEM_ALREADY_OWNED) {
+                    scope.launch {
+                        if (!processPastPurchasesAndReportHandled(details.productId)) {
+                            emitPurchaseResult(result, listOf(details.productId))
+                        }
+                    }
+                } else {
+                    emitPurchaseResult(result, listOf(details.productId))
+                }
             }
         }.onFailure { throwable ->
             diagnostics.recordNonFatal(
@@ -546,20 +530,18 @@ class DefaultBillingRepository internal constructor(
                     "product_type" to productType,
                 ),
             )
-            emitPurchaseResult(result = PurchaseResult.Failed(reason = PurchaseResult.Failed.Reason.LAUNCH_UNAVAILABLE))
+            emitPurchaseResult(result = PurchaseResult.Failed(reason = PurchaseResult.Failed.Reason.LAUNCH_UNAVAILABLE), productIds = listOf(details.productId))
         }
     }
 
     override fun close() {
         scope.cancel()
         billingClient.endConnection()
-        // A closed client cannot reconnect, so the next getInstance must build a new repository
-        // rather than hand back this one.
         clearInstance(closed = this)
     }
 
-    private fun emitPurchaseResult(result: PurchaseResult) {
-        _purchaseResult.tryEmit(value = result)
+    private fun emitPurchaseResult(result: PurchaseResult, productIds: List<String> = emptyList()) {
+        _purchaseResult.tryEmit(value = PurchaseEvent(result, productIds))
     }
 
     private suspend fun retryBillingConnection(maxAttempts: Int = 3) {
@@ -607,12 +589,13 @@ class DefaultBillingRepository internal constructor(
     private suspend fun retryPurchaseUpdate(
         billingResult: BillingResult,
         purchases: List<Purchase>?,
+        productId: String?,
     ) {
         delay(duration = BillingRetryConstants.RETRY_DELAY_SIMPLE_MS.milliseconds)
         if (purchases.isNullOrEmpty()) {
-            val handledAny: Boolean = processPastPurchasesAndReportHandled()
+            val handledAny: Boolean = processPastPurchasesAndReportHandled(productId)
             if (!handledAny) {
-                emitPurchaseResult(result = billingResult.toFailureResult())
+                emitPurchaseResult(result = billingResult.toFailureResult(), productIds = listOfNotNull(productId))
             }
         } else {
             handlePurchases(purchases = purchases)
@@ -667,7 +650,7 @@ class DefaultBillingRepository internal constructor(
 
     private fun BillingResult.isRetryable(): Boolean = responseCode in RETRYABLE_RESPONSE_CODES
 
-    /** Groups Play's response code by what the person can do; Play's message is kept for diagnostics. */
+    /** Maps Play's response to a user-facing reason and preserves its debug message for diagnostics. */
     private fun BillingResult.toFailureResult(): PurchaseResult.Failed {
         val reason: PurchaseResult.Failed.Reason = when (responseCode) {
             BillingClient.BillingResponseCode.NETWORK_ERROR,
@@ -689,11 +672,7 @@ class DefaultBillingRepository internal constructor(
         return PurchaseResult.Failed(reason = reason, debugMessage = debugMessage)
     }
 
-    /**
-     * Resolves the default offer token for [productType]. Subscriptions always require an offer
-     * token; Play Billing 8+ one-time purchase offers may also supply one via
-     * [ProductDetails.oneTimePurchaseOfferDetails] or [ProductDetails.oneTimePurchaseOfferDetailsList].
-     */
+    /** Returns the default offer token for the product type when one is available. */
     private fun ProductDetails.primaryOfferToken(productType: String): String? =
         when (productType) {
             BillingClient.ProductType.SUBS ->

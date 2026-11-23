@@ -261,4 +261,13 @@
     <string name="random_range">Intervallo numerico</string>
     <string name="random_inclusive">Entrambi i limiti sono inclusi.</string>
     <string name="tool_converter_unit">Unità</string>
+
+    <string name="section_toys">Giochi</string>
+    <string name="bell_title">Campanella</string>
+    <string name="bell_summary">Scuoti il telefono per suonare la campanella.</string>
+    <string name="bell_card_note">Scuoti per suonare</string>
+    <string name="bell_ring">Suona la campanella</string>
+    <string name="bell_motion_unavailable">Questo dispositivo non rileva lo scuotimento.</string>
+    <string name="bell_audio_unavailable">Il suono della campanella non è disponibile.</string>
+    <string name="bell_ringing">Campanella in riproduzione</string>
 </resources>

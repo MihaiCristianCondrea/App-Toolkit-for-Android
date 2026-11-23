@@ -261,4 +261,13 @@
     <string name="random_range">숫자 범위</string>
     <string name="random_inclusive">범위의 양 끝값이 포함됩니다.</string>
     <string name="tool_converter_unit">단위</string>
+
+    <string name="section_toys">장난감</string>
+    <string name="bell_title">종</string>
+    <string name="bell_summary">휴대전화를 흔들어 종을 울리세요.</string>
+    <string name="bell_card_note">흔들어 울리기</string>
+    <string name="bell_ring">종 울리기</string>
+    <string name="bell_motion_unavailable">이 기기에서는 흔들기 동작을 감지할 수 없어요.</string>
+    <string name="bell_audio_unavailable">종소리를 재생할 수 없어요.</string>
+    <string name="bell_ringing">종이 울리는 중</string>
 </resources>

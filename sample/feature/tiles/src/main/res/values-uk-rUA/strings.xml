@@ -261,4 +261,13 @@
     <string name="random_range">Діапазон чисел</string>
     <string name="random_inclusive">Обидві межі включено.</string>
     <string name="tool_converter_unit">Одиниця</string>
+
+    <string name="section_toys">Іграшки</string>
+    <string name="bell_title">Дзвіночок</string>
+    <string name="bell_summary">Струсіть телефон, щоб задзеленчав дзвіночок.</string>
+    <string name="bell_card_note">Струсіть, щоб подзвонити</string>
+    <string name="bell_ring">Подзвонити у дзвіночок</string>
+    <string name="bell_motion_unavailable">Цей пристрій не розпізнає струшування.</string>
+    <string name="bell_audio_unavailable">Звук дзвіночка недоступний.</string>
+    <string name="bell_ringing">Дзвіночок дзвенить</string>
 </resources>

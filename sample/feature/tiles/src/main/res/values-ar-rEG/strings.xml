@@ -261,4 +261,13 @@
     <string name="random_range">نطاق الأرقام</string>
     <string name="random_inclusive">يشمل طرفي النطاق.</string>
     <string name="tool_converter_unit">الوحدة</string>
+
+    <string name="section_toys">ألعاب</string>
+    <string name="bell_title">جرس</string>
+    <string name="bell_summary">هز هاتفك ليقرع الجرس.</string>
+    <string name="bell_card_note">هز الهاتف للقرع</string>
+    <string name="bell_ring">اقرع الجرس</string>
+    <string name="bell_motion_unavailable">اكتشاف الاهتزاز غير متاح على هذا الجهاز.</string>
+    <string name="bell_audio_unavailable">صوت الجرس غير متاح.</string>
+    <string name="bell_ringing">الجرس يرن</string>
 </resources>

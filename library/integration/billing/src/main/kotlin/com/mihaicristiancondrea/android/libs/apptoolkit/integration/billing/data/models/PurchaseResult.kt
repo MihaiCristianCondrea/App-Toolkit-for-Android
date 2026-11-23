@@ -17,6 +17,9 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.integration.billing.data.models
 
+/** A billing outcome and the products it concerns. Null identifies a legacy unscoped event. */
+data class PurchaseEvent(val result: PurchaseResult, val productIds: List<String>?)
+
 /**
  * Represents the result of a purchase operation.
  */

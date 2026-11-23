@@ -261,4 +261,13 @@
     <string name="random_range">Számtartomány</string>
     <string name="random_inclusive">Mindkét határérték beletartozik.</string>
     <string name="tool_converter_unit">Egység</string>
+
+    <string name="section_toys">Játékok</string>
+    <string name="bell_title">Csengő</string>
+    <string name="bell_summary">Rázd meg a telefonod a csengetéshez.</string>
+    <string name="bell_card_note">Rázd meg a csengetéshez</string>
+    <string name="bell_ring">Csengetés</string>
+    <string name="bell_motion_unavailable">A rázás érzékelése nem érhető el ezen az eszközön.</string>
+    <string name="bell_audio_unavailable">A csengőhang nem érhető el.</string>
+    <string name="bell_ringing">Cseng</string>
 </resources>

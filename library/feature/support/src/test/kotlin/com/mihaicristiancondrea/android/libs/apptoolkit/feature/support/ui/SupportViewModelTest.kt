@@ -34,7 +34,9 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.feature.support.data.mod
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.support.ui.contracts.SupportEvent
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.support.ui.models.DonationOption
 import com.mihaicristiancondrea.android.libs.apptoolkit.integration.billing.data.repositories.BillingRepository
+import com.mihaicristiancondrea.android.libs.apptoolkit.integration.billing.data.models.PurchaseEvent
 import com.mihaicristiancondrea.android.libs.apptoolkit.integration.billing.data.models.PurchaseResult
+import kotlinx.coroutines.flow.map
 import io.mockk.every
 import io.mockk.mockk
 import kotlinx.collections.immutable.ImmutableMap
@@ -297,6 +299,24 @@ class SupportViewModelTest {
         }
 
     @Test
+    fun `another product settling leaves the current checkout active`() = runTest(dispatcherExtension.testDispatcher) {
+        val billing = FakeBillingRepository()
+        val viewModel = createViewModel(billingRepository = billing)
+        advance()
+        viewModel.donateLow()
+        billing.resultProductIds = listOf(DonationProductIds.HIGH_DONATION)
+        billing.purchaseResults.emit(PurchaseResult.Success)
+        assertTrue(viewModel.state.value.isBillingInProgress)
+        assertTrue(viewModel.messages.value.isEmpty())
+        assertTrue(events("donation_result").isEmpty())
+
+        billing.resultProductIds = listOf(DonationProductIds.LOW_DONATION)
+        billing.purchaseResults.emit(PurchaseResult.Success)
+        assertFalse(viewModel.state.value.isBillingInProgress)
+        assertEquals(1, events("donation_result").size)
+    }
+
+    @Test
     fun `a second tap while a purchase is launching is ignored`() = runTest(dispatcherExtension.testDispatcher) {
         val billing = FakeBillingRepository()
         val viewModel = createViewModel(billingRepository = billing)
@@ -489,6 +509,8 @@ class SupportViewModelTest {
         var queries: Int = 0
 
         override val productDetails: Flow<Map<String, ProductDetails>> = productDetailsFlow
+        var resultProductIds: List<String>? = null
+        override val purchaseEvents = purchaseResults.map { PurchaseEvent(it, resultProductIds) }
         override val purchaseResult: Flow<PurchaseResult> = purchaseResults
 
         override suspend fun queryProductDetails(productIds: List<String>) {

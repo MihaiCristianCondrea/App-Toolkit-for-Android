@@ -25,7 +25,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.telemetry.mo
 /** Only catalogue identifiers may enter product analytics, never tool inputs or results. */
 internal fun toolWorkspace(toolId: String): String = when (toolId) {
     ToolkitTileIds.COIN_FLIP, ToolkitTileIds.DICE_ROLL,
-    ToolkitTileIds.RANDOM_NUMBER, ToolkitTileIds.DECISION_WHEEL -> "play"
+    ToolkitTileIds.RANDOM_NUMBER, ToolkitTileIds.DECISION_WHEEL, ToolkitTileIds.BELL -> "play"
     ToolkitTileIds.RULER, ToolkitTileIds.PROTRACTOR, ToolkitTileIds.UNIT_CONVERTER,
     ToolkitTileIds.BILL_SPLITTER, ToolkitTileIds.COUNTER, ToolkitTileIds.REACTION_TEST -> "measure"
     ToolkitTileIds.COMPASS, ToolkitTileIds.BUBBLE_LEVEL, ToolkitTileIds.FLASH_DIMMER,

@@ -261,4 +261,13 @@
     <string name="random_range">Khoảng số</string>
     <string name="random_inclusive">Bao gồm cả hai đầu của khoảng.</string>
     <string name="tool_converter_unit">Đơn vị</string>
+
+    <string name="section_toys">Đồ chơi</string>
+    <string name="bell_title">Chuông</string>
+    <string name="bell_summary">Lắc điện thoại để rung chuông.</string>
+    <string name="bell_card_note">Lắc để rung chuông</string>
+    <string name="bell_ring">Rung chuông</string>
+    <string name="bell_motion_unavailable">Thiết bị này không phát hiện được thao tác lắc.</string>
+    <string name="bell_audio_unavailable">Không thể phát tiếng chuông.</string>
+    <string name="bell_ringing">Chuông đang reo</string>
 </resources>

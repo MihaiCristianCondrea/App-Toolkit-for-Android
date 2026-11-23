@@ -4,8 +4,13 @@
 
 # Unreleased
 
+### Added
+
+- Shake your phone or tap Ring bell to play with Bell in Play & Decide.
+
 ### Fixed
 
+- Restarting Breathe keeps the new session active, and changing the device clock no longer changes the countdown.
 - Taps no longer sound twice.
 - The menu button and app bar actions no longer slide out and back in when you switch tabs.
 - Lists no longer come back empty after you swipe away from them partway through their entrance.

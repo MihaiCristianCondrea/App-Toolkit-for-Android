@@ -261,4 +261,13 @@
     <string name="random_range">संख्या सीमा</string>
     <string name="random_inclusive">सीमा के दोनों सिरे शामिल हैं।</string>
     <string name="tool_converter_unit">इकाई</string>
+
+    <string name="section_toys">खिलौने</string>
+    <string name="bell_title">घंटी</string>
+    <string name="bell_summary">घंटी बजाने के लिए फ़ोन हिलाएँ।</string>
+    <string name="bell_card_note">बजाने के लिए हिलाएँ</string>
+    <string name="bell_ring">घंटी बजाएँ</string>
+    <string name="bell_motion_unavailable">इस डिवाइस पर फ़ोन हिलाने की पहचान उपलब्ध नहीं है।</string>
+    <string name="bell_audio_unavailable">घंटी की आवाज़ उपलब्ध नहीं है।</string>
+    <string name="bell_ringing">घंटी बज रही है</string>
 </resources>

@@ -261,4 +261,13 @@
     <string name="random_range">ช่วงตัวเลข</string>
     <string name="random_inclusive">รวมค่าขอบเขตทั้งสองด้าน</string>
     <string name="tool_converter_unit">หน่วย</string>
+
+    <string name="section_toys">ของเล่น</string>
+    <string name="bell_title">กระดิ่ง</string>
+    <string name="bell_summary">เขย่าโทรศัพท์เพื่อให้กระดิ่งดัง</string>
+    <string name="bell_card_note">เขย่าให้ดัง</string>
+    <string name="bell_ring">สั่นกระดิ่ง</string>
+    <string name="bell_motion_unavailable">อุปกรณ์นี้ตรวจจับการเขย่าไม่ได้</string>
+    <string name="bell_audio_unavailable">ไม่สามารถเล่นเสียงกระดิ่งได้</string>
+    <string name="bell_ringing">กระดิ่งกำลังดัง</string>
 </resources>

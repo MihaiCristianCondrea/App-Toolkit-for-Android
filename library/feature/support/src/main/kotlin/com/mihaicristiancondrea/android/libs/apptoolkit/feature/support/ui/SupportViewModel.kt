@@ -122,14 +122,17 @@ class SupportViewModel(
         }
 
     private fun observePurchaseResults(): Job =
-        billingRepository.purchaseResult.collectReport(
+        billingRepository.purchaseEvents.collectReport(
             action = SupportOperationNames.OBSERVE_PURCHASE_RESULT,
             onError = { error ->
                 endBillingLaunch()
                 showMessage(error.toErrorMessage(fallback = GenericErrorText))
             },
-        ) { result ->
-            onPurchaseResult(result = result)
+        ) { event ->
+            val activeProduct = checkoutProductId
+            if (activeProduct == null || event.productIds == null || activeProduct in event.productIds.orEmpty()) {
+                onPurchaseResult(result = event.result)
+            }
         }
 
     /**
@@ -195,12 +198,13 @@ class SupportViewModel(
                     details = details,
                 )
                 delay(BillingLaunchTimeout)
+                checkoutProductId = null
                 setState { copy(isBillingInProgress = false) }
             }
         }
     }
 
-    /** Any result, a recovered background purchase's included, ends the wait for the sheet. */
+    /** An outcome for the active product ends the wait for the sheet. */
     private fun onPurchaseResult(result: PurchaseResult) {
         reportDonationResult(outcome = result.toOutcome())
         endBillingLaunch()

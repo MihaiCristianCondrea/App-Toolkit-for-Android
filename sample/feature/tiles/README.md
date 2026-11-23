@@ -8,7 +8,7 @@ The native Quick Tools, Measure and Play & Decide workspaces, their tool sheets,
 
 - `ToolkitTilesRepository` publishes the source-neutral catalogue for all three workspaces and Quick Settings membership. UI mappers own resources, shapes and artwork.
 - Sensor, breathing, torch, Morse, SOS, counter, conversion, bill and ruler repositories retain their existing responsibilities. `WaterEjectRepository` is the entry point to finite speaker playback; `AndroidSpeakerAudioDataSource` owns AudioTrack and audio focus.
-- Dedicated `LoggedScreenViewModel` classes own tool state and events. Koin supplies their repositories and `SavedStateHandle` where input restoration is needed. No feature depends on another feature.
+- Dedicated ViewModels own tool state and events. Tools with operation reporting use `LoggedScreenViewModel`. Koin supplies repositories and `SavedStateHandle` where input restoration is needed. No feature depends on another feature.
 - The app module owns serializable navigation keys and the shell graph. This feature exposes screens without importing app-owned routes.
 - Shared widget geometry lives in `ui/views/catalog`. The compass and level clip to the same 8-sided and 16-sided brand SVG paths as the web kit.
 
@@ -20,7 +20,7 @@ Material Colors uses a connected bento palette: one large primary swatch followe
 | --- | --- |
 | Quick Tools | Sensors: Compass, Bubble Level. Light & signals: Flash Dimmer, combined Morse & SOS. Hardware & sound: Water Eject. Wellbeing: Breathe. Colors, last: Material Colors. |
 | Measure | Length & angle: Surface Ruler, Protractor. Convert & split: Unit Converter, Tip & Bill Splitter. Count & time: Counter, Reaction Test. |
-| Play & Decide | Decision Wheel, Random Number, Coin Flip, Dice Roll. |
+| Play & Decide | Chance: Decision Wheel, Random Number, Coin Flip, Dice Roll. Toys: Bell. |
 
 The widgets follow the marketing kit's (`marketing/ui`): `views/catalog/LiveWidget.kt` draws its live widget (a small uppercase label, the tool's face in its shape on a tint of its accent, a bold value and a note), and the tool accents in `iconColors()` are the kit's `--tk-*` tokens. `RedesignVisualTest` renders the three tabs, light and dark, to `build/outputs/redesign/` for side-by-side review with the kit.
 
@@ -34,7 +34,11 @@ The overview and sheet use the same entry-owned tool ViewModels. Currency, tip s
 
 Counter in Measure and Random Number in Play use the shared `AnimatedDigit` for their overview values. Place values stay keyed from the right across carries, signed results keep their reading order, and accessibility receives the complete value once. Random Number retains its `?` placeholder and rolls that slot into the first result. The marketing widgets mirror changed-digit motion and respect reduced motion; initial rendering remains still.
 
+Bell uses a mono edit of [Bell Ring by Universfield](https://pixabay.com/sound-effects/film-special-effects-bell-ring-123742/) under the [Pixabay Content License](https://pixabay.com/service/license-summary/). The sample matches the approved marketing preview.
+
 ## State and lifecycle
+
+- Bell observes motion and loads its recording while the sheet is in the foreground. Closing or backgrounding it unregisters the sensor and releases its sound pool. The button also rings the bell on devices without a motion sensor. The large bell and arcs follow the recording's impacts. Reduced motion keeps the bell still and shows static arcs.
 
 - Counter remains DataStore-backed and shared with its Quick Settings service. Accepted writes survive the caller disappearing; storage failures are reported.
 - Bill, converter, random-range, ruler draft calibration/reading/range, protractor, Morse input, dice/coin outcomes and wheel choices use `SavedStateHandle`. Dismissing a sheet retains inputs and results. A new process never resumes audio or flashing automatically.

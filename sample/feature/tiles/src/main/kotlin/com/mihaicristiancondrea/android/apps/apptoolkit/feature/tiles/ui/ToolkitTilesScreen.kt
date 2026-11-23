@@ -202,7 +202,7 @@ internal fun ToolkitTilesScreenContent(
     }
 }
 
-private val QuickToolsExcludedCategoryIds = setOf("chance", "measure")
+private val QuickToolsExcludedCategoryIds = setOf("chance", "measure", "toys")
 
 @Composable
 private fun ToolkitTilesCatalog(

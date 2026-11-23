@@ -261,4 +261,13 @@
     <string name="random_range">Rango numérico</string>
     <string name="random_inclusive">Ambos límites están incluidos.</string>
     <string name="tool_converter_unit">Unidad</string>
+
+    <string name="section_toys">Juguetes</string>
+    <string name="bell_title">Campana</string>
+    <string name="bell_summary">Agita el teléfono para hacer sonar la campana.</string>
+    <string name="bell_card_note">Agita para que suene</string>
+    <string name="bell_ring">Tocar la campana</string>
+    <string name="bell_motion_unavailable">Este dispositivo no puede detectar las sacudidas.</string>
+    <string name="bell_audio_unavailable">El sonido de la campana no está disponible.</string>
+    <string name="bell_ringing">Sonando</string>
 </resources>

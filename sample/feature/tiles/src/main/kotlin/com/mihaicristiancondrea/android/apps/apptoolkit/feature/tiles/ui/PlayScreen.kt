@@ -145,9 +145,10 @@ internal fun PlayScreenContent(coin: CoinFlipToolUiState, dice: DiceRollToolUiSt
                     resources.getString(it.summaryResId).contains(query, true)
             }
         }
+        val bellTile = tools.firstOrNull { it.id == ToolkitTileIds.BELL }
         ToolWorkspace(padding) {
             if (tools.isEmpty()) Text(stringResource(R.string.tiles_filter_empty))
-            else ToolSection(stringResource(R.string.section_chance), ToolSymbols.Rounded.Casino, Modifier) {
+            if (tools.any { it.id != ToolkitTileIds.BELL }) ToolSection(stringResource(R.string.section_chance), ToolSymbols.Rounded.Casino, Modifier) {
                 // The kit's Chance group (marketing/ui/src/screens/play.js): every card on the secondary container,
                 // 28 dp on the group's outer corners and 8 dp between cards.
                 Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
@@ -218,6 +219,34 @@ internal fun PlayScreenContent(coin: CoinFlipToolUiState, dice: DiceRollToolUiSt
                 }
             }
             if (query.isBlank() && tools.isNotEmpty()) overviewAd?.invoke()
+            bellTile?.let { tile ->
+                ToolSection(stringResource(R.string.section_toys), ToolSymbols.Rounded.Toys, Modifier) {
+                    val gold = tile.icon.iconColors()
+                    val scheme = MaterialTheme.colorScheme
+                    Surface(
+                        onClick = { selectedId = tile.id },
+                        modifier = Modifier.fillMaxWidth().animateVisibility(),
+                        shape = RoundedCornerShape(28.dp),
+                        color = scheme.surfaceContainerHigh,
+                    ) {
+                        Column(
+                            modifier = Modifier.padding(16.dp),
+                            verticalArrangement = Arrangement.spacedBy(4.dp),
+                            horizontalAlignment = Alignment.CenterHorizontally,
+                        ) {
+                            WidgetLabel(stringResource(tile.titleResId), Modifier.align(Alignment.Start))
+                            Box(
+                                Modifier.size(88.dp).clip(tile.icon.backgroundShape())
+                                    .background(lerp(scheme.surfaceContainerHighest, gold.container, .26f)),
+                                contentAlignment = Alignment.Center,
+                            ) {
+                                Icon(ToolSymbols.Notifications, null, Modifier.size(40.dp), tint = gold.content)
+                            }
+                            WidgetNote(stringResource(R.string.bell_card_note), gold.content)
+                        }
+                    }
+                }
+            }
         }
         catalogTools.firstOrNull { it.id == selectedId }?.let { tile ->
             ToolkitToolBottomSheet(tile, onClose = { selectedId = null }, onAddTile = { tile.requestKey?.let { requestQuickSettingsTile(context,it, onTileAdded = onTileAdded) } }, onSetupTile = {})

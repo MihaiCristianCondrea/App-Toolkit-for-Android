@@ -261,4 +261,13 @@
     <string name="random_range">সংখ্যার সীমা</string>
     <string name="random_inclusive">সীমার উভয় প্রান্ত অন্তর্ভুক্ত।</string>
     <string name="tool_converter_unit">একক</string>
+
+    <string name="section_toys">খেলনা</string>
+    <string name="bell_title">ঘণ্টা</string>
+    <string name="bell_summary">ঘণ্টা বাজাতে ফোন ঝাঁকান।</string>
+    <string name="bell_card_note">বাজাতে ঝাঁকান</string>
+    <string name="bell_ring">ঘণ্টা বাজান</string>
+    <string name="bell_motion_unavailable">এই ডিভাইসে ঝাঁকুনি শনাক্ত করা যায় না।</string>
+    <string name="bell_audio_unavailable">ঘণ্টার শব্দ পাওয়া যাচ্ছে না।</string>
+    <string name="bell_ringing">বাজছে</string>
 </resources>
