@@ -29,14 +29,16 @@ import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.flowWithLifecycle
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.onCompletion
+import kotlinx.coroutines.flow.catch
 
 /**
  * Collects values from this [Flow] in a lifecycle-aware manner and provides a completion callback.
  *
  * The flow is collected only when the lifecycle is at least in the [Lifecycle.State.STARTED] state.
- * If the flow completes or fails with an exception (other than [CancellationException]), the
- * state is reset to the value provided by [initialValueProvider].
+ * If the flow fails with an exception (other than [CancellationException]), the failure does not
+ * escape the effect: the state is reset to the value provided by [initialValueProvider] and
+ * [onCompletion] receives the failure. When the collecting effect is cancelled, [onCompletion] is
+ * not called.
  *
  * @param T The type of the values contained in the flow.
  * @param initialValueProvider A lambda providing the initial value for the state and the reset value upon failure.
@@ -54,17 +56,18 @@ internal fun <T> Flow<T>.collectWithLifecycleOnCompletion(
     val state = remember { mutableStateOf(initialValueProvider()) }
 
     LaunchedEffect(this, lifecycleOwner) {
+        var failure: Throwable? = null
         this@collectWithLifecycleOnCompletion
             .flowWithLifecycle(lifecycleOwner.lifecycle, Lifecycle.State.STARTED)
-            .onCompletion { cause: Throwable? ->
-                if (cause != null && cause !is CancellationException) {
-                    state.value = latestInitialValue
-                }
-                completionHandler(cause)
+            .catch { cause: Throwable ->
+                if (cause is CancellationException) throw cause
+                failure = cause
+                state.value = latestInitialValue
             }
             .collect { value: T ->
                 state.value = value
             }
+        completionHandler(failure)
     }
 
     return state

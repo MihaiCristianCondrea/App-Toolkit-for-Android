@@ -15,7 +15,7 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.store
+package com.mihaicristiancondrea.android.libs.apptoolkit.integration.review.utils.constants
 
 object StoreConstants {
     const val PLAY_STORE_PACKAGE: String = "com.android.vending"

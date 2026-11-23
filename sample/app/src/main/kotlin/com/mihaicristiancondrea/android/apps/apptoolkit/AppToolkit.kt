@@ -49,7 +49,7 @@ class AppToolkit : AppToolkitApplication(), DefaultLifecycleObserver {
     override fun onCreate() {
         initializeKoin(context = this)
         applyDefaultColorPalette()
-        // AppToolkitApplication registers activity callbacks; registering here again would deliver them twice.
+        // Koin starts first: AppToolkitApplication resolves its dependencies from it in onCreate.
         super<AppToolkitApplication>.onCreate()
         getKoin().get<IssueReporterShakeManager>().install()
         getKoin().get<SeasonalThemeManager>().install()

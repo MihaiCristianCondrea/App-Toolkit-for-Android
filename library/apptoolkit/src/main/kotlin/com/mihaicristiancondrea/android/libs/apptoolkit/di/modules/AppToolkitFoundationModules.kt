@@ -73,7 +73,7 @@ private fun corePlatformModule(hostBuildConfig: AppToolkitHostBuildConfig): Modu
     single<InstalledAppsRepository> { DefaultInstalledAppsRepository(context = get(), dispatchers = get()) }
     single<AdMobAppIdDataSource> { ManifestAdMobAppIdDataSource(context = get(), dispatchers = get()) }
     single<ClipboardRepository> { DefaultClipboardRepository(context = get()) }
-    single { AdLoadReporter(telemetryRepository = get(), buildInfoRepository = get()) }
+    single { AdLoadReporter(diagnostics = get(), buildInfoRepository = get()) }
     single { KtorClient.createClient(enableLogging = hostBuildConfig.isDebugBuild) }
     single<BuildInfoRepository> { DefaultBuildInfoRepository(config = hostBuildConfig) }
 }

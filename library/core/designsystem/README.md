@@ -9,7 +9,8 @@ theme-selection visuals, and the shared icon slot used by navigation items and b
 
 - `AppTheme`, theme configuration, typography, and palette selection.
 - Static, seasonal, monochrome, rose, and Material You color definitions.
-- `ColorPalette`, `ThemeSettingOption`, and wallpaper swatch models.
+- `ColorPalette` and wallpaper swatch models. The individual color values behind each palette are
+  internal; hosts take a palette through `ThemePaletteProvider` or its `*Palette` value.
 - Theme option/swatch composables.
 - `ToolkitIcon` and its renderers, the icon slot shared by navigation items and buttons.
 - `ToolkitFab`, `FabSize` and `FabColor`, the description of a floating action button. It lives

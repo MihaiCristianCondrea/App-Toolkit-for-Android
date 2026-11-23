@@ -22,6 +22,13 @@ import androidx.compose.material3.SwitchDefaults
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 
+/**
+ * The spacing and icon sizes shared by toolkit components, as [Dp].
+ *
+ * Names follow the size's role (`LargeSize`, `ExtraSmallSize`) or, for sizes built from others, its
+ * value in dp (`NinetySixSize`). Take a value from here instead of repeating a literal so
+ * components stay aligned.
+ */
 object SizeConstants {
     val ButtonIcon: Dp = ButtonDefaults.IconSpacing
     val ButtonIconSize: Dp = ButtonDefaults.IconSize

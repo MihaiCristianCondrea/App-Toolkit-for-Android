@@ -49,8 +49,10 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.analytics
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.analytics.logGa4Event
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.dialogs.DatePickerDialog
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.style.bounceClick
+import java.text.DateFormat
 import java.text.SimpleDateFormat
 import java.util.Date
+import java.util.Locale
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.analytics.LocalTelemetry
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -67,8 +69,8 @@ fun DatePickerTextField(
     val telemetry = LocalTelemetry.current
     val configuration = LocalConfiguration.current
     val locale = remember(configuration) { configuration.locales[0] }
-    val formatter = remember(locale) { SimpleDateFormat("dd.MM.yyyy", locale) }
-    val parser = remember(locale) { SimpleDateFormat("yyyy-MM-dd", locale) }
+    val formatter = remember(locale) { DateFormat.getDateInstance(DateFormat.MEDIUM, locale) }
+    val parser = remember(locale) { SimpleDateFormat("yyyy-MM-dd", Locale.ROOT) }
     val formattedDate = remember(dateMillis, formatter) {
         formatter.format(Date(dateMillis))
     }

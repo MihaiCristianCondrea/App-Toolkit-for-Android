@@ -19,6 +19,3 @@ package com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.const
 
 const val CLIPBOARD_HELPER_LOG_TAG: String = "ClipboardHelper"
 const val CONSENT_LOG_TAG: String = "Consent"
-const val FCM_LOG_TAG: String = "FirebaseNotifications"
-const val THEME_SETTINGS_LOG_TAG: String = "ThemeSettingsScreen"
-const val INFO_MESSAGE_LOG_TAG: String = "InfoMessageSection"

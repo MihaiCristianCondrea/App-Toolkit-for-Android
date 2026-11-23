@@ -70,6 +70,7 @@ dependencies {
     // are part of what an app using the shell writes against.
     api(project(":library:navigation"))
     api(project(":library:core:ui"))
+    implementation(project(":library:core:datastore"))
 
     // The shell's own settings store.
     implementation(libs.androidx.datastore.preferences)

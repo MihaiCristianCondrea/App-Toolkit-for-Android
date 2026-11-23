@@ -23,6 +23,7 @@ import kotlinx.coroutines.flow.Flow
  * Abstraction for onboarding-related data operations.
  */
 interface OnboardingRepository {
+    /** Emits whether onboarding is done, and again each time that changes. */
     fun observeOnboardingCompletion(): Flow<Boolean>
 
     /** Stores that onboarding is done. A failed write throws `StorageException`. */

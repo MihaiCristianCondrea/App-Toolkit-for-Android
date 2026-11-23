@@ -65,10 +65,10 @@ class SettingsSearchScope internal constructor(
  * [SettingsSearchProvider] with a name of its own.
  *
  * ```
- * val readerSettingsSearch = settingsSearchProvider(R.string.reader_settings, ReaderSettingsRoute) {
+ * val readerSettingsSearch = settingsSearchProvider(R.string.reader_settings, ReaderSettingsScreen) {
  *     preference(R.string.font_size, summary = R.string.font_size_summary)
  *     if (capabilities.hasMultipleTabs) preference(R.string.start_tab)
- *     preference(R.string.reader_theme, destination = ReaderThemeRoute)
+ *     preference(R.string.reader_theme, destination = ReaderThemeScreen)
  * }
  * ```
  *

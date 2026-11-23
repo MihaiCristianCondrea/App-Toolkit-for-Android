@@ -1,7 +1,7 @@
 package com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.ads
 
 import android.util.Log
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.telemetry.TelemetryRepository
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.telemetry.DiagnosticsReporter
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.mockkStatic
@@ -12,7 +12,7 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
 class AdLoadReporterTest {
-    private val telemetry = mockk<TelemetryRepository>(relaxed = true)
+    private val telemetry = mockk<DiagnosticsReporter>(relaxed = true)
     private val reporter = AdLoadReporter(telemetry, mockk(relaxed = true))
 
     @BeforeEach

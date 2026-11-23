@@ -46,6 +46,11 @@ fun Context.startActivitySafely(
         )
 }
 
+/**
+ * Opens [url] in the browser or the app registered for it.
+ *
+ * Returns `false`, without starting anything, when [url] is blank or no activity handles it.
+ */
 fun Context.openUrl(url: String): Boolean {
     val trimmed = url.trim()
     if (trimmed.isBlank()) return false

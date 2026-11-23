@@ -115,7 +115,7 @@ class MainActivity : AppCompatActivity() {
                                     StartupScreen
                                 } else {
                                     displayPreferences.startupValueFlow(
-                                        defaultRoute = ToolkitTilesScreen.ROUTE_ID,
+                                        defaultScreenId = ToolkitTilesScreen.ROUTE_ID,
                                         mapToValue = ::startKeyFor,
                                     ).first()
                                 }

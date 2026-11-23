@@ -61,8 +61,8 @@ page frame, state handling, analytics hooks, and shared components.
 
 - [`:library:core:common`](../common/README.md) for common models, Firebase contracts, and platform
   helpers.
-- [`:library:core:datastore`](../datastore/README.md) for remaining persistence-backed UI adapters;
-  reusable modifiers and ad slots consume design-system-provided values rather than DataStore.
+- No DataStore dependency: reusable modifiers and ad slots consume design-system-provided values
+  rather than DataStore. Modules that need `:library:core:datastore` declare it themselves.
 - [`:library:core:designsystem`](../designsystem/README.md) for theme primitives and the
   `ToolkitIcon` slot the buttons render.
 - [`:library:navigation`](../../navigation/README.md) for the navigator, the page key and pane
@@ -110,7 +110,8 @@ flowchart TD
   once with `LocalScreenStates`; without one, cases cross-fade on the app's motion scheme.
   `StateContent` switches on any other state, such as a flow's phases, the same way.
 - Global UI preferences arrive through the design-system root. Reusable components must not start
-  their own persistence collectors unless a documented adapter still requires it.
+  their own persistence collectors; `collectDataStoreState` and `persistChanges` are helpers for a
+  screen that does collect a preference, and neither lets a storage failure escape the effect.
 
 ## Public contracts
 

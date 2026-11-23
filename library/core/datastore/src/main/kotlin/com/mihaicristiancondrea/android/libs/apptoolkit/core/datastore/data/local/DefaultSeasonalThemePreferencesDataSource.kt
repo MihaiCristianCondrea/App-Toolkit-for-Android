@@ -62,7 +62,7 @@ class DefaultSeasonalThemePreferencesDataSource(
         booleanPreferencesKey(name = DataStoreNamesConstants.DATA_STORE_HOLIDAY_PREVIOUS_DYNAMIC_COLORS)
 
     private val themeModeKey = stringPreferencesKey(DataStoreNamesConstants.DATA_STORE_THEME_MODE)
-    private val previousThemeModeKey = stringPreferencesKey("holiday_previous_theme_mode")
+    private val previousThemeModeKey = stringPreferencesKey(name = DataStoreNamesConstants.DATA_STORE_HOLIDAY_PREVIOUS_THEME_MODE)
 
     override val seasonalThemesUnlocked: Flow<Boolean> = preferencesFlow.map { preferences ->
         preferences[unlockedKey] == true

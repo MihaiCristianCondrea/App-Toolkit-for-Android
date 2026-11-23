@@ -19,7 +19,7 @@ package com.mihaicristiancondrea.android.libs.apptoolkit.integration.review.util
 
 import android.content.Context
 import android.os.Build
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.store.StoreConstants
+import com.mihaicristiancondrea.android.libs.apptoolkit.integration.review.utils.constants.StoreConstants
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.packagemanager.hasPackageVisible
 
 /**

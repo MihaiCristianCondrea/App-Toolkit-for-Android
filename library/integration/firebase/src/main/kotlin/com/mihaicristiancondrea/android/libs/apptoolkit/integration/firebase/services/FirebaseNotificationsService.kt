@@ -20,7 +20,8 @@ package com.mihaicristiancondrea.android.libs.apptoolkit.integration.firebase.se
 import android.util.Log
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.logging.FCM_LOG_TAG
+
+private const val FCM_LOG_TAG: String = "FirebaseNotifications"
 
 /**
  * Default [FirebaseMessagingService] entry point registered by `:library:integration:firebase`.

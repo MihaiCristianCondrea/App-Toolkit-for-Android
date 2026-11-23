@@ -22,17 +22,38 @@ import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.emptyPreferences
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.emitAll
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 
-/** An in-memory Preferences DataStore for testing the data sources written over one. */
+/**
+ * An in-memory Preferences DataStore for testing the data sources written over one.
+ *
+ * Set [readFailure] or [writeFailure] to make the store fail the way a disk error does. A read
+ * failure is thrown to each collector of [data] before it receives a value, as DataStore does; a
+ * write failure is thrown from [updateData] before the transform runs and leaves the state alone.
+ * Set either back to `null` to recover.
+ */
 class FakePreferencesDataStore(initial: Preferences = emptyPreferences()) : DataStore<Preferences> {
     private val state = MutableStateFlow(initial)
     private val updates = Mutex()
 
-    override val data: Flow<Preferences> = state
+    /** Thrown to every collector of [data] while it is not `null`. */
+    @Volatile
+    var readFailure: Throwable? = null
+
+    /** Thrown from [updateData] while it is not `null`. */
+    @Volatile
+    var writeFailure: Throwable? = null
+
+    override val data: Flow<Preferences> = flow {
+        readFailure?.let { throw it }
+        emitAll(state)
+    }
 
     override suspend fun updateData(transform: suspend (t: Preferences) -> Preferences): Preferences = updates.withLock {
+        writeFailure?.let { throw it }
         val updated = transform(state.value)
         state.value = updated
         updated

@@ -17,9 +17,17 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.core.common.telemetry.models
 
+/** The value of one [AnalyticsEvent] parameter, kept typed so a backend can report it as such. */
 sealed interface AnalyticsValue {
+    /** A text value. */
     data class Str(val value: String) : AnalyticsValue
+
+    /** A whole number. */
     data class LongVal(val value: Long) : AnalyticsValue
+
+    /** A decimal number. */
     data class DoubleVal(val value: Double) : AnalyticsValue
+
+    /** A true or false value. */
     data class Bool(val value: Boolean) : AnalyticsValue
 }

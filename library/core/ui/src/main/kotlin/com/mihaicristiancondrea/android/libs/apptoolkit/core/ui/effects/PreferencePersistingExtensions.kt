@@ -24,14 +24,14 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.drop
-import kotlinx.coroutines.flow.onCompletion
 import kotlinx.coroutines.launch
 
 /**
  * Persists changes emitted by a [MutableState] using the provided [onPersist] callback.
  *
  * The helper observes state changes, skips the initial value, and invokes [onError] when a
- * persistence failure occurs (defaulting to restoring the last known value).
+ * persistence failure occurs (defaulting to restoring the last known value). A failed save does
+ * not stop the observation: later changes are still persisted.
  */
 fun <T> MutableState<T>.persistChanges(
     scope: CoroutineScope,
@@ -43,13 +43,14 @@ fun <T> MutableState<T>.persistChanges(
         snapshotFlow { value }
             .distinctUntilChanged()
             .drop(1)
-            .onCompletion { cause: Throwable? ->
-                if (cause != null && cause !is CancellationException) {
-                    onError(cause, currentValue())
-                }
-            }
             .collectLatest { newValue: T ->
-                onPersist(newValue)
+                try {
+                    onPersist(newValue)
+                } catch (cancellation: CancellationException) {
+                    throw cancellation
+                } catch (error: Throwable) {
+                    onError(error, currentValue())
+                }
             }
     }
 }

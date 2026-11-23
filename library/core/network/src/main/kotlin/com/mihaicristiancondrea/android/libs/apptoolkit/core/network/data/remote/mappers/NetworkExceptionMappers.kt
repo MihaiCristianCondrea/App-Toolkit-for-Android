@@ -18,6 +18,7 @@
 package com.mihaicristiancondrea.android.libs.apptoolkit.core.network.data.remote.mappers
 
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.exceptions.NetworkException
+import io.ktor.client.call.NoTransformationFoundException
 import io.ktor.client.network.sockets.ConnectTimeoutException as KtorConnectTimeoutException
 import io.ktor.client.plugins.ClientRequestException
 import io.ktor.client.plugins.HttpRequestTimeoutException
@@ -26,6 +27,7 @@ import io.ktor.client.plugins.ResponseException
 import io.ktor.client.plugins.ServerResponseException
 import io.ktor.http.HttpStatusCode
 import io.ktor.http.isSuccess
+import io.ktor.serialization.ContentConvertException
 import java.io.IOException
 import java.net.ConnectException
 import java.net.SocketTimeoutException
@@ -56,7 +58,10 @@ fun Throwable.toNetworkException(): NetworkException? {
         is UnknownHostException,
         is ConnectException -> NetworkException.Reason.NO_INTERNET
         is SSLException -> NetworkException.Reason.SSL
-        is SerializationException -> NetworkException.Reason.SERIALIZATION
+        // A body Ktor could not convert: JsonConvertException is a ContentConvertException.
+        is SerializationException,
+        is ContentConvertException,
+        is NoTransformationFoundException -> NetworkException.Reason.SERIALIZATION
         is IOException -> NetworkException.Reason.CONNECTION
 
         else -> return null

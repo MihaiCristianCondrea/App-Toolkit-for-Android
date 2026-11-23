@@ -17,6 +17,7 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.github
 
+/** GitHub locations the toolkit reads from or opens: the author's account, issues and changelogs. */
 object GithubConstants {
     const val GITHUB_USER: String = "MihaiCristianCondrea"
     const val GITHUB_BASE: String = "https://github.com/$GITHUB_USER/"
@@ -25,6 +26,8 @@ object GithubConstants {
 
     /** App Toolkit's releases, with the library's notes for every version. */
     const val APP_TOOLKIT_RELEASES: String = "${GITHUB_BASE}App-Toolkit-for-Android/releases"
+
+    /** The raw `CHANGELOG.md` on the default branch of [repository], a repository of [GITHUB_USER]. */
     fun githubChangelog(repository: String): String =
         "$GITHUB_RAW/$repository/refs/heads/master/CHANGELOG.md"
 }

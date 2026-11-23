@@ -18,18 +18,35 @@
 package com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.style
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.exceptions.StorageException
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.models.ThemePreferencesState
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.repositories.ThemePreferencesRepository
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.catch
 import org.koin.compose.koinInject
 
-/** Collects the repository's stable appearance flow at the design-system boundary. */
+/**
+ * Collects the repository's stable appearance flow at the design-system boundary. When the stored
+ * preferences cannot be read, the app keeps [initialValue], the defaults, instead of crashing.
+ */
 @Composable
 internal fun rememberThemePreferencesState(
     initialValue: ThemePreferencesState = ThemePreferencesState(),
 ): ThemePreferencesState {
     val repository: ThemePreferencesRepository = koinInject()
-    return repository.preferencesState.collectAsStateWithLifecycle(
-        initialValue = initialValue,
-    ).value
+    val state: Flow<ThemePreferencesState> = remember(repository, initialValue) {
+        repository.preferencesState.orDefaultOnStorageFailure(default = initialValue)
+    }
+    return state.collectAsStateWithLifecycle(initialValue = initialValue).value
 }
+
+/**
+ * Replaces a [StorageException] from the upstream with [default] and then completes, so a failed
+ * read of stored preferences falls back to defaults. Other failures still propagate.
+ */
+internal fun <T> Flow<T>.orDefaultOnStorageFailure(default: T): Flow<T> =
+    catch { error ->
+        if (error is StorageException) emit(default) else throw error
+    }

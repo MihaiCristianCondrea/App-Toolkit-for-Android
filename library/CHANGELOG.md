@@ -86,6 +86,16 @@
   keys in `reportViewModelError`.
 - Google Play services version lookup in `DefaultGooglePlayServicesRepository` falls back to the
   platform version code when `versionName` is blank.
+- Theme and display preference flows report an unreadable store as `StorageException`, their
+  repositories report failed writes the same way, and `AppTheme` falls back to the default
+  appearance instead of crashing on a read failure. `FakePreferencesDataStore` can inject read and
+  write failures with `readFailure` and `writeFailure`.
+- `toNetworkException` maps Ktor's `ContentConvertException` (including `JsonConvertException`) and
+  `NoTransformationFoundException` to the serialization reason.
+- `DatePickerDialog` returns the day the person picked in any time zone and opens on the current
+  day, and `DatePickerTextField` shows dates in the device locale's format.
+- `collectDataStoreState` and `persistChanges` no longer let a failure escape the effect, and a
+  failed save does not stop later changes from being saved.
 
 ### Changed
 
@@ -153,6 +163,15 @@
   `integration.firebase.services`, removed redundant `POST_NOTIFICATIONS` and `WAKE_LOCK`
   declarations from `:library:integration:firebase`'s manifest, and removed `Boolean.asConsentStatus()`
   from `:library:core:common` (now mapped internally in `:library:integration:firebase`).
+- The color values in `core.designsystem.ui.style.colors.*` are `internal`, and
+  `:library:core:designsystem` declares `:library:core:datastore` with `implementation`.
+  `:library:core:ui` no longer declares `:library:core:datastore`.
+- `AdLoadReporter` takes `diagnostics: DiagnosticsReporter` instead of
+  `telemetryRepository: TelemetryRepository`.
+- `StartupValueExtensions.startupValueFlow` renames `defaultRoute` to `defaultScreenId`.
+- `StoreConstants` moved to `integration.review.utils.constants`, and `FCM_LOG_TAG`,
+  `THEME_SETTINGS_LOG_TAG` and `INFO_MESSAGE_LOG_TAG` moved out of `core.common` into the code that
+  uses them.
 
 ### Removed
 

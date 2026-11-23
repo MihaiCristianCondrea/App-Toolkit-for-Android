@@ -31,9 +31,17 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.sty
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.style.colors.special.skin.skinPalette
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.colorscheme.StaticPaletteIds
 
+/**
+ * Looks up the [ColorPalette] for a static palette id.
+ */
 object ThemePaletteProvider {
+    /**
+     * The palette used for the default id and for any id that is not known. The host sets it at
+     * startup, before the first composition.
+     */
     var defaultPalette: ColorPalette = bluePalette
 
+    /** Returns the palette for [id], one of `StaticPaletteIds`, or [defaultPalette] for any other. */
     fun paletteById(id: String): ColorPalette = when (id) {
         StaticPaletteIds.MONOCHROME -> monochromePalette
         StaticPaletteIds.GOOGLE_BLUE -> bluePalette

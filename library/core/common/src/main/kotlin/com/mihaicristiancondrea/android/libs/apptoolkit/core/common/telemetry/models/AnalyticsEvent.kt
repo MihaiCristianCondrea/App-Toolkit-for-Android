@@ -17,6 +17,11 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.core.common.telemetry.models
 
+/**
+ * One analytics event: an event [name] and its [params], keyed by parameter name.
+ *
+ * Names and parameter keys must follow the rules of the analytics backend the app reports to.
+ */
 data class AnalyticsEvent(
     val name: String,
     val params: Map<String, AnalyticsValue> = emptyMap(),
