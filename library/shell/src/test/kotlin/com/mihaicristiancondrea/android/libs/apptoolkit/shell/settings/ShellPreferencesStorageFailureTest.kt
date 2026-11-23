@@ -19,14 +19,20 @@ package com.mihaicristiancondrea.android.libs.apptoolkit.shell.settings
 
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
+import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.emptyPreferences
+import androidx.datastore.preferences.core.preferencesOf
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.exceptions.StorageException
-import com.mihaicristiancondrea.android.libs.apptoolkit.shell.data.repositories.DataStoreShellPreferencesRepository
+import com.mihaicristiancondrea.android.libs.apptoolkit.shell.data.repositories.DefaultShellPreferencesRepository
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Test
 import java.io.IOException
+import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith
+import kotlin.test.assertNull
 
 class ShellPreferencesStorageFailureTest {
     @Test
@@ -36,9 +42,59 @@ class ShellPreferencesStorageFailureTest {
             override suspend fun updateData(transform: suspend (t: Preferences) -> Preferences): Preferences =
                 throw IOException("Write failed")
         }
-        val repository = DataStoreShellPreferencesRepository(store, ShellSettings())
+        val repository = DefaultShellPreferencesRepository(store, ShellSettings())
         assertFailsWith<StorageException> { repository.setHideTopBarOnScroll(true) }
         assertFailsWith<StorageException> { repository.update { it.copy(hideTopBarOnScroll = true) } }
         assertFailsWith<StorageException> { repository.resetDeveloperOptions() }
+    }
+
+    @Test
+    fun `a failed read falls back to defaults without replacing the last known settings`() = runTest {
+        val chosen = booleanPreferencesKey("hide_top_bar_on_scroll")
+        val store = object : DataStore<Preferences> {
+            override val data = flow {
+                emit(preferencesOf(chosen to true))
+                throw IOException("Read failed")
+            }
+            override suspend fun updateData(transform: suspend (t: Preferences) -> Preferences): Preferences =
+                emptyPreferences()
+        }
+        val repository = DefaultShellPreferencesRepository(store, ShellSettings())
+
+        val emitted = repository.settings.toList()
+
+        assertEquals(listOf(ShellSettings(hideTopBarOnScroll = true), ShellSettings()), emitted)
+        assertEquals(ShellSettings(hideTopBarOnScroll = true), repository.lastKnown)
+    }
+
+    @Test
+    fun `a read that fails first emits defaults and leaves nothing known`() = runTest {
+        val store = object : DataStore<Preferences> {
+            override val data = flow<Preferences> { throw IOException("Read failed") }
+            override suspend fun updateData(transform: suspend (t: Preferences) -> Preferences): Preferences =
+                emptyPreferences()
+        }
+        val repository = DefaultShellPreferencesRepository(store, ShellSettings())
+
+        assertEquals(listOf(ShellSettings()), repository.settings.toList())
+        assertNull(repository.lastKnown)
+    }
+
+    @Test
+    fun `each repository remembers its own last read`() = runTest {
+        val chosen = booleanPreferencesKey("hide_top_bar_on_scroll")
+        val first = DefaultShellPreferencesRepository(FakeStore(preferencesOf(chosen to true)), ShellSettings())
+        val second = DefaultShellPreferencesRepository(FakeStore(emptyPreferences()), ShellSettings())
+
+        first.settings.toList()
+
+        assertEquals(ShellSettings(hideTopBarOnScroll = true), first.lastKnown)
+        assertNull(second.lastKnown)
+    }
+
+    private class FakeStore(preferences: Preferences) : DataStore<Preferences> {
+        override val data = flowOf(preferences)
+        override suspend fun updateData(transform: suspend (t: Preferences) -> Preferences): Preferences =
+            emptyPreferences()
     }
 }

@@ -18,19 +18,30 @@
 package com.mihaicristiancondrea.android.libs.apptoolkit.shell.chrome
 
 import androidx.compose.runtime.Immutable
+import androidx.compose.runtime.staticCompositionLocalOf
 
 /**
  * What a screen inside the shell can ask of the chrome around it: whether the navigation hides in
  * a drawer, and a way to open it, for screens that draw their own header.
+ *
+ * The shell creates the controller; read it from [LocalShellChrome].
+ *
+ * @property showsMenuButton Whether the navigation is a modal drawer, so a screen drawing its own
+ * header shows a menu button. False beside a rail or a permanent drawer, where it is always on
+ * screen, and in the bottom bar layouts that have no drawer to open.
+ * @property openNavigation Opens the navigation drawer or rail. Nothing in the Toolkit calls it,
+ * since its own screens use the shell's app bar; it is for a screen that draws its own header.
  */
 @Immutable
-class ShellChromeController(
+class ShellChromeController internal constructor(
     val showsMenuButton: Boolean,
-    /**
-     * Opens the navigation drawer or rail. Nothing in the Toolkit calls it, since its own screens
-     * use the shell's app bar; it is the host-facing way for a screen that draws its own header
-     * to open the navigation, documented in the module README.
-     */
-    @Suppress("unused")
     val openNavigation: () -> Unit,
 )
+
+/**
+ * The [ShellChromeController] of the shell the screen is in. Outside `ShellHost`, such as in a
+ * preview, it shows no menu button and its [ShellChromeController.openNavigation] does nothing.
+ */
+val LocalShellChrome = staticCompositionLocalOf {
+    ShellChromeController(showsMenuButton = false, openNavigation = {})
+}

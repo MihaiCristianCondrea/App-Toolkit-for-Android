@@ -81,7 +81,7 @@ import kotlin.math.roundToInt
 import kotlinx.coroutines.launch
 
 /** Height of the collapsed player pill. */
-val MiniPlayerHeight: Dp = 64.dp
+internal val MiniPlayerHeight: Dp = 64.dp
 
 /** Space the content keeps free at its bottom while the mini player is docked over it. */
 internal val MiniPlayerReserve: Dp = MiniPlayerHeight + 16.dp

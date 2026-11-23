@@ -72,7 +72,9 @@ dependencies {
     api(project(":library:core:ui"))
     implementation(project(":library:core:datastore"))
 
-    // The shell's own settings store.
+    // The shell's own settings store, and the `storageCall` and `StorageException` it reports with.
+    implementation(project(":library:core:common"))
+    implementation(project(":library:core:datastore"))
     implementation(libs.androidx.datastore.preferences)
 
     // Screenshot tests: Robolectric drives a real activity under JUnit 4, so this module, and only

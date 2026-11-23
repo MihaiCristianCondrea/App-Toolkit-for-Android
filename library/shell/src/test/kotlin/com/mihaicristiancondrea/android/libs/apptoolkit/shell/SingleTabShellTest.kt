@@ -202,6 +202,52 @@ class SingleTabShellTest {
         capture("single-tab-player")
     }
 
+    @Test
+    @Config(qualifiers = "w700dp-h1000dp-xhdpi")
+    fun `the player rests above the system bar beside a rail`() {
+        show(player = true)
+        applySystemNavigationInset()
+        assertPlayerAboveSystemNavigation()
+    }
+
+    @Test
+    @Config(qualifiers = "w900dp-h1000dp-xhdpi")
+    fun `the player rests above the system bar beside an expanded rail`() {
+        show(player = true)
+        applySystemNavigationInset()
+        assertPlayerAboveSystemNavigation()
+    }
+
+    @Test
+    @Config(qualifiers = "w1400dp-h900dp-mdpi")
+    fun `the player rests above the system bar beside a permanent drawer`() {
+        show(player = true)
+        applySystemNavigationInset()
+        assertPlayerAboveSystemNavigation()
+    }
+
+    private fun applySystemNavigationInset() {
+        compose.runOnUiThread {
+            val density = compose.activity.resources.displayMetrics.density
+            val insets = WindowInsetsCompat.Builder()
+                .setInsets(WindowInsetsCompat.Type.navigationBars(), Insets.of(0, 0, 0, (48 * density).toInt()))
+                .build()
+            ViewCompat.dispatchApplyWindowInsets(compose.activity.window.decorView, insets)
+        }
+        compose.waitForIdle()
+    }
+
+    /**
+     * Without the inset the player's text sits about 48dp above the window's bottom edge, so the
+     * bound is the system bar (48dp) plus a margin.
+     */
+    private fun assertPlayerAboveSystemNavigation() {
+        val bottom = compose.onNodeWithText("Mini player", useUnmergedTree = true).fetchSemanticsNode().boundsInRoot.bottom
+        val windowBottom = compose.onRoot().fetchSemanticsNode().boundsInRoot.bottom
+        val density = compose.activity.resources.displayMetrics.density
+        assertTrue("The player does not clear Android's navigation area", bottom <= windowBottom - 72 * density)
+    }
+
     private fun assertClearOfSystemNavigation(label: String) {
         val bottom = compose.onNodeWithText(label, useUnmergedTree = true).fetchSemanticsNode().boundsInRoot.bottom
         val windowBottom = compose.onRoot().fetchSemanticsNode().boundsInRoot.bottom

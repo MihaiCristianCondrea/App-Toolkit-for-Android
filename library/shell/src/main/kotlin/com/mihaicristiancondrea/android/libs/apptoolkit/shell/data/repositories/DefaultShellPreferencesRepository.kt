@@ -53,17 +53,23 @@ import kotlinx.coroutines.flow.onEach
  * [resetDeveloperOptions] removes every key. Unknown enum names read as the default.
  *
  * Corruption replaces the file with empty preferences; IO read failures use defaults for that
- * collection so the root composition can still start.
+ * collection so the root composition can still start, without replacing [lastKnown].
  */
-internal class DataStoreShellPreferencesRepository(
+internal class DefaultShellPreferencesRepository(
     private val dataStore: DataStore<Preferences>,
     override val defaults: ShellSettings,
 ) : ShellPreferencesRepository {
 
+    /** The settings last read from the store by this instance. A failed read does not replace them. */
+    @Volatile
+    private var lastRead: ShellSettings? = null
+
+    // The catch comes after the read is remembered, so the defaults a failed read falls back to
+    // are shown but never taken for what the store holds.
     override val settings: Flow<ShellSettings> = dataStore.data
-        .catch { throwable -> if (throwable is IOException) emit(emptyPreferences()) else throw throwable }
         .map { it.read() }
         .onEach { lastRead = it }
+        .catch { throwable -> if (throwable is IOException) emit(emptyPreferences().read()) else throw throwable }
 
     override val lastKnown: ShellSettings? get() = lastRead
 
@@ -76,21 +82,21 @@ internal class DataStoreShellPreferencesRepository(
         }
     }
 
-    override suspend fun setLayoutMode(value: ShellLayoutMode) = choose(Keys.layoutMode, value.name)
-    override suspend fun setTopBarOverride(value: TopBarOverride) = choose(Keys.topBarOverride, value.name)
-    override suspend fun setTabTransition(value: TabTransitionStyle) = choose(Keys.tabTransition, value.name)
-    override suspend fun setAccessoryMode(value: AccessoryMode) = choose(Keys.accessoryMode, value.name)
-    override suspend fun setHideBottomBarOnScroll(value: Boolean) = choose(Keys.hideBottomBarOnScroll, value)
-    override suspend fun setHideTopBarOnScroll(value: Boolean) = choose(Keys.hideTopBarOnScroll, value)
-    override suspend fun setLimitContentWidth(value: Boolean) = choose(Keys.limitContentWidth, value)
-    override suspend fun setAnimationSpeed(value: AnimationSpeed) = choose(Keys.animationSpeed, value.name)
-    override suspend fun setBackEdgeStyle(value: BackEdgeStyle) = choose(Keys.backEdgeStyle, value.name)
-    override suspend fun setStartOverride(value: Int) = choose(Keys.startOverride, value)
-    override suspend fun setNavigationBarStyle(value: NavigationBarStyle) = choose(Keys.navigationBarStyle, value.name)
-    override suspend fun setNavigationTint(value: NavigationTint) = choose(Keys.navigationTint, value.name)
-    override suspend fun setEntranceStyle(value: EntranceStyle) = choose(Keys.entranceStyle, value.name)
-    override suspend fun setMotionTempo(value: MotionTempo) = choose(Keys.motionTempo, value.name)
-    override suspend fun setEntranceReplay(value: EntranceReplay) = choose(Keys.entranceReplay, value.name)
+    override suspend fun setLayoutMode(value: ShellLayoutMode) = choose(key = Keys.layoutMode, value = value.name)
+    override suspend fun setTopBarOverride(value: TopBarOverride) = choose(key = Keys.topBarOverride, value = value.name)
+    override suspend fun setTabTransition(value: TabTransitionStyle) = choose(key = Keys.tabTransition, value = value.name)
+    override suspend fun setAccessoryMode(value: AccessoryMode) = choose(key = Keys.accessoryMode, value = value.name)
+    override suspend fun setHideBottomBarOnScroll(value: Boolean) = choose(key = Keys.hideBottomBarOnScroll, value = value)
+    override suspend fun setHideTopBarOnScroll(value: Boolean) = choose(key = Keys.hideTopBarOnScroll, value = value)
+    override suspend fun setLimitContentWidth(value: Boolean) = choose(key = Keys.limitContentWidth, value = value)
+    override suspend fun setAnimationSpeed(value: AnimationSpeed) = choose(key = Keys.animationSpeed, value = value.name)
+    override suspend fun setBackEdgeStyle(value: BackEdgeStyle) = choose(key = Keys.backEdgeStyle, value = value.name)
+    override suspend fun setStartOverride(value: Int) = choose(key = Keys.startOverride, value = value)
+    override suspend fun setNavigationBarStyle(value: NavigationBarStyle) = choose(key = Keys.navigationBarStyle, value = value.name)
+    override suspend fun setNavigationTint(value: NavigationTint) = choose(key = Keys.navigationTint, value = value.name)
+    override suspend fun setEntranceStyle(value: EntranceStyle) = choose(key = Keys.entranceStyle, value = value.name)
+    override suspend fun setMotionTempo(value: MotionTempo) = choose(key = Keys.motionTempo, value = value.name)
+    override suspend fun setEntranceReplay(value: EntranceReplay) = choose(key = Keys.entranceReplay, value = value.name)
 
     override suspend fun resetDeveloperOptions(): Unit = storageCall {
         dataStore.edit { preferences -> Stored.all.forEach { it.forget(preferences) } }
@@ -184,9 +190,19 @@ internal class DataStoreShellPreferencesRepository(
         val entranceReplay = stringPreferencesKey("entrance_replay")
     }
 
-    private companion object {
-        /** Shared by every instance, since they share the store. */
+    internal companion object {
         @Volatile
-        var lastRead: ShellSettings? = null
+        private var shared: DefaultShellPreferencesRepository? = null
+
+        /**
+         * The instance for [dataStore] and [defaults], reused while they are the same, so the
+         * settings it last read survive an activity being recreated.
+         */
+        @Synchronized
+        fun sharedFor(dataStore: DataStore<Preferences>, defaults: ShellSettings): DefaultShellPreferencesRepository {
+            val existing = shared
+            if (existing != null && existing.dataStore === dataStore && existing.defaults == defaults) return existing
+            return DefaultShellPreferencesRepository(dataStore, defaults).also { shared = it }
+        }
     }
 }

@@ -20,8 +20,17 @@ package com.mihaicristiancondrea.android.libs.apptoolkit.shell.settings
 import androidx.compose.runtime.staticCompositionLocalOf
 import com.mihaicristiancondrea.android.libs.apptoolkit.shell.data.repositories.ShellPreferencesRepository
 
+/**
+ * The [ShellPreferencesRepository] the shell reads its settings from: the one passed to
+ * `ShellHost`, or its own. A screen that changes a shell setting, such as the developer options,
+ * writes through it. Reading it outside `ShellHost` throws.
+ */
 val LocalShellPreferences = staticCompositionLocalOf<ShellPreferencesRepository> {
     error("ShellPreferencesRepository is only available inside ShellHost.")
 }
 
+/**
+ * The shell settings in effect now, updated as they change. Outside `ShellHost` it holds the
+ * Toolkit's defaults.
+ */
 val LocalShellSettings = staticCompositionLocalOf { ShellSettings() }

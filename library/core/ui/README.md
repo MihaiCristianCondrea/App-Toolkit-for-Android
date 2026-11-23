@@ -321,6 +321,27 @@ Both bars default their strings, so a host that has nothing to say about them pa
 `title` falls back to the app name, and the search placeholder and clear-button description to
 `core:ui`'s own `search` and `clear_search`.
 
+### App bar transitions between tabs
+
+The shell (see [`:library:shell`](../shell/README.md)) moves between tabs with one `ShellTopAppBar`, but its style can change under it: a tab with a
+`TabSearch` is always drawn as a small bar, and `ShellTopAppBar` draws each style with a different
+Material composable. These rules keep that change invisible. Each has regressed before, so keep
+them when changing the bar.
+
+- **The bar's slots move, they are not rebuilt.** `ShellTopAppBar` passes its title, menu button
+  and actions through `movableContentOf`, so a style change carries them into the new Material bar
+  with their state. Rebuilt, the menu button and actions replayed their `AnimatedIconButtonDirection`
+  entrance and slid out and back in on every tab switch (System monitor to Dashboard).
+  `ShellTopAppBarTest` covers this.
+- **A search field and a title swap at once.** The field fills the bar while a centred title's slot
+  shrinks around its text, so an animated exit drew the field cut in half as the slot narrowed
+  (App Manager to System monitor). The newcomer fades in and the outgoing one leaves at once.
+  Between two tabs with search, the field is kept, not swapped, so its text and focus stay.
+- **A destination's actions are held to the end of the row, centred vertically.** They cross-fade
+  in an `AnimatedContent` whose size follows them. At the default top start alignment, an action
+  entering an empty row grew from the corner and slid right and down into place (the App Manager
+  sort toggle).
+
 ## Page frame
 
 `views/shell` holds what a page of the shell is drawn in. `ShellHost` in `:library:shell` wraps

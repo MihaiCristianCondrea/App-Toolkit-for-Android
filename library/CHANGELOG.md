@@ -17,6 +17,14 @@
   page too. Restored tab history is dropped when an update changed the tabs. The navigation display,
   beside-navigation and list-detail scenes no longer write state during composition.
 - `ShellHost` builds with Compose Foundation 1.13 after removal of the temporary pausable prefetch flag.
+- `ShellHost` keeps the app's start decision across recreation, so a rotation draws at once and
+  `resolveStart` is not called again, buffers intents delivered through `onNewIntent` while the
+  settings or the start load and opens them once ready, and tints the frame on its first frame when
+  the navigation tint is always on. `onReady` is documented as called once per activity instance.
+  The mini player keeps clear of the system bar beside a rail, an expanded rail and a permanent
+  drawer, and an open player stays open across a rotation.
+- Shell preferences keep the settings last read per repository instead of per process, and a failed
+  read shows the defaults without replacing them.
 - Advanced settings prevents repeated Clear cache taps from starting overlapping deletions.
 - Advanced settings retains the last known Developer Options unlock state on read failure and
   offers Retry for recoverable errors.
@@ -382,8 +390,13 @@
   its own `DataStore<Preferences>` without replacing Toolkit settings. Custom source bindings
   must request the qualifier.
 - Shell preference contracts and implementations are now `ShellPreferencesRepository`,
-  `DataStoreShellPreferencesRepository` and `InMemoryShellPreferencesRepository`, in
+  `DefaultShellPreferencesRepository` and `InMemoryShellPreferencesRepository`, in
   `shell.data.repositories`. Replace old imports and names directly.
+- `ShellHost(modifier = ...)` applies to the root of the shell, around the frame, the pages and the
+  snackbars, instead of to the inner navigation display. `ShellChromeController`'s constructor and
+  `MiniPlayerHeight` are internal: read the controller from `LocalShellChrome`. The default shell
+  store is `DefaultShellPreferencesRepository` (internal), and `:library:shell` declares its
+  `:library:core:common` and `:library:core:datastore` dependencies itself.
 - Custom `SeasonalThemePreferencesDataSource` implementations must implement
   `updateHolidayTheme` atomically over appearance and snapshot data. Direct construction of
   `DefaultSeasonalThemeRepository` now takes only the seasonal source.

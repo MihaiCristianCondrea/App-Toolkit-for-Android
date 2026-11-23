@@ -21,7 +21,7 @@ import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.PreferenceDataStoreFactory
 import androidx.datastore.preferences.core.Preferences
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.motion.TabTransitionStyle
-import com.mihaicristiancondrea.android.libs.apptoolkit.shell.data.repositories.DataStoreShellPreferencesRepository
+import com.mihaicristiancondrea.android.libs.apptoolkit.shell.data.repositories.DefaultShellPreferencesRepository
 import java.io.File
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -53,7 +53,7 @@ class DataStoreShellPreferencesTest {
      * A store over the same file each time it is called, the way a new app version reads what the
      * previous one saved. Only one DataStore may be active per file, so each call closes the last.
      */
-    private suspend fun store(defaults: ShellSettings): DataStoreShellPreferencesRepository {
+    private suspend fun store(defaults: ShellSettings): DefaultShellPreferencesRepository {
         jobs.forEach { it.cancelAndJoin() }
         jobs.clear()
         val job = SupervisorJob().also(jobs::add)
@@ -61,7 +61,7 @@ class DataStoreShellPreferencesTest {
         val dataStore: DataStore<Preferences> = PreferenceDataStoreFactory.create(scope = scope) {
             File(directory, "shell_settings.preferences_pb")
         }
-        return DataStoreShellPreferencesRepository(dataStore, defaults)
+        return DefaultShellPreferencesRepository(dataStore, defaults)
     }
 
     @AfterEach

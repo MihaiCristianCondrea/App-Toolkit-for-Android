@@ -19,8 +19,9 @@ package com.mihaicristiancondrea.android.libs.apptoolkit.shell.chrome
 
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Stable
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.staticCompositionLocalOf
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
 
 /**
@@ -32,3 +33,6 @@ import androidx.compose.runtime.setValue
 internal class ShellSnackbarHost(val hostState: SnackbarHostState) {
     var drawnByTabs: Int by mutableIntStateOf(0)
 }
+
+/** The shell's snackbar host while inside `ShellHost`, null outside it. */
+internal val LocalShellSnackbarHost = staticCompositionLocalOf<ShellSnackbarHost?> { null }
