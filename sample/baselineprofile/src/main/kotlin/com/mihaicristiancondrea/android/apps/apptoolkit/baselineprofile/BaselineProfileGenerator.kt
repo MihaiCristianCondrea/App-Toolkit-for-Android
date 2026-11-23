@@ -41,4 +41,22 @@ class BaselineProfileGenerator {
         awaitCatalog()
         scrollCatalog()
     }
+
+    @Test
+    fun tabsAndToolSheets() = rule.collect(TARGET_PACKAGE) {
+        startActivityAndWait()
+        awaitCatalog()
+        openTab(label = "Measure")
+        openAndCloseTool(title = "Unit converter")
+        openTab(label = "Play & Decide")
+        openAndCloseTool(title = "Decision Wheel")
+        openAndCloseTool(title = "Bell")
+    }
+
+    @Test
+    fun settings() = rule.collect(TARGET_PACKAGE) {
+        startActivityAndWait()
+        awaitCatalog()
+        openSettingsAndDisplay()
+    }
 }

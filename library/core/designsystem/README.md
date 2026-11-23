@@ -345,11 +345,12 @@ node. The selection check is drawn in the swatch's own primary on a disc of the 
 or lightened for contrast, so it stays visible on every palette without taking colors from the
 app's current theme.
 
-The module ships `src/main/baseline-prof.txt`, as do `:library:core:ui`, `:library:navigation` and
-`:library:feature:theme`. A host's release build merges them and `androidx.profileinstaller`
-installs them, so the listed code is compiled ahead of time on install. The lists are hand-picked:
-the files and classes a cold launch runs before its first frame (theme, default palette, icon slot,
-navigation state and chrome, the seasonal overlay). They are a stopgap. The intended replacement is
+The module ships `src/main/baseline-prof.txt`, as do `:library:core:ui`, `:library:navigation`,
+`:library:shell` and `:library:feature:theme`. A host's release build merges them and
+`androidx.profileinstaller` installs them, so the listed code is compiled ahead of time on install.
+The lists are hand-picked: the files and classes a cold launch runs before its first frame (theme,
+default palette, icon slot, the screen contract, navigation, the shell and its chrome, the seasonal
+overlay). A rule naming a moved or renamed file matches nothing, so update the lists with the code. They are a stopgap. The intended replacement is
 a profile generated from a Macrobenchmark startup journey on a device, extended with a Settings and
 Theme journey if those screens matter, and measured against a release build before and after.
 
