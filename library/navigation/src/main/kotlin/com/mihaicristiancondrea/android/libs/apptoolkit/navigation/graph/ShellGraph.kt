@@ -40,11 +40,15 @@ class ShellGraph internal constructor(
     @param:StringRes val appTitle: Int,
     /** The app's mark, shown beside [appTitle] where the navigation names the app. */
     val appIcon: ToolkitIcon?,
+    /** The roots of the shell, in the order they are added. */
     val tabs: List<ShellTab>,
+    /** The navigation drawer's entries, top to bottom, the footer last. */
     val drawer: List<DrawerEntry>,
     /** The app bar's overflow menu on the tabs' roots. Empty draws no menu button. */
     val overflow: List<DrawerEntry>,
+    /** Host content above the navigation bar, or null when the app declares none. */
     val banner: (@Composable () -> Unit)?,
+    /** The player that docks above the navigation bar, or null when the app declares none. */
     val player: ShellPlayer?,
     /** The default transition of each kind of destination, and per navigation layout. */
     val transitions: ShellTransitions,
@@ -83,11 +87,11 @@ class ShellGraph internal constructor(
     }
 
     /**
-     * The destination [intent] asks for, from the first deep link that recognises it, or null
-     * when none does or the destination is not registered.
+     * The destination [intent] asks for, from the first deep link whose key the graph registers,
+     * or null when none does. A link that returns a key the graph does not register is skipped.
      */
     fun keyFor(intent: Intent): NavKey? =
-        deepLinks.firstNotNullOfOrNull { it(intent) }?.takeIf { it == ShellHomeScreen || contains(it) }
+        deepLinks.asSequence().mapNotNull { it(intent) }.firstOrNull { it == ShellHomeScreen || contains(it) }
 
     /** Every place the app can start: the tabs, then the start screens. */
     val startOptions: List<NavKey> get() = tabs.map { it.key } + startScreens
@@ -95,9 +99,13 @@ class ShellGraph internal constructor(
     /** The first tab, or null in a graph of pages only. */
     val startTab: NavKey? get() = tabs.firstOrNull()?.key
 
+    /** The index of the tab whose key equals [key], or -1 when no tab does. Tabs match by instance. */
     fun tabIndexOf(key: NavKey): Int = tabs.indexOfFirst { it.key == key }
 
-    /** Whether [key] can be navigated to. */
+    /**
+     * Whether [key] can be navigated to: its class is registered and, for a tab, it is the
+     * registered instance.
+     */
     fun contains(key: NavKey): Boolean = destinationOrNull(key) != null
 
     /** How many destinations the graph registers, tabs included. */
@@ -108,10 +116,20 @@ class ShellGraph internal constructor(
     internal val hasFramedPages: Boolean
         get() = destinations.values.any { it.kind == DestinationKind.Page && it.scaffold && it.title != null }
 
+    /**
+     * The destination registered for [key]: by its class, except for a tab, which is matched by
+     * the instance given to `tab()`.
+     *
+     * @throws IllegalStateException when [key] is not registered.
+     */
     @Suppress("UNCHECKED_CAST")
     fun destination(key: NavKey): Destination<NavKey> =
         checkNotNull(destinationOrNull(key)) {
-            "No destination is registered for ${key::class.qualifiedName}. Register it in the shell graph."
+            if (destinations[key::class]?.kind == DestinationKind.Tab) {
+                "$key is not a registered tab. Tabs are matched by instance: use the key given to tab()."
+            } else {
+                "No destination is registered for ${key::class.qualifiedName}. Register it in the shell graph."
+            }
         } as Destination<NavKey>
 
     /** The transition [key] enters and leaves with in [layout]. */
@@ -120,8 +138,14 @@ class ShellGraph internal constructor(
         return transitions.resolve(destination.kind, destination.transition, layout)
     }
 
-    private fun destinationOrNull(key: NavKey): Destination<*>? =
-        if (key == ShellHomeScreen) null else destinations[key::class]
+    private fun destinationOrNull(key: NavKey): Destination<*>? {
+        if (key == ShellHomeScreen) return null
+        val destination = destinations[key::class] ?: return null
+        // Tabs are matched by instance, like [tabIndexOf]: another instance of a tab's class is
+        // not a destination.
+        if (destination.kind == DestinationKind.Tab && tabIndexOf(key) < 0) return null
+        return destination
+    }
 }
 
 /**

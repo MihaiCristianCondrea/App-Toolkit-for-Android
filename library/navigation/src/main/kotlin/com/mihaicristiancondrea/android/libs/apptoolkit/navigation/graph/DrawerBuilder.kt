@@ -30,6 +30,10 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.keys.SupportS
 
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.R as DesignSystemR
 
+/**
+ * The entries of the drawer, the rail's extra entries or the app bar's overflow menu, added in
+ * order inside `ShellGraphBuilder.drawer { }`, `footer { }` or `overflow { }`.
+ */
 class DrawerBuilder internal constructor() {
     internal val entries = mutableListOf<DrawerEntry>()
     internal val footer = mutableListOf<DrawerEntry>()

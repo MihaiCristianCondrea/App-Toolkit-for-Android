@@ -30,6 +30,10 @@ import androidx.compose.animation.togetherWith
 import androidx.compose.runtime.Immutable
 import kotlin.math.roundToInt
 
+/**
+ * Plays the transitions between tabs in the style the app chose, scaled by the developer options'
+ * animation speed.
+ */
 @Immutable
 class TabTransitions internal constructor(
     private val style: TabTransitionStyle,

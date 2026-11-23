@@ -17,8 +17,13 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.navigation.layout
 
+import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
+import androidx.compose.runtime.staticCompositionLocalOf
+import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.platform.LocalWindowInfo
 import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.dp
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.ContentWidth
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.TopBarStyle
 
@@ -45,4 +50,36 @@ data class ShellLayoutInfo(
     /** [style], unless the window is too short for a large bar. */
     fun topBarFor(style: TopBarStyle): TopBarStyle =
         if (style.isLarge && !allowsLargeTopBar) TopBarStyle.Small else style
+}
+
+
+/**
+ * The [ShellLayoutInfo] for the window being drawn: [policy] resolves [requested] against the
+ * window's width, and the window's size decides the list-detail layout and large app bars.
+ *
+ * @param limitContentWidth Whether [ShellLayoutPolicy.contentMaxWidth] applies; false lifts it.
+ */
+@Composable
+fun rememberShellLayoutInfo(
+    policy: ShellLayoutPolicy,
+    requested: ShellLayoutMode,
+    limitContentWidth: Boolean,
+): ShellLayoutInfo {
+    val size = LocalWindowInfo.current.containerSize
+    val density = LocalDensity.current
+    val width = with(density) { size.width.toDp() }
+    val height = with(density) { size.height.toDp() }
+    return ShellLayoutInfo(
+        mode = policy.resolve(requested, width),
+        windowWidth = width,
+        windowHeight = height,
+        listDetail = width >= policy.listDetailFrom,
+        contentMaxWidth = if (limitContentWidth) policy.contentMaxWidth else Dp.Unspecified,
+        allowsLargeTopBar = height >= policy.largeTopBarFrom,
+    )
+}
+
+/** The layout the shell is drawing now. A bottom bar in a zero-size window outside `ShellHost`. */
+val LocalShellLayout = staticCompositionLocalOf {
+    ShellLayoutInfo(ShellLayoutMode.BottomBar, 0.dp, 0.dp, listDetail = false)
 }

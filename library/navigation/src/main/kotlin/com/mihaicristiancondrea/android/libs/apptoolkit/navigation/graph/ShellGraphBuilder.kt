@@ -196,21 +196,29 @@ class ShellGraphBuilder(
         paneRole: PaneRole,
         noinline title: (@Composable (K) -> String)?,
         topBar: TopBarStyle? = null,
+        contentWidth: ContentWidth = ContentWidth.Default,
         noinline actions: (@Composable RowScope.(K) -> Unit)? = null,
+        transition: ScreenTransition? = null,
+        noinline fab: (@Composable (K) -> Unit)? = null,
         noinline fabs: (@Composable (K) -> List<ToolkitFab>)? = null,
         noinline placeholder: (@Composable () -> Unit)? = null,
         topBarScrollMode: TopBarScrollMode = TopBarScrollMode.Default,
+        backButton: Boolean = true,
         noinline content: @Composable (K) -> Unit,
     ) {
         if (K::class !in destinations) {
             page(
                 topBar = topBar,
-                topBarScrollMode = topBarScrollMode,
                 paneRole = paneRole,
+                contentWidth = contentWidth,
                 title = title,
                 actions = actions,
+                transition = transition,
+                fab = fab,
                 fabs = fabs,
                 placeholder = placeholder,
+                topBarScrollMode = topBarScrollMode,
+                backButton = backButton,
                 content = content,
             )
         }
@@ -247,6 +255,7 @@ class ShellGraphBuilder(
         banner = content
     }
 
+    /** Declares the player that docks above the navigation bar. Calling it again replaces it. */
     fun player(player: ShellPlayer) {
         this.player = player
     }
@@ -293,6 +302,12 @@ class ShellGraphBuilder(
         transitions = value
     }
 
+    /**
+     * Builds the graph, with the drawer's footer last.
+     *
+     * @throws IllegalArgumentException when the graph has no tab and no page to start on, or a
+     * tab or start screen is not registered as one.
+     */
     fun build(): ShellGraph = ShellGraph(
         appTitle = appTitle,
         appIcon = appIcon,

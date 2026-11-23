@@ -62,6 +62,7 @@ sealed interface DrawerEntry {
         @param:StringRes override val shortLabel: Int? = null,
     ) : DrawerEntry
 
+    /** Splits the entries in two and pins those after it to the bottom edge. A divider in a menu. */
     data object Spacer : DrawerEntry {
         override val shortLabel: Int? = null
     }

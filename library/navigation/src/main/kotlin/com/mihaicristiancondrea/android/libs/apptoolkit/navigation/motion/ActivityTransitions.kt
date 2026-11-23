@@ -39,7 +39,7 @@ import kotlin.math.roundToInt
  * with a gesture is [CrossActivityBackMotion], which `ShellNavDisplay` drives.
  */
 @Immutable
-class ActivityTransitions internal constructor(
+internal class ActivityTransitions internal constructor(
     private val enteringOffsetPx: Int,
     private val displayMarginPx: Int,
     private val durationScale: Float,
@@ -60,22 +60,22 @@ class ActivityTransitions internal constructor(
      */
     fun close(): ContentTransform {
         val enter = slideInHorizontally(motion()) { -direction * enteringOffsetPx } +
-            scaleIn(motion(), initialScale = ActivityMotion.MINIMUM_SCALE)
+            scaleIn(motion(), initialScale = ActivityMotion.MinimumScale)
         val exit = slideOutHorizontally(motion()) { width -> direction * (drift(width) + enteringOffsetPx) } +
-            scaleOut(motion(), targetScale = ActivityMotion.MINIMUM_SCALE) +
-            fadeOut(tween(duration(ActivityMotion.CLOSING_FADE_MILLIS), easing = ActivityMotion.Emphasized))
+            scaleOut(motion(), targetScale = ActivityMotion.MinimumScale) +
+            fadeOut(tween(duration(ActivityMotion.ClosingFadeMillis), easing = ActivityMotion.Emphasized))
         return enter togetherWith exit
     }
 
     /** How far a page shrunk to the minimum scale moves to rest against an edge, less the margin. */
     private fun drift(width: Int): Int =
-        ((width * (1f - ActivityMotion.MINIMUM_SCALE) / 2f).roundToInt() - displayMarginPx).coerceAtLeast(0)
+        ((width * (1f - ActivityMotion.MinimumScale) / 2f).roundToInt() - displayMarginPx).coerceAtLeast(0)
 
     private fun <T> motion(): FiniteAnimationSpec<T> =
-        tween(duration(ActivityMotion.DURATION_MILLIS), easing = ActivityMotion.Emphasized)
+        tween(duration(ActivityMotion.DurationMillis), easing = ActivityMotion.Emphasized)
 
     private fun <T> fade(): FiniteAnimationSpec<T> =
-        tween(duration(ActivityMotion.FADE_MILLIS), easing = ActivityMotion.Emphasized)
+        tween(duration(ActivityMotion.FadeMillis), easing = ActivityMotion.Emphasized)
 
     private fun duration(millis: Int): Int = (millis * durationScale).roundToInt()
 }

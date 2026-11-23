@@ -58,13 +58,13 @@ import kotlin.math.sign
  *
  * - **Pre-commit**, while the finger is down: both rectangles move from their start to their target
  *   by the gesture's progress, eased with `BACK_GESTURE`. The closing page shrinks to
- *   [MaxScale] and rests against the far edge (or stays centred for a swipe from the right
+ *   [ActivityMotion.MinimumScale] and rests against the far edge (or stays centred for a swipe from the right
  *   edge); the entering page, [ActivityMotion.EnteringStartOffset] further out, shrinks with it.
  *   Both shift vertically with the finger, by as much as the closing page's *current* size leaves
  *   room for.
  * - **Post-commit**, once back is invoked: both rectangles start from exactly where the gesture
  *   left them. The entering page grows to fill the display and the closing page carries on,
- *   fading within the first fifth, over [PostCommitMillis] with the emphasized curve. A spring
+ *   fading within the first fifth, over [ActivityMotion.DurationMillis] with the emphasized curve. A spring
  *   started with the gesture's velocity shrinks both a little further and lets them bounce back.
  * - **Cancel**: the system animates the progress back to zero, and the rectangles follow it.
  *
@@ -72,7 +72,7 @@ import kotlin.math.sign
  * as the system's own animation receives it; it is not smoothed again here.
  */
 @Stable
-class CrossActivityBackMotion internal constructor(
+internal class CrossActivityBackMotion internal constructor(
     private val scope: CoroutineScope,
     private val enteringStartOffsetPx: Float,
     private val displayMarginPx: Float,
@@ -90,8 +90,8 @@ class CrossActivityBackMotion internal constructor(
 
     /**
      * Whether a swipe from the right edge mirrors a swipe from the left, so the page follows the
-     * finger to the left edge and the page underneath waits on the right; the default. False plays
-     * Android's own animation, which shrinks the page in place for a swipe from the right.
+     * finger to the left edge and the page underneath waits on the right. False, the default,
+     * plays Android's own animation, which shrinks the page in place for a swipe from the right.
      */
     var mirrorRightEdge: Boolean = false
 
@@ -136,11 +136,8 @@ class CrossActivityBackMotion internal constructor(
         velocityTracker.addDataPoint(time, gestureProgress)
     }
 
-    /**
-     * Back was invoked: plays the post-commit phase from where the gesture left the pages, and
-     * calls [onFinished] once both have arrived.
-     */
-    fun commit(onFinished: () -> Unit) {
+    /** Back was invoked: plays the post-commit phase from where the gesture left the pages. */
+    fun commit() {
         if (phase != Phase.Gesture) return
         commitClosing = rawClosingRect()
         commitEntering = rawEnteringRect()
@@ -148,7 +145,7 @@ class CrossActivityBackMotion internal constructor(
         // AOSP: velocity (progress per second) × SPRING_SCALE × (1 − MAX_SCALE), doubled for
         // swipes from a side edge, at least DEFAULT_FLING_VELOCITY for a barely started gesture.
         val edgeFactor = if (swipeEdge == NavigationEvent.EDGE_LEFT || swipeEdge == NavigationEvent.EDGE_RIGHT) 2f else 1f
-        var startVelocity = velocity * SpringScale * (1f - MaxScale) * edgeFactor
+        var startVelocity = velocity * SpringScale * (1f - ActivityMotion.MinimumScale) * edgeFactor
         if (gestureProgress < 0.1f) startVelocity = max(startVelocity, DefaultFlingVelocity)
         startVelocity = startVelocity.coerceIn(0f, MaxFlingVelocity)
         phase = Phase.PostCommit
@@ -162,13 +159,12 @@ class CrossActivityBackMotion internal constructor(
                     initialVelocity = -startVelocity / SpringScale,
                 )
             }
-            postCommit.animateTo(1f, tween((PostCommitMillis * durationScale).roundToInt(), easing = { it }))
+            postCommit.animateTo(1f, tween((ActivityMotion.DurationMillis * durationScale).roundToInt(), easing = { it }))
             // The pages stay where the motion left them, the closing one invisible, until the
             // display lets the closing scene go. Going idle before that drew it, for a frame or
             // two, at full size over the page underneath: a flicker.
             withTimeoutOrNull(ClosingSceneGraceMillis) { snapshotFlow { closingGone }.first { it } }
             reset()
-            onFinished()
         }
     }
 
@@ -220,7 +216,7 @@ class CrossActivityBackMotion internal constructor(
         Phase.Idle -> full()
         Phase.Gesture -> {
             val start = full().translate(-enteringStartOffsetPx, 0f)
-            val rect = lerp(start, start.scaleCentered(MaxScale), gestureProgress)
+            val rect = lerp(start, start.scaleCentered(ActivityMotion.MinimumScale), gestureProgress)
             rect.translate(0f, yOffset(lerp(full(), closingTarget(), gestureProgress)))
         }
         Phase.PostCommit -> lerp(commitEntering, full(), emphasized()).scaleCentered(fling())
@@ -252,7 +248,7 @@ class CrossActivityBackMotion internal constructor(
     }
 
     private fun closingTarget(): Rect {
-        val target = full().scaleCentered(MaxScale)
+        val target = full().scaleCentered(ActivityMotion.MinimumScale)
         // Scaled into the middle for a swipe from the right edge, and against the right edge,
         // less the margin, for any other.
         return if (swipeEdge != NavigationEvent.EDGE_RIGHT) {
@@ -282,12 +278,6 @@ class CrossActivityBackMotion internal constructor(
     enum class Phase { Idle, Gesture, PostCommit }
 
     companion object {
-        /** `MAX_SCALE`: how small the closing page gets. */
-        const val MaxScale = 0.9f
-
-        /** `POST_COMMIT_DURATION` of the default cross-activity animation. */
-        const val PostCommitMillis = 450
-
         private const val MaxScrimAlphaDark = 0.8f
         private const val MaxScrimAlphaLight = 0.2f
         private const val SpringScale = 100f

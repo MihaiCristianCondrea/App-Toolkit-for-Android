@@ -17,18 +17,9 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.navigation.layout
 
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.Stable
 import androidx.compose.runtime.compositionLocalOf
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.Shape
-import androidx.compose.ui.unit.dp
-import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.LocalShellNavigator
 
 /**
  * Set by the shell while its pages open beside a rail or a permanent drawer.
@@ -52,51 +43,5 @@ class BesideNavigation(
     val frameColor: () -> Color,
 )
 
-/**
- * Lets this app bar drive the shared colour of the navigation beside it, while the person's
- * settings have it follow scrolling, for as long as the bar is composed. It does nothing anywhere
- * else.
- *
- * [tint] is read in a snapshot, so reading the bar's scroll state there keeps the colour in step.
- *
- * @param underneath Whether the bar sits under pages, as the shell's own tabs do: a page shown
- * over it decides the colour even when the tab's bar appears later.
- */
-@Composable
-fun FollowScrollWithFrameTint(underneath: Boolean = false, tint: () -> FrameTint) {
-    val scrollTint = LocalBesideNavigation.current?.scrollTint ?: return
-    val latest by rememberUpdatedState(tint)
-    DisposableEffect(scrollTint, underneath) {
-        val driver: () -> FrameTint = { latest() }
-        scrollTint.add(driver, underneath)
-        onDispose { scrollTint.remove(driver) }
-    }
-}
-
 /** The shell's pages open beside the navigation; null when they cover the window. */
 val LocalBesideNavigation = compositionLocalOf<BesideNavigation?> { null }
-
-/** The corner the content card takes beside a tinted rail or drawer, under the app bar. */
-val ContentCardShape: Shape = RoundedCornerShape(topStart = 24.dp)
-
-/**
- * Whether [key] is the page the navigation beside it opened, which stands in for a tab: the first
- * page over the shell while pages open beside a rail or permanent drawer. Pages opened from it
- * stack above and keep their back button.
- *
- * A page keeps the answer it had while it animates out: once the navigation swaps it for another
- * entry it is no longer on the stack, and without this it would grow a back button and a large
- * app bar for the length of its exit.
- */
-@Composable
-fun isTopLevelPage(key: Any?): Boolean {
-    if (key == null || LocalBesideNavigation.current == null) return false
-    val pages = LocalShellNavigator.current.pages
-    // Plain memory rather than state: it only ever changes along with the stack it is read from.
-    val last = remember(key) { TopLevelMemory() }
-    val index = pages.indexOf(key)
-    if (index >= 0) last.value = index == 1
-    return last.value
-}
-
-private class TopLevelMemory(var value: Boolean = false)

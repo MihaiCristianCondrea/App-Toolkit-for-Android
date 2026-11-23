@@ -28,9 +28,12 @@ import androidx.compose.ui.unit.LayoutDirection
 /** The shell's transitions, scaled by the developer options' animation speed. */
 @Immutable
 class ShellMotion internal constructor(
-    val activity: ActivityTransitions,
+    internal val activity: ActivityTransitions,
+    /** The transitions between tabs, and between a tab and the page beside the navigation. */
     val tabs: TabTransitions,
+    /** The transitions of children and pages, by [ScreenTransition]. */
     val screens: ScreenTransitions,
+    /** The developer options' animation speed: 1 is normal, 0 plays no motion. */
     val durationScale: Float,
     /**
      * Whether a back swipe from the right edge mirrors one from the left, following the finger,
@@ -39,6 +42,12 @@ class ShellMotion internal constructor(
     val followFingerFromRight: Boolean = false,
 )
 
+/**
+ * The shell's [ShellMotion] for [tabStyle], scaled by [durationScale], with every slide mirrored in
+ * right-to-left layouts. Rebuilt only when an input or the density changes.
+ *
+ * @param followFingerFromRight See [ShellMotion.followFingerFromRight].
+ */
 @Composable
 fun rememberShellMotion(
     tabStyle: TabTransitionStyle,
@@ -66,6 +75,7 @@ fun rememberShellMotion(
     }
 }
 
+/** The shell's motion. Only available inside `ShellHost`. */
 val LocalShellMotion = staticCompositionLocalOf<ShellMotion> {
     error("ShellMotion is only available inside ShellHost.")
 }

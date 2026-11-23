@@ -22,6 +22,10 @@ import androidx.navigation3.scene.Scene
 import androidx.navigation3.scene.SceneStrategy
 import androidx.navigation3.scene.SceneStrategyScope
 
+/**
+ * Shows the entry on top as one page filling the window, with the entries under it as the scene's
+ * previous entries. The fallback for every page that is not part of a list-detail pair.
+ */
 class PageSceneStrategy<T : Any> : SceneStrategy<T> {
     override fun SceneStrategyScope<T>.calculateScene(entries: List<NavEntry<T>>): Scene<T> {
         val entry = entries.last()

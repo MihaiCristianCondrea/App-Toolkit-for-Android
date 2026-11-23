@@ -71,6 +71,16 @@ class ShellNavigator internal constructor(
 ) {
     init {
         require(tabStacks.size == graph.tabs.size) { "Every tab needs a back stack." }
+        // State restored after an app update can describe tabs the graph no longer has: it is
+        // dropped when the tab count changed or an index is out of range.
+        if (tabOpenings.size != tabStacks.size || tabHistory.any { it !in tabStacks.indices }) {
+            tabHistory.clear()
+            tabOpenings.clear()
+            tabStacks.forEachIndexed { index, stack ->
+                stack.clear()
+                stack += graph.tabs[index].key
+            }
+        }
         if (tabHistory.isEmpty()) tabHistory += 0
         while (tabOpenings.size < tabStacks.size) tabOpenings += 0
     }
@@ -78,6 +88,7 @@ class ShellNavigator internal constructor(
     /** The index of the selected tab in [ShellGraph.tabs]. */
     val currentTabIndex: Int get() = tabHistory.last()
 
+    /** The selected tab, as declared in the graph. */
     val currentTab: ShellTab get() = graph.tabs[currentTabIndex]
 
     /** The outer stack: [ShellHomeScreen], or a start page, followed by every open page. */
@@ -95,6 +106,7 @@ class ShellNavigator internal constructor(
     /** The stack of the selected tab, its root first. */
     val currentTabStack: List<NavKey> get() = tabStacks[currentTabIndex]
 
+    /** The stack of tab [index] in [ShellGraph.tabs], its root first. */
     fun tabStack(index: Int): List<NavKey> = tabStacks[index]
 
     /**
@@ -114,8 +126,12 @@ class ShellNavigator internal constructor(
     val isShowingChild: Boolean get() = currentTabStack.size > 1
 
     /**
-     * Opens a registered destination according to its kind. Navigating to another detail
-     * replaces the current detail so one Back returns to the list.
+     * Opens a registered destination according to its kind. Navigating to another detail, as a
+     * child of the current tab or as a page, replaces the current detail so one Back returns to
+     * the list.
+     *
+     * @throws IllegalStateException when [key] is not registered, when it is a tab key that is not
+     * the instance given to `tab()`, or when it is a child and the graph has no tabs.
      */
     fun navigate(key: NavKey) {
         if (key == ShellHomeScreen) {
@@ -130,9 +146,17 @@ class ShellNavigator internal constructor(
             }
 
             DestinationKind.Child -> {
+                check(graph.tabs.isNotEmpty()) {
+                    "$key is a child, but a graph of pages only has no tab to open it on."
+                }
                 enterShell()
                 val stack = tabStacks[currentTabIndex]
-                if (stack.last() != key) stack += key
+                val top = stack.last()
+                when {
+                    top == key -> Unit
+                    destination.paneRole == PaneRole.Detail && top.isDetail() -> stack[stack.lastIndex] = key
+                    else -> stack += key
+                }
             }
 
             DestinationKind.Page -> {
@@ -280,6 +304,7 @@ fun rememberShellNavigator(graph: ShellGraph, onExit: () -> Unit, start: NavKey 
     }
 }
 
+/** The navigator of the shell being drawn. Only available inside `ShellHost`. */
 val LocalShellNavigator = staticCompositionLocalOf<ShellNavigator> {
     error("ShellNavigator is only available inside ShellHost.")
 }

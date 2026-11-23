@@ -41,6 +41,8 @@ class ShellNavigatorTest {
     private data object OtherPage : NavKey
     private data object Detail : NavKey
     private data object OtherDetail : NavKey
+    private data class Article(val id: Int) : NavKey
+    private data class Label(val name: String) : NavKey
 
     private val icon = ToolkitIcon.Vector(Icons.Outlined.Home)
 
@@ -49,6 +51,7 @@ class ShellNavigatorTest {
         tab(Second, 0, icon) {}
         tab(Third, 0, icon) {}
         child<Child>(title = { "" }) {}
+        child<Article>(title = { "" }, paneRole = PaneRole.Detail) {}
         page<Page> {}
         page<OtherPage> {}
         page<Detail>(paneRole = PaneRole.Detail) {}
@@ -377,5 +380,88 @@ class ShellNavigatorTest {
         assertThrows<IllegalArgumentException> {
             ShellGraphBuilder(appTitle = 0).apply { page<Page> {} }.build()
         }
+    }
+
+    @Test
+    fun `a detail child replaces the detail child open on the tab`() {
+        navigator.navigate(Article(1))
+        navigator.navigate(Article(2))
+
+        assertEquals(listOf(First, Article(2)), navigator.currentTabStack)
+
+        navigator.navigate(Article(2))
+        assertEquals(listOf(First, Article(2)), navigator.currentTabStack)
+
+        navigator.goBack()
+        assertEquals(listOf<NavKey>(First), navigator.currentTabStack)
+    }
+
+    @Test
+    fun `a detail child over a plain child is pushed`() {
+        navigator.navigate(Child(1))
+        navigator.navigate(Article(1))
+
+        assertEquals(listOf(First, Child(1), Article(1)), navigator.currentTabStack)
+    }
+
+    @Test
+    fun `navigating to another instance of a tab key fails clearly`() {
+        val labelGraph = ShellGraphBuilder(appTitle = 0).apply {
+            tab(Label("a"), 0, icon) {}
+        }.build()
+        val labelNavigator = ShellNavigator(labelGraph, mutableListOf(ShellHomeScreen), labelGraph.tabs.map { mutableListOf(it.key) }, mutableListOf(0)) { exits++ }
+
+        assertTrue(Label("a") in labelGraph.startOptions)
+        assertTrue(labelGraph.contains(Label("a")))
+        assertFalse(labelGraph.contains(Label("other")))
+        val failure = assertThrows<IllegalStateException> { labelNavigator.navigate(Label("other")) }
+        assertTrue(failure.message.orEmpty().contains("matched by instance"))
+        assertEquals(0, labelNavigator.currentTabIndex)
+    }
+
+    @Test
+    fun `a child in a graph of pages only fails clearly`() {
+        val entry = ShellGraphBuilder(appTitle = 0).apply {
+            page<Page> {}
+            child<Child>(title = { "" }) {}
+            start(Page)
+        }.build()
+        val entryPages = mutableListOf<NavKey>(Page)
+        val entryNavigator = ShellNavigator(entry, entryPages, emptyList(), mutableListOf()) { exits++ }
+
+        assertThrows<IllegalStateException> { entryNavigator.navigate(Child(1)) }
+
+        assertEquals(listOf<NavKey>(Page), entryPages)
+        assertEquals(0, exits)
+    }
+
+    @Test
+    fun `restored state for a different number of tabs is dropped`() {
+        val staleHistory = mutableListOf(0, 5)
+        val staleOpenings = mutableListOf(0, 1, 0, 0, 2, 3)
+        val staleTabs = graph.tabs.map { mutableListOf<NavKey>(it.key, Child(9)) }
+
+        val restored = ShellNavigator(graph, mutableListOf(ShellHomeScreen), staleTabs, staleHistory, staleOpenings) { exits++ }
+
+        assertEquals(0, restored.currentTabIndex)
+        assertEquals(listOf(0), restored.tabsInUse)
+        assertEquals(0, restored.timesOpened(2))
+        assertEquals(listOf<NavKey>(First), restored.tabStack(0))
+    }
+
+    @Test
+    fun `restored history with an index out of range is dropped`() {
+        val restored = ShellNavigator(graph, mutableListOf(ShellHomeScreen), tabs, mutableListOf(1, 7), mutableListOf(0, 1, 0)) { exits++ }
+
+        assertEquals(0, restored.currentTabIndex)
+        assertEquals(0, restored.timesOpened(1))
+    }
+
+    @Test
+    fun `restored state that still fits the tabs is kept`() {
+        val restored = ShellNavigator(graph, mutableListOf(ShellHomeScreen), tabs, mutableListOf(0, 2), mutableListOf(0, 1, 2)) { exits++ }
+
+        assertEquals(2, restored.currentTabIndex)
+        assertEquals(2, restored.timesOpened(2))
     }
 }

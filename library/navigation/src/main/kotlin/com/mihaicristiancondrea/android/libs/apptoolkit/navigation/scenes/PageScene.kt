@@ -36,7 +36,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.layout.LocalB
  * shrinks the page, the page keeps the corners the screen had, as a system window does. Beside a
  * rail or a drawer the page's start corners meet the navigation instead, and stay square.
  */
-data class PageScene<T : Any>(
+internal data class PageScene<T : Any>(
     override val key: Any,
     val entry: NavEntry<T>,
     override val previousEntries: List<NavEntry<T>>,
@@ -45,8 +45,12 @@ data class PageScene<T : Any>(
     override val content: @Composable () -> Unit = { PageSurface { entry.Content() } }
 }
 
+/**
+ * Draws [content] as a window would: on the theme's surface, clipped to the display's corners, with
+ * `onSurface` as the content colour.
+ */
 @Composable
-fun PageSurface(content: @Composable () -> Unit) {
+internal fun PageSurface(content: @Composable () -> Unit) {
     Box(
         modifier = Modifier
             .fillMaxSize()

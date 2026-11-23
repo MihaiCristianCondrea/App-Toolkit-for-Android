@@ -49,6 +49,11 @@ data class ShellLayoutPolicy(
      */
     val hideSingleTabBottomBar: Boolean = false,
 ) {
+    /**
+     * The layout to draw for a window [width]: [requested] when it is not [ShellLayoutMode.Auto],
+     * otherwise the widest mode whose threshold [width] reaches, or the bottom bar below them all.
+     * Never returns [ShellLayoutMode.Auto].
+     */
     fun resolve(requested: ShellLayoutMode, width: Dp): ShellLayoutMode = when {
         requested != ShellLayoutMode.Auto -> requested
         width >= permanentDrawerFrom -> ShellLayoutMode.PermanentDrawer

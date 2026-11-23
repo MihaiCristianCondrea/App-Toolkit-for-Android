@@ -41,7 +41,7 @@ import androidx.core.view.ViewCompat
  * display's corners, and rounding them would round the app bar next to the rail.
  */
 @Composable
-fun rememberDeviceCornerShape(squareStart: Boolean = false): Shape {
+internal fun rememberDeviceCornerShape(squareStart: Boolean = false): Shape {
     val view = LocalView.current
     val density = LocalDensity.current
     val layoutDirection = LocalLayoutDirection.current

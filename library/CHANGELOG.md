@@ -13,6 +13,9 @@
 
 ### Fixed
 
+- The list-detail scene ignores a second close while one plays, so back no longer pops the list
+  page too. Restored tab history is dropped when an update changed the tabs. The navigation display,
+  beside-navigation and list-detail scenes no longer write state during composition.
 - `ShellHost` builds with Compose Foundation 1.13 after removal of the temporary pausable prefetch flag.
 - Advanced settings prevents repeated Clear cache taps from starting overlapping deletions.
 - Advanced settings retains the last known Developer Options unlock state on read failure and
@@ -86,6 +89,16 @@
 
 ### Changed
 
+- `:library:navigation` makes `CrossActivityBackMotion`, `ActivityTransitions`, `ActivityMotion`,
+  `PageScene`, `PageSurface`, `rememberDeviceCornerShape` and `ShellMotion.activity` internal, and
+  shares one set of motion constants between the transitions and the back motion. `pageIfAbsent`
+  accepts `contentWidth`, `transition`, `fab` and `backButton` like `page`. Several files are
+  renamed or split to match their declarations, and its baseline profile uses wildcard rules for
+  the current packages.
+- `ShellNavigator.navigate` on a child with `PaneRole.Detail` replaces the detail already open on
+  the tab, and throws for a tab key that is not the registered instance or a child in a graph of
+  pages only. `ShellGraph.contains` is false for such a key. `ShellGraph.keyFor` skips deep links
+  whose key the graph does not register.
 - `PurchaseResult.Failed` carries a typed `reason` and Play's `debugMessage` instead of a display
   string. Billing settles a purchase it did not launch through the typed purchase queries instead
   of consuming it as a donation, so a subscription bought outside the app is acknowledged.
@@ -143,6 +156,7 @@
 
 ### Removed
 
+- `LocalSelectedDetail` from `:library:navigation`, which no screen read.
 - Remove the unused `LibraryExtrasScreen` placeholder and `LibraryExtrasRoute` key. Use
   `LicensesScreen` from `:library:feature:licenses` and `:library:navigation` instead.
 

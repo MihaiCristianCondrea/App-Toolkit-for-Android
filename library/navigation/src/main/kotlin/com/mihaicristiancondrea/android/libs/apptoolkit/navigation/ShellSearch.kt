@@ -31,6 +31,10 @@ class ShellSearch(initialQuery: String = "") {
     /** The editor state used by the app bar. Its text is also exposed as [query]. */
     val textFieldState: TextFieldState = TextFieldState(initialText = initialQuery)
 
+    /**
+     * The text in the search field. Setting a different value replaces it and places the cursor
+     * at the end; setting the same value changes nothing.
+     */
     var query: String
         get() = textFieldState.text.toString()
         set(value) {
