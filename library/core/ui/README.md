@@ -323,7 +323,7 @@ Both bars default their strings, so a host that has nothing to say about them pa
 
 ### App bar transitions between tabs
 
-The shell (see [`:library:shell`](../shell/README.md)) moves between tabs with one `ShellTopAppBar`, but its style can change under it: a tab with a
+The shell (see [`:library:shell`](../../shell/README.md)) moves between tabs with one `ShellTopAppBar`, but its style can change under it: a tab with a
 `TabSearch` is always drawn as a small bar, and `ShellTopAppBar` draws each style with a different
 Material composable. These rules keep that change invisible. Each has regressed before, so keep
 them when changing the bar.
