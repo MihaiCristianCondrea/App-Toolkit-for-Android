@@ -4,6 +4,10 @@ import bellStrikeUrl from "./bell-strike.mp3?url";
 
 const MAX_VOICES = 3;
 const AUDIO_LEAD_SECONDS = 0.025;
+const MAX_IMPACT_ANGLE = 23;
+const COOKIE_PULSE_SCALE = 0.032;
+const ATTACK_EASING = "cubic-bezier(0.2, 0.8, 0.2, 1)";
+const DECAY_EASING = "cubic-bezier(0.22, 1, 0.36, 1)";
 const IMPACTS = [
   { time: 0.006, angle: 20 },
   { time: 0.10, angle: -23 },
@@ -12,7 +16,86 @@ const IMPACTS = [
   { time: 0.54, angle: 15 },
   { time: 0.84, angle: -12 },
 ];
+const WAVE_RINGS = {
+  inner: {
+    stagger: 0,
+    attack: 0.026,
+    duration: 0.19,
+    finalDuration: 0.21,
+    peakOpacity: 0.8,
+    startScale: 0.91,
+    peakScale: 0.967,
+    endScale: 1.07,
+    startStroke: 3.4,
+    peakStroke: 3.2,
+    endStroke: 2.0,
+  },
+  outer: {
+    stagger: 0.048,
+    attack: 0.034,
+    duration: 0.22,
+    finalDuration: 0.294,
+    peakOpacity: 0.48,
+    startScale: 0.93,
+    peakScale: 0.993,
+    endScale: 1.09,
+    startStroke: 2.6,
+    peakStroke: 2.4,
+    endStroke: 1.5,
+  },
+};
+const INNER_LEFT_ARC = "M 42.56 121.55 A 91 60 0 0 1 42.56 54.45";
+const INNER_RIGHT_ARC = "M 193.44 54.45 A 91 60 0 0 1 193.44 121.55";
+const OUTER_LEFT_ARC = "M 38.33 133.64 A 104 71 0 0 1 38.33 42.36";
+const OUTER_RIGHT_ARC = "M 197.67 42.36 A 104 71 0 0 1 197.67 133.64";
 let strikeBytes;
+
+function clampOffset(offset) {
+  return Math.min(Math.max(offset, 0), 0.999);
+}
+
+function buildWaveKeyframes(sampleSeconds, spec, slot) {
+  const frames = [
+    { offset: 0, opacity: 0, transform: `scale(${spec.startScale})`, strokeWidth: `${spec.startStroke}px` },
+  ];
+  IMPACTS.forEach(({ time, angle }, index) => {
+    if (index % 2 !== slot) return;
+    const isFinal = index === IMPACTS.length - 1;
+    const start = time + spec.stagger;
+    const peak = start + spec.attack;
+    const end = start + (isFinal ? spec.finalDuration : spec.duration);
+    const energy = Math.abs(angle) / MAX_IMPACT_ANGLE;
+    frames.push(
+      {
+        offset: clampOffset(start / sampleSeconds),
+        opacity: 0,
+        transform: `scale(${spec.startScale})`,
+        strokeWidth: `${spec.startStroke}px`,
+        easing: ATTACK_EASING,
+      },
+      {
+        offset: clampOffset(peak / sampleSeconds),
+        opacity: Number((spec.peakOpacity * energy).toFixed(3)),
+        transform: `scale(${spec.peakScale})`,
+        strokeWidth: `${spec.peakStroke}px`,
+        easing: DECAY_EASING,
+      },
+      {
+        offset: clampOffset(end / sampleSeconds),
+        opacity: 0,
+        transform: `scale(${spec.endScale})`,
+        strokeWidth: `${spec.endStroke}px`,
+      },
+    );
+  });
+  frames.push({
+    offset: 1,
+    opacity: 0,
+    transform: `scale(${spec.endScale})`,
+    strokeWidth: `${spec.endStroke}px`,
+  });
+  return frames;
+}
 
 function loadStrike() {
   strikeBytes ??= fetch(bellStrikeUrl)
@@ -79,10 +162,17 @@ class Bell extends LitElement {
     if (document.hidden) this.stop();
   };
 
+  clearWaveDirection() {
+    this.querySelectorAll(".tk-bell__wave").forEach(wave => {
+      delete wave.dataset.lead;
+    });
+  }
+
   stop = () => {
     clearTimeout(this.timer);
     this.motion.forEach(animation => animation.cancel());
     this.motion = [];
+    this.clearWaveDirection();
     const audio = this.audio;
     this.audio = undefined;
     this.sample = undefined;
@@ -151,40 +241,72 @@ class Bell extends LitElement {
 
   animateStrike(sampleSeconds, duration, delay, direction) {
     const icon = this.querySelector(".tk-bell__face md-icon");
+    const mask = this.querySelector(".tk-bell__mask");
     const initial = getComputedStyle(icon).transform;
+    const initialMask = getComputedStyle(mask).transform;
     this.motion.forEach(animation => animation.cancel());
     this.motion = [];
-    if (matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    if (matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      this.clearWaveDirection();
+      return;
+    }
 
     const timing = { duration, delay, fill: "backwards" };
     const swing = [
       { offset: 0, transform: initial },
       ...IMPACTS.map(({ time, angle }) => ({
-        offset: (time + 0.028) / sampleSeconds,
+        offset: clampOffset((time + 0.028) / sampleSeconds),
         transform: `rotate(${angle * direction}deg)`,
         easing: "ease-in-out",
       })),
-      { offset: 1.0 / sampleSeconds, transform: `rotate(${5 * direction}deg)`, easing: "ease-out" },
-      { offset: 1.17 / sampleSeconds, transform: `rotate(${-2 * direction}deg)`, easing: "ease-out" },
+      { offset: clampOffset(1.0 / sampleSeconds), transform: `rotate(${5 * direction}deg)`, easing: "ease-out" },
+      { offset: clampOffset(1.17 / sampleSeconds), transform: `rotate(${-2 * direction}deg)`, easing: "ease-out" },
       { offset: 1, transform: "rotate(0deg)" },
     ];
     const animation = icon.animate(swing, timing);
     animation.id = "bell-swing";
     this.motion.push(animation);
 
-    const waves = this.querySelector(".tk-bell__waves");
-    const pulses = [{ offset: 0, opacity: 0, transform: "scale(.92)" }];
+    const maskPulse = [
+      {
+        offset: 0,
+        transform: initialMask === "none" ? "scale(1)" : initialMask,
+        easing: ATTACK_EASING,
+      },
+    ];
     IMPACTS.forEach(({ time, angle }, index) => {
-      const until = IMPACTS[index + 1]?.time ?? 1.2;
-      pulses.push(
-        { offset: (time + 0.018) / sampleSeconds, opacity: Math.abs(angle) / 23, transform: "scale(.96)", easing: "ease-out" },
-        { offset: (until - 0.013) / sampleSeconds, opacity: 0, transform: "scale(1.04)" },
+      const nextTime = IMPACTS[index + 1]?.time ?? 1.15;
+      const energy = Math.abs(angle) / MAX_IMPACT_ANGLE;
+      const peak = (1 + COOKIE_PULSE_SCALE * energy).toFixed(4);
+      const settle = Math.min(time + 0.135, nextTime - 0.008);
+      if (index > 0) {
+        maskPulse.push({
+          offset: clampOffset(time / sampleSeconds),
+          transform: "scale(1)",
+          easing: ATTACK_EASING,
+        });
+      }
+      maskPulse.push(
+        { offset: clampOffset((time + 0.026) / sampleSeconds), transform: `scale(${peak})`, easing: DECAY_EASING },
+        { offset: clampOffset(settle / sampleSeconds), transform: "scale(1)" },
       );
     });
-    pulses.push({ offset: 1, opacity: 0 });
-    const waveAnimation = waves.animate(pulses, timing);
-    waveAnimation.id = "bell-wave";
-    this.motion.push(waveAnimation);
+    maskPulse.push({ offset: 1, transform: "scale(1)" });
+    const maskAnimation = mask.animate(maskPulse, timing);
+    maskAnimation.id = "bell-mask";
+    this.motion.push(maskAnimation);
+
+    this.querySelectorAll(".tk-bell__wave").forEach(wave => {
+      const ring = wave.dataset.ring;
+      const slot = Number(wave.dataset.slot);
+      wave.dataset.lead = (slot === 0) === (direction > 0) ? "left" : "right";
+      const waveAnimation = wave.animate(
+        buildWaveKeyframes(sampleSeconds, WAVE_RINGS[ring], slot),
+        timing,
+      );
+      waveAnimation.id = `bell-wave-${ring}-${slot}`;
+      this.motion.push(waveAnimation);
+    });
   }
 
   render() {
@@ -195,7 +317,24 @@ class Bell extends LitElement {
           <div class="tk-bell__visual">
             <div class="tk-bell__face" aria-hidden="true">
               <div class="tk-bell__mask" style=${shapeMaskStyle(shapeUrl("cookie_9sided"))}></div>
-              <span class="tk-bell__waves"></span>
+              <svg class="tk-bell__waves" viewBox="0 0 236 176" fill="none" aria-hidden="true">
+                <g class="tk-bell__wave tk-bell__wave--outer" data-ring="outer" data-slot="0">
+                  <path class="tk-bell__arc tk-bell__arc--left" d=${OUTER_LEFT_ARC} />
+                  <path class="tk-bell__arc tk-bell__arc--right" d=${OUTER_RIGHT_ARC} />
+                </g>
+                <g class="tk-bell__wave tk-bell__wave--outer" data-ring="outer" data-slot="1">
+                  <path class="tk-bell__arc tk-bell__arc--left" d=${OUTER_LEFT_ARC} />
+                  <path class="tk-bell__arc tk-bell__arc--right" d=${OUTER_RIGHT_ARC} />
+                </g>
+                <g class="tk-bell__wave tk-bell__wave--inner" data-ring="inner" data-slot="0">
+                  <path class="tk-bell__arc tk-bell__arc--left" d=${INNER_LEFT_ARC} />
+                  <path class="tk-bell__arc tk-bell__arc--right" d=${INNER_RIGHT_ARC} />
+                </g>
+                <g class="tk-bell__wave tk-bell__wave--inner" data-ring="inner" data-slot="1">
+                  <path class="tk-bell__arc tk-bell__arc--left" d=${INNER_LEFT_ARC} />
+                  <path class="tk-bell__arc tk-bell__arc--right" d=${INNER_RIGHT_ARC} />
+                </g>
+              </svg>
               <md-icon class="sc-filled">notifications</md-icon>
             </div>
             <p class="label-large tk-bell__status" data-visible=${Boolean(this.audioUnavailable)} role="status">${this.audioUnavailable

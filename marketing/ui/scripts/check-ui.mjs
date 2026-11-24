@@ -225,12 +225,14 @@ try {
     const simulate = bellPage.locator('mnw-screen-inspector').getByText('Simulate shake', {exact: true});
     await simulate.click();
     await ringing.waitFor();
-    assert.equal(await bell.locator('.tk-bell__face md-icon').evaluate(el => el.getAnimations().length), 0);
+    assert.equal(await bell.locator('.tk-bell__face').evaluate(el => el.getAnimations({subtree: true}).length), 0);
     const reducedWave = await bell.locator('.tk-bell__waves').evaluate(el => ({
-      animations: el.getAnimations().length,
-      opacity: Number(getComputedStyle(el, '::before').opacity),
+      animations: el.getAnimations({subtree: true}).length,
+      inner: Number(getComputedStyle(el.querySelector('.tk-bell__wave--inner[data-slot="0"]')).opacity),
+      outer: Number(getComputedStyle(el.querySelector('.tk-bell__wave--outer[data-slot="0"]')).opacity),
+      secondary: Number(getComputedStyle(el.querySelector('.tk-bell__wave--inner[data-slot="1"]')).opacity),
     }));
-    assert.deepEqual(reducedWave, {animations: 0, opacity: 0.75});
+    assert.deepEqual(reducedWave, {animations: 0, inner: 0.75, outer: 0.45, secondary: 0});
     assert.equal(await status.getAttribute('data-visible'), 'false');
     assert.equal(await status.evaluate(el => getComputedStyle(el).clipPath), 'inset(50%)');
     await bellPage.clock.fastForward(1800);
@@ -274,19 +276,32 @@ try {
         const timings = await bell.evaluate(el => {
           const animatedParts = [
             el.querySelector('.tk-bell__face md-icon'),
-            el.querySelector('.tk-bell__waves'),
+            el.querySelector('.tk-bell__mask'),
+            ...el.querySelectorAll('.tk-bell__wave'),
           ];
           return animatedParts.flatMap(part => part.getAnimations()).map(animation => ({
             id: animation.id,
             duration: animation.effect.getTiming().duration,
             delay: animation.effect.getTiming().delay,
             lateImpact: animation.effect.getKeyframes().some(frame => frame.offset > 0.55 && frame.offset < 0.59),
+            staggeredLateImpact: animation.effect.getKeyframes().some(frame => frame.offset > 0.58 && frame.offset < 0.64),
           }));
         });
-        assert.deepEqual(timings.map(({id}) => id), ['bell-swing', 'bell-wave']);
+        assert.deepEqual(timings.map(({id}) => id), [
+          'bell-swing',
+          'bell-mask',
+          'bell-wave-outer-0',
+          'bell-wave-outer-1',
+          'bell-wave-inner-0',
+          'bell-wave-inner-1',
+        ]);
         assert.equal(await bellHeader.locator('.tk-shape-badge').evaluate(el => el.getAnimations({subtree: true}).length), 0);
-        assert.ok(timings.every(({duration, delay, lateImpact}) =>
-          duration > 1490 && duration < 1520 && delay === timings[0].delay && lateImpact));
+        assert.ok(timings.every(({duration, delay}) =>
+          duration > 1490 && duration < 1520 && delay === timings[0].delay));
+        assert.ok(timings.find(({id}) => id === 'bell-swing')?.lateImpact);
+        assert.ok(timings.find(({id}) => id === 'bell-mask')?.lateImpact);
+        assert.ok(timings.find(({id}) => id === 'bell-wave-inner-1')?.lateImpact);
+        assert.ok(timings.find(({id}) => id === 'bell-wave-outer-1')?.staggeredLateImpact);
         const sheetBounds = await bellPage.locator(SHEET).boundingBox();
         const faceBounds = await face.boundingBox();
         assert.ok(faceBounds.x >= sheetBounds.x && faceBounds.x + faceBounds.width <= sheetBounds.x + sheetBounds.width);

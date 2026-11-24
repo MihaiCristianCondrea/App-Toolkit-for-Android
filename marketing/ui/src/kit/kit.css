@@ -2047,23 +2047,23 @@ mnw-android-screen,
 .tk-bell__waves {
   position: absolute;
   inset: 0;
-  display: grid;
-  place-items: center;
+  inline-size: 100%;
+  block-size: 100%;
+  overflow: visible;
+  pointer-events: none;
 }
-.tk-bell__waves::before, .tk-bell__waves::after {
-  content: "";
-  grid-area: 1 / 1;
-  inline-size: 84%;
-  block-size: 74%;
-  border: 3px solid transparent;
-  border-inline-color: currentColor;
-  border-radius: 50%;
+.tk-bell__wave {
   opacity: 0;
+  stroke: currentColor;
+  stroke-linecap: round;
+  transform-box: fill-box;
+  transform-origin: center;
 }
-.tk-bell__waves::after {
-  inline-size: 97%;
-  block-size: 90%;
-}
+.tk-bell__wave--inner { stroke-width: 3.2px; }
+.tk-bell__wave--outer { stroke-width: 2.4px; }
+.tk-bell__arc { vector-effect: non-scaling-stroke; }
+.tk-bell__wave[data-lead="left"] .tk-bell__arc--right,
+.tk-bell__wave[data-lead="right"] .tk-bell__arc--left { opacity: .78; }
 .tk-bell__status {
   margin: 0;
   color: var(--md-sys-color-on-surface-variant);
@@ -2079,8 +2079,12 @@ mnw-android-screen,
   grid-area: action;
   --md-filled-button-container-height: 56px;
 }
-.tk-bell[data-ringing="true"] .tk-bell__waves::before { opacity: .75; }
-.tk-bell[data-ringing="true"] .tk-bell__waves::after { opacity: .45; }
+.tk-bell[data-capture="true"] .tk-bell__wave--inner[data-slot="0"] { opacity: .75; }
+.tk-bell[data-capture="true"] .tk-bell__wave--outer[data-slot="0"] { opacity: .45; }
+@media (prefers-reduced-motion: reduce) {
+  .tk-bell[data-ringing="true"] .tk-bell__wave--inner[data-slot="0"] { opacity: .75; }
+  .tk-bell[data-ringing="true"] .tk-bell__wave--outer[data-slot="0"] { opacity: .45; }
+}
 
 @container (min-width: 420px) {
   .tk-bell__stage {

@@ -34,10 +34,13 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.states.BellToolUiState
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.tools.BellTool
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.tools.bellAngle
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.tools.bellCookieScale
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.tools.bellWaveRipple
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.motion.LocalShellMotion
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.motion.TabTransitionStyle
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.motion.rememberShellMotion
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertTrue
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -137,5 +140,32 @@ class BellToolTest {
         assertEquals(15f, bellAngle(elapsed = 0f, direction = -1, startAngle = 15f), 0.001f)
         assertEquals(0f, bellAngle(elapsed = 0f, direction = 1, startAngle = 0f), 0.001f)
         assertEquals(0f, bellAngle(elapsed = 1_500f, direction = 1, startAngle = 15f), 0.001f)
+    }
+
+    @Test
+    fun bellWaveRippleStaggersOuterRingExpandsOutwardAndScalesWithImpactEnergy() {
+        val innerPeak = bellWaveRipple(elapsed = 32f, impactIndex = 0, outer = false)
+        val outerBeforeStagger = bellWaveRipple(elapsed = 32f, impactIndex = 0, outer = true)
+        assertTrue(innerPeak.alpha > 0.6f)
+        assertEquals(0f, outerBeforeStagger.alpha, 0.001f)
+
+        val outerPeak = bellWaveRipple(elapsed = 88f, impactIndex = 0, outer = true)
+        val outerTail = bellWaveRipple(elapsed = 200f, impactIndex = 0, outer = true)
+        assertTrue(outerPeak.alpha > outerTail.alpha && outerTail.alpha > 0f)
+        assertTrue(outerTail.scale > outerPeak.scale)
+        assertTrue(outerTail.strokeWidthDp < outerPeak.strokeWidthDp)
+
+        val strongestInnerPeak = bellWaveRipple(elapsed = 126f, impactIndex = 1, outer = false)
+        val softestInnerPeak = bellWaveRipple(elapsed = 866f, impactIndex = 5, outer = false)
+        assertTrue(strongestInnerPeak.alpha > softestInnerPeak.alpha)
+        assertEquals(0f, bellWaveRipple(elapsed = 1_500f, impactIndex = 5, outer = true).alpha, 0.001f)
+    }
+
+    @Test
+    fun bellCookieScalePulsesSubtlyAndBlendsFromCurrentScale() {
+        assertEquals(1.02f, bellCookieScale(elapsed = 0f, startScale = 1.02f), 0.001f)
+        val peak = bellCookieScale(elapsed = 126f)
+        assertTrue(peak > 1.025f && peak <= 1.033f)
+        assertEquals(1f, bellCookieScale(elapsed = 1_500f), 0.001f)
     }
 }
