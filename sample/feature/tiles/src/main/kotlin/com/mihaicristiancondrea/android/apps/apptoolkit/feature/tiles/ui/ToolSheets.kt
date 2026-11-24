@@ -57,6 +57,7 @@ import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.t
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.tools.RulerTool
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.tools.SosTool
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.tools.UnitConverterTool
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.ui.utils.SuppressShakeToReport
 import org.koin.compose.viewmodel.koinViewModel
 
 /*
@@ -262,6 +263,7 @@ internal fun RandomNumberToolSheet(viewModel: RandomNumberToolViewModel = koinVi
 @Composable
 internal fun WaterEjectToolSheet(viewModel: WaterEjectToolViewModel = koinViewModel()) {
     val state by viewModel.state.collectAsStateWithLifecycle()
+    SuppressShakeToReport(enabled = state.running)
     LifecycleStartEffect(viewModel) {
         onStopOrDispose { viewModel.onEvent(com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.contracts.WaterEjectToolEvent.Stop) }
     }

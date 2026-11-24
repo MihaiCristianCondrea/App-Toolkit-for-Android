@@ -22,38 +22,69 @@ import android.media.AudioAttributes
 import android.media.SoundPool
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.R
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.coroutines.dispatchers.DispatcherProvider
-import kotlinx.coroutines.channels.awaitClose
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.callbackFlow
-import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.NonCancellable
+import kotlinx.coroutines.suspendCancellableCoroutine
+import kotlinx.coroutines.withContext
+import kotlin.coroutines.resume
 
-internal class AndroidBellAudioDataSource(
+class AndroidBellAudioDataSource(
     private val context: Context,
     private val dispatchers: DispatcherProvider,
-) {
-    fun open(): Flow<((Float, Float) -> Boolean)?> = callbackFlow<((Float, Float) -> Boolean)?> {
-        val pool = SoundPool.Builder()
-            .setMaxStreams(3)
-            .setAudioAttributes(
-                AudioAttributes.Builder()
-                    .setUsage(AudioAttributes.USAGE_GAME)
-                    .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
-                    .build(),
-            )
-            .build()
+) : BellAudioDataSource {
+
+    override suspend fun runSession(
+        onAudioReady: (Boolean) -> Unit,
+        session: suspend (play: suspend (volume: Float, rate: Float) -> Boolean) -> Unit,
+    ) {
+        val pool = withContext(dispatchers.io) {
+            SoundPool.Builder()
+                .setMaxStreams(MAX_STREAMS)
+                .setAudioAttributes(
+                    AudioAttributes.Builder()
+                        .setUsage(AudioAttributes.USAGE_GAME)
+                        .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
+                        .build(),
+                )
+                .build()
+        }
         try {
-            pool.setOnLoadCompleteListener { _, sample, status ->
-                if (status == 0) {
-                    trySend { volume, rate -> pool.play(sample, volume, volume, 1, 0, rate) != 0 }
-                } else {
-                    trySend(null)
+            val sampleId = withContext(dispatchers.io) { loadSample(pool = pool) }
+            if (sampleId == null) {
+                onAudioReady(false)
+                return
+            }
+            onAudioReady(true)
+            session { volume, rate ->
+                withContext(dispatchers.io) {
+                    pool.play(sampleId, volume, volume, PRIORITY, NO_LOOP, rate) != 0
                 }
             }
-            if (pool.load(context, R.raw.bell_strike, 1) == 0) trySend(null)
-            awaitClose()
         } finally {
-            pool.setOnLoadCompleteListener(null)
-            pool.release()
+            withContext(NonCancellable + dispatchers.io) {
+                pool.setOnLoadCompleteListener(null)
+                pool.release()
+            }
         }
-    }.flowOn(dispatchers.io)
+    }
+
+    private suspend fun loadSample(pool: SoundPool): Int? =
+        suspendCancellableCoroutine { continuation ->
+            pool.setOnLoadCompleteListener { _, sampleId, status ->
+                if (continuation.isActive) {
+                    continuation.resume(if (status == 0) sampleId else null)
+                }
+            }
+            continuation.invokeOnCancellation {
+                pool.setOnLoadCompleteListener(null)
+            }
+            if (pool.load(context, R.raw.bell_strike, PRIORITY) == 0 && continuation.isActive) {
+                continuation.resume(null)
+            }
+        }
+
+    private companion object {
+        const val MAX_STREAMS: Int = 3
+        const val PRIORITY: Int = 1
+        const val NO_LOOP: Int = 0
+    }
 }

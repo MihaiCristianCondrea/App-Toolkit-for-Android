@@ -17,57 +17,95 @@
 
 package com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui
 
-import androidx.lifecycle.viewModelScope
+import com.mihaicristiancondrea.android.apps.apptoolkit.core.analytics.models.AppScreenTracking
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.repositories.BellRepository
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.analytics.ToolUsageTracker
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.contracts.BellToolEvent
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.states.BellToolUiState
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.ScreenViewModel
-import kotlinx.coroutines.CancellationException
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.utils.constants.ToolkitTileIds
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.telemetry.TelemetryRepository
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.LoggedScreenViewModel
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.launch
 
-internal class BellToolViewModel(
+/**
+ * Manages the foreground Bell tool session: audio loading, manual and shake-driven strikes, and
+ * session usage telemetry.
+ */
+class BellToolViewModel(
     private val repository: BellRepository,
-) : ScreenViewModel<BellToolUiState, BellToolEvent>(initialState = BellToolUiState()) {
+    telemetryRepository: TelemetryRepository,
+) : LoggedScreenViewModel<BellToolUiState, BellToolEvent>(
+    initialState = BellToolUiState(),
+    telemetryRepository = telemetryRepository,
+    screenName = AppScreenTracking.Screens.TOOLKIT_TILES.name,
+    viewModelName = "BellToolViewModel",
+) {
+    private val usage = ToolUsageTracker(
+        telemetryRepository = telemetryRepository,
+        toolId = ToolkitTileIds.BELL,
+    )
     private val strikes = MutableSharedFlow<Float>(extraBufferCapacity = 8)
     private var session: Job? = null
 
     override fun handleEvent(event: BellToolEvent) {
         when (event) {
             BellToolEvent.Open -> open()
-            BellToolEvent.Close -> {
-                session?.cancel()
-                session = null
-                setState { BellToolUiState() }
+            BellToolEvent.Close -> close()
+            BellToolEvent.Ring -> {
+                if (currentState.audioReady) {
+                    strikes.tryEmit(1f)
+                }
             }
-            BellToolEvent.Ring -> if (currentState.audioReady) strikes.tryEmit(1f) else Unit
         }
     }
 
     private fun open() {
         if (session?.isActive == true) return
-        session = viewModelScope.launch {
-            launch {
-                repository.shakes().collect { strength ->
-                    if (strength == null) setState { copy(motionAvailable = false) }
-                    else if (currentState.audioReady) strikes.tryEmit(strength)
+        session = launchReport(
+            action = Actions.OPEN_SESSION,
+            onError = {
+                setState { copy(audioReady = false, audioFailed = true) }
+            },
+        ) {
+            coroutineScope {
+                val shakeJob = launch {
+                    repository.shakes().collect { strength ->
+                        if (strength == null) {
+                            setState { copy(motionAvailable = false) }
+                        } else if (currentState.audioReady) {
+                            strikes.tryEmit(strength)
+                        }
+                    }
+                }
+                try {
+                    repository.play(
+                        strikes = strikes,
+                        onAudioReady = { ready ->
+                            setState { copy(audioReady = ready, audioFailed = !ready) }
+                        },
+                        onStrike = { rate ->
+                            usage.markUsed()
+                            setState { copy(strike = strike + 1, playbackRate = rate) }
+                        },
+                    )
+                } finally {
+                    shakeJob.cancel()
                 }
             }
-            try {
-                repository.play(
-                    strikes = strikes,
-                    onAudioReady = { ready -> setState { copy(audioReady = ready, audioFailed = !ready) } },
-                    onStrike = { rate ->
-                        val now = System.nanoTime()
-                        setState { copy(strike = strike + 1, playbackRate = rate, strikeNanos = now) }
-                    },
-                )
-            } catch (cancelled: CancellationException) {
-                throw cancelled
-            } catch (_: RuntimeException) {
-                setState { copy(audioReady = false, audioFailed = true) }
-            }
         }
+    }
+
+    private fun close() {
+        session?.cancel()
+        session = null
+        usage.endSession()
+        setState { BellToolUiState() }
+    }
+
+    private object Actions {
+        const val OPEN_SESSION = "openBellSession"
     }
 }

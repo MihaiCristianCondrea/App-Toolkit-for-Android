@@ -2,12 +2,14 @@
 
 ---
 
-# November 23, 2026
+# November 24, 2026
 
 **Version:** `3.0.0-rc1`
 
 ### Added
 
+- `IssueReporterShakeManager.suppress()` and `SuppressShakeToReport` let screens or tools that use
+  shaking temporarily pause shake-to-report and unregister its accelerometer listener until closed.
 - `ScreenViewModel.ifIsActive` keeps the current active job and starts new work only when no job is
   active. Advanced settings uses it to ignore repeated Clear cache requests.
 - `AppOpenAdController.showAdIfAvailable(activity, scope, onShowAdCompleteListener)` exposes the
@@ -17,6 +19,8 @@
 
 ### Fixed
 
+- `ShakeDetector` ignores non-finite accelerometer readings, and `IssueReporterShakeManager` ignores
+  stale `onActivityPaused` callbacks from activities that are no longer resumed.
 - Support keeps the current checkout open when a different product settles, still reports a
   donation's result when Play answers after the 20-second launch wait, and reports an already-owned
   donation's recovery once.

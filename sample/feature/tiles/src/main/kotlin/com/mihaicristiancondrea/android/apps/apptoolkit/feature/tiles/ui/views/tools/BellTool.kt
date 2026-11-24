@@ -36,6 +36,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.withFrameNanos
@@ -50,9 +51,9 @@ import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.LiveRegionMode
+import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.liveRegion
 import androidx.compose.ui.semantics.semantics
-import androidx.compose.ui.semantics.stateDescription
 import androidx.compose.ui.unit.dp
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.R
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.mappers.backgroundShape
@@ -64,14 +65,15 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.Bu
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.GeneralButton
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.motion.LocalShellMotion
 import kotlinx.coroutines.delay
+import kotlin.time.Duration.Companion.milliseconds
 
 @Composable
 internal fun BellTool(state: BellToolUiState, onRing: () -> Unit) {
-    val ringingDescription = stringResource(R.string.bell_ringing)
+    val ringingDescription = stringResource(id = R.string.bell_ringing)
     val motionScale = LocalShellMotion.current.durationScale
-    var angle by remember { mutableFloatStateOf(0f) }
-    var wave by remember { mutableFloatStateOf(0f) }
-    var ringing by remember { androidx.compose.runtime.mutableStateOf(false) }
+    var angle by remember { mutableFloatStateOf(value = 0f) }
+    var wave by remember { mutableFloatStateOf(value = 0f) }
+    var ringing by remember { mutableStateOf(value = false) }
     LaunchedEffect(state.strike, motionScale) {
         if (state.strike == 0) {
             angle = 0f
@@ -84,13 +86,15 @@ internal fun BellTool(state: BellToolUiState, onRing: () -> Unit) {
         if (reduceMotion) {
             angle = 0f
             wave = 1f
-            delay((SAMPLE_DURATION_MS / state.playbackRate).toLong())
+            delay(duration = (SAMPLE_DURATION_MS / state.playbackRate).toLong().milliseconds)
         } else {
             val direction = if (state.strike % 2 == 0) -1 else 1
+            val startAngle = angle
+            val startNanos = withFrameNanos { it }
             var elapsed: Float
             do {
-                elapsed = withFrameNanos { ((it - state.strikeNanos) / 1_000_000f).coerceAtLeast(0f) } * state.playbackRate
-                angle = direction * bellAngle(elapsed)
+                elapsed = withFrameNanos { ((it - startNanos) / 1_000_000f).coerceAtLeast(0f) } * state.playbackRate
+                angle = bellAngle(elapsed = elapsed, direction = direction, startAngle = startAngle)
                 val previousImpact = BellImpacts.lastOrNull { it.timeMillis <= elapsed }
                 wave = previousImpact?.let { (1f - (elapsed - it.timeMillis) / 110f).coerceIn(0f, 1f) } ?: 0f
             } while (elapsed < SAMPLE_DURATION_MS)
@@ -104,30 +108,45 @@ internal fun BellTool(state: BellToolUiState, onRing: () -> Unit) {
         BellFace(angle = { angle }, wave = { wave })
     }
     val action: @Composable (Modifier) -> Unit = { modifier ->
-        Column(modifier, horizontalAlignment = Alignment.CenterHorizontally) {
+        Column(modifier = modifier, horizontalAlignment = Alignment.CenterHorizontally) {
             GeneralButton(
                 onClick = onRing,
-                modifier = Modifier.fillMaxWidth().semantics {
-                    liveRegion = LiveRegionMode.Polite
-                    if (ringing) stateDescription = ringingDescription
-                },
+                modifier = Modifier.fillMaxWidth(),
                 enabled = state.audioReady,
                 measurements = ButtonMeasurements.Medium,
-                label = stringResource(R.string.bell_ring),
+                label = stringResource(id = R.string.bell_ring),
+            )
+            Box(
+                modifier = Modifier.semantics {
+                    liveRegion = LiveRegionMode.Polite
+                    contentDescription = if (!state.audioFailed && ringing) ringingDescription else ""
+                },
             )
             if (state.audioFailed) {
-                Text(stringResource(R.string.bell_audio_unavailable), color = MaterialTheme.colorScheme.error)
+                Text(
+                    text = stringResource(id = R.string.bell_audio_unavailable),
+                    color = MaterialTheme.colorScheme.error,
+                    modifier = Modifier.semantics { liveRegion = LiveRegionMode.Polite },
+                )
             }
         }
     }
-    BoxWithConstraints(Modifier.fillMaxWidth()) {
+    BoxWithConstraints(modifier = Modifier.fillMaxWidth()) {
         if (maxWidth >= 420.dp) {
-            Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(24.dp), verticalAlignment = Alignment.CenterVertically) {
-                Box(Modifier.weight(1f), contentAlignment = Alignment.Center) { visual() }
-                Box(Modifier.weight(1f), contentAlignment = Alignment.Center) { action(Modifier.widthIn(max = 240.dp)) }
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(24.dp),
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                Box(modifier = Modifier.weight(1f), contentAlignment = Alignment.Center) { visual() }
+                Box(modifier = Modifier.weight(1f), contentAlignment = Alignment.Center) { action(Modifier.widthIn(max = 240.dp)) }
             }
         } else {
-            Column(Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.spacedBy(12.dp)) {
+            Column(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.spacedBy(12.dp),
+            ) {
                 visual()
                 action(Modifier.fillMaxWidth())
             }
@@ -138,22 +157,41 @@ internal fun BellTool(state: BellToolUiState, onRing: () -> Unit) {
 @Composable
 private fun BellFace(angle: () -> Float, wave: () -> Float) {
     val colors = ToolkitTileIcon.Bell.iconColors()
-    Box(Modifier.widthIn(max = 236.dp).fillMaxWidth().height(176.dp), contentAlignment = Alignment.Center) {
+    Box(
+        modifier = Modifier.widthIn(max = 236.dp).fillMaxWidth().height(176.dp),
+        contentAlignment = Alignment.Center,
+    ) {
         Box(
-            Modifier.size(160.dp).background(
+            modifier = Modifier.size(160.dp).background(
                 color = colors.container.copy(alpha = .52f).compositeOver(MaterialTheme.colorScheme.surfaceContainerLow),
                 shape = ToolkitTileIcon.Bell.backgroundShape(),
             ),
         )
-        Canvas(Modifier.fillMaxSize()) {
+        Canvas(modifier = Modifier.fillMaxSize()) {
             val pulse = wave()
             for (ring in 0..1) {
                 val width = size.width * (if (ring == 0) .84f else .97f)
                 val height = size.height * (if (ring == 0) .74f else .90f)
                 val topLeft = Offset((size.width - width) / 2, (size.height - height) / 2)
                 val color = colors.content.copy(alpha = pulse * if (ring == 0) .75f else .45f)
-                drawArc(color, -39f, 78f, false, topLeft, Size(width, height), style = Stroke(3.dp.toPx()))
-                drawArc(color, 141f, 78f, false, topLeft, Size(width, height), style = Stroke(3.dp.toPx()))
+                drawArc(
+                    color = color,
+                    startAngle = -39f,
+                    sweepAngle = 78f,
+                    useCenter = false,
+                    topLeft = topLeft,
+                    size = Size(width = width, height = height),
+                    style = Stroke(width = 3.dp.toPx()),
+                )
+                drawArc(
+                    color = color,
+                    startAngle = 141f,
+                    sweepAngle = 78f,
+                    useCenter = false,
+                    topLeft = topLeft,
+                    size = Size(width = width, height = height),
+                    style = Stroke(width = 3.dp.toPx()),
+                )
             }
         }
         Icon(
@@ -182,12 +220,14 @@ private val BellSwing = listOf(BellImpact(0, 0f)) +
     BellImpacts.map { it.copy(timeMillis = it.timeMillis + 28) } +
     listOf(BellImpact(1000, 5f), BellImpact(1170, -2f), BellImpact(1500, 0f))
 
-private fun bellAngle(elapsed: Float): Float {
+internal fun bellAngle(elapsed: Float, direction: Int = 1, startAngle: Float = 0f): Float {
     val next = BellSwing.indexOfFirst { it.timeMillis > elapsed }
     if (next < 1) return 0f
     val before = BellSwing[next - 1]
     val after = BellSwing[next]
+    val fromAngle = if (next == 1) startAngle else direction * before.angle
+    val toAngle = direction * after.angle
     val position = (elapsed - before.timeMillis) / (after.timeMillis - before.timeMillis)
     val eased = position * position * (3f - 2f * position)
-    return before.angle + (after.angle - before.angle) * eased
+    return fromAngle + (toAngle - fromAngle) * eased
 }

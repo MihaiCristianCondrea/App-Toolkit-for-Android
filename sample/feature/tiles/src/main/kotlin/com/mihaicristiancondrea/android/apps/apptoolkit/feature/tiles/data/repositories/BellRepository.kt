@@ -17,14 +17,14 @@
 
 package com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.repositories
 
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.local.audio.AndroidBellAudioDataSource
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.local.sensors.AndroidBellShakeDataSource
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.local.audio.BellAudioDataSource
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.local.sensors.BellShakeDataSource
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.collectLatest
 
-internal class BellRepository(
-    private val audio: AndroidBellAudioDataSource,
-    private val sensors: AndroidBellShakeDataSource,
+/** Coordinates foreground bell audio playback and shake observations. */
+class BellRepository(
+    private val audio: BellAudioDataSource,
+    private val sensors: BellShakeDataSource,
 ) {
     fun shakes(): Flow<Float?> = sensors.observe()
 
@@ -34,13 +34,11 @@ internal class BellRepository(
         onStrike: (Float) -> Unit,
     ) {
         var even = false
-        audio.open().collectLatest { play ->
-            onAudioReady(play != null)
-            if (play == null) return@collectLatest
+        audio.runSession(onAudioReady = onAudioReady) { playSample ->
             strikes.collect { strength ->
                 val rate = if (even) 1.0052f else 0.9948f
                 val volume = strength * if (even) 0.36f else 0.32f
-                if (play(volume, rate)) {
+                if (playSample(volume, rate)) {
                     even = !even
                     onStrike(rate)
                 }

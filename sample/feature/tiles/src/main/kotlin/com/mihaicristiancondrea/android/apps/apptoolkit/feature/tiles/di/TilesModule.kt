@@ -18,6 +18,7 @@
 package com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.di
 
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.local.audio.AndroidBellAudioDataSource
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.local.audio.BellAudioDataSource
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.local.haptics.AndroidBreathingHapticsDataSource
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.local.haptics.BreathingHapticsDataSource
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.local.preferences.DefaultToolkitTilesPreferencesDataSource
@@ -26,6 +27,7 @@ import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.local
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.local.quicksettings.QuickSettingsTilesLocalDataSource
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.local.sensors.AndroidBellShakeDataSource
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.local.sensors.AndroidSensorLocalDataSource
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.local.sensors.BellShakeDataSource
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.local.sensors.SensorLocalDataSource
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.local.torch.AndroidTorchDataSource
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.local.torch.TorchDataSource
@@ -68,10 +70,10 @@ import org.koin.core.qualifier.named
 import org.koin.dsl.module
 
 val tilesModule: Module = module {
-    single { AndroidBellAudioDataSource(context = androidContext(), dispatchers = get()) }
-    single { AndroidBellShakeDataSource(context = androidContext(), dispatchers = get()) }
+    single<BellAudioDataSource> { AndroidBellAudioDataSource(context = androidContext(), dispatchers = get()) }
+    single<BellShakeDataSource> { AndroidBellShakeDataSource(context = androidContext(), dispatchers = get()) }
     single { BellRepository(audio = get(), sensors = get()) }
-    viewModel { BellToolViewModel(repository = get()) }
+    viewModel { BellToolViewModel(repository = get(), telemetryRepository = get()) }
     single<com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.local.audio.SpeakerAudioDataSource> {
         com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.local.audio.AndroidSpeakerAudioDataSource(context = androidContext(), dispatchers = get())
     }

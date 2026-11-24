@@ -17,21 +17,38 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.ui.utils
 
+import android.app.Activity
 import android.app.Application
+import android.content.Context
+import android.hardware.Sensor
+import android.hardware.SensorEventListener
+import android.hardware.SensorManager
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.data.models.IssueReporterConfig
+import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
 import org.junit.jupiter.api.Test
 
 /**
- * Covers what the manager promises a host: nothing happens unless the host asked for it.
- *
- * Registering activity callbacks is the observable half of that promise, because it is what puts
- * the manager in a position to register a sensor at all.
+ * Covers what the manager promises a host: nothing happens unless the host asked for it, and
+ * temporary suppression stops the accelerometer until every active caller releases it.
  */
 class IssueReporterShakeManagerTest {
 
-    private val application: Application = mockk(relaxed = true)
+    private val accelerometer: Sensor = mockk()
+    private val sensorManager: SensorManager = mockk(relaxed = true) {
+        every { getDefaultSensor(Sensor.TYPE_ACCELEROMETER) } returns accelerometer
+        every {
+            registerListener(
+                any<SensorEventListener>(),
+                accelerometer,
+                SensorManager.SENSOR_DELAY_GAME,
+            )
+        } returns true
+    }
+    private val application: Application = mockk(relaxed = true) {
+        every { getSystemService(Context.SENSOR_SERVICE) } returns sensorManager
+    }
 
     private fun manager(shakeToReportEnabled: Boolean): IssueReporterShakeManager =
         IssueReporterShakeManager(
@@ -76,5 +93,112 @@ class IssueReporterShakeManagerTest {
         manager(shakeToReportEnabled = true).uninstall()
 
         verify(exactly = 0) { application.unregisterActivityLifecycleCallbacks(any()) }
+    }
+
+    @Test
+    fun `suppress stops listening on a resumed activity and resumes when closed`() {
+        val manager = manager(shakeToReportEnabled = true)
+        val activity: Activity = mockk()
+        manager.install()
+        manager.onActivityResumed(activity = activity)
+
+        val handle = manager.suppress()
+        verify(exactly = 1) { sensorManager.unregisterListener(any<SensorEventListener>()) }
+
+        handle.close()
+        verify(exactly = 2) {
+            sensorManager.registerListener(
+                any<SensorEventListener>(),
+                accelerometer,
+                SensorManager.SENSOR_DELAY_GAME,
+            )
+        }
+    }
+
+    @Test
+    fun `overlapping suppressions wait for every handle and ignore repeated close calls`() {
+        val manager = manager(shakeToReportEnabled = true)
+        val activity: Activity = mockk()
+        manager.install()
+        manager.onActivityResumed(activity = activity)
+
+        val first = manager.suppress()
+        val second = manager.suppress()
+
+        first.close()
+        first.close()
+        verify(exactly = 1) {
+            sensorManager.registerListener(
+                any<SensorEventListener>(),
+                accelerometer,
+                SensorManager.SENSOR_DELAY_GAME,
+            )
+        }
+
+        second.close()
+        verify(exactly = 2) {
+            sensorManager.registerListener(
+                any<SensorEventListener>(),
+                accelerometer,
+                SensorManager.SENSOR_DELAY_GAME,
+            )
+        }
+    }
+
+    @Test
+    fun `activity resume does not register the sensor while suppressed`() {
+        val manager = manager(shakeToReportEnabled = true)
+        val activity: Activity = mockk()
+        manager.install()
+
+        val handle = manager.suppress()
+        manager.onActivityResumed(activity = activity)
+        verify(exactly = 0) {
+            sensorManager.registerListener(
+                any<SensorEventListener>(),
+                accelerometer,
+                SensorManager.SENSOR_DELAY_GAME,
+            )
+        }
+
+        manager.onActivityPaused(activity = activity)
+        handle.close()
+        verify(exactly = 0) {
+            sensorManager.registerListener(
+                any<SensorEventListener>(),
+                accelerometer,
+                SensorManager.SENSOR_DELAY_GAME,
+            )
+        }
+
+        manager.onActivityResumed(activity = activity)
+        verify(exactly = 1) {
+            sensorManager.registerListener(
+                any<SensorEventListener>(),
+                accelerometer,
+                SensorManager.SENSOR_DELAY_GAME,
+            )
+        }
+    }
+
+    @Test
+    fun `suppress does not touch sensors when the gesture is disabled`() {
+        val handle = manager(shakeToReportEnabled = false).suppress()
+        handle.close()
+
+        verify(exactly = 0) { application.getSystemService(Context.SENSOR_SERVICE) }
+    }
+
+    @Test
+    fun `pausing an older activity does not stop listening for the newly resumed activity`() {
+        val manager = manager(shakeToReportEnabled = true)
+        val firstActivity: Activity = mockk()
+        val secondActivity: Activity = mockk()
+        manager.install()
+        manager.onActivityResumed(activity = firstActivity)
+        manager.onActivityResumed(activity = secondActivity)
+        manager.onActivityPaused(activity = firstActivity)
+
+        verify(exactly = 0) { sensorManager.unregisterListener(any<SensorEventListener>()) }
     }
 }

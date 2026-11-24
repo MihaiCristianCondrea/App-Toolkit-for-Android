@@ -138,6 +138,7 @@ class ShakeDetector(
      * through [onSensorChanged].
      */
     internal fun onAcceleration(gForce: Float, now: Long) {
+        if (!gForce.isFinite()) return
         if (gForce < releaseLevel) {
             aboveThreshold = false
             return

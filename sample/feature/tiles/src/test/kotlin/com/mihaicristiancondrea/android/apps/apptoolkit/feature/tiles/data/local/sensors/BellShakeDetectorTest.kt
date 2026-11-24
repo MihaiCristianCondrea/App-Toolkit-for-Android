@@ -47,4 +47,12 @@ class BellShakeDetectorTest {
         assertNull(detector.strikeStrength(0f, 0f, 0f, 50_000_000L))
         assertNotNull(detector.strikeStrength(12f, 0f, 0f, 100_000_000L))
     }
+
+    @Test
+    fun `non-finite readings are ignored and do not poison later shakes`() {
+        val detector = BellShakeDetector()
+        assertNull(detector.strikeStrength(Float.NaN, 0f, 0f, 0L))
+        assertNull(detector.strikeStrength(Float.POSITIVE_INFINITY, 0f, 0f, 100_000_000L))
+        assertNotNull(detector.strikeStrength(12f, 0f, 0f, 200_000_000L))
+    }
 }

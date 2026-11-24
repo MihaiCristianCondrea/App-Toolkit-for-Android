@@ -28,6 +28,7 @@ internal class BellShakeDetector {
 
     fun strikeStrength(x: Float, y: Float, z: Float, timeNanos: Long): Float? {
         val magnitude = sqrt(x * x + y * y + z * z)
+        if (!magnitude.isFinite()) return null
         if (magnitude < REARM_ACCELERATION) armed = true
         if (magnitude < STRIKE_ACCELERATION) return null
         val last = lastTime

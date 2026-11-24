@@ -109,6 +109,11 @@ flowchart TD
   anything, so one listener that follows the resumed activity replaces a sensor listener retrofitted
   into every activity of every host app. The accelerometer is registered on resume and unregistered
   on pause, because a sensor left registered keeps drawing power with nothing to show for it.
+- Screens and sheets that consume shaking themselves can pause shake-to-report through
+  `IssueReporterShakeManager.suppress()` or the Compose `SuppressShakeToReport` helper. Suppression
+  is reference-counted and unregisters the accelerometer rather than only dropping the callback, so
+  the gesture does not run a duplicate sensor or carry half-finished shakes across into the screen
+  behind it.
 - The gesture is opt-in through `IssueReporterConfig`. This is a library shipping into several apps,
   and a listener nobody asked for is a cost nobody agreed to; a host that does not enable it
   registers nothing.
@@ -215,9 +220,11 @@ and unavailable versions still produce a null name and version code -1.
   bug report resolves it with `getOrNull()` and hides the entry when it is absent.
 - `IssueReporterBottomSheet(onDismissRequest)` is the entry point for a host inside a composition,
   and `IssueReporterLauncher.show(activity)` for one that is not.
-- `IssueReporterConfig` and `IssueReporterShakeManager.install()` are the shake-gesture contract. A
-  host enables the gesture by passing the config into `appToolkitModules` and calling `install()`
-  from its `Application`.
+- `IssueReporterConfig`, `IssueReporterShakeManager.install()`,
+  `IssueReporterShakeManager.suppress()`, and `SuppressShakeToReport` are the shake-gesture
+  contract. A host enables the gesture by passing the config into `appToolkitModules` and calling
+  `install()` from its `Application`, and any shake-driven surface can suppress it temporarily while
+  active.
 - `IssueReporterRepository`: `sendReport` returns the created issue's URL and throws
   `IssueReportRejectedException` or `NetworkException`; `captureDeviceInfo` returns a `DeviceInfo`.
   Both are main-safe.

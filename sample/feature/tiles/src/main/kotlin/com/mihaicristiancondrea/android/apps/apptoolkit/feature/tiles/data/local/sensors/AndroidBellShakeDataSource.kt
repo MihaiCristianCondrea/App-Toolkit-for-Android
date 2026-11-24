@@ -28,13 +28,13 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.flow.flowOn
 
-internal class AndroidBellShakeDataSource(
+class AndroidBellShakeDataSource(
     context: Context,
     private val dispatchers: DispatcherProvider,
-) {
+) : BellShakeDataSource {
     private val sensors = context.getSystemService(SensorManager::class.java)
 
-    fun observe(): Flow<Float?> = callbackFlow<Float?> {
+    override fun observe(): Flow<Float?> = callbackFlow {
         val manager = sensors
         val linear = manager?.getDefaultSensor(Sensor.TYPE_LINEAR_ACCELERATION)
         val sensor = linear ?: manager?.getDefaultSensor(Sensor.TYPE_ACCELEROMETER)
@@ -50,6 +50,7 @@ internal class AndroidBellShakeDataSource(
         val listener = object : SensorEventListener {
             override fun onSensorChanged(event: SensorEvent) {
                 val values = event.values
+                if (values.size < 3 || !values.isFiniteReading()) return
                 if (linear == null) {
                     for (index in gravity.indices) {
                         gravity[index] = if (gravityInitialized) {

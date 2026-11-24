@@ -17,6 +17,14 @@
 
 package com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.contracts
 
-internal enum class BellToolEvent {
-    Open, Close, Ring,
+/** Actions handled by [com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.BellToolViewModel]. */
+sealed interface BellToolEvent {
+    /** Starts observing motion and loads the bell audio sample for the foreground session. */
+    data object Open : BellToolEvent
+
+    /** Stops motion observation, releases audio resources, and resets the session state. */
+    data object Close : BellToolEvent
+
+    /** Rings the bell manually at full strength when audio is ready. */
+    data object Ring : BellToolEvent
 }

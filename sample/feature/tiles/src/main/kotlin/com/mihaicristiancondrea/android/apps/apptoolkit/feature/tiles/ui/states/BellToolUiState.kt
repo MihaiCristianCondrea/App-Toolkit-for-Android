@@ -17,11 +17,11 @@
 
 package com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.states
 
-internal data class BellToolUiState(
+/** UI state for the Bell tool sheet. */
+data class BellToolUiState(
     val audioReady: Boolean = false,
     val audioFailed: Boolean = false,
     val motionAvailable: Boolean = true,
     val strike: Int = 0,
     val playbackRate: Float = 1f,
-    val strikeNanos: Long = 0L,
 )

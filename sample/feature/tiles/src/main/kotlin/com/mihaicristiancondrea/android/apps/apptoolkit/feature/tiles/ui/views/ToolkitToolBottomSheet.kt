@@ -85,6 +85,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.ico
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.ButtonMeasurements
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.GeneralButton
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.GeneralButtonStyle
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.ui.utils.SuppressShakeToReport
 
 /**
  * Animated bottom sheet host for previewing every Quick Tools catalog entry.
@@ -138,6 +139,7 @@ fun ToolkitToolBottomSheet(
                 if (tile.id == ToolkitTileIds.BELL) {
                     val bell: BellToolViewModel = koinViewModel()
                     val state = bell.state.collectAsStateWithLifecycle().value
+                    SuppressShakeToReport()
                     LifecycleResumeEffect(bell) {
                         bell.onEvent(BellToolEvent.Open)
                         onPauseOrDispose { bell.onEvent(BellToolEvent.Close) }
