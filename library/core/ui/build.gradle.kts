@@ -69,9 +69,6 @@ dependencies {
     testRuntimeOnly(libs.test.junit.vintage.engine)
     debugImplementation(libs.androidx.compose.ui.test.manifest)
     api(project(":library:core:common"))
-    // Declared directly rather than relied on transitively through :library:core:designsystem.
-    // Modifiers and ad helpers in this module reference CommonDataStore by type.
-    api(project(":library:core:datastore"))
     api(project(":library:core:designsystem"))
     api(project(":library:navigation"))
     api(platform(libs.androidx.compose.bom))

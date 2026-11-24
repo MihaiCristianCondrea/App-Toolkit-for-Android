@@ -10,7 +10,7 @@
     "dev": "npm run assets && vite",
     "build": "npm run assets && vite build",
     "preview": "vite preview",
-    "qa": "node scripts/check-ui.mjs"
+    "qa": "npm run assets && node scripts/check-ui.mjs"
   },
   "dependencies": {
     "@material/web": "^2.5.0",

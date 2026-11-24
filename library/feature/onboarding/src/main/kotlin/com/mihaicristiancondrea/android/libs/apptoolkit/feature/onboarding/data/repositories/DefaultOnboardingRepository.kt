@@ -24,6 +24,11 @@ import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
+/**
+ * Persists and observes onboarding completion in [OnboardingPreferencesDataSource].
+ *
+ * [setOnboardingCompleted] wraps storage failures as [StorageException][com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.exceptions.StorageException].
+ */
 class DefaultOnboardingRepository(
     private val preferences: OnboardingPreferencesDataSource,
 ) : OnboardingRepository {

@@ -39,5 +39,5 @@
     <string name="summary_preference_settings_oss">Chi tiết giấy phép cho phần mềm nguồn mở</string>
     <string name="summary_share_message">Hãy xem ứng dụng tuyệt vời này mà tôi đang dùng. Nó có một số tính năng rất thú vị mà bạn có thể thấy hay. Bạn có thể tải xuống từ Play Store tại: %1$s</string>
     <string name="updates">Cập nhật</string>
-    <string name="snack_seasonal_themes_unlocked">Chúc bạn vui vẻ</string>
+    <string name="snack_seasonal_themes_unlocked">Đã mở khóa chủ đề theo mùa và tùy chọn cho nhà phát triển</string>
 </resources>

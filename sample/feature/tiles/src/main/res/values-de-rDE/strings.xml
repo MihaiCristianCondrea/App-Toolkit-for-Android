@@ -261,4 +261,13 @@
     <string name="random_range">Zahlenbereich</string>
     <string name="random_inclusive">Beide Grenzen sind eingeschlossen.</string>
     <string name="tool_converter_unit">Einheit</string>
+
+    <string name="section_toys">Spielzeug</string>
+    <string name="bell_title">Glocke</string>
+    <string name="bell_summary">Schüttle dein Handy, um die Glocke zu läuten.</string>
+    <string name="bell_card_note">Zum Läuten schütteln</string>
+    <string name="bell_ring">Glocke läuten</string>
+    <string name="bell_motion_unavailable">Dieses Gerät kann Schüttelbewegungen nicht erkennen.</string>
+    <string name="bell_audio_unavailable">Der Glockenton ist nicht verfügbar.</string>
+    <string name="bell_ringing">Glocke läutet</string>
 </resources>

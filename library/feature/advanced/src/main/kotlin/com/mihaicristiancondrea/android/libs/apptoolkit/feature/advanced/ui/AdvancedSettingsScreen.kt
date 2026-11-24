@@ -17,15 +17,10 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.advanced.ui
 
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.advanced.ui.analytics.ADVANCED_SETTINGS_SCREEN_NAME
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.advanced.ui.analytics.AdvancedPreferenceKeys
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.advanced.ui.analytics.advancedPreferenceTapEvent
-
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -33,9 +28,8 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.telemetry.models.TrackedScreen
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.UiText
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.ScreenHost
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.modifiers.animatedItem
@@ -46,27 +40,23 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preference
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.sheets.IssueReporterSheet
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.shell.contentPadding
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.advanced.R
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.advanced.ui.analytics.ADVANCED_SETTINGS_SCREEN
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.advanced.ui.analytics.AdvancedPreferenceKeys
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.advanced.ui.analytics.advancedPreferenceTapEvent
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.advanced.ui.contracts.AdvancedSettingsEvent
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.advanced.ui.states.AdvancedSettingsUiState
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.advanced.ui.states.CacheClearStatus
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.LocalShellNavigator
-import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.DeveloperOptionsRoute
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.keys.DeveloperOptionsScreen
 import org.koin.compose.getKoin
 import org.koin.compose.viewmodel.koinViewModel
-
-
-private const val ADVANCED_SETTINGS_SCREEN_CLASS = "AdvancedSettingsScreen"
-private val ADVANCED_SETTINGS_SCREEN: TrackedScreen =
-    TrackedScreen(name = ADVANCED_SETTINGS_SCREEN_NAME, className = ADVANCED_SETTINGS_SCREEN_CLASS)
-
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.R as CoreUiR
 
 
 /**
- * The advanced settings page: the bug report, clearing the cache, and the developer options once
- * the About screen's easter egg unlocks them.
+ * Displays cache management and unlocked developer options.
  *
- * Owns [AdvancedSettingsViewModel], tracking, messages and navigation. The bug report opens the
- * `IssueReporterSheet` bound in Koin over this page, and is left out when nothing binds one. The
- * sheet's visibility is saved, so a rotation does not close it.
+ * A bound [IssueReporterSheet] enables bug reporting. Its visibility survives configuration changes.
  */
 @Composable
 fun AdvancedSettingsScreen() {
@@ -80,12 +70,17 @@ fun AdvancedSettingsScreen() {
         screen = ADVANCED_SETTINGS_SCREEN,
         status = state.cacheClear,
         viewModel = viewModel,
+        onMessageAction = { message ->
+            if (message.actionLabel == UiText.StringResource(resourceId = CoreUiR.string.try_again)) {
+                viewModel.onEvent(event = AdvancedSettingsEvent.ObserveDeveloperOptions)
+            }
+        },
     ) {
         AdvancedSettingsScreenContent(
             state = state,
             onEvent = viewModel::onEvent,
             onReportBug = { showIssueReporter = true },
-            onOpenDeveloperOptions = { navigator.navigate(DeveloperOptionsRoute) },
+            onOpenDeveloperOptions = { navigator.navigate(key = DeveloperOptionsScreen) },
             contentPadding = contentPadding(),
             showBugReport = issueReporterSheet != null,
         )
@@ -97,15 +92,10 @@ fun AdvancedSettingsScreen() {
 }
 
 /**
- * Renders the advanced settings rows for [state]. Each row logs its own tap through its
- * `ga4Event`.
+ * Renders advanced settings rows for [state] and reports row actions through callbacks.
  *
- * @param onEvent Receives the events [AdvancedSettingsViewModel] handles.
- * @param onReportBug Opens the issue reporter. Shown only when [showBugReport] is true.
- * @param onOpenDeveloperOptions Opens the developer options. Navigation belongs to the caller.
- * @param contentPadding Padding from the shell, applied inside the list.
- * @param showBugReport Whether an issue reporter is available, which adds the error reporting
- * category.
+ * @param showBugReport Whether the issue reporter is available.
+ * @param contentPadding Shell insets applied inside the list.
  */
 @Composable
 internal fun AdvancedSettingsScreenContent(
@@ -146,9 +136,13 @@ internal fun AdvancedSettingsScreenContent(
         }
 
         animatedItem {
+            val isClearingCache = state.cacheClear == CacheClearStatus.Clearing
             SettingsPreferenceItem(
+                enabled = !isClearingCache,
                 title = stringResource(id = R.string.clear_cache),
-                summary = stringResource(id = R.string.summary_preference_settings_clear_cache),
+                summary = stringResource(
+                    id = if (isClearingCache) CoreUiR.string.loading else R.string.summary_preference_settings_clear_cache,
+                ),
                 onClick = { onEvent(AdvancedSettingsEvent.ClearCache) },
                 ga4Event = advancedPreferenceTapEvent(preferenceKey = AdvancedPreferenceKeys.CLEAR_CACHE),
                 modifier = Modifier.groupedPreferenceItem(
@@ -176,35 +170,5 @@ internal fun AdvancedSettingsScreenContent(
                 )
             }
         }
-    }
-}
-
-
-
-@Preview(showBackground = true)
-@Composable
-private fun AdvancedSettingsScreenContentPreview() {
-    MaterialTheme {
-        AdvancedSettingsScreenContent(
-            state = AdvancedSettingsUiState(developerOptionsUnlocked = true),
-            onEvent = {},
-            onReportBug = {},
-            onOpenDeveloperOptions = {},
-            showBugReport = true,
-        )
-    }
-}
-
-/** Without an issue reporter and before the easter egg, only the cache row shows. */
-@Preview(showBackground = true)
-@Composable
-private fun AdvancedSettingsScreenContentMinimalPreview() {
-    MaterialTheme {
-        AdvancedSettingsScreenContent(
-            state = AdvancedSettingsUiState(),
-            onEvent = {},
-            onReportBug = {},
-            onOpenDeveloperOptions = {},
-        )
     }
 }

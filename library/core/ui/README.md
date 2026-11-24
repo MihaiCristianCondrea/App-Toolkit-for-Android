@@ -61,8 +61,8 @@ page frame, state handling, analytics hooks, and shared components.
 
 - [`:library:core:common`](../common/README.md) for common models, Firebase contracts, and platform
   helpers.
-- [`:library:core:datastore`](../datastore/README.md) for remaining persistence-backed UI adapters;
-  reusable modifiers and ad slots consume design-system-provided values rather than DataStore.
+- No DataStore dependency: reusable modifiers and ad slots consume design-system-provided values
+  rather than DataStore. Modules that need `:library:core:datastore` declare it themselves.
 - [`:library:core:designsystem`](../designsystem/README.md) for theme primitives and the
   `ToolkitIcon` slot the buttons render.
 - [`:library:navigation`](../../navigation/README.md) for the navigator, the page key and pane
@@ -110,7 +110,8 @@ flowchart TD
   once with `LocalScreenStates`; without one, cases cross-fade on the app's motion scheme.
   `StateContent` switches on any other state, such as a flow's phases, the same way.
 - Global UI preferences arrive through the design-system root. Reusable components must not start
-  their own persistence collectors unless a documented adapter still requires it.
+  their own persistence collectors; `collectDataStoreState` and `persistChanges` are helpers for a
+  screen that does collect a preference, and neither lets a storage failure escape the effect.
 
 ## Public contracts
 
@@ -320,6 +321,27 @@ Both bars default their strings, so a host that has nothing to say about them pa
 `title` falls back to the app name, and the search placeholder and clear-button description to
 `core:ui`'s own `search` and `clear_search`.
 
+### App bar transitions between tabs
+
+The shell (see [`:library:shell`](../../shell/README.md)) moves between tabs with one `ShellTopAppBar`, but its style can change under it: a tab with a
+`TabSearch` is always drawn as a small bar, and `ShellTopAppBar` draws each style with a different
+Material composable. These rules keep that change invisible. Each has regressed before, so keep
+them when changing the bar.
+
+- **The bar's slots move, they are not rebuilt.** `ShellTopAppBar` passes its title, menu button
+  and actions through `movableContentOf`, so a style change carries them into the new Material bar
+  with their state. Rebuilt, the menu button and actions replayed their `AnimatedIconButtonDirection`
+  entrance and slid out and back in on every tab switch (System monitor to Dashboard).
+  `ShellTopAppBarTest` covers this.
+- **A search field and a title swap at once.** The field fills the bar while a centred title's slot
+  shrinks around its text, so an animated exit drew the field cut in half as the slot narrowed
+  (App Manager to System monitor). The newcomer fades in and the outgoing one leaves at once.
+  Between two tabs with search, the field is kept, not swapped, so its text and focus stay.
+- **A destination's actions are held to the end of the row, centred vertically.** They cross-fade
+  in an `AnimatedContent` whose size follows them. At the default top start alignment, an action
+  entering an empty row grew from the corner and slid right and down into place (the App Manager
+  sort toggle).
+
 ## Page frame
 
 `views/shell` holds what a page of the shell is drawn in. `ShellHost` in `:library:shell` wraps
@@ -441,7 +463,7 @@ class AboutViewModel(/* ... */) : LoggedScreenViewModel<AboutUiState, AboutEvent
 // AboutScreen, stateful: ViewModel, the screen's boundary, navigation.
 val state by viewModel.state.collectAsStateWithLifecycle()
 ScreenHost(screen = ABOUT_SCREEN, status = state.items, viewModel = viewModel) {
-    AboutScreenContent(state, onEvent = viewModel::onEvent, onOpenLicenses = { navigator.navigate(LicensesRoute) })
+    AboutScreenContent(state, onEvent = viewModel::onEvent, onOpenLicenses = { navigator.navigate(LicensesScreen) })
 }
 
 // AboutScreenContent, stateless and previewable: renders the state, reports through callbacks.
@@ -450,8 +472,8 @@ ScreenStateHandler(state.items, contentPadding = padding, onRetry = { onEvent(Ab
 }
 ```
 
-The full setup, with the file tree, templates and the migration steps, is the
-[`android-ui-layer` skill](../../../.agents/skills/built-in/architecture/android-ui-layer/SKILL.md).
+The file tree, templates and migration guidance are in the
+[App Toolkit skill](../../../.agents/skills/first-party/app-toolkit/SKILL.md).
 
 - **The state is the feature's own type.** Content that is there from the start needs no status.
   Content that loads gets a `Loadable` field, and nothing makes it start at `Loading`: a screen that
@@ -462,6 +484,9 @@ The full setup, with the file tree, templates and the migration steps, is the
   reported by `ScreenHost` like `Loadable`'s `loading`, `success`, `no_data` and `error`.
 - **Messages** go through `showMessage(UiMessage(...))` and `MessageHost`, which shows them one at a
   time and removes each once it has left. A screen needs no dismiss event.
+- **Job helpers** pair with launches such as `launchReport`. Assign the result back to the stored
+  job. `ifIsActive { ... }` keeps the active job and launches only when the job is absent or inactive.
+  `restart { ... }` cancels the previous job and starts new work.
 - **`LoggedScreenViewModel`** logs `vm_init` and `vm_event` itself; `launchReport`,
   `collectReport` and `observeReport` take the same arguments and log `vm_op_start` and, on
   failure, `vm_op_error` and a Crashlytics report before calling `onError`. `observeReport` logs a

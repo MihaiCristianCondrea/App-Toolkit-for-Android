@@ -8,14 +8,17 @@ no production code or runtime dependency to the application or library.
 
 - Cold startup to the Quick Tools catalog, included in the startup profile.
 - Catalog scrolling in both directions, included only in the baseline profile.
+- The Measure and Play & Decide tabs, opening and closing the Unit converter, Decision Wheel and
+  Bell sheets, included only in the baseline profile.
+- Settings and its Display page from the navigation drawer, included only in the baseline profile.
 - Cold-start benchmarks with compilation disabled and with the packaged profile required.
 - Catalog frame timings with the packaged profile required.
 
 The generator and scrolling benchmark share `AppJourneys.kt`. The target package is the released
 `applicationId`, not the app's namespace. Select English, finish onboarding and any consent dialogs,
-and leave Quick Tools selected with All tools, an empty search and the catalog at the top before running.
-Tests fail if that precondition is missing, rather
-than recording setup screens as the catalog journey. Keep the same catalog, ad settings, animation
+and leave Quick Tools as the startup page with an empty search before running. Tests fail if that
+precondition is missing, rather than recording setup screens as the catalog journey. The tool
+journeys find cards by their English titles and wait for the sheet's Close quick tool button. Keep the same catalog, ad settings, animation
 settings and device configuration when comparing measurements.
 
 ## Generate profiles

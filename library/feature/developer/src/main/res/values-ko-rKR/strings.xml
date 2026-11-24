@@ -80,7 +80,7 @@
     <string name="shell_navigation_tint_always">함께 색상 적용, 콘텐츠는 카드 안에 표시</string>
     <string name="shell_navigation_tint_on_scroll">콘텐츠가 스크롤되면 함께 색상 적용</string>
     <string name="shell_back_edge_system">Android와 동일: 페이지가 제자리에서 축소</string>
-    <string name="shell_back_edge_follow">손가락을 따라 이동, 왼쪽 가장자리와 대칭(기본값)</string>
+    <string name="shell_back_edge_follow">손가락을 따라 이동, 왼쪽 가장자리와 대칭</string>
     <string name="shell_transition_directional">방향성 슬라이드</string>
     <string name="shell_transition_fade_through">페이드 스루</string>
     <string name="shell_transition_fade">크로스 페이드</string>

@@ -31,8 +31,11 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 import kotlin.math.ceil
 import kotlin.time.Duration.Companion.milliseconds
+import kotlin.time.TimeSource
 
 /** Owns the breathing-session state machine and delegates haptics to its platform source. */
 class BreathingRepository(
@@ -42,20 +45,19 @@ class BreathingRepository(
     private val repositoryScope = CoroutineScope(SupervisorJob() + dispatchers.default)
     private val _breathingState = MutableStateFlow(BreathingState())
     val breathingState: StateFlow<BreathingState> = _breathingState.asStateFlow()
+    private val sessionMutex = Mutex()
     private var job: Job? = null
 
     fun start() {
-        val previous = job
-        previous?.cancel()
+        job?.cancel()
         job = repositoryScope.launch {
-            // The cancelled session resets the state as it ends; wait for that, so it cannot land
-            // after this session's first phase.
-            previous?.join()
-            try {
-                runPhase(BreathingPhase.PREPARING, DURATION_PREPARING, 1f, 1f)
-                while (isActive) runCycle()
-            } finally {
-                _breathingState.value = BreathingState()
+            sessionMutex.withLock {
+                try {
+                    runPhase(BreathingPhase.PREPARING, DURATION_PREPARING, 1f, 1f)
+                    while (isActive) runCycle()
+                } finally {
+                    _breathingState.value = BreathingState()
+                }
             }
         }
     }
@@ -81,12 +83,12 @@ class BreathingRepository(
         endVal: Float,
         useHaptics: Boolean = false,
     ) {
-        val startTime = System.currentTimeMillis()
+        val startTime = TimeSource.Monotonic.markNow()
         var elapsedTime = 0L
         var nextHapticTrigger = 0L
 
         while (elapsedTime < duration && currentCoroutineContext().isActive) {
-            elapsedTime = System.currentTimeMillis() - startTime
+            elapsedTime = startTime.elapsedNow().inWholeMilliseconds
             if (useHaptics && elapsedTime >= nextHapticTrigger) {
                 hapticsDataSource.tick()
                 nextHapticTrigger += INHALE_TICK_INTERVAL

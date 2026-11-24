@@ -1,0 +1,29 @@
+package <base>.feature.x.ui
+
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.tooling.preview.Preview
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.UiText
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.Loadable
+import <base>.feature.x.ui.models.XItem
+import <base>.feature.x.ui.states.XUiState
+import kotlinx.collections.immutable.persistentListOf
+
+@Preview(showBackground = true)
+@Composable
+private fun XScreenContentPreview() {
+    MaterialTheme {
+        XScreenContent(
+            state = XUiState(
+                items = Loadable.Ready(
+                    value = persistentListOf(
+                        XItem(key = "first", title = UiText.DynamicString(content = "First entry")),
+                        XItem(key = "second", title = UiText.DynamicString(content = "Second entry")),
+                    )
+                ),
+            ),
+            onEvent = {},
+            onOpenDetails = {},
+        )
+    }
+}

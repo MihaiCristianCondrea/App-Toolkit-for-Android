@@ -56,7 +56,7 @@ class ValidateIssueReportUseCase {
             maximumLength = DESCRIPTION_MAX_LENGTH,
             minimumLetters = DESCRIPTION_MIN_LETTERS,
         ) ?: IssueReportFieldError.SameAsTitle.takeIf {
-            title.isNotEmpty() && description.normalized() == title.normalized()
+            title.isNotEmpty() && (normalizeText(text = description) == normalizeText(text = title))
         }
 
     /**
@@ -71,60 +71,64 @@ class ValidateIssueReportUseCase {
     ): IssueReportFieldError? {
         if (text.isEmpty()) return IssueReportFieldError.Missing
 
-        val letters: List<Int> = text.letters()
+        val letters: List<Int> = extractLetters(text = text)
         val length: Int = text.codePointCount(0, text.length)
         return when {
             letters.isEmpty() -> IssueReportFieldError.TooFewLetters
             length > maximumLength -> IssueReportFieldError.TooLong(maximumLength = maximumLength)
-            text.isLinkOnly(minimumLetters = minimumLetters) -> IssueReportFieldError.LinkOnly
+            isLinkOnly(text = text, minimumLetters = minimumLetters) -> IssueReportFieldError.LinkOnly
             length < minimumLength -> IssueReportFieldError.TooShort(minimumLength = minimumLength)
             letters.size < minimumLetters -> IssueReportFieldError.TooFewLetters
-            letters.isRepetitive() -> IssueReportFieldError.Repetitive
+            isRepetitive(letters = letters) -> IssueReportFieldError.Repetitive
             else -> null
         }
     }
 
     private fun emailError(email: String): IssueReportFieldError? = when {
         email.isEmpty() -> IssueReportFieldError.Missing
-        email.length > EMAIL_MAX_LENGTH || !EmailPattern.matches(email) -> IssueReportFieldError.InvalidEmail
+        (email.length > EMAIL_MAX_LENGTH) || !EmailPattern.matches(input = email) ->
+            IssueReportFieldError.InvalidEmail
         else -> null
     }
 
-    /** Whether this holds a link and, without its links, fewer than [minimumLetters] letters. */
-    private fun String.isLinkOnly(minimumLetters: Int): Boolean =
-        LinkPattern.containsMatchIn(this) && replace(LinkPattern, " ").letters().size < minimumLetters
+    /** Whether [text] holds a link and, without its links, fewer than [minimumLetters] letters. */
+    private fun isLinkOnly(text: String, minimumLetters: Int): Boolean =
+        LinkPattern.containsMatchIn(input = text) &&
+            extractLetters(text = text.replace(regex = LinkPattern, replacement = " ")).size < minimumLetters
 
-    /** The letters and digits of this, in any script, lowercased, one code point each. */
-    private fun String.letters(): List<Int> = buildList {
+    /** The letters and digits of [text], in any script, lowercased, one code point each. */
+    private fun extractLetters(text: String): List<Int> = buildList {
         var index = 0
-        while (index < length) {
-            val codePoint: Int = codePointAt(index)
+        while (index < text.length) {
+            val codePoint: Int = text.codePointAt(index)
             if (Character.isLetterOrDigit(codePoint)) add(Character.toLowerCase(codePoint))
             index += Character.charCount(codePoint)
         }
     }
 
     /**
-     * Whether these letters are a handful of characters, or one short unit repeated at least
+     * Whether [letters] are a handful of characters, or one short unit repeated at least
      * [MIN_REPEATS] times over the whole text. Only the whole text counts, so a stack trace that
      * repeats its frames under a distinct first line is not repetitive.
      */
-    private fun List<Int>.isRepetitive(): Boolean =
-        toSet().size < MIN_DISTINCT_LETTERS || shortestPeriod() * MIN_REPEATS <= size
+    private fun isRepetitive(letters: List<Int>): Boolean =
+        letters.toSet().size < MIN_DISTINCT_LETTERS ||
+            shortestPeriod(letters = letters) * MIN_REPEATS <= letters.size
 
-    /** Length of the shortest unit that, repeated, spells these letters, from the KMP border table. */
-    private fun List<Int>.shortestPeriod(): Int {
-        val border = IntArray(size)
+    /** Length of the shortest unit that, repeated, spells [letters], from the KMP border table. */
+    private fun shortestPeriod(letters: List<Int>): Int {
+        val border = IntArray(size = letters.size)
         var matched = 0
-        for (index in 1 until size) {
-            while (matched > 0 && this[index] != this[matched]) matched = border[matched - 1]
-            if (this[index] == this[matched]) matched++
+        for (index in 1 until letters.size) {
+            while (matched > 0 && letters[index] != letters[matched]) matched = border[matched - 1]
+            if (letters[index] == letters[matched]) matched++
             border[index] = matched
         }
-        return size - border[size - 1]
+        return letters.size - border[letters.size - 1]
     }
 
-    private fun String.normalized(): String = lowercase().replace(Whitespace, " ")
+    private fun normalizeText(text: String): String =
+        text.lowercase().replace(regex = Whitespace, replacement = " ")
 
     companion object {
         const val TITLE_MIN_LENGTH: Int = 10
@@ -143,16 +147,16 @@ class ValidateIssueReportUseCase {
         /** Repeats of one unit that make a text repetitive rather than emphatic. */
         private const val MIN_REPEATS: Int = 3
 
-        private val LinkPattern = Regex("""(?i)(?:https?://|www\.)\S+""")
+        private val LinkPattern = Regex(pattern = """(?i)(?:https?://|www\.)\S+""")
 
-        private val Whitespace = Regex("""\s+""")
+        private val Whitespace = Regex(pattern = """\s+""")
 
         /**
          * A dotted local part, then a host of dotted labels ending in a top-level domain of two or
          * more letters. Letters and digits may be in any script, for internationalised addresses.
          */
         private val EmailPattern = Regex(
-            """[\p{L}\p{N}_%+-]+(?:\.[\p{L}\p{N}_%+-]+)*@(?:[\p{L}\p{N}](?:[\p{L}\p{N}-]*[\p{L}\p{N}])?\.)+\p{L}{2,}""",
+            pattern = """[\p{L}\p{N}_%+-]+(?:\.[\p{L}\p{N}_%+-]+)*@(?:[\p{L}\p{N}](?:[\p{L}\p{N}-]*[\p{L}\p{N}])?\.)+\p{L}{2,}""",
         )
     }
 }

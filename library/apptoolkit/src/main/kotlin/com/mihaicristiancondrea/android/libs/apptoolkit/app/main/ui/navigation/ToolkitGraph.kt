@@ -19,21 +19,21 @@ package com.mihaicristiancondrea.android.libs.apptoolkit.app.main.ui.navigation
 
 import androidx.annotation.StringRes
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.icons.ToolkitIcon
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.ui.navigation.aboutPages
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.advanced.ui.navigation.advancedSettingsPage
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.developer.ui.navigation.developerOptionsPage
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.diagnostics.ui.navigation.diagnosticsSettingsPage
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.display.ui.navigation.displaySettingsPage
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.ui.navigation.helpPage
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.licenses.ui.navigation.licensesPage
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.onboarding.ui.navigation.onboardingPages
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.startup.ui.navigation.startupPage
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.permissions.ui.navigation.permissionsPage
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.privacy.ui.navigation.privacySettingsPage
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.settings.ui.navigation.settingsPage
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.support.ui.navigation.supportPage
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.theme.ui.navigation.themeSettingsPage
-import com.mihaicristiancondrea.android.libs.apptoolkit.integration.ads.ui.navigation.adsSettingsPage
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.ui.navigation.aboutScreen
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.advanced.ui.navigation.advancedSettingsScreen
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.developer.ui.navigation.developerOptionsScreen
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.diagnostics.ui.navigation.diagnosticsSettingsScreen
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.display.ui.navigation.displaySettingsScreen
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.ui.navigation.helpScreen
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.licenses.ui.navigation.licensesScreen
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.onboarding.ui.navigation.onboardingScreen
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.startup.ui.navigation.startupScreen
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.permissions.ui.navigation.permissionsScreen
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.privacy.ui.navigation.privacySettingsScreen
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.settings.ui.navigation.settingsScreen
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.support.ui.navigation.supportScreen
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.theme.ui.navigation.themeSettingsScreen
+import com.mihaicristiancondrea.android.libs.apptoolkit.integration.ads.ui.navigation.adsSettingsScreen
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.NavigationDefaults
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.ShellGraph
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.ShellGraphBuilder
@@ -45,7 +45,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.ShellGr
  *
  * The app's [builder] runs first, so a page it registers for one of the Toolkit's keys replaces
  * the Toolkit's page, and a feature's registration function it calls itself, such as
- * `aboutPages { ... }`, takes its arguments. The app still decides where each page is offered: in
+ * `aboutScreen { ... }`, takes its arguments. The app still decides where each page is offered: in
  * the drawer, the overflow menu or from a screen.
  *
  * [defaults] set the app bar of every destination that names none, the Toolkit's pages included,
@@ -53,8 +53,8 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.ShellGr
  *
  * ```
  * val graph = toolkitGraph(appTitle = R.string.app_name) {
- *     tab(HomeRoute, R.string.home, ToolkitIcon.Vector(Icons.Outlined.Home)) { HomeScreen() }
- *     drawer { settings(); link(HelpRoute, R.string.help, ToolkitIcon.Vector(Icons.Outlined.Help)) }
+ *     tab(HomeScreen, R.string.home, ToolkitIcon.Vector(Icons.Outlined.Home)) { HomeScreen() }
+ *     drawer { settings(); link(HelpScreen, R.string.help, ToolkitIcon.Vector(Icons.Outlined.Help)) }
  *     overflow { supportUs() }
  * }
  * ```
@@ -66,7 +66,7 @@ fun toolkitGraph(
     builder: ShellGraphBuilder.() -> Unit,
 ): ShellGraph = ShellGraphBuilder(appTitle, appIcon, defaults).apply {
     builder()
-    toolkitPages()
+    toolkitScreens()
 }.build()
 
 /**
@@ -77,20 +77,20 @@ fun toolkitGraph(
  * This is the only place that names every feature; the features know nothing of each other and
  * open one another's pages by key.
  */
-fun ShellGraphBuilder.toolkitPages() {
-    settingsPage()
-    displaySettingsPage()
-    themeSettingsPage()
-    privacySettingsPage()
-    diagnosticsSettingsPage()
-    permissionsPage()
-    adsSettingsPage()
-    advancedSettingsPage()
-    aboutPages()
-    licensesPage()
-    helpPage()
-    supportPage()
-    developerOptionsPage()
-    startupPage()
-    onboardingPages()
+fun ShellGraphBuilder.toolkitScreens() {
+    settingsScreen()
+    displaySettingsScreen()
+    themeSettingsScreen()
+    privacySettingsScreen()
+    diagnosticsSettingsScreen()
+    permissionsScreen()
+    adsSettingsScreen()
+    advancedSettingsScreen()
+    aboutScreen()
+    licensesScreen()
+    helpScreen()
+    supportScreen()
+    developerOptionsScreen()
+    startupScreen()
+    onboardingScreen()
 }

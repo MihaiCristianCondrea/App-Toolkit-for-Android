@@ -42,7 +42,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.input.TextFieldValue
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.icons.ToolkitIcon
@@ -237,9 +236,3 @@ private fun FormattingAction(
         iconSize = SizeConstants.ButtonIconSize,
     )
 }
-
-/** Places the caret and the selection a [MarkdownEdit] asks for on the text it produced. */
-internal fun MarkdownEdit.toTextFieldValue(): TextFieldValue = TextFieldValue(
-    text = text,
-    selection = TextRange(start = selectionStart, end = selectionEnd),
-)

@@ -19,15 +19,21 @@ package com.mihaicristiancondrea.android.libs.apptoolkit.shell.settings
 
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.NavigationDefaults
 
+/**
+ * The receiver of [appToolkitDefaults]. Anything a block leaves out keeps the Toolkit's default;
+ * calling a block twice builds on what the first one set.
+ */
 @AppToolkitDefaultsDsl
 class AppToolkitDefaultsBuilder internal constructor() {
     private var shell = ShellSettings()
     private var navigation = NavigationDefaults()
 
+    /** Chooses the app's shell defaults, given to `ShellHost(defaults = ...)` as `AppToolkitDefaults.shell`. */
     fun shell(builder: ShellDefaultsBuilder.() -> Unit) {
         shell = ShellDefaultsBuilder(shell).apply(builder).build()
     }
 
+    /** Chooses the app's navigation defaults, given to the graph as `AppToolkitDefaults.navigation`. */
     fun navigation(builder: NavigationDefaultsBuilder.() -> Unit) {
         navigation = NavigationDefaultsBuilder(navigation).apply(builder).build()
     }

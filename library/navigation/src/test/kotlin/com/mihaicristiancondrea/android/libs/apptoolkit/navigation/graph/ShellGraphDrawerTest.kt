@@ -21,7 +21,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Home
 import androidx.navigation3.runtime.NavKey
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.icons.ToolkitIcon
-import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.SettingsRoute
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.keys.SettingsScreen
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 
@@ -37,7 +37,7 @@ class ShellGraphDrawerTest {
         tab(Home, 0, icon) {}
         page<Library> {}
         page<Downloads> {}
-        page<SettingsRoute> {}
+        page<SettingsScreen> {}
         drawer()
     }.build()
 
@@ -53,7 +53,7 @@ class ShellGraphDrawerTest {
             drawer { link(Downloads, 0, icon) }
         }
 
-        assertEquals(listOf(Library, Downloads, DrawerEntry.Spacer, SettingsRoute), graph.drawer.keys())
+        assertEquals(listOf(Library, Downloads, DrawerEntry.Spacer, SettingsScreen), graph.drawer.keys())
     }
 
     @Test
@@ -67,7 +67,7 @@ class ShellGraphDrawerTest {
             }
         }
 
-        assertEquals(listOf(Library, DrawerEntry.Spacer, Downloads, SettingsRoute), graph.drawer.keys())
+        assertEquals(listOf(Library, DrawerEntry.Spacer, Downloads, SettingsScreen), graph.drawer.keys())
     }
 
     @Test

@@ -24,8 +24,10 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.LoggedScr
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.toErrorMessage
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.toFailed
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.diagnostics.R
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.diagnostics.data.repositories.UsageAndDiagnosticsRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.diagnostics.data.models.UsageAndDiagnosticsSettings
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.diagnostics.data.repositories.UsageAndDiagnosticsRepository
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.diagnostics.ui.analytics.USAGE_DIAGNOSTICS_SCREEN_NAME
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.diagnostics.ui.constants.UsageAndDiagnosticsOperationNames
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.diagnostics.ui.contracts.UsageAndDiagnosticsEvent
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.diagnostics.ui.states.UsageAndDiagnosticsUiState
 import kotlinx.coroutines.Job
@@ -42,7 +44,7 @@ class UsageAndDiagnosticsViewModel(
 ) : LoggedScreenViewModel<UsageAndDiagnosticsUiState, UsageAndDiagnosticsEvent>(
     initialState = UsageAndDiagnosticsUiState(),
     telemetryRepository = telemetryRepository,
-    screenName = "UsageAndDiagnostics",
+    screenName = USAGE_DIAGNOSTICS_SCREEN_NAME,
     viewModelName = "UsageAndDiagnosticsViewModel",
 ) {
 
@@ -61,53 +63,44 @@ class UsageAndDiagnosticsViewModel(
 
     override fun handleEvent(event: UsageAndDiagnosticsEvent) {
         when (event) {
-            UsageAndDiagnosticsEvent.Load -> observeConsents()
+            is UsageAndDiagnosticsEvent.Load -> observeConsents()
 
             is UsageAndDiagnosticsEvent.SetUsageAndDiagnostics ->
                 setUsageAndDiagnosticsJob = persistChoice(
                     job = setUsageAndDiagnosticsJob,
-                    action = Actions.SET_USAGE_AND_DIAGNOSTICS,
-                    extra = mapOf(ExtraKeys.ENABLED to event.enabled.toString()),
-                ) { repository.setUsageAndDiagnostics(event.enabled) }
+                    action = UsageAndDiagnosticsOperationNames.SET_USAGE_AND_DIAGNOSTICS,
+                ) { repository.setUsageAndDiagnostics(enabled = event.enabled) }
 
             is UsageAndDiagnosticsEvent.SetAnalyticsConsent ->
                 setAnalyticsConsentJob = persistChoice(
                     job = setAnalyticsConsentJob,
-                    action = Actions.SET_ANALYTICS_CONSENT,
-                    extra = mapOf(ExtraKeys.GRANTED to event.granted.toString()),
-                ) { repository.setAnalyticsConsent(event.granted) }
+                    action = UsageAndDiagnosticsOperationNames.SET_ANALYTICS_CONSENT,
+                ) { repository.setAnalyticsConsent(granted = event.granted) }
 
             is UsageAndDiagnosticsEvent.SetAdStorageConsent ->
                 setAdStorageConsentJob = persistChoice(
                     job = setAdStorageConsentJob,
-                    action = Actions.SET_AD_STORAGE_CONSENT,
-                    extra = mapOf(ExtraKeys.GRANTED to event.granted.toString()),
-                ) { repository.setAdStorageConsent(event.granted) }
+                    action = UsageAndDiagnosticsOperationNames.SET_AD_STORAGE_CONSENT,
+                ) { repository.setAdStorageConsent(granted = event.granted) }
 
             is UsageAndDiagnosticsEvent.SetAdUserDataConsent ->
                 setAdUserDataConsentJob = persistChoice(
                     job = setAdUserDataConsentJob,
-                    action = Actions.SET_AD_USER_DATA_CONSENT,
-                    extra = mapOf(ExtraKeys.GRANTED to event.granted.toString()),
-                ) { repository.setAdUserDataConsent(event.granted) }
+                    action = UsageAndDiagnosticsOperationNames.SET_AD_USER_DATA_CONSENT,
+                ) { repository.setAdUserDataConsent(granted = event.granted) }
 
             is UsageAndDiagnosticsEvent.SetAdPersonalizationConsent ->
                 setAdPersonalizationConsentJob = persistChoice(
                     job = setAdPersonalizationConsentJob,
-                    action = Actions.SET_AD_PERSONALIZATION_CONSENT,
-                    extra = mapOf(ExtraKeys.GRANTED to event.granted.toString()),
-                ) { repository.setAdPersonalizationConsent(event.granted) }
+                    action = UsageAndDiagnosticsOperationNames.SET_AD_PERSONALIZATION_CONSENT,
+                ) { repository.setAdPersonalizationConsent(granted = event.granted) }
 
-            UsageAndDiagnosticsEvent.AllowAllConsent -> applyConsentBundle(
-                analytics = true,
-                adStorage = true,
+            is UsageAndDiagnosticsEvent.AllowAllConsent -> applyConsentBundle(
                 adUserData = true,
                 adPersonalization = true,
             )
 
-            UsageAndDiagnosticsEvent.AllowEssentialConsent -> applyConsentBundle(
-                analytics = true,
-                adStorage = true,
+            is UsageAndDiagnosticsEvent.AllowEssentialConsent -> applyConsentBundle(
                 adUserData = false,
                 adPersonalization = false,
             )
@@ -119,29 +112,35 @@ class UsageAndDiagnosticsViewModel(
         observeConsentsJob = observeConsentsJob.restart {
             setState { copy(settings = Loadable.Loading) }
             repository.observeSettings().collectReport(
-                action = Actions.OBSERVE_CONSENTS,
-                onError = { error -> setState { copy(settings = error.toFailed(fallback = ErrorText)) } },
+                action = UsageAndDiagnosticsOperationNames.OBSERVE_CONSENTS,
+                onError = { error ->
+                    setState {
+                        copy(
+                            settings = error.toFailed(
+                                fallback = UiText.StringResource(resourceId = R.string.error_an_error_occurred),
+                            ),
+                        )
+                    }
+                },
             ) { settings ->
-                setState { copy(settings = Loadable.Ready(settings)) }
+                setState { copy(settings = Loadable.Ready(value = settings)) }
             }
         }
     }
 
     /**
      * Stores one of the dialog's whole-bundle answers in one write, after cancelling single-choice
-     * writes still in flight so they cannot overwrite it. Reporting is turned on with either
-     * answer, since leaving it off would drop every choice just made.
+     * writes still in flight so they cannot overwrite it. Both answers grant reporting, analytics
+     * and ad storage, and differ only in targeting consents ([adUserData], [adPersonalization]).
      */
     private fun applyConsentBundle(
-        analytics: Boolean,
-        adStorage: Boolean,
         adUserData: Boolean,
         adPersonalization: Boolean,
     ) {
         val settings = UsageAndDiagnosticsSettings(
             usageAndDiagnostics = true,
-            analyticsConsent = analytics,
-            adStorageConsent = adStorage,
+            analyticsConsent = true,
+            adStorageConsent = true,
             adUserDataConsent = adUserData,
             adPersonalizationConsent = adPersonalization,
         )
@@ -154,14 +153,16 @@ class UsageAndDiagnosticsViewModel(
         ).forEach { job -> job?.cancel() }
         setConsentBundleJob = setConsentBundleJob.restart {
             launchReport(
-                action = Actions.SET_CONSENT_BUNDLE,
-                extra = mapOf(
-                    ExtraKeys.ANALYTICS to analytics.toString(),
-                    ExtraKeys.AD_PERSONALIZATION to adPersonalization.toString(),
-                ),
-                onError = { error -> showMessage(error.toErrorMessage(fallback = ErrorText)) },
+                action = UsageAndDiagnosticsOperationNames.SET_CONSENT_BUNDLE,
+                onError = { error ->
+                    showMessage(
+                        message = error.toErrorMessage(
+                            fallback = UiText.StringResource(resourceId = R.string.error_an_error_occurred),
+                        ),
+                    )
+                },
             ) {
-                repository.setAll(settings)
+                repository.setAll(settings = settings)
             }
         }
     }
@@ -173,35 +174,18 @@ class UsageAndDiagnosticsViewModel(
     private fun persistChoice(
         job: Job?,
         action: String,
-        extra: Map<String, String>,
         write: suspend () -> Unit,
     ): Job = job.restart {
         launchReport(
             action = action,
-            extra = extra,
-            onError = { error -> showMessage(error.toErrorMessage(fallback = ErrorText)) },
+            onError = { error ->
+                showMessage(
+                    message = error.toErrorMessage(
+                        fallback = UiText.StringResource(resourceId = R.string.error_an_error_occurred),
+                    ),
+                )
+            },
             block = write,
         )
-    }
-
-    private object Actions {
-        const val OBSERVE_CONSENTS: String = "observeConsents"
-        const val SET_USAGE_AND_DIAGNOSTICS: String = "setUsageAndDiagnostics"
-        const val SET_ANALYTICS_CONSENT: String = "setAnalyticsConsent"
-        const val SET_AD_STORAGE_CONSENT: String = "setAdStorageConsent"
-        const val SET_AD_USER_DATA_CONSENT: String = "setAdUserDataConsent"
-        const val SET_AD_PERSONALIZATION_CONSENT: String = "setAdPersonalizationConsent"
-        const val SET_CONSENT_BUNDLE: String = "setConsentBundle"
-    }
-
-    private object ExtraKeys {
-        const val ENABLED: String = "enabled"
-        const val GRANTED: String = "granted"
-        const val ANALYTICS: String = "analytics"
-        const val AD_PERSONALIZATION: String = "adPersonalization"
-    }
-
-    private companion object {
-        val ErrorText = UiText.StringResource(R.string.error_an_error_occurred)
     }
 }

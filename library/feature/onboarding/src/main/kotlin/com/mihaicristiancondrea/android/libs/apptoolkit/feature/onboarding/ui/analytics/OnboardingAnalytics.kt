@@ -34,7 +34,7 @@ internal val ONBOARDING_SCREEN: TrackedScreen =
 internal fun onboardingTutorialBeginEvent(): AnalyticsEvent = AnalyticsEvent(
     name = OnboardingEventNames.TUTORIAL_BEGIN,
     params = mapOf(
-        OnboardingParams.SCREEN to AnalyticsValue.Str(ONBOARDING_SCREEN_NAME),
+        OnboardingParams.SCREEN to AnalyticsValue.Str(value = ONBOARDING_SCREEN_NAME),
     ),
 )
 
@@ -45,10 +45,14 @@ internal fun onboardingTutorialCompleteEvent(
 ): AnalyticsEvent = AnalyticsEvent(
     name = OnboardingEventNames.TUTORIAL_COMPLETE,
     params = buildMap {
-        put(OnboardingParams.SCREEN, AnalyticsValue.Str(ONBOARDING_SCREEN_NAME))
-        put(OnboardingParams.METHOD, AnalyticsValue.Str(method))
-        pageIndex?.let { put(OnboardingParams.STEP_INDEX, AnalyticsValue.LongVal(it.toLong())) }
-        pageKey?.let { put(OnboardingParams.PAGE_KEY, AnalyticsValue.Str(it)) }
+        put(OnboardingParams.SCREEN, AnalyticsValue.Str(value = ONBOARDING_SCREEN_NAME))
+        put(OnboardingParams.METHOD, AnalyticsValue.Str(value = method))
+        pageIndex?.let { index ->
+            put(OnboardingParams.STEP_INDEX, AnalyticsValue.LongVal(value = index.toLong()))
+        }
+        pageKey?.let { key ->
+            put(OnboardingParams.PAGE_KEY, AnalyticsValue.Str(value = key))
+        }
     },
 )
 
@@ -59,10 +63,12 @@ internal fun onboardingStepViewEvent(
 ): AnalyticsEvent = AnalyticsEvent(
     name = OnboardingEventNames.STEP_VIEW,
     params = buildMap {
-        put(OnboardingParams.SCREEN, AnalyticsValue.Str(ONBOARDING_SCREEN_NAME))
-        put(OnboardingParams.STEP_INDEX, AnalyticsValue.LongVal(stepIndex.toLong()))
-        put(OnboardingParams.DIRECTION, AnalyticsValue.Str(direction))
-        pageKey?.let { put(OnboardingParams.PAGE_KEY, AnalyticsValue.Str(it)) }
+        put(OnboardingParams.SCREEN, AnalyticsValue.Str(value = ONBOARDING_SCREEN_NAME))
+        put(OnboardingParams.STEP_INDEX, AnalyticsValue.LongVal(value = stepIndex.toLong()))
+        put(OnboardingParams.DIRECTION, AnalyticsValue.Str(value = direction))
+        pageKey?.let { key ->
+            put(OnboardingParams.PAGE_KEY, AnalyticsValue.Str(value = key))
+        }
     },
 )
 
@@ -72,8 +78,8 @@ internal fun onboardingActionEvent(
 ): AnalyticsEvent = AnalyticsEvent(
     name = OnboardingEventNames.ACTION,
     params = buildMap {
-        put(OnboardingParams.SCREEN, AnalyticsValue.Str(ONBOARDING_SCREEN_NAME))
-        put(SettingsAnalytics.Params.ACTION_NAME, AnalyticsValue.Str(actionName))
+        put(OnboardingParams.SCREEN, AnalyticsValue.Str(value = ONBOARDING_SCREEN_NAME))
+        put(SettingsAnalytics.Params.ACTION_NAME, AnalyticsValue.Str(value = actionName))
         putAll(params)
     },
 )
@@ -81,5 +87,5 @@ internal fun onboardingActionEvent(
 internal fun onboardingThemeCustomizedEvent(setting: String): AnalyticsEvent =
     onboardingActionEvent(
         actionName = OnboardingActionNames.THEME_CUSTOMIZED,
-        params = mapOf(OnboardingParams.SETTING to AnalyticsValue.Str(setting)),
+        params = mapOf(OnboardingParams.SETTING to AnalyticsValue.Str(value = setting)),
     )

@@ -22,9 +22,7 @@ import android.content.Context
 import com.google.android.libraries.ads.mobile.sdk.appopen.AppOpenAd
 import com.google.android.libraries.ads.mobile.sdk.common.AdLoadCallback
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.coroutines.dispatchers.DispatcherProvider
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.BuildInfoRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.FakeAdsSettingsRepository
-import com.mihaicristiancondrea.android.libs.apptoolkit.integration.ads.data.remote.AdsSdkInitializer
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.mockkObject
@@ -53,10 +51,9 @@ class AppOpenAdControllerThreadingTest {
         val context = mockk<Context>()
         val controller = AppOpenAdController(
             context = context,
-            buildInfoRepository = mockk<BuildInfoRepository>(),
             dispatchers = dispatchers,
             adMobAppIdDataSource = { "ca-app-pub-1234567890123456~1234567890" },
-            adsSdkInitializer = AdsSdkInitializer { _, _ -> },
+            adsSdkInitializer = { _, _ -> },
             adsSettingsRepository = FakeAdsSettingsRepository(),
         )
         val callback = slot<AdLoadCallback<AppOpenAd>>()

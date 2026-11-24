@@ -21,6 +21,8 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 
+/** Tracks whether the finish-page celebration konfetti has already played in this process. */
 object FinalOnboardingKonfettiState {
-    var hasKonfettiBeenShownGlobally by mutableStateOf(false)
+    /** `true` once [FinishOnboardingPage][com.mihaicristiancondrea.android.libs.apptoolkit.feature.onboarding.ui.views.pages.finish.FinishOnboardingPage] has shown konfetti. */
+    var hasKonfettiBeenShownGlobally by mutableStateOf(value = false)
 }

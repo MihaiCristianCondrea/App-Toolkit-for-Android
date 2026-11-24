@@ -15,6 +15,6 @@
   ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
   -->
 <resources>
-    <string name="error_loading_changelog_message">No se pudo cargar el registro de cambios de la aplicación. Por favor, inténtelo de nuevo.</string>
+    <string name="error_loading_changelog_message">No se pudo cargar el registro de cambios de la aplicación.</string>
     <string name="loading_changelog_message">Obteniendo el registro de cambios de la aplicación…</string>
 </resources>

@@ -15,6 +15,6 @@
   ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
   -->
 <resources>
-    <string name="error_loading_changelog_message">एप्लिकेशन चेंजलॉग लोड करने में असमर्थ। कृपया पुनः प्रयास करें।</string>
+    <string name="error_loading_changelog_message">एप्लिकेशन चेंजलॉग लोड करने में असमर्थ।</string>
     <string name="loading_changelog_message">एप्लिकेशन चेंजलॉग प्राप्त किया जा रहा है…</string>
 </resources>

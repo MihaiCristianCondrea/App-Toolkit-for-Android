@@ -261,4 +261,13 @@
     <string name="random_range">نمبروں کی حد</string>
     <string name="random_inclusive">حد کے دونوں سرے شامل ہیں۔</string>
     <string name="tool_converter_unit">اکائی</string>
+
+    <string name="section_toys">کھلونے</string>
+    <string name="bell_title">گھنٹی</string>
+    <string name="bell_summary">گھنٹی بجانے کے لیے فون ہلائیں۔</string>
+    <string name="bell_card_note">بجانے کے لیے ہلائیں</string>
+    <string name="bell_ring">گھنٹی بجائیں</string>
+    <string name="bell_motion_unavailable">یہ آلہ فون ہلانے کا پتا نہیں لگا سکتا۔</string>
+    <string name="bell_audio_unavailable">گھنٹی کی آواز دستیاب نہیں ہے۔</string>
+    <string name="bell_ringing">گھنٹی بج رہی ہے</string>
 </resources>

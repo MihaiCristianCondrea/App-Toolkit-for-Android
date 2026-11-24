@@ -19,11 +19,12 @@ package com.mihaicristiancondrea.android.apps.apptoolkit.feature.about.data.loca
 
 import android.content.Context
 import android.os.Build
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.about.data.formatters.formatAboutDeviceReport
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.di.models.AppToolkitHostBuildConfig
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.data.local.AboutDeviceInfoDataSource
 
 /**
- * Formats sample build/device metadata for the reusable About screen.
+ * Supplies sample build and device metadata for the reusable About screen.
  *
  * Build type comes from [hostBuildConfig], not this library module's `BuildConfig`, so the label
  * describes the final application variant.
@@ -33,17 +34,13 @@ class AppAboutDeviceInfoDataSource(
     private val hostBuildConfig: AppToolkitHostBuildConfig,
 ) : AboutDeviceInfoDataSource {
     override val deviceInfo: String
-        get() {
-            return context.getString(
-                com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.R.string.app_build,
-                "${context.getString(com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.R.string.manufacturer)} ${Build.MANUFACTURER}",
-                "${context.getString(com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.R.string.device_model)} ${Build.MODEL}",
-                "${context.getString(com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.R.string.android_version)} ${Build.VERSION.RELEASE}",
-                "${context.getString(com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.R.string.api_level)} ${Build.VERSION.SDK_INT}",
-                "${context.getString(com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.R.string.arch)} ${Build.SUPPORTED_ABIS.joinToString()}",
-                if (hostBuildConfig.isDebugBuild) context.getString(com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.R.string.debug) else context.getString(
-                    com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.R.string.release
-                )
-            )
-        }
+        get() = formatAboutDeviceReport(
+            context = context,
+            manufacturer = Build.MANUFACTURER,
+            model = Build.MODEL,
+            androidVersion = Build.VERSION.RELEASE,
+            apiLevel = Build.VERSION.SDK_INT,
+            supportedAbis = Build.SUPPORTED_ABIS,
+            isDebugBuild = hostBuildConfig.isDebugBuild,
+        )
 }

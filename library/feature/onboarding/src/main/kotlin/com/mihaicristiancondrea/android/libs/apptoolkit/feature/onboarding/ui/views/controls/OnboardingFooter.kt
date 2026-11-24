@@ -22,7 +22,6 @@ import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideOutHorizontally
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
@@ -32,10 +31,10 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.KeyboardArrowLeft
 import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
 import androidx.compose.material.icons.filled.Check
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.FlexibleBottomAppBar
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -48,80 +47,91 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.carousel.A
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.onboarding.R
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.R as CoreUiR
 
+/**
+ * Bottom bar for the onboarding pager with Back, page indicator dots, and Next or Done.
+ *
+ * @param pagerState Active onboarding pager state.
+ * @param pageCount Total number of onboarding pages.
+ * @param onNextClicked Advances to the next page, or finishes onboarding on the last page.
+ * @param onBackClicked Returns to the previous page.
+ * @param enabled Whether the Back and Next/Done controls accept clicks.
+ */
 @OptIn(
-    ExperimentalFoundationApi::class,
     ExperimentalMaterial3Api::class,
-    ExperimentalMaterial3ExpressiveApi::class
+    ExperimentalMaterial3ExpressiveApi::class,
 )
 @Composable
 fun OnboardingFooter(
     pagerState: PagerState,
     pageCount: Int,
     onNextClicked: () -> Unit,
-    onBackClicked: () -> Unit
+    onBackClicked: () -> Unit,
+    enabled: Boolean = true,
 ) {
     val motion = MaterialTheme.motionScheme
     FlexibleBottomAppBar(
         contentPadding = PaddingValues(
             horizontal = SizeConstants.LargeSize,
-            vertical = SizeConstants.SmallSize
+            vertical = SizeConstants.SmallSize,
         ),
-        horizontalArrangement = Arrangement.SpaceBetween
+        horizontalArrangement = Arrangement.SpaceBetween,
     ) {
         Box(
             modifier = Modifier
-                .weight(1f)
+                .weight(weight = 1f)
                 .fillMaxWidth(),
-            contentAlignment = Alignment.CenterStart
+            contentAlignment = Alignment.CenterStart,
         ) {
             androidx.compose.animation.AnimatedVisibility(
                 visible = pagerState.currentPage > 0,
                 enter = slideInHorizontally(
-                    initialOffsetX = { -it },
-                    animationSpec = motion.defaultSpatialSpec()
+                    initialOffsetX = { fullWidth -> -fullWidth },
+                    animationSpec = motion.defaultSpatialSpec(),
                 ) + fadeIn(animationSpec = motion.defaultEffectsSpec()),
                 exit = slideOutHorizontally(
-                    targetOffsetX = { -it },
-                    animationSpec = motion.defaultSpatialSpec()
-                ) + fadeOut(animationSpec = motion.fastEffectsSpec())
+                    targetOffsetX = { fullWidth -> -fullWidth },
+                    animationSpec = motion.defaultSpatialSpec(),
+                ) + fadeOut(animationSpec = motion.fastEffectsSpec()),
             ) {
                 GeneralButton(
                     style = GeneralButtonStyle.Outlined,
+                    enabled = enabled,
                     onClick = onBackClicked,
                     icon = ToolkitIcon.Vector(imageVector = Icons.AutoMirrored.Filled.KeyboardArrowLeft),
                     contentDescription = stringResource(id = R.string.back_button_content_description),
-                    label = stringResource(id = R.string.back_button_text)
+                    label = stringResource(id = R.string.back_button_text),
                 )
             }
         }
 
         Box(
-            modifier = Modifier.weight(1f),
-            contentAlignment = Alignment.Center
+            modifier = Modifier.weight(weight = 1f),
+            contentAlignment = Alignment.Center,
         ) {
             AospPageIndicator(
                 pagerState = pagerState,
-                dotSize = SizeConstants.SmallSize
+                dotSize = SizeConstants.SmallSize,
             )
         }
 
         Box(
             modifier = Modifier
-                .weight(1f)
+                .weight(weight = 1f)
                 .animateContentSize(),
-            contentAlignment = Alignment.CenterEnd
+            contentAlignment = Alignment.CenterEnd,
         ) {
             val isLastPage = pagerState.currentPage == pageCount - 1
 
             GeneralButton(
                 onClick = onNextClicked,
+                enabled = enabled,
                 modifier = Modifier.animateContentSize(),
                 icon = ToolkitIcon.Vector(
                     imageVector = if (isLastPage) {
                         Icons.Filled.Check
                     } else {
                         Icons.AutoMirrored.Filled.KeyboardArrowRight
-                    }
+                    },
                 ),
                 contentDescription = if (isLastPage) {
                     stringResource(id = CoreUiR.string.done_button_content_description)
@@ -132,7 +142,7 @@ fun OnboardingFooter(
                     stringResource(id = R.string.done_button_text)
                 } else {
                     stringResource(id = R.string.next_button_text)
-                }
+                },
             )
         }
     }

@@ -80,7 +80,7 @@
     <string name="shell_navigation_tint_always">一緒に着色し、コンテンツをカードに表示</string>
     <string name="shell_navigation_tint_on_scroll">コンテンツがスクロールしたら一緒に着色</string>
     <string name="shell_back_edge_system">Android と同じ: ページがその場で縮小</string>
-    <string name="shell_back_edge_follow">指に追従し、左端と対称に動く（デフォルト）</string>
+    <string name="shell_back_edge_follow">指に追従し、左端と対称に動く</string>
     <string name="shell_transition_directional">方向付きスライド</string>
     <string name="shell_transition_fade_through">フェードスルー</string>
     <string name="shell_transition_fade">クロスフェード</string>

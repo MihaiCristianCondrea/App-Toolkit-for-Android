@@ -261,4 +261,13 @@
     <string name="random_range">Диапазон чисел</string>
     <string name="random_inclusive">Обе границы включены.</string>
     <string name="tool_converter_unit">Единица</string>
+
+    <string name="section_toys">Игрушки</string>
+    <string name="bell_title">Колокольчик</string>
+    <string name="bell_summary">Потрясите телефон, чтобы позвонить в колокольчик.</string>
+    <string name="bell_card_note">Потрясите, чтобы позвонить</string>
+    <string name="bell_ring">Позвонить в колокольчик</string>
+    <string name="bell_motion_unavailable">Устройство не распознаёт встряхивание.</string>
+    <string name="bell_audio_unavailable">Звук колокольчика недоступен.</string>
+    <string name="bell_ringing">Колокольчик звенит</string>
 </resources>

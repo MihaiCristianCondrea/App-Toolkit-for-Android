@@ -19,9 +19,11 @@ package com.mihaicristiancondrea.android.libs.apptoolkit.integration.gms.di
 
 import com.mihaicristiancondrea.android.libs.apptoolkit.integration.gms.data.repositories.DefaultGooglePlayServicesRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.integration.gms.data.repositories.GooglePlayServicesRepository
+import org.koin.core.module.Module
 import org.koin.dsl.module
 
-val googlePlayServicesModule = module {
+/** Koin bindings for installed Google Play services metadata lookups. */
+val googlePlayServicesModule: Module = module {
     single<GooglePlayServicesRepository> {
         DefaultGooglePlayServicesRepository(context = get(), dispatchers = get())
     }

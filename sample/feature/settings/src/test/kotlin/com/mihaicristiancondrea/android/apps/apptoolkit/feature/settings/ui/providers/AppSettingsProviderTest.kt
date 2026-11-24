@@ -17,16 +17,13 @@
 
 package com.mihaicristiancondrea.android.apps.apptoolkit.feature.settings.ui.providers
 
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.settings.utils.constants.SettingsConstants
-
-import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.AboutRoute
-import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.AdvancedSettingsRoute
-import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.DisplaySettingsRoute
-import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.PrivacySettingsRoute
-import kotlin.test.assertTrue
-import kotlin.test.assertFalse
 import android.content.Context
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.settings.ui.constants.SettingsConstants
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.context.openAppNotificationSettings
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.keys.AboutScreen
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.keys.AdvancedSettingsScreen
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.keys.DisplaySettingsScreen
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.keys.PrivacySettingsScreen
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.mockkStatic
@@ -36,7 +33,9 @@ import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertDoesNotThrow
 import kotlin.test.assertEquals
+import kotlin.test.assertFalse
 import kotlin.test.assertNull
+import kotlin.test.assertTrue
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.R as CoreUiR
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.settings.R as SettingsR
 
@@ -114,11 +113,11 @@ class AppSettingsProviderTest {
         assertEquals(defaultStrings[SettingsR.string.summary_preference_settings_about], about.summary)
 
         // Each row opens its Toolkit page; notifications first tries the system's page.
-        assertEquals(PrivacySettingsRoute, notifications.destination)
-        assertEquals(DisplaySettingsRoute, display.destination)
-        assertEquals(PrivacySettingsRoute, security.destination)
-        assertEquals(AdvancedSettingsRoute, advanced.destination)
-        assertEquals(AboutRoute, about.destination)
+        assertEquals(PrivacySettingsScreen, notifications.destination)
+        assertEquals(DisplaySettingsScreen, display.destination)
+        assertEquals(PrivacySettingsScreen, security.destination)
+        assertEquals(AdvancedSettingsScreen, advanced.destination)
+        assertEquals(AboutScreen, about.destination)
         assertTrue(notifications.action?.invoke() == true)
         verify(exactly = 1) { context.openAppNotificationSettings() }
         listOf(display, security, advanced, about).forEach { assertNull(it.action) }
@@ -139,7 +138,7 @@ class AppSettingsProviderTest {
 
         // Unhandled, so the settings list opens the row's destination instead.
         assertFalse(assertDoesNotThrow { notifications.action?.invoke() } == true)
-        assertEquals(PrivacySettingsRoute, notifications.destination)
+        assertEquals(PrivacySettingsScreen, notifications.destination)
         verify(exactly = 1) { context.openAppNotificationSettings() }
     }
 

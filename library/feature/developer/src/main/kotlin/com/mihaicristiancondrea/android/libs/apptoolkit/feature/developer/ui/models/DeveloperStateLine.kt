@@ -17,7 +17,10 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.developer.ui.models
 
+import androidx.compose.runtime.Immutable
+
 /** One read-only line of live shell state; selected marks the tab currently on screen. */
+@Immutable
 internal data class DeveloperStateLine(
     val title: String,
     val summary: String,

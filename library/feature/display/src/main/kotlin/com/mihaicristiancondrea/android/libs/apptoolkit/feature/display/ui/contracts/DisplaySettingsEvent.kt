@@ -21,10 +21,22 @@ package com.mihaicristiancondrea.android.libs.apptoolkit.feature.display.ui.cont
 sealed interface DisplaySettingsEvent {
     /** Follows the stored preferences, on start and on retry. */
     data object Load : DisplaySettingsEvent
+
+    /** Stores the selected theme mode key. */
     data class ThemeModeChanged(val mode: String) : DisplaySettingsEvent
+
+    /** Updates whether Material You dynamic colors are enabled. */
     data class DynamicColorsChanged(val enabled: Boolean) : DisplaySettingsEvent
+
+    /** Updates whether button press bounce animations are enabled. */
     data class BouncyButtonsChanged(val enabled: Boolean) : DisplaySettingsEvent
+
+    /** Updates whether bottom navigation bar labels are shown. */
     data class BottomBarLabelsChanged(val show: Boolean) : DisplaySettingsEvent
+
+    /** Stores the selected application language tag. */
     data class LanguageChanged(val language: String) : DisplaySettingsEvent
+
+    /** Stores the selected startup destination route key. */
     data class StartupRouteChanged(val route: String) : DisplaySettingsEvent
 }

@@ -166,6 +166,19 @@ class ShakeDetectorTest {
         assertFalse(detector().start())
     }
 
+    @Test
+    fun `non-finite readings are ignored and never count as shakes`() {
+        val detector = detector()
+        repeat(times = MINIMUM_SHAKES * 2) { index ->
+            val now: Long = index * SHAKE_STEP_MILLIS
+            detector.onAcceleration(gForce = Float.NaN, now = now)
+            detector.onAcceleration(gForce = Float.POSITIVE_INFINITY, now = now + 10L)
+            detector.onAcceleration(gForce = REST_G, now = now + SHAKE_STEP_MILLIS / 2)
+        }
+
+        assertEquals(0, reported)
+    }
+
     private companion object {
         const val THRESHOLD: Float = 2.5f
         const val REST_G: Float = 1f

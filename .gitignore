@@ -122,6 +122,12 @@ lint/tmp/
 .codex/
 resources/
 
+# Skill bundles under .agents/ ship their own resources/ and bin/ folders as part of the skill.
+!.agents/**/resources/
+!.agents/**/bin/
+!marketing/.agents/**/resources/
+!marketing/.agents/**/bin/
+
 ###############################################################################
 # NODE / REMOTION BUILD CACHE
 ###############################################################################

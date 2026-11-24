@@ -17,36 +17,37 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.data.remote.mappers
 
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.data.constants.GithubIssueMarkdownConstants
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.data.mappers.toDeviceInfoFields
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.data.models.DeviceInfo
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.data.models.ExtraInfo
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.data.models.Report
 
 internal fun Report.toGithubIssueBody(): String = buildString {
-    append(DESCRIPTION_HEADING)
-    append(PARAGRAPH_BREAK)
+    append(GithubIssueMarkdownConstants.DESCRIPTION_HEADING)
+    append(GithubIssueMarkdownConstants.PARAGRAPH_BREAK)
     append(description.trim())
-    append(PARAGRAPH_BREAK)
+    append(GithubIssueMarkdownConstants.PARAGRAPH_BREAK)
 
-    append(DEVICE_INFO_HEADING)
-    append(PARAGRAPH_BREAK)
-    append(DETAILS_OPEN)
-    append(PARAGRAPH_BREAK)
-    append(deviceInfo.toMarkdown())
-    append(PARAGRAPH_BREAK)
-    append(DETAILS_CLOSE)
+    append(GithubIssueMarkdownConstants.DEVICE_INFO_HEADING)
+    append(GithubIssueMarkdownConstants.PARAGRAPH_BREAK)
+    append(GithubIssueMarkdownConstants.DETAILS_OPEN)
+    append(GithubIssueMarkdownConstants.PARAGRAPH_BREAK)
+    append(formatDeviceInfoTable(deviceInfo = deviceInfo))
+    append(GithubIssueMarkdownConstants.PARAGRAPH_BREAK)
+    append(GithubIssueMarkdownConstants.DETAILS_CLOSE)
 
     if (extraInfo.values.isNotEmpty()) {
-        append(PARAGRAPH_BREAK)
-        append(EXTRA_INFO_HEADING)
-        append(PARAGRAPH_BREAK)
-        append(extraInfo.toMarkdown())
+        append(GithubIssueMarkdownConstants.PARAGRAPH_BREAK)
+        append(GithubIssueMarkdownConstants.EXTRA_INFO_HEADING)
+        append(GithubIssueMarkdownConstants.PARAGRAPH_BREAK)
+        append(formatExtraInfoTable(extraInfo = extraInfo))
     }
 
     if (!email.isNullOrBlank()) {
-        append(PARAGRAPH_BREAK)
-        append(HORIZONTAL_RULE)
-        append(PARAGRAPH_BREAK)
+        append(GithubIssueMarkdownConstants.PARAGRAPH_BREAK)
+        append(GithubIssueMarkdownConstants.HORIZONTAL_RULE)
+        append(GithubIssueMarkdownConstants.PARAGRAPH_BREAK)
         append("*Reported by [$email](mailto:$email)*")
     }
 }
@@ -55,32 +56,25 @@ internal fun Report.toGithubIssueBody(): String = buildString {
  * Device table for the GitHub issue body. Markdown remains readable in plain-text payloads and
  * notification emails. The report owns surrounding headings and details blocks.
  */
-private fun DeviceInfo.toMarkdown(): String = buildString {
-    append("| Item | Value |\n")
-    append("| --- | --- |\n")
-    toDeviceInfoFields().forEach { (label, value) ->
-        append("| ${label.escapeTableCell()} | ${value.escapeTableCell()} |\n")
+private fun formatDeviceInfoTable(deviceInfo: DeviceInfo): String =
+    formatMarkdownTable(rows = deviceInfo.toDeviceInfoFields())
+
+private fun formatExtraInfoTable(extraInfo: ExtraInfo): String {
+    if (extraInfo.values.isEmpty()) return ""
+    return formatMarkdownTable(rows = extraInfo.values.entries.map { (key, value) -> key to value })
+}
+
+private fun formatMarkdownTable(rows: List<Pair<String, String>>): String = buildString {
+    append(GithubIssueMarkdownConstants.TABLE_HEADER)
+    append(GithubIssueMarkdownConstants.TABLE_DIVIDER)
+    rows.forEach { (label, value) ->
+        append("| ${escapeTableCell(value = label)} | ${escapeTableCell(value = value)} |\n")
     }
 }
 
-private fun ExtraInfo.toMarkdown(): String {
-    if (values.isEmpty()) return ""
-    return buildString {
-        append("| Item | Value |\n")
-        append("| --- | --- |\n")
-        values.forEach { (key, value) ->
-            append("| ${key.escapeTableCell()} | ${value.escapeTableCell()} |\n")
-        }
-    }
-}
-
-/** Keeps a value containing a pipe from splitting the row it is rendered in. */
-private fun String.escapeTableCell(): String = replace(oldValue = "|", newValue = "\\|")
-
-private const val PARAGRAPH_BREAK = "\n\n"
-private const val HORIZONTAL_RULE = "---"
-private const val DESCRIPTION_HEADING = "## Description"
-private const val DEVICE_INFO_HEADING = "## Device info"
-private const val EXTRA_INFO_HEADING = "## Extra info"
-private const val DETAILS_OPEN = "<details>\n<summary>Device and app details</summary>"
-private const val DETAILS_CLOSE = "</details>"
+/** Keeps pipes and line breaks inside a value from breaking the Markdown table row. */
+private fun escapeTableCell(value: String): String = value
+    .replace(oldValue = "|", newValue = "\\|")
+    .replace(oldValue = "\r\n", newValue = "<br>")
+    .replace(oldValue = "\n", newValue = "<br>")
+    .replace(oldValue = "\r", newValue = "<br>")

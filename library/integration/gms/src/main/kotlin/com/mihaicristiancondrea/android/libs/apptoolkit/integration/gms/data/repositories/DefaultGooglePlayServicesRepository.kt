@@ -23,6 +23,12 @@ import android.os.Build
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.coroutines.dispatchers.DispatcherProvider
 import kotlinx.coroutines.withContext
 
+/**
+ * [GooglePlayServicesRepository] backed by Android's [PackageManager].
+ *
+ * Retains the application [PackageManager] rather than an activity context and performs package
+ * lookups on [DispatcherProvider.io].
+ */
 class DefaultGooglePlayServicesRepository(
     context: Context,
     private val dispatchers: DispatcherProvider,
@@ -43,7 +49,7 @@ class DefaultGooglePlayServicesRepository(
             } else {
                 info.versionCode.toLong()
             }
-            info.versionName ?: versionCode.toString()
+            info.versionName?.takeIf(String::isNotBlank) ?: versionCode.toString()
         } catch (_: PackageManager.NameNotFoundException) {
             null
         }

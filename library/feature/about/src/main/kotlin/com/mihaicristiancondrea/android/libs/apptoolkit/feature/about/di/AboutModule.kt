@@ -18,17 +18,18 @@
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.di
 
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.settings.SettingsSearchProvider
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.ui.search.aboutSettingsSearch
-import org.koin.core.qualifier.named
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.data.repositories.AboutRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.data.repositories.DefaultAboutRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.ui.AboutViewModel
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.ui.search.aboutSettingsSearch
 import org.koin.core.module.Module
 import org.koin.core.module.dsl.viewModel
+import org.koin.core.qualifier.named
 import org.koin.dsl.module
 
+/** Registers the About repository, ViewModel and settings search provider. */
 val aboutModule: Module = module {
-    single<SettingsSearchProvider>(named("about")) { aboutSettingsSearch }
+    single<SettingsSearchProvider>(qualifier = named(name = "about")) { aboutSettingsSearch }
 
     single<DefaultAboutRepository> {
         DefaultAboutRepository(

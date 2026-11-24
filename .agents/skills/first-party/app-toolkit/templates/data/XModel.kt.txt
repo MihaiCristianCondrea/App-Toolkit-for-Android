@@ -1,0 +1,9 @@
+package <base>.feature.x.data.models
+
+/**
+ * Inventory entry shared by catalog consumers.
+ *
+ * @property id Stable identifier used for item selection.
+ * @property availableQuantity Stock count used to determine whether a requested quantity can be fulfilled.
+ */
+data class XModel(val id: String, val title: String, val availableQuantity: Int)

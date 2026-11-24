@@ -29,7 +29,9 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.consta
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.datastore.DataStoreNamesConstants
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.local.models.HolidayThemePreferences
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.local.models.HolidayThemeSnapshot
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.local.mappers.toStorageException
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
 
@@ -41,6 +43,10 @@ import kotlinx.coroutines.flow.map
 class DefaultSeasonalThemePreferencesDataSource(
     private val dataStore: DataStore<Preferences>,
 ) : SeasonalThemePreferencesDataSource {
+
+    private val preferencesFlow = dataStore.data.catch { error ->
+        throw error.toStorageException() ?: error
+    }
 
     private val unlockedKey =
         booleanPreferencesKey(name = DataStoreNamesConstants.DATA_STORE_SEASONAL_THEMES_UNLOCKED)
@@ -56,24 +62,24 @@ class DefaultSeasonalThemePreferencesDataSource(
         booleanPreferencesKey(name = DataStoreNamesConstants.DATA_STORE_HOLIDAY_PREVIOUS_DYNAMIC_COLORS)
 
     private val themeModeKey = stringPreferencesKey(DataStoreNamesConstants.DATA_STORE_THEME_MODE)
-    private val previousThemeModeKey = stringPreferencesKey("holiday_previous_theme_mode")
+    private val previousThemeModeKey = stringPreferencesKey(name = DataStoreNamesConstants.DATA_STORE_HOLIDAY_PREVIOUS_THEME_MODE)
 
-    override val seasonalThemesUnlocked: Flow<Boolean> = dataStore.data.map { preferences ->
+    override val seasonalThemesUnlocked: Flow<Boolean> = preferencesFlow.map { preferences ->
         preferences[unlockedKey] == true
     }.distinctUntilChanged()
 
-    override val weatherEffect: Flow<WeatherEffect> = dataStore.data.map { preferences ->
+    override val weatherEffect: Flow<WeatherEffect> = preferencesFlow.map { preferences ->
         preferences[weatherEffectKey]
             ?.let { name -> WeatherEffect.entries.firstOrNull { it.name == name } }
             ?: WeatherEffect.Automatic
     }.distinctUntilChanged()
 
-    override val lastHolidayGreeting: Flow<String?> = dataStore.data.map { preferences ->
+    override val lastHolidayGreeting: Flow<String?> = preferencesFlow.map { preferences ->
         preferences[lastGreetingKey]
     }.distinctUntilChanged()
 
     override val holidayThemeSnapshot: Flow<HolidayThemeSnapshot?> =
-        dataStore.data.map { it.readHolidaySnapshot() }.distinctUntilChanged()
+        preferencesFlow.map { it.readHolidaySnapshot() }.distinctUntilChanged()
 
     override suspend fun saveSeasonalThemesUnlocked(unlocked: Boolean) {
         dataStore.edit { preferences: MutablePreferences -> preferences[unlockedKey] = unlocked }

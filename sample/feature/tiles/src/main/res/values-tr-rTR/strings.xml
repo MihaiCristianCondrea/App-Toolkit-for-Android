@@ -261,4 +261,13 @@
     <string name="random_range">Sayı aralığı</string>
     <string name="random_inclusive">Her iki sınır da dahildir.</string>
     <string name="tool_converter_unit">Birim</string>
+
+    <string name="section_toys">Oyuncaklar</string>
+    <string name="bell_title">Çan</string>
+    <string name="bell_summary">Çanı çalmak için telefonunu salla.</string>
+    <string name="bell_card_note">Çalmak için salla</string>
+    <string name="bell_ring">Çanı çal</string>
+    <string name="bell_motion_unavailable">Bu cihazda sallama algılanamıyor.</string>
+    <string name="bell_audio_unavailable">Çan sesi kullanılamıyor.</string>
+    <string name="bell_ringing">Çan çalıyor</string>
 </resources>

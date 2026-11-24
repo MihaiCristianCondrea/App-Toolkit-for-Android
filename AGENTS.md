@@ -5,13 +5,18 @@ Work with the existing project architecture and conventions.
 Inspect the affected modules, their documentation, the relevant skills, and the surrounding code
 before making changes. Prefer the smallest complete solution over broad refactors.
 
-This file is shared across the App Toolkit project family. It is intentionally focused on rules that
-apply across those projects. Detailed Android guidance belongs in the skills, and module-specific
-knowledge belongs in each module's `README.md`.
+This file is shared across the App Toolkit project family. It is maintained in the
+`android-skills` repository and copied unchanged into each project, the same way as the skills, so
+every project reads the same rules. It is intentionally focused on rules that apply across those
+projects. Detailed Android guidance belongs in the skills, module-specific knowledge belongs in each
+module's `README.md`, and a project's own verification tasks live in its build configuration.
 
 ## Project family
 
-These projects are built around App Toolkit for Android.
+These projects are built around App Toolkit for Android. The skills also serve Android projects
+without it: inspect the project's dependencies before assuming App Toolkit exists. When it is absent,
+follow the project's established patterns and the applicable Android skills; the App Toolkit rules
+in this file do not apply.
 
 App Toolkit itself has two main parts:
 
@@ -71,6 +76,9 @@ Do not design from assumptions when the repository can answer the question.
 
 Do not invent architecture that is not supported by the current project.
 
+When a task is sufficiently defined, execute it without unnecessary questions or additional
+architectural decisions.
+
 ## Sources of project guidance
 
 Different sources answer different questions.
@@ -102,6 +110,11 @@ with the code.
 
 ## Skills
 
+Start with [`app-toolkit`](.agents/skills/first-party/app-toolkit/SKILL.md) when implementing, reviewing,
+or integrating App Toolkit features in the library, sample, or a consumer app. Use it to select
+only the references and specialist skills needed for the task. For standalone Android architecture
+and ViewModel work, use its portable guidance with the project's existing AndroidX stack.
+
 Skills contain the detailed technical guidance that should not be duplicated in this file.
 
 ### Finding skills
@@ -110,14 +123,16 @@ Prefer a skill set in this repository:
 
 ```text
 .agents/skills/
-├── built-in/          # project family skills: architecture, data, UI, build, localization
-├── android-official/  # Google's Android skills
-└── kotlin-official/   # JetBrains' Kotlin skills
+├── first-party/       # project family skills
+├── official/          # vendor skills grouped by publisher
+└── third-party/       # externally maintained skills
 ```
 
-`built-in/` and `marketing/skills/` are copies of the `android-skills` repository, which is their
-source of truth. Change a shared skill there first, then copy it into each repository that carries
-it, so the copies never drift.
+`.agents/skills/`, `marketing/.agents/skills/`, their `skills.json` manifests, and this `AGENTS.md`
+are copies of the `android-skills` repository, which is their source of truth. Change a shared skill
+or rule there first, then copy it into each repository that carries it, so the copies never drift.
+`skills.json` provides nested skill discovery for Antigravity; other agents may discover skills
+differently, and skills may be nested several directories deep.
 
 For a consumer application that does not contain its own skill set, App Toolkit may provide the
 shared skills from a sibling checkout:
@@ -151,31 +166,172 @@ The following are common entry points. This list is not exhaustive.
 
 | Work                                                            | Skill                                                                       |
 |-----------------------------------------------------------------|-----------------------------------------------------------------------------|
-| Build validation, Gradle checks, SDK setup                      | `.agents/skills/built-in/android-build-validation/SKILL.md`                 |
-| Repository, data source, model, threading and caching decisions | `.agents/skills/built-in/architecture/android-data-layer/SKILL.md`          |
-| Domain layer and use-case decisions                             | `.agents/skills/built-in/architecture/android-domain-layer/SKILL.md`        |
-| Screens, ViewModels, UI state, events and messages              | `.agents/skills/built-in/architecture/android-ui-layer/SKILL.md`            |
-| Module and package placement                                    | `.agents/skills/built-in/architecture/layered-tree-review/SKILL.md`         |
-| Navigation 3                                                    | `.agents/skills/android-official/navigation/navigation-3/SKILL.md`          |
-| Navigation events                                               | `.agents/skills/android-official/navigation/navigation-event/SKILL.md`      |
-| Adaptive Compose layouts                                        | `.agents/skills/android-official/jetpack-compose/adaptive/SKILL.md`         |
-| Compose styles and theming                                      | `.agents/skills/android-official/jetpack-compose/theming/styles/SKILL.md`   |
-| Edge-to-edge and system UI                                      | `.agents/skills/android-official/system/edge-to-edge/SKILL.md`              |
-| DataStore                                                       | `.agents/skills/built-in/android-datastore/SKILL.md`                        |
-| WorkManager                                                     | `.agents/skills/built-in/android-workmanager/SKILL.md`                      |
-| Notifications                                                   | `.agents/skills/built-in/android-notification-views/SKILL.md`               |
-| Glance widgets                                                  | `.agents/skills/built-in/glance-widget/SKILL.md`                            |
-| Analytics and Firebase telemetry                                | `.agents/skills/built-in/ga4-app-analytics/SKILL.md`                        |
-| Localization                                                    | `.agents/skills/built-in/localization/SKILL.md`                             |
-| Testing                                                         | `.agents/skills/android-official/testing/testing-setup/SKILL.md`            |
-| R8 and keep rules                                               | `.agents/skills/android-official/performance/r8-analyzer/SKILL.md`          |
-| Intent and component security                                   | `.agents/skills/android-official/security/android-intent-security/SKILL.md` |
-| Changelog updates                                               | `.agents/skills/built-in/changelog/SKILL.md`                                |
+| Build validation, Gradle checks, SDK setup                      | `.agents/skills/first-party/android-build-validation/SKILL.md`                 |
+| Repository, data source, model, threading and caching decisions | `.agents/skills/official/google/android-developers/android-data-layer/SKILL.md`          |
+| Domain layer and use-case decisions                             | `.agents/skills/official/google/android-developers/android-domain-layer/SKILL.md`        |
+| Google UI architecture, state, events and state holders          | `.agents/skills/official/google/android-developers/android-ui-layer/SKILL.md` |
+| Toolkit screen contracts, ViewModels and starter templates      | `.agents/skills/first-party/app-toolkit/SKILL.md` |
+| Module and package placement                                    | `.agents/skills/first-party/layered-tree-review/SKILL.md`         |
+| Navigation 3                                                    | `.agents/skills/official/google/android/navigation/navigation-3/SKILL.md`          |
+| Navigation events                                               | `.agents/skills/official/google/android/navigation/navigation-event/SKILL.md`      |
+| Adaptive Compose layouts                                        | `.agents/skills/official/google/android/jetpack-compose/adaptive/SKILL.md`         |
+| Compose styles and theming                                      | `marketing/.agents/skills/official/google/material-ui/SKILL.md`   |
+| Edge-to-edge and system UI                                      | `.agents/skills/official/google/android/system/edge-to-edge/SKILL.md`              |
+| DataStore                                                       | `.agents/skills/official/google/android-developers/android-datastore/SKILL.md`                        |
+| WorkManager                                                     | `.agents/skills/official/google/android-developers/android-workmanager/SKILL.md`                      |
+| Notifications                                                   | `.agents/skills/official/google/android-developers/android-notification-views/SKILL.md`               |
+| Glance widgets                                                  | `.agents/skills/official/google/android-developers/glance-widget/SKILL.md`                            |
+| Analytics and Firebase telemetry                                | `.agents/skills/first-party/ga4-app-analytics/SKILL.md`                        |
+| Localization                                                    | `.agents/skills/first-party/android-localization/SKILL.md`                     |
+| Testing                                                         | `.agents/skills/official/google/android/testing/testing-setup/SKILL.md`            |
+| R8 and keep rules                                               | `.agents/skills/official/google/android/performance/r8-analyzer/SKILL.md`          |
+| Intent and component security                                   | `.agents/skills/official/google/android/security/android-intent-security/SKILL.md` |
+| Runtime permissions                                             | `.agents/skills/official/google/android/security/android-permissions-security/SKILL.md` |
+| Play Billing Library upgrades                                   | `.agents/skills/official/google/android/play/play-billing-library-version-upgrade/SKILL.md` |
+| Kotlin call sites and readable control flow                     | `.agents/skills/first-party/code-style/traceable-code/SKILL.md`             |
+| Docs, KDoc, comments and commit messages                        | `.agents/skills/first-party/writing-style/SKILL.md`                         |
+| Changelog updates                                               | `.agents/skills/first-party/app-changelog/SKILL.md`                                |
 
-Additional specialized skills exist under `android-official/` (such as `build-system/`,
-`device-ai/`, `devtools/`, `play/`, `profilers/` and `wear/`) and under `kotlin-official/`.
+Additional specialized skills exist under `official/google/android/` (such as `build-system/`,
+`device-ai/`, `devtools/`, `play/`, `profilers/` and `wear/`) and under `official/jetbrains/kotlin/`.
 
 Discover the available `SKILL.md` files instead of assuming this table contains every skill.
+
+Use `layered-tree-review` when creating, moving, renaming, or reorganizing Kotlin files, packages, or
+modules, alongside the architecture skill that owns the behavior.
+
+### Task workflows
+
+Do not load the entire skill collection or large third-party suites (such as `remotion/`,
+`tiktok-skills/`, or `imagegen-skills/`) unless the task explicitly requires them.
+
+| Task | Load `marketing/AGENTS.md`? | Select these skills | Exclude unless requested |
+| --- | --- | --- | --- |
+| New user-facing screen or substantial UI/UX redesign | Yes (for the prototype, approval, and parity phases) | `material-ui` (Material design phase), `layered-tree-review`, `android-ui-layer` (Google UI architecture), `app-toolkit` (Toolkit implementation), plus `android-data-layer` and `android-domain-layer` as needed, `ponytail`, `traceable-code`, `android-build-validation`, plus `marketing-ui` via `marketing/AGENTS.md` | `remotion/`, `social-captions`, `play-store-*`, `tiktok-skills/` |
+| Existing bug fix or nonvisual Android work (repository, data source, DataStore, WorkManager, refactor) | No | The relevant `android-developers` skill, `layered-tree-review`, `ponytail`, `traceable-code`, `android-build-validation` | All `marketing/` skills, `ga4-app-analytics` (unless telemetry changed) |
+| New feature needing repositories or use cases | Only if adding or redesigning UI | `layered-tree-review`, `android-data-layer`, `android-domain-layer` (only when justified), `ponytail`, `traceable-code`, `android-build-validation` | Pass-through use cases, empty layers, `marketing/` campaign skills |
+| Compose UI animation or transition | No (read the design skill directly if needed) | `material-ui` and `motion-design` (principles), `android-ui-layer` (screen state that drives the motion) | `motion-video`, `remotion/*`, `taste-skill` |
+| GA4 instrumentation review or implementation | No | `ga4-app-analytics`, `android-ui-layer`, `android-data-layer` (for telemetry boundaries) | `ga-gsc-skills` (unless reading existing reports); do not implement before approval |
+| GA4, Search Console, or Trends data analysis | Only if informing marketing work | The applicable `zenith779/ga-gsc-skills` skill | `ga4-app-analytics` edits, automatic tracking changes |
+| Marketing assets, promo video, Play Store listing or screenshots, social campaigns | Yes | Defer to the `marketing/AGENTS.md` routing table | Unrequested Compose or Android code changes |
+| `CHANGELOG.md` vs Play Store What's new | Play Store notes only | `app-changelog` for `CHANGELOG.md`; `play-store-changelog` for Play Store notes | Social captions for internal releases |
+
+### Writing and documentation
+
+Use `writing-style` whenever writing or editing Markdown documentation and README files, KDoc and
+code comments, user-facing strings and descriptions, changelogs and release notes, commit messages
+and other project text. The skill is the only place the writing rules are written; do not repeat them
+here or in project documentation.
+
+Apply the relevant `unslop` skill as a final editorial pass:
+
+- `official/cursor/cursor-unslop` for removing generic AI writing patterns.
+- `third-party/theclaymethod/unslop` for rewriting, prose audits, and author voice.
+
+Preserve technical meaning, resource placeholders, API names, and existing documentation contracts.
+Editorial cleanup must not change behavior or technical requirements.
+
+### Code implementation
+
+Use `ponytail` when writing, fixing, or refactoring code. Follow its smallest-complete-change
+approach while preserving the project's architecture, validation, security, and compatibility
+requirements. Do not use minimal code size as a reason to omit necessary functionality.
+
+Use `traceable-code` during implementation and as a final code-style review. Before finishing a code
+change, verify that control flow is easy to follow, names communicate their purpose, no unnecessary
+abstractions or intermediate state were introduced, project conventions are respected, and the change
+has no unrelated edits.
+
+For substantial or risky changes, use `ponytail-review` to examine correctness, security, edge cases,
+tests, performance, and unnecessary complexity. Code-style review does not replace compilation or
+functional testing.
+
+### Analytics
+
+Use `ga4-app-analytics` when implementing, reviewing, or changing analytics instrumentation.
+
+For meaningful changes to user-facing functionality, review whether the affected user journey should
+be measured. Check existing events and the project's telemetry architecture before proposing changes.
+
+Do not add events merely because a screen, button, or feature exists, or for routine nonvisual fixes.
+Avoid duplicate events, unstable event names, sensitive data, and unnecessary parameters.
+
+Follow the GA4 skill's approval gate before implementing proposed instrumentation unless the user
+already requested direct implementation. An analytics review does not automatically authorize new
+tracking.
+
+### Analytics reporting and research
+
+For analysis of existing analytics data, use the applicable skill from
+`.agents/skills/third-party/zenith779/ga-gsc-skills/`:
+
+- `google-analytics` for GA4 property reporting, traffic, engagement, and source or device comparisons.
+- `google-search-console` for website search performance, query and page CTR, and URL inspection.
+- `google-trends` for keyword interest and trending-topic research.
+
+These are reporting and research skills, not substitutes for Android instrumentation guidance. When a
+task spans measurement design and existing-data analysis, use both the reporting skill and
+`ga4-app-analytics`.
+
+Use only data sources the project is authorized to access. Keep service-account keys, tokens,
+credentials, and private exports out of the repository. Report missing access rather than inventing
+metrics. Analytics findings may inform marketing decisions, but do not authorize tracking changes or
+unrelated code changes.
+
+## Marketing and design workflow
+
+Marketing and application development are connected workflows with separate instruction files:
+
+- This file governs Android architecture, Compose implementation, code quality, and validation.
+- `marketing/AGENTS.md` governs design exploration, `marketing/ui`, motion and video, store assets,
+  and campaign production.
+
+Load `marketing/AGENTS.md` when working on a new user-facing screen, a substantial UI/UX redesign,
+marketing UI parity, promotional assets, trailers, or store listings. Load each `AGENTS.md` file only
+once per session; never reload them recursively.
+
+Skip `marketing/AGENTS.md` for repository and data-layer fixes, nonvisual refactors, ordinary bug
+fixes that keep the approved design intact, and standalone GA4 instrumentation tasks. Do not produce
+social captions, marketing campaigns, or Remotion setups for ordinary Android feature work.
+
+### Design-first development
+
+For new user-facing screens or substantial UI/UX redesigns, follow this sequence, loading each skill
+when its phase starts:
+
+1. **Inspect**: identify affected modules, local `README.md` files, dependencies (including whether
+   App Toolkit is used), navigation, the application theme, and reusable components.
+2. **Plan**: use `android-ui-layer` for Google's UI architecture, `app-toolkit` for Toolkit screen
+   contracts, `layered-tree-review` for module and package placement, and `android-data-layer` (plus
+   `android-domain-layer` only when justified) for data needs. Decide navigation, DI, permissions,
+   persistence, background work, and test requirements.
+3. **Material design**: use `material-ui` to choose components, tokens, typography, states, adaptive
+   behavior, and Expressive and motion treatment. Add `motion-design` only when the motion needs
+   choreography beyond Material's specs.
+4. **Interactive prototype**: load `marketing/AGENTS.md` once and build the screen in `marketing/ui`
+   with `marketing-ui` across realistic states (`loading`, `empty`, `populated`, `error`, selection)
+   and supported windows (`phone`, `fold`, `desktop`).
+5. **Approval**: present the design, key interactions, and handoff
+   (`marketing/.agents/skills/first-party/marketing/marketing-ui/references/design-handoff.md`).
+   **Do not modify Compose or Kotlin UI files until the design is approved**, unless the user
+   explicitly authorized proceeding without a separate approval checkpoint.
+6. **Compose implementation**: build the approved design using `app-toolkit` for Toolkit screen
+   wiring, `android-ui-layer` for UI architecture, `layered-tree-review`, `ponytail`,
+   `traceable-code`, `material-ui` for Material APIs, and existing components, without unapproved
+   visual changes.
+7. **Validation**: validate the build and tests with `android-build-validation`, and inspect the
+   rendered UI.
+8. **Parity**: compare the Compose UI against `marketing/ui` (states, interactions, accessibility,
+   adaptive layouts) and update the prototype and handoff where implementation constraints changed
+   the design.
+
+For an existing screen, `marketing-ui` also works in reverse: it translates the Compose source into
+`marketing/ui` for synchronization and marketing assets, with no approval step.
+
+The marketing UI is the design exploration and approval environment. The Android implementation
+remains authoritative for runtime behavior, supported states, and technical contracts. Keep both
+synchronized without inventing app behavior in previews. Do not modify unrelated marketing resources
+during development tasks.
 
 ## General engineering rules
 
@@ -189,9 +345,6 @@ Discover the available `SKILL.md` files instead of assuming this table contains 
 * Do not change frameworks or architectural approaches unless the task requires it.
 * Keep public APIs small and deliberate.
 * Keep implementation details in the module that owns them.
-* Avoid comments and KDoc that only repeat what the code already says.
-* Add or improve KDoc when it explains a public contract, invariant, side effect, ownership rule,
-  lifecycle requirement, or non-obvious behavior.
 
 ## Module boundaries
 
@@ -572,6 +725,7 @@ Keep ownership clear and document the host contract in the owning library module
 Each active module may contain a local `README.md`.
 
 Treat it as the primary written source for that module's responsibilities and contracts.
+Use `writing-style` for the README and Mermaid diagram, and the `app-toolkit` starter for a new module.
 
 Before substantial changes:
 
@@ -611,24 +765,9 @@ notes, internal implementations, publishing information, architecture guards, or
 
 ## KDoc and comments
 
-Documentation must explain things that are not obvious from the code itself.
-
-Useful KDoc and comments explain:
-
-* public contracts
-* lifecycle requirements
-* ownership
-* invariants
-* side effects
-* compatibility requirements
-* unusual platform behavior
-* reasons for a non-obvious implementation decision
-
-Do not use comments as prose decoration. A comment should explain a reason, constraint, invariant,
-lifecycle detail, compatibility requirement, or other information that cannot be understood easily
-from the code itself.
-
-If existing documentation becomes inaccurate because of the change, update it.
+Apply `writing-style` to public API KDoc, meaningful internal operations and inline comments.
+Include inherited documentation and the owning module's flow chart in review when the affected code
+changes. Use the configured Dokka checks for published modules.
 
 ## Repository-level docs
 
@@ -641,7 +780,7 @@ Do not duplicate module README content into `docs/` or into this file.
 
 ## Changelog
 
-Use the changelog skill when a change may be meaningful to:
+Use `app-changelog` when a change may be meaningful to:
 
 * application users
 * sample app users
@@ -670,7 +809,8 @@ Do not add changelog entries for ordinary:
 * documentation-only work
 * dependency bumps with no observable effect
 
-Describe the result, not the implementation history.
+Describe the result, not the implementation history. For Play Store "What's new" release notes,
+use `play-store-changelog` instead.
 
 ## Validation
 
@@ -696,7 +836,14 @@ broad JVM test suite
 lint or other static checks when applicable
         ↓
 device or emulator validation when runtime behavior requires it
+        ↓
+final review with traceable-code, and ponytail-review for substantial or risky changes
+        ↓
+documentation, localization, analytics, and changelog requirements where relevant
 ```
+
+A successful build does not establish that animations, gestures, navigation, or visual behavior work
+correctly.
 
 Examples of repository-specific checks may include:
 
@@ -781,6 +928,7 @@ Keep changes focused on the requested work.
 
 Do not:
 
+* overwrite or discard existing user changes
 * rewrite nearby code without a reason
 * perform opportunistic architecture migrations
 * rename unrelated symbols
@@ -798,49 +946,12 @@ connected to the task and explain why.
 
 ## Writing style
 
-Use clear, natural, direct language in all project writing.
-
-This applies to:
-
-- documentation
-- README files
-- changelogs
-- release notes
-- KDoc
-- code comments
-- commit messages when asked to write them
-- user-facing technical copy
-
-### Style rules
-
-- Never use em dashes (`—`). Use commas, parentheses, colons, or separate sentences instead.
-- Avoid generic AI wording and unnecessary corporate language.
-- Prefer simple technical words over inflated alternatives.
-- Do not use words such as `facade`, `orchestrate`, `synergy`, `robust`, `seamless`, or similar wording when a simpler and more precise term exists.
-- Do not describe ordinary code as "powerful", "comprehensive", "sophisticated", "elegant", or "production-ready" without a concrete reason.
-- Avoid filler introductions and conclusions.
-- Avoid repeating the same point using different wording.
-- Prefer short paragraphs and direct sentences.
-- Prefer concrete names such as `app module`, `repository`, `provider`, `screen`, `worker`, or `navigation entry` over vague terms such as `layer`, `system`, `solution`, or `mechanism` when the concrete thing is known.
-- Explain why something exists when the reason is important. Do not merely restate what the code does.
-- Keep technical documentation factual. Do not praise the implementation.
-- Do not use exaggerated claims such as `ultimate`, `perfect`, `best`, or `fully optimized` in technical documentation.
-- Do not write in a conversational assistant voice inside repository files.
-- Match the tone and terminology already used by nearby project documentation.
-
-### Formatting
-
-- Use Markdown headings and lists only when they improve readability.
-- Do not over-section short documentation.
-- Keep bullet points concise.
-- Use code blocks for commands, paths, APIs, or examples when that makes them easier to read.
-- Use backticks for code symbols, module names, file names, Gradle tasks, resource names, and paths.
-- Avoid decorative emoji in technical documentation unless the existing document already uses them intentionally.
+Use `writing-style` for all project writing: documentation, README files, changelogs, release notes,
+KDoc, code comments, commit messages, and user-facing technical copy. The skill holds the rules.
 
 ## Completion report
 
 When finishing implementation work, report what was actually done.
-
 
 Include:
 

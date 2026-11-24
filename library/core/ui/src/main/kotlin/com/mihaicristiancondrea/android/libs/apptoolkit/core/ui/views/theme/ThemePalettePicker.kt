@@ -57,7 +57,6 @@ import androidx.compose.ui.unit.Dp
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.models.ThemePreferencesState
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.colorscheme.DynamicPaletteVariant
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.colorscheme.StaticPaletteIds
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.datastore.DataStoreNamesConstants
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.colorscheme.applyDynamicVariant
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.date.isChristmasSeason
@@ -362,13 +361,7 @@ private fun rememberScrolledToSelected(selectedIndex: Int): LazyListState {
 private fun ThemePalettePickerPreview() {
     MaterialTheme {
         ThemePalettePicker(
-            preferences = ThemePreferencesState(
-                themeMode = DataStoreNamesConstants.THEME_MODE_FOLLOW_SYSTEM,
-                dynamicColors = false,
-                amoledMode = false,
-                dynamicPaletteVariant = 0,
-                staticPaletteId = StaticPaletteIds.DEFAULT,
-            ),
+            preferences = ThemePreferencesState(dynamicColors = false),
             seasonalThemesUnlocked = false,
             onDynamicPaletteSelected = {},
             onStaticPaletteSelected = { _, _ -> },

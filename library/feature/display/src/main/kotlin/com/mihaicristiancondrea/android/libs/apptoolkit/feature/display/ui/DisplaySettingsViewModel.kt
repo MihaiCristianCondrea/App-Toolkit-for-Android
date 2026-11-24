@@ -24,6 +24,8 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.Loadable
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.LoggedScreenViewModel
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.toErrorMessage
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.toFailed
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.display.ui.analytics.DISPLAY_SETTINGS_SCREEN_NAME
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.display.ui.constants.DisplaySettingsOperationNames
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.display.ui.contracts.DisplaySettingsEvent
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.display.ui.models.DisplaySettings
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.display.ui.states.DisplaySettingsUiState
@@ -34,7 +36,7 @@ import kotlinx.coroutines.flow.combine
 /**
  * Follows and stores the display preferences the display settings screen shows. A failed read
  * replaces them with a retryable failure; a failed write keeps them on screen and shows an error
- * message. The shell's layout choices are written by the screen itself, not here.
+ * message.
  */
 class DisplaySettingsViewModel(
     private val displayPreferences: DisplayPreferencesRepository,
@@ -43,38 +45,48 @@ class DisplaySettingsViewModel(
 ) : LoggedScreenViewModel<DisplaySettingsUiState, DisplaySettingsEvent>(
     initialState = DisplaySettingsUiState(),
     telemetryRepository = telemetryRepository,
-    screenName = "DisplaySettings",
+    screenName = DISPLAY_SETTINGS_SCREEN_NAME,
     viewModelName = "DisplaySettingsViewModel",
 ) {
     private var observeJob: Job? = null
 
     init {
-        onEvent(DisplaySettingsEvent.Load)
+        onEvent(event = DisplaySettingsEvent.Load)
     }
 
     override fun handleEvent(event: DisplaySettingsEvent) {
         when (event) {
-            DisplaySettingsEvent.Load -> observePreferences()
+            is DisplaySettingsEvent.Load -> observePreferences()
 
             is DisplaySettingsEvent.ThemeModeChanged ->
-                persist(action = Actions.SET_THEME_MODE) { themePreferences.selectThemeMode(event.mode) }
+                persist(action = DisplaySettingsOperationNames.SET_THEME_MODE) {
+                    themePreferences.selectThemeMode(mode = event.mode)
+                }
 
             is DisplaySettingsEvent.DynamicColorsChanged ->
-                persist(action = Actions.SET_DYNAMIC_COLORS) { themePreferences.setDynamicColors(event.enabled) }
+                persist(action = DisplaySettingsOperationNames.SET_DYNAMIC_COLORS) {
+                    themePreferences.setDynamicColors(enabled = event.enabled)
+                }
 
             is DisplaySettingsEvent.BouncyButtonsChanged ->
-                persist(action = Actions.SET_BOUNCY_BUTTONS) { displayPreferences.setBouncyButtons(event.enabled) }
+                persist(action = DisplaySettingsOperationNames.SET_BOUNCY_BUTTONS) {
+                    displayPreferences.setBouncyButtons(enabled = event.enabled)
+                }
 
             is DisplaySettingsEvent.BottomBarLabelsChanged ->
-                persist(action = Actions.SET_SHOW_BOTTOM_BAR_LABELS) {
-                    displayPreferences.setShowBottomBarLabels(event.show)
+                persist(action = DisplaySettingsOperationNames.SET_SHOW_BOTTOM_BAR_LABELS) {
+                    displayPreferences.setShowBottomBarLabels(show = event.show)
                 }
 
             is DisplaySettingsEvent.LanguageChanged ->
-                persist(action = Actions.SET_LANGUAGE) { displayPreferences.setLanguage(event.language) }
+                persist(action = DisplaySettingsOperationNames.SET_LANGUAGE) {
+                    displayPreferences.setLanguage(language = event.language)
+                }
 
             is DisplaySettingsEvent.StartupRouteChanged ->
-                persist(action = Actions.SET_STARTUP_PAGE) { displayPreferences.setStartupPage(event.route) }
+                persist(action = DisplaySettingsOperationNames.SET_STARTUP_PAGE) {
+                    displayPreferences.setStartupPage(route = event.route)
+                }
         }
     }
 
@@ -83,10 +95,10 @@ class DisplaySettingsViewModel(
         observeJob = observeJob.restart {
             setState { copy(settings = Loadable.Loading) }
             storedSettings().collectReport(
-                action = Actions.OBSERVE_PREFERENCES,
+                action = DisplaySettingsOperationNames.OBSERVE_PREFERENCES,
                 onError = { error -> setState { copy(settings = error.toFailed()) } },
             ) { settings ->
-                setState { copy(settings = Loadable.Ready(settings)) }
+                setState { copy(settings = Loadable.Ready(value = settings)) }
             }
         }
     }
@@ -98,7 +110,7 @@ class DisplaySettingsViewModel(
         displayPreferences.showBottomBarLabels,
         combine(
             displayPreferences.language,
-            displayPreferences.startupPage(default = NO_STARTUP_ROUTE),
+            displayPreferences.startupPage(default = ""),
         ) { language, startupRoute -> language to startupRoute },
     ) { themeMode, dynamicColors, bouncyButtons, showBottomBarLabels, (language, startupRoute) ->
         DisplaySettings(
@@ -118,22 +130,8 @@ class DisplaySettingsViewModel(
     private fun persist(action: String, write: suspend () -> Unit) {
         launchReport(
             action = action,
-            onError = { error -> showMessage(error.toErrorMessage()) },
+            onError = { error -> showMessage(message = error.toErrorMessage()) },
             block = write,
         )
-    }
-
-    private object Actions {
-        const val OBSERVE_PREFERENCES: String = "observePreferences"
-        const val SET_THEME_MODE: String = "setThemeMode"
-        const val SET_DYNAMIC_COLORS: String = "setDynamicColors"
-        const val SET_BOUNCY_BUTTONS: String = "setBouncyButtons"
-        const val SET_SHOW_BOTTOM_BAR_LABELS: String = "setShowBottomBarLabels"
-        const val SET_LANGUAGE: String = "setLanguage"
-        const val SET_STARTUP_PAGE: String = "setStartupPage"
-    }
-
-    private companion object {
-        const val NO_STARTUP_ROUTE: String = ""
     }
 }

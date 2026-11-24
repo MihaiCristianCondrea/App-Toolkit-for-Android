@@ -21,12 +21,15 @@ import android.content.ActivityNotFoundException
 import android.content.Context
 import android.content.Intent
 import android.content.IntentSender
-import android.net.Uri
 import android.provider.Settings
 import android.widget.Toast
 import androidx.core.net.toUri
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.R
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.ui.constants.AppActionLauncherConstants
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.ui.contracts.AppActionLauncher
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.ui.extensions.asExternalActivityIntent
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.ui.extensions.toPackageUri
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.ui.validators.isProbablyValidPackageName
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.ClipboardRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.InstalledAppsRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.links.AppLinks
@@ -38,14 +41,6 @@ class AndroidAppActionLauncher(
     private val clipboardRepository: ClipboardRepository,
     private val installedApps: InstalledAppsRepository,
 ) : AppActionLauncher {
-
-    companion object {
-        private const val PLAY_STORE_PACKAGE_NAME: String = "com.android.vending"
-
-        private const val LEGACY_EXTRA_APP_PACKAGE: String = "app_package"
-        private const val LEGACY_PROVIDER_EXTRA_APP_PACKAGE: String =
-            "android.provider.extra.APP_PACKAGE"
-    }
 
     override suspend fun openApp(packageName: String): Boolean {
         if (!packageName.isProbablyValidPackageName()) return false
@@ -76,8 +71,8 @@ class AndroidAppActionLauncher(
             putExtra(Settings.EXTRA_APP_PACKAGE, packageName)
 
             // OEM/old Settings compatibility. Harmless if ignored.
-            putExtra(LEGACY_EXTRA_APP_PACKAGE, packageName)
-            putExtra(LEGACY_PROVIDER_EXTRA_APP_PACKAGE, packageName)
+            putExtra(AppActionLauncherConstants.LEGACY_EXTRA_APP_PACKAGE, packageName)
+            putExtra(AppActionLauncherConstants.LEGACY_PROVIDER_EXTRA_APP_PACKAGE, packageName)
         }
 
         return startFirstAvailable(notificationIntent, appInfoIntent(packageName))
@@ -109,7 +104,7 @@ class AndroidAppActionLauncher(
 
         return startFirstAvailable(
             Intent(Intent.ACTION_VIEW, marketUri).apply {
-                setPackage(PLAY_STORE_PACKAGE_NAME)
+                setPackage(AppActionLauncherConstants.PLAY_STORE_PACKAGE_NAME)
             },
             Intent(Intent.ACTION_VIEW, marketUri),
             Intent(Intent.ACTION_VIEW, webUri),
@@ -207,24 +202,5 @@ class AndroidAppActionLauncher(
         }
 
         return false
-    }
-
-    private fun Intent.asExternalActivityIntent(): Intent {
-        addCategory(Intent.CATEGORY_DEFAULT)
-        addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-        return this
-    }
-
-    private fun String.toPackageUri(): Uri = Uri.fromParts("package", this, null)
-
-    private fun String.isProbablyValidPackageName(): Boolean {
-        if (isBlank()) return false
-        if (!contains('.')) return false
-
-        return split('.').all { segment ->
-            segment.isNotBlank() &&
-                    segment.first().isLetter() &&
-                    segment.all { char -> char.isLetterOrDigit() || char == '_' }
-        }
     }
 }

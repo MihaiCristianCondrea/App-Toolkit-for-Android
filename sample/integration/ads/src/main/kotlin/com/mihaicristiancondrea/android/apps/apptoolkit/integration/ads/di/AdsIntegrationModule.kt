@@ -17,7 +17,7 @@
 
 package com.mihaicristiancondrea.android.apps.apptoolkit.integration.ads.di
 
-import com.mihaicristiancondrea.android.apps.apptoolkit.integration.ads.constants.AdsConstants
+import com.mihaicristiancondrea.android.apps.apptoolkit.integration.ads.utils.constants.AdsConstants
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ads.AdsQualifiers
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.ads.AdsConfig
 import org.koin.core.module.Module

@@ -17,7 +17,12 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.changelog.data.local
 
-import app.cash.turbine.test
+import androidx.datastore.core.CorruptionException
+import androidx.datastore.core.DataStore
+import androidx.datastore.preferences.core.Preferences
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.exceptions.StorageException
+import kotlinx.coroutines.flow.flow
+import kotlin.test.assertFailsWith
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.FakePreferencesDataStore
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.first
@@ -52,6 +57,22 @@ class ChangelogPreferencesDataSourceTest {
         dataStore.saveCachedChangelog(expected)
 
         assertEquals(expected, dataStore.cachedChangelog(default).first())
+    }
+
+    @Test
+    fun `preference read and write failures use storage errors`() = runTest {
+        val failingStore = object : DataStore<Preferences> by FakePreferencesDataStore() {
+            override val data = flow<Preferences> { throw CorruptionException(message = "Invalid preferences") }
+
+            override suspend fun updateData(transform: suspend (t: Preferences) -> Preferences): Preferences =
+                throw java.io.IOException("Could not write preferences")
+        }
+        val source = DefaultChangelogPreferencesDataSource(dataStore = failingStore)
+
+        val read = assertFailsWith<StorageException> { source.cachedChangelog().first() }
+        val write = assertFailsWith<StorageException> { source.saveLastSeenVersion(version = "1.0.0") }
+        assertEquals(expected = StorageException.Reason.CORRUPT, actual = read.reason)
+        assertEquals(expected = StorageException.Reason.FAILED, actual = write.reason)
     }
 
     private fun createDataStore(): DefaultChangelogPreferencesDataSource =

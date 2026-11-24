@@ -23,9 +23,11 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.modifiers.
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.motion.TabTransitionStyle
 
 /**
- * The shell settings an app may choose as its own defaults. The settings that only exist to test
- * the shell, such as a forced layout, a slowed animation or a start override, stay at the Toolkit's
- * defaults and are left to the developer options.
+ * The shell settings an app may choose as its own defaults in `appToolkitDefaults { shell { } }`.
+ * Each property starts at the Toolkit's default and means what the [ShellSettings] property of the
+ * same name does. The settings that only exist to test the shell, such as a forced layout, a
+ * slowed animation or a start override, stay at the Toolkit's defaults and are left to the
+ * developer options.
  */
 @AppToolkitDefaultsDsl
 class ShellDefaultsBuilder internal constructor(private val from: ShellSettings) {

@@ -18,4 +18,5 @@
     <string name="changelog_title">ایپ چینج لاگ</string>
     <string name="changelog_all_releases">تمام ریلیزز</string>
     <string name="no_new_updates_message">کوئی نئی اپ ڈیٹس دستیاب نہیں ہیں۔</string>
+    <string name="changelog_current">موجودہ</string>
 </resources>

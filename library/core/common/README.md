@@ -31,7 +31,8 @@ Android utility abstractions shared across the toolkit.
   app's `TelemetryRepository` reports it. An app learns from it what the person does, such as which
   tools they open and finish, to order its own suggestions. Observers see events whatever the
   analytics consent, so what they receive must never leave the device.
-- `BillingCore`, dispatcher, build-info, app-info, permissions, and ad-SDK contracts.
+- `BillingCore`, dispatcher, build-info, clipboard, installed-apps, onboarding, permissions and
+  AdMob application ID contracts.
 - Host DI configuration (`AppToolkitHostBuildConfig`, qualifiers, and constants).
 - Small platform and Kotlin extensions used across modules. An extension or constant that one
   module uses lives in that module instead: FAQ, changelog, issue reporter, billing, ads and review
@@ -111,13 +112,14 @@ blocking `PackageManager` call, so data-layer callers switch to `dispatchers.io`
 - `TelemetryRepository`, `AnalyticsReporter`, `DiagnosticsReporter`, `TelemetryCollection`,
   `AnalyticsObserver`, `ObservedTelemetryRepository`, `telemetryModule`, `BillingCore`, `DispatcherProvider`, and provider/helper interfaces.
 - `AppToolkitHostBuildConfig`, DI qualifiers, common result/value models, and stable constants.
-- `core.common.data.models.theme.ThemePreferencesState`, the immutable application-facing
+- `core.common.data.models.ThemePreferencesState`, the immutable application-facing
   representation shared by persistence and theme UI.
 
-## Internal implementations
+## Implementations
 
-- `StandardDispatchers`, `AppToolkitApplication`, small Android adapters, extensions, and
-  crash guards.
+- Public: `StandardDispatchers`, the production `DispatcherProvider`, and `AppToolkitApplication`,
+  the base class a host application extends.
+- Internal or small: Android adapters, extensions, and crash guards.
 
 ## Current risks
 

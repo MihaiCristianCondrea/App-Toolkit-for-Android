@@ -18,11 +18,51 @@
 package com.mihaicristiancondrea.android.libs.apptoolkit.integration.billing.data.models
 
 /**
+ * A billing outcome and the products it concerns.
+ *
+ * @property productIds The products [result] concerns. Empty when the outcome belongs to no known
+ * product, such as a callback that arrives without a launch in this process. Null when the
+ * implementation does not identify products, as the default `BillingRepository.purchaseEvents` does.
+ */
+data class PurchaseEvent(val result: PurchaseResult, val productIds: List<String>?)
+
+/**
  * Represents the result of a purchase operation.
  */
 sealed class PurchaseResult {
     data object Success : PurchaseResult()
     data object Pending : PurchaseResult()
-    data class Failed(val error: String) : PurchaseResult()
+
+    /**
+     * Play could not complete the purchase, the product query, or the recovery of a past purchase.
+     *
+     * @property reason What went wrong, for the screen to choose its own localized text.
+     * @property debugMessage Play's developer message, for diagnostics only. Google documents it as
+     * not meant for users, so a screen never shows it.
+     */
+    data class Failed(
+        val reason: Reason,
+        val debugMessage: String = "",
+    ) : PurchaseResult() {
+
+        /** Why a purchase failed, grouped by what the person can do about it. */
+        enum class Reason {
+            /** No connection to Play, or Play's service is busy or restarting; trying again can work. */
+            NETWORK,
+
+            /** Billing is unavailable on this device or account, for example Play is disabled. */
+            BILLING_UNAVAILABLE,
+
+            /** The product cannot be bought now, or the account already owns it. */
+            ITEM_UNAVAILABLE,
+
+            /** The purchase sheet could not open, for example because the screen went away. */
+            LAUNCH_UNAVAILABLE,
+
+            /** Any other failure, including an error in how the app called Play. */
+            UNKNOWN,
+        }
+    }
+
     data object UserCancelled : PurchaseResult()
 }

@@ -104,7 +104,7 @@ fun rememberNativeAdState(
         when {
             !enabled || adUnitId.isBlank() -> holder.release()
             // SDK startup is expected; this effect retries when readiness changes.
-            !AdsSdkState.canRequestAds() -> holder.waitForSdk()
+            !AdsSdkState.isSdkInitialized() -> holder.waitForSdk()
             else -> holder.load(
                 loaderClient = loaderClient,
                 reporter = reporter,

@@ -32,8 +32,8 @@ Capability-specific sources live with their owning features or integrations.
 
 ## Used by
 
-Core UI, the design system, feature and integration repositories, and the application composition
-root use this module. A source in another module receives the same `DataStore<Preferences>`
+The design system (`AppTheme` reads the appearance), feature and integration repositories, and the
+application composition root use this module. `:library:core:ui` does not. A source in another module receives the same `DataStore<Preferences>`
 instance from the graph using `get(qualifier = named(DataStoreQualifiers.SETTINGS))`.
 
 ## Architectural decisions

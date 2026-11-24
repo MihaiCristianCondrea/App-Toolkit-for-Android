@@ -19,6 +19,11 @@ package com.mihaicristiancondrea.android.libs.apptoolkit.feature.privacy.ui.prov
 
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.links.AppLinks
 
+/**
+ * Host contract supplying the policy and legal URLs opened from `PrivacyScreen`.
+ *
+ * Every property defaults to [AppLinks], so a host only overrides the links it customizes.
+ */
 interface PrivacySettingsProvider {
 
     /**

@@ -20,33 +20,53 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Home
 import androidx.navigation3.runtime.NavKey
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.icons.ToolkitIcon
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.settings.SettingsSearchEntry
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.settings.SettingsSearchContext
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.settings.SettingsSearchEntry
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.privacy.R
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.shellGraph
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.keys.AdsSettingsScreen
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.keys.DiagnosticsSettingsScreen
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.keys.PermissionsScreen
 import org.junit.jupiter.api.Test
 import kotlin.test.assertEquals
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.privacy.R
-import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.AdsSettingsRoute
-import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.DiagnosticsSettingsRoute
-import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.PermissionsRoute
 
 class PrivacySettingsSearchTest {
 
     private data object Home : NavKey
 
-    private val graph = shellGraph(appTitle = 0) { tab(Home, 0, ToolkitIcon.Vector(Icons.Outlined.Home)) {} }
+    private val graph = shellGraph(appTitle = 0) {
+        tab(key = Home, label = 0, icon = ToolkitIcon.Vector(imageVector = Icons.Outlined.Home)) {}
+    }
 
     @Test
     fun `each privacy row opens the page the row opens`() {
         fun entry(title: Int, summary: Int, destination: NavKey) =
-            SettingsSearchEntry(title = title, section = R.string.security_and_privacy, destination = destination, summary = summary)
+            SettingsSearchEntry(
+                title = title,
+                section = R.string.security_and_privacy,
+                destination = destination,
+                summary = summary,
+            )
 
         assertEquals(
             listOf(
-                entry(R.string.permissions, R.string.summary_preference_settings_permissions, PermissionsRoute),
-                entry(R.string.ads, R.string.summary_preference_settings_ads, AdsSettingsRoute),
-                entry(R.string.usage_and_diagnostics, R.string.summary_preference_settings_usage_and_diagnostics, DiagnosticsSettingsRoute),
+                entry(
+                    title = R.string.permissions,
+                    summary = R.string.summary_preference_settings_permissions,
+                    destination = PermissionsScreen,
+                ),
+                entry(
+                    title = R.string.ads,
+                    summary = R.string.summary_preference_settings_ads,
+                    destination = AdsSettingsScreen,
+                ),
+                entry(
+                    title = R.string.usage_and_diagnostics,
+                    summary = R.string.summary_preference_settings_usage_and_diagnostics,
+                    destination = DiagnosticsSettingsScreen,
+                ),
             ),
-            privacySettingsSearch.entries(SettingsSearchContext(graph)),
+            privacySettingsSearch.entries(context = SettingsSearchContext(graph = graph)),
         )
-    }}
+    }
+}

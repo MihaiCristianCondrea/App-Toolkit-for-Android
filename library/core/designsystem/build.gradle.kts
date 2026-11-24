@@ -51,7 +51,8 @@ dependencies {
     androidTestImplementation(libs.bundles.instrumentationTest)
     debugImplementation(libs.androidx.compose.ui.test.manifest)
     api(project(":library:core:common"))
-    api(project(":library:core:datastore"))
+    // Only AppTheme reads stored preferences from it; no designsystem signature exposes its types.
+    implementation(project(":library:core:datastore"))
 
     api(platform(libs.androidx.compose.bom))
     api(libs.androidx.compose.material3)

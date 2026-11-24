@@ -17,6 +17,7 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.links
 
+/** Play Store, legal and contact links the toolkit's screens open. */
 object AppLinks {
 
     const val PLAY_STORE_MAIN: String = "https://play.google.com/"

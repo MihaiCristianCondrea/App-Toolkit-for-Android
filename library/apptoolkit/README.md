@@ -12,7 +12,7 @@ through Gradle `api` dependencies.
   `defaultAdsEnabled` argument controls the fresh-install default; stored choices take priority.
 - `appToolkitFoundationModules`, `appToolkitFeatureModules`, and `appToolkitSettingsModules`, the
   granular lists `appToolkitModules` composes.
-- `toolkitGraph { }` and `ShellGraphBuilder.toolkitPages()`, which register the Toolkit's pages in
+- `toolkitGraph { }` and `ShellGraphBuilder.toolkitScreens()`, which register the Toolkit's pages in
   an app's shell graph. See [Navigation](#navigation).
 - `toolkitFooter(onShowUpdates)`, the drawer footer every Toolkit app ends with. See
   [The drawer's footer](#the-drawers-footer).
@@ -86,7 +86,7 @@ flowchart TD
 ## Public contracts
 
 - `appToolkitModules`, the three DI module-list factories it composes, `toolkitGraph`, and
-  `toolkitPages`.
+  `toolkitScreens`.
 - Transitive APIs from all `api(project(...))` dependencies are also visible to consumers.
 
 ### Manifest and resource defaults
@@ -133,40 +133,40 @@ modules they compose.
 ## Navigation
 
 `toolkitGraph { }` lives in `app.main.ui.navigation`. It runs the app's builder first and then
-`toolkitPages()`, which calls each feature's own registration. Every registration uses
+`toolkitScreens()`, which calls each feature's own registration. Every registration uses
 `pageIfAbsent`, so a key the app registered itself keeps the app's page. None of them names a
 `topBar`, so `toolkitGraph(defaults = ...)` sets the app bar of every Toolkit page along with the
 app's own; see the shell README's [App defaults](../shell/README.md#app-defaults):
 
 | Registration | Module | Keys | Pane role |
 |---|---|---|---|
-| `settingsPage()` | settings | `SettingsRoute` | List |
-| `displaySettingsPage()` | display | `DisplaySettingsRoute` | Detail |
-| `themeSettingsPage()` | theme | `ThemeSettingsRoute` | None |
-| `privacySettingsPage()` | privacy | `PrivacySettingsRoute` | Detail |
-| `diagnosticsSettingsPage()` | diagnostics | `DiagnosticsSettingsRoute` | None |
-| `permissionsPage()` | permissions | `PermissionsRoute` | None |
-| `adsSettingsPage()` | integration:ads | `AdsSettingsRoute` | None |
-| `advancedSettingsPage()` | advanced | `AdvancedSettingsRoute` | Detail |
-| `aboutPages()` | about | `AboutRoute`, `LibraryExtrasRoute` | Detail, None |
-| `licensesPage()` | licenses | `LicensesRoute` | None |
-| `helpPage()` | faq | `HelpRoute` | None |
-| `supportPage()` | support | `SupportRoute` | None |
-| `developerOptionsPage()` | developer | `DeveloperOptionsRoute` | None |
-| `startupPage()` | startup | `StartupRoute`, as a start screen | None |
-| `onboardingPages()` | onboarding | `OnboardingRoute`, as a start screen | None |
+| `settingsScreen()` | settings | `SettingsScreen` | List |
+| `displaySettingsScreen()` | display | `DisplaySettingsScreen` | Detail |
+| `themeSettingsScreen()` | theme | `ThemeSettingsScreen` | None |
+| `privacySettingsScreen()` | privacy | `PrivacySettingsScreen` | Detail |
+| `diagnosticsSettingsScreen()` | diagnostics | `DiagnosticsSettingsScreen` | None |
+| `permissionsScreen()` | permissions | `PermissionsScreen` | None |
+| `adsSettingsScreen()` | integration:ads | `AdsSettingsScreen` | None |
+| `advancedSettingsScreen()` | advanced | `AdvancedSettingsScreen` | Detail |
+| `aboutScreen()` | about | `AboutScreen` | Detail |
+| `licensesScreen()` | licenses | `LicensesScreen` | None |
+| `helpScreen()` | faq | `HelpScreen` | None |
+| `supportScreen()` | support | `SupportScreen` | None |
+| `developerOptionsScreen()` | developer | `DeveloperOptionsScreen` | None |
+| `startupScreen()` | startup | `StartupScreen`, as a start screen | None |
+| `onboardingScreen()` | onboarding | `OnboardingScreen`, as a start screen | None |
 
 The settings categories are details, so on a wide window they open beside the list. Pages opened
 from a detail are `None`: a detail opened from a detail replaces it instead of stacking on it.
 
-`toolkitPages()` is the only place that names every feature. The features know nothing of each
+`toolkitScreens()` is the only place that names every feature. The features know nothing of each
 other and open one another's pages by key, which `checkModuleBoundaries` enforces: no
 `:library:feature` module may depend on another.
 
 It registers pages only; the app decides where each is offered (`settings()` and `supportUs()` in
 the drawer and overflow builders, links, or a screen's button). An app that needs to pass a
-registration arguments calls it in its own builder first, such as `aboutPages { ... }`. An app that
-builds its graph with `ShellGraphBuilder` directly calls `toolkitPages()` after its own
+registration arguments calls it in its own builder first, such as `aboutScreen { ... }`. An app that
+builds its graph with `ShellGraphBuilder` directly calls `toolkitScreens()` after its own
 destinations.
 
 ### The drawer's footer

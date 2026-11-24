@@ -261,4 +261,13 @@
     <string name="random_range">數字範圍</string>
     <string name="random_inclusive">包含範圍的兩端。</string>
     <string name="tool_converter_unit">單位</string>
+
+    <string name="section_toys">玩具</string>
+    <string name="bell_title">鈴鐺</string>
+    <string name="bell_summary">搖晃手機即可搖響鈴鐺。</string>
+    <string name="bell_card_note">搖晃即可響鈴</string>
+    <string name="bell_ring">搖響鈴鐺</string>
+    <string name="bell_motion_unavailable">這部裝置無法偵測搖晃動作。</string>
+    <string name="bell_audio_unavailable">無法播放鈴聲。</string>
+    <string name="bell_ringing">鈴鐺正在響</string>
 </resources>

@@ -18,7 +18,7 @@
 package com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui
 
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.ads.rememberOverviewNativeAd
-import com.mihaicristiancondrea.android.apps.apptoolkit.integration.ads.constants.AdsConstants
+import com.mihaicristiancondrea.android.apps.apptoolkit.integration.ads.utils.constants.AdsConstants
 
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.catalog.ToolDesignTheme
 
@@ -40,7 +40,7 @@ import androidx.compose.ui.text.drawText
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.rememberTextMeasurer
 import androidx.compose.ui.unit.sp
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.tools.labelResId
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.mappers.labelResId
 import kotlin.math.cos
 import kotlin.math.roundToInt
 import kotlin.math.sin

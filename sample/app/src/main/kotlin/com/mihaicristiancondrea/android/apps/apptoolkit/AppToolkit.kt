@@ -24,7 +24,7 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ProcessLifecycleOwner
 import androidx.lifecycle.lifecycleScope
 import com.mihaicristiancondrea.android.apps.apptoolkit.di.initializeKoin
-import com.mihaicristiancondrea.android.apps.apptoolkit.integration.ads.constants.AdsConstants
+import com.mihaicristiancondrea.android.apps.apptoolkit.integration.ads.utils.constants.AdsConstants
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.AppToolkitApplication
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.style.AppThemeConfig
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.style.colors.ColorPalette
@@ -49,7 +49,7 @@ class AppToolkit : AppToolkitApplication(), DefaultLifecycleObserver {
     override fun onCreate() {
         initializeKoin(context = this)
         applyDefaultColorPalette()
-        // AppToolkitApplication registers activity callbacks; registering here again would deliver them twice.
+        // Koin starts first: AppToolkitApplication resolves its dependencies from it in onCreate.
         super<AppToolkitApplication>.onCreate()
         getKoin().get<IssueReporterShakeManager>().install()
         getKoin().get<SeasonalThemeManager>().install()
@@ -61,10 +61,7 @@ class AppToolkit : AppToolkitApplication(), DefaultLifecycleObserver {
     }
 
     private suspend fun initializeAds() {
-        adsCoreManager.initializeAds(
-            appOpenUnitId = AdsConstants.APP_OPEN_UNIT_ID,
-            disableNativeValidator = true,
-        )
+        adsCoreManager.initializeAds(appOpenUnitId = AdsConstants.APP_OPEN_UNIT_ID)
     }
 
     /**

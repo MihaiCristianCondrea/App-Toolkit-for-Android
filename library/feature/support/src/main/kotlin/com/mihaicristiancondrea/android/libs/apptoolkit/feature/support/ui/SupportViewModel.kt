@@ -29,16 +29,19 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.toErrorMe
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.toFailed
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.support.R
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.support.data.models.DonationProductIds
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.support.ui.contracts.SupportEvent
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.support.ui.mappers.toDonationOptions
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.support.ui.models.DonationOption
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.support.ui.states.SupportUiState
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.support.ui.analytics.SUPPORT_SCREEN
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.support.ui.analytics.SupportAnalytics
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.support.ui.analytics.beginCheckoutEvent
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.support.ui.analytics.donationResultEvent
-import com.mihaicristiancondrea.android.libs.apptoolkit.integration.billing.data.repositories.BillingRepository
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.support.ui.constants.SupportOperationNames
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.support.ui.contracts.SupportEvent
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.support.ui.mappers.toDonationOptions
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.support.ui.mappers.toUiText
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.support.ui.models.DonationOption
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.support.ui.states.SupportUiState
+import com.mihaicristiancondrea.android.libs.apptoolkit.integration.billing.data.extensions.isValidForBilling
 import com.mihaicristiancondrea.android.libs.apptoolkit.integration.billing.data.models.PurchaseResult
-import com.mihaicristiancondrea.android.libs.apptoolkit.integration.billing.utils.extensions.isValidForBilling
+import com.mihaicristiancondrea.android.libs.apptoolkit.integration.billing.data.repositories.BillingRepository
 import java.util.concurrent.atomic.AtomicReference
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
@@ -59,7 +62,7 @@ class SupportViewModel(
 ) : LoggedScreenViewModel<SupportUiState, SupportEvent>(
     initialState = SupportUiState(),
     telemetryRepository = telemetryRepository,
-    screenName = "Support",
+    screenName = SUPPORT_SCREEN.name,
     viewModelName = "SupportViewModel",
 ) {
     /** Play's details for each loaded product, which launching its purchase needs. */
@@ -85,7 +88,7 @@ class SupportViewModel(
 
     override fun handleEvent(event: SupportEvent) {
         when (event) {
-            SupportEvent.QueryProductDetails -> load()
+            is SupportEvent.QueryProductDetails -> load()
             is SupportEvent.Donate -> donate(activity = event.activity, productId = event.productId)
         }
     }
@@ -95,15 +98,15 @@ class SupportViewModel(
      * retry also restarts a stream that failed, then queries the products.
      */
     private fun load() {
-        if (productDetailsJob?.isActive != true) observeProductDetails()
-        if (purchaseResultJob?.isActive != true) observePurchaseResults()
+        productDetailsJob = productDetailsJob.ifIsActive(::observeProductDetails)
+        purchaseResultJob = purchaseResultJob.ifIsActive(::observePurchaseResults)
         queryProductDetails()
     }
 
     /** The repository replays its last result, so a page opened again shows its options at once. */
-    private fun observeProductDetails() {
-        productDetailsJob = billingRepository.productDetails.collectReport(
-            action = Actions.OBSERVE_PRODUCT_DETAILS,
+    private fun observeProductDetails(): Job =
+        billingRepository.productDetails.collectReport(
+            action = SupportOperationNames.OBSERVE_PRODUCT_DETAILS,
             onError = { error -> showLoadFailure(error = error) },
         ) { details ->
             productDetails = details
@@ -117,19 +120,21 @@ class SupportViewModel(
                 )
             }
         }
-    }
 
-    private fun observePurchaseResults() {
-        purchaseResultJob = billingRepository.purchaseResult.collectReport(
-            action = Actions.OBSERVE_PURCHASE_RESULT,
+    private fun observePurchaseResults(): Job =
+        billingRepository.purchaseEvents.collectReport(
+            action = SupportOperationNames.OBSERVE_PURCHASE_RESULT,
             onError = { error ->
                 endBillingLaunch()
                 showMessage(error.toErrorMessage(fallback = GenericErrorText))
             },
-        ) { result ->
-            onPurchaseResult(result = result)
+        ) { event ->
+            val activeProduct: String? = checkoutProductId
+            val productIds: List<String>? = event.productIds
+            if (activeProduct == null || productIds == null || activeProduct in productIds) {
+                onPurchaseResult(result = event.result)
+            }
         }
-    }
 
     /**
      * Options already on screen stay while the query runs. The query publishes its result through
@@ -138,11 +143,15 @@ class SupportViewModel(
     private fun queryProductDetails() {
         queryJob = queryJob.restart {
             launchReport(
-                action = Actions.QUERY_PRODUCT_DETAILS,
+                action = SupportOperationNames.QUERY_PRODUCT_DETAILS,
                 onError = { error -> showLoadFailure(error = error) },
             ) {
                 setState {
-                    if (donationOptions is Loadable.Ready) this else copy(donationOptions = Loadable.Loading)
+                    if (donationOptions is Loadable.Ready) {
+                        this
+                    } else {
+                        copy(donationOptions = Loadable.Loading)
+                    }
                 }
                 billingRepository.queryProductDetails(productIds = DonationProducts)
             }
@@ -174,10 +183,10 @@ class SupportViewModel(
         setState { copy(isBillingInProgress = true) }
         billingLaunchJob = billingLaunchJob.restart {
             launchReport(
-                action = Actions.DONATE_CLICKED,
+                action = SupportOperationNames.DONATE_CLICKED,
                 extra = mapOf(
-                    ExtraKeys.PRODUCT_ID to productId,
-                    ExtraKeys.ACTIVITY to hostName,
+                    SupportOperationNames.ExtraKeys.PRODUCT_ID to productId,
+                    SupportOperationNames.ExtraKeys.ACTIVITY to hostName,
                 ),
                 onError = { error ->
                     reportDonationResult(outcome = SupportAnalytics.Outcomes.FAILED)
@@ -190,35 +199,44 @@ class SupportViewModel(
                     details = details,
                 )
                 delay(BillingLaunchTimeout)
+                // The sheet may still be open, so keep the checkout and report its result when it arrives.
                 setState { copy(isBillingInProgress = false) }
             }
         }
     }
 
-    /** Any result, a recovered background purchase's included, ends the wait for the sheet. */
+    /** An outcome for the active product ends the wait for the sheet. */
     private fun onPurchaseResult(result: PurchaseResult) {
         reportDonationResult(outcome = result.toOutcome())
         endBillingLaunch()
         when (result) {
-            PurchaseResult.Pending -> showMessage(UiMessage(UiText.StringResource(R.string.purchase_pending)))
-            PurchaseResult.Success -> showMessage(UiMessage(UiText.StringResource(R.string.purchase_thank_you)))
-            PurchaseResult.UserCancelled ->
-                showMessage(UiMessage(UiText.StringResource(R.string.purchase_cancelled)))
+            is PurchaseResult.Pending ->
+                showMessage(UiMessage(text = UiText.StringResource(R.string.purchase_pending)))
 
-            is PurchaseResult.Failed -> showPurchaseFailure(error = result.error)
+            is PurchaseResult.Success ->
+                showMessage(UiMessage(text = UiText.StringResource(R.string.purchase_thank_you)))
+
+            is PurchaseResult.UserCancelled ->
+                showMessage(UiMessage(text = UiText.StringResource(R.string.purchase_cancelled)))
+
+            is PurchaseResult.Failed -> showPurchaseFailure(failure = result)
         }
     }
 
     /**
      * Before any options have loaded, the failure is the product query's, so the page shows its
-     * failure state with a retry. Otherwise the options stay, and a message gives Play's reason.
+     * failure state with a retry. Otherwise the options stay, and a message says what went wrong in
+     * the person's language. Play's own message is for developers and is never shown.
      */
-    private fun showPurchaseFailure(error: String) {
+    private fun showPurchaseFailure(failure: PurchaseResult.Failed) {
         when (currentState.donationOptions) {
-            Loadable.Loading -> setState { copy(donationOptions = Loadable.Failed(message = LoadFailedText)) }
+            is Loadable.Loading ->
+                setState { copy(donationOptions = Loadable.Failed(message = LoadFailedText)) }
+
             is Loadable.Failed -> Unit
+
             is Loadable.Empty, is Loadable.Ready ->
-                showMessage(UiMessage(text = UiText.DynamicString(error), isError = true))
+                showMessage(UiMessage(text = failure.reason.toUiText(), isError = true))
         }
     }
 
@@ -245,22 +263,10 @@ class SupportViewModel(
     }
 
     private fun PurchaseResult.toOutcome(): String = when (this) {
-        PurchaseResult.Pending -> SupportAnalytics.Outcomes.PENDING
-        PurchaseResult.Success -> SupportAnalytics.Outcomes.SUCCESS
+        is PurchaseResult.Pending -> SupportAnalytics.Outcomes.PENDING
+        is PurchaseResult.Success -> SupportAnalytics.Outcomes.SUCCESS
         is PurchaseResult.Failed -> SupportAnalytics.Outcomes.FAILED
-        PurchaseResult.UserCancelled -> SupportAnalytics.Outcomes.CANCELLED
-    }
-
-    private object Actions {
-        const val OBSERVE_PRODUCT_DETAILS: String = "observeProductDetails"
-        const val OBSERVE_PURCHASE_RESULT: String = "observePurchaseResult"
-        const val QUERY_PRODUCT_DETAILS: String = "queryProductDetails"
-        const val DONATE_CLICKED: String = "donateClicked"
-    }
-
-    private object ExtraKeys {
-        const val PRODUCT_ID: String = "productId"
-        const val ACTIVITY: String = "activity"
+        is PurchaseResult.UserCancelled -> SupportAnalytics.Outcomes.CANCELLED
     }
 
     private companion object {
@@ -274,7 +280,7 @@ class SupportViewModel(
 
         val BillingLaunchTimeout: Duration = 20.seconds
 
-        /** Shown for a failure with no text of its own; see `toUiText` for the ones that have one. */
+        /** Fallback shown when loading donation product details fails without a specific message. */
         val LoadFailedText = UiText.StringResource(R.string.error_failed_to_load_sku_details)
 
         val OfferUnavailableText = UiText.StringResource(R.string.support_offer_unavailable)

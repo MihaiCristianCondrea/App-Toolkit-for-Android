@@ -25,12 +25,12 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.settings.
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.settings.SettingsConfig
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.settings.SettingsPreference
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.settings.SettingsSearchContext
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.settings.SettingsSearchEntry
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.settings.SettingsSearchProvider
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.settings.settingsSearchProvider
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.ShellGraph
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.shellGraph
 import org.junit.jupiter.api.Test
+import java.util.Locale
 import kotlin.test.assertEquals
 import kotlin.test.assertNull
 import kotlin.test.assertSame
@@ -110,6 +110,7 @@ class SettingsSearchIndexTest {
     fun `every word must match, in any order`() {
         assertEquals(listOf("Bounce buttons"), index().titles("display bounce"))
         assertEquals(listOf("Bounce buttons"), index().titles("  BOUNCE   display "))
+        assertEquals(listOf("Bounce buttons"), index().titles("display\tbounce\n"))
         assertEquals(emptyList(), index().titles("display lecteur"))
     }
 
@@ -117,6 +118,17 @@ class SettingsSearchIndexTest {
     fun `case and accents are ignored`() {
         assertEquals(listOf("Thème de lecture"), index().titles("THEME DE"))
         assertEquals(listOf("Dark theme", "Thème de lecture"), index().titles("thème"))
+    }
+
+    @Test
+    fun `uppercase I matches lowercase i regardless of default locale`() {
+        val previousLocale = Locale.getDefault()
+        try {
+            Locale.setDefault(Locale.forLanguageTag("tr-TR"))
+            assertEquals(listOf("Bounce buttons"), index().titles("DISPLAY BOUNCE"))
+        } finally {
+            Locale.setDefault(previousLocale)
+        }
     }
 
     @Test

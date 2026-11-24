@@ -17,11 +17,10 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.navigation
 
+import androidx.compose.foundation.text.input.TextFieldState
+import androidx.compose.foundation.text.input.setTextAndPlaceCursorAtEnd
 import androidx.compose.runtime.Stable
 import androidx.compose.runtime.compositionLocalOf
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
 
 /**
  * The query typed into a tab's app bar search field. One per searchable tab, kept by the shell so
@@ -29,7 +28,18 @@ import androidx.compose.runtime.setValue
  */
 @Stable
 class ShellSearch(initialQuery: String = "") {
-    var query: String by mutableStateOf(initialQuery)
+    /** The editor state used by the app bar. Its text is also exposed as [query]. */
+    val textFieldState: TextFieldState = TextFieldState(initialText = initialQuery)
+
+    /**
+     * The text in the search field. Setting a different value replaces it and places the cursor
+     * at the end; setting the same value changes nothing.
+     */
+    var query: String
+        get() = textFieldState.text.toString()
+        set(value) {
+            if (value != query) textFieldState.setTextAndPlaceCursorAtEnd(value)
+        }
 }
 
 /**

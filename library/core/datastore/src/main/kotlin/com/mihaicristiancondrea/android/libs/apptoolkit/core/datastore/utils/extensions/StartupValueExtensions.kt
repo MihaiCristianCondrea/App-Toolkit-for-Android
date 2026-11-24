@@ -23,14 +23,15 @@ import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
 
 /**
- * Projects the stored startup route without depending on a navigation framework.
+ * Projects the stored startup screen identifier without depending on a navigation framework.
  *
- * Blank routes use [defaultRoute]; callers decide how to handle unknown or legacy routes.
+ * A blank identifier uses [defaultScreenId]; callers decide how to handle unknown or legacy
+ * identifiers.
  * Consecutive equal mapped values are emitted only once.
  */
 fun <T> DisplayPreferencesRepository.startupValueFlow(
-    defaultRoute: String,
+    defaultScreenId: String,
     mapToValue: (String) -> T,
-): Flow<T> = startupPage(default = defaultRoute)
-    .map { route -> mapToValue(route.ifBlank { defaultRoute }) }
+): Flow<T> = startupPage(default = defaultScreenId)
+    .map { screenId -> mapToValue(screenId.ifBlank { defaultScreenId }) }
     .distinctUntilChanged()

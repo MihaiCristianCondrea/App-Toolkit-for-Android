@@ -9,7 +9,7 @@ Displays a localized explanation of the permissions used by AppToolkit hosts.
 - `PermissionsScreen`, the static permission catalogue and screen tracking.
 - `permissionsConfig()`, an internal composable that resolves existing resource IDs against the
   current configuration, and `PermissionsContent`, the stateless grouped catalogue renderer.
-- `permissionsPage()`, the registration of `PermissionsRoute`.
+- `permissionsScreen()`, the registration of `PermissionsScreen`.
 
 ## Does not own
 
@@ -27,13 +27,13 @@ Displays a localized explanation of the permissions used by AppToolkit hosts.
 
 ## Used by
 
-- `:library:apptoolkit`, which calls `permissionsPage()` from `toolkitPages()`.
+- `:library:apptoolkit`, which calls `permissionsScreen()` from `toolkitScreens()`.
 
 ## Flow chart
 
 ```mermaid
 flowchart TD
-    Page[permissionsPage] --> Screen[PermissionsScreen]
+    Page[permissionsScreen] --> Screen[PermissionsScreen]
     Screen --> Resources[Current locale resources]
     Resources --> Config[SettingsConfig]
     Config --> Content[PermissionsContent]
@@ -46,17 +46,23 @@ flowchart TD
 - The catalogue is presentation data. No repository, ViewModel, loading state, retry job or
   dependency-injection module is needed to render fixed resource-backed descriptions.
 - `stringResource` runs in composition, so a configuration change resolves the new language
-  without relying on a retained ViewModel to reload strings.
-- Screen-view tracking and the ready screen-state event keep the existing Permissions identity.
-- The public `PermissionsContent` still accepts a host-built `SettingsConfig`.
+  without relying on a retained ViewModel to reload strings. Built-in entries carry stable,
+  locale-independent keys (`PermissionKeys`) so a live locale change preserves list identity and
+  scroll position.
+- Screen-view tracking keeps the existing `Permissions` identity (`ScreenHost(screen = ...)`), and
+  no `screen_state` event is emitted because nothing loads.
+- The public `PermissionsContent` still accepts a host-built `SettingsConfig` (including optional
+  row icons and click actions); rows without an `action` render as non-clickable descriptive cards.
 
 ## Public contracts
 
-- `PermissionsScreen`, `PermissionsContent`, and `permissionsPage()`.
+- `PermissionsScreen`, `PermissionsContent`, and `permissionsScreen()`.
 
 ## Internal implementations
 
-- Localized catalogue assembly and grouped row rendering, in `ui/PermissionsScreen.kt`.
+- Localized catalogue assembly and grouped row rendering in `ui/PermissionsScreen.kt`, sibling
+  preview in `ui/PermissionsScreenPreview.kt`, and stable keys in `ui/constants/PermissionKeys.kt`.
+- `PermissionsPageTest` covers `permissionsScreen()` registration and host override behavior.
 - `PermissionsLocaleTest` in `:sample:app` verifies English-to-Romanian resource updates without
   recreating the screen. It passed on the API 37 emulator.
 

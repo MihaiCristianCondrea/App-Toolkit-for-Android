@@ -1,0 +1,11 @@
+package <base>.feature.x.ui.mappers
+
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.UiText
+import <base>.feature.x.data.models.XModel
+import <base>.feature.x.ui.models.XItem
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.toImmutableList
+
+/** Keeps catalog order and maps item IDs to stable UI keys. */
+internal fun List<XModel>.toXItems(): ImmutableList<XItem> =
+    map { XItem(key = it.id, title = UiText.DynamicString(content = it.title)) }.toImmutableList()

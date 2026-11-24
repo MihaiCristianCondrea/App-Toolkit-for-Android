@@ -25,6 +25,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.SupervisorJob
 import org.koin.core.module.Module
 import org.koin.dsl.module
+import org.koin.dsl.onClose
 
 /**
  * Koin module for the billing integration.
@@ -36,9 +37,9 @@ val billingModule: Module = module {
             context = get(),
             dispatchers = dispatchers,
             diagnostics = get(),
-            externalScope = CoroutineScope(SupervisorJob() + dispatchers.io),
+            externalScope = CoroutineScope(context = SupervisorJob() + dispatchers.io),
         )
-    }
+    } onClose { repository -> repository?.close() }
 
     single<BillingCore> { get<BillingRepository>() }
 }

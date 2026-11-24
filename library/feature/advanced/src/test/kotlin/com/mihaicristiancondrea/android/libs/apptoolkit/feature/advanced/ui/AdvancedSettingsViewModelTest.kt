@@ -31,12 +31,15 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.feature.advanced.ui.stat
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.emitAll
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.RegisterExtension
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
+import kotlin.test.assertNull
 import kotlin.test.assertTrue
 
 class AdvancedSettingsViewModelTest {
@@ -105,6 +108,27 @@ class AdvancedSettingsViewModelTest {
             gate.complete(Unit)
             advance()
             assertEquals(CacheClearStatus.Idle, viewModel.state.value.cacheClear)
+        }
+
+    @Test
+    fun `repeated taps while clearing start one deletion and show one confirmation`() =
+        runTest(dispatcherExtension.testDispatcher) {
+            val gate = CompletableDeferred<Unit>()
+            val repository = FakeCacheRepository(gate = gate)
+            val viewModel = createViewModel(repository = repository)
+
+            viewModel.onEvent(AdvancedSettingsEvent.ClearCache)
+            viewModel.onEvent(AdvancedSettingsEvent.ClearCache)
+            advance()
+
+            assertEquals(1, repository.clears)
+            assertEquals(CacheClearStatus.Clearing, viewModel.state.value.cacheClear)
+            assertTrue(viewModel.messages.value.isEmpty())
+
+            gate.complete(Unit)
+            advance()
+            assertEquals(CacheClearStatus.Idle, viewModel.state.value.cacheClear)
+            assertEquals(R.string.cache_cleared_success, viewModel.onlyMessage().resourceId)
         }
 
     @Test
@@ -179,6 +203,72 @@ class AdvancedSettingsViewModelTest {
             advance()
 
             assertTrue(viewModel.state.value.developerOptionsUnlocked)
+        }
+
+    @Test
+    fun `retry resumes unlock observation without discarding the last value`() =
+        runTest(dispatcherExtension.testDispatcher) {
+            val unlocked = MutableStateFlow(false)
+            var firstRead = true
+            val viewModel = createViewModel(
+                developerOptionsUnlocked = flow {
+                    if (firstRead) {
+                        firstRead = false
+                        emit(true)
+                        throw StorageException(reason = StorageException.Reason.FAILED)
+                    }
+                    emitAll(unlocked)
+                },
+            )
+            advance()
+
+            assertTrue(viewModel.state.value.developerOptionsUnlocked)
+            val message = viewModel.onlyMessage()
+            assertEquals(UiText.StringResource(CoreUiR.string.try_again), message.actionLabel)
+
+            viewModel.messageShown(message.id)
+            viewModel.onEvent(event = AdvancedSettingsEvent.ObserveDeveloperOptions)
+            advance()
+            assertFalse(viewModel.state.value.developerOptionsUnlocked)
+
+            unlocked.value = true
+            advance()
+            assertTrue(viewModel.state.value.developerOptionsUnlocked)
+            assertTrue(viewModel.messages.value.isEmpty())
+        }
+
+    @Test
+    fun `a non-retryable unlock failure omits the retry action`() =
+        runTest(dispatcherExtension.testDispatcher) {
+            val viewModel = createViewModel(
+                developerOptionsUnlocked = flow {
+                    throw StorageException(reason = StorageException.Reason.CORRUPT)
+                },
+            )
+            advance()
+
+            val message = viewModel.onlyMessage()
+            assertTrue(message.isError)
+            assertNull(message.actionLabel)
+        }
+
+    @Test
+    fun `requesting unlock observation while already active keeps the single collector`() =
+        runTest(dispatcherExtension.testDispatcher) {
+            val unlocked = MutableStateFlow(value = false)
+            var subscriptions = 0
+            val viewModel = createViewModel(
+                developerOptionsUnlocked = flow {
+                    subscriptions += 1
+                    emitAll(flow = unlocked)
+                },
+            )
+            advance()
+
+            viewModel.onEvent(event = AdvancedSettingsEvent.ObserveDeveloperOptions)
+            advance()
+
+            assertEquals(1, subscriptions)
         }
 
     /** Counts each clear; [failure] makes it throw, and [gate] holds it until completed. */

@@ -23,7 +23,6 @@ import android.content.Context
 import android.hardware.SensorManager
 import android.os.Bundle
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.data.models.IssueReporterConfig
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.ui.IssueReporterLauncher
 
 /**
  * Turns a shake of the device into the issue reporter, for every activity in the app.
@@ -57,6 +56,7 @@ class IssueReporterShakeManager(
 
     private var resumedActivity: Activity? = null
     private var installed: Boolean = false
+    private var suppressionCount: Int = 0
 
     /**
      * Starts following the app's activities.
@@ -79,20 +79,53 @@ class IssueReporterShakeManager(
         resumedActivity = null
     }
 
+    /**
+     * Temporarily stops shake-to-report until the returned handle is closed.
+     *
+     * Use this while a screen or tool owns the shake gesture itself so shaking the device does not
+     * open the report sheet. Unregistering the accelerometer also clears any half-finished gesture,
+     * preventing a carry-over trigger right after suppression ends.
+     *
+     * Overlapping callers are reference-counted, and closing a handle more than once has no
+     * effect. Returns a no-op handle when [IssueReporterConfig.shakeToReportEnabled] is false. Must
+     * be called on the main thread.
+     */
+    fun suppress(): AutoCloseable {
+        if (!config.shakeToReportEnabled) return AutoCloseable { }
+        suppressionCount++
+        if (installed && (suppressionCount == 1)) {
+            shakeDetector.stop()
+        }
+        var closed = false
+        return AutoCloseable {
+            if (closed) return@AutoCloseable
+            closed = true
+            if (suppressionCount > 0) {
+                suppressionCount--
+            }
+            if ((suppressionCount == 0) && installed && (resumedActivity != null)) {
+                shakeDetector.start()
+            }
+        }
+    }
+
     override fun onActivityResumed(activity: Activity) {
         resumedActivity = activity
-        shakeDetector.start()
+        if (suppressionCount == 0) {
+            shakeDetector.start()
+        }
     }
 
     override fun onActivityPaused(activity: Activity) {
-        shakeDetector.stop()
         if (resumedActivity === activity) {
+            shakeDetector.stop()
             resumedActivity = null
         }
     }
 
     override fun onActivityDestroyed(activity: Activity) {
         if (resumedActivity === activity) {
+            shakeDetector.stop()
             resumedActivity = null
         }
     }

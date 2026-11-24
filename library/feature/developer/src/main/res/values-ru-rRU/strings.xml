@@ -80,7 +80,7 @@
     <string name="shell_navigation_tint_always">Окрашены вместе, контент в карточке</string>
     <string name="shell_navigation_tint_on_scroll">Окрашены вместе, как только контент прокручивается</string>
     <string name="shell_back_edge_system">Как в Android: страница уменьшается на месте</string>
-    <string name="shell_back_edge_follow">Следует за пальцем, зеркально левому краю (по умолчанию)</string>
+    <string name="shell_back_edge_follow">Следует за пальцем, зеркально левому краю</string>
     <string name="shell_transition_directional">Направленный сдвиг</string>
     <string name="shell_transition_fade_through">Проявление через фон</string>
     <string name="shell_transition_fade">Плавный переход</string>

@@ -17,16 +17,21 @@
 
 package com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.di
 
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.local.audio.AndroidBellAudioDataSource
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.local.audio.BellAudioDataSource
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.local.haptics.AndroidBreathingHapticsDataSource
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.local.haptics.BreathingHapticsDataSource
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.local.preferences.DefaultToolkitTilesPreferencesDataSource
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.local.preferences.ToolkitTilesPreferencesDataSource
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.local.quicksettings.AndroidQuickSettingsTilesLocalDataSource
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.local.quicksettings.QuickSettingsTilesLocalDataSource
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.local.sensors.AndroidBellShakeDataSource
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.local.sensors.AndroidSensorLocalDataSource
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.local.sensors.BellShakeDataSource
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.local.sensors.SensorLocalDataSource
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.local.torch.AndroidTorchDataSource
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.local.torch.TorchDataSource
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.repositories.BellRepository
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.repositories.BillSplitterRepository
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.repositories.BreathingRepository
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.repositories.CounterRepository
@@ -40,6 +45,7 @@ import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.repos
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.repositories.TorchRepository
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.repositories.UnitConversionRepository
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.services.getTileServiceRequests
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.BellToolViewModel
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.ProtractorToolViewModel
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.BillSplitterToolViewModel
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.RandomNumberToolViewModel
@@ -64,6 +70,10 @@ import org.koin.core.qualifier.named
 import org.koin.dsl.module
 
 val tilesModule: Module = module {
+    single<BellAudioDataSource> { AndroidBellAudioDataSource(context = androidContext(), dispatchers = get()) }
+    single<BellShakeDataSource> { AndroidBellShakeDataSource(context = androidContext(), dispatchers = get()) }
+    single { BellRepository(audio = get(), sensors = get()) }
+    viewModel { BellToolViewModel(repository = get(), telemetryRepository = get()) }
     single<com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.local.audio.SpeakerAudioDataSource> {
         com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.local.audio.AndroidSpeakerAudioDataSource(context = androidContext(), dispatchers = get())
     }

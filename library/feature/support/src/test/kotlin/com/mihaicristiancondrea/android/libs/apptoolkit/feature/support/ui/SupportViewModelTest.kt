@@ -33,14 +33,16 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.feature.support.R
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.support.data.models.DonationProductIds
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.support.ui.contracts.SupportEvent
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.support.ui.models.DonationOption
-import com.mihaicristiancondrea.android.libs.apptoolkit.integration.billing.data.repositories.BillingRepository
+import com.mihaicristiancondrea.android.libs.apptoolkit.integration.billing.data.models.PurchaseEvent
 import com.mihaicristiancondrea.android.libs.apptoolkit.integration.billing.data.models.PurchaseResult
+import com.mihaicristiancondrea.android.libs.apptoolkit.integration.billing.data.repositories.BillingRepository
 import io.mockk.every
 import io.mockk.mockk
 import kotlinx.collections.immutable.ImmutableMap
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.RegisterExtension
@@ -177,7 +179,7 @@ class SupportViewModelTest {
             val viewModel = createViewModel(billingRepository = billing)
             advance()
 
-            billing.purchaseResults.emit(PurchaseResult.Failed("Billing service unavailable"))
+            billing.purchaseResults.emit(PurchaseResult.Failed(reason = PurchaseResult.Failed.Reason.NETWORK))
 
             val failed = assertIs<Loadable.Failed>(viewModel.state.value.donationOptions)
             assertEquals(UiText.StringResource(R.string.error_failed_to_load_sku_details), failed.message)
@@ -208,17 +210,34 @@ class SupportViewModelTest {
         }
 
     @Test
-    fun `a failed purchase keeps the options and shows Play's reason`() =
+    fun `a failed purchase keeps the options and never shows Play's developer message`() =
         runTest(dispatcherExtension.testDispatcher) {
             val billing = FakeBillingRepository()
             val viewModel = createViewModel(billingRepository = billing)
             advance()
 
-            billing.purchaseResults.emit(PurchaseResult.Failed("Card declined"))
+            billing.purchaseResults.emit(
+                PurchaseResult.Failed(reason = PurchaseResult.Failed.Reason.UNKNOWN, debugMessage = "Card declined"),
+            )
 
             assertTrue(viewModel.readyOptions().isNotEmpty())
             val message = viewModel.onlyMessage()
-            assertEquals(UiText.DynamicString("Card declined"), message.text)
+            assertEquals(GenericErrorText, message.text)
+            assertTrue(message.isError)
+        }
+
+    @Test
+    fun `a purchase that fails for the network says to try again`() =
+        runTest(dispatcherExtension.testDispatcher) {
+            val billing = FakeBillingRepository()
+            val viewModel = createViewModel(billingRepository = billing)
+            advance()
+
+            billing.purchaseResults.emit(PurchaseResult.Failed(reason = PurchaseResult.Failed.Reason.NETWORK))
+
+            assertTrue(viewModel.readyOptions().isNotEmpty())
+            val message = viewModel.onlyMessage()
+            assertEquals(UiText.StringResource(CoreUiR.string.screen_error_connection), message.text)
             assertTrue(message.isError)
         }
 
@@ -228,7 +247,7 @@ class SupportViewModelTest {
         val viewModel = createViewModel(billingRepository = billing)
         advance()
 
-        billing.purchaseResults.emit(PurchaseResult.Failed("Item is unavailable"))
+        billing.purchaseResults.emit(PurchaseResult.Failed(reason = PurchaseResult.Failed.Reason.ITEM_UNAVAILABLE))
 
         assertIs<Loadable.Empty>(viewModel.state.value.donationOptions)
         assertTrue(viewModel.onlyMessage().isError)
@@ -278,6 +297,40 @@ class SupportViewModelTest {
 
             assertFalse(viewModel.state.value.isBillingInProgress)
         }
+
+    @Test
+    fun `another product settling leaves the current checkout active`() = runTest(dispatcherExtension.testDispatcher) {
+        val billing = FakeBillingRepository()
+        val viewModel = createViewModel(billingRepository = billing)
+        advance()
+        viewModel.donateLow()
+        billing.resultProductIds = listOf(DonationProductIds.HIGH_DONATION)
+        billing.purchaseResults.emit(PurchaseResult.Success)
+        assertTrue(viewModel.state.value.isBillingInProgress)
+        assertTrue(viewModel.messages.value.isEmpty())
+        assertTrue(events("donation_result").isEmpty())
+
+        billing.resultProductIds = listOf(DonationProductIds.LOW_DONATION)
+        billing.purchaseResults.emit(PurchaseResult.Success)
+        assertFalse(viewModel.state.value.isBillingInProgress)
+        assertEquals(1, events("donation_result").size)
+    }
+
+    @Test
+    fun `a result after the launch timeout is still reported`() = runTest(dispatcherExtension.testDispatcher) {
+        val billing = FakeBillingRepository()
+        val viewModel = createViewModel(billingRepository = billing)
+        advance()
+        viewModel.donateLow()
+        advance()
+        assertFalse(viewModel.state.value.isBillingInProgress)
+
+        billing.resultProductIds = listOf(DonationProductIds.LOW_DONATION)
+        billing.purchaseResults.emit(PurchaseResult.Success)
+
+        assertEquals(1, events("donation_result").size)
+        assertEquals(R.string.purchase_thank_you, viewModel.onlyMessage().resourceId)
+    }
 
     @Test
     fun `a second tap while a purchase is launching is ignored`() = runTest(dispatcherExtension.testDispatcher) {
@@ -472,6 +525,8 @@ class SupportViewModelTest {
         var queries: Int = 0
 
         override val productDetails: Flow<Map<String, ProductDetails>> = productDetailsFlow
+        var resultProductIds: List<String>? = null
+        override val purchaseEvents = purchaseResults.map { PurchaseEvent(it, resultProductIds) }
         override val purchaseResult: Flow<PurchaseResult> = purchaseResults
 
         override suspend fun queryProductDetails(productIds: List<String>) {

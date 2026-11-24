@@ -17,13 +17,13 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.app.privacy.ui.navigation
 
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.diagnostics.ui.navigation.diagnosticsSettingsPage
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.permissions.ui.navigation.permissionsPage
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.privacy.ui.navigation.privacySettingsPage
-import com.mihaicristiancondrea.android.libs.apptoolkit.integration.ads.ui.navigation.adsSettingsPage
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.diagnostics.ui.navigation.diagnosticsSettingsScreen
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.permissions.ui.navigation.permissionsScreen
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.privacy.ui.navigation.privacySettingsScreen
+import com.mihaicristiancondrea.android.libs.apptoolkit.integration.ads.ui.navigation.adsSettingsScreen
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.ShellGraph
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.ShellGraphBuilder
-import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.PrivacySettingsRoute
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.keys.PrivacySettingsScreen
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.R as CommonR
 
 /**
@@ -32,9 +32,9 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.R as CommonR
  * settings rather than into the app.
  */
 fun permissionUsageGraph(): ShellGraph = ShellGraphBuilder(appTitle = CommonR.string.app_name).apply {
-    privacySettingsPage()
-    permissionsPage()
-    adsSettingsPage()
-    diagnosticsSettingsPage()
-    start(PrivacySettingsRoute)
+    privacySettingsScreen()
+    permissionsScreen()
+    adsSettingsScreen()
+    diagnosticsSettingsScreen()
+    start(PrivacySettingsScreen)
 }.build()

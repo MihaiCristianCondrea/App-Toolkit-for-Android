@@ -17,16 +17,11 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.boolean
 
-import com.google.firebase.analytics.FirebaseAnalytics
-
 /**
  * Maps a debug flag to the corresponding API environment name.
  */
 fun Boolean.toApiEnvironment(): String =
     if (this) DEBUG_API_ENVIRONMENT else RELEASE_API_ENVIRONMENT
-
-fun Boolean.asConsentStatus(): FirebaseAnalytics.ConsentStatus =
-    if (this) FirebaseAnalytics.ConsentStatus.GRANTED else FirebaseAnalytics.ConsentStatus.DENIED
 
 private const val DEBUG_API_ENVIRONMENT: String = "debug"
 private const val RELEASE_API_ENVIRONMENT: String = "release"

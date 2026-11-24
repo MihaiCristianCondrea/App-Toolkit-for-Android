@@ -1,0 +1,41 @@
+package <base>.feature.x.data.repositories
+
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.exceptions.NetworkException
+import <base>.feature.x.data.local.XLocalDataSource
+import <base>.feature.x.data.models.XModel
+import <base>.feature.x.data.remote.XRemoteDataSource
+import <base>.feature.x.data.remote.models.XDto
+import io.mockk.coEvery
+import io.mockk.mockk
+import kotlinx.coroutines.test.runTest
+import org.junit.jupiter.api.Test
+import kotlin.test.assertEquals
+import kotlin.test.assertFailsWith
+import kotlin.test.assertSame
+
+/** Verifies remote mapping and offline fallback for the catalog repository. */
+class XRepositoryTest {
+    private val remote = mockk<XRemoteDataSource>()
+
+    @Test
+    fun `remote entries map to application models`() = runTest {
+        coEvery { remote.fetchItems() } returns listOf(element = XDto(id = "first", title = "First entry", availableQuantity = 1))
+
+        assertEquals(
+            expected = listOf(element = XModel(id = "first", title = "First entry", availableQuantity = 1)),
+            actual = DefaultXRepository(remote = remote).getItems(),
+        )
+    }
+
+    @Test
+    fun `offline read uses the local snapshot when available`() = runTest {
+        val offline = NetworkException(reason = NetworkException.Reason.NO_INTERNET)
+        coEvery { remote.fetchItems() } throws offline
+        val saved = listOf(element = XModel(id = "saved", title = "Saved entry", availableQuantity = 2))
+        val local = XLocalDataSource { saved }
+
+        assertEquals(expected = saved, actual = DefaultXRepository(remote = remote, local = local).getItems())
+        val failure = assertFailsWith<NetworkException> { DefaultXRepository(remote = remote).getItems() }
+        assertSame(expected = offline, actual = failure)
+    }
+}

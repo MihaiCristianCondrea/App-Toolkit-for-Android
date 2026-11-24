@@ -20,8 +20,6 @@ package com.mihaicristiancondrea.android.libs.apptoolkit.shell
 import android.content.Intent
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.LocalActivity
-import androidx.compose.foundation.ComposeFoundationFlags
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.WindowInsets
@@ -38,6 +36,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -72,7 +71,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.snackbar.D
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.LocalPageKey
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.LocalShellGraph
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.LocalShellNavigator
-import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.ShellHomeRoute
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.ShellHomeScreen
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.ShellNavDisplay
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.ShellNavigator
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.DestinationKind
@@ -106,7 +105,12 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.shell.data.repositories.
 import com.mihaicristiancondrea.android.libs.apptoolkit.shell.settings.BackEdgeStyle
 import com.mihaicristiancondrea.android.libs.apptoolkit.shell.settings.LocalShellPreferences
 import com.mihaicristiancondrea.android.libs.apptoolkit.shell.settings.LocalShellSettings
+import com.mihaicristiancondrea.android.libs.apptoolkit.shell.settings.NavigationTint
 import com.mihaicristiancondrea.android.libs.apptoolkit.shell.settings.ShellSettings
+import java.io.IOException
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.channels.ReceiveChannel
+import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.distinctUntilChanged
 
 /**
@@ -126,18 +130,22 @@ import kotlinx.coroutines.flow.distinctUntilChanged
  * `LocalActivity.current` and `rememberLauncherForActivityResult`: every page is composed inside
  * the one activity.
  *
+ * @param graph The tabs, pages, bars and deep links the shell draws.
+ * @param modifier Applied to the root of the shell, around the frame, the pages and the snackbars.
  * @param start Where a fresh launch opens, instead of the graph's `start`: a tab, or a page shown
  * as a start screen before the shell.
  * @param resolveStart Decides [start] at launch from stored state, such as a welcome screen until
- * the person has seen it once. Nothing is drawn until it returns; null keeps [start]. Keep the
- * splash screen up until [onReady].
+ * the person has seen it once. Nothing is drawn until it returns; null or an [IOException] (including
+ * storage failures) keeps [start]. Keep the splash screen up until [onReady].
  * @param preferences Where the shell keeps its settings. By default a DataStore of its own; an app
- * with a settings store supplies its own implementation, which then owns its `defaults`.
+ * with a settings store supplies its own implementation, which then owns its `defaults`. Pass a
+ * remembered instance, not a new one on every composition.
  * @param defaults The app's own shell defaults, usually `appToolkitDefaults { }.shell`: what a
  * setting nobody chose in the developer options reads as, and what a reset returns to. Only used
  * for the shell's own store, when [preferences] is null.
  * @param onReady Called once the first frame of the app is composed, the settings and the start
- * decided: the moment to let the splash screen go.
+ * decided: the moment to let the splash screen go. Called once for each activity instance, so
+ * again after the activity is recreated, as a rotation does.
  * @param onDestinationChanged Called with the destination on top whenever it changes, first with
  * the one the app opens on: for analytics and the like.
  * @param layoutPolicy The window widths at which the navigation changes form, and how wide content
@@ -153,27 +161,45 @@ fun ShellHost(
     graph: ShellGraph,
     modifier: Modifier = Modifier,
     start: NavKey? = null,
-    resolveStart: (suspend () -> NavKey?)? = null, // FIXME: Parameter 'start' has runtime-determined stability
-    preferences: ShellPreferencesRepository? = null, // FIXME: Parameter 'preferences' has runtime-determined stability
+    resolveStart: (suspend () -> NavKey?)? = null,
+    preferences: ShellPreferencesRepository? = null,
     defaults: ShellSettings = ShellSettings(),
     onReady: () -> Unit = {},
     onDestinationChanged: (NavKey) -> Unit = {},
     layoutPolicy: ShellLayoutPolicy = graph.defaults.layoutPolicy,
     snackbarHostState: SnackbarHostState? = null,
 ) {
-    disablePausablePrefetch()
     val context = LocalContext.current
     val shellSnackbars = snackbarHostState ?: remember { SnackbarHostState() }
     val shellSnackbarHost = remember(shellSnackbars) { ShellSnackbarHost(shellSnackbars) }
     val store = preferences ?: remember(context, defaults) { ShellPreferencesRepository(context, defaults) }
     // A cold start waits a frame for the stored settings rather than drawing a layout it would
-    // replace a frame later.
-    val settings by store.settings.collectAsStateWithLifecycle(initialValue = store.lastKnown)
-    // The app's start decision, awaited alongside the settings.
-    var decidedStart by remember { mutableStateOf(if (resolveStart == null) StartDecision(start) else null) }
-    if (resolveStart != null) {
-        LaunchedEffect(Unit) { decidedStart = StartDecision(resolveStart() ?: start) }
+    // replace a frame later. A storage read failure falls back to the last known or default
+    // settings so the root shell still launches.
+    val settingsFlow = remember(store) {
+        store.settings.catch { throwable ->
+            if (throwable is IOException) emit(store.lastKnown ?: store.defaults) else throw throwable
+        }
     }
+    val settings by settingsFlow.collectAsStateWithLifecycle(initialValue = store.lastKnown)
+    // The app's start decision, awaited alongside the settings. Once the navigator is composed with
+    // it, it is saved, since the navigator restores its own stack after recreation and the start
+    // only matters to a fresh one: a rotation draws at once instead of deciding again.
+    var startDecided by rememberSaveable { mutableStateOf(resolveStart == null) }
+    var decidedStart by remember { mutableStateOf(if (startDecided) StartDecision(key = start) else null) }
+    if (!startDecided && resolveStart != null) {
+        LaunchedEffect(Unit) {
+            val resolved = try {
+                resolveStart()
+            } catch (_: IOException) {
+                null
+            }
+            decidedStart = StartDecision(key = resolved ?: start)
+        }
+    }
+    // Registered before anything below can return, so an intent that arrives while the settings or
+    // the start load is kept for the navigator instead of lost.
+    val newIntents = rememberNewIntents()
     val current = settings ?: return
     val launchStart = decidedStart ?: return
 
@@ -188,8 +214,15 @@ fun ShellHost(
     // The developer options' choice, then the app's choice at launch, then the graph's.
     val startKey = graph.startOptions.getOrNull(current.startOverride) ?: launchStart.key ?: graph.start
     val navigator = rememberShellNavigator(graph, onExit = { activity?.finish() }, start = startKey)
-    val frameState = rememberShellFrameState(layoutInfo.mode)
-    DeepLinks(graph, navigator)
+    if (!startDecided) {
+        SideEffect { startDecided = true }
+    }
+    val frameState = rememberShellFrameState(
+        mode = layoutInfo.mode,
+        // Already tinted on the first frame when the tint is always on, rather than snapped to it a frame later.
+        initialTint = if (layoutInfo.mode.keepsNavigationBeside && current.navigationTint == NavigationTint.Always) 1f else 0f,
+    )
+    DeepLinks(graph, navigator, newIntents)
     val currentOnDestinationChanged by rememberUpdatedState(onDestinationChanged)
     LaunchedEffect(navigator) {
         snapshotFlow { navigator.currentKey }.distinctUntilChanged().collect { currentOnDestinationChanged(it) }
@@ -236,14 +269,14 @@ fun ShellHost(
             )
             // Beside a rail or a permanent drawer, the displays sit next to the navigation, so pages
             // open there; otherwise the frame adds nothing.
-            Box(Modifier.fillMaxSize()) {
+            Box(modifier.fillMaxSize()) {
                 ShellFrame(graph, navigator, frameState) {
                     ShellNavDisplay(
                         entries = entries,
                         sceneStrategies = sceneStrategies,
                         onBack = { navigator.popPage() },
                         // Seen around the pages while the back gesture shrinks them, as behind closing windows.
-                        modifier = modifier
+                        modifier = Modifier
                             .fillMaxSize()
                             .background(MaterialTheme.colorScheme.surfaceDim),
                         // Pages move as their destination declares, like activities by default; the
@@ -293,11 +326,30 @@ fun ShellHost(
 private class StartDecision(val key: NavKey?)
 
 /**
- * Opens the destinations the activity's intents ask for: the launch intent once, not again when
- * the activity is recreated, and every new intent while it runs.
+ * The intents the activity receives while it runs, buffered until [DeepLinks] can open them. Empty
+ * where there is no activity to deliver them.
  */
 @Composable
-private fun DeepLinks(graph: ShellGraph, navigator: ShellNavigator) {
+private fun rememberNewIntents(): Channel<Intent> {
+    val activity = LocalActivity.current as? ComponentActivity
+    val intents = remember { Channel<Intent>(Channel.UNLIMITED) }
+    if (activity != null) {
+        DisposableEffect(activity, intents) {
+            val listener = Consumer<Intent> { intent -> intents.trySend(intent) }
+            activity.addOnNewIntentListener(listener)
+            onDispose { activity.removeOnNewIntentListener(listener) }
+        }
+    }
+    return intents
+}
+
+/**
+ * Opens the destinations the activity's intents ask for: the launch intent once, not again when
+ * the activity is recreated, and every intent in [newIntents], including those that arrived before
+ * the navigator existed.
+ */
+@Composable
+private fun DeepLinks(graph: ShellGraph, navigator: ShellNavigator, newIntents: ReceiveChannel<Intent>) {
     val activity = LocalActivity.current
     var launchHandled by rememberSaveable { mutableStateOf(false) }
     LaunchedEffect(navigator) {
@@ -306,11 +358,10 @@ private fun DeepLinks(graph: ShellGraph, navigator: ShellNavigator) {
             activity?.intent?.let(graph::keyFor)?.let(navigator::navigate)
         }
     }
-    val intents = activity as? ComponentActivity ?: return
-    DisposableEffect(intents, navigator) {
-        val listener = Consumer<Intent> { intent -> graph.keyFor(intent)?.let(navigator::navigate) }
-        intents.addOnNewIntentListener(listener)
-        onDispose { intents.removeOnNewIntentListener(listener) }
+    LaunchedEffect(graph, navigator, newIntents) {
+        for (intent in newIntents) {
+            graph.keyFor(intent)?.let(navigator::navigate)
+        }
     }
 }
 
@@ -329,11 +380,11 @@ private fun swapsInPlace(from: Scene<*>, to: Scene<*>, layout: ShellLayoutMode, 
 private val Scene<*>.depth: Int get() = previousEntries.size - (entries.size - 1)
 
 private fun pageEntry(graph: ShellGraph, navigator: ShellNavigator, key: NavKey): NavEntry<NavKey> {
-    if (key == ShellHomeRoute) {
+    if (key == ShellHomeScreen) {
         return NavEntry(
             key = key,
             contentKey = key.toString(),
-            metadata = ShellEntryInfo(DestinationKind.Page, tabIndex = -1, PaneRole.None).toMetadata(),
+            metadata = ShellEntryInfo(kind = DestinationKind.Page, tabIndex = -1, paneRole = PaneRole.None).toMetadata(),
         ) {
             ProvideEntranceCue { ShellChrome(graph, navigator) }
         }
@@ -360,7 +411,12 @@ private fun pageEntry(graph: ShellGraph, navigator: ShellNavigator, key: NavKey)
     return NavEntry(
         key = key,
         contentKey = key.toString(),
-        metadata = ShellEntryInfo(DestinationKind.Page, tabIndex = -1, destination.paneRole, destination.transition).toMetadata() +
+        metadata = ShellEntryInfo(
+            kind = DestinationKind.Page,
+            tabIndex = -1,
+            paneRole = destination.paneRole,
+            transition = destination.transition,
+        ).toMetadata() +
             placeholder + chrome,
     ) { pageKey ->
         CompositionLocalProvider(
@@ -387,19 +443,4 @@ private fun pageEntry(graph: ShellGraph, navigator: ShellNavigator, key: NavKey)
             }
         }
     }
-}
-
-/**
- * Turns off pausing a lazy list item's composition while it is prefetched, for the whole process.
- *
- * With it on, foundation 1.12 can measure a recycled lazy item during the lookahead pass of the
- * shell's shared transitions, crashing with "measure is called on a deactivated node"
- * (https://issuetracker.google.com/issues/469669851). Prefetch itself keeps running; only its
- * pausing stops. Remove this once a foundation release fixes the issue.
- */
-@OptIn(ExperimentalFoundationApi::class)
-private fun disablePausablePrefetch() {
-    // Set on every composition of the shell, before its lists compose: a plain write, and it stays
-    // off even if something turned it back on.
-    ComposeFoundationFlags.isPausableCompositionInPrefetchEnabled = false
 }

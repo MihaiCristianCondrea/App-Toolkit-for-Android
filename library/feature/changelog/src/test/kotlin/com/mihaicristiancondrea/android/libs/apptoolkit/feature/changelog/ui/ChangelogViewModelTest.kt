@@ -18,22 +18,26 @@
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.changelog.ui
 
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.exceptions.NetworkException
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.UiText
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.BuildInfoRepository
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.UiText
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.FakeTelemetryRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.UnconfinedDispatcherExtension
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.R as CoreUiR
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.Loadable
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.changelog.R
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.changelog.data.models.ChangelogRelease
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.changelog.data.repositories.ChangelogRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.changelog.domain.usecases.GetChangelogUseCase
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.changelog.ui.contracts.ChangelogEvent
+import kotlinx.collections.immutable.persistentListOf
+import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.RegisterExtension
 import kotlin.test.assertEquals
+import kotlin.test.assertFalse
 import kotlin.test.assertIs
 import kotlin.test.assertTrue
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.R as CoreUiR
 
 class ChangelogViewModelTest {
 
@@ -45,9 +49,17 @@ class ChangelogViewModelTest {
 
     private val telemetryRepository = FakeTelemetryRepository()
 
+    private val sampleReleases = listOf(
+        ChangelogRelease(heading = "2.0.0", sections = listOf("- New"), isCurrent = true),
+        ChangelogRelease(heading = "1.0.0", sections = listOf("- Old"), isCurrent = false),
+    )
+
     private fun createViewModel(repository: ChangelogRepository): ChangelogViewModel =
         ChangelogViewModel(
-            getChangelogUseCase = GetChangelogUseCase(repository = repository, buildInfoRepository = BuildInfo),
+            getChangelogUseCase = GetChangelogUseCase(
+                repository = repository,
+                buildInfoRepository = BuildInfo,
+            ),
             telemetryRepository = telemetryRepository,
         )
 
@@ -57,56 +69,112 @@ class ChangelogViewModelTest {
         get() = (message as UiText.StringResource).resourceId
 
     @Test
-    fun `the first load shows the current version's notes`() = runTest(dispatcherExtension.testDispatcher) {
-        val viewModel = createViewModel(FakeChangelogRepository(markdown = "# 2.0.0\n- New\n# 1.0.0\n- Old"))
-        advance()
+    fun `the first load exposes mapped releases`() =
+        runTest(dispatcherExtension.testDispatcher) {
+            val viewModel = createViewModel(FakeChangelogRepository(releases = sampleReleases))
+            advance()
 
-        assertEquals(Loadable.Ready("# 2.0.0\n- New"), viewModel.state.value.markdown)
-    }
+            assertEquals(
+                Loadable.Ready(value = persistentListOf(*sampleReleases.toTypedArray())),
+                viewModel.state.value.releases,
+            )
+        }
 
     @Test
-    fun `a blank changelog shows the empty state`() = runTest(dispatcherExtension.testDispatcher) {
-        val viewModel = createViewModel(FakeChangelogRepository(markdown = "  "))
+    fun `a load requested during the first fetch keeps the active fetch`() =
+        runTest(dispatcherExtension.testDispatcher) {
+            val response = CompletableDeferred<List<ChangelogRelease>>()
+            var requests = 0
+            val viewModel = createViewModel(
+                object : ChangelogRepository {
+                    override suspend fun getChangelog(
+                        packageName: String,
+                        currentVersion: String,
+                    ): List<ChangelogRelease> {
+                        requests++
+                        return response.await()
+                    }
+                },
+            )
+
+            viewModel.onEvent(event = ChangelogEvent.Load)
+            advance()
+            assertEquals(1, requests)
+            assertEquals(Loadable.Loading, viewModel.state.value.releases)
+
+            val releases = listOf(
+                ChangelogRelease(heading = "2.0.0", sections = listOf("- New"), isCurrent = true),
+            )
+            response.complete(value = releases)
+            advance()
+            assertEquals(
+                Loadable.Ready(value = persistentListOf(releases.single())),
+                viewModel.state.value.releases,
+            )
+        }
+
+    @Test
+    fun `an empty changelog shows the empty state`() = runTest(dispatcherExtension.testDispatcher) {
+        val viewModel = createViewModel(FakeChangelogRepository(releases = emptyList()))
         advance()
 
-        assertIs<Loadable.Empty>(viewModel.state.value.markdown)
+        assertIs<Loadable.Empty>(viewModel.state.value.releases)
     }
 
     @Test
     fun `a failure with no text of its own shows the changelog's text with a retry`() =
         runTest(dispatcherExtension.testDispatcher) {
-            val viewModel = createViewModel(FakeChangelogRepository(failure = IllegalStateException("bug")))
+            val viewModel =
+                createViewModel(FakeChangelogRepository(failure = IllegalStateException("bug")))
             advance()
 
-            val markdown = assertIs<Loadable.Failed>(viewModel.state.value.markdown)
-            assertEquals(R.string.error_loading_changelog_message, markdown.resourceId)
-            assertTrue(markdown.retryable)
+            val releases = assertIs<Loadable.Failed>(viewModel.state.value.releases)
+            assertEquals(R.string.error_loading_changelog_message, releases.resourceId)
+            assertTrue(releases.retryable)
             assertTrue(telemetryRepository.loggedEvents.any { it.name == "vm_op_error" })
         }
 
     @Test
     fun `being offline shows the offline text`() = runTest(dispatcherExtension.testDispatcher) {
         val viewModel = createViewModel(
-            FakeChangelogRepository(failure = NetworkException(NetworkException.Reason.NO_INTERNET)),
+            FakeChangelogRepository(failure = NetworkException(reason = NetworkException.Reason.NO_INTERNET)),
         )
         advance()
 
-        val markdown = assertIs<Loadable.Failed>(viewModel.state.value.markdown)
-        assertEquals(CoreUiR.string.screen_error_no_internet, markdown.resourceId)
+        val releases = assertIs<Loadable.Failed>(viewModel.state.value.releases)
+        assertEquals(CoreUiR.string.screen_error_no_internet, releases.resourceId)
     }
 
     @Test
-    fun `retrying after a failure shows the notes`() = runTest(dispatcherExtension.testDispatcher) {
-        val repository = FakeChangelogRepository(markdown = "# 2.0.0\n- New", failure = IllegalStateException("bug"))
+    fun `a client error is not retryable`() = runTest(dispatcherExtension.testDispatcher) {
+        val viewModel = createViewModel(
+            FakeChangelogRepository(failure = NetworkException(reason = NetworkException.Reason.CLIENT)),
+        )
+        advance()
+
+        val releases = assertIs<Loadable.Failed>(viewModel.state.value.releases)
+        assertEquals(R.string.error_loading_changelog_message, releases.resourceId)
+        assertFalse(releases.retryable)
+    }
+
+    @Test
+    fun `retrying after a failure shows the releases`() = runTest(dispatcherExtension.testDispatcher) {
+        val repository = FakeChangelogRepository(
+            releases = sampleReleases,
+            failure = IllegalStateException("bug"),
+        )
         val viewModel = createViewModel(repository)
         advance()
-        assertIs<Loadable.Failed>(viewModel.state.value.markdown)
+        assertIs<Loadable.Failed>(viewModel.state.value.releases)
 
         repository.failure = null
-        viewModel.onEvent(ChangelogEvent.Load)
+        viewModel.onEvent(event = ChangelogEvent.Load)
         advance()
 
-        assertEquals(Loadable.Ready("# 2.0.0\n- New"), viewModel.state.value.markdown)
+        assertEquals(
+            Loadable.Ready(value = persistentListOf(*sampleReleases.toTypedArray())),
+            viewModel.state.value.releases,
+        )
     }
 
     private object BuildInfo : BuildInfoRepository {
@@ -117,12 +185,15 @@ class ChangelogViewModelTest {
     }
 
     private class FakeChangelogRepository(
-        private val markdown: String = "",
+        private val releases: List<ChangelogRelease> = emptyList(),
         var failure: Throwable? = null,
     ) : ChangelogRepository {
-        override suspend fun getChangelog(packageName: String): String {
+        override suspend fun getChangelog(
+            packageName: String,
+            currentVersion: String,
+        ): List<ChangelogRelease> {
             failure?.let { throw it }
-            return markdown
+            return releases
         }
     }
 }

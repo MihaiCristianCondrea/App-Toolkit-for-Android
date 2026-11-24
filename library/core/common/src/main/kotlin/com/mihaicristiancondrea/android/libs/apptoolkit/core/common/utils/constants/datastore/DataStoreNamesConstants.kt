@@ -58,5 +58,7 @@ open class DataStoreNamesConstants {
         const val DATA_STORE_HOLIDAY_THEME_SEASON = "seasonal_holiday_theme_season"
         const val DATA_STORE_HOLIDAY_PREVIOUS_PALETTE_ID = "seasonal_holiday_previous_palette_id"
         const val DATA_STORE_HOLIDAY_PREVIOUS_DYNAMIC_COLORS = "seasonal_holiday_previous_dynamic_colors"
+        // Unlike its neighbors this key has no "seasonal_" prefix; stored values depend on it.
+        const val DATA_STORE_HOLIDAY_PREVIOUS_THEME_MODE = "holiday_previous_theme_mode"
     }
 }

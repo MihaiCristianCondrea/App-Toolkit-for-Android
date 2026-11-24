@@ -25,8 +25,11 @@ import org.koin.core.module.dsl.viewModel
 import org.koin.core.qualifier.named
 import org.koin.dsl.module
 
+/** Registers the display settings search provider and ViewModel for the host. */
 val displaySettingsModule: Module = module {
-    single<SettingsSearchProvider>(named("display")) { displaySettingsSearch(startup = getOrNull()) }
+    single<SettingsSearchProvider>(qualifier = named(name = "display")) {
+        displaySettingsSearch(startup = getOrNull())
+    }
     viewModel {
         DisplaySettingsViewModel(
             displayPreferences = get(),

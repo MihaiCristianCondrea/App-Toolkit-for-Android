@@ -261,4 +261,13 @@
     <string name="random_range">Числов диапазон</string>
     <string name="random_inclusive">Двете граници са включени.</string>
     <string name="tool_converter_unit">Единица</string>
+
+    <string name="section_toys">Играчки</string>
+    <string name="bell_title">Звънец</string>
+    <string name="bell_summary">Разклати телефона, за да звънне звънецът.</string>
+    <string name="bell_card_note">Разклати, за да звънне</string>
+    <string name="bell_ring">Позвъни</string>
+    <string name="bell_motion_unavailable">Засичането на разклащане не е налично на това устройство.</string>
+    <string name="bell_audio_unavailable">Звукът на звънеца не е наличен.</string>
+    <string name="bell_ringing">Звъни</string>
 </resources>

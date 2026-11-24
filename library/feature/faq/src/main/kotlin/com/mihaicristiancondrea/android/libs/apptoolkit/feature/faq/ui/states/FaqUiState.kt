@@ -23,12 +23,11 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.data.models.
 import kotlinx.collections.immutable.ImmutableList
 
 /**
- * Everything the help page renders.
+ * State rendered by the FAQ and feedback screen.
  *
- * @property questions The questions, remote or bundled.
- * @property openStoreListing The in-app review could not be shown, so the screen should open the
- * app's Play Store listing instead. The screen sends `FaqEvent.StoreListingOpened` once it has, so
- * the flag survives a configuration change but fires once.
+ * @property questions Current question load result.
+ * @property openStoreListing Stays set across configuration changes until the screen reports
+ * `FaqEvent.StoreListingOpened`.
  */
 @Immutable
 data class FaqUiState(

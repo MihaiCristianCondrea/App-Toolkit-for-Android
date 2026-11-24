@@ -20,35 +20,45 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Home
 import androidx.navigation3.runtime.NavKey
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.icons.ToolkitIcon
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.settings.SettingsSearchEntry
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.settings.SettingsSearchContext
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.settings.SettingsSearchEntry
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.R
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.shellGraph
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.keys.AboutScreen
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.keys.LicensesScreen
 import org.junit.jupiter.api.Test
 import kotlin.test.assertEquals
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.R
-import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.AboutRoute
-import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.LicensesRoute
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.R as CoreUiR
 
 class AboutSettingsSearchTest {
 
     private data object Home : NavKey
 
-    private val graph = shellGraph(appTitle = 0) { tab(Home, 0, ToolkitIcon.Vector(Icons.Outlined.Home)) {} }
+    private val graph =
+        shellGraph(appTitle = 0) { tab(Home, 0, ToolkitIcon.Vector(Icons.Outlined.Home)) {} }
 
     @Test
     fun `the About rows open About, and the licenses row the licenses page`() {
         assertEquals(
             listOf(
-                SettingsSearchEntry(title = R.string.app_info, section = CoreUiR.string.about, destination = AboutRoute),
-                SettingsSearchEntry(title = R.string.device_info, section = CoreUiR.string.about, destination = AboutRoute),
+                SettingsSearchEntry(
+                    title = R.string.app_info,
+                    section = CoreUiR.string.about,
+                    destination = AboutScreen
+                ),
+                SettingsSearchEntry(
+                    title = R.string.device_info,
+                    section = CoreUiR.string.about,
+                    destination = AboutScreen
+                ),
                 SettingsSearchEntry(
                     title = R.string.oss_license_title,
                     section = CoreUiR.string.about,
-                    destination = LicensesRoute,
+                    destination = LicensesScreen,
                     summary = R.string.summary_preference_settings_oss,
                 ),
             ),
             aboutSettingsSearch.entries(SettingsSearchContext(graph)),
         )
-    }}
+    }
+}

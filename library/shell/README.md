@@ -32,7 +32,9 @@ drawer and transition the graph describes. It is the chrome around the navigatio
   menu), navigation bar, rail, expanded rail, modal and permanent drawers with the app's header,
   banner slot, docked on the bottom navigation bar and nowhere else, docked player, and the inner
   display. `ShellChromeController` and
-  `LocalShellChrome` let a page's own frame open the navigation.
+  `LocalShellChrome` let a page's own frame open the navigation: a screen reads
+  `LocalShellChrome.current`, shows a menu button when `showsMenuButton` is true and calls
+  `openNavigation()` from it. The shell creates the controller; an app cannot construct one.
 - The shell's developer overrides: `ShellSettings` and Compose locals in `settings`, repositories
   in `data/repositories`, and the DataStore delegate in `data/local`.
 - An app's defaults for the Toolkit, in `settings`: `AppToolkitDefaults` and its
@@ -58,7 +60,14 @@ drawer and transition the graph describes. It is the chrome around the navigatio
 
 - [`:library:navigation`](../navigation/README.md) and [`:library:core:ui`](../core/ui/README.md),
   both as `api`: an app writes its graph and pages against them.
+- [`:library:core:datastore`](../core/datastore/README.md) and
+  [`:library:core:common`](../core/common/README.md), as `implementation`, for `storageCall` and
+  `StorageException` in the settings store.
 - DataStore Preferences, for the shell's settings store.
+- `LocalShowBottomBarLabels`, read for the navigation bar's labels. It is owned by
+  [`:library:core:designsystem`](../core/designsystem/README.md) and provided by `AppTheme`.
+- `AppToolkitDefaultsBuilder`, in `settings`, is the receiver of `appToolkitDefaults { }`; the shell
+  owns it and the app calls it.
 
 ## Used by
 
@@ -75,16 +84,19 @@ flowchart TD
     App[Activity: setContent] --> Theme[AppTheme]
     Theme --> Host[ShellHost]
     Host --> Prefs[ShellPreferencesRepository]
+    Prefs --> Store[DefaultShellPreferencesRepository]
     Host --> Start[resolveStart, then onReady]
+    Host --> Links[New intents buffered, then DeepLinks]
+    Links --> Outer
     Host --> Outer[Outer ShellNavDisplay: shell and pages]
-    Outer -->|ShellHomeRoute| Chrome[ShellChrome]
+    Outer -->|ShellHomeScreen| Chrome[ShellChrome]
     Chrome --> Layout{Window width}
     Layout --> Bar[Bottom bar + modal drawer]
     Layout --> Rail[Rail, modal when opened]
     Layout --> Expanded[Expanded rail]
     Layout --> Drawer[Permanent drawer]
     Chrome --> Inner[Inner ShellNavDisplay: tabs]
-    Chrome --> Bottom[Banner, player and FAB]
+    Chrome --> Bottom[Banner, player and FAB, above the system bar]
 ```
 
 ## Using it
@@ -161,24 +173,11 @@ each pane of a list-detail scene.
 
 ## App bar transitions between tabs
 
-Moving between tabs keeps one shell app bar, but its style can change under it: a tab with a
-`TabSearch` is always drawn as a small bar, and `ShellTopAppBar` draws each style with a different
-Material composable. These rules keep that change invisible. Each has regressed before, so keep
-them when changing the bar.
-
-- **The bar's slots move, they are not rebuilt.** `ShellTopAppBar` passes its title, menu button
-  and actions through `movableContentOf`, so a style change carries them into the new Material bar
-  with their state. Rebuilt, the menu button and actions replayed their `AnimatedIconButtonDirection`
-  entrance and slid out and back in on every tab switch (System monitor to Dashboard).
-  `ShellTopAppBarTest` covers this.
-- **A search field and a title swap at once.** The field fills the bar while a centred title's slot
-  shrinks around its text, so an animated exit drew the field cut in half as the slot narrowed
-  (App Manager to System monitor). The newcomer fades in and the outgoing one leaves at once.
-  Between two tabs with search, the field is kept, not swapped, so its text and focus stay.
-- **A destination's actions are held to the end of the row, centred vertically.** They cross-fade
-  in an `AnimatedContent` whose size follows them. At the default top start alignment, an action
-  entering an empty row grew from the corner and slid right and down into place (the App Manager
-  sort toggle).
+The shell keeps one app bar across tab switches. `ShellTopAppBar` lives in
+[`:library:core:ui`](../core/ui/README.md#app-bar-transitions-between-tabs), together with the
+rules that keep a style change under it invisible and the `ShellTopAppBarTest` that covers them.
+Keep the bar's slots, its search and title swap, and the held-to-the-end actions row of
+`ShellChrome` in step with those rules.
 
 ## Pages beside the navigation
 
@@ -307,7 +306,10 @@ JUnit 5. They start Koin with the theme, display and ads repositories `AppTheme`
   that activity hosts its own `ShellHost` with a graph of pages only, as the Toolkit's
   `PermissionUsageActivity` does for Android's permission manager.
 - **The start is decided before the first frame.** `resolveStart` may read stored state and is
-  awaited with the settings; `onReady` then tells the activity it can drop its splash screen.
+  awaited with the settings; `onReady` then tells the activity it can drop its splash screen. The
+  decision is saved, so a recreated activity draws at once instead of deciding again; its
+  navigator restores its own stack. New intents received while the settings or the start load are
+  kept and opened once the navigator exists.
 - **The shell keeps its own store.** Its settings are developer overrides of the shell, so they
   live in a DataStore of their own rather than in `:library:core:datastore`; that also keeps the
   datastore module free of navigation types. Every value is a developer option, and
@@ -315,6 +317,11 @@ JUnit 5. They start Koin with the theme, display and ads repositories `AppTheme`
   person's preferences, such as the navigation labels, live in the common store and are not
   touched. `ShellHost(preferences = ...)` takes any `ShellPreferencesRepository`, and tests pass an
   `InMemoryShellPreferencesRepository`.
+- Shell settings reads, writes, updates and resets translate storage failures to `StorageException`.
+  `ShellHost` falls back to `lastKnown` or `defaults` on storage read failures so launch still
+  succeeds, and `resolveStart` falls back to `start` (or the graph's start) on `IOException`
+  (including `StorageException`). Developer options reports read and write failures through the
+  shared UI error messages.
 - **The store keeps choices, not values.** A setting someone chose is saved even when it equals the
   current default, and a setting nobody chose is not saved at all. A later release that changes the
   app's defaults therefore reaches the people who never chose, and leaves alone the ones who did.
@@ -331,11 +338,15 @@ JUnit 5. They start Koin with the theme, display and ads repositories `AppTheme`
 ## Public contracts
 
 - `ShellHost(graph, modifier, start, resolveStart, preferences, defaults, onReady,
-  onDestinationChanged, layoutPolicy)`. `layoutPolicy` defaults to the graph's
-  `NavigationDefaults.layoutPolicy`.
+  onDestinationChanged, layoutPolicy, snackbarHostState)`. `layoutPolicy` defaults to the graph's
+  `NavigationDefaults.layoutPolicy`. `modifier` applies to the root of the shell, around the frame,
+  the pages and the snackbars. `preferences` should be a remembered instance. `snackbarHostState`
+  is where the tabs' scaffold shows snackbars; pass one to show the app's own messages there.
+  `onReady` is called once for each activity instance, so again after a recreation.
 - `AppToolkitDefaults`, `appToolkitDefaults { }` and its `shell { }` and `navigation { }` builders.
 - `ShellChromeController` and `LocalShellChrome`.
-- `ShellSettings` and its enums, `ShellPreferencesRepository` and its `defaults`, `ShellPreferencesRepository(context, defaults)`,
+- `ShellSettings` and its enums, `ShellPreferencesRepository` and its `defaults`, `ShellPreferencesRepository(context, defaults)`
+  (which reuses one `DefaultShellPreferencesRepository` for the same store and defaults),
   `InMemoryShellPreferencesRepository`, `LocalShellPreferences` and `LocalShellSettings`. The DataStore's key
   names are persisted: renaming one resets that option on update.
 

@@ -18,15 +18,16 @@
 package com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.models
 
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.models.ToolkitTileData
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.mappers.toUiModel
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.mappers.toToolkitTile
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.utils.constants.ToolkitTileIds
 import kotlinx.collections.immutable.toImmutableList
 
 internal val MeasureTools = listOf(
     ToolkitTileIds.RULER, ToolkitTileIds.PROTRACTOR, ToolkitTileIds.UNIT_CONVERTER,
     ToolkitTileIds.BILL_SPLITTER, ToolkitTileIds.COUNTER, ToolkitTileIds.REACTION_TEST,
-).map { ToolkitTileData(id = it, status = com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.models.ToolkitTileStatus.Available, requestKey = if (it == ToolkitTileIds.COUNTER) it else null).toUiModel() }.toImmutableList()
+).map { ToolkitTileData(id = it, status = com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.models.ToolkitTileStatus.Available, requestKey = if (it == ToolkitTileIds.COUNTER) it else null).toToolkitTile() }.toImmutableList()
 
 internal val PlayTools = listOf(
     ToolkitTileIds.DECISION_WHEEL, ToolkitTileIds.RANDOM_NUMBER, ToolkitTileIds.COIN_FLIP, ToolkitTileIds.DICE_ROLL,
-).map { ToolkitTileData(id = it, status = com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.models.ToolkitTileStatus.Available, requestKey = if (it == ToolkitTileIds.COIN_FLIP || it == ToolkitTileIds.DICE_ROLL) it else null).toUiModel() }.toImmutableList()
+    ToolkitTileIds.BELL,
+).map { ToolkitTileData(id = it, status = com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.models.ToolkitTileStatus.Available, requestKey = if (it == ToolkitTileIds.COIN_FLIP || it == ToolkitTileIds.DICE_ROLL) it else null).toToolkitTile() }.toImmutableList()

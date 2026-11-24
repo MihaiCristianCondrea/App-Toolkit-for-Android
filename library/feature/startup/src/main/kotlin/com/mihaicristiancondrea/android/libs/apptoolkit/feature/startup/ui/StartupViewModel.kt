@@ -19,11 +19,13 @@ package com.mihaicristiancondrea.android.libs.apptoolkit.feature.startup.ui
 
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.telemetry.TelemetryRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.LoggedScreenViewModel
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.startup.ui.analytics.STARTUP_SCREEN
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.startup.ui.constants.StartupOperationNames
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.startup.ui.contracts.StartupEvent
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.startup.ui.states.ConsentRequestStatus
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.startup.ui.states.StartupUiState
-import com.mihaicristiancondrea.android.libs.apptoolkit.integration.consent.data.repositories.ConsentRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.integration.consent.data.models.ConsentHost
+import com.mihaicristiancondrea.android.libs.apptoolkit.integration.consent.data.repositories.ConsentRepository
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.withTimeoutOrNull
 import kotlin.time.Duration
@@ -42,7 +44,7 @@ class StartupViewModel(
 ) : LoggedScreenViewModel<StartupUiState, StartupEvent>(
     initialState = StartupUiState(),
     telemetryRepository = telemetryRepository,
-    screenName = "Startup",
+    screenName = STARTUP_SCREEN.name,
     viewModelName = "StartupViewModel",
 ) {
     private var consentJob: Job? = null
@@ -62,7 +64,7 @@ class StartupViewModel(
         if (currentState.consent == ConsentRequestStatus.Settled) return
         consentJob = consentJob.restart {
             launchReport(
-                action = Actions.REQUEST_CONSENT,
+                action = StartupOperationNames.REQUEST_CONSENT,
                 onError = { settleConsent() },
             ) {
                 if (host != null) {
@@ -77,10 +79,6 @@ class StartupViewModel(
 
     private fun settleConsent() {
         setState { copy(consent = ConsentRequestStatus.Settled) }
-    }
-
-    private object Actions {
-        const val REQUEST_CONSENT: String = "requestConsent"
     }
 
     private companion object {

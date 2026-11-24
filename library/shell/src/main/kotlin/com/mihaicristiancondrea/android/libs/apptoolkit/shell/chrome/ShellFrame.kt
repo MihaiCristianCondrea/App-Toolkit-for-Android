@@ -35,11 +35,7 @@ import androidx.compose.material3.PermanentDrawerSheet
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.Modifier
@@ -59,31 +55,6 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.layout.ShellL
 import com.mihaicristiancondrea.android.libs.apptoolkit.shell.settings.LocalShellSettings
 import com.mihaicristiancondrea.android.libs.apptoolkit.shell.settings.NavigationTint
 import kotlinx.coroutines.flow.collectLatest
-
-/** Whether this layout keeps the navigation on screen beside the content: a rail or a permanent drawer. */
-internal val ShellLayoutMode.keepsNavigationBeside: Boolean
-    get() = this == ShellLayoutMode.Rail || this == ShellLayoutMode.ExpandedRail || this == ShellLayoutMode.PermanentDrawer
-
-/**
- * The frame's state for the layout [mode] the window has now. The expanded rail starts collapsed,
- * and collapses again whenever the layout changes, as a rotation does: it is opened for the
- * window it was opened in. Within one layout it keeps what its button left it at, across
- * recreation and process death.
- */
-@Composable
-internal fun rememberShellFrameState(mode: ShellLayoutMode): ShellFrameState {
-    var railExpanded by rememberSaveable { mutableStateOf(false) }
-    var expandedIn by rememberSaveable { mutableStateOf(mode) }
-    val state = remember { ShellFrameState(railExpanded && expandedIn == mode) }
-    LaunchedEffect(mode) {
-        if (mode != expandedIn) {
-            state.railExpanded = false
-            expandedIn = mode
-        }
-    }
-    LaunchedEffect(state.railExpanded) { railExpanded = state.railExpanded }
-    return state
-}
 
 /** The frame around the displays, for the chrome inside them; null outside `ShellHost`. */
 internal val LocalShellFrame = staticCompositionLocalOf<ShellFrameState?> { null }

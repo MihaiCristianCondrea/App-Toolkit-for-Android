@@ -17,16 +17,17 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.theme.ui.features.seasonal
 
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.theme.ui.analytics.holidayGreetingAnsweredEvent
-
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.telemetry.TelemetryRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.models.HolidaySeason
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.models.WeatherEffect
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.telemetry.TelemetryRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.colorscheme.StaticPaletteIds
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.date.isChristmasSeason
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.repositories.SeasonalThemeRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.repositories.ThemePreferencesRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.LoggedScreenViewModel
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.theme.ui.analytics.SEASONAL_THEME_OVERLAY_SCREEN_NAME
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.theme.ui.analytics.holidayGreetingAnsweredEvent
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.theme.ui.features.seasonal.constants.SeasonalThemeOperationNames
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.theme.ui.features.seasonal.contracts.SeasonalThemeOverlayEvent
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.theme.ui.features.seasonal.states.SeasonalThemeOverlayUiState
 import java.time.LocalDate
@@ -65,7 +66,7 @@ class SeasonalThemeOverlayViewModel(
 ) : LoggedScreenViewModel<SeasonalThemeOverlayUiState, SeasonalThemeOverlayEvent>(
     initialState = SeasonalThemeOverlayUiState(),
     telemetryRepository = telemetryRepository,
-    screenName = "SeasonalThemeOverlay",
+    screenName = SEASONAL_THEME_OVERLAY_SCREEN_NAME,
     viewModelName = "SeasonalThemeOverlayViewModel",
 ) {
     private var greetingClaimed: Boolean = false
@@ -77,25 +78,26 @@ class SeasonalThemeOverlayViewModel(
 
     override fun handleEvent(event: SeasonalThemeOverlayEvent) {
         when (event) {
-            is SeasonalThemeOverlayEvent.AnswerGreeting -> answerGreeting(event.useHolidayTheme)
+            is SeasonalThemeOverlayEvent.AnswerGreeting ->
+                answerGreeting(useHolidayTheme = event.useHolidayTheme)
         }
     }
 
     /** Looks up the greeting once the restore is done, and also after it failed. */
     private fun restoreThemeAfterHoliday(date: LocalDate) {
         launchReport(
-            action = Actions.RESTORE_THEME_AFTER_HOLIDAY,
+            action = SeasonalThemeOperationNames.RESTORE_THEME_AFTER_HOLIDAY,
             onError = { lookUpGreeting(date = date) },
         ) {
-            seasonal.restoreThemeAfterHoliday(date)
+            seasonal.restoreThemeAfterHoliday(today = date)
             lookUpGreeting(date = date)
         }
     }
 
     /** Shows a due greeting unless another activity's overlay already shows one. */
     private fun lookUpGreeting(date: LocalDate) {
-        launchReport(action = Actions.PENDING_HOLIDAY_GREETING) {
-            seasonal.pendingHolidayGreeting(date)?.let { season ->
+        launchReport(action = SeasonalThemeOperationNames.PENDING_HOLIDAY_GREETING) {
+            seasonal.pendingHolidayGreeting(today = date)?.let { season ->
                 if (HolidayGreetingPresence.claim()) {
                     greetingClaimed = true
                     setState { copy(greeting = season) }
@@ -120,8 +122,14 @@ class SeasonalThemeOverlayViewModel(
             val showRain = seasonalState.weatherEffect == WeatherEffect.Rain && unlocked && !holidaySnow
             Triple(showSnowfall, showRain, themeState.themeMode)
         }.distinctUntilChanged()
-            .collectReport(action = Actions.OBSERVE_WEATHER) { (showSnowfall, showRain, themeMode) ->
-                setState { copy(showSnowfall = showSnowfall, showRain = showRain, themeMode = themeMode) }
+            .collectReport(action = SeasonalThemeOperationNames.OBSERVE_WEATHER) { (showSnowfall, showRain, themeMode) ->
+                setState {
+                    copy(
+                        showSnowfall = showSnowfall,
+                        showRain = showRain,
+                        themeMode = themeMode,
+                    )
+                }
             }
     }
 
@@ -133,7 +141,7 @@ class SeasonalThemeOverlayViewModel(
             holidayGreetingAnsweredEvent(season = season, useHolidayTheme = useHolidayTheme),
         )
         launchReport(
-            action = Actions.ANSWER_HOLIDAY_GREETING,
+            action = SeasonalThemeOperationNames.ANSWER_HOLIDAY_GREETING,
             onError = { releaseGreeting() },
         ) {
             seasonal.answerHolidayGreeting(
@@ -155,12 +163,5 @@ class SeasonalThemeOverlayViewModel(
             greetingClaimed = false
             HolidayGreetingPresence.release()
         }
-    }
-
-    private object Actions {
-        const val RESTORE_THEME_AFTER_HOLIDAY: String = "restoreThemeAfterHoliday"
-        const val PENDING_HOLIDAY_GREETING: String = "pendingHolidayGreeting"
-        const val OBSERVE_WEATHER: String = "observeWeather"
-        const val ANSWER_HOLIDAY_GREETING: String = "answerHolidayGreeting"
     }
 }

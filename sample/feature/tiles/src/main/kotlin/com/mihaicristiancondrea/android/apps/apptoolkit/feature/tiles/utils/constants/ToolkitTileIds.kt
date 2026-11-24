@@ -22,6 +22,7 @@ object ToolkitTileIds {
     const val WATER_EJECT: String = "water_eject"
     const val COIN_FLIP = "coin_flip"
     const val DICE_ROLL = "dice_roll"
+    const val BELL = "bell"
     const val COUNTER = "counter"
     const val COMPASS = "compass"
     const val BUBBLE_LEVEL = "bubble_level"

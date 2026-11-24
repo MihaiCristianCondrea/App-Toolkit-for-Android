@@ -261,4 +261,13 @@
     <string name="random_range">Saklaw ng numero</string>
     <string name="random_inclusive">Kasama ang parehong hangganan.</string>
     <string name="tool_converter_unit">Yunit</string>
+
+    <string name="section_toys">Mga laruan</string>
+    <string name="bell_title">Kampana</string>
+    <string name="bell_summary">Iling ang telepono para patunugin ang kampana.</string>
+    <string name="bell_card_note">Iling para tumunog</string>
+    <string name="bell_ring">Patunugin ang kampana</string>
+    <string name="bell_motion_unavailable">Hindi natutukoy ng device na ito ang pag-iling.</string>
+    <string name="bell_audio_unavailable">Hindi available ang tunog ng kampana.</string>
+    <string name="bell_ringing">Tumutunog</string>
 </resources>

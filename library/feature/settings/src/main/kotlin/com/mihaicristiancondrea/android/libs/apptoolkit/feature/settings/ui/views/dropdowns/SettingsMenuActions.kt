@@ -17,15 +17,11 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.settings.ui.views.dropdowns
 
-import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.LocalShellNavigator
-import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.HelpRoute
-import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.R as NavigationR
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.HelpOutline
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material3.DropdownMenu
-import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -34,17 +30,20 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.res.stringResource
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.R
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.icons.ToolkitIcon
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.AnimatedIconButtonDirection
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.dropdown.CommonDropdownMenuItem
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.LocalShellNavigator
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.keys.HelpScreen
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.R as CoreUiR
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.R as NavigationR
 
 /**
  * Top-app-bar actions for the settings root.
  *
  * Help belongs to the screen the settings tree starts at, not to each page inside it, so only the
- * settings list's app bar carries it; `settingsPage()` puts it there. It opens `HelpRoute`.
+ * settings list's app bar carries it; `settingsScreen()` puts it there. It opens [HelpScreen].
  */
-@OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
 fun SettingsMenuActions() {
     val navigator = LocalShellNavigator.current
@@ -57,8 +56,8 @@ fun SettingsMenuActions() {
     AnimatedIconButtonDirection(
         modifier = Modifier.graphicsLayer { rotationZ = rotation },
         fromRight = true,
-        contentDescription = stringResource(id = R.string.content_description_more_options),
-        icon = com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.icons.ToolkitIcon.Vector(Icons.Default.MoreVert),
+        contentDescription = stringResource(id = CoreUiR.string.content_description_more_options),
+        icon = ToolkitIcon.Vector(imageVector = Icons.Default.MoreVert),
         onClick = { showMenu.value = true },
     )
 
@@ -72,7 +71,7 @@ fun SettingsMenuActions() {
             icon = Icons.AutoMirrored.Outlined.HelpOutline,
             onClick = {
                 showMenu.value = false
-                navigator.navigate(HelpRoute)
+                navigator.navigate(key = HelpScreen)
             },
         )
     }

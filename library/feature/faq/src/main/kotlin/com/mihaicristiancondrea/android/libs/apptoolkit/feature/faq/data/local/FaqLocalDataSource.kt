@@ -18,19 +18,13 @@
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.data.local
 
 import android.content.Context
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.R
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.data.models.FaqId
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.data.models.FaqItem
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.R
 
-/**
- * Local data source responsible for retrieving FAQ items from the application's resources.
- *
- * This class maps predefined string resources to [FaqItem] domain models, providing
- * a static list of questions and answers available offline.
- *
- * @property context The [Context] used to resolve string resources.
- */
+/** Reads the FAQ question and answer pairs supplied through host string resources. */
 class FaqLocalDataSource(private val context: Context) {
+    /** Reads the localized host slots in resource order, including empty placeholders. */
     fun loadLocalQuestions(): List<FaqItem> {
         val faq = listOf(
             R.string.question_1 to R.string.summary_preference_faq_1,
@@ -41,10 +35,10 @@ class FaqLocalDataSource(private val context: Context) {
             R.string.question_6 to R.string.summary_preference_faq_6,
             R.string.question_7 to R.string.summary_preference_faq_7,
             R.string.question_8 to R.string.summary_preference_faq_8,
-            R.string.question_9 to R.string.summary_preference_faq_9
-        ).map { (questionRes, answerRes) ->
+            R.string.question_9 to R.string.summary_preference_faq_9,
+        ).mapIndexed { index, (questionRes, answerRes) ->
             FaqItem(
-                id = FaqId("local:$questionRes"),
+                id = FaqId(value = "local:${index + 1}"),
                 question = context.getString(questionRes),
                 answer = context.getString(answerRes),
             )

@@ -17,23 +17,17 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.data.repositories
 
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.telemetry.DiagnosticsReporter
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.BuildInfoRepository
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.telemetry.DiagnosticsReporter
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.BuildConfig
-import com.mihaicristiancondrea.android.libs.apptoolkit.integration.gms.data.repositories.GooglePlayServicesRepository
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.data.models.AboutInfo
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.data.local.AboutDeviceInfoDataSource
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.data.models.AboutInfo
+import com.mihaicristiancondrea.android.libs.apptoolkit.integration.gms.data.repositories.GooglePlayServicesRepository
 
 /**
- * Provides the raw application and device metadata shown on the About screen.
+ * Combines host build information, the host device report and the installed Play services version.
  *
- * Turning that metadata into rendered entries is the UI layer's responsibility, and copying it is a
- * presentation interaction owned by the ViewModel, so this repository holds neither.
- *
- * @param deviceInfoDataSource Supplies the host-formatted device report.
- * @param buildInfoRepository Supplies the host application version name and code.
- * @param googlePlayServices Supplies the installed Google Play services runtime version, if present.
- * @param toolkitVersionProvider Supplies the App Toolkit library publishing version.
+ * @param toolkitVersionProvider Supplies the published Toolkit version displayed by About.
  */
 class DefaultAboutRepository(
     private val deviceInfoDataSource: AboutDeviceInfoDataSource,

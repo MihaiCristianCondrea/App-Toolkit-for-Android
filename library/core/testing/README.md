@@ -9,7 +9,10 @@ on production runtime classpaths.
 
 - `FakeAdsSettingsRepository`, in-memory settings for tests that render Toolkit UI.
 - `FakePreferencesDataStore`, an in-memory Preferences DataStore for testing the preference data
-  sources each module keeps over the shared settings file.
+  sources each module keeps over the shared settings file. Set `readFailure` or `writeFailure` to
+  make it fail like a disk error.
+- `collectInBackground`, which collects a flow for the rest of a test, as a screen collects a
+  ViewModel's state.
 - `TestDispatchers`, which maps every `DispatcherProvider` lane to one test dispatcher.
 - JUnit 5 extensions for installing standard or unconfined test dispatchers as `Dispatchers.Main`.
 - `FakeTelemetryRepository`, which records events, screen views, breadcrumbs, non-fatal reports
@@ -41,8 +44,8 @@ flowchart LR
     Extension -->|beforeEach| Main["Dispatchers.Main = test dispatcher"]
     Test --> Dispatchers[TestDispatchers]
     Dispatchers --> Contract[DispatcherProvider]
-    Test --> Firebase[FakeTelemetryRepository]
-    Firebase --> FirebaseContract[TelemetryRepository]
+    Test --> Telemetry[FakeTelemetryRepository]
+    Telemetry --> TelemetryContract[TelemetryRepository]
     Extension -->|afterEach| Reset[Dispatchers.resetMain]
 ```
 
@@ -59,11 +62,8 @@ flowchart LR
 
 ## Public contracts
 
-- `FakeAdsSettingsRepository`, in-memory settings for tests that render Toolkit UI.
-- `FakePreferencesDataStore`, an in-memory Preferences DataStore for testing the preference data
-  sources each module keeps over the shared settings file.
-- `TestDispatchers`, `StandardDispatcherExtension`, `UnconfinedDispatcherExtension`, and
-  `FakeTelemetryRepository`.
+- `FakePreferencesDataStore`, `collectInBackground`, `TestDispatchers`,
+  `StandardDispatcherExtension`, `UnconfinedDispatcherExtension`, and `FakeTelemetryRepository`.
 
 ## Internal implementations
 

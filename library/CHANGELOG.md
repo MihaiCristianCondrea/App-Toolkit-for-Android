@@ -2,6 +2,206 @@
 
 ---
 
+# November 24, 2026
+
+**Version:** `3.0.0-rc1`
+
+### Added
+
+- `IssueReporterShakeManager.suppress()` and `SuppressShakeToReport` let screens or tools that use
+  shaking temporarily pause shake-to-report and unregister its accelerometer listener until closed.
+- `ScreenViewModel.ifIsActive` keeps the current active job and starts new work only when no job is
+  active. Advanced settings uses it to ignore repeated Clear cache requests.
+- `AppOpenAdController.showAdIfAvailable(activity, scope, onShowAdCompleteListener)` exposes the
+  completion callback directly, and `OnShowAdCompleteListener` is now a `fun interface`.
+- `BillingRepository.purchaseEvents` emits each billing outcome as a `PurchaseEvent` with the
+  product IDs it concerns. `purchaseResult` keeps emitting the same outcomes without IDs.
+
+### Fixed
+
+- `ShakeDetector` ignores non-finite accelerometer readings, and `IssueReporterShakeManager` ignores
+  stale `onActivityPaused` callbacks from activities that are no longer resumed.
+- Support keeps the current checkout open when a different product settles, still reports a
+  donation's result when Play answers after the 20-second launch wait, and reports an already-owned
+  donation's recovery once.
+- The list-detail scene ignores a second close while one plays, so back no longer pops the list
+  page too. Restored tab history is dropped when an update changed the tabs. The navigation display,
+  beside-navigation and list-detail scenes no longer write state during composition.
+- `ShellHost` builds with Compose Foundation 1.13 after removal of the temporary pausable prefetch flag.
+- `ShellHost` keeps the app's start decision across recreation, so a rotation draws at once and
+  `resolveStart` is not called again, buffers intents delivered through `onNewIntent` while the
+  settings or the start load and opens them once ready, and tints the frame on its first frame when
+  the navigation tint is always on. `onReady` is documented as called once per activity instance.
+  The mini player keeps clear of the system bar beside a rail, an expanded rail and a permanent
+  drawer, and an open player stays open across a rotation.
+- Shell preferences keep the settings last read per repository instead of per process, and a failed
+  read shows the defaults without replacing them.
+- Advanced settings prevents repeated Clear cache taps from starting overlapping deletions.
+- Advanced settings retains the last known Developer Options unlock state on read failure and
+  offers Retry for recoverable errors.
+- Changelog preference reads and writes report storage failures as `StorageException`.
+- The changelog preserves literal trailing dashes in release notes.
+- Developer options handles failed saves and resets with error messages and records successful
+  changes through settings analytics. Failed reads keep the last settings visible and offer a retry.
+  Accessory labels follow the host's available accessories.
+- Shell preference writes, updates and resets expose storage failures as `StorageException`.
+- The changelog dialog shows all releases, marks the installed version as Current, and opens at
+  its release. The scrolling body reaches the fixed Done action. Repeated requests keep the current
+  fetch, and the dialog reports visits and load states.
+- Onboarding records `theme_customized` only after the theme preference write succeeds, ignores
+  repeated completion taps while saving or after completion is saved, disables pager actions while
+  saving, includes `page_key` on `tutorial_complete` and skip events, scrolls the theme and finish
+  pages on short screens, and skips finish confetti when system animations are disabled.
+- Permissions uses locale-independent list keys so live locale changes keep scroll position, omits
+  empty category header spacers, forwards host-supplied row icons in `PermissionsContent`, and
+  renders rows without an action as non-clickable descriptive cards.
+- Settings renders non-blank `SettingsCategory.title` headings in `SettingsList`, treats configs
+  whose categories have no preferences as `Loadable.Empty`, refreshes already-loaded settings in
+  place without flashing `Loadable.Loading`, and normalizes settings search case folding across all
+  locales and whitespace separators.
+- Startup applies scaffold insets through `LazyColumn` `contentPadding` without double-padding
+  system bars, clears the Agree FAB for scrolled terms content, and pauses the welcome Lottie
+  animation when system animations are disabled.
+- Support marks INAPP donation products eligible when Play Billing returns offers only through
+  `oneTimePurchaseOfferDetailsList`, shows localized failure text instead of Play's English developer
+  message, and skips rendering the native ad list item when `bannerAdUnitId` is blank.
+- Theme updates `baseline-prof.txt` to match the `feature.theme.ui.features.seasonal` package,
+  keeps loaded theme preferences visible when `ThemeSettingsEvent.Load` re-runs, skips redundant
+  weather effect writes when Done confirms the current effect, and avoids posting redundant
+  layout callbacks in `SeasonalThemeManager` once the overlay is attached.
+- Ads settings logs `preference_toggle` events only after preference writes succeed and keeps
+  loaded preferences visible when `AdsSettingsEvent.Load` re-runs.
+- `AppOpenAdController` disables the GMA Next-Gen SDK native ad validator by default via
+  `InitializationConfig.Builder.setNativeValidatorDisabled()` (`disableNativeValidator = true`)
+  instead of relying on the legacy `NATIVE_AD_DEBUGGER_ENABLED` manifest flag, measures the 4-hour
+  App Open ad lifetime monotonically, initializes the SDK without registering an App Open loader
+  when `appOpenUnitId` is blank, fails closed with non-fatal diagnostics when `AppOpenAd.load`,
+  `AppOpenAd.show`, or `observeReduceAds()` throws, notifies completion listeners whenever an
+  ad is skipped or unavailable, and starts ads once per launch instead of again when it begins
+  observing the ads preference. `DefaultAdsPreferencesDataSource` logs breadcrumbs on transient IO
+  retries and records non-fatal diagnostics on unexpected read failures.
+- Billing rejects activities undergoing configuration changes in `Activity.isValidForBilling()`
+  and enforces host activity validation inside `DefaultBillingRepository` before launching and after
+  reconnecting (using a `WeakReference` on the main dispatcher). `DefaultBillingRepository` also
+  resolves Play Billing 8/9 one-time offer tokens from `oneTimePurchaseOfferDetailsList`, rejects
+  missing subscription offer tokens upfront, guards empty `queryProductDetails` lists, uses
+  `awaitBillingCallback` with a mutex in `retryBillingConnection`, buffers `purchaseResult` without
+  parking emissions when no collector is active, stops retrying non-transient `ITEM_ALREADY_OWNED`
+  / `ITEM_NOT_OWNED` responses, emits a failure when retryable purchase updates settle nothing, and
+  registers `onClose` cleanup in `billingModule`.
+- Consent rejects activities undergoing configuration changes in `ConsentHost.isAlive`, re-checks
+  host liveness after loading the AdMob app id, runs UMP SDK calls on `DispatcherProvider.main`,
+  guards UMP callbacks with an atomic single-completion flag, catches synchronous exceptions from
+  `loadAndShowConsentFormIfRequired` and `loadConsentForm`, holds the active host via
+  `WeakReference`, prevents cancelled `requestScope` launches from hanging callers, and registers
+  `onClose` teardown in `consentModule()`.
+- Firebase stops enabling `firebase_performance_logcat_enabled` in release manifests, disables
+  automatic GA4 Activity screen reporting so it does not duplicate `ScreenHost` screen views,
+  defaults Crashlytics and Analytics manifest consent metadata to `false` until
+  `ConsentRepository.applyInitialConsent()` applies stored choices, stops logging raw FCM
+  installation IDs in `FirebaseNotificationsService`, fails closed when `FirebaseApp` is not
+  initialized, rejects overlong user property names instead of truncating them, drops blank screen
+  names and non-finite `DoubleVal` parameters, and preserves canonical `view_model` and `action`
+  keys in `reportViewModelError`.
+- Google Play services version lookup in `DefaultGooglePlayServicesRepository` falls back to the
+  platform version code when `versionName` is blank.
+- Theme and display preference flows report an unreadable store as `StorageException`, their
+  repositories report failed writes the same way, and `AppTheme` falls back to the default
+  appearance instead of crashing on a read failure. `FakePreferencesDataStore` can inject read and
+  write failures with `readFailure` and `writeFailure`.
+- `toNetworkException` maps Ktor's `ContentConvertException` (including `JsonConvertException`) and
+  `NoTransformationFoundException` to the serialization reason.
+- `DatePickerDialog` returns the day the person picked in any time zone and opens on the current
+  day, and `DatePickerTextField` shows dates in the device locale's format.
+- `collectDataStoreState` and `persistChanges` no longer let a failure escape the effect, and a
+  failed save does not stop later changes from being saved.
+
+### Changed
+
+- `AdsSdkState.canRequestAds()` is renamed `isSdkInitialized()`, since it reports SDK
+  initialization, not consent.
+- `:library:navigation` makes `CrossActivityBackMotion`, `ActivityTransitions`, `ActivityMotion`,
+  `PageScene`, `PageSurface`, `rememberDeviceCornerShape` and `ShellMotion.activity` internal, and
+  shares one set of motion constants between the transitions and the back motion. `pageIfAbsent`
+  accepts `contentWidth`, `transition`, `fab` and `backButton` like `page`. Several files are
+  renamed or split to match their declarations, and its baseline profile uses wildcard rules for
+  the current packages.
+- `ShellNavigator.navigate` on a child with `PaneRole.Detail` replaces the detail already open on
+  the tab, and throws for a tab key that is not the registered instance or a child in a graph of
+  pages only. `ShellGraph.contains` is false for such a key. `ShellGraph.keyFor` skips deep links
+  whose key the graph does not register.
+- `PurchaseResult.Failed` carries a typed `reason` and Play's `debugMessage` instead of a display
+  string. Billing settles a purchase it did not launch through the typed purchase queries instead
+  of consuming it as a donation, so a subscription bought outside the app is acknowledged.
+- Handle `AdvancedSettingsEvent.ObserveDeveloperOptions` in exhaustive `when` expressions that
+  consume `AdvancedSettingsEvent`.
+- Replace `helpPage()` with `helpScreen()` when registering the FAQ destination. The key remains
+  `HelpScreen`. Import `FaqEndpointConstants` and `faqCatalogUrl` from the FAQ data layer.
+- `GetChangelogUseCase.invoke()` returns `ChangelogHistory` with the full Markdown and installed
+  version. Direct callers use its `markdown` and `currentVersion` properties.
+- Developer options uses `developerOptionsModule`, included in the assembled Toolkit graph. Hosts
+  listing modules manually add it to open `DeveloperOptionsScreen`.
+- App bar search uses a state-based Compose text field. `ShellSearch.query` remains readable and writable.
+- `SettingsPreferenceItem` and `PreferenceItem` accept an `enabled` argument and a nullable
+  `onClick` callback (`null` renders a non-clickable descriptive row without dimmed text).
+- `onboardingModule` now binds `OnboardingViewModel`; hosts only need to bind `OnboardingProvider`.
+- `ThemeOnboardingPageTab`, `OnboardingThemeViewModel`, `OnboardingThemeUiState`,
+  `OnboardingThemeEvent`, and `AmoledModeToggleCard` moved to `feature.onboarding.ui.features.theme`
+  and its subpackages (`contracts`, `states`, `views`).
+- `TelemetryOnboardingPage` moved to `feature.diagnostics.ui.features.onboarding` the same way, with
+  `UsageAndDiagnosticsToggleCard` and `PrivacyPolicySection` in its `views` subpackage.
+- `OnboardingPage` exposes `key` and `isEnabled` directly on the sealed base class,
+  `FinishOnboardingPage` accepts an optional `isSelected` parameter, and `OnboardingFooter` accepts
+  an optional `enabled` parameter.
+- `SettingsList` and `SettingsDetailPlaceholder` accept an optional `modifier: Modifier = Modifier`
+  parameter, and `:library:feature:settings` removes unused `:library:core:datastore` and
+  `:library:core:network` dependencies.
+- `:library:feature:startup` and `:library:feature:support` remove unused `:library:core:network`
+  dependencies, and `:library:feature:theme` declares its direct `:library:navigation` dependency
+  explicitly.
+- Renamed all Toolkit `AppToolkitNavKey` route keys from `*Route` to `*Screen` (`AboutScreen`,
+  `AdsSettingsScreen`, `AdvancedSettingsScreen`, `DiagnosticsSettingsScreen`,
+  `DisplaySettingsScreen`, `LicensesScreen`, `OnboardingScreen`, `PermissionsScreen`,
+  `PrivacySettingsScreen`, `SettingsScreen`, `StartupScreen`, `SupportScreen`, and
+  `ThemeSettingsScreen`) and renamed `ShellHomeRoute` to `ShellHomeScreen`. The keys and
+  `AppToolkitNavKey` moved from `navigation.routes` to `navigation.keys`.
+- Renamed `ShellGraphBuilder` registration extensions from `*Page()`/`*Pages()` to `*Screen()`
+  (`toolkitScreens()`, `aboutScreen()`, `adsSettingsScreen()`, `advancedSettingsScreen()`,
+  `diagnosticsSettingsScreen()`, `displaySettingsScreen()`, `licensesScreen()`,
+  `onboardingScreen()`, `permissionsScreen()`, `privacySettingsScreen()`, `settingsScreen()`,
+  `startupScreen()`, `supportScreen()`, and `themeSettingsScreen()`).
+- Removed the unused `buildInfoRepository` constructor parameter from `AppOpenAdController`, added
+  an optional `diagnostics: DiagnosticsReporter? = null` parameter to `AppOpenAdController` and
+  `DefaultAdsPreferencesDataSource`, and removed the unused `:library:core:network` dependency from
+  `:library:integration:ads`.
+- Moved `Activity.isValidForBilling()` from `integration.billing.utils.extensions` to
+  `integration.billing.data.extensions` (`ActivityBillingExtensions.kt`).
+- Moved `ConsentHost.isAlive` and `ConsentHost.canShowConsentForm` from
+  `integration.consent.data.models` to `integration.consent.data.extensions`, removed the unused
+  `:library:core:network` dependency from `:library:integration:consent`, and changed its
+  `user-messaging-platform` dependency from `api` to `implementation`.
+- Moved `FirebaseNotificationsService` from `integration.firebase.data.notifications` to
+  `integration.firebase.services`, removed redundant `POST_NOTIFICATIONS` and `WAKE_LOCK`
+  declarations from `:library:integration:firebase`'s manifest, and removed `Boolean.asConsentStatus()`
+  from `:library:core:common` (now mapped internally in `:library:integration:firebase`).
+- The color values in `core.designsystem.ui.style.colors.*` are `internal`, and
+  `:library:core:designsystem` declares `:library:core:datastore` with `implementation`.
+  `:library:core:ui` no longer declares `:library:core:datastore`.
+- `AdLoadReporter` takes `diagnostics: DiagnosticsReporter` instead of
+  `telemetryRepository: TelemetryRepository`.
+- `StartupValueExtensions.startupValueFlow` renames `defaultRoute` to `defaultScreenId`.
+- `StoreConstants` moved to `integration.review.utils.constants`, and `FCM_LOG_TAG`,
+  `THEME_SETTINGS_LOG_TAG` and `INFO_MESSAGE_LOG_TAG` moved out of `core.common` into the code that
+  uses them.
+
+### Removed
+
+- `LocalSelectedDetail` from `:library:navigation`, which no screen read.
+- Remove the unused `LibraryExtrasScreen` placeholder and `LibraryExtrasRoute` key. Use
+  `LicensesScreen` from `:library:feature:licenses` and `:library:navigation` instead.
+
+---
+
 # November 16, 2026
 
 **Version:** `3.0.0-pre34`
@@ -203,8 +403,13 @@
   its own `DataStore<Preferences>` without replacing Toolkit settings. Custom source bindings
   must request the qualifier.
 - Shell preference contracts and implementations are now `ShellPreferencesRepository`,
-  `DataStoreShellPreferencesRepository` and `InMemoryShellPreferencesRepository`, in
+  `DefaultShellPreferencesRepository` and `InMemoryShellPreferencesRepository`, in
   `shell.data.repositories`. Replace old imports and names directly.
+- `ShellHost(modifier = ...)` applies to the root of the shell, around the frame, the pages and the
+  snackbars, instead of to the inner navigation display. `ShellChromeController`'s constructor and
+  `MiniPlayerHeight` are internal: read the controller from `LocalShellChrome`. The default shell
+  store is `DefaultShellPreferencesRepository` (internal), and `:library:shell` declares its
+  `:library:core:common` and `:library:core:datastore` dependencies itself.
 - Custom `SeasonalThemePreferencesDataSource` implementations must implement
   `updateHolidayTheme` atomically over appearance and snapshot data. Direct construction of
   `DefaultSeasonalThemeRepository` now takes only the seasonal source.
@@ -583,7 +788,7 @@ every removed API to its replacement.
   offers. The startup page row shows only with more than one; while it is null, as before, with more
   than one tab.
 - Added `AboutRoute`, `ThemeSettingsRoute`, `DisplaySettingsRoute`, `PrivacySettingsRoute`,
-  `AdvancedSettingsRoute`, `DiagnosticsSettingsRoute`, `DeveloperOptionsRoute`, `StartupRoute` and
+  `AdvancedSettingsRoute`, `DiagnosticsSettingsRoute`, `DeveloperOptionsScreen`, `StartupRoute` and
   `OnboardingRoute`, one key per Toolkit page.
 - Added `FrameScrollTint`, `FrameTint`, `FollowScrollWithFrameTint` and
   `BesideNavigation.scrollTint` to `:library:navigation`, and `TopAppBarScrollBehavior.frameTint` to
@@ -1463,7 +1668,7 @@ every removed API to its replacement.
   feature. Help-specific classes and constants were renamed to their FAQ equivalents, `helpModule`
   became `faqModule(hostBuildConfig)`, `GetFaqUseCase` was removed, `FaqMappers` moved to
   `data/remote/mappers`, `FaqItem` and `FaqId` moved to `data/models`, and the sample FAQ resources
-  moved to `:sample:feature:faq`. The user-facing `Help & feedback` destination, `HelpRoute`,
+  moved to `:sample:feature:faq`. The user-facing `Help & feedback` destination, `HelpScreen`,
   `HELP_NATIVE_AD` qualifier, and GA4 screen name remain unchanged.
 - Moved `AboutInfo` from `domain/models` to `data/models`.
 - Moved `DefaultNavigationRepository` and its drawer labels from `:library:feature:about` to

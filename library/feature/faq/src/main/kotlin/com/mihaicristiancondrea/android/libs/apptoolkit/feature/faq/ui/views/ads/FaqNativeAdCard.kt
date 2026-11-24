@@ -33,9 +33,10 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.ads.rememb
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.GroupedItemPosition
 
 /**
- * Feature-owned native ad row styled to match the grouped FAQ questions and contact card.
- * [NativeAdSlot] owns loading and disposal; the screen owns placement policy.
+ * Displays a compact native ad styled for the FAQ question and support cards.
+ * [NativeAdSlot] owns the ad lifecycle.
  *
+ * @param adUnitId Native ad unit configured by the host.
  * @param groupedPosition Position in a grouped FAQ section, or `null` when standalone.
  * @param containerColor Optional host surface override.
  * @param onAdLoaded Reports whether an ad is currently displayed.

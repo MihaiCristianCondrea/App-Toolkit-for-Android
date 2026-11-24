@@ -15,6 +15,6 @@
   ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
   -->
 <resources>
-    <string name="error_loading_changelog_message">Не може да се зареди дневникът с промените на приложението. Моля, опитайте отново.</string>
+    <string name="error_loading_changelog_message">Не може да се зареди дневникът с промените на приложението.</string>
     <string name="loading_changelog_message">Извличане на дневника с промените на приложението…</string>
 </resources>

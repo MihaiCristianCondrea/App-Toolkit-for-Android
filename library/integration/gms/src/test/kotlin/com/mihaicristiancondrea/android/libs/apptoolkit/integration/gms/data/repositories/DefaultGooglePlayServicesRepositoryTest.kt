@@ -84,6 +84,14 @@ class DefaultGooglePlayServicesRepositoryTest {
     }
 
     @Test
+    fun blankVersionNameFallsBackToThePlatformVersionCode() = runTest {
+        prepare()
+        info.versionName = "   "
+        val repository = DefaultGooglePlayServicesRepository(context, TestDispatchers(StandardTestDispatcher(testScheduler)))
+        assertEquals(if (Build.VERSION.SDK_INT >= 28) "4294967300" else "123", repository.getVersion())
+    }
+
+    @Test
     fun missingGooglePlayServicesReturnsNull() = runTest {
         prepare(PackageManager.NameNotFoundException())
         val repository = DefaultGooglePlayServicesRepository(context, TestDispatchers(StandardTestDispatcher(testScheduler)))

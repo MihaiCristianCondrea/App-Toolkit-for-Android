@@ -261,4 +261,13 @@
     <string name="random_range">Talintervall</string>
     <string name="random_inclusive">Båda gränserna ingår.</string>
     <string name="tool_converter_unit">Enhet</string>
+
+    <string name="section_toys">Leksaker</string>
+    <string name="bell_title">Klocka</string>
+    <string name="bell_summary">Skaka telefonen för att ringa i klockan.</string>
+    <string name="bell_card_note">Skaka för att ringa</string>
+    <string name="bell_ring">Ring i klockan</string>
+    <string name="bell_motion_unavailable">Den här enheten kan inte känna av skakningar.</string>
+    <string name="bell_audio_unavailable">Klockljudet är inte tillgängligt.</string>
+    <string name="bell_ringing">Klockan ringer</string>
 </resources>

@@ -80,7 +80,7 @@
     <string name="shell_navigation_tint_always">Colorés ensemble, contenu dans une carte</string>
     <string name="shell_navigation_tint_on_scroll">Colorés ensemble dès que le contenu défile</string>
     <string name="shell_back_edge_system">Comme Android : la page se réduit sur place</string>
-    <string name="shell_back_edge_follow">Suit le doigt, en miroir du bord gauche (par défaut)</string>
+    <string name="shell_back_edge_follow">Suit le doigt, en miroir du bord gauche</string>
     <string name="shell_transition_directional">Glissement directionnel</string>
     <string name="shell_transition_fade_through">Fondu enchaîné par le centre</string>
     <string name="shell_transition_fade">Fondu enchaîné</string>

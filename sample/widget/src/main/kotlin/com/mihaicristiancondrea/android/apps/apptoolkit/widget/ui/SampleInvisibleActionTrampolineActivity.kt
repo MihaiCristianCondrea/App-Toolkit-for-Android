@@ -19,9 +19,11 @@ package com.mihaicristiancondrea.android.apps.apptoolkit.widget.ui
 
 import android.content.Intent
 import android.os.Bundle
-import androidx.core.content.IntentCompat
 import android.util.Log
+import androidx.core.content.IntentCompat
 import androidx.glance.appwidget.action.InvisibleActionTrampolineActivity
+import com.mihaicristiancondrea.android.apps.apptoolkit.widget.ui.constants.WidgetLogTags
+import com.mihaicristiancondrea.android.apps.apptoolkit.widget.ui.extensions.isMissingGlanceAction
 
 /**
  * Keeps Glance's private component address compatible with existing widget PendingIntents.
@@ -36,13 +38,8 @@ class SampleInvisibleActionTrampolineActivity : InvisibleActionTrampolineActivit
             super.onCreate(savedInstanceState)
         } catch (failure: IllegalArgumentException) {
             if (!failure.isMissingGlanceAction(missingEnvelope)) throw failure
-            Log.w("SampleWidget", "Ignoring widget trampoline launch with missing action data")
+            Log.w(WidgetLogTags.SAMPLE_WIDGET, "Ignoring widget trampoline launch with missing action data")
             finish()
         }
     }
 }
-
-internal fun IllegalArgumentException.isMissingGlanceAction(missingEnvelope: Boolean): Boolean =
-    missingEnvelope &&
-        (message == "List adapter activity trampoline invoked without specifying target intent." ||
-            message == "List adapter activity trampoline invoked without trampoline type")

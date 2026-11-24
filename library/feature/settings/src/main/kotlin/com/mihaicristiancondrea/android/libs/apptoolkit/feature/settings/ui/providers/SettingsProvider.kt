@@ -19,7 +19,14 @@ package com.mihaicristiancondrea.android.libs.apptoolkit.feature.settings.ui.pro
 
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.settings.SettingsConfig
 
+/**
+ * Host contract supplying the root categories and rows rendered by `SettingsScreen`.
+ */
 interface SettingsProvider {
+    /**
+     * Builds the current [SettingsConfig] for the settings list. Called each time the list enters
+     * composition and on retry, so row summaries can reflect recent changes.
+     */
     fun provideSettingsConfig(): SettingsConfig
 }
 

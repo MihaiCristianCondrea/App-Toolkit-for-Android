@@ -23,21 +23,13 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.UiText
  * Click interactions supported by About screen preference items.
  */
 sealed interface AboutItemAction {
-    /** Opens the open-source software licenses screen. */
+    /** Opens the shared open-source licenses destination. */
     data object OpenLicenses : AboutItemAction
 
     /**
-     * Copies [text] to the system clipboard under [label].
+     * Copies the exact rendered [text] under [label].
      *
-     * The text travels with the action so the clipboard receives exactly what the item displays,
-     * instead of a second lookup that could resolve under a different configuration. Both are
-     * [UiText] rather than `String` so a row whose value is a string resource, such as the
-     * application name, is as copyable as one holding a formatted value.
-     *
-     * @property label Clipboard entry label, also used as the copied item's name.
-     * @property text The exact text written to the clipboard.
-     * @property successMessage Confirmation shown once the copy succeeds. When `null` the screen
-     * falls back to the generic copied-to-clipboard message.
+     * @property successMessage Custom confirmation. A null value uses the generic copy message.
      */
     data class CopyToClipboard(
         val label: UiText,

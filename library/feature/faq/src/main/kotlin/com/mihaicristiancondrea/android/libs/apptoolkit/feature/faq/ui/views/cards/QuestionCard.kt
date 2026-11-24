@@ -17,7 +17,6 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.ui.views.cards
 
-import android.view.View
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.background
@@ -32,7 +31,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ExpandMore
 import androidx.compose.material.icons.outlined.QuestionAnswer
 import androidx.compose.material3.Card
-import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -40,12 +38,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.RectangleShape
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.hapticfeedback.HapticFeedback
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.platform.LocalHapticFeedback
-import androidx.compose.ui.platform.LocalView
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.icons.ToolkitIcon
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.GeneralButton
@@ -57,12 +54,14 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.spacers.Sm
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.text.HtmlText
 
 /**
- * Displays one expandable FAQ entry.
+ * Displays one FAQ entry whose expanded state is controlled by the caller.
+ *
+ * @param summary Answer rendered as HTML when the entry is expanded.
+ * @param onToggleExpand Requests an expansion state change.
  *
  * @param groupedPosition Optional position in the FAQ content group. When supplied, the card
  * uses grouped corners and a compact layout; when omitted, the standalone shape is kept.
  */
-@OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
 fun QuestionCard(
     title: String,
@@ -73,10 +72,9 @@ fun QuestionCard(
     groupedPosition: GroupedItemPosition? = null,
 ) {
     val hapticFeedback: HapticFeedback = LocalHapticFeedback.current
-    val view: View = LocalView.current
     val expandIconRotation by animateFloatAsState(
         targetValue = if (isExpanded) 180f else 0f,
-        label = "ExpandIconRotation"
+        label = "ExpandIconRotation",
     )
     val cardModifier = modifier
         .fillMaxWidth()
@@ -130,8 +128,8 @@ fun QuestionCard(
 
                 GeneralButton(
                     style = GeneralButtonStyle.Text,
-                    onClick = { onToggleExpand() },
-                    contentDescription = title,
+                    onClick = onToggleExpand,
+                    contentDescription = null,
                     iconSize = SizeConstants.ButtonIconSize,
                     icon = ToolkitIcon.Vector(imageVector = Icons.Filled.ExpandMore),
                     modifier = Modifier.graphicsLayer { rotationZ = expandIconRotation },

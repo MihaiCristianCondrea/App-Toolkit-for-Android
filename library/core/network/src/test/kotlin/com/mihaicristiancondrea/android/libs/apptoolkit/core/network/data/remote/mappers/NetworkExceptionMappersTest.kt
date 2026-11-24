@@ -19,7 +19,12 @@ package com.mihaicristiancondrea.android.libs.apptoolkit.core.network.data.remot
 
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.exceptions.NetworkException
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.network.data.remote.networkCall
+import io.ktor.client.call.NoTransformationFoundException
+import io.ktor.client.statement.HttpResponse
 import io.ktor.http.HttpStatusCode
+import io.ktor.serialization.ContentConvertException
+import io.ktor.serialization.JsonConvertException
+import io.mockk.mockk
 import java.io.EOFException
 import java.net.ConnectException
 import java.net.SocketTimeoutException
@@ -50,6 +55,27 @@ class NetworkExceptionMappersTest {
         assertEquals(
             NetworkException.Reason.SERIALIZATION,
             SerializationException("bad body").toNetworkException()?.reason,
+        )
+    }
+
+    @Test
+    fun `translates Ktor body conversion failures to serialization`() {
+        val badJson = JsonConvertException("bad json")
+        val translated = badJson.toNetworkException()
+
+        assertEquals(NetworkException.Reason.SERIALIZATION, translated?.reason)
+        assertSame(badJson, translated?.cause)
+        assertEquals(
+            NetworkException.Reason.SERIALIZATION,
+            ContentConvertException("no converter").toNetworkException()?.reason,
+        )
+        assertEquals(
+            NetworkException.Reason.SERIALIZATION,
+            NoTransformationFoundException(
+                response = mockk<HttpResponse>(relaxed = true),
+                from = String::class,
+                to = Int::class,
+            ).toNetworkException()?.reason,
         )
     }
 

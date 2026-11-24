@@ -17,6 +17,7 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.theme.ui
 
+import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.material.icons.Icons
@@ -96,7 +97,9 @@ internal fun WeatherEffectDialog(
     BasicAlertDialog(
         onDismiss = onDismiss,
         onConfirm = {
-            onSelected(selected)
+            if (selected != current) {
+                onSelected(selected)
+            }
             onDismiss()
         },
         icon = selected.icon,
@@ -132,6 +135,7 @@ private val WeatherEffect.icon: ImageVector
         WeatherEffect.Off -> Icons.Outlined.CloudOff
     }
 
+@get:StringRes
 private val WeatherEffect.label: Int
     get() = when (this) {
         WeatherEffect.Automatic -> R.string.weather_effect_automatic

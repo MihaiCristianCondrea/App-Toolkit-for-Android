@@ -261,4 +261,13 @@
     <string name="random_range">Interval numeric</string>
     <string name="random_inclusive">Ambele limite ale intervalului sunt incluse.</string>
     <string name="tool_converter_unit">Unitate</string>
+
+    <string name="section_toys">Jucării</string>
+    <string name="bell_title">Clopoțel</string>
+    <string name="bell_summary">Scutură telefonul ca să sune clopoțelul.</string>
+    <string name="bell_card_note">Scutură ca să sune</string>
+    <string name="bell_ring">Sună clopoțelul</string>
+    <string name="bell_motion_unavailable">Acest dispozitiv nu poate detecta scuturarea.</string>
+    <string name="bell_audio_unavailable">Sunetul clopoțelului nu este disponibil.</string>
+    <string name="bell_ringing">Clopoțelul sună</string>
 </resources>

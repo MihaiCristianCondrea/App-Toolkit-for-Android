@@ -261,4 +261,13 @@
     <string name="random_range">数値の範囲</string>
     <string name="random_inclusive">範囲の両端を含みます。</string>
     <string name="tool_converter_unit">単位</string>
+
+    <string name="section_toys">おもちゃ</string>
+    <string name="bell_title">ベル</string>
+    <string name="bell_summary">スマートフォンを振ってベルを鳴らします。</string>
+    <string name="bell_card_note">振って鳴らす</string>
+    <string name="bell_ring">ベルを鳴らす</string>
+    <string name="bell_motion_unavailable">この端末では振る動作を検出できません。</string>
+    <string name="bell_audio_unavailable">ベルの音を再生できません。</string>
+    <string name="bell_ringing">ベルが鳴っています</string>
 </resources>

@@ -27,6 +27,7 @@ import io.ktor.client.request.header
 import io.ktor.client.statement.bodyAsText
 import io.ktor.http.HttpHeaders
 
+/** Reads changelog Markdown over HTTP and preserves the response status for fallback selection. */
 class ChangelogRemoteDataSource(
     private val client: HttpClient,
     private val diagnostics: DiagnosticsReporter,
@@ -35,11 +36,11 @@ class ChangelogRemoteDataSource(
     suspend fun fetchMarkdown(url: String): MarkdownResponse {
         diagnostics.logBreadcrumb(
             message = "Changelog fetch",
-            attributes = mapOf("url" to url),
+            attributes = emptyMap(),
         )
         return networkCall {
-            val response = client.get(url) {
-                header(HttpHeaders.Accept, "text/markdown, text/plain;q=0.9, */*;q=0.1")
+            val response = client.get(urlString = url) {
+                header(key = HttpHeaders.Accept, value = "text/markdown, text/plain;q=0.9, */*;q=0.1")
             }
             MarkdownResponse(status = response.status, body = response.bodyAsText())
         }

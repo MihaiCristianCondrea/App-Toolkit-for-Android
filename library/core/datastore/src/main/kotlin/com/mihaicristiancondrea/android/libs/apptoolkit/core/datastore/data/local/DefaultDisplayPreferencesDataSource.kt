@@ -23,15 +23,25 @@ import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.exceptions.StorageException
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.datastore.DataStoreNamesConstants
 import kotlinx.coroutines.flow.Flow
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.local.mappers.toStorageException
+import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
 
-/** Display preferences stored in the shared `settings` Preferences DataStore. */
+/**
+ * Display preferences stored in the shared `settings` Preferences DataStore. A failed read is
+ * thrown to the collector as a [StorageException].
+ */
 class DefaultDisplayPreferencesDataSource(
     private val dataStore: DataStore<Preferences>,
 ) : DisplayPreferencesDataSource {
+
+    private val preferencesFlow: Flow<Preferences> = dataStore.data.catch { error ->
+        throw error.toStorageException() ?: error
+    }
 
     private val showBottomBarLabelsKey =
         booleanPreferencesKey(name = DataStoreNamesConstants.DATA_STORE_SHOW_BOTTOM_BAR_LABELS)
@@ -43,20 +53,20 @@ class DefaultDisplayPreferencesDataSource(
         stringPreferencesKey(name = DataStoreNamesConstants.DATA_STORE_STARTUP_PAGE)
 
     override val showBottomBarLabels: Flow<Boolean> =
-        dataStore.data.map { preferences: Preferences ->
+        preferencesFlow.map { preferences: Preferences ->
             preferences[showBottomBarLabelsKey] != false
         }.distinctUntilChanged()
 
-    override val bouncyButtons: Flow<Boolean> = dataStore.data.map { preferences: Preferences ->
+    override val bouncyButtons: Flow<Boolean> = preferencesFlow.map { preferences: Preferences ->
         preferences[bouncyButtonsKey] != false
     }.distinctUntilChanged()
 
-    override val language: Flow<String> = dataStore.data.map { preferences: Preferences ->
+    override val language: Flow<String> = preferencesFlow.map { preferences: Preferences ->
         preferences[languageKey] ?: DEFAULT_LANGUAGE
     }.distinctUntilChanged()
 
     override fun startupPage(default: String): Flow<String> =
-        dataStore.data.map { preferences: Preferences ->
+        preferencesFlow.map { preferences: Preferences ->
             preferences[startupPageKey] ?: default
         }.distinctUntilChanged()
 

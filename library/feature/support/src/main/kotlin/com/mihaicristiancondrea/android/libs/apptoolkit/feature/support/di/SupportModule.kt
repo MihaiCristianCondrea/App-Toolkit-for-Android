@@ -22,6 +22,7 @@ import org.koin.core.module.Module
 import org.koin.core.module.dsl.viewModel
 import org.koin.dsl.module
 
+/** Binds [SupportViewModel] for the support page. */
 val supportModule: Module = module {
     viewModel {
         SupportViewModel(billingRepository = get(), telemetryRepository = get())

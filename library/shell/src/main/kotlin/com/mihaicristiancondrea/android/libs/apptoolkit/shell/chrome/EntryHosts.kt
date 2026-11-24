@@ -18,9 +18,8 @@
 package com.mihaicristiancondrea.android.libs.apptoolkit.shell.chrome
 
 import androidx.compose.runtime.Stable
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.navigation3.runtime.NavKey
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.fab.FabHost
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.layout.ArticleTopBarHost
 
@@ -48,3 +47,6 @@ internal class EntryHosts {
         articleHosts.keys.retainAll(liveEntryKeys)
     }
 }
+
+/** A tab screen's entry key: the same child can be open in two tabs at once. */
+internal fun tabEntryKey(tabIndex: Int, key: NavKey): String = "$tabIndex/$key"

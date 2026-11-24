@@ -18,5 +18,6 @@
 package com.mihaicristiancondrea.android.libs.apptoolkit.shell.settings
 
 
+/** Keeps the blocks of [appToolkitDefaults] from reaching the builders around them. */
 @DslMarker
 annotation class AppToolkitDefaultsDsl

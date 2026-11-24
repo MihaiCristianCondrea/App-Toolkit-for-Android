@@ -90,6 +90,9 @@ open class AppToolkitApplication : MultiDexApplication(), Application.ActivityLi
      *
      * Subclasses should avoid heavy work here and instead override
      * [onInitializeApp] which runs on a background coroutine.
+     *
+     * Start Koin before calling `super.onCreate()`. This class reads [billingRepository] and its
+     * diagnostics reporter from Koin, and the startup coroutine launched here uses them at once.
      */
     override fun onCreate() {
         super.onCreate()

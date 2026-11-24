@@ -48,7 +48,7 @@ sealed interface IssueSubmissionState : TrackedStatus {
     /**
      * The report was filed.
      *
-     * @property issueUrl The created issue, which the confirmation offers to open.
+     * @property issueUrl Web URL of the created GitHub issue, or empty when omitted by the API.
      */
     data class Submitted(val issueUrl: String) : IssueSubmissionState {
         override val trackingLabel: String get() = "success"

@@ -59,7 +59,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.feature.settings.di.sett
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.settings.ui.providers.SettingsProvider
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.LocalShellNavigator
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.PaneRole
-import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.SettingsRoute
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.keys.SettingsScreen
 import com.mihaicristiancondrea.android.libs.apptoolkit.shell.ShellHost
 import com.mihaicristiancondrea.android.libs.apptoolkit.shell.data.repositories.InMemoryShellPreferencesRepository
 import io.mockk.mockk
@@ -272,7 +272,7 @@ internal data object UnregisteredPage : NavKey
 private val HostGraph = toolkitGraph(appTitle = CommonR.string.app_name) {
     tab(HostHome, NavigationR.string.updates, ToolkitIcon.Vector(Icons.Outlined.Home)) {
         val navigator = LocalShellNavigator.current
-        Text("Open settings", Modifier.clickable { navigator.navigate(SettingsRoute) }.padding(16.dp))
+        Text("Open settings", Modifier.clickable { navigator.navigate(SettingsScreen) }.padding(16.dp))
     }
     page<HostPage>(paneRole = PaneRole.Detail, title = { "Host page" }) { Text("Host page body") }
     page<HostSubpage>(paneRole = PaneRole.Detail, title = { "Host subpage" }) { Text("Host subpage body") }

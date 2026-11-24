@@ -23,27 +23,29 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.calculateEndPadding
+import androidx.compose.foundation.layout.calculateStartPadding
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.safeDrawingPadding
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.CheckCircle
 import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.LifecycleResumeEffect
@@ -53,40 +55,39 @@ import com.airbnb.lottie.compose.LottieAnimation
 import com.airbnb.lottie.compose.LottieCompositionSpec
 import com.airbnb.lottie.compose.LottieConstants
 import com.airbnb.lottie.compose.rememberLottieComposition
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.telemetry.models.TrackedScreen
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.links.AppLinks
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.context.isSystemAnimationDisabled
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.style.bounceClick
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.R as CoreUiR
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.ScreenHost
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.StateContent
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.fab.AnimatedExtendedFloatingActionButton
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.modifiers.animatedItem
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.layouts.LoadingScreen
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.layouts.sections.InfoMessageSection
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.modifiers.animatedItem
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.navigation.TopAppBarScaffold
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.startup.R
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.R as CoreUiR
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.startup.ui.analytics.STARTUP_SCREEN
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.startup.ui.contracts.StartupEvent
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.startup.ui.providers.StartupProvider
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.startup.ui.states.ConsentRequestStatus
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.startup.ui.states.StartupUiState
 import com.mihaicristiancondrea.android.libs.apptoolkit.integration.consent.data.models.ConsentHost
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.LocalShellNavigator
-import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.OnboardingRoute
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.keys.OnboardingScreen
 import org.koin.compose.koinInject
 import org.koin.compose.viewmodel.koinViewModel
-
-private const val STARTUP_SCREEN_NAME = "Startup"
-private const val STARTUP_SCREEN_CLASS = "StartupScreen"
-private val STARTUP_SCREEN: TrackedScreen =
-    TrackedScreen(name = STARTUP_SCREEN_NAME, className = STARTUP_SCREEN_CLASS)
 
 /** How wide the screen grows on a large window, as onboarding's pages do; it is centred in the rest. */
 private val StartupContentMaxWidth: Dp = 640.dp
 
+/** Extra bottom clearance so the last scrolled item stays reachable above the extended Agree FAB. */
+private val StartupFabClearance: Dp = 88.dp
+
 /**
  * The startup start screen: the welcome illustration, the terms and privacy notice, and Agree,
- * which hands over to `OnboardingRoute`. There is no shell under it, so back leaves the app.
+ * which hands over to `OnboardingScreen`. There is no shell under it, so back leaves the app.
  *
  * Asks for [StartupProvider.requiredPermissions] once per screen instance. That decision is saved
  * across rotation and the resume the permission dialog causes, so a person who declined is not
@@ -116,7 +117,7 @@ fun StartupScreen() {
     ScreenHost(screen = STARTUP_SCREEN, status = state.consent) {
         StartupScreenContent(
             state = state,
-            onContinue = { navigator.continueStart(OnboardingRoute) },
+            onContinue = { navigator.continueStart(OnboardingScreen) },
         )
     }
 }
@@ -134,10 +135,10 @@ internal fun StartupScreenContent(
 ) {
     StateContent(state = state.consent, modifier = modifier, label = "StartupConsent") { consent ->
         when (consent) {
-            ConsentRequestStatus.Pending -> LoadingScreen()
+            is ConsentRequestStatus.Pending -> LoadingScreen()
 
-            ConsentRequestStatus.Settled -> TopAppBarScaffold(
-                title = stringResource(R.string.welcome),
+            is ConsentRequestStatus.Settled -> TopAppBarScaffold(
+                title = stringResource(id = R.string.welcome),
                 content = { paddingValues -> StartupWelcome(paddingValues = paddingValues) },
                 floatingActionButton = {
                     AnimatedExtendedFloatingActionButton(
@@ -161,19 +162,31 @@ internal fun StartupScreenContent(
 @Composable
 private fun StartupWelcome(
     paddingValues: PaddingValues,
+    modifier: Modifier = Modifier,
 ) {
+    val context = LocalContext.current
+    val animationsDisabled: Boolean = remember(context) { context.isSystemAnimationDisabled() }
+    val layoutDirection = LocalLayoutDirection.current
+    val sectionMargin: Dp = SizeConstants.MediumSize * 2
+    val listPadding = PaddingValues(
+        start = paddingValues.calculateStartPadding(layoutDirection) + sectionMargin,
+        top = paddingValues.calculateTopPadding() + sectionMargin,
+        end = paddingValues.calculateEndPadding(layoutDirection) + sectionMargin,
+        bottom = paddingValues.calculateBottomPadding() + sectionMargin + StartupFabClearance,
+    )
     val composition by rememberLottieComposition(
         spec = LottieCompositionSpec.RawRes(R.raw.anim_startup),
     )
 
     Box(
-        modifier = Modifier.fillMaxSize(),
+        modifier = modifier.fillMaxSize(),
     ) {
         LottieAnimation(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(top = paddingValues.calculateTopPadding()),
             composition = composition,
+            isPlaying = !animationsDisabled,
             restartOnPlay = true,
             iterations = LottieConstants.IterateForever,
             contentScale = ContentScale.Crop,
@@ -184,48 +197,24 @@ private fun StartupWelcome(
             modifier = Modifier
                 .align(Alignment.TopCenter)
                 .fillMaxHeight()
-                .widthIn(max = StartupContentMaxWidth)
-                .padding(paddingValues = paddingValues)
-                .padding(all = SizeConstants.MediumSize * 2)
-                .safeDrawingPadding(),
+                .widthIn(max = StartupContentMaxWidth),
+            contentPadding = listPadding,
             verticalArrangement = Arrangement.spacedBy(space = SizeConstants.LargeSize),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
-            animatedItem {
+            animatedItem(key = "startup_illustration") {
                 AsyncImage(
                     model = R.drawable.il_startup,
                     contentDescription = null,
                 )
             }
-            animatedItem {
+            animatedItem(key = "startup_terms") {
                 InfoMessageSection(
-                    message = stringResource(R.string.summary_browse_terms_of_service_and_privacy_policy),
-                    learnMoreText = stringResource(CoreUiR.string.learn_more),
+                    message = stringResource(id = R.string.summary_browse_terms_of_service_and_privacy_policy),
+                    learnMoreText = stringResource(id = CoreUiR.string.learn_more),
                     learnMoreUrl = AppLinks.PRIVACY_POLICY,
                 )
             }
         }
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-private fun StartupScreenContentPreview() {
-    MaterialTheme {
-        StartupScreenContent(
-            state = StartupUiState(consent = ConsentRequestStatus.Settled),
-            onContinue = {},
-        )
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-private fun StartupScreenContentLoadingPreview() {
-    MaterialTheme {
-        StartupScreenContent(
-            state = StartupUiState(),
-            onContinue = {},
-        )
     }
 }

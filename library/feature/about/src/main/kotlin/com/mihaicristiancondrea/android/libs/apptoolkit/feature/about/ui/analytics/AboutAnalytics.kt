@@ -17,6 +17,7 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.ui.analytics
 
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.telemetry.models.TrackedScreen
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.telemetry.models.AnalyticsValue
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.analytics.SettingsAnalytics
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.analytics.Ga4EventData
@@ -28,8 +29,10 @@ internal fun aboutPreferenceTapEvent(preferenceKey: String): Ga4EventData {
     return Ga4EventData(
         name = SettingsAnalytics.Events.PREFERENCE_VIEW,
         params = mapOf(
-            SettingsAnalytics.Params.SCREEN to AnalyticsValue.Str("About"),
-            SettingsAnalytics.Params.PREFERENCE_KEY to AnalyticsValue.Str(preferenceKey),
+            SettingsAnalytics.Params.SCREEN to AnalyticsValue.Str(value = ABOUT_SCREEN.name),
+            SettingsAnalytics.Params.PREFERENCE_KEY to AnalyticsValue.Str(value = preferenceKey),
         ),
     )
 }
+
+internal val ABOUT_SCREEN = TrackedScreen(name = "About", className = "AboutScreen")

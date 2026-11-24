@@ -20,25 +20,21 @@ package com.mihaicristiancondrea.android.libs.apptoolkit.feature.advanced.ui.sta
 import androidx.compose.runtime.Immutable
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.TrackedStatus
 
-/**
- * Where the last cache clear stands. Its labels are the ones the advanced settings page has
- * always reported in `screen_state`: the page is `success` until a clear runs, `loading` while it
- * runs, and `error` once it has failed.
- */
+/** Cache operation status reported by Advanced Settings through [TrackedStatus]. */
 @Immutable
 sealed interface CacheClearStatus : TrackedStatus {
 
-    /** No clear is running, and the last one, if any, succeeded. */
+    /** No cache clear is running, and the last one, if any, succeeded. */
     data object Idle : CacheClearStatus {
         override val trackingLabel: String get() = "success"
     }
 
-    /** The cache directories are being deleted. */
+    /** A cache clear is running and the clear action is disabled. */
     data object Clearing : CacheClearStatus {
         override val trackingLabel: String get() = "loading"
     }
 
-    /** The last clear failed. The next clear starts over. */
+    /** The last cache clear failed and the action can be tried again. */
     data object Failed : CacheClearStatus {
         override val trackingLabel: String get() = "error"
     }

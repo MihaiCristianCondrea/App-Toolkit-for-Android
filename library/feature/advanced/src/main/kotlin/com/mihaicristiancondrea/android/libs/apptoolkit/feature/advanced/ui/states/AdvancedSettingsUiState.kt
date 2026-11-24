@@ -20,12 +20,10 @@ package com.mihaicristiancondrea.android.libs.apptoolkit.feature.advanced.ui.sta
 import androidx.compose.runtime.Immutable
 
 /**
- * Everything the advanced settings page renders. Its rows are there from the start, so nothing
- * here loads.
+ * State rendered by the advanced settings page.
  *
- * @property cacheClear Where the last cache clear stands, reported as the page's `screen_state`.
- * @property developerOptionsUnlocked Whether the About screen's version easter egg has been found,
- * which offers the developer options row.
+ * @property cacheClear Status of the current or most recent cache clear.
+ * @property developerOptionsUnlocked Whether the developer options row is available.
  */
 @Immutable
 data class AdvancedSettingsUiState(

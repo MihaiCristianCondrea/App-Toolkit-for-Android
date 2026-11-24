@@ -77,7 +77,7 @@ flowchart TD
     Graph --> ToolkitPages["toolkitGraph { }: Toolkit pages"]
     Host --> Graph
     Host --> Start{resolveStart: onboarding done?}
-    Start -->|no| FirstRun[StartupRoute, then OnboardingRoute]
+    Start -->|no| FirstRun[StartupScreen, then OnboardingScreen]
     Start -->|yes| Stored[Stored start page]
     FirstRun --> Ready[onReady: splash screen leaves]
     Stored --> Ready
@@ -93,7 +93,7 @@ The target SDK remains 37 and the minimum SDK remains 26.
 
 - Host apps should use the Toolkit's shared ads preference rather than seeding a local enabled
   value. It starts disabled until persisted storage answers and retries transient read failures.
-  The Permissions page is now static Compose UI: keep `permissionsPage()`/`PermissionsScreen()`,
+  The Permissions page is now static Compose UI: keep `permissionsScreen()`/`PermissionsScreen()`,
   and remove manual `permissionsModule` registration and references to its former loading ViewModel.
   The standard `appToolkitModules` graph already reflects this change. Shell defaults use
   `BackEdgeStyle.System`; explicit developer choices remain in effect until reset.

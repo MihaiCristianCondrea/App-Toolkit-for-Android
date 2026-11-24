@@ -44,6 +44,8 @@ internal fun ToolkitTile.previewTextResId(): Int = when (id) {
 internal fun ToolkitTileIcon.imageVector(): ImageVector = when (this) {
     ToolkitTileIcon.Wheel -> ToolSymbols.RotateRight
     ToolkitTileIcon.Water -> ToolSymbols.WaterDrop
+    ToolkitTileIcon.Bell -> ToolSymbols.Notifications
+    ToolkitTileIcon.Toys -> ToolSymbols.Rounded.Toys
     ToolkitTileIcon.Protractor -> ToolSymbols.Architecture
     ToolkitTileIcon.BillSplitter -> ToolSymbols.Calculate
     ToolkitTileIcon.RandomNumber -> ToolSymbols.Casino
@@ -69,7 +71,8 @@ internal fun ToolkitTileIcon.backgroundShape(): Shape = when (this) {
     ToolkitTileIcon.Level -> Cookie16Shape
     ToolkitTileIcon.Sos, ToolkitTileIcon.Morse -> KitShape.Cookie7
     ToolkitTileIcon.FlashDimmer -> KitShape.Burst
-    ToolkitTileIcon.Water, ToolkitTileIcon.Protractor, ToolkitTileIcon.Converter, ToolkitTileIcon.Timer -> KitShape.Cookie9
+    ToolkitTileIcon.Water, ToolkitTileIcon.Bell, ToolkitTileIcon.Protractor,
+    ToolkitTileIcon.Converter, ToolkitTileIcon.Timer, ToolkitTileIcon.Toys -> KitShape.Cookie9
     ToolkitTileIcon.Breathing, ToolkitTileIcon.BillSplitter, ToolkitTileIcon.Palette -> KitShape.SoftBurst
     ToolkitTileIcon.Counter -> KitShape.Flower
     ToolkitTileIcon.Coin, ToolkitTileIcon.Dice, ToolkitTileIcon.Ruler, ToolkitTileIcon.Wheel -> KitShape.Cookie12

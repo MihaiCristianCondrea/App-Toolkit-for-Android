@@ -28,6 +28,13 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extens
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.withContext
 
+/**
+ * [InstalledAppsRepository] backed by the device's `PackageManager`.
+ *
+ * Package lookups block, so they run on `dispatchers.io`. A blank package name is never installed
+ * and has no launch intent. Lookups that fail, such as a package hidden by package visibility
+ * rules, answer as not installed or `null` instead of throwing; cancellation still propagates.
+ */
 class DefaultInstalledAppsRepository(
     context: Context,
     private val dispatchers: DispatcherProvider,

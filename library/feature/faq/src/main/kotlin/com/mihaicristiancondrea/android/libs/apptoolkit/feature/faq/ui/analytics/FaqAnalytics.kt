@@ -25,13 +25,12 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.consta
 /**
  * Keeps the established `Help` analytics identity so the screen retains its GA4 history.
  */
-internal const val FAQ_SCREEN_NAME: String = "Help"
+internal object FaqAnalytics {
+    const val SCREEN_NAME: String = "Help"
+    val SCREEN = TrackedScreen(name = SCREEN_NAME, className = "FaqScreen")
+}
 
-private const val FAQ_SCREEN_CLASS: String = "FaqScreen"
-
-internal val FAQ_SCREEN: TrackedScreen =
-    TrackedScreen(name = FAQ_SCREEN_NAME, className = FAQ_SCREEN_CLASS)
-
+/** Builds a GA4 selection event for a FAQ question, feedback action or support card. */
 internal fun faqSelectContentEvent(
     contentType: String,
     itemId: String,
@@ -40,14 +39,15 @@ internal fun faqSelectContentEvent(
     return AnalyticsEvent(
         name = FaqEventNames.SELECT_CONTENT,
         params = buildMap {
-            put(SettingsAnalytics.Params.SCREEN, AnalyticsValue.Str(FAQ_SCREEN_NAME))
-            put(FaqParams.CONTENT_TYPE, AnalyticsValue.Str(contentType))
-            put(FaqParams.ITEM_ID, AnalyticsValue.Str(itemId))
-            putAll(params)
+            put(key = SettingsAnalytics.Params.SCREEN, value = AnalyticsValue.Str(value = FaqAnalytics.SCREEN_NAME))
+            put(key = FaqParams.CONTENT_TYPE, value = AnalyticsValue.Str(value = contentType))
+            put(key = FaqParams.ITEM_ID, value = AnalyticsValue.Str(value = itemId))
+            putAll(from = params)
         },
     )
 }
 
+/** Builds a question selection event with its zero-based position and resulting expansion state. */
 internal fun faqQuestionSelectEvent(
     faqId: String,
     position: Int,
@@ -57,12 +57,13 @@ internal fun faqQuestionSelectEvent(
         contentType = FaqContentTypes.FAQ_ITEM,
         itemId = faqId,
         params = mapOf(
-            FaqParams.FAQ_POSITION to AnalyticsValue.LongVal(position.toLong()),
-            FaqParams.EXPANDED to AnalyticsValue.Bool(expanded),
+            FaqParams.FAQ_POSITION to AnalyticsValue.LongVal(value = position.toLong()),
+            FaqParams.EXPANDED to AnalyticsValue.Bool(value = expanded),
         ),
     )
 }
 
+/** Builds a settings action event attributed to the help screen. */
 internal fun faqActionEvent(
     actionName: String,
     params: Map<String, AnalyticsValue> = emptyMap(),
@@ -70,9 +71,9 @@ internal fun faqActionEvent(
     return AnalyticsEvent(
         name = FaqEventNames.ACTION,
         params = buildMap {
-            put(SettingsAnalytics.Params.SCREEN, AnalyticsValue.Str(FAQ_SCREEN_NAME))
-            put(SettingsAnalytics.Params.ACTION_NAME, AnalyticsValue.Str(actionName))
-            putAll(params)
+            put(key = SettingsAnalytics.Params.SCREEN, value = AnalyticsValue.Str(value = FaqAnalytics.SCREEN_NAME))
+            put(key = SettingsAnalytics.Params.ACTION_NAME, value = AnalyticsValue.Str(value = actionName))
+            putAll(from = params)
         },
     )
 }

@@ -24,6 +24,8 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.LoggedScr
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.toFailed
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.R
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.data.repositories.FaqRepository
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.ui.analytics.FaqAnalytics
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.ui.constants.FaqOperationNames
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.ui.contracts.FaqEvent
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.ui.states.FaqUiState
 import com.mihaicristiancondrea.android.libs.apptoolkit.integration.review.domain.models.ReviewHost
@@ -33,9 +35,9 @@ import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.Job
 
 /**
- * ViewModel for the help page: the questions, and the review request from the feedback sheet.
+ * Owns the FAQ load state and pending store listing request.
  *
- * Both the repository and the review use case are main-safe, so it needs no dispatcher.
+ * Starts the first load on creation and accepts [FaqEvent.Load] for retry.
  */
 class FaqViewModel(
     private val faqRepository: FaqRepository,
@@ -44,29 +46,38 @@ class FaqViewModel(
 ) : LoggedScreenViewModel<FaqUiState, FaqEvent>(
     initialState = FaqUiState(),
     telemetryRepository = telemetryRepository,
-    screenName = "Help",
+    screenName = FaqAnalytics.SCREEN_NAME,
     viewModelName = "FaqViewModel",
 ) {
     private var loadJob: Job? = null
     private var reviewJob: Job? = null
 
     init {
-        onEvent(FaqEvent.Load)
+        onEvent(event = FaqEvent.Load)
     }
 
     override fun handleEvent(event: FaqEvent) {
         when (event) {
-            FaqEvent.Load -> loadFaq()
+            is FaqEvent.Load -> loadFaq()
             is FaqEvent.RequestReview -> requestReview(host = event.host)
-            FaqEvent.StoreListingOpened -> setState { copy(openStoreListing = false) }
+            is FaqEvent.StoreListingOpened -> setState { copy(openStoreListing = false) }
         }
     }
 
+    /** Loads questions and publishes a load result. Duplicate requests retain the active load. */
     private fun loadFaq() {
-        loadJob = loadJob.restart {
+        loadJob = loadJob.ifIsActive {
             launchReport(
-                action = Actions.LOAD_FAQ,
-                onError = { error -> setState { copy(questions = error.toFailed(fallback = LoadFailedText)) } },
+                action = FaqOperationNames.LOAD_FAQ,
+                onError = { error ->
+                    setState {
+                        copy(
+                            questions = error.toFailed(
+                                fallback = UiText.StringResource(resourceId = R.string.error_failed_to_load_faq),
+                            ),
+                        )
+                    }
+                },
             ) {
                 telemetryRepository.logBreadcrumb(
                     message = "FAQ fetch started",
@@ -79,7 +90,7 @@ class FaqViewModel(
                         questions = if (questions.isEmpty()) {
                             Loadable.Empty()
                         } else {
-                            Loadable.Ready(questions.toImmutableList())
+                            Loadable.Ready(value = questions.toImmutableList())
                         },
                     )
                 }
@@ -87,12 +98,11 @@ class FaqViewModel(
         }
     }
 
-    // Any outcome but a shown review, a failure included, sends the user to the store listing, so
-    // the request they made always leads somewhere.
+    /** Requests an in-app review with a Play Store listing fallback. */
     private fun requestReview(host: ReviewHost) {
         reviewJob = reviewJob.restart {
             launchReport(
-                action = Actions.REQUEST_REVIEW,
+                action = FaqOperationNames.REQUEST_REVIEW,
                 onError = { setState { copy(openStoreListing = true) } },
             ) {
                 val outcome: ReviewOutcome = forceInAppReviewUseCase(host = host)
@@ -101,14 +111,5 @@ class FaqViewModel(
                 }
             }
         }
-    }
-
-    private object Actions {
-        const val LOAD_FAQ: String = "loadFaq"
-        const val REQUEST_REVIEW: String = "requestReview"
-    }
-
-    private companion object {
-        val LoadFailedText = UiText.StringResource(R.string.error_failed_to_load_faq)
     }
 }

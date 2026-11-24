@@ -80,7 +80,7 @@
     <string name="shell_navigation_tint_always">Оцветени заедно, съдържание в карта</string>
     <string name="shell_navigation_tint_on_scroll">Оцветени заедно, щом съдържанието се превърти</string>
     <string name="shell_back_edge_system">Като Android: страницата се свива на място</string>
-    <string name="shell_back_edge_follow">Следва пръста, огледално на левия край (по подразбиране)</string>
+    <string name="shell_back_edge_follow">Следва пръста, огледално на левия край</string>
     <string name="shell_transition_directional">Насочено плъзгане</string>
     <string name="shell_transition_fade_through">Преливане през фона</string>
     <string name="shell_transition_fade">Кръстосано преливане</string>

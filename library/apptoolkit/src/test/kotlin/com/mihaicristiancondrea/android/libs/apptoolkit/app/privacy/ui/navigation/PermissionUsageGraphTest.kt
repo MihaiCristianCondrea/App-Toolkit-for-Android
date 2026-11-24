@@ -17,11 +17,11 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.app.privacy.ui.navigation
 
-import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.AdsSettingsRoute
-import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.DiagnosticsSettingsRoute
-import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.PermissionsRoute
-import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.PrivacySettingsRoute
-import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.SettingsRoute
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.keys.AdsSettingsScreen
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.keys.DiagnosticsSettingsScreen
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.keys.PermissionsScreen
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.keys.PrivacySettingsScreen
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.keys.SettingsScreen
 import org.junit.jupiter.api.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
@@ -33,13 +33,13 @@ class PermissionUsageGraphTest {
 
     @Test
     fun `it opens on the privacy page with no shell under it`() {
-        assertEquals(PrivacySettingsRoute, graph.start)
+        assertEquals(PrivacySettingsScreen, graph.start)
         assertEquals(emptyList(), graph.tabs)
     }
 
     @Test
     fun `every page the privacy page links to opens inside it`() {
-        listOf(PermissionsRoute, AdsSettingsRoute, DiagnosticsSettingsRoute).forEach { key ->
+        listOf(PermissionsScreen, AdsSettingsScreen, DiagnosticsSettingsScreen).forEach { key ->
             assertTrue(graph.contains(key))
         }
     }
@@ -47,6 +47,6 @@ class PermissionUsageGraphTest {
     @Test
     fun `it offers no start choice, so the developer start option cannot replace the privacy page`() {
         assertEquals(emptyList(), graph.startOptions)
-        assertFalse(graph.contains(SettingsRoute))
+        assertFalse(graph.contains(SettingsScreen))
     }
 }

@@ -29,18 +29,18 @@ import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.utils.cons
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
 
-internal fun List<ToolkitTileCategoryData>.toUiModels(): ImmutableList<ToolkitTileCategory> =
+internal fun List<ToolkitTileCategoryData>.toToolkitTileCategories(): ImmutableList<ToolkitTileCategory> =
     map { category ->
         val categoryVisuals = category.id.categoryVisuals()
         ToolkitTileCategory(
             id = category.id,
             titleResId = categoryVisuals.titleResId,
             icon = categoryVisuals.icon,
-            tiles = category.tiles.map(ToolkitTileData::toUiModel).toImmutableList(),
+            tiles = category.tiles.map(ToolkitTileData::toToolkitTile).toImmutableList(),
         )
     }.toImmutableList()
 
-internal fun ToolkitTileData.toUiModel(): ToolkitTile {
+internal fun ToolkitTileData.toToolkitTile(): ToolkitTile {
     val visuals = id.tileVisuals()
     return ToolkitTile(
         id = id,
@@ -58,6 +58,7 @@ private fun String.categoryVisuals(): CategoryVisuals = when (this) {
     "sensors" -> CategoryVisuals(R.string.section_sensors, ToolkitTileIcon.Compass)
     "utilities" -> CategoryVisuals(R.string.tiles_category_utilities, ToolkitTileIcon.Dice)
     "chance" -> CategoryVisuals(R.string.section_chance, ToolkitTileIcon.Dice)
+    "toys" -> CategoryVisuals(R.string.section_toys, ToolkitTileIcon.Toys)
     "measure" -> CategoryVisuals(R.string.measure_title, ToolkitTileIcon.Ruler)
     "sound" -> CategoryVisuals(R.string.section_sound, ToolkitTileIcon.Water)
     "system" -> CategoryVisuals(R.string.section_light, ToolkitTileIcon.FlashDimmer)
@@ -69,6 +70,7 @@ private fun String.categoryVisuals(): CategoryVisuals = when (this) {
 private fun String.tileVisuals(): TileVisuals = when (this) {
     ToolkitTileIds.DECISION_WHEEL -> TileVisuals(R.string.wheel_title, R.string.wheel_summary, ToolkitTileIcon.Wheel)
     ToolkitTileIds.WATER_EJECT -> TileVisuals(R.string.water_title, R.string.water_summary, ToolkitTileIcon.Water)
+    ToolkitTileIds.BELL -> TileVisuals(R.string.bell_title, R.string.bell_summary, ToolkitTileIcon.Bell)
     ToolkitTileIds.BUBBLE_LEVEL -> TileVisuals(
         R.string.tile_bubble_level_title,
         R.string.tile_bubble_level_summary,

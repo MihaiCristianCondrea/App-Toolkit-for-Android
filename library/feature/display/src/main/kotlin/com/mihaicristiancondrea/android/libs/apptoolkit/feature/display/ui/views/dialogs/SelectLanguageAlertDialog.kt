@@ -44,7 +44,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preference
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.spacers.MediumVerticalSpacer
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
-
+import kotlin.math.min
 
 /**
  * A composable that displays an alert dialog for selecting the application language.
@@ -68,10 +68,10 @@ fun SelectLanguageAlertDialog(
 
     val preferenceLanguageEntries = stringArrayResource(id = R.array.preference_language_entries)
     val preferenceLanguageValues = stringArrayResource(id = R.array.preference_language_values)
-    val languageEntries: ImmutableList<String> = remember(preferenceLanguageEntries) {
+    val languageEntries: ImmutableList<String> = remember(key1 = preferenceLanguageEntries) {
         preferenceLanguageEntries.toList().toImmutableList()
     }
-    val languageValues: ImmutableList<String> = remember(preferenceLanguageValues) {
+    val languageValues: ImmutableList<String> = remember(key1 = preferenceLanguageValues) {
         preferenceLanguageValues.toList().toImmutableList()
     }
 
@@ -90,44 +90,55 @@ fun SelectLanguageAlertDialog(
             SelectLanguageAlertDialogContent(
                 selectedLanguage = selectedLanguage,
                 languageEntries = languageEntries,
-                languageValues = languageValues
+                languageValues = languageValues,
             )
-        })
+        },
+    )
 }
 
+/**
+ * Displays the language option radio list inside [SelectLanguageAlertDialog].
+ *
+ * @param selectedLanguage Provisional language tag state updated when a row is chosen.
+ * @param languageEntries Display labels corresponding to [languageValues].
+ * @param languageValues Language tag values stored when confirmed.
+ */
 @Composable
 fun SelectLanguageAlertDialogContent(
     selectedLanguage: MutableState<String>,
     languageEntries: ImmutableList<String>,
-    languageValues: ImmutableList<String>
+    languageValues: ImmutableList<String>,
 ) {
+    val count: Int = min(languageEntries.size, languageValues.size)
+
     Column(
-        modifier = Modifier.fillMaxHeight(fraction = 0.6f)
+        modifier = Modifier.fillMaxHeight(fraction = 0.6f),
     ) {
         Text(text = stringResource(id = R.string.dialog_language_subtitle))
         Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .weight(weight = 1f)
+                .weight(weight = 1f),
         ) {
             LazyColumn(
-                verticalArrangement = Arrangement.spacedBy(space = SizeConstants.ExtraTinySize)
+                verticalArrangement = Arrangement.spacedBy(space = SizeConstants.ExtraTinySize),
             ) {
-                items(count = languageEntries.size) { index: Int ->
+                items(count = count) { index: Int ->
+                    val languageValue: String = languageValues[index]
                     RadioButtonPreferenceItem(
                         modifier = Modifier.groupedPreferenceItem(
                             position = groupedItemPosition(
                                 index = index,
-                                size = languageEntries.size
+                                size = count,
                             ),
                             outerRadius = SizeConstants.LargeMediumSize,
-                            horizontalPadding = SizeConstants.ZeroSize
+                            horizontalPadding = SizeConstants.ZeroSize,
                         ),
                         text = languageEntries[index],
-                        isChecked = selectedLanguage.value == languageValues[index],
+                        isChecked = selectedLanguage.value == languageValue,
                         onCheckedChange = {
-                            selectedLanguage.value = languageValues[index]
-                        }
+                            selectedLanguage.value = languageValue
+                        },
                     )
                 }
             }

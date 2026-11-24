@@ -21,6 +21,8 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.telemetry.Te
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.Loadable
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.LoggedScreenViewModel
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.toFailed
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.privacy.ui.analytics.PRIVACY_SCREEN
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.privacy.ui.constants.PrivacyOperationNames
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.privacy.ui.contracts.PrivacyEvent
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.privacy.ui.mappers.toPrivacyItems
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.privacy.ui.providers.PrivacySettingsProvider
@@ -40,37 +42,33 @@ class PrivacyViewModel(
 ) : LoggedScreenViewModel<PrivacyUiState, PrivacyEvent>(
     initialState = PrivacyUiState(),
     telemetryRepository = telemetryRepository,
-    screenName = "Privacy",
+    screenName = PRIVACY_SCREEN.name,
     viewModelName = "PrivacyViewModel",
 ) {
     private var loadJob: Job? = null
 
     init {
-        onEvent(PrivacyEvent.Load)
+        onEvent(event = PrivacyEvent.Load)
     }
 
     override fun handleEvent(event: PrivacyEvent) {
         when (event) {
-            PrivacyEvent.Load -> loadItems()
-            is PrivacyEvent.ItemClicked -> startOperation(action = Actions.OPEN_PRIVACY_ITEM)
+            is PrivacyEvent.Load -> loadItems()
+            is PrivacyEvent.ItemClicked -> startOperation(action = PrivacyOperationNames.OPEN_PRIVACY_ITEM)
         }
     }
 
+    /** Builds the privacy rows from the host provider. Duplicate requests share an active load. */
     private fun loadItems() {
-        loadJob = loadJob.restart {
+        loadJob = loadJob.ifIsActive {
             launchReport(
-                action = Actions.LOAD_PRIVACY_ITEMS,
+                action = PrivacyOperationNames.LOAD_PRIVACY_ITEMS,
                 onError = { error -> setState { copy(items = error.toFailed()) } },
             ) {
                 setState { copy(items = Loadable.Loading) }
                 val items = provider.toPrivacyItems()
-                setState { copy(items = Loadable.Ready(items)) }
+                setState { copy(items = Loadable.Ready(value = items)) }
             }
         }
-    }
-
-    private object Actions {
-        const val LOAD_PRIVACY_ITEMS: String = "loadPrivacyItems"
-        const val OPEN_PRIVACY_ITEM: String = "openPrivacyItem"
     }
 }

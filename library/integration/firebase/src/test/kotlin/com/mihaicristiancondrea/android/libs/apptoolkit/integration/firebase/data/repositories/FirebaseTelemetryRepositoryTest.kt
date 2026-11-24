@@ -149,6 +149,31 @@ class FirebaseTelemetryRepositoryTest {
     }
 
     @Test
+    fun `logEvent caps parameters at 25, truncates strings at 100 chars, and drops invalid or non-finite params`() {
+        val params = buildMap {
+            put("firebase_reserved", AnalyticsValue.Str("blocked"))
+            put("1invalid", AnalyticsValue.Str("blocked"))
+            put("nan_param", AnalyticsValue.DoubleVal(Double.NaN))
+            put("inf_param", AnalyticsValue.DoubleVal(Double.POSITIVE_INFINITY))
+            put("long_str", AnalyticsValue.Str("a".repeat(150)))
+            repeat(30) { index ->
+                put("p_$index", AnalyticsValue.LongVal(index.toLong()))
+            }
+        }
+
+        controller.logEvent(AnalyticsEvent(name = "capped_event", params = params))
+
+        verify { anyConstructed<Bundle>().putString("long_str", "a".repeat(100)) }
+        verify(exactly = 0) { anyConstructed<Bundle>().putString("firebase_reserved", any()) }
+        verify(exactly = 0) { anyConstructed<Bundle>().putString("1invalid", any()) }
+        verify(exactly = 0) { anyConstructed<Bundle>().putDouble("nan_param", any()) }
+        verify(exactly = 0) { anyConstructed<Bundle>().putDouble("inf_param", any()) }
+        verify(exactly = 24) { anyConstructed<Bundle>().putLong(any(), any()) }
+        verify { crashlytics.log(match { it.contains("analytics_drop_invalid_param") }) }
+        verify { crashlytics.log(match { it.contains("analytics_drop_non_finite_param") }) }
+    }
+
+    @Test
     fun `logScreenView logs screen view event with parameters`() {
         val bundleSlot = slot<Bundle>()
         every { analytics.logEvent(eq(FirebaseAnalytics.Event.SCREEN_VIEW), capture(bundleSlot)) } returns Unit
@@ -161,43 +186,72 @@ class FirebaseTelemetryRepositoryTest {
     }
 
     @Test
-    fun `setUserProperty delegates valid property name and value`() {
-        controller.setUserProperty("theme_mode", "dark")
+    fun `logScreenView drops blank screen names and omits blank screen class`() {
+        controller.logScreenView(screenName = "   ", screenClass = "MainActivity")
+        verify(exactly = 0) { analytics.logEvent(FirebaseAnalytics.Event.SCREEN_VIEW, any()) }
+        verify { crashlytics.log("analytics_drop_invalid_screen_view") }
 
-        verify { analytics.setUserProperty("theme_mode", "dark") }
+        controller.logScreenView(screenName = "Home", screenClass = "  ")
+        verify { anyConstructed<Bundle>().putString(FirebaseAnalytics.Param.SCREEN_NAME, "Home") }
+        verify(exactly = 0) { anyConstructed<Bundle>().putString(FirebaseAnalytics.Param.SCREEN_CLASS, any()) }
     }
 
     @Test
-    fun `setUserProperty drops invalid property name`() {
+    fun `setUserProperty delegates valid property name and truncates value to 36 chars or clears null`() {
+        controller.setUserProperty("theme_mode", "x".repeat(50))
+        verify { analytics.setUserProperty("theme_mode", "x".repeat(36)) }
+
+        controller.setUserProperty("theme_mode", null)
+        verify { analytics.setUserProperty("theme_mode", null) }
+    }
+
+    @Test
+    fun `setUserProperty drops reserved or overlong property names instead of truncating`() {
         controller.setUserProperty("ga_reserved_property", "value")
+        controller.setUserProperty("property_name_exceeding_24_chars", "value")
 
-        verify(exactly = 0) { analytics.setUserProperty("ga_reserved_property", any()) }
-        verify { crashlytics.log(match { it.contains("analytics_drop_invalid_user_property") }) }
+        verify(exactly = 0) { analytics.setUserProperty(any(), any()) }
+        verify(exactly = 2) { crashlytics.log(match { it.contains("analytics_drop_invalid_user_property") }) }
     }
 
     @Test
-    fun `logBreadcrumb formats message and attributes`() {
+    fun `logBreadcrumb formats message with and without attributes`() {
+        controller.logBreadcrumb(message = "plain_event")
+        verify { crashlytics.log("plain_event") }
+
         controller.logBreadcrumb(
             message = "user_clicked_button",
             attributes = mapOf("button_id" to "save", "screen" to "profile"),
         )
-
         verify { crashlytics.log("user_clicked_button | button_id=save, screen=profile") }
     }
 
     @Test
-    fun `reportViewModelError sets metadata and records exception`() {
+    fun `reportViewModelError preserves canonical keys and records exception without persistent keys`() {
         val exception = RuntimeException("test error")
+        val recordedKeys = mutableMapOf<String, String>()
+        mockkConstructor(CustomKeysAndValues.Builder::class)
+        every {
+            anyConstructed<CustomKeysAndValues.Builder>().putString(any(), any())
+        } answers {
+            recordedKeys[firstArg()] = secondArg()
+            self as CustomKeysAndValues.Builder
+        }
 
         controller.reportViewModelError(
             viewModelName = "MainViewModel",
             action = "fetchData",
             throwable = exception,
-            extraKeys = mapOf("retry_count" to "3"),
+            extraKeys = mapOf("retry_count" to "3", "view_model" to "spoofed", "action" to "spoofed"),
         )
 
         verify { crashlytics.log("ViewModel catch in MainViewModel during fetchData") }
         verify { crashlytics.recordException(exception, any<CustomKeysAndValues>()) }
+        assertEquals("MainViewModel", recordedKeys["view_model"])
+        assertEquals("fetchData", recordedKeys["action"])
+        assertEquals("3", recordedKeys["retry_count"])
+        assertEquals(RuntimeException::class.java.name, recordedKeys["exception_type"])
+        assertEquals("test error", recordedKeys["exception_message"])
         // The keys belong to this report only; persistent keys would follow every later crash.
         verify(exactly = 0) { crashlytics.setCustomKey(any<String>(), any<String>()) }
     }
@@ -213,5 +267,30 @@ class FirebaseTelemetryRepositoryTest {
 
         verify { crashlytics.recordException(exception, any<CustomKeysAndValues>()) }
         verify(exactly = 0) { crashlytics.setCustomKey(any<String>(), any<String>()) }
+    }
+
+    @Test
+    fun `uninitialized FirebaseApp providers fail closed without throwing`() {
+        val uninitialized = FirebaseTelemetryRepository(
+            analyticsProvider = { error("Default FirebaseApp is not initialized") },
+            crashlyticsProvider = { error("Default FirebaseApp is not initialized") },
+            performanceProvider = { error("Default FirebaseApp is not initialized") },
+        )
+
+        uninitialized.updateConsent(
+            analyticsGranted = true,
+            adStorageGranted = true,
+            adUserDataGranted = false,
+            adPersonalizationGranted = false,
+        )
+        uninitialized.setAnalyticsEnabled(true)
+        uninitialized.setCrashlyticsEnabled(true)
+        uninitialized.setPerformanceEnabled(true)
+        uninitialized.logBreadcrumb("msg")
+        uninitialized.logEvent(AnalyticsEvent(name = "custom_event"))
+        uninitialized.logScreenView(screenName = "Home", screenClass = null)
+        uninitialized.setUserProperty("theme_mode", "dark")
+        uninitialized.reportViewModelError("MainViewModel", "load", IllegalStateException("boom"))
+        uninitialized.recordNonFatal(IllegalStateException("boom"))
     }
 }

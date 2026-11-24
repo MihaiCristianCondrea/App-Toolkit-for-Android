@@ -15,24 +15,27 @@ it in the activity; this module has no chrome of its own.
   `DeepLinkBuilder`, `Destination`, `DestinationKind`, `ShellTab`, `DrawerEntry`, `PaneRole`,
   `TopBarStyle`, `TopBarScrollMode`, `ContentWidth` and `ShellPlayer`, in the `graph` package, and
   `shellGraph { }`.
-- `ShellNavigator`, `rememberShellNavigator`, `ShellHomeRoute`, `ShellNavDisplay`,
+- `ShellNavigator`, `rememberShellNavigator`, `ShellHomeScreen`, `ShellNavDisplay`,
   `ShellBackHandler` and `ShellSearch`, in the root package.
 - The page and list-detail scenes and their strategies, in `scenes`.
 - `ScreenTransition`, `ShellTransitions`, the tab transitions and `CrossActivityBackMotion`, in
   `motion`.
-- `ShellLayoutPolicy`, `ShellLayoutMode` and `ShellLayout`, in `layout`.
+- `ShellLayoutPolicy`, `ShellLayoutMode`, `ShellLayoutInfo`, `rememberShellLayoutInfo` and
+  `LocalShellLayout`, in `layout`.
 - `ShellCapabilities`, in `graph`: what the app's declared graph and layout policy can show.
 - The article app bar a screen declares, in `layout`: `ArticleTopBarHost`, `LocalArticleTopBarHost`,
   `ScaffoldArticleTopBar`, the compact title and reading progress line every bar draws for it
   (`ArticleTopBarTitle`, `ArticleReadingProgress`), and `readingProgress()` for `ScrollState` and
   `LazyListState`. It is here, not in `:library:core:ui`, because the list-detail scene draws it
   too.
-- `AppToolkitNavKey`, one `@Serializable` key per Toolkit page: `SettingsRoute`, `HelpRoute`, `SupportRoute`, `AdsSettingsRoute`, `PermissionsRoute`,
-  `LicensesRoute`, `LibraryExtrasRoute`, `AboutRoute`, `ThemeSettingsRoute`,
-  `DisplaySettingsRoute`, `PrivacySettingsRoute`, `AdvancedSettingsRoute`,
-  `DiagnosticsSettingsRoute`, `DeveloperOptionsRoute`, `StartupRoute` and `OnboardingRoute`.
+- `AppToolkitNavKey`, one `@Serializable` key per Toolkit page: `SettingsScreen`, `HelpScreen`,
+  `SupportScreen`, `AdsSettingsScreen`, `PermissionsScreen`, `LicensesScreen`, `AboutScreen`,
+  `ThemeSettingsScreen`, `DisplaySettingsScreen`, `PrivacySettingsScreen`,
+  `AdvancedSettingsScreen`, `DiagnosticsSettingsScreen`, `DeveloperOptionsScreen`,
+  `StartupScreen` and `OnboardingScreen`.
 - The strings the graph's built-in entries use: settings, support us, navigate back and the pane
-  separator's description.
+  separator's description. Other modules also read `help_and_feedback`, `share` and `updates` from
+  its `R`, for the drawer footer and the settings pages.
 
 ## Does not own
 
@@ -46,7 +49,6 @@ it in the activity; this module has no chrome of its own.
 
 ## Depends on
 
-- [`:library:core:common`](../core/common/README.md) for shared sizing constants.
 - [`:library:core:designsystem`](../core/designsystem/README.md) for `ToolkitIcon`, the slot every
   tab, drawer entry and overflow entry takes, and the `anim_settings` drawable.
 - Navigation 3, with the navigation event library it brings, and Compose, which define the
@@ -95,13 +97,13 @@ val graph = shellGraph(appTitle = R.string.app_name) {
         fabs = { listOf(ToolkitFab(ToolkitIcon.Vector(Icons.Outlined.Add), onClick = ::add, label = "New")) },
     ) { HomeScreen() }
     child<ItemRoute>(title = { it.name }) { ItemScreen(it) }
-    page<LicensesRoute>(paneRole = PaneRole.Detail, title = { stringResource(R.string.licenses) }) { LicensesScreen() }
+    page<LicensesScreen>(paneRole = PaneRole.Detail, title = { stringResource(R.string.licenses) }) { LicensesScreen() }
     drawer {
         link(LibraryRoute, R.string.library, ToolkitIcon.Vector(Icons.Outlined.VideoLibrary))
-        footer { settings(); link(HelpRoute, R.string.help_and_feedback, ToolkitIcon.Vector(Icons.Outlined.HelpOutline)) }
+        footer { settings(); link(HelpScreen, R.string.help_and_feedback, ToolkitIcon.Vector(Icons.Outlined.HelpOutline)) }
     }
     overflow { supportUs() }
-    deepLinks { action(ACTION_OPEN_SETTINGS) { SettingsRoute } }
+    deepLinks { action(ACTION_OPEN_SETTINGS) { SettingsScreen } }
 }
 ```
 
@@ -124,7 +126,7 @@ Screens then call `LocalShellNavigator.current.navigate(key)` with any registere
 - **Tabs keep a true back stack.** Back from a tab's root returns to the tab visited before it,
   each tab remembered once and moved to the top when revisited, the first tab included. When the
   history runs out on another tab, back goes to the first tab, from which the app closes.
-- **An app starts on a tab or on a screen of its own.** A start screen, such as `StartupRoute`,
+- **An app starts on a tab or on a screen of its own.** A start screen, such as `StartupScreen`,
   has no shell under it, so back from it leaves the app. `continueStart(next)` hands over to the
   next start screen, and navigating to a tab, or `enterShell()`, replaces the last with the shell
   for good.
@@ -180,6 +182,16 @@ Screens then call `LocalShellNavigator.current.navigate(key)` with any registere
 - **Overlays register late.** A display inside a `Scaffold` is composed during layout, after what
   is composed beside it. `ShellBackHandler` waits a frame before registering, so overlay handlers
   always come after, and win over, the displays.
+- **A tab is matched by instance, everything else by class.** Registration is per key class, so a
+  second `tab()` or `page()` for the same class fails. A tab key is the instance given to `tab()`:
+  `navigate(TabKey("other"))` throws, and `contains` is false for it.
+- **Register an app's own key before `toolkitGraph`.** `pageIfAbsent` skips a key already
+  registered, so an app replaces a Toolkit page by registering its own first.
+- **Deep links are an entry point.** `deepLinks { }` lambdas receive intents from exported
+  components, so any app can send one. Validate the caller before returning a key such as
+  `DeveloperOptionsScreen`.
+- **An unregistered key throws.** `navigate()` on a key the graph does not register fails with an
+  error naming it, and a child in a graph of pages only has no tab to open on.
 - **Keys are serializable.** `rememberNavBackStack` saves keys with kotlinx.serialization, so the
   stacks survive rotation and process death. A key that is not `@Serializable` fails at runtime
   when the stack is saved.
@@ -201,10 +213,13 @@ Screens then call `LocalShellNavigator.current.navigate(key)` with any registere
   `tab`, `child`, `page` and `pageIfAbsent` means the default for that kind of destination.
 - `ShellNavigator` (`navigate`, `close`, `goBack`, `selectTab`, `continueStart`, `enterShell`, the
   page and tab stacks) and `rememberShellNavigator`.
-- `ShellNavDisplay`, `ShellBackHandler`, `ShellHomeRoute`, the scenes and their strategies,
-  `ScreenTransition`, `ShellTransitions`, `CrossActivityBackMotion` and `ShellLayoutPolicy`.
+- `ShellSearch.query` reads and updates the tab's search text. The app bar edits the same
+  `ShellSearch.textFieldState`, which also owns the editor selection.
+- `ShellNavDisplay`, `ShellBackHandler`, `ShellHomeScreen`, the scenes and their strategies,
+  `ScreenTransition`, `ShellTransitions`, `ShellMotion` with its tab and screen transitions, and
+  `ShellLayoutPolicy`. `CrossActivityBackMotion`, `PageScene` and `PageSurface` are internal.
 - The composition locals `LocalShellNavigator`, `LocalShellGraph`, `LocalPageKey`,
-  `LocalPaneRole`, `LocalSelectedDetail`, `LocalShellSearch`, `LocalShellLayout`,
+  `LocalPaneRole`, `LocalShellSearch`, `LocalShellLayout`,
   `LocalShellMotion` and `LocalBesideNavigation`, with `isTopLevelPage`. While the shared colour
   beside the navigation follows scrolling, `BesideNavigation.scrollTint` is a `FrameScrollTint`,
   and app bars join it with `FollowScrollWithFrameTint`, saying how far to tint as a `FrameTint`:

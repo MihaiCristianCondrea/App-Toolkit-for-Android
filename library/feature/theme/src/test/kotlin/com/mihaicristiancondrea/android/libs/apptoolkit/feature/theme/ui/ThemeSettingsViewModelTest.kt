@@ -135,6 +135,18 @@ class ThemeSettingsViewModelTest {
     }
 
     @Test
+    fun `reloading while preferences are already ready does not flash loading`() =
+        runTest(dispatcherExtension.testDispatcher) {
+            val viewModel = createViewModel()
+            advance()
+
+            preferences.stored.value = null
+            viewModel.onEvent(ThemeSettingsEvent.Load)
+
+            assertEquals(FakeThemePreferencesRepository.DefaultPreferences, viewModel.loadedPreferences())
+        }
+
+    @Test
     fun `selecting a theme mode saves it`() = runTest(dispatcherExtension.testDispatcher) {
         val viewModel = createViewModel()
         advance()

@@ -8,11 +8,11 @@ import androidx.datastore.preferences.core.emptyPreferences
 import androidx.datastore.preferences.core.preferencesOf
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.coroutines.dispatchers.DispatcherProvider
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.datastore.DataStoreNamesConstants
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.FakeTelemetryRepository
 import io.mockk.every
 import io.mockk.mockkStatic
 import io.mockk.unmockkStatic
 import io.mockk.verify
-import java.io.IOException
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.awaitCancellation
@@ -25,13 +25,19 @@ import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import java.io.IOException
+import kotlin.test.assertEquals
 import kotlin.test.assertFalse
+import kotlin.test.assertIs
 import kotlin.test.assertTrue
 
 @OptIn(kotlinx.coroutines.ExperimentalCoroutinesApi::class)
 class AdsPreferenceRecoveryTest {
+    private lateinit var diagnostics: FakeTelemetryRepository
+
     @BeforeEach
     fun prepareLogs() {
+        diagnostics = FakeTelemetryRepository()
         mockkStatic(Log::class)
         every { Log.w(any(), any<String>(), any()) } returns 0
         every { Log.e(any(), any<String>(), any()) } returns 0
@@ -43,11 +49,14 @@ class AdsPreferenceRecoveryTest {
     @Test
     fun `a delayed opt out never publishes the enabled default`() = runTest {
         val readReady = CompletableDeferred<Unit>()
-        val source = source(StandardTestDispatcher(testScheduler), flow {
-            readReady.await()
-            emit(preferencesOf(booleanPreferencesKey(DataStoreNamesConstants.DATA_STORE_ADS) to false))
-            awaitCancellation()
-        })
+        val source = source(
+            dispatcher = StandardTestDispatcher(testScheduler),
+            values = flow {
+                readReady.await()
+                emit(preferencesOf(booleanPreferencesKey(DataStoreNamesConstants.DATA_STORE_ADS) to false))
+                awaitCancellation()
+            },
+        )
         try {
             assertFalse(source.adsEnabled.value)
             runCurrent()
@@ -63,11 +72,14 @@ class AdsPreferenceRecoveryTest {
     @Test
     fun `an absent preference enables ads only after storage answers`() = runTest {
         val readReady = CompletableDeferred<Unit>()
-        val source = source(StandardTestDispatcher(testScheduler), flow {
-            readReady.await()
-            emit(emptyPreferences())
-            awaitCancellation()
-        })
+        val source = source(
+            dispatcher = StandardTestDispatcher(testScheduler),
+            values = flow {
+                readReady.await()
+                emit(emptyPreferences())
+                awaitCancellation()
+            },
+        )
         try {
             runCurrent()
             assertFalse(source.adsEnabled.value)
@@ -82,18 +94,23 @@ class AdsPreferenceRecoveryTest {
     @Test
     fun `a transient read failure disables ads and reconnects to storage`() = runTest {
         var reads = 0
-        val source = source(StandardTestDispatcher(testScheduler), flow {
-            if (reads++ == 0) {
+        val source = source(
+            dispatcher = StandardTestDispatcher(testScheduler),
+            values = flow {
+                if (reads++ == 0) {
+                    emit(emptyPreferences())
+                    throw IOException("storage temporarily unavailable")
+                }
                 emit(emptyPreferences())
-                throw IOException("storage temporarily unavailable")
-            }
-            emit(emptyPreferences())
-            awaitCancellation()
-        })
+                awaitCancellation()
+            },
+        )
         try {
             runCurrent()
             assertFalse(source.adsEnabled.value)
             verify(exactly = 1) { Log.w(any(), any<String>(), ofType<IOException>()) }
+            assertEquals(1, diagnostics.breadcrumbs.size)
+            assertTrue(diagnostics.nonFatals.isEmpty())
             advanceTimeBy(1_000)
             runCurrent()
             assertTrue(source.adsEnabled.value)
@@ -104,19 +121,27 @@ class AdsPreferenceRecoveryTest {
 
     @Test
     fun `an unexpected read failure is logged and leaves ads disabled`() = runTest {
-        val source = source(StandardTestDispatcher(testScheduler), flow {
-            throw IllegalStateException("unexpected storage failure")
-        })
+        val source = source(
+            dispatcher = StandardTestDispatcher(testScheduler),
+            values = flow {
+                throw IllegalStateException("unexpected storage failure")
+            },
+        )
         try {
             runCurrent()
             assertFalse(source.adsEnabled.value)
             verify(exactly = 1) { Log.e(any(), any<String>(), ofType<IllegalStateException>()) }
+            assertEquals(1, diagnostics.nonFatals.size)
+            assertIs<IllegalStateException>(diagnostics.nonFatals.single())
         } finally {
             source.close()
         }
     }
 
-    private fun source(dispatcher: CoroutineDispatcher, values: Flow<Preferences>): DefaultAdsPreferencesDataSource {
+    private fun source(
+        dispatcher: CoroutineDispatcher,
+        values: Flow<Preferences>,
+    ): DefaultAdsPreferencesDataSource {
         val store = object : DataStore<Preferences> {
             override val data = values
             override suspend fun updateData(transform: suspend (Preferences) -> Preferences): Preferences =
@@ -128,6 +153,11 @@ class AdsPreferenceRecoveryTest {
             override val main = dispatcher
             override val unconfined = dispatcher
         }
-        return DefaultAdsPreferencesDataSource(store, dispatchers, defaultAdsEnabled = true)
+        return DefaultAdsPreferencesDataSource(
+            dataStore = store,
+            dispatchers = dispatchers,
+            defaultAdsEnabled = true,
+            diagnostics = diagnostics,
+        )
     }
 }

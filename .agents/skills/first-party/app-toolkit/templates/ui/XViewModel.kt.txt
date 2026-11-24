@@ -1,0 +1,63 @@
+package <base>.feature.x.ui
+
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.telemetry.TelemetryRepository
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.UiText
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.Loadable
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.LoggedScreenViewModel
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.toFailed
+import <base>.feature.x.R
+import <base>.feature.x.data.repositories.XRepository
+import <base>.feature.x.ui.analytics.XAnalytics
+import <base>.feature.x.ui.constants.XOperationNames
+import <base>.feature.x.ui.contracts.XEvent
+import <base>.feature.x.ui.mappers.toXItems
+import <base>.feature.x.ui.states.XUiState
+import kotlinx.coroutines.Job
+
+/**
+ * Loads inventory when created and retries through [XEvent.Load].
+ * Concurrent requests for the same catalog share the active load.
+ */
+class XViewModel(
+    private val repository: XRepository,
+    telemetryRepository: TelemetryRepository,
+) : LoggedScreenViewModel<XUiState, XEvent>(
+    initialState = XUiState(),
+    telemetryRepository = telemetryRepository,
+    screenName = XAnalytics.SCREEN_NAME,
+    viewModelName = "XViewModel",
+) {
+    private var loadJob: Job? = null
+
+    init {
+        onEvent(event = XEvent.Load)
+    }
+
+    override fun handleEvent(event: XEvent) {
+        when (event) {
+            is XEvent.Load -> load()
+        }
+    }
+
+    /** Publishes the catalog load result, including retryable failures. */
+    private fun load() {
+        loadJob = loadJob.ifIsActive {
+            launchReport(
+                action = XOperationNames.LOAD,
+                onError = { error ->
+                    setState {
+                        copy(
+                            items = error.toFailed(
+                                fallback = UiText.StringResource(resourceId = R.string.x_load_failed),
+                            ),
+                        )
+                    }
+                },
+            ) {
+                setState { copy(items = Loadable.Loading) }
+                val items = repository.getItems().toXItems()
+                setState { copy(items = if (items.isEmpty()) Loadable.Empty() else Loadable.Ready(value = items)) }
+            }
+        }
+    }
+}

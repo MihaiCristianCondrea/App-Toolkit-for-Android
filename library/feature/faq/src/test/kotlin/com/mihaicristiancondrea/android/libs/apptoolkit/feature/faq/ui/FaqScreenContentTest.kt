@@ -48,9 +48,9 @@ class FaqScreenContentTest {
     @get:Rule
     val compose = createAndroidComposeRule<ComponentActivity>()
 
-    private val questions = (1..7).map { FaqItem(id = FaqId("q$it"), question = "Question $it", answer = "Answer $it") }
+    private val questions = (1..7).map { FaqItem(id = FaqId(value = "q$it"), question = "Question $it", answer = "Answer $it") }
     private val calls = mutableListOf<String>()
-    private var showFeedbackSheet by mutableStateOf(false)
+    private var showFeedbackSheet by mutableStateOf(value = false)
 
     private fun string(id: Int): String = compose.activity.getString(id)
 
@@ -58,15 +58,21 @@ class FaqScreenContentTest {
         compose.setContent {
             MaterialTheme {
                 FaqScreenContent(
-                    state = FaqUiState(questions = Loadable.Ready(questions.toImmutableList())),
+                    state = FaqUiState(questions = Loadable.Ready(value = questions.toImmutableList())),
                     showFeedbackSheet = showFeedbackSheet,
                     onFeedbackSheetDismissed = {
                         calls += "dismissed"
                         showFeedbackSheet = false
                     },
                     onRetry = {},
-                    onRequestFeature = { calls += "feature" },
-                    onLeaveReview = { calls += "review" },
+                    onRequestFeature = {
+                        calls += "feature"
+                        showFeedbackSheet = false
+                    },
+                    onLeaveReview = {
+                        calls += "review"
+                        showFeedbackSheet = false
+                    },
                     onQuestionToggled = { question, position, expanded -> calls += "${question.id.value}@$position=$expanded" },
                     onShowMoreQuestions = { calls += "more" },
                     onContactUs = {},
@@ -76,44 +82,44 @@ class FaqScreenContentTest {
     }
 
     private fun scrollTo(text: String) {
-        compose.onNode(hasScrollAction()).performScrollToNode(hasText(text))
+        compose.onNode(matcher = hasScrollAction()).performScrollToNode(matcher = hasText(text = text))
     }
 
     @Test
     fun `show more reveals the rest of the questions once and then leaves`() {
         setContent()
-        scrollTo("Question 5")
-        compose.onNodeWithText("Question 6").assertDoesNotExist()
+        scrollTo(text = "Question 5")
+        compose.onNodeWithText(text = "Question 6").assertDoesNotExist()
 
-        scrollTo(string(R.string.show_more))
-        compose.onNodeWithText(string(R.string.show_more)).performClick()
+        scrollTo(text = string(id = R.string.show_more))
+        compose.onNodeWithText(text = string(id = R.string.show_more)).performClick()
         compose.waitForIdle()
 
-        scrollTo("Question 7")
-        compose.onNodeWithText("Question 7").assertExists()
-        compose.onNodeWithText(string(R.string.show_more)).assertDoesNotExist()
-        assertEquals(listOf("more"), calls)
+        scrollTo(text = "Question 7")
+        compose.onNodeWithText(text = "Question 7").assertExists()
+        compose.onNodeWithText(text = string(id = R.string.show_more)).assertDoesNotExist()
+        assertEquals(listOf(element = "more"), calls)
     }
 
     @Test
     fun `a question reports each toggle with its position`() {
         setContent()
-        compose.onNodeWithText("Question 2").performClick()
-        compose.onNodeWithText("Question 2").performClick()
+        compose.onNodeWithText(text = "Question 2").performClick()
+        compose.onNodeWithText(text = "Question 2").performClick()
 
         assertEquals(listOf("q2@1=true", "q2@1=false"), calls)
     }
 
     @Test
-    fun `a row of the feedback sheet closes it before running its choice`() {
+    fun `a row of the feedback sheet runs its choice without firing dismiss`() {
         setContent()
-        compose.onNodeWithText(string(R.string.help_feedback_sheet_title)).assertDoesNotExist()
+        compose.onNodeWithText(text = string(id = R.string.help_feedback_sheet_title)).assertDoesNotExist()
 
         showFeedbackSheet = true
-        compose.onNodeWithText(string(R.string.help_feedback_sheet_feature_request_title)).performClick()
+        compose.onNodeWithText(text = string(id = R.string.help_feedback_sheet_feature_request_title)).performClick()
         compose.waitForIdle()
 
-        assertEquals(listOf("dismissed", "feature"), calls)
-        compose.onNodeWithText(string(R.string.help_feedback_sheet_title)).assertDoesNotExist()
+        assertEquals(listOf(element = "feature"), calls)
+        compose.onNodeWithText(text = string(id = R.string.help_feedback_sheet_title)).assertDoesNotExist()
     }
 }

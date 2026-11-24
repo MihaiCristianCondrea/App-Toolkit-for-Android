@@ -53,21 +53,29 @@ import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.model
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.mappers.helperSummaryResId
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.mappers.helperTitleResId
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.models.ToolkitTile
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.navigation.BillSplitterToolRoute
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.navigation.BreathingToolRoute
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.navigation.CoinFlipToolRoute
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.navigation.CompassToolRoute
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.navigation.CounterToolRoute
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.navigation.DiceRollToolRoute
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.navigation.FlashDimmerToolRoute
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.navigation.LevelToolRoute
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.navigation.MorseToolRoute
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.navigation.ProtractorToolRoute
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.navigation.RandomNumberToolRoute
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.navigation.ReactionTestToolRoute
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.navigation.RulerToolRoute
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.navigation.SosToolRoute
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.navigation.UnitConverterToolRoute
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.BillSplitterToolSheet
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.BreathingToolSheet
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.CoinFlipToolSheet
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.CompassToolSheet
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.CounterToolSheet
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.DiceRollToolSheet
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.FlashDimmerToolSheet
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.LevelToolSheet
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.MorseToolSheet
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.ProtractorToolSheet
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.RandomNumberToolSheet
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.ReactionTestToolSheet
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.RulerToolSheet
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.SosToolSheet
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.UnitConverterToolSheet
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.compose.LifecycleResumeEffect
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.BellToolViewModel
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.contracts.BellToolEvent
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.tools.BellTool
+import org.koin.compose.viewmodel.koinViewModel
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.WaterEjectToolSheet
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.DecisionWheelToolSheet
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.catalog.TileIconBadge
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.catalog.ToolAccentTheme
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.previews.GenericToolPreview
@@ -77,6 +85,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.ico
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.ButtonMeasurements
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.GeneralButton
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.GeneralButtonStyle
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.ui.utils.SuppressShakeToReport
 
 /**
  * Animated bottom sheet host for previewing every Quick Tools catalog entry.
@@ -99,11 +108,11 @@ fun ToolkitToolBottomSheet(
     }
     when (tile.id) {
         ToolkitTileIds.PROTRACTOR -> {
-            ProtractorToolRoute(onClose = onClose)
+            ProtractorToolSheet(onClose = onClose)
             return
         }
         ToolkitTileIds.RULER -> {
-            RulerToolRoute(onClose = onClose)
+            RulerToolSheet(onClose = onClose)
             return
         }
     }
@@ -127,8 +136,23 @@ fun ToolkitToolBottomSheet(
                     .padding(SizeConstants.LargeSize),
                 verticalArrangement = Arrangement.spacedBy(SizeConstants.LargeSize),
             ) {
-                ToolSheetHeader(tile = tile, onClose = onClose)
-                ToolInteractiveContent(tile = tile, startReaction = startReaction)
+                if (tile.id == ToolkitTileIds.BELL) {
+                    val bell: BellToolViewModel = koinViewModel()
+                    val state = bell.state.collectAsStateWithLifecycle().value
+                    SuppressShakeToReport()
+                    LifecycleResumeEffect(bell) {
+                        bell.onEvent(BellToolEvent.Open)
+                        onPauseOrDispose { bell.onEvent(BellToolEvent.Close) }
+                    }
+                    ToolSheetHeader(
+                        tile = if (state.motionAvailable) tile else tile.copy(summaryResId = R.string.bell_motion_unavailable),
+                        onClose = onClose,
+                    )
+                    BellTool(state = state, onRing = { bell.onEvent(BellToolEvent.Ring) })
+                } else {
+                    ToolSheetHeader(tile = tile, onClose = onClose)
+                    ToolInteractiveContent(tile = tile, startReaction = startReaction)
+                }
                 ToolIntegrationSection(
                     tile = tile,
                     onAddTile = onAddTile,
@@ -218,22 +242,22 @@ private fun ToolInteractiveContent(
     startReaction: Boolean,
 ) {
     when (tile.id) {
-        ToolkitTileIds.WATER_EJECT -> com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.navigation.WaterEjectToolRoute()
-        ToolkitTileIds.DECISION_WHEEL -> com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.navigation.DecisionWheelToolRoute()
-        ToolkitTileIds.COIN_FLIP -> CoinFlipToolRoute()
-        ToolkitTileIds.DICE_ROLL -> DiceRollToolRoute()
-        ToolkitTileIds.COUNTER -> CounterToolRoute()
-        ToolkitTileIds.COMPASS -> CompassToolRoute()
-        ToolkitTileIds.BUBBLE_LEVEL -> LevelToolRoute()
-        ToolkitTileIds.REACTION_TEST -> ReactionTestToolRoute(autoStart = startReaction)
-        ToolkitTileIds.SOS -> SosToolRoute()
-        ToolkitTileIds.MORSE -> MorseToolRoute()
-        ToolkitTileIds.BREATHING -> BreathingToolRoute()
-        ToolkitTileIds.FLASH_DIMMER -> FlashDimmerToolRoute()
+        ToolkitTileIds.WATER_EJECT -> WaterEjectToolSheet()
+        ToolkitTileIds.DECISION_WHEEL -> DecisionWheelToolSheet()
+        ToolkitTileIds.COIN_FLIP -> CoinFlipToolSheet()
+        ToolkitTileIds.DICE_ROLL -> DiceRollToolSheet()
+        ToolkitTileIds.COUNTER -> CounterToolSheet()
+        ToolkitTileIds.COMPASS -> CompassToolSheet()
+        ToolkitTileIds.BUBBLE_LEVEL -> LevelToolSheet()
+        ToolkitTileIds.REACTION_TEST -> ReactionTestToolSheet(autoStart = startReaction)
+        ToolkitTileIds.SOS -> SosToolSheet()
+        ToolkitTileIds.MORSE -> MorseToolSheet()
+        ToolkitTileIds.BREATHING -> BreathingToolSheet()
+        ToolkitTileIds.FLASH_DIMMER -> FlashDimmerToolSheet()
         ToolkitTileIds.PROTRACTOR -> Unit
-        ToolkitTileIds.BILL_SPLITTER -> BillSplitterToolRoute()
-        ToolkitTileIds.RANDOM_NUMBER -> RandomNumberToolRoute()
-        ToolkitTileIds.UNIT_CONVERTER -> UnitConverterToolRoute()
+        ToolkitTileIds.BILL_SPLITTER -> BillSplitterToolSheet()
+        ToolkitTileIds.RANDOM_NUMBER -> RandomNumberToolSheet()
+        ToolkitTileIds.UNIT_CONVERTER -> UnitConverterToolSheet()
         else -> GenericToolPreview(tile = tile)
     }
 }

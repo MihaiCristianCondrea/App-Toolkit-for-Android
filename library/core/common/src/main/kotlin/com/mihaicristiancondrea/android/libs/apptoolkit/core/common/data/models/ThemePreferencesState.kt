@@ -17,13 +17,25 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.models
 
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.colorscheme.StaticPaletteIds
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.datastore.DataStoreNamesConstants
+
 /**
- * Represents the persisted theme-related preferences exposed to the UI layer.
+ * Stored theme preferences exposed to the UI layer.
+ *
+ * Defaults match the Toolkit's first-launch appearance: follow the system theme, dynamic colors
+ * enabled, pure-black AMOLED mode off, dynamic palette variant `0`, and [StaticPaletteIds.DEFAULT].
+ *
+ * @property themeMode Selected theme mode key from [DataStoreNamesConstants].
+ * @property dynamicColors Whether dynamic wallpaper colors are enabled when supported.
+ * @property amoledMode Whether pure-black dark surfaces are enabled.
+ * @property dynamicPaletteVariant Clamped index of the active dynamic palette variant.
+ * @property staticPaletteId Identifier of the selected static color palette from [StaticPaletteIds].
  */
 data class ThemePreferencesState(
-    val themeMode: String,
-    val dynamicColors: Boolean,
-    val amoledMode: Boolean,
-    val dynamicPaletteVariant: Int,
-    val staticPaletteId: String,
+    val themeMode: String = DataStoreNamesConstants.THEME_MODE_FOLLOW_SYSTEM,
+    val dynamicColors: Boolean = true,
+    val amoledMode: Boolean = false,
+    val dynamicPaletteVariant: Int = 0,
+    val staticPaletteId: String = StaticPaletteIds.DEFAULT,
 )

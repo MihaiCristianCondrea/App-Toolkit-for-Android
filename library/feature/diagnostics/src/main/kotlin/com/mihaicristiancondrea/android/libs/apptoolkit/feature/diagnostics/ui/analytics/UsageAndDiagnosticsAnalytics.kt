@@ -17,33 +17,35 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.diagnostics.ui.analytics
 
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.analytics.Ga4EventData
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.analytics.SettingsAnalytics
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.telemetry.models.AnalyticsValue
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.telemetry.models.TrackedScreen
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.analytics.SettingsAnalytics
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.analytics.Ga4EventData
 
-internal const val USAGE_DIAGNOSTICS_SCREEN_NAME = "UsageAndDiagnostics"
+internal const val USAGE_DIAGNOSTICS_SCREEN_NAME: String = "UsageAndDiagnostics"
+
+internal val USAGE_DIAGNOSTICS_SCREEN: TrackedScreen = TrackedScreen(
+    name = USAGE_DIAGNOSTICS_SCREEN_NAME,
+    className = "UsageAndDiagnosticsScreen",
+)
 
 internal fun diagnosticsToggleEvent(enabled: Boolean): Ga4EventData = Ga4EventData(
     name = SettingsAnalytics.Events.PREFERENCE_TOGGLE,
     params = mapOf(
-        SettingsAnalytics.Params.SCREEN to AnalyticsValue.Str(
-            USAGE_DIAGNOSTICS_SCREEN_NAME
-        ),
+        SettingsAnalytics.Params.SCREEN to AnalyticsValue.Str(value = USAGE_DIAGNOSTICS_SCREEN_NAME),
         SettingsAnalytics.Params.PREFERENCE_KEY to AnalyticsValue.Str(
-            UsageAndDiagnosticsPreferenceKeys.USAGE_AND_DIAGNOSTICS
+            value = UsageAndDiagnosticsPreferenceKeys.USAGE_AND_DIAGNOSTICS,
         ),
-        SettingsAnalytics.Params.ENABLED to AnalyticsValue.Str(enabled.toString()),
+        SettingsAnalytics.Params.ENABLED to AnalyticsValue.Str(value = enabled.toString()),
     ),
 )
 
 internal fun diagnosticsPrivacyChoicesEvent(): Ga4EventData = Ga4EventData(
     name = SettingsAnalytics.Events.PREFERENCE_VIEW,
     params = mapOf(
-        SettingsAnalytics.Params.SCREEN to AnalyticsValue.Str(
-            USAGE_DIAGNOSTICS_SCREEN_NAME
-        ),
+        SettingsAnalytics.Params.SCREEN to AnalyticsValue.Str(value = USAGE_DIAGNOSTICS_SCREEN_NAME),
         SettingsAnalytics.Params.PREFERENCE_KEY to AnalyticsValue.Str(
-            UsageAndDiagnosticsPreferenceKeys.PRIVACY_CHOICES
+            value = UsageAndDiagnosticsPreferenceKeys.PRIVACY_CHOICES,
         ),
     ),
 )

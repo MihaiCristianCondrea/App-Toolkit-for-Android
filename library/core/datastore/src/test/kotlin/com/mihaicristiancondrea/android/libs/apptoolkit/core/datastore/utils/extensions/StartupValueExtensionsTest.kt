@@ -33,7 +33,7 @@ class StartupValueExtensionsTest {
         every { store.startupPage(default = "home") } returns
             flowOf("", " ", "home", "apps", "apps", "legacy", "unknown", "apps")
         val received = mutableListOf<String>()
-        val values = store.startupValueFlow(defaultRoute = "home") { route ->
+        val values = store.startupValueFlow(defaultScreenId = "home") { route ->
             received += route
             if (route == "apps") 1 else 0
         }.toList()

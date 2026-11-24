@@ -21,14 +21,13 @@ import kotlinx.serialization.Serializable
 import kotlinx.serialization.SerialName
 
 /**
- * Data transfer object representing the FAQ catalog structure.
+ * Catalog response containing the schema version and available product entries.
  *
- * @property schemaVersion The version of the catalog schema used for parsing.
- * @property products A list of available products and their associated FAQ sources.
+ * @property schemaVersion Version of the JSON catalog format.
  */
 @Serializable
 data class FaqCatalogDto(
-    @SerialName("schemaVersion")
+    @SerialName(value = "schemaVersion")
     val schemaVersion: Int,
     val products: List<FaqProductDto> = emptyList(),
 )

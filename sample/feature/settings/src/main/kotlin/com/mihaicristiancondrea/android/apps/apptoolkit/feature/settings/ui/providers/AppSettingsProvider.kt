@@ -17,13 +17,6 @@
 
 package com.mihaicristiancondrea.android.apps.apptoolkit.feature.settings.ui.providers
 
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.icons.ToolkitIcon
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.settings.utils.constants.SettingsConstants
-
-import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.AboutRoute
-import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.AdvancedSettingsRoute
-import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.DisplaySettingsRoute
-import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.PrivacySettingsRoute
 import android.content.Context
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Build
@@ -32,11 +25,17 @@ import androidx.compose.material.icons.outlined.Notifications
 import androidx.compose.material.icons.outlined.Palette
 import androidx.compose.material.icons.outlined.Security
 import androidx.compose.ui.graphics.Color
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.settings.ui.constants.SettingsConstants
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.context.openAppNotificationSettings
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.icons.ToolkitIcon
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.settings.SettingsCategory
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.settings.SettingsConfig
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.settings.SettingsPreference
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.settings.ui.providers.SettingsProvider
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.keys.AboutScreen
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.keys.AdvancedSettingsScreen
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.keys.DisplaySettingsScreen
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.keys.PrivacySettingsScreen
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.R as CoreUiR
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.settings.R as SettingsR
 
@@ -57,24 +56,24 @@ class AppSettingsProvider(context: Context) : SettingsProvider {
                     preferences = listOf(
                         SettingsPreference(
                             key = SettingsConstants.KEY_SETTINGS_NOTIFICATION,
-                            icon = ToolkitIcon.Vector(Icons.Outlined.Notifications),
+                            icon = ToolkitIcon.Vector(imageVector = Icons.Outlined.Notifications),
                             useIconContainer = true,
-                            iconColor = Color(0xFF8D0154),
-                            iconContainerColor = Color(0xFFFFD8EF),
+                            iconColor = Color(color = 0xFF8D0154),
+                            iconContainerColor = Color(color = 0xFFFFD8EF),
                             title = context.getString(SettingsR.string.notifications),
                             summary = context.getString(SettingsR.string.summary_preference_settings_notifications),
-                            destination = PrivacySettingsRoute,
+                            destination = PrivacySettingsScreen,
                             action = { context.openAppNotificationSettings() },
                         ),
                         SettingsPreference(
                             key = SettingsConstants.KEY_SETTINGS_DISPLAY,
-                            icon = ToolkitIcon.Vector(Icons.Outlined.Palette),
+                            icon = ToolkitIcon.Vector(imageVector = Icons.Outlined.Palette),
                             useIconContainer = true,
-                            iconColor = Color(0xFF763504),
-                            iconContainerColor = Color(0xFFFFDCC3),
+                            iconColor = Color(color = 0xFF763504),
+                            iconContainerColor = Color(color = 0xFFFFDCC3),
                             title = context.getString(SettingsR.string.display),
                             summary = context.getString(SettingsR.string.summary_preference_settings_display),
-                            destination = DisplaySettingsRoute,
+                            destination = DisplaySettingsScreen,
                         ),
                     ),
                 ),
@@ -82,33 +81,33 @@ class AppSettingsProvider(context: Context) : SettingsProvider {
                     preferences = listOf(
                         SettingsPreference(
                             key = SettingsConstants.KEY_SETTINGS_SECURITY_AND_PRIVACY,
-                            icon = ToolkitIcon.Vector(Icons.Outlined.Security),
+                            icon = ToolkitIcon.Vector(imageVector = Icons.Outlined.Security),
                             useIconContainer = true,
-                            iconColor = Color(0xFF014E69),
-                            iconContainerColor = Color(0xFFBDE9FF),
+                            iconColor = Color(color = 0xFF014E69),
+                            iconContainerColor = Color(color = 0xFFBDE9FF),
                             title = context.getString(SettingsR.string.security_and_privacy),
                             summary = context.getString(SettingsR.string.summary_preference_settings_privacy_and_security),
-                            destination = PrivacySettingsRoute,
+                            destination = PrivacySettingsScreen,
                         ),
                         SettingsPreference(
                             key = SettingsConstants.KEY_SETTINGS_ADVANCED,
-                            icon = ToolkitIcon.Vector(Icons.Outlined.Build),
+                            icon = ToolkitIcon.Vector(imageVector = Icons.Outlined.Build),
                             useIconContainer = true,
-                            iconColor = Color(0xFF572AA4),
-                            iconContainerColor = Color(0xFFEEDCFE),
+                            iconColor = Color(color = 0xFF572AA4),
+                            iconContainerColor = Color(color = 0xFFEEDCFE),
                             title = context.getString(SettingsR.string.advanced),
                             summary = context.getString(SettingsR.string.summary_preference_settings_advanced),
-                            destination = AdvancedSettingsRoute,
+                            destination = AdvancedSettingsScreen,
                         ),
                         SettingsPreference(
                             key = SettingsConstants.KEY_SETTINGS_ABOUT,
-                            icon = ToolkitIcon.Vector(Icons.Outlined.Info),
+                            icon = ToolkitIcon.Vector(imageVector = Icons.Outlined.Info),
                             useIconContainer = true,
-                            iconColor = Color(0xFF484848),
-                            iconContainerColor = Color(0xFFE3E3E3),
+                            iconColor = Color(color = 0xFF484848),
+                            iconContainerColor = Color(color = 0xFFE3E3E3),
                             title = context.getString(CoreUiR.string.about),
                             summary = context.getString(SettingsR.string.summary_preference_settings_about),
-                            destination = AboutRoute,
+                            destination = AboutScreen,
                         ),
                     ),
                 ),

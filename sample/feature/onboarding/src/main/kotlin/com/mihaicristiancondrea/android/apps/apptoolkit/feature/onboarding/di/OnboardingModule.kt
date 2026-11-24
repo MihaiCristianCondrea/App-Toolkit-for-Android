@@ -18,20 +18,11 @@
 package com.mihaicristiancondrea.android.apps.apptoolkit.feature.onboarding.di
 
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.onboarding.ui.providers.AppOnboardingProvider
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.onboarding.ui.OnboardingViewModel
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.onboarding.ui.providers.OnboardingProvider
 import org.koin.core.module.Module
-import org.koin.core.module.dsl.viewModel
 import org.koin.dsl.module
 
+/** Koin bindings for the sample app's onboarding page provider. */
 val onboardingModule: Module = module {
     single<OnboardingProvider> { AppOnboardingProvider() }
-
-    viewModel {
-        OnboardingViewModel(
-            onboardingRepository = get(),
-            consentRepository = get(),
-            telemetryRepository = get(),
-        )
-    }
 }

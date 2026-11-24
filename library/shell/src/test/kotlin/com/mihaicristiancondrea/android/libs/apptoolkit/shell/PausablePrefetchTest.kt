@@ -18,12 +18,16 @@
 package com.mihaicristiancondrea.android.libs.apptoolkit.shell
 
 import androidx.activity.ComponentActivity
-import androidx.compose.foundation.ComposeFoundationFlags
-import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Home
 import androidx.compose.material3.Text
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.junit4.v2.createAndroidComposeRule
+import androidx.compose.ui.test.onNodeWithText
+import androidx.compose.ui.test.performClick
 import androidx.navigation3.runtime.NavKey
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.R as CommonR
@@ -39,11 +43,11 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.ico
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.style.AppTheme
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.FakePreferencesDataStore
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.R as NavigationR
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.LocalShellNavigator
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.shellGraph
 import com.mihaicristiancondrea.android.libs.apptoolkit.shell.data.repositories.InMemoryShellPreferencesRepository
 import kotlinx.serialization.Serializable
 import org.junit.After
-import org.junit.Assert.assertFalse
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -53,7 +57,6 @@ import org.koin.core.context.stopKoin
 import org.koin.dsl.module
 import org.robolectric.annotation.Config
 
-@OptIn(ExperimentalFoundationApi::class)
 @RunWith(AndroidJUnit4::class)
 @Config(sdk = [36])
 class PausablePrefetchTest {
@@ -62,7 +65,6 @@ class PausablePrefetchTest {
 
     @Before
     fun setUp() {
-        ComposeFoundationFlags.isPausableCompositionInPrefetchEnabled = true
         startKoin { modules(module {
                     single<AdsSettingsRepository> { FakeAdsSettingsRepository() }
                     single<DisplayPreferencesRepository> { DefaultDisplayPreferencesRepository(DefaultDisplayPreferencesDataSource(FakePreferencesDataStore())) }
@@ -73,16 +75,31 @@ class PausablePrefetchTest {
     fun tearDown() = stopKoin()
 
     @Test
-    fun `the shell turns off pausing lazy items while they are prefetched`() {
+    fun `the shell returns to a lazy tab after a page transition`() {
         val graph = shellGraph(appTitle = CommonR.string.app_name) {
-            tab(PrefetchHome, NavigationR.string.updates, ToolkitIcon.Vector(Icons.Outlined.Home)) { Text("Home") }
+            tab(PrefetchHome, NavigationR.string.updates, ToolkitIcon.Vector(Icons.Outlined.Home)) {
+                val navigator = LocalShellNavigator.current
+                LazyColumn {
+                    items(100) { index ->
+                        Text("Row $index", Modifier.clickable { navigator.navigate(PrefetchDetail) })
+                    }
+                }
+            }
+            page<PrefetchDetail>(title = { "Detail" }) {
+                val navigator = LocalShellNavigator.current
+                Text("Return to list", Modifier.clickable { navigator.popPage() })
+            }
         }
         compose.setContent { AppTheme { ShellHost(graph = graph, preferences = InMemoryShellPreferencesRepository()) } }
-        compose.waitForIdle()
 
-        assertFalse(ComposeFoundationFlags.isPausableCompositionInPrefetchEnabled)
+        compose.onNodeWithText("Row 0").performClick()
+        compose.onNodeWithText("Return to list").performClick()
+        compose.onNodeWithText("Row 0").assertIsDisplayed()
     }
 }
 
 @Serializable
 internal data object PrefetchHome : NavKey
+
+@Serializable
+internal data object PrefetchDetail : NavKey

@@ -20,9 +20,7 @@ package com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.data.reposi
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.exceptions.NetworkException
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.data.models.FaqItem
 
-/**
- * Repository for retrieving FAQ information.
- */
+/** Provides the resolved question list for the host's FAQ screen. */
 interface FaqRepository {
 
     /**

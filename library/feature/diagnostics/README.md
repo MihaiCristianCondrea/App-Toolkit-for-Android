@@ -17,7 +17,7 @@ analytics and advertising consents behind it, on a settings page and on an onboa
   strings.
 - `UsageAndDiagnosticsSettings`, `UsageAndDiagnosticsRepository`,
   `DefaultUsageAndDiagnosticsRepository` and `diagnosticsSettingsModule`.
-- `diagnosticsSettingsPage()`, the registration of `DiagnosticsSettingsRoute`.
+- `diagnosticsSettingsScreen()`, the registration of `DiagnosticsSettingsScreen`.
 
 ## Does not own
 
@@ -30,13 +30,13 @@ analytics and advertising consents behind it, on a settings page and on an onboa
 
 ## Depends on
 
-- `:library:core:common`, `:library:core:datastore`, `:library:core:ui` (which exposes navigation)
-  and `:library:integration:consent`.
+- `:library:core:common`, `:library:core:datastore`, `:library:core:ui`,
+  [`:library:navigation`](../../navigation/README.md) and `:library:integration:consent`.
 - No other feature module.
 
 ## Used by
 
-- [`:library:apptoolkit`](../../apptoolkit/README.md), which calls `diagnosticsSettingsPage()` and
+- [`:library:apptoolkit`](../../apptoolkit/README.md), which calls `diagnosticsSettingsScreen()` and
   includes `diagnosticsSettingsModule`.
 - `:sample:feature:onboarding`, which lists `TelemetryOnboardingPage`.
 
@@ -44,7 +44,7 @@ analytics and advertising consents behind it, on a settings page and on an onboa
 
 ```mermaid
 flowchart TD
-    Page[diagnosticsSettingsPage: DiagnosticsSettingsRoute] --> Screen[UsageAndDiagnosticsScreen]
+    Page[diagnosticsSettingsScreen: DiagnosticsSettingsScreen] --> Screen[UsageAndDiagnosticsScreen]
     Onboarding[TelemetryOnboardingPage] --> VM
     Screen --> VM[UsageAndDiagnosticsViewModel]
     Screen --> Content[UsageAndDiagnosticsScreenContent]
@@ -75,12 +75,13 @@ flowchart TD
   places that show the dialog agree on what "everything" and "essentials" cover. Both turn reporting
   on, cancel single-choice writes still in flight, and store the answer with `setAll`.
 - **The onboarding page waits for the stored choices.** Its toggle shows off and its dialog stays
-  closed until they arrive. It draws its messages through the page frame's snackbar host, or its
-  own at the bottom of the page outside a frame.
+  closed until they arrive. A failed read replaces the consent controls with the failure message
+  and a retry action when retryable. It draws write-failure messages through the page frame's
+  snackbar host, or its own at the bottom of the page outside a frame.
 
 ## Public contracts
 
-- `UsageAndDiagnosticsScreen()`, `diagnosticsSettingsPage()`, `TelemetryOnboardingPage(isSelected)`,
+- `UsageAndDiagnosticsScreen()`, `diagnosticsSettingsScreen()`, `TelemetryOnboardingPage(isSelected)`,
   `FirebaseConsentDialog(settings, ...)`, `UsageAndDiagnosticsViewModel`, `UsageAndDiagnosticsUiState`,
   `UsageAndDiagnosticsEvent`, `UsageAndDiagnosticsSettings`, `UsageAndDiagnosticsRepository` and
   `diagnosticsSettingsModule`. `UsageAndDiagnosticsScreenContent` and
@@ -99,7 +100,7 @@ flowchart TD
 ## Migration notes
 
 In `3.0.0-pre30`, `FirebaseOnboardingPage` was renamed directly to `TelemetryOnboardingPage`
-(`ui.onboarding`). Hosts must update imports and calls; no compatibility alias is provided.
+(`ui.features.onboarding`). Hosts must update imports and calls; no compatibility alias is provided.
 The name covers the page's usage and diagnostics reporting and its analytics and advertising
 consent choices. Keep the existing page key and pass the same `isSelected` value. Consent state,
 defaults and SDK updates keep their existing behavior. See the

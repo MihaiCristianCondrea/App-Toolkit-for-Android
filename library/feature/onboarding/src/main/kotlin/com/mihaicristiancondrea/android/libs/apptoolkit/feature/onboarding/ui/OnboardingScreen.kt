@@ -17,14 +17,12 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.onboarding.ui
 
-import androidx.activity.compose.BackHandler
 import androidx.activity.compose.LocalActivity
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideOutHorizontally
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxHeight
@@ -36,10 +34,7 @@ import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.SkipNext
-import androidx.compose.material.icons.outlined.Palette
-import androidx.compose.material.icons.outlined.Star
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.TopAppBar
@@ -56,7 +51,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.LifecycleResumeEffect
@@ -75,7 +69,6 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.feature.onboarding.ui.co
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.onboarding.ui.contracts.OnboardingEvent
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.onboarding.ui.contracts.OnboardingStepDirection
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.onboarding.ui.models.OnboardingPage
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.onboarding.ui.models.key
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.onboarding.ui.providers.OnboardingProvider
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.onboarding.ui.states.OnboardingCompletion
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.onboarding.ui.states.OnboardingUiState
@@ -83,8 +76,8 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.feature.onboarding.ui.vi
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.onboarding.ui.views.pages.default.DefaultOnboardingPage
 import com.mihaicristiancondrea.android.libs.apptoolkit.integration.consent.data.models.ConsentHost
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.LocalShellNavigator
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.ShellBackHandler
 import kotlinx.collections.immutable.ImmutableList
-import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
@@ -92,7 +85,7 @@ import org.koin.compose.koinInject
 import org.koin.compose.viewmodel.koinViewModel
 
 /** How wide an onboarding page grows on a large window; it is centred in the rest. */
-internal val OnboardingContentMaxWidth: Dp = 640.dp
+private val OnboardingContentMaxWidth: Dp = 640.dp
 
 /**
  * The onboarding start screen: the host's pages from [OnboardingProvider], with Skip, Back and
@@ -109,17 +102,24 @@ fun OnboardingScreen() {
     val context = LocalContext.current
     val activity = LocalActivity.current
     val navigator = LocalShellNavigator.current
-    val pages: ImmutableList<OnboardingPage> = remember {
-        onboardingProvider.getOnboardingPages(context = context).toImmutableList()
+    val pages: ImmutableList<OnboardingPage> = remember(onboardingProvider, context) {
+        onboardingProvider
+            .getOnboardingPages(context = context)
+            .filter { page -> page.isEnabled }
+            .toImmutableList()
     }
     val snackbarHostState: SnackbarHostState = remember { SnackbarHostState() }
 
-    LifecycleResumeEffect(Unit) {
-        activity?.let { viewModel.onEvent(OnboardingEvent.RequestConsent(host = ConsentHost(activity = it))) }
+    LifecycleResumeEffect(key1 = Unit) {
+        activity?.let { hostActivity ->
+            viewModel.onEvent(
+                event = OnboardingEvent.RequestConsent(host = ConsentHost(activity = hostActivity)),
+            )
+        }
         onPauseOrDispose { }
     }
 
-    LaunchedEffect(state.completion) {
+    LaunchedEffect(key1 = state.completion) {
         if (state.completion == OnboardingCompletion.Saved) navigator.enterShell()
     }
 
@@ -148,7 +148,7 @@ fun OnboardingScreen() {
  * @param snackbarHostState The host the scaffold draws, provided to the pages as
  * [LocalPageSnackbarHostState] so their messages show here too.
  */
-@OptIn(ExperimentalFoundationApi::class, ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun OnboardingScreenContent(
     state: OnboardingUiState,
@@ -159,18 +159,19 @@ internal fun OnboardingScreenContent(
 ) {
     val coroutineScope: CoroutineScope = rememberCoroutineScope()
     val pagerState: PagerState = rememberPagerState(initialPage = state.currentTabIndex) { pages.size }
-    var lastReportedPage: Int by rememberSaveable { mutableIntStateOf(-1) }
+    var lastReportedPage: Int by rememberSaveable { mutableIntStateOf(value = -1) }
+    val actionsEnabled: Boolean = state.completion != OnboardingCompletion.Saving
 
-    BackHandler(enabled = pages.isNotEmpty() && pagerState.currentPage > 0) {
+    ShellBackHandler(enabled = pages.isNotEmpty() && (pagerState.currentPage > 0)) {
         coroutineScope.launch {
-            pagerState.animateScrollToPage(pagerState.currentPage - 1)
+            pagerState.animateScrollToPage(page = pagerState.currentPage - 1)
         }
     }
 
     // The page the pager settles on, not the one it passes halfway through a swipe, so a swipe given
     // up reports nothing. The last reported page survives rotation, so coming back to the same page
     // reports nothing either.
-    LaunchedEffect(pagerState.settledPage) {
+    LaunchedEffect(key1 = pagerState.settledPage) {
         val currentPage = pagerState.settledPage
         if (currentPage == lastReportedPage) return@LaunchedEffect
         val direction = when {
@@ -182,9 +183,9 @@ internal fun OnboardingScreenContent(
         onEvent(
             OnboardingEvent.PageSelected(
                 index = currentPage,
-                pageKey = pages.getOrNull(currentPage)?.key,
+                pageKey = pages.getOrNull(index = currentPage)?.key,
                 direction = direction,
-            )
+            ),
         )
     }
 
@@ -198,24 +199,25 @@ internal fun OnboardingScreenContent(
                     actions = {
                         AnimatedVisibility(
                             visible = pagerState.currentPage < pages.size - 1,
-                            enter = slideInHorizontally(initialOffsetX = { fullWidth -> fullWidth }) + fadeIn(),
-                            exit = slideOutHorizontally(targetOffsetX = { fullWidth -> fullWidth }) + fadeOut()
+                            enter = slideInHorizontally { fullWidth -> fullWidth } + fadeIn(),
+                            exit = slideOutHorizontally { fullWidth -> fullWidth } + fadeOut(),
                         ) {
                             GeneralButton(
                                 style = GeneralButtonStyle.Outlined,
+                                enabled = actionsEnabled,
                                 onClick = {
                                     onEvent(
                                         OnboardingEvent.CompleteOnboarding(
                                             method = OnboardingCompletionMethod.SKIP,
-                                        )
+                                        ),
                                     )
                                 },
                                 icon = ToolkitIcon.Vector(imageVector = Icons.Filled.SkipNext),
                                 contentDescription = stringResource(id = R.string.skip_button_content_description),
-                                label = stringResource(id = R.string.skip_button_text)
+                                label = stringResource(id = R.string.skip_button_text),
                             )
                         }
-                    }
+                    },
                 )
             }
         },
@@ -224,29 +226,30 @@ internal fun OnboardingScreenContent(
                 OnboardingFooter(
                     pagerState = pagerState,
                     pageCount = pages.size,
+                    enabled = actionsEnabled,
                     onNextClicked = {
                         if (pagerState.currentPage < pages.size - 1) {
                             coroutineScope.launch {
-                                pagerState.animateScrollToPage(pagerState.currentPage + 1)
+                                pagerState.animateScrollToPage(page = pagerState.currentPage + 1)
                             }
                         } else {
                             onEvent(
                                 OnboardingEvent.CompleteOnboarding(
                                     method = OnboardingCompletionMethod.DONE,
-                                )
+                                ),
                             )
                         }
                     },
                     onBackClicked = {
                         if (pagerState.currentPage > 0) {
                             coroutineScope.launch {
-                                pagerState.animateScrollToPage(pagerState.currentPage - 1)
+                                pagerState.animateScrollToPage(page = pagerState.currentPage - 1)
                             }
                         }
-                    }
+                    },
                 )
             }
-        }
+        },
     ) { paddingValues: PaddingValues ->
         CompositionLocalProvider(LocalPageSnackbarHostState provides snackbarHostState) {
             HorizontalPager(
@@ -254,11 +257,11 @@ internal fun OnboardingScreenContent(
                 modifier = Modifier
                     .fillMaxSize()
                     .hapticPagerSwipe(pagerState = pagerState)
-                    .padding(paddingValues = paddingValues)
+                    .padding(paddingValues = paddingValues),
             ) { pageIndex: Int ->
-                Box(Modifier.fillMaxSize(), contentAlignment = Alignment.TopCenter) {
+                Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.TopCenter) {
                     Box(
-                        Modifier
+                        modifier = Modifier
                             .fillMaxHeight()
                             .widthIn(max = OnboardingContentMaxWidth),
                     ) {
@@ -270,30 +273,5 @@ internal fun OnboardingScreenContent(
                 }
             }
         }
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-private fun OnboardingScreenContentPreview() {
-    MaterialTheme {
-        OnboardingScreenContent(
-            state = OnboardingUiState(),
-            pages = persistentListOf(
-                OnboardingPage.DefaultPage(
-                    key = "welcome",
-                    title = "Welcome",
-                    description = "A short tour of what the app can do.",
-                    imageVector = Icons.Outlined.Star,
-                ),
-                OnboardingPage.DefaultPage(
-                    key = "theme",
-                    title = "Make it yours",
-                    description = "Pick a theme and a palette.",
-                    imageVector = Icons.Outlined.Palette,
-                ),
-            ),
-            onEvent = {},
-        )
     }
 }

@@ -61,8 +61,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.R
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.analytics.toolOpenedEvent
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.formatters.toHexString
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.mappers.toAppColorTable
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.mappers.toHexString
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.models.AndroidColorData
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.models.AndroidColorTable
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.models.ColorTable

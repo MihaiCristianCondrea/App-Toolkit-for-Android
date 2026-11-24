@@ -53,6 +53,7 @@ abstract class ScreenViewModel<S, E : Any>(initialState: S) : ViewModel() {
 
     private val mutableState: MutableStateFlow<S> = MutableStateFlow(initialState)
 
+    /** The current state of the screen. It always holds a value and replays it to new collectors. */
     val state: StateFlow<S> = mutableState.asStateFlow()
 
     protected val currentState: S
@@ -64,6 +65,11 @@ abstract class ScreenViewModel<S, E : Any>(initialState: S) : ViewModel() {
     /** Messages waiting to be shown, oldest first. */
     val messages: StateFlow<ImmutableList<UiMessage>> = mutableMessages.asStateFlow()
 
+    /**
+     * Receives an [event] from the UI. It is safe to call from the main thread: it runs
+     * [onEventReceived] and then [handleEvent] on the calling thread, so any longer work belongs
+     * in a coroutine started by [handleEvent].
+     */
     fun onEvent(event: E) {
         onEventReceived(event)
         handleEvent(event)
@@ -92,6 +98,10 @@ abstract class ScreenViewModel<S, E : Any>(initialState: S) : ViewModel() {
     fun messageShown(id: Long) {
         mutableMessages.update { queue -> queue.removingAll { it.id == id } }
     }
+
+    /** Returns this job while it is active. Otherwise, calls [orStart] and returns the new job. */
+    protected inline fun Job?.ifIsActive(orStart: () -> Job): Job =
+        this?.takeIf { it.isActive } ?: orStart()
 
     /** Cancels this job, if any, and starts the one [start] returns. */
     protected fun Job?.restart(start: () -> Job): Job {

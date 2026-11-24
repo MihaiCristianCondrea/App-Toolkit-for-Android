@@ -18,11 +18,6 @@
 package com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.tools
 
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.icons.ToolSymbols
-import android.os.Build
-import android.icu.util.Measure
-import android.icu.text.MeasureFormat
-import android.icu.util.MeasureUnit
-import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -65,6 +60,8 @@ import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.R
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.models.ConversionCategory
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.models.ConversionUnit
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.contracts.UnitConverterToolEvent
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.formatters.displayName
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.mappers.labelResId
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.states.UnitConverterToolUiState
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
 
@@ -180,50 +177,5 @@ private fun UnitPicker(unit: ConversionUnit, onUnit: (ConversionUnit) -> Unit) {
                 )
             }
         }
-    }
-}
-
-internal fun ConversionCategory.labelResId(): Int = when (this) {
-    ConversionCategory.Length -> R.string.tool_converter_length
-    ConversionCategory.Mass -> R.string.tool_converter_mass
-    ConversionCategory.Temperature -> R.string.tool_converter_temperature
-    ConversionCategory.Volume -> R.string.tool_converter_volume
-    ConversionCategory.Data -> R.string.tool_converter_data
-}
-
-@Composable
-private fun ConversionUnit.displayName(): String {
-    val locale = LocalConfiguration.current.locales[0]
-    val measureUnit = when (this) {
-        ConversionUnit.Millimetre -> MeasureUnit.MILLIMETER
-        ConversionUnit.Centimetre -> MeasureUnit.CENTIMETER
-        ConversionUnit.Metre -> MeasureUnit.METER
-        ConversionUnit.Kilometre -> MeasureUnit.KILOMETER
-        ConversionUnit.Inch -> MeasureUnit.INCH
-        ConversionUnit.Foot -> MeasureUnit.FOOT
-        ConversionUnit.Yard -> MeasureUnit.YARD
-        ConversionUnit.Mile -> MeasureUnit.MILE
-        ConversionUnit.Gram -> MeasureUnit.GRAM
-        ConversionUnit.Kilogram -> MeasureUnit.KILOGRAM
-        ConversionUnit.Ounce -> MeasureUnit.OUNCE
-        ConversionUnit.Pound -> MeasureUnit.POUND
-        ConversionUnit.Stone -> MeasureUnit.STONE
-        ConversionUnit.Celsius -> MeasureUnit.CELSIUS
-        ConversionUnit.Fahrenheit -> MeasureUnit.FAHRENHEIT
-        ConversionUnit.Kelvin -> MeasureUnit.KELVIN
-        ConversionUnit.Millilitre -> MeasureUnit.MILLILITER
-        ConversionUnit.Litre -> MeasureUnit.LITER
-        ConversionUnit.CubicMetre -> MeasureUnit.CUBIC_METER
-        ConversionUnit.UsGallon -> MeasureUnit.GALLON
-        ConversionUnit.Byte -> MeasureUnit.BYTE
-        ConversionUnit.Kilobyte -> MeasureUnit.KILOBYTE
-        ConversionUnit.Megabyte -> MeasureUnit.MEGABYTE
-        ConversionUnit.Gigabyte -> MeasureUnit.GIGABYTE
-        ConversionUnit.Terabyte -> MeasureUnit.TERABYTE
-    }
-    return remember(locale, measureUnit) {
-        val format = MeasureFormat.getInstance(locale, MeasureFormat.FormatWidth.WIDE)
-        if (Build.VERSION.SDK_INT >= 28) format.getUnitDisplayName(measureUnit)
-        else format.formatMeasures(Measure(1, measureUnit))
     }
 }

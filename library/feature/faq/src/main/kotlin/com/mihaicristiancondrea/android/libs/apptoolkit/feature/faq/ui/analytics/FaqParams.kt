@@ -17,11 +17,9 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.ui.analytics
 
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.analytics.SettingsAnalytics
-
 internal object FaqParams {
     const val CONTENT_TYPE: String = "content_type"
     const val ITEM_ID: String = "item_id"
-    const val FAQ_POSITION: String = SettingsAnalytics.Params.FAQ_POSITION
-    const val EXPANDED: String = SettingsAnalytics.Params.EXPANDED
+    const val FAQ_POSITION: String = "faq_position"
+    const val EXPANDED: String = "expanded"
 }

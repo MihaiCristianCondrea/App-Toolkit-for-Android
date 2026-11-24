@@ -9,16 +9,15 @@ completion logic to the App Toolkit's onboarding infrastructure.
 
 - `AppOnboardingProvider`, which defines five pages: Welcome, Theme, Quick Settings, telemetry
   usage and diagnostics consent, and Finish. The consent page reuses `TelemetryOnboardingPage` from
-  the Toolkit and passes its pager selection state so its dialog opens only when selected.
+  the Toolkit and passes its pager selection state so its dialog opens only when selected, and the
+  finish page passes its selection state into `FinishOnboardingPage`.
   Consent choices also remain available in Settings under Security and Privacy.
-- Stable onboarding page identifiers in `ui/models`.
+- Stable onboarding page identifiers in `ui/constants`.
 - Onboarding-specific strings and keys.
-- `OnboardingFeatureModule`, which connects the sample's provider to the library's
-  `OnboardingViewModel`.
+- `onboardingModule`, which registers `AppOnboardingProvider` as the host `OnboardingProvider`.
 
 ## Depends on
 
-- `:library:core:datastore`.
 - [`:library:apptoolkit`](../../../library/apptoolkit/README.md) for the core onboarding UI and
   logic.
 
@@ -30,14 +29,14 @@ completion logic to the App Toolkit's onboarding infrastructure.
 
 ```mermaid
 flowchart TD
-    App[":sample:app"] -->|initializes Koin| Module[OnboardingFeatureModule]
+    App[":sample:app"] -->|initializes Koin| Module[onboardingModule]
     Module --> Provider[AppOnboardingProvider]
-    App -->|resolveStart: startup flag set| Start[StartupRoute, then OnboardingRoute]
-    Start --> ViewModel[OnboardingViewModel]
-    ViewModel -->|requests pages| Provider
+    App -->|resolveStart: startup flag set| Start[StartupScreen, then OnboardingScreen]
+    Start --> Screen[OnboardingScreen]
+    Screen -->|requests pages| Provider
     Provider -->|returns| Pages[List of OnboardingPage]
-    Pages --> UI[Onboarding UI]
-    UI -->|finished| Enter[enterShell: the app's start tab]
+    Screen --> ViewModel[OnboardingViewModel]
+    Screen -->|finished| Enter[enterShell: the app's start tab]
 ```
 
 ## Architectural decisions

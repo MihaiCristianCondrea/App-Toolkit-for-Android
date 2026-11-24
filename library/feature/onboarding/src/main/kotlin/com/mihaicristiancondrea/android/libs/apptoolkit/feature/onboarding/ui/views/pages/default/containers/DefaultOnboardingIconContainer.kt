@@ -30,26 +30,26 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
 
+/** Displays [imageVector] centered inside an expressive decorative indicator container. */
 @OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
 fun DefaultOnboardingIconContainer(imageVector: ImageVector) {
-
     Box(
-        contentAlignment = Alignment.Center
+        contentAlignment = Alignment.Center,
     ) {
         LoadingIndicator(
-            modifier = Modifier.size(SizeConstants.TwoHundredFiftySixSize)
+            modifier = Modifier.size(size = SizeConstants.TwoHundredFiftySixSize),
         )
 
         Box(
-            modifier = Modifier
-                .padding(SizeConstants.LargeSize), contentAlignment = Alignment.Center
+            modifier = Modifier.padding(all = SizeConstants.LargeSize),
+            contentAlignment = Alignment.Center,
         ) {
             Icon(
                 imageVector = imageVector,
                 contentDescription = null,
-                modifier = Modifier.size(SizeConstants.EightySize),
-                tint = MaterialTheme.colorScheme.onSecondary
+                modifier = Modifier.size(size = SizeConstants.EightySize),
+                tint = MaterialTheme.colorScheme.onSecondary,
             )
         }
     }

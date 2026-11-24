@@ -28,7 +28,7 @@ import androidx.navigation3.runtime.NavKey
 import com.mihaicristiancondrea.android.apps.apptoolkit.R
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.ui.MoreAppsSection
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.components.R as ComponentsR
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.components.ui.ArticleDemoScreen
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.components.ui.ArticleDemoScreen as ArticleDemoScreenContent
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.components.ui.ComponentsScreen
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.R as TilesR
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.PlayScreen
@@ -43,11 +43,11 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.ico
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.ads.AdsConfig
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.ads.BottomAppBarNativeAdBanner
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.ui.AboutScreen
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.ui.navigation.aboutPages
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.ui.navigation.aboutScreen
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.ShellGraph
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.TabSearch
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.TopBarStyle
-import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.SettingsRoute
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.keys.SettingsScreen
 import org.koin.compose.koinInject
 import org.koin.core.qualifier.named
 
@@ -78,7 +78,7 @@ fun appGraph(
     defaults = AppDefaults.navigation,
 ) {
     tab(
-        key = ToolkitTilesRoute,
+        key = ToolkitTilesScreen,
         label = TilesR.string.tiles_title,
         icon = ToolkitIcon.AnimatedVector(
             resId = DesignSystemR.drawable.anim_grid_select,
@@ -92,7 +92,7 @@ fun appGraph(
         ToolkitTilesScreen(footer = { MoreAppsSection() })
     }
     tab(
-        key = NumbersRoute,
+        key = NumbersScreen,
         label = TilesR.string.measure_title,
         search = TabSearch(hint = TilesR.string.tiles_search_hint),
         icon = ToolkitIcon.Vector(Icons.Outlined.Straighten),
@@ -101,7 +101,7 @@ fun appGraph(
         NumbersScreen()
     }
     tab(
-        key = PlayRoute,
+        key = PlayScreen,
         label = TilesR.string.play_title,
         icon = ToolkitIcon.Vector(Icons.Outlined.Casino),
         selectedIcon = ToolkitIcon.Vector(Icons.Filled.Casino),
@@ -110,18 +110,18 @@ fun appGraph(
         PlayScreen()
     }
     if (showDebugPages) {
-        page<ComponentsRoute>(title = { stringResource(ComponentsR.string.components_title) }) {
+        page<ComponentsScreen>(title = { stringResource(ComponentsR.string.components_title) }) {
             val navigator = com.mihaicristiancondrea.android.libs.apptoolkit.navigation.LocalShellNavigator.current
-            ComponentsScreen(onOpenArticleDemo = { navigator.navigate(ArticleDemoRoute(it)) })
+            ComponentsScreen(onOpenArticleDemo = { navigator.navigate(ArticleDemoScreen(it)) })
         }
-        page<ArticleDemoRoute>(
+        page<ArticleDemoScreen>(
             topBar = TopBarStyle.Small,
             title = { stringResource(ComponentsR.string.components_section_article_bar) },
         ) { key ->
-            ArticleDemoScreen(branded = key.branded)
+            ArticleDemoScreenContent(branded = key.branded)
         }
     }
-    aboutPages { AboutScreen() }
+    aboutScreen { AboutScreen() }
     banner {
         val config: AdsConfig = koinInject(qualifier = named(AdsQualifiers.BOTTOM_NAV_BAR_NATIVE_AD))
         BottomAppBarNativeAdBanner(
@@ -134,7 +134,7 @@ fun appGraph(
     drawer {
         if (showDebugPages) {
             link(
-                key = ComponentsRoute,
+                key = ComponentsScreen,
                 label = ComponentsR.string.components_title,
                 icon = ToolkitIcon.Vector(Icons.Outlined.Widgets),
             )
@@ -142,19 +142,19 @@ fun appGraph(
         toolkitFooter(onShowUpdates = onShowChangelog)
     }
     overflow { supportUs() }
-    deepLinks { action(ACTION_OPEN_SETTINGS) { SettingsRoute } }
+    deepLinks { action(ACTION_OPEN_SETTINGS) { SettingsScreen } }
 }
 
 /**
  * The tab a launch opens on, from the startup page chosen in the display settings, which stores
- * the tab's [NumbersRoute.ROUTE_ID], [PlayRoute.ROUTE_ID] or [ToolkitTilesRoute.ROUTE_ID]. An install
+ * the tab's [NumbersScreen.ROUTE_ID], [PlayScreen.ROUTE_ID] or [ToolkitTilesScreen.ROUTE_ID]. An install
  * that stored the removed Apps page, [LEGACY_APPS_ROUTE_ID], opens Quick Tools, where its apps now are.
  */
 fun startKeyFor(route: String): NavKey = when (route) {
-    PlayRoute.ROUTE_ID -> PlayRoute
-    NumbersRoute.ROUTE_ID -> NumbersRoute
-    LEGACY_APPS_ROUTE_ID -> ToolkitTilesRoute
-    else -> ToolkitTilesRoute
+    PlayScreen.ROUTE_ID -> PlayScreen
+    NumbersScreen.ROUTE_ID -> NumbersScreen
+    LEGACY_APPS_ROUTE_ID -> ToolkitTilesScreen
+    else -> ToolkitTilesScreen
 }
 
 /** The startup-page value of the Apps page that "More apps" in Quick Tools replaced. */

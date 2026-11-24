@@ -20,70 +20,54 @@ package com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.ui
 import android.content.Context
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.key
 import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.telemetry.models.TrackedScreen
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.UiText
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.Loadable
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.context.isSystemAnimationDisabled
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.ScreenHost
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.ScreenStateHandler
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.modifiers.animatedItems
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.GroupedItemPosition
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.groupedPreferenceItem
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.PreferenceCategoryItem
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.SettingsPreferenceItem
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.groupedPreferenceItem
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.shell.contentPadding
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.ui.analytics.ABOUT_SCREEN
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.ui.analytics.aboutPreferenceTapEvent
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.ui.constants.AboutEasterEggConstants
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.ui.contracts.AboutEvent
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.ui.contracts.AboutItemAction
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.ui.models.AboutItem
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.ui.models.AboutItemKey
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.ui.states.AboutUiState
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.LocalShellNavigator
-import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.LicensesRoute
-import java.util.concurrent.TimeUnit
-import kotlin.time.Duration.Companion.milliseconds
-import kotlinx.collections.immutable.persistentListOf
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.keys.LicensesScreen
 import kotlinx.coroutines.delay
 import nl.dionsegijn.konfetti.compose.KonfettiView
 import nl.dionsegijn.konfetti.core.Angle
-import nl.dionsegijn.konfetti.core.emitter.Emitter
 import nl.dionsegijn.konfetti.core.Party
 import nl.dionsegijn.konfetti.core.Position
 import nl.dionsegijn.konfetti.core.Spread
+import nl.dionsegijn.konfetti.core.emitter.Emitter
 import org.koin.compose.viewmodel.koinViewModel
-
-private val ABOUT_SCREEN: TrackedScreen =
-    TrackedScreen(name = "About", className = "AboutScreen")
+import java.util.concurrent.TimeUnit
+import kotlin.time.Duration.Companion.milliseconds
 
 /**
- * The "About" screen: information about the application and the device.
+ * Displays the host and Toolkit versions, the device report and the open-source licenses link.
  *
- * This is the stateful half. It owns the [AboutViewModel], collects its state, tracks the screen,
- * shows the ViewModel's messages and navigates, then hands the rendering to [AboutScreenContent].
- *
- * The list includes:
- * - App information: full name, version, and a link to the open-source licenses screen.
- * - Device information: a summary of the device's details, which can be copied to the clipboard.
- *
- * It also features an easter egg: tapping the app version five times triggers a konfetti animation.
- *
- * @param onVersionTap Callback invoked with the cumulative number of taps on the app version item.
+ * @param onVersionTap Receives the cumulative number of version-row taps.
  */
 @Composable
 fun AboutScreen(
@@ -97,48 +81,18 @@ fun AboutScreen(
         AboutScreenContent(
             state = state,
             onEvent = viewModel::onEvent,
-            onOpenLicenses = { navigator.navigate(LicensesRoute) },
+            onOpenLicenses = { navigator.navigate(key = LicensesScreen) },
             contentPadding = contentPadding(),
             onVersionTap = onVersionTap,
         )
     }
 }
 
-/** Taps on the version row that launch the konfetti and report the easter egg. */
-private const val EASTER_EGG_TAPS: Int = 5
-
-private val konfettiBurst: Party = Party(
-    speed = 0f,
-    maxSpeed = 30f,
-    damping = 0.9f,
-    spread = Spread.ROUND,
-    position = Position.Relative(0.5, 0.3),
-    emitter = Emitter(duration = 200, TimeUnit.MILLISECONDS).max(amount = 100),
-)
-
-private val konfettiRain: Party = Party(
-    emitter = Emitter(duration = 3, TimeUnit.SECONDS).perSecond(amount = 60),
-    angle = Angle.BOTTOM,
-    spread = Spread.SMALL,
-    speed = 5f,
-    maxSpeed = 15f,
-    timeToLive = 3000L,
-    position = Position.Relative(x = 0.0, y = 0.0)
-        .between(value = Position.Relative(x = 1.0, y = 0.0)),
-)
-
 /**
- * Renders the About list for [state] and reports what the user does through callbacks.
+ * Renders the About entries and owns the visual version-tap gesture.
  *
- * This is the stateless half of [AboutScreen]: it holds no ViewModel, injects nothing and does not
- * navigate, so it can be previewed and tested with any [AboutUiState]. The only state it keeps is
- * the version-tap counters and the konfetti flag, which are visual and die with the screen.
- *
- * @param state What to render.
- * @param onEvent Receives the events the ViewModel handles: retry, copy and the easter egg.
- * @param onOpenLicenses Invoked by the licenses row. Navigation belongs to the caller.
- * @param contentPadding Padding from the shell, applied inside the list and the state screens.
- * @param onVersionTap Invoked with the cumulative number of taps on the app version row.
+ * @param onOpenLicenses Handles the licenses row action.
+ * @param contentPadding Shell insets applied inside the list and load-state surfaces.
  */
 @Composable
 internal fun AboutScreenContent(
@@ -150,40 +104,14 @@ internal fun AboutScreenContent(
     onVersionTap: (Int) -> Unit = {},
 ) {
     val context: Context = LocalContext.current
-    var showKonfetti: Boolean by rememberSaveable { mutableStateOf(false) }
-    var versionTapCount: Int by rememberSaveable { mutableIntStateOf(0) }
-    var versionTotalTapCount: Int by rememberSaveable { mutableIntStateOf(0) }
+    var konfettiBurstId: Int by remember { mutableIntStateOf(value = 0) }
+    var versionTapCount: Int by rememberSaveable { mutableIntStateOf(value = 0) }
+    var versionTotalTapCount: Int by rememberSaveable { mutableIntStateOf(value = 0) }
 
-    LaunchedEffect(showKonfetti) {
-        if (showKonfetti) {
-            delay(3000.milliseconds)
-            showKonfetti = false
-        }
-    }
-
-    fun onPreferenceClick(item: AboutItem.Preference) {
-        if (item.countsVersionTap) {
-            versionTotalTapCount += 1
-            onVersionTap(versionTotalTapCount)
-            versionTapCount += 1
-            if (versionTapCount >= EASTER_EGG_TAPS) {
-                versionTapCount = 0
-                showKonfetti = true
-                onEvent(AboutEvent.EasterEggFound)
-            }
-        }
-        when (val action = item.action) {
-            is AboutItemAction.CopyToClipboard -> onEvent(
-                AboutEvent.CopyToClipboard(
-                    label = action.label.asString(context),
-                    text = action.text.asString(context),
-                    successMessage = action.successMessage,
-                )
-            )
-
-            AboutItemAction.OpenLicenses -> onOpenLicenses()
-
-            null -> Unit
+    LaunchedEffect(key1 = konfettiBurstId) {
+        if (konfettiBurstId > 0) {
+            delay(duration = AboutEasterEggConstants.KONFETTI_DURATION_MILLIS.milliseconds)
+            konfettiBurstId = 0
         }
     }
 
@@ -208,7 +136,33 @@ internal fun AboutScreenContent(
                             is AboutItem.Preference -> SettingsPreferenceItem(
                                 title = item.title.asString(),
                                 summary = item.summary.asString(),
-                                onClick = { onPreferenceClick(item) },
+                                onClick = {
+                                    if (item.countsVersionTap) {
+                                        versionTotalTapCount += 1
+                                        onVersionTap(versionTotalTapCount)
+                                        versionTapCount += 1
+                                        if (versionTapCount >= AboutEasterEggConstants.EASTER_EGG_TAPS) {
+                                            versionTapCount = 0
+                                            if (!context.isSystemAnimationDisabled()) {
+                                                konfettiBurstId += 1
+                                            }
+                                            onEvent(AboutEvent.EasterEggFound)
+                                        }
+                                    }
+
+                                    when (val action = item.action) {
+                                        is AboutItemAction.CopyToClipboard -> onEvent(
+                                            AboutEvent.CopyToClipboard(
+                                                label = action.label.asString(context = context),
+                                                text = action.text.asString(context = context),
+                                                successMessage = action.successMessage,
+                                            ),
+                                        )
+
+                                        is AboutItemAction.OpenLicenses -> onOpenLicenses()
+                                        null -> Unit
+                                    }
+                                },
                                 ga4Event = item.action?.let {
                                     aboutPreferenceTapEvent(preferenceKey = item.key)
                                 },
@@ -223,45 +177,40 @@ internal fun AboutScreenContent(
             },
         )
 
-        if (showKonfetti) {
-            KonfettiView(
-                modifier = Modifier.fillMaxSize(),
-                parties = listOf(konfettiBurst, konfettiRain),
-            )
+        if (konfettiBurstId > 0) {
+            key(konfettiBurstId) {
+                KonfettiView(
+                    modifier = Modifier.fillMaxSize(),
+                    parties = remember {
+                        listOf(
+                            Party(
+                                speed = 0f,
+                                maxSpeed = 30f,
+                                damping = 0.9f,
+                                spread = Spread.ROUND,
+                                position = Position.Relative(x = 0.5, y = 0.3),
+                                emitter = Emitter(
+                                    duration = AboutEasterEggConstants.KONFETTI_BURST_DURATION_MILLIS,
+                                    timeUnit = TimeUnit.MILLISECONDS,
+                                ).max(amount = 100),
+                            ),
+                            Party(
+                                emitter = Emitter(
+                                    duration = AboutEasterEggConstants.KONFETTI_RAIN_DURATION_SECONDS,
+                                    timeUnit = TimeUnit.SECONDS,
+                                ).perSecond(amount = 60),
+                                angle = Angle.BOTTOM,
+                                spread = Spread.SMALL,
+                                speed = 5f,
+                                maxSpeed = 15f,
+                                timeToLive = AboutEasterEggConstants.KONFETTI_DURATION_MILLIS,
+                                position = Position.Relative(x = 0.0, y = 0.0)
+                                    .between(value = Position.Relative(x = 1.0, y = 0.0)),
+                            ),
+                        )
+                    },
+                )
+            }
         }
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-private fun AboutScreenContentPreview() {
-    MaterialTheme {
-        AboutScreenContent(
-            state = AboutUiState(
-                items = Loadable.Ready(
-                    persistentListOf(
-                        AboutItem.Header(
-                            key = AboutItemKey.HEADER_APP_INFO,
-                            title = UiText.DynamicString("App information"),
-                        ),
-                        AboutItem.Preference(
-                            key = AboutItemKey.APP_NAME,
-                            title = UiText.DynamicString("App name"),
-                            summary = UiText.DynamicString("App Toolkit Sample"),
-                            position = GroupedItemPosition.FIRST,
-                        ),
-                        AboutItem.Preference(
-                            key = AboutItemKey.APP_BUILD_VERSION,
-                            title = UiText.DynamicString("Version"),
-                            summary = UiText.DynamicString("1.0.0 (100)"),
-                            position = GroupedItemPosition.LAST,
-                            countsVersionTap = true,
-                        ),
-                    )
-                ),
-            ),
-            onEvent = {},
-            onOpenLicenses = {},
-        )
     }
 }

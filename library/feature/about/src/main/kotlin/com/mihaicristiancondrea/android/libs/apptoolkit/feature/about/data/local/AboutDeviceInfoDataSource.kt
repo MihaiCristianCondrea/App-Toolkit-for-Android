@@ -19,5 +19,6 @@ package com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.data.loca
 
 /** Host-supplied device information included in the About metadata. */
 interface AboutDeviceInfoDataSource {
+    /** Host-formatted report displayed and copied as a single value. Read on the main thread. */
     val deviceInfo: String
 }

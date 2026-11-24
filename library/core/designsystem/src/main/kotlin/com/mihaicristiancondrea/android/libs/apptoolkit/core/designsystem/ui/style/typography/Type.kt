@@ -28,6 +28,10 @@ private val appFontFamily = FontFamily(
     Font(R.font.google_sans_flex_variable)
 )
 
+/**
+ * The Material 3 type scale with the toolkit's variable font (Google Sans Flex) on every style.
+ * `AppTheme` applies it; sizes and weights stay the Material defaults.
+ */
 val AppTypography: Typography = Typography(
     displayLarge = baseline.displayLarge.copy(fontFamily = appFontFamily),
     displayMedium = baseline.displayMedium.copy(fontFamily = appFontFamily),

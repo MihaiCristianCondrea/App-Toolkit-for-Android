@@ -22,6 +22,8 @@ import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.models.
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.models.ToolkitTileCategory
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.models.ToolkitTileIcon
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.states.ToolkitTilesFilter
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.transformers.filterFor
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.transformers.search
 import kotlinx.collections.immutable.persistentListOf
 import org.junit.jupiter.api.Test
 import kotlin.test.assertEquals

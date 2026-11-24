@@ -45,7 +45,6 @@ android {
 
 dependencies {
     testImplementation(project(":library:core:testing"))
-    api(project(":library:core:common"))
     api(project(":library:core:designsystem"))
 
     // Navigation3. The shell's back stacks save their keys through kotlinx.serialization, so keys

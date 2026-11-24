@@ -19,23 +19,22 @@ package com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.u
 
 import androidx.annotation.StringRes
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.UiText
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.toErrorMessage
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.UiMessage
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.toErrorMessage
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.R
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.data.exceptions.IssueReportRejectedException
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.data.models.IssueReportRefusal
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.domain.models.IssueReportFieldError
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.R
-
-/** Shown for a failed send with no text of its own; see `toUiText` for the ones that have one. */
-private val SendFailedText: UiText = UiText.StringResource(R.string.snack_report_failed)
 
 /**
  * A failed send as the error message the sheet shows. GitHub's refusals say what the host has to
- * fix; every other failure gets the shared text or [SendFailedText].
+ * fix; every other failure gets the shared text or `R.string.snack_report_failed`.
  */
 internal fun Throwable.toSendFailedMessage(): UiMessage = when (this) {
     is IssueReportRejectedException -> UiMessage(text = reason.toUiText(), isError = true)
-    else -> toErrorMessage(fallback = SendFailedText)
+    else -> toErrorMessage(
+        fallback = UiText.StringResource(resourceId = R.string.snack_report_failed),
+    )
 }
 
 /** A report held back by the device's history, as the error message the sheet shows. */
@@ -54,16 +53,25 @@ internal fun IssueReportRefusal.toMessage(): UiMessage = UiMessage(
  * [missingText]; every other error reads the same on any field.
  */
 internal fun IssueReportFieldError.toUiText(@StringRes missingText: Int): UiText = when (this) {
-    IssueReportFieldError.Missing -> UiText.StringResource(missingText)
-    is IssueReportFieldError.TooShort ->
-        UiText.StringResource(R.string.error_too_short, arguments = listOf(minimumLength))
-    is IssueReportFieldError.TooLong ->
-        UiText.StringResource(R.string.error_too_long, arguments = listOf(maximumLength))
-    IssueReportFieldError.TooFewLetters -> UiText.StringResource(R.string.error_too_few_letters)
-    IssueReportFieldError.Repetitive -> UiText.StringResource(R.string.error_repetitive)
-    IssueReportFieldError.LinkOnly -> UiText.StringResource(R.string.error_link_only)
-    IssueReportFieldError.SameAsTitle -> UiText.StringResource(R.string.error_same_as_title)
-    IssueReportFieldError.InvalidEmail -> UiText.StringResource(R.string.error_email_invalid)
+    IssueReportFieldError.Missing -> UiText.StringResource(resourceId = missingText)
+    is IssueReportFieldError.TooShort -> UiText.StringResource(
+        resourceId = R.string.error_too_short,
+        arguments = listOf(minimumLength),
+    )
+    is IssueReportFieldError.TooLong -> UiText.StringResource(
+        resourceId = R.string.error_too_long,
+        arguments = listOf(maximumLength),
+    )
+    IssueReportFieldError.TooFewLetters ->
+        UiText.StringResource(resourceId = R.string.error_too_few_letters)
+    IssueReportFieldError.Repetitive ->
+        UiText.StringResource(resourceId = R.string.error_repetitive)
+    IssueReportFieldError.LinkOnly ->
+        UiText.StringResource(resourceId = R.string.error_link_only)
+    IssueReportFieldError.SameAsTitle ->
+        UiText.StringResource(resourceId = R.string.error_same_as_title)
+    IssueReportFieldError.InvalidEmail ->
+        UiText.StringResource(resourceId = R.string.error_email_invalid)
 }
 
 private fun IssueReportRejectedException.Reason.toUiText(): UiText = UiText.StringResource(

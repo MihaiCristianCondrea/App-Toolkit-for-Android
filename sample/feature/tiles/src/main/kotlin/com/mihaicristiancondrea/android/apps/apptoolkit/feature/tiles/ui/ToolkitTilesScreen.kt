@@ -61,15 +61,15 @@ import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.models.
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.models.ToolkitTileIcon
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.models.ToolkitTilesListItem
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.states.ToolkitTilesUiState
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.transformers.search
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.utils.requestQuickSettingsTile
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.utils.search
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.MaterialColorsToolDialog
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.ToolkitToolBottomSheet
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.ads.QuickToolsNativeAdCard
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.ads.QuickToolsNativeAdViewFactory
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.catalog.EmptyFilterCard
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.catalog.HiddenAdPreloaders
-import com.mihaicristiancondrea.android.apps.apptoolkit.integration.ads.constants.AdsConstants
+import com.mihaicristiancondrea.android.apps.apptoolkit.integration.ads.utils.constants.AdsConstants
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.Loadable
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.MessageToastHost
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.ScreenHost
@@ -202,7 +202,7 @@ internal fun ToolkitTilesScreenContent(
     }
 }
 
-private val QuickToolsExcludedCategoryIds = setOf("chance", "measure")
+private val QuickToolsExcludedCategoryIds = setOf("chance", "measure", "toys")
 
 @Composable
 private fun ToolkitTilesCatalog(

@@ -32,10 +32,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.fields.Gen
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.fields.markdown.MarkdownFormatAction
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.GroupedItemPosition
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.R
-
-/** Rows the description field grows to before it starts scrolling its own content. */
-private const val DESCRIPTION_MIN_LINES: Int = 5
-private const val DESCRIPTION_MAX_LINES: Int = 12
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.ui.constants.IssueReporterUiConstants
 
 /**
  * The report body: the toolkit's Markdown editor, cut into the grouped form above and below it.
@@ -45,8 +42,9 @@ private const val DESCRIPTION_MAX_LINES: Int = 12
  * typed, and the formatting bar edits the Markdown source, so someone can fence a stack trace or
  * list reproduction steps without knowing the syntax.
  *
- * Growth is capped at [DESCRIPTION_MAX_LINES] rows; past that the field scrolls internally instead
- * of pushing the rest of the form off screen while a long log is pasted in.
+ * Growth is capped at [IssueReporterUiConstants.DESCRIPTION_MAX_LINES] rows; past that the field
+ * scrolls internally instead of pushing the rest of the form off screen while a long log is pasted
+ * in.
  *
  * @param onMarkdownFormat Called with each formatting action used, which the sheet reports.
  * @param errorText Why the description cannot be sent, shown beneath it; null shows nothing.
@@ -66,12 +64,12 @@ internal fun IssueDescriptionField(
         errorText = errorText,
         style = GeneralTextFieldStyle.Grouped,
         position = GroupedItemPosition.MIDDLE,
-        groupedOuterRadius = ISSUE_GROUP_OUTER_RADIUS,
+        groupedOuterRadius = IssueReporterUiConstants.GROUP_OUTER_RADIUS,
         placeholder = stringResource(id = R.string.issue_description_placeholder),
         leadingIcon = ToolkitIcon.Vector(imageVector = Icons.Outlined.Description),
         leadingIconContentDescription = stringResource(id = R.string.issue_description_label),
-        minLines = DESCRIPTION_MIN_LINES,
-        maxLines = DESCRIPTION_MAX_LINES,
+        minLines = IssueReporterUiConstants.DESCRIPTION_MIN_LINES,
+        maxLines = IssueReporterUiConstants.DESCRIPTION_MAX_LINES,
         keyboardOptions = KeyboardOptions(
             capitalization = KeyboardCapitalization.Sentences,
             imeAction = ImeAction.Default,

@@ -17,26 +17,25 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.ui
 
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.telemetry.models.AnalyticsValue
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.telemetry.TelemetryRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.Loadable
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.LoggedScreenViewModel
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.toFailed
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.data.models.GithubTarget
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.data.models.IssueReportRefusal
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.data.repositories.IssueReporterRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.data.repositories.IssueReportHistoryRepository
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.data.repositories.IssueReporterRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.di.GithubToken
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.domain.models.IssueReportValidation
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.domain.usecases.ValidateIssueReportUseCase
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.ui.analytics.ISSUE_REPORTER_SCREEN_NAME
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.ui.analytics.IssueReporterParams
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.ui.analytics.analyticsName
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.ui.analytics.failureName
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.ui.analytics.ISSUE_REPORTER_SCREEN_NAME
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.ui.analytics.issueReporterActionEvent
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.ui.analytics.IssueReporterActionNames
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.ui.analytics.IssueReporterParams
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.ui.analytics.issueReporterSendAttemptEvent
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.ui.constants.IssueReporterOperationNames
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.ui.contracts.IssueReporterEvent
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.ui.mappers.toDeviceInfoText
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.ui.formatters.toDeviceInfoText
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.ui.mappers.toMessage
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.ui.mappers.toReport
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.ui.mappers.toSendFailedMessage
@@ -86,9 +85,9 @@ class IssueReporterViewModel(
                 copy(email = event.value, fieldErrors = fieldErrors.copy(emailError = null))
             }
 
-            IssueReporterEvent.RequestDeviceInfo -> loadDeviceInfo()
-            IssueReporterEvent.Send -> sendReport()
-            IssueReporterEvent.Reset -> resetReport()
+            is IssueReporterEvent.RequestDeviceInfo -> loadDeviceInfo()
+            is IssueReporterEvent.Send -> sendReport()
+            is IssueReporterEvent.Reset -> resetReport()
         }
     }
 
@@ -98,16 +97,16 @@ class IssueReporterViewModel(
      */
     private fun loadDeviceInfo() {
         val deviceInfo: Loadable<String> = currentState.deviceInfo
-        if (deviceInfo is Loadable.Ready || deviceInfo is Loadable.Loading) return
+        if ((deviceInfo is Loadable.Ready) || (deviceInfo is Loadable.Loading)) return
 
         deviceInfoJob = deviceInfoJob.restart {
             launchReport(
-                action = Actions.LOAD_DEVICE_INFO,
+                action = IssueReporterOperationNames.LOAD_DEVICE_INFO,
                 onError = { error -> setState { copy(deviceInfo = error.toFailed()) } },
             ) {
                 setState { copy(deviceInfo = Loadable.Loading) }
                 val text: String = repository.captureDeviceInfo().toDeviceInfoText()
-                setState { copy(deviceInfo = Loadable.Ready(text)) }
+                setState { copy(deviceInfo = Loadable.Ready(value = text)) }
             }
         }
     }
@@ -119,47 +118,48 @@ class IssueReporterViewModel(
      * intact.
      */
     private fun sendReport() {
-        if (sendJob?.isActive == true) return
-
-        val draft: IssueReporterUiState = currentState
-        val validation: IssueReportValidation = validateReport(
-            title = draft.title,
-            description = draft.description,
-            email = draft.email,
-        )
-        setState { copy(fieldErrors = validation) }
-        if (!validation.isValid) {
-            logSendAttempt(draft = draft, failure = validation.failureName())
-            return
-        }
-
-        sendJob = launchReport(
-            action = Actions.SEND_REPORT,
-            onError = { error ->
-                setState { copy(submissionState = IssueSubmissionState.Failed) }
-                showMessage(error.toSendFailedMessage())
-                applyPendingReset()
-            },
-        ) {
-            val title: String = draft.title.trim()
-            val description: String = draft.description.trim()
-            val refusal: IssueReportRefusal? = historyRepository.refusalFor(title = title, description = description)
-            logSendAttempt(draft = draft, failure = refusal?.analyticsName)
-            if (refusal != null) {
-                showMessage(refusal.toMessage())
-                applyPendingReset()
-                return@launchReport
+        sendJob = sendJob.ifIsActive {
+            val draft: IssueReporterUiState = currentState
+            val validation: IssueReportValidation = validateReport(
+                title = draft.title,
+                description = draft.description,
+                email = draft.email,
+            )
+            setState { copy(fieldErrors = validation) }
+            if (!validation.isValid) {
+                logSendAttempt(draft = draft, failure = validation.failureName())
+                return
             }
 
-            setState { copy(submissionState = IssueSubmissionState.Sending) }
-            val issueUrl: String = repository.sendReport(
-                report = draft.toReport(deviceInfo = repository.captureDeviceInfo()),
-                target = githubTarget,
-                token = githubToken.takeIf { it.isNotBlank() },
-            )
-            historyRepository.recordSubmission(title = title, description = description)
-            setState { copy(submissionState = IssueSubmissionState.Submitted(issueUrl = issueUrl)) }
-            applyPendingReset()
+            launchReport(
+                action = IssueReporterOperationNames.SEND_REPORT,
+                onError = { error ->
+                    setState { copy(submissionState = IssueSubmissionState.Failed) }
+                    showMessage(message = error.toSendFailedMessage())
+                    applyPendingReset()
+                },
+            ) {
+                val title: String = draft.title.trim()
+                val description: String = draft.description.trim()
+                val refusal: IssueReportRefusal? =
+                    historyRepository.refusalFor(title = title, description = description)
+                logSendAttempt(draft = draft, failure = refusal?.analyticsName)
+                if (refusal != null) {
+                    showMessage(message = refusal.toMessage())
+                    applyPendingReset()
+                    return@launchReport
+                }
+
+                setState { copy(submissionState = IssueSubmissionState.Sending) }
+                val issueUrl: String = repository.sendReport(
+                    report = draft.toReport(deviceInfo = repository.captureDeviceInfo()),
+                    target = githubTarget,
+                    token = githubToken.takeIf { it.isNotBlank() },
+                )
+                historyRepository.recordSubmission(title = title, description = description)
+                setState { copy(submissionState = IssueSubmissionState.Submitted(issueUrl = issueUrl)) }
+                applyPendingReset()
+            }
         }
     }
 
@@ -169,15 +169,10 @@ class IssueReporterViewModel(
      */
     private fun logSendAttempt(draft: IssueReporterUiState, failure: String?) {
         telemetryRepository.logEvent(
-            issueReporterActionEvent(
-                actionName = IssueReporterActionNames.SEND_ISSUE,
-                params = mapOf(
-                    IssueReporterParams.TITLE_LENGTH to AnalyticsValue.LongVal(draft.title.length.toLong()),
-                    IssueReporterParams.DESCRIPTION_LENGTH to
-                        AnalyticsValue.LongVal(draft.description.length.toLong()),
-                    IssueReporterParams.VALIDATION_FAILURE to
-                        AnalyticsValue.Str(failure ?: IssueReporterParams.VALIDATION_PASSED),
-                ),
+            event = issueReporterSendAttemptEvent(
+                titleLength = draft.title.length,
+                descriptionLength = draft.description.length,
+                validationFailure = failure,
             ),
         )
     }
@@ -203,11 +198,6 @@ class IssueReporterViewModel(
     private fun applyReset() {
         deviceInfoJob?.cancel()
         setState { IssueReporterUiState() }
-        messages.value.forEach { message -> messageShown(message.id) }
-    }
-
-    private object Actions {
-        const val SEND_REPORT: String = "sendReport"
-        const val LOAD_DEVICE_INFO: String = "loadDeviceInfo"
+        messages.value.forEach { message -> messageShown(id = message.id) }
     }
 }

@@ -236,6 +236,62 @@ class DefaultConsentRepositoryTest {
     }
 
     @Test
+    fun `requests from a rotating host never reach UMP`() = runTest(dispatcherExtension.testDispatcher) {
+        val remote = CountingConsentRemoteDataSource()
+        val repository = createRepository(remote = remote, requestScope = backgroundScope)
+
+        val failure = assertFailsWith<ConsentException> {
+            repository.requestConsent(
+                host = FakeConsentHost(isChangingConfigurations = true),
+                showIfRequired = true,
+            )
+        }
+
+        assertEquals(ConsentException.Reason.HOST_UNAVAILABLE, failure.reason)
+        assertEquals(0, remote.requestCount)
+    }
+
+    @Test
+    fun `cancelled requestScope fails callers with REQUEST_FAILED instead of hanging`() =
+        runTest(dispatcherExtension.testDispatcher) {
+            val remote = CountingConsentRemoteDataSource()
+            val cancelledScope = CoroutineScope(dispatcherExtension.testDispatcher).apply {
+                coroutineContext[kotlinx.coroutines.Job]?.cancel()
+            }
+            val repository = createRepository(remote = remote, requestScope = cancelledScope)
+
+            val failure = assertFailsWith<ConsentException> {
+                repository.requestConsent(host = FakeConsentHost(), showIfRequired = true)
+            }
+
+            assertEquals(ConsentException.Reason.REQUEST_FAILED, failure.reason)
+            assertEquals(0, remote.requestCount)
+        }
+
+    @Test
+    fun `close cancels an internally owned scope without failing caller-supplied scopes`() =
+        runTest(dispatcherExtension.testDispatcher) {
+            val remote = CountingConsentRemoteDataSource()
+            val ownedRepository = DefaultConsentRepository(
+                remote = remote,
+                local = FakeConsentPreferencesDataSource(),
+                buildInfoRepository = FakeBuildInfoRepository(isDebugBuild = false),
+                diagnostics = FakeTelemetryRepository(),
+                collection = FakeTelemetryRepository(),
+                dispatchers = com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.TestDispatchers(
+                    dispatcherExtension.testDispatcher,
+                ),
+            )
+
+            ownedRepository.close()
+
+            val failure = assertFailsWith<ConsentException> {
+                ownedRepository.requestConsent(host = FakeConsentHost(), showIfRequired = true)
+            }
+            assertEquals(ConsentException.Reason.REQUEST_FAILED, failure.reason)
+        }
+
+    @Test
     fun `applyInitialConsent reads persisted values and updates Firebase`() =
         runTest(dispatcherExtension.testDispatcher) {
             val telemetryRepository = mockk<TelemetryRepository>(relaxed = true)
@@ -453,12 +509,16 @@ private class CountingConsentRemoteDataSource : ConsentRemoteDataSource {
     }
 }
 
-private class FakeConsentHost(isFinishing: Boolean = false) : ConsentHost {
+private class FakeConsentHost(
+    isFinishing: Boolean = false,
+    isChangingConfigurations: Boolean = false,
+) : ConsentHost {
     /** Set to true to stand for the activity being destroyed while a request is in flight. */
     var destroyed: Boolean = false
 
     override val activity = mockk<android.app.Activity>(relaxed = true).also {
         every { it.isFinishing } returns isFinishing
+        every { it.isChangingConfigurations } returns isChangingConfigurations
         every { it.isDestroyed } answers { destroyed }
     }
 }

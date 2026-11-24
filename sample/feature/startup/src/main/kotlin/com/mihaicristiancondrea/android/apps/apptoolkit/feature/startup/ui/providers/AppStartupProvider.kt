@@ -28,9 +28,10 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.feature.startup.ui.provi
  * hands over to the Toolkit's onboarding start screen.
  */
 class AppStartupProvider : StartupProvider {
-    override val requiredPermissions = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-        arrayOf(Manifest.permission.POST_NOTIFICATIONS)
-    } else {
-        emptyArray()
-    }
+    override val requiredPermissions: Array<String> =
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            arrayOf(Manifest.permission.POST_NOTIFICATIONS)
+        } else {
+            emptyArray()
+        }
 }

@@ -25,26 +25,13 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.data.models.
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.data.remote.FaqRemoteDataSource
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.data.remote.mappers.toFaqItems
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.data.remote.models.FaqQuestionDto
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.data.transformers.normalizeFaqItems
 
 /**
- * Implementation of [FaqRepository] that manages the retrieval of FAQ items
- * from both remote and local data sources.
+ * Resolves the host product from the remote catalog and normalizes both sources before selection.
  *
- * Prioritizes remote data from a specified catalog and product, falling back to the bundled local
- * questions when the remote fetch fails or yields nothing usable.
- *
- * Both sources are normalized before they are considered: entries are trimmed, blanks are dropped
- * and repeated ids collapse to their first occurrence. Normalizing here rather than downstream is
- * what makes the fallback correct, a remote catalog of nothing but blank rows now counts as empty
- * and falls through to the local questions instead of rendering blank rows.
- *
- * It needs no dispatcher: the remote calls suspend inside Ktor, and the local questions are string
- * resources, which the system already holds in memory.
- *
- * @property localDataSource The local data source for accessing cached or bundled FAQ questions.
- * @property remoteDataSource The remote data source for fetching FAQ catalogs and questions via network.
- * @property catalogUrl The URL of the remote catalog containing product information.
- * @property productId The identifier used to find the specific product within the catalog.
+ * @param catalogUrl Full URL for the selected catalog environment.
+ * @param productId Matches the product ID or alternate key in the catalog.
  */
 class DefaultFaqRepository(
     private val localDataSource: FaqLocalDataSource,
@@ -57,55 +44,56 @@ class DefaultFaqRepository(
     override suspend fun getFaq(): List<FaqItem> {
         diagnostics.logBreadcrumb(
             message = "FAQ repositories fetch",
-            attributes = mapOf(
-                "catalogUrl" to catalogUrl,
-                "productId" to productId,
-            ),
+            attributes = emptyMap(),
         )
         val remoteResult: Result<List<FaqItem>> = runSuspendCatching {
             fetchRemoteFaqItems()
         }
 
-        val remoteItems = remoteResult.getOrNull().orEmpty().normalize()
+        val remoteItems = remoteResult.getOrNull().orEmpty().normalizeFaqItems()
         if (remoteItems.isNotEmpty()) return remoteItems
 
-        val localItems = localDataSource.loadLocalQuestions().normalize()
+        val localItems = localDataSource.loadLocalQuestions().normalizeFaqItems()
         if (localItems.isNotEmpty()) return localItems
 
-        // Nothing to show: the remote failure is the reason, so it reaches the screen. A remote
-        // catalog that loaded but had nothing for this product is not a failure, only empty.
         remoteResult.exceptionOrNull()?.let { failure -> throw failure }
         return emptyList()
     }
 
-    // The catalog must load for there to be anything remote; a question source that fails only
-    // drops its own questions, so the rest still show.
+    /**
+     * Reads the host product's question sources and keeps results from sources that succeed.
+     * Propagates the first source failure when every configured source fails.
+     */
     private suspend fun fetchRemoteFaqItems(): List<FaqItem> {
-        val catalog = networkCall { remoteDataSource.fetchCatalog(catalogUrl) }
+        val catalog = networkCall { remoteDataSource.fetchCatalog(url = catalogUrl) }
         val product = catalog.products.firstOrNull { it.productId == productId || it.key == productId }
             ?: return emptyList()
 
-        val questions: List<FaqQuestionDto> = product.questionSources.flatMap { source ->
-            runSuspendCatching {
-                networkCall { remoteDataSource.fetchQuestions(source.url) }
-            }.getOrDefault(emptyList())
+        val questions = mutableListOf<FaqQuestionDto>()
+        var succeededSourceCount = 0
+        var firstFailure: Throwable? = null
+
+        for (source in product.questionSources) {
+            val result = runSuspendCatching {
+                networkCall { remoteDataSource.fetchQuestions(url = source.url) }
+            }
+            result.fold(
+                onSuccess = { fetched ->
+                    succeededSourceCount += 1
+                    questions.addAll(elements = fetched)
+                },
+                onFailure = { failure ->
+                    if (firstFailure == null) {
+                        firstFailure = failure
+                    }
+                },
+            )
+        }
+
+        if (succeededSourceCount == 0 && firstFailure != null) {
+            throw firstFailure
         }
 
         return questions.toFaqItems()
     }
-
-    /**
-     * Trims each entry, drops the ones left without a question or an answer, and keeps the first
-     * of any repeated id.
-     */
-    private fun List<FaqItem>.normalize(): List<FaqItem> = asSequence()
-        .map { faqItem ->
-            faqItem.copy(
-                question = faqItem.question.trim(),
-                answer = faqItem.answer.trim(),
-            )
-        }
-        .filter { it.question.isNotBlank() && it.answer.isNotBlank() }
-        .distinctBy { it.id.value }
-        .toList()
 }

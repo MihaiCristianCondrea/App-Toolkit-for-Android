@@ -102,7 +102,8 @@ fun isAppInDarkTheme(themeMode: String): Boolean = when (themeMode) {
 /**
  * Applies the stored appearance and provides UI preferences through dynamic composition locals.
  * Preference changes recompose their readers; the color scheme is rebuilt only when its inputs
- * change. Configure [AppThemeConfig] before the first composition.
+ * change. Configure [AppThemeConfig] before the first composition. If the stored
+ * preferences cannot be read, the defaults apply instead of the app failing.
  */
 @OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
@@ -111,10 +112,12 @@ fun AppTheme(content: @Composable () -> Unit) {
     val themePreferences = rememberThemePreferencesState()
     val displayPreferences: DisplayPreferencesRepository = koinInject()
     val adsSettings: AdsSettingsRepository = koinInject()
-    val bouncyAnimationsEnabled = displayPreferences.bouncyButtons
-        .collectAsStateWithLifecycle(initialValue = true)
-    val showBottomBarLabels = displayPreferences.showBottomBarLabels
-        .collectAsStateWithLifecycle(initialValue = true)
+    val bouncyAnimationsEnabled = remember(displayPreferences) {
+        displayPreferences.bouncyButtons.orDefaultOnStorageFailure(default = true)
+    }.collectAsStateWithLifecycle(initialValue = true)
+    val showBottomBarLabels = remember(displayPreferences) {
+        displayPreferences.showBottomBarLabels.orDefaultOnStorageFailure(default = true)
+    }.collectAsStateWithLifecycle(initialValue = true)
     val adsEnabled = adsSettings.adsEnabled
         .collectAsStateWithLifecycle()
 

@@ -17,22 +17,21 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.developer.ui.models
 
-
 /** A shell override the developer options offer, in the order the page shows them. */
 internal enum class DeveloperOption(val category: DeveloperCategory) {
-    Layout(DeveloperCategory.LayoutAndBars),
-    TopBarStyle(DeveloperCategory.LayoutAndBars),
-    HideTopBarOnScroll(DeveloperCategory.LayoutAndBars),
-    NavigationBarStyle(DeveloperCategory.LayoutAndBars),
-    HideBottomBarOnScroll(DeveloperCategory.LayoutAndBars),
-    NavigationTint(DeveloperCategory.LayoutAndBars),
-    ContentWidth(DeveloperCategory.LayoutAndBars),
-    StartOverride(DeveloperCategory.Navigation),
-    TabTransition(DeveloperCategory.Navigation),
-    BackEdge(DeveloperCategory.Navigation),
-    AnimationSpeed(DeveloperCategory.Motion),
-    EntranceStyle(DeveloperCategory.Motion),
-    MotionTempo(DeveloperCategory.Motion),
-    EntranceReplay(DeveloperCategory.Motion),
-    BottomAccessory(DeveloperCategory.Accessories),
+    Layout(category = DeveloperCategory.LayoutAndBars),
+    TopBarStyle(category = DeveloperCategory.LayoutAndBars),
+    HideTopBarOnScroll(category = DeveloperCategory.LayoutAndBars),
+    NavigationBarStyle(category = DeveloperCategory.LayoutAndBars),
+    HideBottomBarOnScroll(category = DeveloperCategory.LayoutAndBars),
+    NavigationTint(category = DeveloperCategory.LayoutAndBars),
+    ContentWidth(category = DeveloperCategory.LayoutAndBars),
+    StartOverride(category = DeveloperCategory.Navigation),
+    TabTransition(category = DeveloperCategory.Navigation),
+    BackEdge(category = DeveloperCategory.Navigation),
+    AnimationSpeed(category = DeveloperCategory.Motion),
+    EntranceStyle(category = DeveloperCategory.Motion),
+    MotionTempo(category = DeveloperCategory.Motion),
+    EntranceReplay(category = DeveloperCategory.Motion),
+    BottomAccessory(category = DeveloperCategory.Accessories),
 }

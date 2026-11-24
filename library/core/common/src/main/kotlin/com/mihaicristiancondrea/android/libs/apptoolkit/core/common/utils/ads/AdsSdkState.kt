@@ -48,13 +48,16 @@ object AdsSdkState {
     }
 
     /**
-     * Whether an ad may be requested right now.
+     * Whether the Mobile Ads SDK is initialized, so an ad loader can run without throwing.
+     *
+     * This says nothing about consent. It is not UMP's `ConsentInformation.canRequestAds()`, which
+     * a host checks separately.
      *
      * [isReady] only knows about initialization the toolkit performed. A host that initializes the
      * SDK itself, which the toolkit asks it not to do, but cannot prevent, would otherwise leave
      * every ad slot permanently empty, so the SDK's own `MobileAds.isInitialized` is consulted as a
      * fallback.
      */
-    fun canRequestAds(): Boolean =
+    fun isSdkInitialized(): Boolean =
         readyState.value || runCatching { MobileAds.isInitialized }.getOrDefault(false)
 }

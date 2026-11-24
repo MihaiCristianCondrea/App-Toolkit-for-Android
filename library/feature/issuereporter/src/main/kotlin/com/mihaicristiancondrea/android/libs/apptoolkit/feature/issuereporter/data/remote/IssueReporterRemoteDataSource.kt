@@ -21,15 +21,17 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.excepti
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.network.data.remote.mappers.toNetworkException
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.data.exceptions.IssueReportRejectedException
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.data.models.GithubTarget
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.data.remote.mappers.toRejectedException
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.data.remote.models.CreateIssueRequest
 import io.ktor.client.HttpClient
 import io.ktor.client.request.header
 import io.ktor.client.request.post
 import io.ktor.client.request.setBody
 import io.ktor.client.statement.bodyAsText
-import io.ktor.http.contentType
 import io.ktor.http.ContentType
+import io.ktor.http.HttpHeaders
 import io.ktor.http.HttpStatusCode
+import io.ktor.http.contentType
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.jsonObject
 import kotlinx.serialization.json.jsonPrimitive
@@ -56,11 +58,13 @@ class IssueReporterRemoteDataSource(
         token: String?,
     ): String {
         val url = "https://api.github.com/repos/${target.username}/${target.repository}/issues"
-        val response = client.post(url) {
-            contentType(ContentType.Application.Json)
-            header("Accept", "application/vnd.github+json")
-            token?.let { header("Authorization", "Bearer $it") }
-            setBody(Json.encodeToString(CreateIssueRequest.serializer(), payload))
+        val response = client.post(urlString = url) {
+            contentType(type = ContentType.Application.Json)
+            header(key = HttpHeaders.Accept, value = "application/vnd.github+json")
+            token?.takeIf { it.isNotBlank() }?.let { validToken ->
+                header(key = HttpHeaders.Authorization, value = "Bearer $validToken")
+            }
+            setBody(body = Json.encodeToString(serializer = CreateIssueRequest.serializer(), value = payload))
         }
 
         if (response.status != HttpStatusCode.Created) {
@@ -69,18 +73,7 @@ class IssueReporterRemoteDataSource(
                 ?: NetworkException(reason = NetworkException.Reason.UNEXPECTED_RESPONSE)
         }
 
-        val json = Json.parseToJsonElement(response.bodyAsText()).jsonObject
+        val json = Json.parseToJsonElement(string = response.bodyAsText()).jsonObject
         return json["html_url"]?.jsonPrimitive?.content.orEmpty()
     }
-}
-
-private fun HttpStatusCode.toRejectedException(): IssueReportRejectedException? {
-    val reason: IssueReportRejectedException.Reason = when (this) {
-        HttpStatusCode.Unauthorized -> IssueReportRejectedException.Reason.UNAUTHORIZED
-        HttpStatusCode.Forbidden -> IssueReportRejectedException.Reason.FORBIDDEN
-        HttpStatusCode.Gone -> IssueReportRejectedException.Reason.GONE
-        HttpStatusCode.UnprocessableEntity -> IssueReportRejectedException.Reason.UNPROCESSABLE
-        else -> return null
-    }
-    return IssueReportRejectedException(reason = reason)
 }

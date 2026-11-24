@@ -28,12 +28,7 @@ class AppOnboardingProviderTest {
     @Test
     fun `consent is shown after quick settings and before completion`() {
         val pages = AppOnboardingProvider().getOnboardingPages(mockk<Context>(relaxed = true))
-        val keys = pages.map { page ->
-            when (page) {
-                is OnboardingPage.DefaultPage -> page.key
-                is OnboardingPage.CustomPage -> page.key
-            }
-        }
+        val keys = pages.map { page -> page.key }
         assertEquals(listOf("welcome", "theme_options", "quick_settings", "crashlytics_options", "onboarding_complete"), keys)
         assertIs<OnboardingPage.CustomPage>(pages[3])
     }

@@ -25,6 +25,7 @@ class IssueReportRejectedException(
     val reason: Reason,
 ) : Exception("GitHub rejected the issue report: $reason") {
 
+    /** Why GitHub refused to create the issue. */
     enum class Reason {
         /** HTTP 401: the token is missing, expired or invalid. */
         UNAUTHORIZED,

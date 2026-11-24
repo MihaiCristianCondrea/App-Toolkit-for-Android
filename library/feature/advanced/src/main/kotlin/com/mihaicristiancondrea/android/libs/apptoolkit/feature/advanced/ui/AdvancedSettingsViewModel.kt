@@ -21,82 +21,93 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.telemetry.Te
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.UiText
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.LoggedScreenViewModel
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.UiMessage
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.isRetryable
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.toErrorMessage
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.advanced.R
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.advanced.data.repositories.CacheRepository
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.advanced.ui.analytics.ADVANCED_SETTINGS_SCREEN
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.advanced.ui.constants.AdvancedSettingsOperationNames
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.advanced.ui.contracts.AdvancedSettingsEvent
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.advanced.ui.states.AdvancedSettingsUiState
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.advanced.ui.states.CacheClearStatus
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.R as CoreUiR
 
 /**
- * ViewModel for the advanced settings page: clearing the cache, and whether the developer options
- * are offered.
+ * Owns cache-clear status and developer options visibility.
  *
- * [CacheRepository] moves its own file work off the main thread, so this needs no dispatcher. A
- * clear confirms with a message, and a failed one reports with an error message while the rows stay.
- *
- * @param developerOptionsUnlocked Whether the About screen's version easter egg has been found,
- * which offers the developer options here.
+ * @param developerOptionsUnlocked Emits the current developer options unlock state.
  */
 class AdvancedSettingsViewModel(
     private val repository: CacheRepository,
     telemetryRepository: TelemetryRepository,
-    developerOptionsUnlocked: Flow<Boolean> = flowOf(false),
+    private val developerOptionsUnlocked: Flow<Boolean> = flowOf(value = false),
 ) : LoggedScreenViewModel<AdvancedSettingsUiState, AdvancedSettingsEvent>(
     initialState = AdvancedSettingsUiState(),
     telemetryRepository = telemetryRepository,
-    screenName = "AdvancedSettings",
+    screenName = ADVANCED_SETTINGS_SCREEN.name,
     viewModelName = "AdvancedSettingsViewModel",
 ) {
     private var clearJob: Job? = null
+    private var observeJob: Job? = null
 
     init {
-        observeDeveloperOptions(unlocked = developerOptionsUnlocked)
+        onEvent(event = AdvancedSettingsEvent.ObserveDeveloperOptions)
     }
 
     override fun handleEvent(event: AdvancedSettingsEvent) {
         when (event) {
-            AdvancedSettingsEvent.ClearCache -> clearCache()
+            is AdvancedSettingsEvent.ObserveDeveloperOptions -> observeDeveloperOptions()
+            is AdvancedSettingsEvent.ClearCache -> clearCache()
         }
     }
 
-    /** A failure leaves the row hidden; the unlock is read again the next time the page opens. */
-    private fun observeDeveloperOptions(unlocked: Flow<Boolean>) {
-        unlocked.collectReport(action = Actions.OBSERVE_DEVELOPER_OPTIONS) { isUnlocked ->
-            setState { copy(developerOptionsUnlocked = isUnlocked) }
+    /** Observes unlock state and allows retry after the observation has failed. */
+    private fun observeDeveloperOptions() {
+        observeJob = observeJob.ifIsActive {
+            developerOptionsUnlocked.collectReport(
+                action = AdvancedSettingsOperationNames.OBSERVE_DEVELOPER_OPTIONS,
+                onError = { error ->
+                    val message = error.toErrorMessage()
+                    showMessage(
+                        message = if (error.isRetryable) {
+                            message.copy(actionLabel = UiText.StringResource(resourceId = CoreUiR.string.try_again))
+                        } else {
+                            message
+                        },
+                    )
+                },
+            ) { isUnlocked ->
+                setState { copy(developerOptionsUnlocked = isUnlocked) }
+            }
         }
     }
 
-    /** A second tap restarts the clear rather than queueing another, so only one result shows. */
+    /** Runs one cache clear at a time and reports completion through a snackbar. */
     private fun clearCache() {
-        clearJob = clearJob.restart {
+        clearJob = clearJob.ifIsActive {
             launchReport(
-                action = Actions.CLEAR_CACHE,
+                action = AdvancedSettingsOperationNames.CLEAR_CACHE,
                 onError = { error ->
                     setState { copy(cacheClear = CacheClearStatus.Failed) }
-                    showMessage(error.toErrorMessage(fallback = ClearFailedText))
+                    showMessage(
+                        message = error.toErrorMessage(
+                            fallback = UiText.StringResource(resourceId = R.string.cache_cleared_error),
+                        ),
+                    )
                 },
             ) {
                 setState { copy(cacheClear = CacheClearStatus.Clearing) }
                 repository.clearCache()
                 setState { copy(cacheClear = CacheClearStatus.Idle) }
-                showMessage(UiMessage(ClearedText))
+                showMessage(
+                    message = UiMessage(
+                        text = UiText.StringResource(resourceId = R.string.cache_cleared_success),
+                    ),
+                )
             }
         }
-    }
-
-    private object Actions {
-        const val CLEAR_CACHE: String = "clearCache"
-        const val OBSERVE_DEVELOPER_OPTIONS: String = "observeDeveloperOptions"
-    }
-
-    private companion object {
-        val ClearedText = UiText.StringResource(R.string.cache_cleared_success)
-
-        /** Shown for a failure with no text of its own; see `toUiText` for the ones that have one. */
-        val ClearFailedText = UiText.StringResource(R.string.cache_cleared_error)
     }
 }

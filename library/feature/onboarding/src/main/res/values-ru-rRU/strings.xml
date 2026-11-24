@@ -29,5 +29,4 @@
     <string name="onboarding_theme_title">Выберите свой стиль</string>
     <string name="skip_button_content_description">Пропустить</string>
     <string name="skip_button_text">Пропустить</string>
-    <string name="usage_and_diagnostics">Использование и диагностика</string>
 </resources>

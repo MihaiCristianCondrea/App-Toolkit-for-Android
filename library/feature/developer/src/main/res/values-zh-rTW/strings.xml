@@ -80,7 +80,7 @@
     <string name="shell_navigation_tint_always">一同著色，內容顯示在卡片中</string>
     <string name="shell_navigation_tint_on_scroll">內容捲動後一同著色</string>
     <string name="shell_back_edge_system">如同 Android：頁面在原地縮小</string>
-    <string name="shell_back_edge_follow">跟隨手指，與左側邊緣對稱 (預設)</string>
+    <string name="shell_back_edge_follow">跟隨手指，與左側邊緣對稱</string>
     <string name="shell_transition_directional">方向性滑動</string>
     <string name="shell_transition_fade_through">淡出淡入</string>
     <string name="shell_transition_fade">交叉淡化</string>

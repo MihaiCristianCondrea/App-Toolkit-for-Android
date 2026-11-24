@@ -20,13 +20,13 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Home
 import androidx.navigation3.runtime.NavKey
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.icons.ToolkitIcon
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.settings.SettingsSearchEntry
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.settings.SettingsSearchContext
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.settings.SettingsSearchEntry
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.advanced.R
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.shellGraph
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.keys.AdvancedSettingsScreen
 import org.junit.jupiter.api.Test
 import kotlin.test.assertEquals
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.advanced.R
-import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.AdvancedSettingsRoute
 
 class AdvancedSettingsSearchTest {
 
@@ -41,10 +41,11 @@ class AdvancedSettingsSearchTest {
                 SettingsSearchEntry(
                     title = R.string.clear_cache,
                     section = R.string.advanced,
-                    destination = AdvancedSettingsRoute,
+                    destination = AdvancedSettingsScreen,
                     summary = R.string.summary_preference_settings_clear_cache,
                 ),
             ),
             advancedSettingsSearch.entries(SettingsSearchContext(graph)),
         )
-    }}
+    }
+}

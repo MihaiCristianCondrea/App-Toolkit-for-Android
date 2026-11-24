@@ -17,7 +17,7 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.fields
 
-import android.view.View
+import android.content.res.Configuration
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
@@ -44,13 +44,16 @@ import androidx.compose.ui.hapticfeedback.HapticFeedback
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalHapticFeedback
-import androidx.compose.ui.platform.LocalView
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.analytics.Ga4EventData
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.analytics.logGa4Event
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.dialogs.DatePickerDialog
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.style.bounceClick
-import java.text.SimpleDateFormat
+import java.text.DateFormat
+import java.time.LocalDate
+import java.time.ZoneId
+import java.time.format.DateTimeFormatter
 import java.util.Date
+import java.util.Locale
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.analytics.LocalTelemetry
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -66,9 +69,8 @@ fun DatePickerTextField(
 ) {
     val telemetry = LocalTelemetry.current
     val configuration = LocalConfiguration.current
-    val locale = remember(configuration) { configuration.locales[0] }
-    val formatter = remember(locale) { SimpleDateFormat("dd.MM.yyyy", locale) }
-    val parser = remember(locale) { SimpleDateFormat("yyyy-MM-dd", locale) }
+    val locale = remember(configuration) { resolveDisplayLocale(configuration = configuration) }
+    val formatter = remember(locale) { DateFormat.getDateInstance(DateFormat.MEDIUM, locale) }
     val formattedDate = remember(dateMillis, formatter) {
         formatter.format(Date(dateMillis))
     }
@@ -76,14 +78,12 @@ fun DatePickerTextField(
     var showDialog by rememberSaveable { mutableStateOf(false) }
 
     val hapticFeedback: HapticFeedback = LocalHapticFeedback.current
-    val view: View = LocalView.current
-    val latestOnDateSelected by rememberUpdatedState(onDateSelected)
+    val latestOnDateSelected by rememberUpdatedState(newValue = onDateSelected)
 
     if (showDialog) {
         DatePickerDialog(
             onDateSelected = { dateString ->
-                val parsedMillis = runCatching { parser.parse(dateString)?.time }
-                    .getOrNull() ?: dateMillis
+                val parsedMillis = parseIsoDateToLocalMillis(dateString = dateString) ?: dateMillis
 
                 latestOnDateSelected(parsedMillis)
                 showDialog = false
@@ -128,3 +128,16 @@ fun DatePickerTextField(
         )
     }
 }
+
+internal fun resolveDisplayLocale(configuration: Configuration): Locale =
+    configuration.locales.takeUnless { it.isEmpty }?.get(0) ?: Locale.getDefault()
+
+internal fun parseIsoDateToLocalMillis(
+    dateString: String,
+    zone: ZoneId = ZoneId.systemDefault(),
+): Long? = runCatching {
+    LocalDate.parse(dateString, DateTimeFormatter.ISO_LOCAL_DATE)
+        .atStartOfDay(zone)
+        .toInstant()
+        .toEpochMilli()
+}.getOrNull()

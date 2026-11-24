@@ -18,11 +18,8 @@
 package com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.mappers
 
 import androidx.compose.material3.ColorScheme
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.toArgb
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.models.ColorSwatchData
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.models.ColorTable
-import java.util.Locale
 
 internal fun ColorScheme.toAppColorTable(title: String): ColorTable =
     ColorTable(
@@ -42,5 +39,3 @@ internal fun ColorScheme.toAppColorTable(title: String): ColorTable =
             ColorSwatchData("scrim", scrim),
         ),
     )
-
-internal fun Color.toHexString(): String = String.format(Locale.US, "#%08X", toArgb())

@@ -30,6 +30,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -127,9 +128,13 @@ fun <T : Any> ShellNavDisplay(
             )
         }
     }
-    backMotion.durationScale = shellMotion.durationScale
-    backMotion.darkTheme = MaterialTheme.colorScheme.surface.luminance() < 0.5f
-    backMotion.mirrorRightEdge = shellMotion.followFingerFromRight
+    val darkTheme = MaterialTheme.colorScheme.surface.luminance() < 0.5f
+    // The motion reads these when a gesture starts, so they are set once composition has applied.
+    SideEffect {
+        backMotion.durationScale = shellMotion.durationScale
+        backMotion.darkTheme = darkTheme
+        backMotion.mirrorRightEdge = shellMotion.followFingerFromRight
+    }
 
     val strategies = remember(sceneStrategies, backMotion) {
         sceneStrategies.map { MotionSceneStrategy(it, backMotion) }
@@ -175,7 +180,7 @@ fun <T : Any> ShellNavDisplay(
         popTransitionSpec = popTransitionSpec,
         predictivePopTransitionSpec = { swipeEdge ->
             if (forwarder.drivesMotion) {
-                hold((CrossActivityBackMotion.PostCommitMillis * shellMotion.durationScale).roundToInt() + HoldMarginMillis)
+                hold((ActivityMotion.DurationMillis * shellMotion.durationScale).roundToInt() + HoldMarginMillis)
             } else {
                 currentPredictive(this, swipeEdge)
             }
@@ -217,7 +222,7 @@ private class GestureForwarder(
     }
 
     fun complete() {
-        if (started && drivesMotion) motion.commit(onFinished = {})
+        if (started && drivesMotion) motion.commit()
         // Without a gesture, this is a key or a button that reported no progress: the display
         // pops with its plain pop transition.
         input.backCompleted()

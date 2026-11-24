@@ -264,4 +264,13 @@
     <string name="random_range">Number range</string>
     <string name="random_inclusive">Both ends of the range are included.</string>
     <string name="tool_converter_unit">Unit</string>
+
+    <string name="section_toys">Toys</string>
+    <string name="bell_title">Bell</string>
+    <string name="bell_summary">Shake your phone to ring the bell.</string>
+    <string name="bell_card_note">Shake to ring</string>
+    <string name="bell_ring">Ring bell</string>
+    <string name="bell_motion_unavailable">Shake detection is unavailable on this device.</string>
+    <string name="bell_audio_unavailable">Bell audio is unavailable.</string>
+    <string name="bell_ringing">Ringing</string>
 </resources>

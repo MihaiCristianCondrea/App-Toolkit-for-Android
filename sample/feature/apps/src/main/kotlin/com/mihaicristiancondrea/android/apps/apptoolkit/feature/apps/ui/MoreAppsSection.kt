@@ -47,6 +47,7 @@ import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.ui.analytic
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.ui.analytics.logAppInteraction
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.ui.contracts.AppActionLauncher
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.ui.contracts.MoreAppsEvent
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.ui.mappers.toShowcaseApp
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.ui.states.MoreAppsUiState
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.ui.utils.AnalyticsAppActionLauncher
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.ui.utils.AndroidAppActionLauncher
@@ -66,7 +67,6 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.analytics.
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.showcase.AppShowcase
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.showcase.AppShowcaseLabels
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.showcase.AppShowcaseState
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.showcase.ShowcaseApp
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.showcase.appShowcaseLabels
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.launch
@@ -254,13 +254,3 @@ private fun moreAppsLabels(): AppShowcaseLabels {
         openActionDescription = { name -> openDescription.format(name) },
     )
 }
-
-/** The card the library draws for this app: its catalogue category, or nothing when it has none. */
-internal fun AppSummary.toShowcaseApp(installed: Boolean): ShowcaseApp = ShowcaseApp(
-    key = packageName,
-    name = name,
-    category = category?.label.orEmpty(),
-    description = shortDescription,
-    iconUrl = iconUrl,
-    installed = installed,
-)

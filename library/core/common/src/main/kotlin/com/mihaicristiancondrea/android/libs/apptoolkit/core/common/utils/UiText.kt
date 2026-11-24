@@ -27,7 +27,10 @@ import androidx.compose.ui.res.stringResource
  * string resources, or plural resources without retaining a [Context].
  */
 sealed class UiText {
+    /** Literal text, shown as it is. */
     data class DynamicString(val content: String) : UiText()
+
+    /** A string resource, with [arguments] for its format placeholders. */
     data class StringResource(val resourceId: Int, val arguments: List<Any> = emptyList()) :
         UiText()
 

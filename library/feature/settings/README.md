@@ -14,7 +14,7 @@ each row opening its destination in the shell.
 - `SettingsScreenContent`, the stateless list with its loading, empty and failure states, and
   `SettingsList`, the rows themselves.
 - `SettingsProvider`, the contract an app implements to describe its settings.
-- `settingsPage()`, the registration of `SettingsRoute` as a list page.
+- `settingsScreen()`, the registration of `SettingsScreen` as a list page.
 - The settings search: a field above the rows, not in the app bar, that searches the host's rows
   and every row the settings pages register as a `SettingsSearchProvider`, ignoring case and
   accents. Results replace the categories while there is a query; back clears it first, and a
@@ -35,14 +35,14 @@ each row opening its destination in the shell.
 
 ## Depends on
 
-- `:library:core:common`, `:library:core:datastore`, `:library:core:network`, `:library:core:ui`,
-  and [`:library:navigation`](../../navigation/README.md) for the keys and the graph builder.
+- `:library:core:common`, `:library:core:ui`, and [`:library:navigation`](../../navigation/README.md)
+  for shared state, Compose views, keys, and the graph builder.
 - No other feature module.
 
 ## Used by
 
-- [`:library:apptoolkit`](../../apptoolkit/README.md), which calls `settingsPage()` from
-  `toolkitPages()`, and through it every app built on the Toolkit.
+- [`:library:apptoolkit`](../../apptoolkit/README.md), which calls `settingsScreen()` from
+  `toolkitScreens()`, and through it every app built on the Toolkit.
 - `:sample:feature:settings`, which provides the sample's `SettingsProvider`.
 
 ## Flow chart
@@ -57,7 +57,7 @@ flowchart TD
     Action -->|yes| Done[App's own action]
     Action -->|no| Navigate[navigator.navigate: preference.destination]
     Navigate --> Pages[Display, privacy, advanced, about... pages beside the list]
-    Screen --> Menu[SettingsMenuActions] --> Help[HelpRoute]
+    Screen --> Menu[SettingsMenuActions] --> Help[HelpScreen]
 ```
 
 ## Using it
@@ -72,13 +72,13 @@ class AppSettingsProvider(private val context: Context) : SettingsProvider {
                     SettingsPreference(
                         key = "notifications",
                         title = context.getString(SettingsR.string.notifications),
-                        destination = PrivacySettingsRoute,
+                        destination = PrivacySettingsScreen,
                         action = { context.openAppNotificationSettings() },
                     ),
                     SettingsPreference(
                         key = "display",
                         title = context.getString(SettingsR.string.display),
-                        destination = DisplaySettingsRoute,
+                        destination = DisplaySettingsScreen,
                     ),
                 ),
             ),
@@ -108,11 +108,11 @@ looks inside the page.
 ```kotlin
 val readerSettingsSearch = settingsSearchProvider(
     section = R.string.reader_settings,
-    destination = ReaderSettingsRoute,
+    destination = ReaderSettingsScreen,
 ) {
     preference(R.string.font_size, summary = R.string.font_size_summary)
     preference(R.string.line_spacing)
-    preference(R.string.reader_theme, destination = ReaderThemeRoute)
+    preference(R.string.reader_theme, destination = ReaderThemeScreen)
 }
 ```
 
@@ -150,7 +150,7 @@ The block runs each time the index is built and reads both as `capabilities` and
 rows out with plain Kotlin, under the same conditions the page shows them:
 
 ```kotlin
-settingsSearchProvider(R.string.reader_settings, ReaderSettingsRoute) {
+settingsSearchProvider(R.string.reader_settings, ReaderSettingsScreen) {
     preference(R.string.font_size)
     if (capabilities.hasMultipleTabs) preference(R.string.start_tab)
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) preference(R.string.dynamic_colors)
@@ -202,15 +202,17 @@ and is checked the same way.
 - **An app action runs first.** `SettingsPreference.action` returns whether it handled the click;
   when it did not (or there is none), the destination opens. Notifications uses this to open the
   system's notification settings and fall back to the privacy page.
-- **A list page.** `SettingsRoute` is registered with `PaneRole.List`, so on wide windows the
+- **A list page.** `SettingsScreen` is registered with `PaneRole.List`, so on wide windows the
   category pages, registered as `PaneRole.Detail`, open beside it. Until one is, the detail side
   shows `SettingsDetailPlaceholder`: the settings illustration, the app's name and a Get help
-  button that opens `HelpRoute`.
+  button that opens `HelpScreen`.
 - **On `core.ui.screen`.** `SettingsViewModel` loads the provider's config on each `Load`, which
   the screen sends each time the list is shown so a row's summary follows a change made on its
-  page. A config with no category is `Loadable.Empty` with "No settings found"; a provider that
-  throws is `Loadable.Failed`, reported to telemetry. The provider builds from resources, which is
-  main-safe, so the ViewModel takes no dispatcher.
+  page. Reloads while already `Loadable.Ready` refresh in place without flashing `Loadable.Loading`.
+  A config with no categories or no preferences is `Loadable.Empty` with "No settings found"; a
+  provider that throws is `Loadable.Failed`, reported to telemetry. Categories with a non-blank
+  `title` render a `PreferenceCategoryItem` heading; untitled categories render spacing. The
+  provider builds from resources, which is main-safe, so the ViewModel takes no dispatcher.
 - **The screen owns the search.** The query and the search index live in `SettingsScreen`, because
   the index reads the shell graph and Koin; `SettingsScreenContent` receives the query and the
   results and stays previewable. The rows themselves come from `searchRows`, a plain function of
@@ -221,12 +223,12 @@ and is checked the same way.
   them can be opened. A result for an unregistered page is left out with a warning rather than a
   crash, the way `ShellGraph.keyFor` drops an intent's unregistered key: the providers are bound
   app-wide, and an app may legitimately leave a page out of a graph.
-- Layers follow ownership, as described in [the architecture rules](../../../.agents/skills/built-in/architecture/layered-tree-review/references/android-tree-rules.md).
+- Layers follow ownership, as described in [the architecture rules](../../../.agents/skills/first-party/layered-tree-review/references/android-tree-rules.md).
 
 ## Public contracts
 
 - `SettingsProvider`, `SettingsScreen`, `SettingsList`, `SettingsViewModel`, `SettingsUiState`,
-  `SettingsEvent`, `SettingsMenuActions` and `settingsPage()`. `SettingsScreenContent` is internal.
+  `SettingsEvent`, `SettingsMenuActions` and `settingsScreen()`. `SettingsScreenContent` is internal.
 - The label and summary strings listed under Owns.
 
 ## Current risks

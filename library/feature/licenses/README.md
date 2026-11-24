@@ -8,7 +8,7 @@ AboutLibraries metadata that backs them.
 ## Owns
 
 - `LicensesScreen`, drawn inside the shell's page frame, and the stateless `LicensesScreenContent`.
-- `licensesPage()`, the registration of `LicensesRoute`, opened from About and Help.
+- `licensesScreen()`, the registration of `LicensesScreen`, opened from About and Help.
 - `LicensesViewModel` and `LicensesUiState`, which turn metadata parsing into a loading and then
   ready `Loadable` library count, for tracking and the `loadLibraries` report.
 - The AboutLibraries Gradle plugin and its generated `raw/aboutlibraries` resource.
@@ -19,7 +19,7 @@ AboutLibraries metadata that backs them.
   [`:library:feature:about`](../about/README.md).
 - The Help overflow entry that opens this screen, owned by
   [`:library:feature:faq`](../faq/README.md).
-- The `LicensesRoute` key, owned by [`:library:navigation`](../../navigation/README.md). Pages that
+- The `LicensesScreen` key, owned by [`:library:navigation`](../../navigation/README.md). Pages that
   open this one navigate to the key, so neither About nor Help depends on this module.
 
 ## Depends on
@@ -30,14 +30,14 @@ AboutLibraries metadata that backs them.
 
 ## Used by
 
-- [`:library:apptoolkit`](../../apptoolkit/README.md), which calls `licensesPage()` from
-  `toolkitPages()`.
+- [`:library:apptoolkit`](../../apptoolkit/README.md), which calls `licensesScreen()` from
+  `toolkitScreens()`.
 
 ## Flow chart
 
 ```mermaid
 flowchart TD
-    Entry[About / Help: navigate LicensesRoute] --> Page[licensesPage]
+    Entry[About / Help: navigate LicensesScreen] --> Page[licensesScreen]
     Page --> Screen[LicensesScreen]
     Screen --> Producer[produceLibraries on raw metadata]
     Producer --> VM[LicensesViewModel]
@@ -49,10 +49,12 @@ flowchart TD
 ## Architectural decisions
 
 - Metadata is parsed by the AboutLibraries Compose producer, which is inherently a composition-side
-  API. The screen reports when parsing finishes and `LicensesViewModel` turns that into a
-  `Loadable` library count, the status `ScreenHost` reports, instead of the screen building
-  one inline. The list itself is drawn straight from the producer's result, which
-  `LibrariesContainer` already shows as loading while it is `null`.
+  API. The screen reports when parsing finishes and `LicensesViewModel` turns positive counts into
+  `Loadable.Ready` and zero counts into `Loadable.Empty`, the status `ScreenHost` reports, instead
+  of the screen building one inline. Repeated notifications with the same result (such as after
+  configuration changes) are ignored so `loadLibraries` is not logged twice. The list itself is
+  drawn straight from the producer's result, which `LibrariesContainer` already shows as loading
+  while it is `null`.
 - The module carries the AboutLibraries plugin so the generated metadata resource stays next to the
   screen that reads it, and so modules that only link to licenses do not inherit the plugin.
 - The page is `PaneRole.None`, not a detail: it opens from About, itself a detail beside the
@@ -62,12 +64,14 @@ flowchart TD
 
 ## Public contracts
 
-- `LicensesScreen`, `licensesPage()`, `LicensesViewModel`, `LicensesUiState`, `LicensesEvent`, and
+- `LicensesScreen`, `licensesScreen()`, `LicensesViewModel`, `LicensesUiState`, `LicensesEvent`, and
   `licensesModule`. `LicensesScreenContent` is internal.
 
 ## Internal implementations
 
-- AboutLibraries metadata production and badge configuration.
+- AboutLibraries metadata production and badge configuration, screen tracking in
+  `ui/analytics/LicensesAnalytics.kt`, stable operation names in
+  `ui/constants/LicensesOperationNames.kt`, and previews in `ui/LicensesScreenPreview.kt`.
 
 ## Current risks
 

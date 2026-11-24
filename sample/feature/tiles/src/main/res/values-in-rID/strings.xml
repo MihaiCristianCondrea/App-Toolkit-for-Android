@@ -261,4 +261,13 @@
     <string name="random_range">Rentang angka</string>
     <string name="random_inclusive">Kedua batas rentang disertakan.</string>
     <string name="tool_converter_unit">Satuan</string>
+
+    <string name="section_toys">Mainan</string>
+    <string name="bell_title">Lonceng</string>
+    <string name="bell_summary">Goyangkan ponsel untuk membunyikan lonceng.</string>
+    <string name="bell_card_note">Goyangkan untuk membunyikan</string>
+    <string name="bell_ring">Bunyikan lonceng</string>
+    <string name="bell_motion_unavailable">Deteksi guncangan tidak tersedia di perangkat ini.</string>
+    <string name="bell_audio_unavailable">Suara lonceng tidak tersedia.</string>
+    <string name="bell_ringing">Lonceng berbunyi</string>
 </resources>

@@ -18,8 +18,8 @@
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.di
 
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.di.models.AppToolkitHostBuildConfig
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.utils.constants.FaqConstants
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.utils.extensions.faqCatalogUrl
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.data.constants.FaqEndpointConstants
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.data.extensions.faqCatalogUrl
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.data.local.FaqLocalDataSource
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.data.remote.FaqRemoteDataSource
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.data.repositories.DefaultFaqRepository
@@ -31,8 +31,9 @@ import org.koin.core.module.dsl.viewModel
 import org.koin.dsl.module
 
 /**
- * Binds the FAQ feature: the catalog sources, the repository that normalizes and falls back
- * between them, and the screen that lists them alongside the contact and review actions.
+ * Registers the FAQ sources, repository and ViewModel for the host.
+ *
+ * @param hostBuildConfig Selects the catalog environment and identifies the host's catalog product.
  */
 fun faqModule(hostBuildConfig: AppToolkitHostBuildConfig): Module = module {
     single<FaqLocalDataSource> { FaqLocalDataSource(context = get()) }
@@ -41,7 +42,7 @@ fun faqModule(hostBuildConfig: AppToolkitHostBuildConfig): Module = module {
         DefaultFaqRepository(
             localDataSource = get(),
             remoteDataSource = get(),
-            catalogUrl = FaqConstants.FAQ_BASE_URL.faqCatalogUrl(
+            catalogUrl = FaqEndpointConstants.FAQ_BASE_URL.faqCatalogUrl(
                 isDebugBuild = hostBuildConfig.isDebugBuild,
             ),
             productId = hostBuildConfig.faqProductId,

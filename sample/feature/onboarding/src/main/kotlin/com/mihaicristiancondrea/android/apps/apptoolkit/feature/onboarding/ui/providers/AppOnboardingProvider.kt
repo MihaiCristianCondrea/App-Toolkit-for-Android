@@ -22,12 +22,12 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Handyman
 import androidx.compose.material.icons.outlined.Widgets
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.onboarding.R
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.onboarding.ui.models.OnboardingKeys
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.diagnostics.ui.onboarding.TelemetryOnboardingPage
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.onboarding.ui.constants.OnboardingKeys
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.diagnostics.ui.features.onboarding.TelemetryOnboardingPage
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.onboarding.ui.models.OnboardingPage
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.onboarding.ui.providers.OnboardingProvider
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.onboarding.ui.views.pages.finish.FinishOnboardingPage
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.onboarding.ui.views.pages.theme.ThemeOnboardingPageTab
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.onboarding.ui.features.theme.ThemeOnboardingPageTab
 
 class AppOnboardingProvider : OnboardingProvider {
 
@@ -59,15 +59,10 @@ class AppOnboardingProvider : OnboardingProvider {
             ),
             OnboardingPage.CustomPage(
                 key = OnboardingKeys.ONBOARDING_COMPLETE,
-                content = {
-                    FinishOnboardingPage()
-                }
+                content = { isSelected ->
+                    FinishOnboardingPage(isSelected = isSelected)
+                },
             ),
-        ).filter {
-            when (it) {
-                is OnboardingPage.DefaultPage -> it.isEnabled
-                is OnboardingPage.CustomPage -> it.isEnabled
-            }
-        }
+        ).filter { page -> page.isEnabled }
     }
 }

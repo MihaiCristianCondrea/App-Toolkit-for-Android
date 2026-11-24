@@ -88,6 +88,8 @@ import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.model
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.models.RulerSettings
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.models.RulerUnits
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.contracts.RulerToolEvent
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.mappers.rulerScales
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.models.RulerGeometry
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.states.RulerToolUiState
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.icons.ToolkitIcon
@@ -453,34 +455,6 @@ private fun RulerChoice(options: ImmutableList<String>, selected: Int, onSelect:
 }
 
 private class RulerColors(val line: Color, val marker: Color, val strip: Color)
-
-/** The scales to draw and the edge each sits on: with both units, inches take the edge opposite centimetres. */
-internal fun rulerScales(settings: RulerSettings): List<Pair<RulerUnits, RulerEdge>> = when (settings.units) {
-    RulerUnits.Metric -> listOf(RulerUnits.Metric to settings.edge)
-    RulerUnits.Imperial -> listOf(RulerUnits.Imperial to settings.edge)
-    RulerUnits.Both -> listOf(RulerUnits.Metric to settings.edge, RulerUnits.Imperial to settings.edge.opposite)
-}
-
-/**
- * Maps between a distance from zero, as a fraction of the ruler's length, and the screen. The ruler
- * runs down the screen in portrait and across it in landscape, from either end.
- */
-internal class RulerGeometry(val landscape: Boolean, val countFromEnd: Boolean, val length: Float) {
-    /** The position along the ruler of a distance from zero given as a fraction of its length. */
-    fun along(fraction: Float): Float = if (countFromEnd) length * (1f - fraction) else length * fraction
-
-    /** The distance from zero of a point on screen, as a fraction of the ruler's length. */
-    fun fraction(point: Offset): Float {
-        val raw = ((if (landscape) point.x else point.y) / length.coerceAtLeast(1f)).coerceIn(0f, 1f)
-        return if (countFromEnd) 1f - raw else raw
-    }
-
-    /** A point at [along] on the ruler and [across] in from [edge]. */
-    fun point(along: Float, across: Float, edge: RulerEdge, size: Size): Offset {
-        val cross = if (edge == RulerEdge.Start) across else (if (landscape) size.height else size.width) - across
-        return if (landscape) Offset(along, cross) else Offset(cross, along)
-    }
-}
 
 private fun DrawScope.drawStrip(edge: RulerEdge, geometry: RulerGeometry, thickness: Float, color: Color) {
     val topLeft = geometry.point(0f, if (edge == RulerEdge.Start) 0f else thickness, edge, size)

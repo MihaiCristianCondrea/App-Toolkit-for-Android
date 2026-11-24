@@ -26,12 +26,15 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.GeneralButton
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.GeneralButtonStyle
-import java.text.SimpleDateFormat
-import java.util.Date
+import java.time.Instant
+import java.time.LocalDate
+import java.time.ZoneId
+import java.time.ZoneOffset
+import java.time.format.DateTimeFormatter
 import java.util.Locale
 
 /**
- * Returns the selected date as `yyyy-MM-dd`. The caller owns visibility, validation, and
+ * Returns the selected date as `yyyy-MM-dd`, the calendar day the person picked. The caller owns visibility, validation, and
  * storage. Cancel calls [onDismiss]; confirm calls [onDismiss] before [onDateSelected], and
  * emits no date if none is selected.
  */
@@ -39,7 +42,7 @@ import java.util.Locale
 @Composable
 fun DatePickerDialog(onDateSelected: (String) -> Unit, onDismiss: () -> Unit) {
     val selectedDatePickerState: DatePickerState =
-        rememberDatePickerState(initialSelectedDateMillis = System.currentTimeMillis())
+        rememberDatePickerState(initialSelectedDateMillis = todayAsPickerMillis())
 
     DatePickerDialog(onDismissRequest = {
         onDismiss()
@@ -47,7 +50,7 @@ fun DatePickerDialog(onDateSelected: (String) -> Unit, onDismiss: () -> Unit) {
         GeneralButton(onClick = {
             onDismiss()
             selectedDatePickerState.selectedDateMillis?.let {
-                onDateSelected(SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Date(it)))
+                onDateSelected(pickerMillisToIsoDate(it))
             }
         }, label = stringResource(id = android.R.string.ok))
     }, dismissButton = {
@@ -60,3 +63,18 @@ fun DatePickerDialog(onDateSelected: (String) -> Unit, onDismiss: () -> Unit) {
         DatePicker(state = selectedDatePickerState)
     }
 }
+
+/**
+ * Formats [pickerMillis] as `yyyy-MM-dd`. Material's date picker reports the picked day as
+ * midnight UTC, so it is read in UTC: any other zone would move the date by a day.
+ */
+internal fun pickerMillisToIsoDate(pickerMillis: Long): String =
+    Instant.ofEpochMilli(pickerMillis).atZone(ZoneOffset.UTC).toLocalDate()
+        .format(DateTimeFormatter.ISO_LOCAL_DATE.withLocale(Locale.ROOT))
+
+/**
+ * Today in [zone] as the midnight UTC value the Material date picker uses for a selected day, so
+ * the picker opens on the person's current calendar day whatever their offset from UTC.
+ */
+internal fun todayAsPickerMillis(zone: ZoneId = ZoneId.systemDefault()): Long =
+    LocalDate.now(zone).atStartOfDay(ZoneOffset.UTC).toInstant().toEpochMilli()

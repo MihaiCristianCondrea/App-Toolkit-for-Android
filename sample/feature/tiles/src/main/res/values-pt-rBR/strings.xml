@@ -261,4 +261,13 @@
     <string name="random_range">Intervalo numérico</string>
     <string name="random_inclusive">Os dois limites estão incluídos.</string>
     <string name="tool_converter_unit">Unidade</string>
+
+    <string name="section_toys">Brinquedos</string>
+    <string name="bell_title">Sino</string>
+    <string name="bell_summary">Agite o celular para tocar o sino.</string>
+    <string name="bell_card_note">Agite para tocar</string>
+    <string name="bell_ring">Tocar o sino</string>
+    <string name="bell_motion_unavailable">Este dispositivo não detecta movimentos de agitação.</string>
+    <string name="bell_audio_unavailable">O som do sino está indisponível.</string>
+    <string name="bell_ringing">Tocando</string>
 </resources>

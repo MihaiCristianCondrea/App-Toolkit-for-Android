@@ -17,6 +17,7 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.ui
 
+import kotlinx.coroutines.CompletableDeferred
 import android.app.Activity
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.exceptions.NetworkException
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.UiText
@@ -33,6 +34,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.integration.review.domai
 import com.mihaicristiancondrea.android.libs.apptoolkit.integration.review.domain.models.ReviewOutcome
 import com.mihaicristiancondrea.android.libs.apptoolkit.integration.review.domain.usecases.ForceInAppReviewUseCase
 import io.mockk.coEvery
+import io.mockk.coVerify
 import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Test
@@ -57,9 +59,7 @@ class FaqViewModelTest {
         override val activity: Activity = mockk()
     }
 
-    // Already normalized: trimming, blank-dropping and de-duplication are the repository's job,
-    // covered by DefaultFaqRepositoryTest.
-    private val question = FaqItem(id = FaqId("remote-1"), question = "Q", answer = "A")
+    private val question = FaqItem(id = FaqId(value = "remote-1"), question = "Q", answer = "A")
 
     private fun createViewModel(repository: FaqRepository = FakeFaqRepository()): FaqViewModel =
         FaqViewModel(
@@ -74,97 +74,115 @@ class FaqViewModelTest {
         get() = (message as UiText.StringResource).resourceId
 
     @Test
-    fun `the first load shows the questions`() = runTest(dispatcherExtension.testDispatcher) {
-        val viewModel = createViewModel(FakeFaqRepository(questions = listOf(question)))
+    fun `the first load shows the questions`() = runTest(context = dispatcherExtension.testDispatcher) {
+        val viewModel = createViewModel(repository = FakeFaqRepository(questions = listOf(element = question)))
         advance()
 
         val questions = viewModel.state.value.questions as Loadable.Ready
-        assertEquals(listOf(question), questions.value.toList())
+        assertEquals(expected = listOf(element = question), actual = questions.value.toList())
     }
 
     @Test
-    fun `no questions shows the empty state`() = runTest(dispatcherExtension.testDispatcher) {
-        val viewModel = createViewModel(FakeFaqRepository(questions = emptyList()))
+    fun `a duplicate load keeps the active fetch`() = runTest(context = dispatcherExtension.testDispatcher) {
+        val response = CompletableDeferred<List<FaqItem>>()
+        val repository: FaqRepository = mockk()
+        coEvery { repository.getFaq() } coAnswers { response.await() }
+        val viewModel = createViewModel(repository = repository)
         advance()
 
-        assertIs<Loadable.Empty>(viewModel.state.value.questions)
+        viewModel.onEvent(event = FaqEvent.Load)
+        advance()
+        response.complete(value = listOf(element = question))
+        advance()
+
+        coVerify(exactly = 1) { repository.getFaq() }
+        val questions = assertIs<Loadable.Ready<*>>(value = viewModel.state.value.questions)
+        assertEquals(expected = listOf(element = question), actual = questions.value)
+    }
+
+    @Test
+    fun `no questions shows the empty state`() = runTest(context = dispatcherExtension.testDispatcher) {
+        val viewModel = createViewModel(repository = FakeFaqRepository(questions = emptyList()))
+        advance()
+
+        assertIs<Loadable.Empty>(value = viewModel.state.value.questions)
     }
 
     @Test
     fun `a failure with no text of its own shows the help page's text with a retry`() =
-        runTest(dispatcherExtension.testDispatcher) {
-            val viewModel = createViewModel(FakeFaqRepository(failure = IllegalStateException("bug")))
+        runTest(context = dispatcherExtension.testDispatcher) {
+            val viewModel = createViewModel(repository = FakeFaqRepository(failure = IllegalStateException("bug")))
             advance()
 
             val questions = viewModel.state.value.questions as Loadable.Failed
-            assertEquals(R.string.error_failed_to_load_faq, questions.resourceId)
-            assertTrue(questions.retryable)
-            assertContains(telemetryRepository.loggedEvents.map { it.name }, "vm_op_error")
+            assertEquals(expected = R.string.error_failed_to_load_faq, actual = questions.resourceId)
+            assertTrue(actual = questions.retryable)
+            assertContains(iterable = telemetryRepository.loggedEvents.map { it.name }, element = "vm_op_error")
         }
 
     @Test
-    fun `being offline shows the offline text`() = runTest(dispatcherExtension.testDispatcher) {
+    fun `being offline shows the offline text`() = runTest(context = dispatcherExtension.testDispatcher) {
         val viewModel = createViewModel(
-            FakeFaqRepository(failure = NetworkException(NetworkException.Reason.NO_INTERNET))
+            repository = FakeFaqRepository(failure = NetworkException(reason = NetworkException.Reason.NO_INTERNET))
         )
         advance()
 
         val questions = viewModel.state.value.questions as Loadable.Failed
-        assertEquals(CoreUiR.string.screen_error_no_internet, questions.resourceId)
+        assertEquals(expected = CoreUiR.string.screen_error_no_internet, actual = questions.resourceId)
     }
 
     @Test
-    fun `retrying after a failure shows the questions`() = runTest(dispatcherExtension.testDispatcher) {
-        val repository = FakeFaqRepository(questions = listOf(question), failure = IllegalStateException("bug"))
-        val viewModel = createViewModel(repository)
+    fun `retrying after a failure shows the questions`() = runTest(context = dispatcherExtension.testDispatcher) {
+        val repository = FakeFaqRepository(questions = listOf(element = question), failure = IllegalStateException("bug"))
+        val viewModel = createViewModel(repository = repository)
         advance()
-        assertIs<Loadable.Failed>(viewModel.state.value.questions)
+        assertIs<Loadable.Failed>(value = viewModel.state.value.questions)
 
         repository.failure = null
-        viewModel.onEvent(FaqEvent.Load)
+        viewModel.onEvent(event = FaqEvent.Load)
         advance()
 
-        assertIs<Loadable.Ready<*>>(viewModel.state.value.questions)
+        assertIs<Loadable.Ready<*>>(value = viewModel.state.value.questions)
     }
 
     @Test
-    fun `a shown review asks for nothing else`() = runTest(dispatcherExtension.testDispatcher) {
+    fun `a shown review asks for nothing else`() = runTest(context = dispatcherExtension.testDispatcher) {
         coEvery { reviewUseCase(host = any()) } returns ReviewOutcome.Launched
         val viewModel = createViewModel()
         advance()
 
-        viewModel.onEvent(FaqEvent.RequestReview(host = reviewHost))
+        viewModel.onEvent(event = FaqEvent.RequestReview(host = reviewHost))
         advance()
 
-        assertFalse(viewModel.state.value.openStoreListing)
+        assertFalse(actual = viewModel.state.value.openStoreListing)
     }
 
     @Test
-    fun `an unavailable review asks for the store listing once`() = runTest(dispatcherExtension.testDispatcher) {
+    fun `an unavailable review asks for the store listing once`() = runTest(context = dispatcherExtension.testDispatcher) {
         coEvery { reviewUseCase(host = any()) } returns ReviewOutcome.Unavailable
         val viewModel = createViewModel()
         advance()
 
-        viewModel.onEvent(FaqEvent.RequestReview(host = reviewHost))
+        viewModel.onEvent(event = FaqEvent.RequestReview(host = reviewHost))
         advance()
-        assertTrue(viewModel.state.value.openStoreListing)
+        assertTrue(actual = viewModel.state.value.openStoreListing)
 
-        viewModel.onEvent(FaqEvent.StoreListingOpened)
-        assertFalse(viewModel.state.value.openStoreListing)
+        viewModel.onEvent(event = FaqEvent.StoreListingOpened)
+        assertFalse(actual = viewModel.state.value.openStoreListing)
     }
 
     @Test
     fun `a failed review request still asks for the store listing`() =
-        runTest(dispatcherExtension.testDispatcher) {
+        runTest(context = dispatcherExtension.testDispatcher) {
             coEvery { reviewUseCase(host = any()) } throws IllegalStateException("review")
             val viewModel = createViewModel()
             advance()
 
-            viewModel.onEvent(FaqEvent.RequestReview(host = reviewHost))
+            viewModel.onEvent(event = FaqEvent.RequestReview(host = reviewHost))
             advance()
 
-            assertTrue(viewModel.state.value.openStoreListing)
-            assertContains(telemetryRepository.loggedEvents.map { it.name }, "vm_op_error")
+            assertTrue(actual = viewModel.state.value.openStoreListing)
+            assertContains(iterable = telemetryRepository.loggedEvents.map { it.name }, element = "vm_op_error")
         }
 
     private class FakeFaqRepository(

@@ -20,9 +20,19 @@ package com.mihaicristiancondrea.android.libs.apptoolkit.feature.support.ui.anal
 import com.android.billingclient.api.ProductDetails
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.telemetry.models.AnalyticsEvent
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.telemetry.models.AnalyticsValue
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.telemetry.models.TrackedScreen
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.analytics.SettingsAnalytics
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.analytics.Ga4EventData
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.support.ui.utils.primaryOneTimePurchaseOffer
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.support.ui.extensions.primaryOneTimePurchaseOffer
+
+internal const val SUPPORT_SCREEN_NAME: String = "Support"
+
+private const val SUPPORT_SCREEN_CLASS: String = "SupportComposable"
+
+internal val SUPPORT_SCREEN: TrackedScreen = TrackedScreen(
+    name = SUPPORT_SCREEN_NAME,
+    className = SUPPORT_SCREEN_CLASS,
+)
 
 /**
  * The donation funnel's GA4 vocabulary.
@@ -92,8 +102,6 @@ internal fun donationResultEvent(productId: String, outcome: String): AnalyticsE
     )
 
 private const val MICROS_PER_UNIT: Double = 1_000_000.0
-
-internal const val SUPPORT_SCREEN_NAME = "Support"
 
 internal fun supportPreferenceTapEvent(
     preferenceKey: String,

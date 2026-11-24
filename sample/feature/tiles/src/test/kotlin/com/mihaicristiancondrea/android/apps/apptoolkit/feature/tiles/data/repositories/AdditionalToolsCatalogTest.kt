@@ -25,7 +25,6 @@ import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.models.
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.NumbersCalculateTools
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.NumbersChanceTools
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.NumbersSecondaryTools
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.mappers.toUiModels
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.utils.constants.ToolkitTileIds
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Test
@@ -49,7 +48,7 @@ class AdditionalToolsCatalogTest {
             quickSettingsDataSource = source,
         )
         val categories = repository.currentTileCategories()
-        val catalogIds = categories.filter { it.id !in setOf("chance", "measure") }.flatMap { it.tiles }.map { it.id }.toSet()
+        val catalogIds = categories.filter { it.id !in setOf("chance", "measure", "toys") }.flatMap { it.tiles }.map { it.id }.toSet()
 
         assertFalse(ToolkitTileIds.PROTRACTOR in catalogIds)
         assertFalse(ToolkitTileIds.BILL_SPLITTER in catalogIds)
@@ -66,6 +65,11 @@ class AdditionalToolsCatalogTest {
         assertTrue(visuals.titleResId != 0 && visuals.summaryResId != 0)
         assertFalse(catalogIds.any { id -> PlayTools.any { it.id == id } })
         assertTrue(ToolkitTileIds.WATER_EJECT in catalogIds)
+        val bell = categories.single { it.id == "toys" }.tiles.single()
+        assertEquals(ToolkitTileIds.BELL, bell.id)
+        assertNull(bell.requestKey)
+        assertEquals(ToolkitTileStatus.Available, bell.status)
+        assertTrue(PlayTools.any { it.id == bell.id })
 
         assertEquals(
             listOf(ToolkitTileIds.UNIT_CONVERTER, ToolkitTileIds.BILL_SPLITTER),

@@ -20,7 +20,10 @@ package com.mihaicristiancondrea.android.libs.apptoolkit.shell.chrome
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.AnimationSpec
 import androidx.compose.animation.core.AnimationVector1D
+import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Stable
+import androidx.compose.runtime.saveable.Saver
+import androidx.compose.runtime.saveable.rememberSaveable
 
 /**
  * How far the player is open, from 0 (the docked pill) to 1 (the full window).
@@ -30,8 +33,8 @@ import androidx.compose.runtime.Stable
  * chrome from skipping. Reading [value] or [targetValue] is a snapshot read, as on the animatable.
  */
 @Stable
-internal class PlayerExpansion {
-    private val animatable: Animatable<Float, AnimationVector1D> = Animatable(0f)
+internal class PlayerExpansion(initial: Float = 0f) {
+    private val animatable: Animatable<Float, AnimationVector1D> = Animatable(initial)
 
     val value: Float get() = animatable.value
 
@@ -45,3 +48,12 @@ internal class PlayerExpansion {
         animatable.animateTo(target, animationSpec)
     }
 }
+
+/**
+ * A [PlayerExpansion] that keeps where it was across recreation, so a rotation does not collapse
+ * an open player. It saves its target, not a frame of a running animation.
+ */
+@Composable
+internal fun rememberPlayerExpansion(): PlayerExpansion = rememberSaveable(
+    saver = Saver(save = { expansion -> expansion.targetValue }, restore = { target -> PlayerExpansion(target) }),
+) { PlayerExpansion() }

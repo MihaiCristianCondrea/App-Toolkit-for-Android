@@ -2,7 +2,7 @@
 
 ## Purpose
 
-Owns the AppToolkit About screen: host application, App Toolkit, and Google Play services metadata,
+Owns the App Toolkit About screen: host application, App Toolkit, and Google Play services metadata,
 plus the tap-to-copy interaction for the entries it renders and the version-tap easter egg.
 
 ## Owns
@@ -13,14 +13,12 @@ plus the tap-to-copy interaction for the entries it renders and the version-tap 
   info and the open-source licenses, which opens the licenses page.
 - Tap-to-copy for About entries, including the clipboard write and its in-app confirmation.
 - The version-tap easter egg: konfetti on the fifth tap, and the seasonal themes unlock it records.
-- The library-owned extras screen, `LibraryExtrasScreen`.
-- `aboutPages()`, the registration of `AboutRoute` (a detail of the settings list) and
-  `LibraryExtrasRoute`.
+- `aboutScreen()`, the registration of `AboutScreen` (a detail of the settings list).
 
 ## Does not own
 
 - Open-source licenses, owned by [`:library:feature:licenses`](../licenses/README.md); the About
-  list only navigates to `LicensesRoute`.
+  list only navigates to `LicensesScreen`.
 - Privacy and legal entries, owned by [`:library:feature:privacy`](../privacy/README.md).
 - Changelog retrieval, presentation, and in-app-update triggering, owned by
   [`:library:feature:changelog`](../changelog/README.md).
@@ -32,6 +30,11 @@ plus the tap-to-copy interaction for the entries it renders and the version-tap 
 - The consent, review and update hosts. Each integration module builds its own from the activity
   (`ConsentHost`, `ReviewHost`, `InAppUpdateHost`).
 
+## Host requirements
+
+Bind an `AboutDeviceInfoDataSource` that supplies a formatted report suitable for display and
+copying. Its `deviceInfo` property is read on the main thread. A blank report is omitted.
+
 ## Depends on
 
 - `:library:core:common` and `:library:core:ui` for shared state, platform helpers, and Compose.
@@ -42,26 +45,28 @@ plus the tap-to-copy interaction for the entries it renders and the version-tap 
 
 ## Used by
 
-- [`:library:apptoolkit`](../../apptoolkit/README.md), which calls `aboutPages()` from
-  `toolkitPages()`.
-- `:sample:app`, which registers About first with its own content (`aboutPages {
-  AboutSettingsContent() }`), and `:sample:feature:about`, which provides the device report.
+- [`:library:apptoolkit`](../../apptoolkit/README.md), which calls `aboutScreen()` from
+  `toolkitScreens()`.
+- `:sample:app`, which registers `aboutScreen { AboutScreen() }` before the Toolkit adds its pages.
+- `:sample:feature:about`, which provides the formatted device report.
 
 ## Flow chart
 
 ```mermaid
 flowchart TD
-    AboutScreen[About screen] --> AboutVM[AboutViewModel]
-    AboutVM --> AboutRepo[AboutRepository]
-    AboutRepo --> Build[Build and app-info providers]
-    AboutRepo --> Gms[GooglePlayServicesRepository]
-    AboutVM --> Mapper[AboutMappers to AboutItem list]
-    AboutScreen --> CopyEvent[AboutEvent.CopyToClipboard]
-    CopyEvent --> AboutVM
-    AboutVM --> Clipboard[ClipboardRepository: main-thread clipboard write]
-    Clipboard --> Snackbar[In-app confirmation]
-    Page[aboutPages: AboutRoute] --> AboutScreen
-    AboutScreen -->|licenses row| Licenses[navigate LicensesRoute]
+    Entry["aboutScreen()"] -->|"AboutScreen"| Screen["AboutScreen"]
+    Screen --> Host["ScreenHost"]
+    Host --> Content["AboutScreenContent"]
+    Content -->|"Version gesture, copy or retry"| VM["AboutViewModel"]
+    Content -->|"Licenses action"| Licenses["LicensesScreen"]
+    VM -->|"AboutUiState and messages"| Host
+    VM --> Repo["AboutRepository / DefaultAboutRepository"]
+    Repo --> Build["BuildInfoRepository"]
+    Repo --> Device["AboutDeviceInfoDataSource"]
+    Repo --> Gms["GooglePlayServicesRepository"]
+    VM --> Mapper["toAboutItems()"]
+    VM --> Clipboard["ClipboardRepository"]
+    VM --> Unlock["SeasonalThemeRepository"]
 ```
 
 ## Architectural decisions
@@ -82,24 +87,19 @@ flowchart TD
   displays rather than a second lookup resolved under a different configuration. Both texts are
   `UiText`, so a row whose value is a string resource copies as readily as one holding a
   formatted value.
-- Every row that displays a value copies it on tap, with two exceptions. Open source licenses
-  navigates. The build version row copies nothing: it is where the easter egg lives, people tap it
-  over and over, and copying on each tap filled the clipboard and covered the konfetti with
-  confirmations. Rows that rendered as clickable but carried no action were the reason tapping most
-  of this screen appeared to do nothing.
-- The hidden version-tap gesture is `Preference.countsVersionTap`, not an `AboutItemAction`, so it
-  can sit on a row whatever that row does.
-- The fifth tap plays konfetti and raises `AboutEvent.EasterEggFound`. `AboutViewModel` records the
-  unlock through `SeasonalThemeRepository`, which keeps the holiday palettes and snowfall available
-  all year.
-  Only the first unlock shows a snackbar, since nothing else points at where the reward went.
-- The page takes its content as a parameter. `aboutPages(about = ...)` lets an app wrap
+- The build-version row counts taps toward the easter egg. Clipboard actions on other rows copy the
+  displayed value. The licenses row opens `LicensesScreen`.
+- The fifth tap plays konfetti when system animations are enabled and raises
+  `AboutEvent.EasterEggFound`. `AboutViewModel` records the unlock through
+  `SeasonalThemeRepository`, which keeps the holiday palettes and snowfall available all year.
+  Only the first unlock shows a snackbar.
+- The page takes its content as a parameter. `aboutScreen(about = ...)` lets an app wrap
   `AboutScreen` (to react to version taps, say) and keep the Toolkit's key and pane role, instead of
   re-declaring the page.
 - Confirmations go to the page's snackbar host (`rememberPageSnackbarHostState()`), so they sit
   above the shell's bottom chrome rather than under it.
-- Use cases are retained where they perform a named operation or combine concerns; repository calls
-  that only forwarded data were not given synthetic wrappers.
+- The ViewModel calls repositories directly. `ui/formatters/` owns the display format for the build
+  version, and the mapper applies the shared preference grouping after filtering the rows.
 
 ## Verifying tap-to-copy
 
@@ -124,16 +124,17 @@ Verify on a physical device, where the preview appears on every tap, or switch o
 ## Public contracts
 
 - `AboutDeviceInfoDataSource`, `AboutRepository`, `AboutInfo`, `AboutItem`, `AboutItemAction`,
-  `AboutEvent`, `AboutScreen`, `LibraryExtrasScreen`, and `aboutPages()`.
+  `AboutItemKey`, `AboutEvent`, `AboutUiState`, `AboutViewModel`, `DefaultAboutRepository`,
+  `AboutScreen`, `aboutScreen()`, and `aboutModule`.
 
 ## Internal implementations
 
 - Device/build-info mapping, About item assembly with grouped card position calculation
-  (`ui/mappers`), Google Play services package inspection, and clipboard behavior.
+  (`ui/mappers`), and clipboard behavior. The GMS integration owns package inspection.
 
 ## Current risks
 
-`AboutDeviceInfoDataSource` lives in `data/local`; hosts supply their device-information text through this contract.
+Emulator clipboard sharing can hide system copy previews. See [Verifying tap-to-copy](#verifying-tap-to-copy).
 
 ## Migration notes
 
@@ -144,7 +145,7 @@ The former feature-owned provider is removed. Hosts constructing the repository 
 update that argument. Hosts using the assembled Toolkit graph receive the new binding automatically.
 
 The About tap-event builder lives in `ui/analytics/AboutAnalytics.kt`. Initial loading continues
-through `onEvent(AboutEvent.Load)`, preserving the event breadcrumb.
+through `onEvent(event = AboutEvent.Load)`, preserving the event breadcrumb.
 
 The host device contract is now `data.local.AboutDeviceInfoDataSource`, replacing
 `ui.providers.AboutSettingsProvider`. Hosts update their implementation and Koin binding directly.

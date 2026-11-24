@@ -15,6 +15,6 @@
   ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
   -->
 <resources>
-    <string name="error_loading_changelog_message">Der Anwendungs-Changelog konnte nicht geladen werden. Bitte versuchen Sie es erneut.</string>
+    <string name="error_loading_changelog_message">Der Anwendungs-Changelog konnte nicht geladen werden.</string>
     <string name="loading_changelog_message">Anwendungs-Changelog wird abgerufen…</string>
 </resources>

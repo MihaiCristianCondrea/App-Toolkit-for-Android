@@ -1,0 +1,48 @@
+{
+  "entries": [
+    {
+      "path": ".agents/skills",
+      "include_only": [
+        "first-party/marketing/marketing-startup",
+        "first-party/marketing/marketing-ui",
+        "first-party/metadata/files-metadata",
+        "first-party/metadata/social-captions",
+        "first-party/motion-video",
+        "first-party/play-store/play-store-changelog",
+        "first-party/play-store/play-store-listing",
+        "first-party/play-store/play-store-media",
+        "official/google/material-ui",
+        "official/google/stitch-skill",
+        "official/lottiefiles/motion-design",
+        "official/remotion/remotion-best-practices",
+        "official/remotion/remotion-captions",
+        "official/remotion/remotion-create",
+        "official/remotion/remotion-docs",
+        "official/remotion/remotion-interactivity",
+        "official/remotion/remotion-license",
+        "official/remotion/remotion-maps",
+        "official/remotion/remotion-markup",
+        "official/remotion/remotion-multimedia",
+        "official/remotion/remotion-render",
+        "official/remotion/remotion-saas",
+        "official/remotion/remotion-studio",
+        "official/remotion/remotion-upgrade",
+        "third-party/leonxlnx/imagegen-skills/brandkit",
+        "third-party/leonxlnx/imagegen-skills/image-to-code",
+        "third-party/leonxlnx/imagegen-skills/imagegen-frontend-mobile",
+        "third-party/leonxlnx/imagegen-skills/imagegen-frontend-web",
+        "third-party/leonxlnx/taste-skill",
+        "third-party/microck/ui-unslop",
+        "third-party/sergebulaev/tiktok-skills",
+        "third-party/sergebulaev/tiktok-skills/skills/tt-audience-insights",
+        "third-party/sergebulaev/tiktok-skills/skills/tt-caption-writer",
+        "third-party/sergebulaev/tiktok-skills/skills/tt-content-planner",
+        "third-party/sergebulaev/tiktok-skills/skills/tt-hook-scripter",
+        "third-party/sergebulaev/tiktok-skills/skills/tt-humanizer",
+        "third-party/sergebulaev/tiktok-skills/skills/tt-profile-optimizer",
+        "third-party/sergebulaev/tiktok-skills/skills/tt-repurposer",
+        "third-party/sergebulaev/tiktok-skills/skills/tt-trend-mapper"
+      ]
+    }
+  ]
+}

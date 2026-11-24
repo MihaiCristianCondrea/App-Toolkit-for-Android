@@ -80,7 +80,7 @@
     <string name="shell_navigation_tint_always">Забарвлені разом, вміст у картці</string>
     <string name="shell_navigation_tint_on_scroll">Забарвлені разом, щойно вміст прокручується</string>
     <string name="shell_back_edge_system">Як в Android: сторінка зменшується на місці</string>
-    <string name="shell_back_edge_follow">Слідує за пальцем, дзеркально до лівого краю (за замовчуванням)</string>
+    <string name="shell_back_edge_follow">Слідує за пальцем, дзеркально до лівого краю</string>
     <string name="shell_transition_directional">Спрямований зсув</string>
     <string name="shell_transition_fade_through">Проявлення через тло</string>
     <string name="shell_transition_fade">Плавний перехід</string>

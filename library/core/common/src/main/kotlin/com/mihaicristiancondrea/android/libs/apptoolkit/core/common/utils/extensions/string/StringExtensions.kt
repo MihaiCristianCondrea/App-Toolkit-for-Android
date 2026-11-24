@@ -18,6 +18,7 @@
 package com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.string
 
 import java.net.URI
+import kotlin.io.encoding.Base64
 
 /**
  * Sanitizes URL-like input by trimming and validating strict http(s) absolute URLs.
@@ -43,3 +44,10 @@ fun String?.normalizeRoute(): String? = this
     ?.substringBefore('?')
     ?.substringBefore('/')
     ?.takeIf { it.isNotBlank() }
+
+/**
+ * Decodes a base64 string into UTF-8 text, returning an empty string on failure.
+ */
+fun String.toToken(): String =
+    runCatching { String(bytes = Base64.decode(source = this), charset = Charsets.UTF_8) }
+        .getOrDefault(defaultValue = "")

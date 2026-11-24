@@ -53,13 +53,13 @@ shell, rails, drawers and sheets come with Material Next.
 
 ## Dependencies
 
-It uses Material Next `0.1.0` from npm and needs Node.js 24. The gallery opens
+It uses Material Next `0.2.x` from npm and needs Node.js 24. The gallery opens
 each screen in the same page; `screen.html` remains for captures and direct links.
 Gallery cards start without device frames. Opening screen detail shows a frame automatically,
 while an explicit `frame=none` URL stays frameless.
 
 Shared frames and badges are copied from the installed package into ignored `public/material-next/`
-at build time. App-specific fonts, logos and illustrations still come from this repository.
+before development, builds and browser QA. Google Sans Flex is copied from the Android design system so the preview uses the same font file as the app. Logos, illustrations and shapes come from `marketing/assets/`.
 
 ## Entry Points
 
@@ -114,7 +114,7 @@ Node.js and npm must be on PATH. The Windows window stays open on failure so the
 npm install
 npm run dev      # sync assets and start Vite dev server
 npm run build    # sync assets and build production bundle to dist/
-npm run qa       # browser checks (CHROMIUM_PATH can select a local Chromium)
+npm run qa       # sync assets and run browser checks (CHROMIUM_PATH can select a local Chromium)
 npm run palettes # regenerate src/theme/palettes.css from Kotlin Color.kt files
 ```
 
@@ -149,6 +149,12 @@ Decision Wheel no longer has preset chips. SOS uses separate SOS and Morse-messa
 ## Native ad previews
 
 The prototype's Show ads switch reveals one shared sponsored-content layout on each overview: Quick Tools after Sensors, Measure between Convert & split and Count & time, and Play & Decide below Chance. Search hides these previews. They are static layout samples, not live ad requests, and are absent when Show ads is off.
+
+## Bell design preview
+
+Open Play & Decide and choose Bell under Toys. The tool sheet pairs a filled bell on the nine-sided cookie shape with the shake instruction and Ring bell button. The layout stacks on phones and places the bell beside the controls in wider windows. In the preview inspector, open the Bell sheet and use Simulate shake. The Bell without motion and Bell ringing (silent capture) presets cover the fallback and a fixed ringing pose. The browser uses a trimmed, mono edit of [Bell Ring by Universfield](https://pixabay.com/sound-effects/film-special-effects-bell-ring-123742/) under the [Pixabay Content License](https://pixabay.com/service/license-summary/).
+
+The design proposes one chime per deliberate shake while the sheet is open and the sample app is in the foreground. Rapid taps play immediately, with up to three overlapping strikes and small pitch and volume variations. Dismissal or backgrounding stops the audio. The large bell swings at the recorded impacts. The sound arcs pulse at each impact, and the motion settles with the playback tail. Reduced motion shows still sound arcs during the chime. A live status announces the ring to assistive technology. Keep the Ring bell button available on devices without a motion sensor.
 
 ## Water Eject captures
 

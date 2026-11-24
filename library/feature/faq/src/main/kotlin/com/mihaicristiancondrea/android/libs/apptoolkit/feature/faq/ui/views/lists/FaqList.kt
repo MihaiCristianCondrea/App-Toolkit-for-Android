@@ -17,10 +17,6 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.ui.views.lists
 
-import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.fadeOut
-import androidx.compose.animation.shrinkVertically
-import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -51,16 +47,17 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preference
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.spacers.ExtraLargeVerticalSpacer
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.R
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.data.models.FaqItem
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.ui.constants.FaqConstants
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.ui.views.ads.FaqNativeAdCard
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.ui.views.cards.ContactUsCard
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.ui.views.cards.QuestionCard
 import kotlinx.collections.immutable.ImmutableList
 
-private const val INITIAL_VISIBLE_QUESTION_COUNT = 5
-
 /**
- * The questions, five at first and the rest behind Show more, then the native ad and the contact
- * card. Which questions are expanded and whether all of them show is visual state kept here.
+ * Renders the question list and support rows, retaining each question's expansion state.
+ *
+ * @param onQuestionToggled Reports the question, its zero-based list position and its new state.
+ * @param adUnitId Native ad unit, or `null` to omit the ad row.
  */
 @Composable
 internal fun FaqList(
@@ -76,12 +73,11 @@ internal fun FaqList(
     val visibleQuestions = if (showAllQuestions) {
         questions
     } else {
-        questions.take(INITIAL_VISIBLE_QUESTION_COUNT)
+        questions.take(n = FaqConstants.INITIAL_VISIBLE_QUESTION_COUNT)
     }
-    val hasHiddenQuestions = questions.size > INITIAL_VISIBLE_QUESTION_COUNT
-    val popularGroupItemCount = visibleQuestions.size + if (hasHiddenQuestions) 1 else 0
-    val supportGroupItemCount = 1 + if (adUnitId != null && isAdLoaded) 1 else 0
-    val motion = MaterialTheme.motionScheme
+    val hasMoreToReveal = !showAllQuestions && (questions.size > FaqConstants.INITIAL_VISIBLE_QUESTION_COUNT)
+    val popularGroupItemCount = visibleQuestions.size + (if (hasMoreToReveal) 1 else 0)
+    val supportGroupItemCount = if ((adUnitId != null) && isAdLoaded) 2 else 1
 
     LazyColumn(
         modifier = Modifier.fillMaxSize(),
@@ -91,7 +87,7 @@ internal fun FaqList(
             start = SizeConstants.LargeSize,
             end = SizeConstants.LargeSize,
         ),
-        verticalArrangement = Arrangement.spacedBy(SizeConstants.ExtraTinySize),
+        verticalArrangement = Arrangement.spacedBy(space = SizeConstants.ExtraTinySize),
     ) {
         animatedItem {
             Text(text = stringResource(id = R.string.popular_help_resources))
@@ -108,7 +104,7 @@ internal fun FaqList(
                     isExpanded = isExpanded,
                     groupedPosition = groupedItemPosition(
                         index = index,
-                        size = if (showAllQuestions) questions.size else popularGroupItemCount,
+                        size = popularGroupItemCount,
                     ),
                     onToggleExpand = {
                         val expanded = !isExpanded
@@ -119,55 +115,43 @@ internal fun FaqList(
             }
         }
 
-        if (hasHiddenQuestions) {
+        if (hasMoreToReveal) {
             animatedItem(key = "show_more_questions") {
-                AnimatedVisibility(
-                    visible = !showAllQuestions,
-                    exit = slideOutVertically(
-                        targetOffsetY = { it },
-                        animationSpec = motion.defaultSpatialSpec(),
-                    ) + fadeOut(
-                        animationSpec = motion.fastEffectsSpec(),
-                    ) + shrinkVertically(
-                        animationSpec = motion.defaultSpatialSpec(),
-                    ),
+                Card(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .groupedCorners(
+                            position = groupedItemPosition(
+                                index = popularGroupItemCount - 1,
+                                size = popularGroupItemCount,
+                            ),
+                            outerRadius = SizeConstants.ExtraLargeIncreasedSize,
+                        ),
+                    shape = RectangleShape,
+                    onClick = {
+                        onShowMoreQuestions()
+                        showAllQuestions = true
+                    },
                 ) {
-                    Card(
+                    Row(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .groupedCorners(
-                                position = groupedItemPosition(
-                                    index = popularGroupItemCount - 1,
-                                    size = popularGroupItemCount,
-                                ),
-                                outerRadius = SizeConstants.ExtraLargeIncreasedSize,
+                            .padding(
+                                horizontal = SizeConstants.LargeSize,
+                                vertical = SizeConstants.MediumSize,
                             ),
-                        shape = RectangleShape,
-                        onClick = {
-                            onShowMoreQuestions()
-                            showAllQuestions = true
-                        },
+                        horizontalArrangement = Arrangement.Center,
+                        verticalAlignment = Alignment.CenterVertically,
                     ) {
-                        Row(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(
-                                    horizontal = SizeConstants.LargeSize,
-                                    vertical = SizeConstants.MediumSize,
-                                ),
-                            horizontalArrangement = Arrangement.Center,
-                            verticalAlignment = Alignment.CenterVertically,
-                        ) {
-                            Text(
-                                text = stringResource(id = R.string.show_more),
-                                style = MaterialTheme.typography.titleMedium,
-                            )
-                            Icon(
-                                imageVector = Icons.Filled.ExpandMore,
-                                contentDescription = null,
-                                modifier = Modifier.padding(start = SizeConstants.SmallSize),
-                            )
-                        }
+                        Text(
+                            text = stringResource(id = R.string.show_more),
+                            style = MaterialTheme.typography.titleMedium,
+                        )
+                        Icon(
+                            imageVector = Icons.Filled.ExpandMore,
+                            contentDescription = null,
+                            modifier = Modifier.padding(start = SizeConstants.SmallSize),
+                        )
                     }
                 }
             }
@@ -186,8 +170,9 @@ internal fun FaqList(
                         size = supportGroupItemCount,
                     ),
                     modifier = Modifier.animateItem(),
-                    onAdLoaded = { isAdLoaded = it },
-                )
+                ) { loaded ->
+                    isAdLoaded = loaded
+                }
             }
         }
 
@@ -199,7 +184,7 @@ internal fun FaqList(
                 ),
                 onClick = onContactUs,
             )
-            repeat(3) { ExtraLargeVerticalSpacer() }
+            repeat(times = 3) { ExtraLargeVerticalSpacer() }
         }
     }
 }

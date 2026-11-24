@@ -52,9 +52,9 @@ class DefaultFaqRepositoryTest {
     ): DefaultFaqRepository {
         val remote = mockk<FaqRemoteDataSource>()
         if (catalogFailure != null) {
-            coEvery { remote.fetchCatalog(CATALOG_URL) } throws catalogFailure
+            coEvery { remote.fetchCatalog(url = CATALOG_URL) } throws catalogFailure
         } else {
-            coEvery { remote.fetchCatalog(CATALOG_URL) } returns FaqCatalogDto(
+            coEvery { remote.fetchCatalog(url = CATALOG_URL) } returns FaqCatalogDto(
                 schemaVersion = 1,
                 products = listOf(
                     FaqProductDto(
@@ -69,9 +69,9 @@ class DefaultFaqRepositoryTest {
             )
         }
         if (remoteQuestions == null) {
-            coEvery { remote.fetchQuestions(QUESTIONS_URL) } throws IllegalStateException("offline")
+            coEvery { remote.fetchQuestions(url = QUESTIONS_URL) } throws IllegalStateException("offline")
         } else {
-            coEvery { remote.fetchQuestions(QUESTIONS_URL) } returns remoteQuestions
+            coEvery { remote.fetchQuestions(url = QUESTIONS_URL) } returns remoteQuestions
         }
 
         val local = mockk<FaqLocalDataSource>()
@@ -90,72 +90,72 @@ class DefaultFaqRepositoryTest {
         FaqQuestionDto(id = id, question = question, answer = answer)
 
     private fun item(id: String, question: String, answer: String) =
-        FaqItem(id = FaqId(id), question = question, answer = answer)
+        FaqItem(id = FaqId(value = id), question = question, answer = answer)
 
     @Test
     fun `trims surrounding whitespace from remote questions and answers`() = runTest {
         val questions = repository(
-            remoteQuestions = listOf(dto("1", "  Why?  ", "\n Because. \t")),
+            remoteQuestions = listOf(dto(id = "1", question = "  Why?  ", answer = "\n Because. \t")),
         ).getFaq()
 
-        assertEquals("Why?", questions.single().question)
-        assertEquals("Because.", questions.single().answer)
+        assertEquals(expected = "Why?", actual = questions.single().question)
+        assertEquals(expected = "Because.", actual = questions.single().answer)
     }
 
     @Test
     fun `drops entries with a blank question or answer`() = runTest {
         val questions = repository(
             remoteQuestions = listOf(
-                dto("1", "Kept?", "Yes."),
-                dto("2", "   ", "Orphan answer."),
-                dto("3", "Orphan question?", "  "),
+                dto(id = "1", question = "Kept?", answer = "Yes."),
+                dto(id = "2", question = "   ", answer = "Orphan answer."),
+                dto(id = "3", question = "Orphan question?", answer = "  "),
             ),
         ).getFaq()
 
-        assertEquals(listOf("1"), questions.map { it.id.value })
+        assertEquals(expected = listOf(element = "1"), actual = questions.map { it.id.value })
     }
 
     @Test
     fun `keeps the first entry when ids repeat`() = runTest {
         val questions = repository(
             remoteQuestions = listOf(
-                dto("dup", "First question?", "First answer."),
-                dto("dup", "Second question?", "Second answer."),
+                dto(id = "dup", question = "First question?", answer = "First answer."),
+                dto(id = "dup", question = "Second question?", answer = "Second answer."),
             ),
         ).getFaq()
 
-        assertEquals(1, questions.size)
-        assertEquals("First question?", questions.single().question)
+        assertEquals(expected = 1, actual = questions.size)
+        assertEquals(expected = "First question?", actual = questions.single().question)
     }
 
     @Test
     fun `falls back to the local questions when the remote catalog is all blanks`() = runTest {
         val questions = repository(
-            remoteQuestions = listOf(dto("1", "   ", "   ")),
-            localQuestions = listOf(item("local", "Bundled?", "Yes.")),
+            remoteQuestions = listOf(dto(id = "1", question = "   ", answer = "   ")),
+            localQuestions = listOf(item(id = "local", question = "Bundled?", answer = "Yes.")),
         ).getFaq()
 
-        assertEquals(listOf("local"), questions.map { it.id.value })
+        assertEquals(expected = listOf(element = "local"), actual = questions.map { it.id.value })
     }
 
     @Test
     fun `falls back to the local questions when a question source fails`() = runTest {
         val questions = repository(
             remoteQuestions = null,
-            localQuestions = listOf(item("local", "Bundled?", "Yes.")),
+            localQuestions = listOf(item(id = "local", question = "Bundled?", answer = "Yes.")),
         ).getFaq()
 
-        assertEquals("Bundled?", questions.single().question)
+        assertEquals(expected = "Bundled?", actual = questions.single().question)
     }
 
     @Test
     fun `falls back to the local questions when the catalog fails`() = runTest {
         val questions = repository(
             catalogFailure = UnknownHostException(),
-            localQuestions = listOf(item("local", "Bundled?", "Yes.")),
+            localQuestions = listOf(item(id = "local", question = "Bundled?", answer = "Yes.")),
         ).getFaq()
 
-        assertEquals("Bundled?", questions.single().question)
+        assertEquals(expected = "Bundled?", actual = questions.single().question)
     }
 
     @Test
@@ -163,20 +163,20 @@ class DefaultFaqRepositoryTest {
         val questions = repository(
             remoteQuestions = emptyList(),
             localQuestions = listOf(
-                item("local", "  Bundled?  ", " Yes. "),
-                item("blank", "  ", "  "),
+                item(id = "local", question = "  Bundled?  ", answer = " Yes. "),
+                item(id = "blank", question = "  ", answer = "  "),
             ),
         ).getFaq()
 
-        assertEquals(1, questions.size)
-        assertEquals("Bundled?", questions.single().question)
+        assertEquals(expected = 1, actual = questions.size)
+        assertEquals(expected = "Bundled?", actual = questions.single().question)
     }
 
     @Test
     fun `returns no questions when both sources load empty`() = runTest {
         val questions = repository(remoteQuestions = emptyList(), localQuestions = emptyList()).getFaq()
 
-        assertEquals(emptyList(), questions)
+        assertEquals(expected = emptyList(), actual = questions)
     }
 
     @Test
@@ -185,7 +185,79 @@ class DefaultFaqRepositoryTest {
             repository(catalogFailure = UnknownHostException(), localQuestions = emptyList()).getFaq()
         }.exceptionOrNull()
 
-        assertIs<NetworkException>(failure)
-        assertEquals(NetworkException.Reason.NO_INTERNET, failure.reason)
+        assertIs<NetworkException>(value = failure)
+        assertEquals(expected = NetworkException.Reason.NO_INTERNET, actual = failure.reason)
+    }
+
+    @Test
+    fun `throws the question source failure, translated, when every source fails and there is nothing to fall back to`() = runTest {
+        val remote = mockk<FaqRemoteDataSource>()
+        coEvery { remote.fetchCatalog(url = CATALOG_URL) } returns FaqCatalogDto(
+            schemaVersion = 1,
+            products = listOf(
+                FaqProductDto(
+                    name = "Product",
+                    productId = PRODUCT_ID,
+                    key = PRODUCT_ID,
+                    questionSources = listOf(
+                        FaqQuestionSourceDto(url = QUESTIONS_URL, category = "general"),
+                    ),
+                ),
+            ),
+        )
+        coEvery { remote.fetchQuestions(url = QUESTIONS_URL) } throws UnknownHostException()
+        val local = mockk<FaqLocalDataSource>()
+        every { local.loadLocalQuestions() } returns emptyList()
+
+        val repo = DefaultFaqRepository(
+            localDataSource = local,
+            remoteDataSource = remote,
+            catalogUrl = CATALOG_URL,
+            productId = PRODUCT_ID,
+            diagnostics = mockk(relaxed = true),
+        )
+
+        val failure = runCatching { repo.getFaq() }.exceptionOrNull()
+
+        assertIs<NetworkException>(value = failure)
+        assertEquals(expected = NetworkException.Reason.NO_INTERNET, actual = failure.reason)
+    }
+
+    @Test
+    fun `keeps questions from working sources when another question source fails`() = runTest {
+        val secondUrl = "https://example.test/questions-2"
+        val remote = mockk<FaqRemoteDataSource>()
+        coEvery { remote.fetchCatalog(url = CATALOG_URL) } returns FaqCatalogDto(
+            schemaVersion = 1,
+            products = listOf(
+                FaqProductDto(
+                    name = "Product",
+                    productId = PRODUCT_ID,
+                    key = PRODUCT_ID,
+                    questionSources = listOf(
+                        FaqQuestionSourceDto(url = QUESTIONS_URL, category = "general"),
+                        FaqQuestionSourceDto(url = secondUrl, category = "billing"),
+                    ),
+                ),
+            ),
+        )
+        coEvery { remote.fetchQuestions(url = QUESTIONS_URL) } throws UnknownHostException()
+        coEvery { remote.fetchQuestions(url = secondUrl) } returns listOf(
+            dto(id = "2", question = "From working source?", answer = "Yes."),
+        )
+        val local = mockk<FaqLocalDataSource>()
+        every { local.loadLocalQuestions() } returns emptyList()
+
+        val repo = DefaultFaqRepository(
+            localDataSource = local,
+            remoteDataSource = remote,
+            catalogUrl = CATALOG_URL,
+            productId = PRODUCT_ID,
+            diagnostics = mockk(relaxed = true),
+        )
+
+        val questions = repo.getFaq()
+
+        assertEquals(expected = listOf(element = "2"), actual = questions.map { it.id.value })
     }
 }

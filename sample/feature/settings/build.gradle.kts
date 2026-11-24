@@ -24,6 +24,5 @@ android {
 }
 
 dependencies {
-    testImplementation(project(":library:core:testing"))
     api(project(":library:apptoolkit"))
 }

@@ -8,11 +8,11 @@ shell, drawn before its tabs.
 
 ## Owns
 
-- `startupPage()`, which registers `StartupRoute` as a page without a title and offers it as a
+- `startupScreen()`, which registers `StartupScreen` as a page without a title and offers it as a
   start screen (`startScreens`).
 - `StartupScreen`, with `StartupScreenContent` in the same file, `StartupViewModel`, its state
   (`StartupUiState`, `ConsentRequestStatus`) and `StartupEvent`. The screen asks for the
-  permissions and consent on resume and hands over with `continueStart(OnboardingRoute)`.
+  permissions and consent on resume and hands over with `continueStart(OnboardingScreen)`.
 - `StartupProvider`, the host extension contract: the runtime permissions to ask for.
 - `startupModule(startupProviderFactory)`, which binds the host's provider and the ViewModel.
 - The startup illustration and animation, and the welcome, agree, learn more and terms strings, in
@@ -20,17 +20,16 @@ shell, drawn before its tabs.
 
 ## Does not own
 
-- Deciding whether the first launch runs. The app starts on `StartupRoute` from
+- Deciding whether the first launch runs. The app starts on `StartupScreen` from
   `ShellHost(resolveStart = ...)` while its startup flag is set; see [Using it](#using-it).
 - The onboarding pages that follow, owned by [`:library:feature:onboarding`](../onboarding/README.md).
-  This module opens `OnboardingRoute` by key and does not depend on it.
+  This module opens `OnboardingScreen` by key and does not depend on it.
 - The host's provider, owned by the app (`:sample:feature:startup` in the sample).
 - Consent SDK orchestration, owned by `:library:integration:consent`.
 
 ## Depends on
 
-- `:library:core:common`, `:library:core:network` and `:library:core:ui` for shared contracts,
-  error handling and UI.
+- `:library:core:common` and `:library:core:ui` for shared contracts, error handling and UI.
 - [`:library:navigation`](../../navigation/README.md) for the keys, the graph builder and the
   shell navigator.
 - [`:library:integration:consent`](../../integration/consent/README.md) for `ConsentRepository`,
@@ -40,8 +39,8 @@ shell, drawn before its tabs.
 
 ## Used by
 
-- [`:library:apptoolkit`](../../apptoolkit/README.md), which calls `startupPage()` from
-  `toolkitPages()` and `startupModule` from `appToolkitModules`, and `:sample:feature:startup`,
+- [`:library:apptoolkit`](../../apptoolkit/README.md), which calls `startupScreen()` from
+  `toolkitScreens()` and `startupModule` from `appToolkitModules`, and `:sample:feature:startup`,
   which provides the permissions.
 
 ## Using it
@@ -49,14 +48,14 @@ shell, drawn before its tabs.
 ```kotlin
 ShellHost(
     graph = graph,
-    resolveStart = { if (dataStore.startup.first()) StartupRoute else startKeyFor(storedTab) },
+    resolveStart = { if (dataStore.startup.first()) StartupScreen else startKeyFor(storedTab) },
     onReady = { keepSplashVisible = false },
 )
 ```
 
 The screen has no shell under it, so back leaves the app. Continuing replaces it with
-`OnboardingRoute`, whose completion enters the shell; the next launch then resolves past
-`StartupRoute`.
+`OnboardingScreen`, whose completion enters the shell; the next launch then resolves past
+`StartupScreen`.
 
 ## Flow chart
 
@@ -69,7 +68,7 @@ flowchart TD
     VM --> Consent[ConsentRepository: consent form]
     Consent -->|answer, failure or 15 s timeout| Settled[ConsentRequestStatus.Settled]
     Settled -->|Agree shown| Startup
-    Startup -->|Agree: continueStart| Onboarding[OnboardingRoute, feature:onboarding]
+    Startup -->|Agree: continueStart| Onboarding[OnboardingScreen, feature:onboarding]
 ```
 
 ## Architectural decisions
@@ -88,13 +87,13 @@ flowchart TD
 - Consent settles on any answer, on a failure, and after 15 seconds without one. This is the app's
   first screen and Agree is its only way forward, so a round trip that never reports back must not
   keep the person on a spinner. `screen_state` reports `loading` until then and `success` after.
-- Agree is a callback from the content; the screen navigates with `continueStart(OnboardingRoute)`.
+- Agree is a callback from the content; the screen navigates with `continueStart(OnboardingScreen)`.
 - On large screens the content keeps to a column at most 640dp wide, centred, as onboarding's
   pages do.
 
 ## Public contracts
 
-- `startupPage()`, `startupModule`, `StartupProvider`, and `StartupScreen()`.
+- `startupScreen()`, `startupModule`, `StartupProvider`, and `StartupScreen()`.
 - `StartupViewModel(consentRepository, telemetryRepository)`, with `StartupUiState`,
   `ConsentRequestStatus` and `StartupEvent`.
 
@@ -106,7 +105,7 @@ flowchart TD
 
 - The app decides when the first launch runs. An app that forgets the `resolveStart` check never
   shows startup, and one that never clears its startup flag shows it on every launch.
-- Handing over by key means an app that registers `StartupRoute` without `OnboardingRoute` sends
+- Handing over by key means an app that registers `StartupScreen` without `OnboardingScreen` sends
   the person to a key the graph does not know.
 - The ViewModel waits for the suspend `ConsentRepository.requestConsent()` call, which completes
   or throws. Its 15-second limit bounds this screen's wait, not the shared UMP round trip owned by

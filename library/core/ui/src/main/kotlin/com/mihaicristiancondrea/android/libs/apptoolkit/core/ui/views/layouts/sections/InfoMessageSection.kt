@@ -41,9 +41,9 @@ import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.withStyle
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.logging.INFO_MESSAGE_LOG_TAG
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.context.openUrl
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.R
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.constants.CoreUiLogTags
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.modifiers.componentEntrance
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.spacers.MediumVerticalSpacer
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.text.LearnMoreText
@@ -112,7 +112,7 @@ fun InfoMessageSection(
                                 !learnMoreUrl.isNullOrEmpty() -> {
                                     if (!context.openUrl(learnMoreUrl)) {
                                         Log.w(
-                                            INFO_MESSAGE_LOG_TAG,
+                                            CoreUiLogTags.INFO_MESSAGE_SECTION,
                                             "Failed to open learn more url: $learnMoreUrl"
                                         )
                                     }
@@ -135,7 +135,7 @@ fun InfoMessageSection(
                             !learnMoreUrl.isNullOrEmpty() -> {
                                 if (!context.openUrl(learnMoreUrl)) {
                                     Log.w(
-                                        INFO_MESSAGE_LOG_TAG,
+                                        CoreUiLogTags.INFO_MESSAGE_SECTION,
                                         "Failed to open learn more url: $learnMoreUrl"
                                     )
                                 }

@@ -22,10 +22,10 @@
 
     <application>
         <!--
-            Expand ProxyBillingActivity configChanges to prevent destruction and recreation
-            on font scale, uiMode (dark theme), smallest screen size, density, and locale changes.
-            This mitigates NullPointerException crashes in ProxyBillingActivity.onCreate caused by
-            loss of PendingIntent extras during Activity recreation.
+            Retained compatibility override for Play Billing proxy activities. This is not a proven
+            fix for ProxyBillingActivity.onCreate null-PendingIntent crashes; see
+            docs/crashes/open/billing-proxy-activity-null-intent/README.md before changing or
+            removing it without licensed purchase-flow validation.
         -->
         <activity
             android:name="com.android.billingclient.api.ProxyBillingActivity"

@@ -22,9 +22,6 @@ const TOOLS = {
   material_colors: { id: "material_colors", title: "Material Colors", subtitle: "Preview the app palette and Android Material You tonal colors", icon: "palette", shape: "soft_burst", palette: "gold", supportsTile: false },
 };
 
-/** The brand's own MaterialShapes exports in marketing/assets/shapes, used as masks. */
-const brandShape = (name) => asset(`shapes/${encodeURIComponent(name)}.svg`);
-
 // A press on the torch shape is a tap until the pointer moves this far; then it is a swipe that sets brightness.
 const SWIPE_SLOP = 6;
 let torchPress = null;
@@ -142,7 +139,7 @@ export default {
         <div class="qt-live" data-accent="teal" role="button" tabindex="0" @click=${() => open("compass")} @keydown=${activate("compass")}
           aria-label="Compass, ${heading} degrees ${direction(heading)}">
           <span class="qt-live__label">Compass</span>
-          ${face(brandShape("8 Sided Cookie"), compassRose(heading, 136, { labels: false, face: false }))}
+          ${face(asset("shapes/8-sided-cookie.svg"), compassRose(heading, 136, { labels: false, face: false }))}
           <span class="qt-live__value">${heading}°</span>
           <span class="qt-live__note">${direction(heading)}</span>
         </div>`,
@@ -150,7 +147,7 @@ export default {
         <div class="qt-live" data-accent="teal" role="button" tabindex="0" @click=${() => open("bubble_level")} @keydown=${activate("bubble_level")}
           aria-label="Bubble level, ${flat ? "level" : "tilted"}">
           <span class="qt-live__label">Bubble Level</span>
-          ${face(brandShape("16 Sided Cookie"), levelDial(s.levelRoll, s.levelPitch, 148, { ring: false, edge: true }))}
+          ${face(asset("shapes/16-sided-cookie.svg"), levelDial(s.levelRoll, s.levelPitch, 148, { ring: false, edge: true }))}
           <span class="qt-live__value">${flat ? "Level" : "Tilted"}</span>
           <span class="qt-live__note">${Math.abs(s.levelRoll).toFixed(1)}° · ${Math.abs(s.levelPitch).toFixed(1)}°</span>
         </div>`,

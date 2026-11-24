@@ -26,13 +26,18 @@ sealed interface ThemeSettingsEvent {
     /** Starts observing the stored appearance, on start and on retry. */
     data object Load : ThemeSettingsEvent
 
+    /** Persists the selected theme mode identifier. */
     data class SelectThemeMode(val mode: String) : ThemeSettingsEvent
 
+    /** Persists whether pure-black AMOLED dark surfaces are enabled. */
     data class SetAmoledMode(val enabled: Boolean) : ThemeSettingsEvent
 
+    /** Persists the unlocked weather overlay effect. */
     data class SetWeatherEffect(val effect: WeatherEffect) : ThemeSettingsEvent
 
+    /** Persists a Material You wallpaper palette variant and enables dynamic colors. */
     data class SelectDynamicPalette(val variant: Int) : ThemeSettingsEvent
 
+    /** Persists a static palette identifier and turns off wallpaper dynamic colors. */
     data class SelectStaticPalette(val id: String) : ThemeSettingsEvent
 }

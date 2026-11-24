@@ -25,6 +25,12 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extens
 import kotlinx.coroutines.withContext
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.InstalledAppsRepository
 
+/**
+ * Opens other installed apps by package name.
+ *
+ * When the app is not installed or cannot be started, the person sees a short "not installed"
+ * toast, so a caller only decides what to do next.
+ */
 class AppLauncher(
     private val installedApps: InstalledAppsRepository,
     private val dispatchers: DispatcherProvider,

@@ -17,6 +17,7 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.support.ui.constants
 
+/** Direct links opened from the non-paid support section. */
 object ShortenLinkConstants {
     const val LINKVERTISE_APP_DIRECT_LINK: String = "https://direct-link.net/548212/agOqI7123501341"
 }

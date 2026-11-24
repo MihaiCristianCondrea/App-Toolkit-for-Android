@@ -27,13 +27,18 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.Loadable
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.settings.R
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.settings.ui.contracts.SettingsEvent
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.settings.ui.providers.SettingsProvider
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.RegisterExtension
 import kotlin.test.assertEquals
+import kotlin.test.assertFalse
 import kotlin.test.assertIs
 import kotlin.test.assertTrue
 
+@OptIn(ExperimentalCoroutinesApi::class)
 class SettingsViewModelTest {
 
     companion object {
@@ -69,10 +74,10 @@ class SettingsViewModelTest {
     fun `loading shows the provider's categories`() = runTest(dispatcherExtension.testDispatcher) {
         val viewModel = createViewModel(FakeSettingsProvider(filled))
 
-        viewModel.onEvent(SettingsEvent.Load)
+        viewModel.onEvent(event = SettingsEvent.Load)
         advance()
 
-        assertEquals(Loadable.Ready(filled), viewModel.state.value.config)
+        assertEquals(Loadable.Ready(value = filled), viewModel.state.value.config)
     }
 
     @Test
@@ -80,7 +85,26 @@ class SettingsViewModelTest {
         runTest(dispatcherExtension.testDispatcher) {
             val viewModel = createViewModel(FakeSettingsProvider(empty))
 
-            viewModel.onEvent(SettingsEvent.Load)
+            viewModel.onEvent(event = SettingsEvent.Load)
+            advance()
+
+            val config = assertIs<Loadable.Empty>(viewModel.state.value.config)
+            assertEquals(
+                R.string.error_no_settings_found,
+                (config.message as UiText.StringResource).resourceId,
+            )
+        }
+
+    @Test
+    fun `a config whose categories have no preferences shows the empty state`() =
+        runTest(dispatcherExtension.testDispatcher) {
+            val emptyCategories = SettingsConfig(
+                title = "Settings",
+                categories = listOf(SettingsCategory(title = "General", preferences = emptyList())),
+            )
+            val viewModel = createViewModel(FakeSettingsProvider(emptyCategories))
+
+            viewModel.onEvent(event = SettingsEvent.Load)
             advance()
 
             val config = assertIs<Loadable.Empty>(viewModel.state.value.config)
@@ -94,7 +118,7 @@ class SettingsViewModelTest {
     fun `a provider that throws shows a failure and reports it`() = runTest(dispatcherExtension.testDispatcher) {
         val viewModel = createViewModel(FakeSettingsProvider(filled, failure = IllegalStateException("bug")))
 
-        viewModel.onEvent(SettingsEvent.Load)
+        viewModel.onEvent(event = SettingsEvent.Load)
         advance()
 
         assertIs<Loadable.Failed>(viewModel.state.value.config)
@@ -105,23 +129,53 @@ class SettingsViewModelTest {
     fun `loading again replaces the empty state`() = runTest(dispatcherExtension.testDispatcher) {
         val provider = FakeSettingsProvider(empty)
         val viewModel = createViewModel(provider)
-        viewModel.onEvent(SettingsEvent.Load)
+        viewModel.onEvent(event = SettingsEvent.Load)
         advance()
         assertIs<Loadable.Empty>(viewModel.state.value.config)
 
         provider.config = filled
-        viewModel.onEvent(SettingsEvent.Load)
+        viewModel.onEvent(event = SettingsEvent.Load)
         advance()
 
-        assertEquals(Loadable.Ready(filled), viewModel.state.value.config)
+        assertEquals(Loadable.Ready(value = filled), viewModel.state.value.config)
     }
+
+    @Test
+    fun `reloading while already ready refreshes in place without flashing loading`() =
+        runTest(dispatcherExtension.testDispatcher) {
+            val updated = SettingsConfig(
+                title = "Settings",
+                categories = listOf(
+                    SettingsCategory(
+                        preferences = listOf(SettingsPreference(key = "display", summary = "Dark")),
+                    ),
+                ),
+            )
+            val provider = FakeSettingsProvider(filled)
+            val viewModel = createViewModel(provider)
+            viewModel.onEvent(event = SettingsEvent.Load)
+            advance()
+
+            val statesAfterInitialLoad = mutableListOf<Loadable<SettingsConfig>>()
+            val collector = backgroundScope.launch(UnconfinedTestDispatcher(testScheduler)) {
+                viewModel.state.collect { statesAfterInitialLoad += it.config }
+            }
+
+            provider.config = updated
+            viewModel.onEvent(event = SettingsEvent.Load)
+            advance()
+            collector.cancel()
+
+            assertFalse(statesAfterInitialLoad.any { it is Loadable.Loading })
+            assertEquals(Loadable.Ready(value = updated), viewModel.state.value.config)
+        }
 
     @Test
     fun `each load asks the provider once`() = runTest(dispatcherExtension.testDispatcher) {
         val provider = FakeSettingsProvider(filled)
         val viewModel = createViewModel(provider)
 
-        viewModel.onEvent(SettingsEvent.Load)
+        viewModel.onEvent(event = SettingsEvent.Load)
         advance()
 
         assertEquals(1, provider.calls)

@@ -20,11 +20,17 @@ package com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.data.remote
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.SerialName
 
+/**
+ * Catalog entry that groups question sources for one product.
+ *
+ * @property productId Product identifier accepted by the FAQ repository.
+ * @property key Alternate identifier the repository also accepts when selecting the product.
+ */
 @Serializable
 data class FaqProductDto(
     val name: String,
     val productId: String,
     val key: String,
-    @SerialName("questionSources")
+    @SerialName(value = "questionSources")
     val questionSources: List<FaqQuestionSourceDto> = emptyList(),
 )

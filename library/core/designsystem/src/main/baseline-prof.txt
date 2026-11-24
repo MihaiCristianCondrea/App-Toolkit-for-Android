@@ -5,9 +5,9 @@
 HSPLcom/mihaicristiancondrea/android/libs/apptoolkit/core/designsystem/ui/style/ThemeKt;->**(**)**
 HSPLcom/mihaicristiancondrea/android/libs/apptoolkit/core/designsystem/ui/style/ThemeKt$**;->**(**)**
 HSPLcom/mihaicristiancondrea/android/libs/apptoolkit/core/designsystem/ui/style/ComposableSingletons$ThemeKt**;->**(**)**
-HSPLcom/mihaicristiancondrea/android/libs/apptoolkit/core/designsystem/ui/style/ThemePreferencesStateKt;->**(**)**
-HSPLcom/mihaicristiancondrea/android/libs/apptoolkit/core/designsystem/ui/style/ThemePreferencesStateKt$**;->**(**)**
-HSPLcom/mihaicristiancondrea/android/libs/apptoolkit/core/designsystem/ui/style/ComposableSingletons$ThemePreferencesStateKt**;->**(**)**
+HSPLcom/mihaicristiancondrea/android/libs/apptoolkit/core/designsystem/ui/style/RememberThemePreferencesStateKt;->**(**)**
+HSPLcom/mihaicristiancondrea/android/libs/apptoolkit/core/designsystem/ui/style/RememberThemePreferencesStateKt$**;->**(**)**
+HSPLcom/mihaicristiancondrea/android/libs/apptoolkit/core/designsystem/ui/style/ComposableSingletons$RememberThemePreferencesStateKt**;->**(**)**
 HSPLcom/mihaicristiancondrea/android/libs/apptoolkit/core/designsystem/ui/style/UiPreferencesKt;->**(**)**
 HSPLcom/mihaicristiancondrea/android/libs/apptoolkit/core/designsystem/ui/style/UiPreferencesKt$**;->**(**)**
 HSPLcom/mihaicristiancondrea/android/libs/apptoolkit/core/designsystem/ui/style/ComposableSingletons$UiPreferencesKt**;->**(**)**

@@ -18,6 +18,7 @@
 package com.mihaicristiancondrea.android.libs.apptoolkit.di.modules
 
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.advanced.di.advancedSettingsModule
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.developer.di.developerOptionsModule
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.settings.di.settingsModule
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.diagnostics.di.diagnosticsSettingsModule
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.display.di.displaySettingsModule
@@ -35,6 +36,7 @@ import org.koin.core.module.Module
 fun appToolkitSettingsModules(): List<Module> = listOf(
     settingsModule,
     advancedSettingsModule,
+    developerOptionsModule,
     diagnosticsSettingsModule,
     displaySettingsModule,
     themeSettingsModule,

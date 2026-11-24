@@ -22,14 +22,20 @@ import android.view.animation.PathInterpolator
 import androidx.compose.animation.core.Easing
 import androidx.compose.ui.unit.dp
 
-/** The system's activity motion values. See `CrossActivityBackAnimation` in AOSP. */
-object ActivityMotion {
-    const val MINIMUM_SCALE: Float = 0.90f
+/**
+ * The system's activity motion values, the one source for [ActivityTransitions] and
+ * [CrossActivityBackMotion]. See `CrossActivityBackAnimation` in AOSP.
+ */
+internal object ActivityMotion {
+    /** `MAX_SCALE`: how small the closing page gets. */
+    const val MinimumScale: Float = 0.90f
     val EnteringStartOffset = 96.dp
     val DisplayBoundsMargin = 8.dp
-    const val DURATION_MILLIS: Int = 450
-    const val FADE_MILLIS: Int = 120
-    const val CLOSING_FADE_MILLIS: Int = DURATION_MILLIS / 5
+
+    /** `POST_COMMIT_DURATION` of the default cross-activity animation. */
+    const val DurationMillis: Int = 450
+    const val FadeMillis: Int = 120
+    const val ClosingFadeMillis: Int = DurationMillis / 5
 
     /** Android's `fast_out_extra_slow_in`, the emphasized curve activity transitions use. */
     val Emphasized: Easing = run {

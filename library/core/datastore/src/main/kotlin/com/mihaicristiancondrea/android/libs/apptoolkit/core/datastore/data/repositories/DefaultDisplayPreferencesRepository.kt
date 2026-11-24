@@ -18,9 +18,13 @@
 package com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.repositories
 
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.local.DisplayPreferencesDataSource
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.local.storageCall
 import kotlinx.coroutines.flow.Flow
 
-/** Reads and writes display preferences through the preference store. */
+/**
+ * Reads and writes display preferences through the preference store. Writes throw
+ * [com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.exceptions.StorageException] when the store fails.
+ */
 class DefaultDisplayPreferencesRepository(
     private val preferences: DisplayPreferencesDataSource,
 ) : DisplayPreferencesRepository {
@@ -33,19 +37,19 @@ class DefaultDisplayPreferencesRepository(
 
     override fun startupPage(default: String): Flow<String> = preferences.startupPage(default = default)
 
-    override suspend fun setShowBottomBarLabels(show: Boolean) {
+    override suspend fun setShowBottomBarLabels(show: Boolean): Unit = storageCall {
         preferences.saveShowBottomBarLabels(show)
     }
 
-    override suspend fun setBouncyButtons(enabled: Boolean) {
+    override suspend fun setBouncyButtons(enabled: Boolean): Unit = storageCall {
         preferences.saveBouncyButtons(enabled)
     }
 
-    override suspend fun setLanguage(language: String) {
+    override suspend fun setLanguage(language: String): Unit = storageCall {
         preferences.saveLanguage(language)
     }
 
-    override suspend fun setStartupPage(route: String) {
+    override suspend fun setStartupPage(route: String): Unit = storageCall {
         preferences.saveStartupPage(route)
     }
 }

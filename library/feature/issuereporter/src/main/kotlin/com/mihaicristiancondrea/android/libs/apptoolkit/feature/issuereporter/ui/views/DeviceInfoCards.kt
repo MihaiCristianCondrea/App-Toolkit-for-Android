@@ -37,6 +37,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.ExpandMore
 import androidx.compose.material3.Card
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -50,13 +51,11 @@ import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.Dp
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.icons.ToolkitIcon
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.Loadable
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.GeneralButton
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.GeneralButtonStyle
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.GroupedItemPosition
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.getGroupedShape
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.R
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.ui.constants.IssueReporterUiConstants
 
 /**
  * What will be attached to the report, as two grouped components: a header and its content.
@@ -92,9 +91,8 @@ internal fun DeviceInfoSection(
 /**
  * Header of the device-info group.
  *
- * Only the arrow is interactive. The row itself carries no click handling and no press animation,
- * so the affordance and the touch target are the same thing, and the header does not react to a tap
- * meant for the text beside it.
+ * The entire card is a single interactive target so tapping anywhere on the header expands or
+ * collapses the details without nesting a second clickable button inside the card.
  *
  * The bottom corners animate between the group's outer and inner radius, which is what keeps the
  * header joined to the content while expanded and a single rounded row while collapsed.
@@ -110,15 +108,19 @@ private fun DeviceInfoHeaderCard(
         label = "DeviceInfoArrowRotation",
     )
     val bottomRadius: Dp by animateDpAsState(
-        targetValue = if (expanded) SizeConstants.ExtraTinySize else ISSUE_GROUP_OUTER_RADIUS,
+        targetValue = if (expanded) {
+            SizeConstants.ExtraTinySize
+        } else {
+            IssueReporterUiConstants.GROUP_OUTER_RADIUS
+        },
         label = "DeviceInfoHeaderCorners",
     )
 
     Card(
         modifier = modifier.fillMaxWidth(),
         shape = RoundedCornerShape(
-            topStart = ISSUE_GROUP_OUTER_RADIUS,
-            topEnd = ISSUE_GROUP_OUTER_RADIUS,
+            topStart = IssueReporterUiConstants.GROUP_OUTER_RADIUS,
+            topEnd = IssueReporterUiConstants.GROUP_OUTER_RADIUS,
             bottomStart = bottomRadius,
             bottomEnd = bottomRadius,
         ),
@@ -128,10 +130,8 @@ private fun DeviceInfoHeaderCard(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(
-                    start = SizeConstants.LargeSize,
-                    end = SizeConstants.SmallSize,
-                    top = SizeConstants.SmallSize,
-                    bottom = SizeConstants.SmallSize,
+                    horizontal = SizeConstants.LargeSize,
+                    vertical = SizeConstants.LargeSize,
                 ),
             verticalAlignment = Alignment.CenterVertically,
         ) {
@@ -141,10 +141,8 @@ private fun DeviceInfoHeaderCard(
                 modifier = Modifier.weight(weight = 1f),
             )
 
-            GeneralButton(
-                onClick = onToggle,
-                style = GeneralButtonStyle.Text,
-                icon = ToolkitIcon.Vector(imageVector = Icons.Outlined.ExpandMore),
+            Icon(
+                imageVector = Icons.Outlined.ExpandMore,
                 contentDescription = stringResource(id = R.string.cd_expand_device_info),
                 modifier = Modifier.graphicsLayer { rotationZ = arrowRotation },
             )
@@ -173,7 +171,7 @@ private fun DeviceInfoContentCard(
                 .animateContentSize(),
             shape = getGroupedShape(
                 position = GroupedItemPosition.LAST,
-                outerRadius = ISSUE_GROUP_OUTER_RADIUS,
+                outerRadius = IssueReporterUiConstants.GROUP_OUTER_RADIUS,
             ),
         ) {
             Box(

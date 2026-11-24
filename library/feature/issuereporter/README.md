@@ -25,7 +25,7 @@ Collects device/report data and submits structured issues to a configured GitHub
 - `IssueReporterRepository` and its default implementation, `IssueReportRejectedException`, the
   device-info data-source contract, the GitHub remote source, the local device source, the request DTO,
   and its mapper.
-- The `GithubToken` Koin qualifier and `toToken`, which decodes the host's token.
+- The `GithubToken` Koin qualifier.
 - The sheet's localized strings, including the texts for each GitHub refusal and each report check.
 
 ## Does not own
@@ -40,6 +40,8 @@ Collects device/report data and submits structured issues to a configured GitHub
 
 - [`:library:core:common`](../../core/common/README.md) for the IO dispatcher of the device
   source, Firebase reporting, `NetworkException` and host constants.
+- [`:library:core:datastore`](../../core/datastore/README.md) for the shared settings DataStore
+  qualifier used by the local submission history source.
 - [`:library:core:network`](../../core/network/README.md) for Ktor and `networkCall`.
 - [`:library:core:ui`](../../core/ui/README.md) for `core.ui.screen`, UI components and the
   `IssueReporterSheet` contract it binds.
@@ -107,6 +109,11 @@ flowchart TD
   anything, so one listener that follows the resumed activity replaces a sensor listener retrofitted
   into every activity of every host app. The accelerometer is registered on resume and unregistered
   on pause, because a sensor left registered keeps drawing power with nothing to show for it.
+- Screens and sheets that consume shaking themselves can pause shake-to-report through
+  `IssueReporterShakeManager.suppress()` or the Compose `SuppressShakeToReport` helper. Suppression
+  is reference-counted and unregisters the accelerometer rather than only dropping the callback, so
+  the gesture does not run a duplicate sensor or carry half-finished shakes across into the screen
+  behind it.
 - The gesture is opt-in through `IssueReporterConfig`. This is a library shipping into several apps,
   and a listener nobody asked for is a cost nobody agreed to; a host that does not enable it
   registers nothing.
@@ -125,9 +132,9 @@ flowchart TD
   and the confirmation is part of the same interaction; clearing them the moment the network
   answered would destroy that input while the author is still looking at the sheet. Done is a
   dismissal like any other and takes the same path.
-- Done is the primary action on the confirmation and opening the issue is the quiet one, because
-  finishing is the normal next step. There is deliberately no "report another": it adds a decision
-  to what should be the simplest state in the feature, and reopening the reporter covers it.
+- Done is the only action on the confirmation, because finishing is the normal next step. There is
+  deliberately no "report another": it adds a decision to what should be the simplest state in the
+  feature, and reopening the reporter covers it.
 - Failure messages use toasts so they do not cover the sheet's send button. The ViewModel queues
   them with `showMessage` like any screen, and the sheet shows the queue as toasts instead of
   through `MessageHost`, marking each one shown. Success is represented by the confirmation state,
@@ -213,9 +220,11 @@ and unavailable versions still produce a null name and version code -1.
   bug report resolves it with `getOrNull()` and hides the entry when it is absent.
 - `IssueReporterBottomSheet(onDismissRequest)` is the entry point for a host inside a composition,
   and `IssueReporterLauncher.show(activity)` for one that is not.
-- `IssueReporterConfig` and `IssueReporterShakeManager.install()` are the shake-gesture contract. A
-  host enables the gesture by passing the config into `appToolkitModules` and calling `install()`
-  from its `Application`.
+- `IssueReporterConfig`, `IssueReporterShakeManager.install()`,
+  `IssueReporterShakeManager.suppress()`, and `SuppressShakeToReport` are the shake-gesture
+  contract. A host enables the gesture by passing the config into `appToolkitModules` and calling
+  `install()` from its `Application`, and any shake-driven surface can suppress it temporarily while
+  active.
 - `IssueReporterRepository`: `sendReport` returns the created issue's URL and throws
   `IssueReportRejectedException` or `NetworkException`; `captureDeviceInfo` returns a `DeviceInfo`.
   Both are main-safe.
@@ -266,11 +275,11 @@ itself
 from a `Context` through a `create()` companion, and imported a `core:ui` extension to read the
 package version, a domain model depending on the UI module. It is now a plain data class; capture
 lives in `DeviceInfoLocalDataSource`. GitHub rendering belongs to `data/remote/mappers`,
-and device-panel text mapping belongs to `ui/mappers`.
+and device-panel text formatting belongs to `ui/formatters`.
 
 That last part matters more than it looks: the model's `toString()` was the device panel's text, so
 making it a data class would silently have rendered `DeviceInfo(appVersionName=…)` on screen. The
-formatting lives in the UI mapper `toDeviceInfoText()`.
+formatting lives in the UI formatter `toDeviceInfoText()`.
 
 The payoff shows up in the tests, which used to `mockk<DeviceInfo>()` because the real thing needed
 a

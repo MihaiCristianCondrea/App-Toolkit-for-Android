@@ -17,14 +17,20 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.changelog.data.local
 
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.exceptions.StorageException
 import kotlinx.coroutines.flow.Flow
 
 /**
- * Persisted changelog state: the last version the user saw and its cached Markdown.
+ * Persisted changelog state for hosts.
+ * Reads and writes report storage failures as [StorageException].
  */
 interface ChangelogPreferencesDataSource {
+    /** Observes the last acknowledged version, using [default] before the first write. */
     fun lastSeenVersion(default: String = ""): Flow<String>
+    /** Observes the cached release notes, using [default] before the first write. */
     fun cachedChangelog(default: String = ""): Flow<String>
+    /** Persists the host's last acknowledged release version. */
     suspend fun saveLastSeenVersion(version: String)
+    /** Replaces the cached release notes with [changelog]. */
     suspend fun saveCachedChangelog(changelog: String)
 }

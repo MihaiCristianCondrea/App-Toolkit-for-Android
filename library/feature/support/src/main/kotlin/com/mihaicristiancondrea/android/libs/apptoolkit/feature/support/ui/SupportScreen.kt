@@ -17,10 +17,6 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.support.ui
 
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.support.ui.analytics.SUPPORT_SCREEN_NAME
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.support.ui.analytics.SupportPreferenceKeys
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.support.ui.analytics.supportPreferenceTapEvent
-
 import android.app.Activity
 import android.content.Context
 import androidx.activity.compose.LocalActivity
@@ -45,15 +41,12 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.telemetry.models.TrackedScreen
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ads.AdsQualifiers
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.context.openUrl
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.icons.ToolkitIcon
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.ads.AdsConfig
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.Loadable
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.ScreenHost
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.ScreenStateHandler
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.GeneralButton
@@ -62,24 +55,20 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.modifiers.
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.shell.contentPadding
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.support.R
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.support.data.models.DonationProductIds
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.support.ui.analytics.SUPPORT_SCREEN
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.support.ui.analytics.SupportPreferenceKeys
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.support.ui.analytics.supportPreferenceTapEvent
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.support.ui.constants.ShortenLinkConstants
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.support.ui.contracts.SupportEvent
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.support.ui.models.DonationOption
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.support.ui.states.SupportUiState
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.support.ui.views.ads.SupportNativeAdCard
 import kotlinx.collections.immutable.ImmutableMap
-import kotlinx.collections.immutable.persistentMapOf
 import org.koin.compose.koinInject
 import org.koin.compose.viewmodel.koinViewModel
 import org.koin.core.qualifier.named
 
-
-private const val SUPPORT_SCREEN_CLASS = "SupportComposable"
-private val SUPPORT_SCREEN: TrackedScreen =
-    TrackedScreen(name = SUPPORT_SCREEN_NAME, className = SUPPORT_SCREEN_CLASS)
-
-
-
+/** Compatibility entry point that delegates directly to [SupportScreen]. */
 @Composable
 fun SupportComposable() {
     SupportScreen()
@@ -87,7 +76,7 @@ fun SupportComposable() {
 
 /**
  * The support page: donation tiers bought through Google Play, a web ad link and a native ad. It
- * is the body of the page `supportPage()` registers, which the overflow menu's `supportUs()` entry
+ * is the body of the page `supportScreen()` registers, which the overflow menu's `supportUs()` entry
  * opens.
  *
  * Owns [SupportViewModel], tracking and messages. A purchase needs the host activity, so a tap
@@ -106,11 +95,15 @@ fun SupportScreen() {
             state = state,
             onEvent = viewModel::onEvent,
             onDonate = { productId ->
-                activity?.let { host -> viewModel.onEvent(SupportEvent.Donate(productId = productId, activity = host)) }
+                activity?.let { host ->
+                    viewModel.onEvent(
+                        SupportEvent.Donate(productId = productId, activity = host),
+                    )
+                }
             },
             onOpenWebAd = { context.openUrl(ShortenLinkConstants.LINKVERTISE_APP_DIRECT_LINK) },
             contentPadding = contentPadding(),
-            adUnitId = adsConfig.bannerAdUnitId,
+            adUnitId = adsConfig.bannerAdUnitId.takeIf(String::isNotBlank),
         )
     }
 }
@@ -125,7 +118,7 @@ fun SupportScreen() {
  * belongs to the caller.
  * @param onOpenWebAd The web ad button was tapped. Opening the link needs a `Context`.
  * @param contentPadding Padding from the shell, applied inside the list and the state screens.
- * @param adUnitId The native ad slot's unit, or null when no ad should show.
+ * @param adUnitId The native ad slot's unit, or null or blank when no ad should show.
  */
 @Composable
 internal fun SupportScreenContent(
@@ -163,35 +156,39 @@ private fun SupportList(
     onOpenWebAd: () -> Unit,
     contentPadding: PaddingValues,
     adUnitId: String?,
+    modifier: Modifier = Modifier,
 ) {
-    LazyColumn(contentPadding = contentPadding) {
-        animatedItem {
+    LazyColumn(
+        modifier = modifier,
+        contentPadding = contentPadding,
+    ) {
+        animatedItem(key = "support_paid_header") {
             Text(
                 text = stringResource(id = R.string.paid_support),
                 modifier = Modifier.padding(
                     start = SizeConstants.LargeSize,
-                    top = SizeConstants.LargeSize
+                    top = SizeConstants.LargeSize,
                 ),
                 style = MaterialTheme.typography.titleLarge,
             )
         }
-        animatedItem {
+        animatedItem(key = "support_paid_card") {
             OutlinedCard(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(all = SizeConstants.LargeSize),
-                shape = RoundedCornerShape(size = SizeConstants.ExtraLargeSize)
+                shape = RoundedCornerShape(size = SizeConstants.ExtraLargeSize),
             ) {
                 Column {
                     Text(
                         text = stringResource(id = R.string.summary_donations),
-                        modifier = Modifier.padding(all = SizeConstants.LargeSize)
+                        modifier = Modifier.padding(all = SizeConstants.LargeSize),
                     )
                     Row(
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(horizontal = SizeConstants.LargeSize),
-                        horizontalArrangement = Arrangement.SpaceEvenly
+                        horizontalArrangement = Arrangement.SpaceEvenly,
                     ) {
                         DonationButton(
                             productId = DonationProductIds.LOW_DONATION,
@@ -215,7 +212,7 @@ private fun SupportList(
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(all = SizeConstants.LargeSize),
-                        horizontalArrangement = Arrangement.SpaceEvenly
+                        horizontalArrangement = Arrangement.SpaceEvenly,
                     ) {
                         DonationButton(
                             productId = DonationProductIds.HIGH_DONATION,
@@ -238,14 +235,14 @@ private fun SupportList(
                 }
             }
         }
-        animatedItem {
+        animatedItem(key = "support_non_paid_header") {
             Text(
                 text = stringResource(id = R.string.non_paid_support),
                 modifier = Modifier.padding(start = SizeConstants.LargeSize),
                 style = MaterialTheme.typography.titleLarge,
             )
         }
-        animatedItem {
+        animatedItem(key = "support_web_ad") {
             GeneralButton(
                 style = GeneralButtonStyle.Tonal,
                 modifier = Modifier
@@ -257,12 +254,12 @@ private fun SupportList(
                     destination = ShortenLinkConstants.LINKVERTISE_APP_DIRECT_LINK,
                 ),
                 icon = ToolkitIcon.Vector(imageVector = Icons.Outlined.Paid),
-                label = stringResource(id = R.string.web_ad)
+                label = stringResource(id = R.string.web_ad),
             )
         }
-        if (adUnitId != null) {
+        if (!adUnitId.isNullOrBlank()) {
             // A native ad enters on its own once it loads, so its item does not.
-            item {
+            item(key = "support_native_ad") {
                 SupportNativeAdCard(
                     modifier = Modifier
                         .padding(all = SizeConstants.LargeSize)
@@ -299,59 +296,6 @@ private fun DonationButton(
             eligibleOption.formattedPrice.orEmpty()
         } else {
             stringResource(id = R.string.support_offer_unavailable)
-        }
+        },
     )
-}
-
-
-
-@Preview(showBackground = true)
-@Composable
-private fun SupportScreenContentPreview() {
-    MaterialTheme {
-        SupportScreenContent(
-            state = SupportUiState(
-                donationOptions = Loadable.Ready(
-                    persistentMapOf(
-                        DonationProductIds.LOW_DONATION to DonationOption(
-                            productId = DonationProductIds.LOW_DONATION,
-                            formattedPrice = "€0.99",
-                            isEligible = true,
-                        ),
-                        DonationProductIds.NORMAL_DONATION to DonationOption(
-                            productId = DonationProductIds.NORMAL_DONATION,
-                            formattedPrice = "€1.99",
-                            isEligible = true,
-                        ),
-                        DonationProductIds.HIGH_DONATION to DonationOption(
-                            productId = DonationProductIds.HIGH_DONATION,
-                            formattedPrice = "€4.99",
-                            isEligible = true,
-                        ),
-                        DonationProductIds.EXTREME_DONATION to DonationOption(
-                            productId = DonationProductIds.EXTREME_DONATION,
-                            formattedPrice = null,
-                            isEligible = false,
-                        ),
-                    )
-                ),
-            ),
-            onEvent = {},
-            onDonate = {},
-            onOpenWebAd = {},
-        )
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-private fun SupportScreenContentLoadingPreview() {
-    MaterialTheme {
-        SupportScreenContent(
-            state = SupportUiState(donationOptions = Loadable.Loading),
-            onEvent = {},
-            onDonate = {},
-            onOpenWebAd = {},
-        )
-    }
 }

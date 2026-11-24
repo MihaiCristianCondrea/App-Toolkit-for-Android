@@ -22,8 +22,8 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.feature.developer.R
 
 /** A heading of the developer options' settings, in the order the page shows them. */
 internal enum class DeveloperCategory(@param:StringRes val title: Int) {
-    LayoutAndBars(R.string.shell_dev_layout_and_bars),
-    Navigation(R.string.shell_dev_navigation),
-    Motion(R.string.shell_dev_motion),
-    Accessories(R.string.shell_dev_accessories),
+    LayoutAndBars(title = R.string.shell_dev_layout_and_bars),
+    Navigation(title = R.string.shell_dev_navigation),
+    Motion(title = R.string.shell_dev_motion),
+    Accessories(title = R.string.shell_dev_accessories),
 }

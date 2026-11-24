@@ -11,6 +11,7 @@ package com.mihaicristiancondrea.android.libs.apptoolkit.feature.changelog.data.
 
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.exceptions.NetworkException
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.FakeTelemetryRepository
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.changelog.data.models.ChangelogRelease
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.changelog.data.remote.ChangelogRemoteDataSource
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.mock.MockEngine
@@ -25,7 +26,7 @@ import kotlin.test.assertIs
 class DefaultChangelogRepositoryTest {
 
     @Test
-    fun `public package changelog is the primary source`() = runTest {
+    fun `public package changelog is the primary source and maps releases`() = runTest {
         val requestedPaths = mutableListOf<String>()
         val repository = createRepository(
             engine = MockEngine { request ->
@@ -34,9 +35,21 @@ class DefaultChangelogRepositoryTest {
             },
         )
 
-        val changelog = repository.getChangelog("com.example.app")
+        val releases = repository.getChangelog(
+            packageName = "com.example.app",
+            currentVersion = "2.0.0",
+        )
 
-        assertEquals("# 2.0.0\n- Worker", changelog)
+        assertEquals(
+            listOf(
+                ChangelogRelease(
+                    heading = "2.0.0",
+                    sections = listOf("- Worker"),
+                    isCurrent = true,
+                ),
+            ),
+            releases,
+        )
         assertEquals(listOf("/api/v1/apps/com.example.app/changelog.md"), requestedPaths)
     }
 
@@ -54,9 +67,18 @@ class DefaultChangelogRepositoryTest {
             },
         )
 
-        val changelog = repository.getChangelog("com.example.missing")
+        val releases = repository.getChangelog(packageName = "com.example.missing")
 
-        assertEquals("# Legacy", changelog)
+        assertEquals(
+            listOf(
+                ChangelogRelease(
+                    heading = "",
+                    sections = listOf("# Legacy"),
+                    isCurrent = false,
+                ),
+            ),
+            releases,
+        )
         assertEquals(
             listOf(
                 "/api/v1/apps/com.example.missing/changelog.md",
@@ -76,9 +98,18 @@ class DefaultChangelogRepositoryTest {
             },
         )
 
-        val changelog = repository.getChangelog(" ")
+        val releases = repository.getChangelog(packageName = " ")
 
-        assertEquals("# Legacy", changelog)
+        assertEquals(
+            listOf(
+                ChangelogRelease(
+                    heading = "",
+                    sections = listOf("# Legacy"),
+                    isCurrent = false,
+                ),
+            ),
+            releases,
+        )
         assertEquals(listOf("legacy.example"), requestedHosts)
     }
 
@@ -110,7 +141,8 @@ class DefaultChangelogRepositoryTest {
             },
         )
 
-        val failure = runCatching { repository.getChangelog("com.example.missing") }.exceptionOrNull()
+        val failure =
+            runCatching { repository.getChangelog("com.example.missing") }.exceptionOrNull()
 
         assertEquals(NetworkException.Reason.CLIENT, assertIs<NetworkException>(failure).reason)
     }
@@ -121,7 +153,10 @@ class DefaultChangelogRepositoryTest {
 
         val failure = runCatching { repository.getChangelog("com.example.app") }.exceptionOrNull()
 
-        assertEquals(NetworkException.Reason.NO_INTERNET, assertIs<NetworkException>(failure).reason)
+        assertEquals(
+            NetworkException.Reason.NO_INTERNET,
+            assertIs<NetworkException>(failure).reason
+        )
     }
 
     private fun createRepository(engine: MockEngine): DefaultChangelogRepository =

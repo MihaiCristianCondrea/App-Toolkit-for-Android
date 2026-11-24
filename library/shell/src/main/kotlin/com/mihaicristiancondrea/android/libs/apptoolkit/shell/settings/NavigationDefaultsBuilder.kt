@@ -21,6 +21,11 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.Navigat
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.TopBarStyle
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.layout.ShellLayoutPolicy
 
+/**
+ * The navigation defaults an app may choose in `appToolkitDefaults { navigation { } }`: the app bar
+ * style of each kind of destination and the layout policy. Anything left out keeps the Toolkit's
+ * default.
+ */
 @AppToolkitDefaultsDsl
 class NavigationDefaultsBuilder internal constructor(private val from: NavigationDefaults) {
     var tabTopBarStyle: TopBarStyle = from.tabTopBarStyle

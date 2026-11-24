@@ -24,54 +24,62 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.LoggedScr
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.toFailed
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.changelog.R
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.changelog.domain.usecases.GetChangelogUseCase
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.changelog.ui.analytics.CHANGELOG_SCREEN
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.changelog.ui.constants.ChangelogOperationNames
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.changelog.ui.contracts.ChangelogEvent
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.changelog.ui.states.ChangelogUiState
+import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.Job
 
-/**
- * Owns changelog loading and retry for the changelog dialog.
- *
- * The use case and the repository behind it are main-safe, so it needs no dispatcher.
- */
+/** Loads parsed changelog releases on creation and retries through [ChangelogEvent.Load]. */
 class ChangelogViewModel(
     private val getChangelogUseCase: GetChangelogUseCase,
     telemetryRepository: TelemetryRepository,
 ) : LoggedScreenViewModel<ChangelogUiState, ChangelogEvent>(
     initialState = ChangelogUiState(),
     telemetryRepository = telemetryRepository,
-    screenName = "Changelog",
+    screenName = CHANGELOG_SCREEN.name,
     viewModelName = "ChangelogViewModel",
 ) {
     private var loadJob: Job? = null
 
     init {
-        onEvent(ChangelogEvent.Load)
+        onEvent(event = ChangelogEvent.Load)
     }
 
     override fun handleEvent(event: ChangelogEvent) {
         when (event) {
-            ChangelogEvent.Load -> loadChangelog()
+            is ChangelogEvent.Load -> loadChangelog()
         }
     }
 
+    /** Loads the parsed release history, sharing an active fetch with duplicate requests. */
     private fun loadChangelog() {
-        loadJob = loadJob.restart {
+        loadJob = loadJob.ifIsActive {
             launchReport(
-                action = Actions.LOAD_CHANGELOG,
-                onError = { error -> setState { copy(markdown = error.toFailed(fallback = LoadFailedText)) } },
+                action = ChangelogOperationNames.LOAD_CHANGELOG,
+                onError = { error ->
+                    setState {
+                        copy(
+                            releases = error.toFailed(
+                                fallback = UiText.StringResource(resourceId = R.string.error_loading_changelog_message),
+                            ),
+                        )
+                    }
+                },
             ) {
-                setState { copy(markdown = Loadable.Loading) }
-                val markdown = getChangelogUseCase()
-                setState { copy(markdown = if (markdown.isBlank()) Loadable.Empty() else Loadable.Ready(markdown)) }
+                setState { copy(releases = Loadable.Loading) }
+                val releases = getChangelogUseCase()
+                setState {
+                    copy(
+                        releases = if (releases.isEmpty()) {
+                            Loadable.Empty()
+                        } else {
+                            Loadable.Ready(value = releases.toImmutableList())
+                        },
+                    )
+                }
             }
         }
-    }
-
-    private object Actions {
-        const val LOAD_CHANGELOG: String = "loadChangelog"
-    }
-
-    private companion object {
-        val LoadFailedText = UiText.StringResource(R.string.error_loading_changelog_message)
     }
 }

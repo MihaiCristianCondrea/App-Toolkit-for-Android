@@ -261,4 +261,13 @@
     <string name="random_range">Plage de nombres</string>
     <string name="random_inclusive">Les deux limites sont incluses.</string>
     <string name="tool_converter_unit">Unité</string>
+
+    <string name="section_toys">Jouets</string>
+    <string name="bell_title">Cloche</string>
+    <string name="bell_summary">Secouez votre téléphone pour faire sonner la cloche.</string>
+    <string name="bell_card_note">Secouez pour faire sonner</string>
+    <string name="bell_ring">Faire sonner la cloche</string>
+    <string name="bell_motion_unavailable">La détection des secousses est indisponible sur cet appareil.</string>
+    <string name="bell_audio_unavailable">Le son de la cloche est indisponible.</string>
+    <string name="bell_ringing">La cloche sonne</string>
 </resources>

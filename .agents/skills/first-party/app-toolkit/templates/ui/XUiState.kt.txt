@@ -1,0 +1,16 @@
+package <base>.feature.x.ui.states
+
+import androidx.compose.runtime.Immutable
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.Loadable
+import <base>.feature.x.ui.models.XItem
+import kotlinx.collections.immutable.ImmutableList
+
+/**
+ * State rendered by the inventory catalog.
+ *
+ * @property items Current catalog load result. Starts in [Loadable.Loading].
+ */
+@Immutable
+data class XUiState(
+    val items: Loadable<ImmutableList<XItem>> = Loadable.Loading,
+)

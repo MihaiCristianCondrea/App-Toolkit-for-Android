@@ -8,7 +8,7 @@ The native Quick Tools, Measure and Play & Decide workspaces, their tool sheets,
 
 - `ToolkitTilesRepository` publishes the source-neutral catalogue for all three workspaces and Quick Settings membership. UI mappers own resources, shapes and artwork.
 - Sensor, breathing, torch, Morse, SOS, counter, conversion, bill and ruler repositories retain their existing responsibilities. `WaterEjectRepository` is the entry point to finite speaker playback; `AndroidSpeakerAudioDataSource` owns AudioTrack and audio focus.
-- Dedicated `LoggedScreenViewModel` classes own tool state and events. Koin supplies their repositories and `SavedStateHandle` where input restoration is needed. No feature depends on another feature.
+- Dedicated ViewModels own tool state and events. Tools with operation reporting use `LoggedScreenViewModel`. Koin supplies repositories and `SavedStateHandle` where input restoration is needed. No feature depends on another feature.
 - The app module owns serializable navigation keys and the shell graph. This feature exposes screens without importing app-owned routes.
 - Shared widget geometry lives in `ui/views/catalog`. The compass and level clip to the same 8-sided and 16-sided brand SVG paths as the web kit.
 
@@ -20,7 +20,7 @@ Material Colors uses a connected bento palette: one large primary swatch followe
 | --- | --- |
 | Quick Tools | Sensors: Compass, Bubble Level. Light & signals: Flash Dimmer, combined Morse & SOS. Hardware & sound: Water Eject. Wellbeing: Breathe. Colors, last: Material Colors. |
 | Measure | Length & angle: Surface Ruler, Protractor. Convert & split: Unit Converter, Tip & Bill Splitter. Count & time: Counter, Reaction Test. |
-| Play & Decide | Decision Wheel, Random Number, Coin Flip, Dice Roll. |
+| Play & Decide | Chance: Decision Wheel, Random Number, Coin Flip, Dice Roll. Toys: Bell. |
 
 The widgets follow the marketing kit's (`marketing/ui`): `views/catalog/LiveWidget.kt` draws its live widget (a small uppercase label, the tool's face in its shape on a tint of its accent, a bold value and a note), and the tool accents in `iconColors()` are the kit's `--tk-*` tokens. `RedesignVisualTest` renders the three tabs, light and dark, to `build/outputs/redesign/` for side-by-side review with the kit.
 
@@ -34,13 +34,17 @@ The overview and sheet use the same entry-owned tool ViewModels. Currency, tip s
 
 Counter in Measure and Random Number in Play use the shared `AnimatedDigit` for their overview values. Place values stay keyed from the right across carries, signed results keep their reading order, and accessibility receives the complete value once. Random Number retains its `?` placeholder and rolls that slot into the first result. The marketing widgets mirror changed-digit motion and respect reduced motion; initial rendering remains still.
 
+Bell uses a mono edit of [Bell Ring by Universfield](https://pixabay.com/sound-effects/film-special-effects-bell-ring-123742/) under the [Pixabay Content License](https://pixabay.com/service/license-summary/). The sample matches the approved marketing preview.
+
 ## State and lifecycle
+
+- Bell observes motion and loads its recording while the sheet is in the foreground. Closing or backgrounding it unregisters the sensor and releases its sound pool, and an audio load failure stops the motion sensor as well. Shake-to-report is suppressed while the Bell sheet is open so shaking rings the bell instead of opening the issue reporter. The button also rings the bell on devices without a motion sensor. The large bell and arcs follow the recording's impacts. Reduced motion keeps the bell still and shows static arcs.
 
 - Counter remains DataStore-backed and shared with its Quick Settings service. Accepted writes survive the caller disappearing; storage failures are reported.
 - Bill, converter, random-range, ruler draft calibration/reading/range, protractor, Morse input, dice/coin outcomes and wheel choices use `SavedStateHandle`. Dismissing a sheet retains inputs and results. A new process never resumes audio or flashing automatically.
 - Compass and level overview instances have distinct keys from sheet instances. Each starts sampling only while its lifecycle is started and stops on stop or disposal. The sheet retains its existing foreground sensor handling.
 - Torch strength writes cancel superseded UI requests. Leaving the foreground or disposing the tool stops its in-app torch work. Morse and SOS share the existing serialized playback owner, so replacement waits for the previous final torch-off command.
-- Water Eject starts only from an explicit action. It requests transient audio focus and plays a finite 30-second 165 Hz cycle at a conservative track gain. Stop, focus loss, dismissal, backgrounding and ViewModel cancellation release playback and audio focus. It never changes system volume or requests a foreground service, microphone access or a wake lock. The UI does not promise waterproofing or repair.
+- Water Eject starts only from an explicit action. It requests transient audio focus and plays a finite 30-second 165 Hz cycle at a conservative track gain, suppressing shake-to-report while active. Stop, focus loss, dismissal, backgrounding and ViewModel cancellation release playback and audio focus. It never changes system volume or requests a foreground service, microphone access or a wake lock. The UI does not promise waterproofing or repair.
 - Wheel choices accept 2–12 non-blank lines. A spin selects one index uniformly, locks editing and resolves that segment under the fixed pointer. Dismissal settles the selected result rather than drawing again. Motion and haptic feedback belong to the Compose view, and animation follows the system motion scale.
 - Reaction Test cancels its pending signal when the app stops. Foreground return does not manufacture a reaction result.
 
@@ -70,8 +74,9 @@ is a new visit. Material Colors has its own sheet and emits the same opening eve
 
 `tool_used` retains its once-per-use-session semantics and now includes the bounded `workspace`
 (`quick_tools`, `measure`, `play`). Inline coin, dice and counter actions also count as use;
-they do not manufacture a sheet opening. A use-session can include inline actions followed by a
-sheet visit until that tool's existing lifecycle resets its tracker.
+they do not manufacture a sheet opening. Bell reports `tool_used` on its first successful strike
+per open session. A use-session can include inline actions followed by a sheet visit until that
+tool's existing lifecycle resets its tracker.
 
 Water Eject counts use only when playback publishes its first countdown. Stop, background or
 dismissal resets its use-session. Each accepted playback job reports `tool_cycle_finished` with

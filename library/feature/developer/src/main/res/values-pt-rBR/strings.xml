@@ -80,7 +80,7 @@
     <string name="shell_navigation_tint_always">Coloridas juntas, conteúdo em um cartão</string>
     <string name="shell_navigation_tint_on_scroll">Coloridas juntas quando o conteúdo rola</string>
     <string name="shell_back_edge_system">Como o Android: a página encolhe no lugar</string>
-    <string name="shell_back_edge_follow">Segue o dedo, espelhando a borda esquerda (padrão)</string>
+    <string name="shell_back_edge_follow">Segue o dedo, espelhando a borda esquerda</string>
     <string name="shell_transition_directional">Deslize direcional</string>
     <string name="shell_transition_fade_through">Esmaecer através</string>
     <string name="shell_transition_fade">Esmaecimento cruzado</string>

@@ -15,6 +15,6 @@
   ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
   -->
 <resources>
-    <string name="error_loading_changelog_message">Не удалось загрузить журнал изменений приложения. Пожалуйста, попробуйте снова.</string>
+    <string name="error_loading_changelog_message">Не удалось загрузить журнал изменений приложения.</string>
     <string name="loading_changelog_message">Загрузка журнала изменений приложения…</string>
 </resources>

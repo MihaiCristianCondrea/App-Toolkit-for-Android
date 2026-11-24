@@ -17,23 +17,15 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.settings.ui
 
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.settings.ui.analytics.settingsPreferenceTapEvent
-
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.settings.ui.analytics.SETTINGS_SCREEN_NAME
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.settings.ui.analytics.SettingsActionNames
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.settings.ui.analytics.settingsActionGa4Event
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.settings.ui.analytics.UNKNOWN_PREFERENCE_KEY
-
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Close
-import androidx.compose.material.icons.outlined.Notifications
 import androidx.compose.material.icons.outlined.Search
 import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.material3.MaterialTheme
@@ -48,12 +40,9 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.telemetry.models.TrackedScreen
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.icons.ToolkitIcon
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.R as CoreUiR
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.settings.SettingsCategory
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.settings.SettingsConfig
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.settings.SettingsPreference
@@ -64,27 +53,26 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.analytics.
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.analytics.logGa4Event
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.fields.GeneralTextField
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.fields.GeneralTextFieldStyle
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.modifiers.animatedItemsIndexed
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.modifiers.animatedItem
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.modifiers.animatedItemsIndexed
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.PreferenceCategoryItem
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.SettingsPreferenceItem
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.groupedItemPosition
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.groupedPreferenceItem
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.shell.contentPadding
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.spacers.LargeVerticalSpacer
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.settings.R
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.settings.ui.analytics.SETTINGS_SCREEN
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.settings.ui.analytics.SettingsActionNames
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.settings.ui.analytics.settingsActionGa4Event
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.settings.ui.analytics.settingsPreferenceTapEvent
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.settings.ui.contracts.SettingsEvent
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.settings.ui.search.rememberSettingsSearchIndex
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.settings.ui.states.SettingsUiState
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.LocalShellNavigator
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.ShellBackHandler
 import org.koin.compose.viewmodel.koinViewModel
-
-
-private const val SETTINGS_SCREEN_CLASS = "SettingsScreen"
-private val SETTINGS_SCREEN: TrackedScreen =
-    TrackedScreen(name = SETTINGS_SCREEN_NAME, className = SETTINGS_SCREEN_CLASS)
-
-
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.R as CoreUiR
 
 /**
  * Host-supplied settings categories with search and navigation. A row's external action gets
@@ -102,15 +90,17 @@ fun SettingsScreen() {
     val navigator = LocalShellNavigator.current
     val telemetry = LocalTelemetry.current
 
-    LaunchedEffect(Unit) {
+    LaunchedEffect(key1 = Unit) {
         viewModel.onEvent(event = SettingsEvent.Load)
     }
 
-    var query by rememberSaveable { mutableStateOf("") }
+    var query by rememberSaveable { mutableStateOf(value = "") }
     val config: SettingsConfig? = (state.config as? Loadable.Ready)?.value
     val results: List<SettingsPreference>? = config?.let { loaded ->
-        val index = rememberSettingsSearchIndex(loaded)
-        remember(index, query) { if (query.isBlank()) null else index.matching(query) }
+        val index = rememberSettingsSearchIndex(config = loaded)
+        remember(key1 = index, key2 = query) {
+            if (query.isBlank()) null else index.matching(query = query)
+        }
     }
     ShellBackHandler(enabled = config != null && query.isNotEmpty()) { query = "" }
 
@@ -123,7 +113,9 @@ fun SettingsScreen() {
             results = results,
             onPreferenceClick = { preference ->
                 if (preference.action?.invoke() != true) {
-                    preference.destination?.let(navigator::navigate)
+                    preference.destination?.let { destination ->
+                        navigator.navigate(key = destination)
+                    }
                 }
             },
             onRetry = {
@@ -135,10 +127,6 @@ fun SettingsScreen() {
         )
     }
 }
-
-
-
-
 
 /**
  * The stateless half of [SettingsScreen]: the list, or its loading, empty or failure state.
@@ -160,9 +148,11 @@ internal fun SettingsScreenContent(
     results: List<SettingsPreference>?,
     onPreferenceClick: (SettingsPreference) -> Unit,
     onRetry: () -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     ScreenStateHandler(
         state = state.config,
+        modifier = modifier,
         contentPadding = contentPadding,
         onRetry = onRetry,
         retryWhenEmpty = true,
@@ -185,12 +175,14 @@ internal fun SettingsScreenContent(
  *
  * With [onQueryChange] set, a search field heads the list, and while [results] is not null the
  * list shows those instead of the categories: every row the search found, host rows and the rows
- * of the settings pages alike, or a line saying none did.
+ * of the settings pages alike, or a line saying none did. Categories with a non-blank title render
+ * a [PreferenceCategoryItem] heading; untitled categories are separated by vertical spacing.
  */
 @Composable
 fun SettingsList(
     paddingValues: PaddingValues,
     settingsConfig: SettingsConfig,
+    modifier: Modifier = Modifier,
     onPreferenceClick: (SettingsPreference) -> Unit = {},
     query: String = "",
     onQueryChange: ((String) -> Unit)? = null,
@@ -198,7 +190,7 @@ fun SettingsList(
 ) {
     LazyColumn(
         contentPadding = paddingValues,
-        modifier = Modifier.fillMaxHeight(),
+        modifier = modifier.fillMaxSize(),
         verticalArrangement = Arrangement.spacedBy(space = SizeConstants.ExtraTinySize),
     ) {
         if (onQueryChange != null) {
@@ -207,10 +199,14 @@ fun SettingsList(
                     value = query,
                     onValueChange = onQueryChange,
                     style = GeneralTextFieldStyle.SearchOutlined,
-                    placeholder = stringResource(R.string.search_settings),
-                    leadingIcon = ToolkitIcon.Vector(Icons.Outlined.Search),
-                    trailingIcon = if (query.isNotEmpty()) ToolkitIcon.Vector(Icons.Outlined.Close) else null,
-                    trailingIconContentDescription = stringResource(CoreUiR.string.clear_search),
+                    placeholder = stringResource(id = R.string.search_settings),
+                    leadingIcon = ToolkitIcon.Vector(imageVector = Icons.Outlined.Search),
+                    trailingIcon = if (query.isNotEmpty()) {
+                        ToolkitIcon.Vector(imageVector = Icons.Outlined.Close)
+                    } else {
+                        null
+                    },
+                    trailingIconContentDescription = stringResource(id = CoreUiR.string.clear_search),
                     onTrailingIconClick = { onQueryChange("") },
                     singleLine = true,
                     modifier = Modifier
@@ -221,13 +217,20 @@ fun SettingsList(
             }
         }
         if (results != null) {
-            searchResults(results, onPreferenceClick)
+            searchResults(results = results, onPreferenceClick = onPreferenceClick)
             return@LazyColumn
         }
         settingsConfig.categories.forEachIndexed { categoryIndex: Int, category: SettingsCategory ->
             if (category.preferences.isNotEmpty()) {
-                animatedItem(key = "settings_category_spacing_$categoryIndex") {
-                    LargeVerticalSpacer()
+                val categoryTitle = category.title?.takeIf { it.isNotBlank() }
+                if (categoryTitle != null) {
+                    animatedItem(key = "settings_category_title_$categoryIndex") {
+                        PreferenceCategoryItem(title = categoryTitle)
+                    }
+                } else {
+                    animatedItem(key = "settings_category_spacing_$categoryIndex") {
+                        LargeVerticalSpacer()
+                    }
                 }
 
                 animatedItemsIndexed(
@@ -251,7 +254,7 @@ fun SettingsList(
                         iconColor = preference.iconColor,
                         iconContainerColor = preference.iconContainerColor,
                         ga4EventProvider = {
-                            settingsPreferenceTapEvent(preference.key)
+                            settingsPreferenceTapEvent(preferenceKey = preference.key)
                         },
                         onClick = { onPreferenceClick(preference) },
                         modifier = Modifier.groupedPreferenceItem(
@@ -274,20 +277,22 @@ private fun LazyListScope.searchResults(
     if (results.isEmpty()) {
         animatedItem(key = "settings_search_empty") {
             Text(
-                text = stringResource(R.string.no_settings_found),
+                text = stringResource(id = R.string.no_settings_found),
                 style = MaterialTheme.typography.bodyLarge,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
                 textAlign = TextAlign.Center,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(SizeConstants.LargeSize),
+                    .padding(all = SizeConstants.LargeSize),
             )
         }
         return
     }
     animatedItemsIndexed(
         items = results,
-        key = { index: Int, preference: SettingsPreference -> "settings_search_${preference.key ?: index}_$index" },
+        key = { index: Int, preference: SettingsPreference ->
+            "settings_search_${preference.key ?: index}_$index"
+        },
     ) { index: Int, preference: SettingsPreference ->
         SettingsPreferenceItem(
             icon = preference.icon,
@@ -301,64 +306,6 @@ private fun LazyListScope.searchResults(
                 position = groupedItemPosition(index = index, size = results.size),
                 outerRadius = SizeConstants.ExtraLargeSize,
             ),
-        )
-    }
-}
-
-// Only the loaded and loading states have previews: the empty and failure states draw
-// `NoDataScreen`, which resolves its ad unit through Koin.
-@Preview(showBackground = true)
-@Composable
-private fun SettingsScreenContentPreview() {
-    MaterialTheme {
-        SettingsScreenContent(
-            state = SettingsUiState(
-                config = Loadable.Ready(
-                    SettingsConfig(
-                        title = "Settings",
-                        categories = listOf(
-                            SettingsCategory(
-                                preferences = listOf(
-                                    SettingsPreference(
-                                        key = "notifications",
-                                        icon = ToolkitIcon.Vector(Icons.Outlined.Notifications),
-                                        title = "Notifications",
-                                        summary = "Alerts and reminders",
-                                    ),
-                                    SettingsPreference(
-                                        key = "display",
-                                        icon = ToolkitIcon.Vector(Icons.Outlined.Settings),
-                                        title = "Display",
-                                        summary = "Layout and text size",
-                                    ),
-                                ),
-                            ),
-                        ),
-                    ),
-                ),
-            ),
-            contentPadding = PaddingValues(),
-            query = "",
-            onQueryChange = {},
-            results = null,
-            onPreferenceClick = {},
-            onRetry = {},
-        )
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-private fun SettingsScreenContentLoadingPreview() {
-    MaterialTheme {
-        SettingsScreenContent(
-            state = SettingsUiState(config = Loadable.Loading),
-            contentPadding = PaddingValues(),
-            query = "",
-            onQueryChange = {},
-            results = null,
-            onPreferenceClick = {},
-            onRetry = {},
         )
     }
 }

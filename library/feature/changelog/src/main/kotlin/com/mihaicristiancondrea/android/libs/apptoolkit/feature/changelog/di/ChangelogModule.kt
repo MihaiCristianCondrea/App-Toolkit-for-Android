@@ -19,29 +19,40 @@ package com.mihaicristiancondrea.android.libs.apptoolkit.feature.changelog.di
 
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.di.AppToolkitDiConstants
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.di.DataStoreQualifiers
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.changelog.data.local.ChangelogPreferencesDataSource
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.changelog.data.local.DefaultChangelogPreferencesDataSource
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.changelog.data.remote.ChangelogRemoteDataSource
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.changelog.data.repositories.ChangelogRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.changelog.data.repositories.DefaultChangelogRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.changelog.domain.usecases.GetChangelogUseCase
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.changelog.ui.ChangelogViewModel
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.changelog.data.local.ChangelogPreferencesDataSource
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.changelog.data.local.DefaultChangelogPreferencesDataSource
 import org.koin.core.module.Module
 import org.koin.core.module.dsl.viewModel
 import org.koin.core.qualifier.named
 import org.koin.dsl.module
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.changelog.data.remote.ChangelogRemoteDataSource
 
+/**
+ * Registers changelog loading and host storage bindings.
+ *
+ * The host supplies the API base URL, legacy Markdown URL, settings DataStore and telemetry.
+ */
 val changelogModule: Module = module {
-    single<ChangelogPreferencesDataSource> { DefaultChangelogPreferencesDataSource(dataStore = get(qualifier = named(DataStoreQualifiers.SETTINGS))) }
+    single<ChangelogPreferencesDataSource> {
+        DefaultChangelogPreferencesDataSource(
+            dataStore = get(
+                qualifier = named(name = DataStoreQualifiers.SETTINGS)
+            )
+        )
+    }
     single { ChangelogRemoteDataSource(client = get(), diagnostics = get()) }
     single<DefaultChangelogRepository> {
         DefaultChangelogRepository(
             remoteDataSource = get(),
             apiBaseUrl = get(
-                qualifier = named(AppToolkitDiConstants.ANDROID_APPS_METADATA_API_BASE_URL),
+                qualifier = named(name = AppToolkitDiConstants.ANDROID_APPS_METADATA_API_BASE_URL),
             ),
             legacyChangelogUrl = get(
-                qualifier = named(AppToolkitDiConstants.GITHUB_CHANGELOG),
+                qualifier = named(name = AppToolkitDiConstants.GITHUB_CHANGELOG),
             ),
             diagnostics = get(),
         )

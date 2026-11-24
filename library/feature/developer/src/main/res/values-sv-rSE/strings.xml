@@ -80,7 +80,7 @@
     <string name="shell_navigation_tint_always">Färgade tillsammans, innehållet på ett kort</string>
     <string name="shell_navigation_tint_on_scroll">Färgade tillsammans när innehållet rullar</string>
     <string name="shell_back_edge_system">Som Android: sidan krymper på plats</string>
-    <string name="shell_back_edge_follow">Följer fingret, speglat mot vänsterkanten (standard)</string>
+    <string name="shell_back_edge_follow">Följer fingret, speglat mot vänsterkanten</string>
     <string name="shell_transition_directional">Riktad glidning</string>
     <string name="shell_transition_fade_through">Tona genom</string>
     <string name="shell_transition_fade">Övertoning</string>

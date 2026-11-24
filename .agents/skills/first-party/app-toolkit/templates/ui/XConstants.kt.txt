@@ -1,0 +1,6 @@
+package <base>.feature.x.ui.constants
+
+internal object XConstants {
+    /** Caps row titles to keep the catalog list compact. */
+    const val MAX_TITLE_LINES: Int = 2
+}

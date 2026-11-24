@@ -27,15 +27,25 @@ import androidx.datastore.preferences.core.stringPreferencesKey
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.models.ThemePreferencesState
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.colorscheme.DynamicPaletteVariant
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.colorscheme.StaticPaletteIds
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.exceptions.StorageException
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.datastore.DataStoreNamesConstants
 import kotlinx.coroutines.flow.Flow
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.local.mappers.toStorageException
+import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
 
-/** Appearance preferences stored in the shared `settings` Preferences DataStore. */
+/**
+ * Appearance preferences stored in the shared `settings` Preferences DataStore. A failed read is
+ * thrown to the collector as a [StorageException].
+ */
 class DefaultThemePreferencesDataSource(
     private val dataStore: DataStore<Preferences>,
 ) : ThemePreferencesDataSource {
+
+    private val preferencesFlow: Flow<Preferences> = dataStore.data.catch { error ->
+        throw error.toStorageException() ?: error
+    }
 
     private val themeModeKey =
         stringPreferencesKey(name = DataStoreNamesConstants.DATA_STORE_THEME_MODE)
@@ -47,24 +57,24 @@ class DefaultThemePreferencesDataSource(
     private val staticPaletteIdKey = ThemePreferenceKeys.staticPaletteId
 
     override val themeMode: Flow<String> =
-        dataStore.data.map { preferences: Preferences -> preferences.themeMode() }.distinctUntilChanged()
+        preferencesFlow.map { preferences: Preferences -> preferences.themeMode() }.distinctUntilChanged()
 
     override val amoledMode: Flow<Boolean> =
-        dataStore.data.map { preferences: Preferences -> preferences.amoledMode() }.distinctUntilChanged()
+        preferencesFlow.map { preferences: Preferences -> preferences.amoledMode() }.distinctUntilChanged()
 
     override val dynamicColors: Flow<Boolean> =
-        dataStore.data.map { preferences: Preferences -> preferences.dynamicColors() }.distinctUntilChanged()
+        preferencesFlow.map { preferences: Preferences -> preferences.dynamicColors() }.distinctUntilChanged()
 
     override val dynamicPaletteVariant: Flow<Int> =
-        dataStore.data.map { preferences: Preferences -> preferences.dynamicPaletteVariant() }
+        preferencesFlow.map { preferences: Preferences -> preferences.dynamicPaletteVariant() }
             .distinctUntilChanged()
 
     override val staticPaletteId: Flow<String> =
-        dataStore.data.map { preferences: Preferences -> preferences.staticPaletteId() }
+        preferencesFlow.map { preferences: Preferences -> preferences.staticPaletteId() }
             .distinctUntilChanged()
 
     override val storedPreferences: Flow<ThemePreferencesState> =
-        dataStore.data.map { preferences: Preferences ->
+        preferencesFlow.map { preferences: Preferences ->
             ThemePreferencesState(
                 themeMode = preferences.themeMode(),
                 dynamicColors = preferences.dynamicColors(),

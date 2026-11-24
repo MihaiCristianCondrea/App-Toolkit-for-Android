@@ -15,12 +15,12 @@ Wraps Google Play Billing behind a reusable repository and Koin module.
 ## Does not own
 
 - Donation product IDs or support-screen behavior, owned by `:library:feature:support`.
-- Generic purchase models/contracts, owned by `:library:core:common`.
+- Narrow teardown contract `BillingCore`, owned by `:library:core:common`.
 
 ## Depends on
 
-- [`:library:core:common`](../../core/common/README.md) for `BillingCore`, purchase results, and
-  shared lifecycle helpers.
+- [`:library:core:common`](../../core/common/README.md) for `BillingCore`, `DispatcherProvider`,
+  and `DiagnosticsReporter`.
   `BillingRepository` extends `BillingCore`, so the core manager can close billing without seeing
   the purchase surface.
 
@@ -45,6 +45,7 @@ flowchart TD
     Client --> Callback[PurchasesUpdatedListener]
     Callback --> State{Purchase state}
     State -->|purchased one-time product| Consume[Consume one-time donation]
+    State -->|product not launched here| Past
     State -->|purchased subscription| Acknowledge[Acknowledge subscription]
     State -->|pending| Result[PurchaseResult Flow]
     State -->|cancelled or error| Result
@@ -64,24 +65,38 @@ flowchart TD
   because a subscription token cannot be consumed and Play refunds one that is not acknowledged
   within three days. `Purchase` does not carry its product type, so the repository remembers the
   type of each product it launches, and past-purchase recovery queries one-time products and
-  subscriptions separately. Completed unsettled purchases are recovered on setup/reconnect and
-  settled before success is emitted.
-- Product details replay the latest query result; purchase outcomes do not replay because they are
-  one-off events.
+  subscriptions separately. A purchase reported for a product it did not launch, such as a pending
+  purchase completing after a restart or one bought in the Play Store, is settled through those
+  typed queries rather than guessed. Completed unsettled purchases are recovered on setup/reconnect
+  and settled before success is emitted.
+- `PurchaseResult.Failed` carries a typed `reason` for the screen to choose localized text, and
+  Play's `debugMessage` for diagnostics only; Google documents that message as not meant for users.
+- `purchaseEvents` carries the product IDs of each outcome. A failure or cancel from Play's
+  callback belongs to the product whose sheet is open. An empty list marks an outcome that belongs
+  to no known product. A null list comes from the interface default, used by an implementation
+  that does not identify products. `purchaseResult` exposes the same outcomes without product IDs.
+- Product details replay the latest query result; purchase outcomes are buffered one-off events
+  that do not replay or park coroutines when no UI is collecting.
+- `launchInAppDonationFlow` and `launchSubscriptionFlow` validate `Activity.isValidForBilling()`
+  before launching and again on `dispatchers.main` after a reconnect (holding the host `Activity`
+  via `WeakReference`), resolve Play Billing 8/9 offer tokens from both `oneTimePurchaseOfferDetails`
+  and `oneTimePurchaseOfferDetailsList`, and reject missing subscription offer tokens before calling
+  the SDK.
 - `BillingRepository` extends the narrow `BillingCore` teardown contract so common lifecycle code
-  can close billing without depending on Play Billing APIs.
+  can close billing without depending on Play Billing APIs. `billingModule` also registers
+  `onClose { it?.close() }` so Koin teardown closes the client and scope cleanly.
 
 ## Public contracts
 
-- `BillingRepository` and `BillingModule`. Consumers inject the interface: the implementation is a
-  process-wide singleton behind a private constructor, which a feature module can neither substitute
-  nor fake in a test.
+- `BillingRepository`, `PurchaseResult`, `Activity.isValidForBilling()`, and `billingModule`.
+  Consumers inject `BillingRepository`: the implementation is a process-wide singleton behind an
+  internal constructor and `DefaultBillingRepository.getInstance(...)`.
 
 ## Internal implementations
 
-- `DefaultBillingRepository`: BillingClient callbacks, connection management, product-detail
-  replay, retry policy, past-purchase queries, donation consumption, and subscription
-  acknowledgement.
+- `DefaultBillingRepository`: BillingClient callbacks, mutex-guarded connection retries via
+  `awaitBillingCallback`, product-detail replay, retry policy, past-purchase queries, donation
+  consumption, and subscription acknowledgement.
 
 ## Current risks
 

@@ -19,7 +19,6 @@ package com.mihaicristiancondrea.android.libs.apptoolkit.navigation.scenes
 
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.core.Animatable
-import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
@@ -29,41 +28,19 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.Orientation
 import androidx.compose.foundation.gestures.draggable
 import androidx.compose.foundation.gestures.rememberDraggableState
-import androidx.compose.foundation.hoverable
 import androidx.compose.foundation.interaction.MutableInteractionSource
-import androidx.compose.foundation.interaction.collectIsDraggedAsState
-import androidx.compose.foundation.interaction.collectIsHoveredAsState
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.WindowInsets
-import androidx.compose.foundation.layout.WindowInsetsSides
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.only
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.requiredWidth
-import androidx.compose.foundation.layout.safeDrawing
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.layout.wrapContentWidth
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.compositionLocalOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -77,19 +54,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.draw.drawBehind
-import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
-import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
-import androidx.compose.ui.input.nestedscroll.NestedScrollSource
 import androidx.compose.ui.input.nestedscroll.nestedScroll
-import androidx.compose.ui.layout.layout
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalLayoutDirection
-import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.semantics.contentDescription
-import androidx.compose.ui.semantics.semantics
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
@@ -103,19 +72,17 @@ import androidx.navigationevent.NavigationEventInfo
 import androidx.navigationevent.NavigationEventTransitionState
 import androidx.navigationevent.compose.NavigationBackHandler
 import androidx.navigationevent.compose.rememberNavigationEventState
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.style.bounceClick
-import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.R
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.PaneRole
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.TopBarScrollMode
-import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.layout.ArticleReadingProgress
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.layout.ArticleTopBarHost
-import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.layout.ArticleTopBarTitle
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.layout.ContentCardShape
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.layout.FollowScrollWithFrameTint
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.layout.FrameTint
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.layout.LocalArticleTopBarHost
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.layout.LocalBesideNavigation
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.layout.besideNavigationTitle
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.layout.extensions.requiredWidthOf
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.layout.extensions.widthOf
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.layout.isTopLevelPage
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.motion.LocalShellMotion
 import kotlin.math.roundToInt
@@ -202,6 +169,8 @@ private fun <T : Any> ListDetailLayout(
     val motion = LocalShellMotion.current
     val density = LocalDensity.current
     val scope = rememberCoroutineScope()
+    // A second back, or a drag, while a close plays must not close again and pop the list too.
+    val closeGuard = remember { CloseGuard(scope) }
     val direction = if (LocalLayoutDirection.current == LayoutDirection.Rtl) -1f else 1f
     val hasDetail = detailEntry != null
 
@@ -255,7 +224,10 @@ private fun <T : Any> ListDetailLayout(
     val slideToPop: suspend () -> Unit = {
         fraction.animateTo(1f, tween((200 * motion.durationScale).roundToInt()))
         closeDetail()
-        fraction.animateTo(restingFraction, tween((350 * motion.durationScale).roundToInt()))
+        // Settle outside the close guard so a quick back on a newly opened detail is not ignored.
+        scope.launch {
+            fraction.animateTo(restingFraction, tween((350 * motion.durationScale).roundToInt()))
+        }
     }
     val shrinkToPop: suspend (from: Float) -> Unit = { from ->
         val duration = (200 * motion.durationScale).roundToInt()
@@ -276,7 +248,7 @@ private fun <T : Any> ListDetailLayout(
             val fromDetail = lastGesture.fromDetailSide
             val progress = lastGesture.progress
             lastGesture.clear()
-            scope.launch {
+            closeGuard.launch {
                 if (fromDetail) {
                     shrinkToPop(progress)
                 } else {
@@ -314,11 +286,10 @@ private fun <T : Any> ListDetailLayout(
         val listScroll = remember { PaneScrollOffset() }
         val detailScroll = remember { PaneScrollOffset() }
         val listArticle = remember { ArticleTopBarHost() }
-        val detailArticles = remember { mutableMapOf<Any, ArticleTopBarHost>() }
-        val detailArticle = detailEntry?.let { entry -> detailArticles.getOrPut(entry.contentKey) { ArticleTopBarHost() } }
-        LaunchedEffect(detailEntry?.contentKey) {
+        val detailKey = detailEntry?.contentKey
+        val detailArticle = remember(detailKey) { detailKey?.let { ArticleTopBarHost() } }
+        LaunchedEffect(detailKey) {
             detailScroll.offset = 0f
-            detailArticles.keys.retainAll(setOfNotNull(detailEntry?.contentKey))
         }
         if (framed) {
             // A static pane keeps the bar as it is; only a pane that follows the scroll tints it.
@@ -341,7 +312,10 @@ private fun <T : Any> ListDetailLayout(
                     listArticle = listArticle,
                     detailArticle = detailArticle,
                     listWidth = listWidth,
-                    onCloseList = closeList,
+                    onCloseList = {
+                        closeGuard.cancel()
+                        closeList()
+                    },
                     showsBack = !topLevel,
                     // Standing in for the tab, its title grows or shrinks from the one it replaces.
                     listTitleModifier = if (topLevel) besideNavigationTitle() else Modifier,
@@ -356,7 +330,6 @@ private fun <T : Any> ListDetailLayout(
                 Box(Modifier.widthOf(listWidth).fillMaxHeight().nestedScroll(listScroll)) {
                     CompositionLocalProvider(
                         LocalPaneRole provides PaneRole.List,
-                        LocalSelectedDetail provides detailEntry?.contentKey,
                         LocalArticleTopBarHost provides if (framed) listArticle else LocalArticleTopBarHost.current,
                     ) {
                         listEntry.Content()
@@ -374,8 +347,8 @@ private fun <T : Any> ListDetailLayout(
                                 dragging = false
                             }
                             if (hasDetail && fraction.value > PopFraction) {
-                                slideToPop()
-                            } else {
+                                closeGuard.launch(slideToPop)
+                            } else if (!closeGuard.isRunning) {
                                 restingFraction = fraction.value.coerceIn(MinFraction, MaxRestingFraction)
                                 fraction.animateTo(restingFraction)
                             }
@@ -419,8 +392,11 @@ private fun <T : Any> ListDetailLayout(
                                 label = "DetailPane",
                             ) { entry ->
                                 if (entry != null) {
-                                    val article = remember {
-                                        detailArticles.getOrPut(entry.contentKey) { ArticleTopBarHost() }
+                                    // The entry leaving keeps a host of its own while it fades out.
+                                    val article = if (entry.contentKey == detailKey && detailArticle != null) {
+                                        detailArticle
+                                    } else {
+                                        remember { ArticleTopBarHost() }
                                     }
                                     CompositionLocalProvider(
                                         LocalArticleTopBarHost provides if (framed) article else LocalArticleTopBarHost.current,
@@ -439,193 +415,6 @@ private fun <T : Any> ListDetailLayout(
     }
 }
 
-/**
- * [Modifier.width] with a width read while measuring, so a width that moves every frame lays the
- * element out again without recomposing it.
- */
-private fun Modifier.widthOf(width: () -> Dp): Modifier = layout { measurable, constraints ->
-    val px = width().roundToPx().coerceIn(constraints.minWidth, constraints.maxWidth)
-    val placeable = measurable.measure(constraints.copy(minWidth = px, maxWidth = px))
-    layout(placeable.width, placeable.height) { placeable.place(0, 0) }
-}
-
-/** [Modifier.requiredWidth] with a width read while measuring, as [widthOf] is. */
-private fun Modifier.requiredWidthOf(width: () -> Dp): Modifier = layout { measurable, constraints ->
-    val px = width().roundToPx().coerceAtLeast(0)
-    val placeable = measurable.measure(constraints.copy(minWidth = px, maxWidth = px))
-    layout(placeable.width, placeable.height) { placeable.place(0, 0) }
-}
-
-/**
- * How far a pane's content has scrolled from its top, as Material's pinned app bar counts it: what
- * the content consumed, back to zero once it is pulled past its top.
- */
-private class PaneScrollOffset : NestedScrollConnection {
-    var offset: Float by mutableFloatStateOf(0f)
-
-    /** Whether content has scrolled under the app bar. */
-    val scrolledUnder: Boolean
-        get() = offset < -1f
-
-    override fun onPostScroll(consumed: Offset, available: Offset, source: NestedScrollSource): Offset {
-        offset = if (consumed.y == 0f && available.y > 0f) 0f else offset + consumed.y
-        return Offset.Zero
-    }
-}
-
-/**
- * One small app bar over both panes, each half titled after the page under it. A pane that declares
- * an article bar shows the article's compact title in its half, with its reading progress along
- * that half's bottom edge only.
- */
-@Composable
-private fun ListDetailTopBar(
-    listChrome: PageChrome?,
-    detailChrome: PageChrome?,
-    listArticle: ArticleTopBarHost,
-    detailArticle: ArticleTopBarHost?,
-    listWidth: () -> Dp,
-    onCloseList: () -> Unit,
-    showsBack: Boolean,
-    containerColor: Color,
-    listTitleModifier: Modifier = Modifier,
-) {
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .background(containerColor)
-            .windowInsetsPadding(WindowInsets.safeDrawing.only(WindowInsetsSides.Top))
-            .height(64.dp),
-        verticalAlignment = Alignment.CenterVertically,
-    ) {
-        Box(Modifier.widthOf(listWidth).fillMaxHeight()) {
-            Row(
-                modifier = Modifier
-                    .fillMaxHeight()
-                    .windowInsetsPadding(WindowInsets.safeDrawing.only(WindowInsetsSides.Start)),
-                verticalAlignment = Alignment.CenterVertically,
-            ) {
-                // A list standing in for a tab has no way back but the navigation beside it.
-                if (showsBack) {
-                    // This module cannot depend on core UI, so it supplies matching bounce and sound feedback locally.
-                    IconButton(
-                        onClick = {
-                            onCloseList()
-                        },
-                        modifier = Modifier
-                            .padding(start = 4.dp)
-                            .bounceClick(),
-                    ) {
-                        Icon(Icons.AutoMirrored.Filled.ArrowBack, stringResource(R.string.shell_navigate_back))
-                    }
-                }
-                PaneTitle(
-                    title = listChrome?.title?.invoke().orEmpty(),
-                    article = listArticle,
-                    modifier = Modifier.padding(start = if (showsBack) 4.dp else 16.dp, end = 16.dp),
-                    titleModifier = listTitleModifier,
-                )
-            }
-            if (listArticle.isDeclared) {
-                ArticleReadingProgress(listArticle, Modifier.align(Alignment.BottomStart))
-            }
-        }
-        Spacer(Modifier.width(SeparatorWidth))
-        AnimatedContent(
-            targetState = detailChrome to detailArticle,
-            transitionSpec = { fadeIn() togetherWith fadeOut() },
-            modifier = Modifier.weight(1f),
-            label = "DetailTitle",
-        ) { (chrome, article) ->
-            Box(Modifier.fillMaxHeight()) {
-                Row(
-                    modifier = Modifier
-                        .fillMaxHeight()
-                        .windowInsetsPadding(WindowInsets.safeDrawing.only(WindowInsetsSides.End)),
-                    verticalAlignment = Alignment.CenterVertically,
-                ) {
-                    PaneTitle(
-                        title = chrome?.title?.invoke().orEmpty(),
-                        article = article,
-                        modifier = Modifier
-                            .weight(1f)
-                            .padding(start = 8.dp),
-                    )
-                    chrome?.actions?.invoke(this)
-                }
-                if (article?.isDeclared == true) {
-                    ArticleReadingProgress(article, Modifier.align(Alignment.BottomStart))
-                }
-            }
-        }
-    }
-}
-
-/**
- * A pane's half of the shared bar: its page's [title], or the compact title of the article the
- * page declares. [titleModifier] applies to the page's title only.
- */
-@Composable
-private fun PaneTitle(
-    title: String,
-    article: ArticleTopBarHost?,
-    modifier: Modifier = Modifier,
-    titleModifier: Modifier = Modifier,
-) {
-    if (article?.isDeclared == true) {
-        Box(modifier, contentAlignment = Alignment.CenterStart) {
-            ArticleTopBarTitle(article, textStyle = MaterialTheme.typography.titleLarge)
-        }
-    } else {
-        Text(
-            text = title,
-            style = MaterialTheme.typography.titleLarge,
-            maxLines = 1,
-            overflow = TextOverflow.Ellipsis,
-            modifier = modifier.then(titleModifier),
-        )
-    }
-}
-
-/**
- * The handle between the panes. It widens while dragged or hovered, the way Material's pane
- * expansion handle does, so the person can see what they are holding.
- */
-@Composable
-private fun PaneSeparator(interactions: MutableInteractionSource, modifier: Modifier) {
-    val dragged by interactions.collectIsDraggedAsState()
-    val hovered by interactions.collectIsHoveredAsState()
-    val handleWidth by animateDpAsState(if (dragged || hovered) 12.dp else 4.dp, label = "HandleWidth")
-    val description = stringResource(R.string.shell_pane_separator)
-    Box(
-        modifier = modifier
-            .width(SeparatorWidth)
-            .fillMaxHeight()
-            .hoverable(interactions)
-            .semantics { contentDescription = description },
-        contentAlignment = Alignment.Center,
-    ) {
-        Box(
-            Modifier
-                .size(width = handleWidth, height = 48.dp)
-                .background(
-                    if (dragged) MaterialTheme.colorScheme.onSurface else MaterialTheme.colorScheme.outline,
-                    CircleShape,
-                ),
-        )
-    }
-}
-
-/**
- * The pane the current page is drawn in. A page inside a pane leaves its app bar to the scene,
- * and a detail beside its list has no back button, since the list is already on screen.
- */
-val LocalPaneRole = compositionLocalOf { PaneRole.None }
-
-/** The content key of the detail open beside a list, so the list can highlight its row. */
-val LocalSelectedDetail = compositionLocalOf<Any?> { null }
-
-private val SeparatorWidth = 24.dp
 private const val DefaultListFraction = 0.38f
 private const val MinFraction = 0.25f
 private const val MaxRestingFraction = 0.6f

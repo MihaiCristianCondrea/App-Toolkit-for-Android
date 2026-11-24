@@ -24,7 +24,6 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.UiText
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.repositories.SeasonalThemeRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.FakeTelemetryRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.UnconfinedDispatcherExtension
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.R as CoreUiR
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.Loadable
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.UiMessage
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.R
@@ -35,6 +34,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.ui.mappers
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.mockk
+import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.RegisterExtension
@@ -43,6 +43,7 @@ import kotlin.test.assertEquals
 import kotlin.test.assertFalse
 import kotlin.test.assertIs
 import kotlin.test.assertTrue
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.R as CoreUiR
 
 class AboutViewModelTest {
 
@@ -244,7 +245,10 @@ class AboutViewModelTest {
             advance()
 
             val items = viewModel.state.value.items as Loadable.Failed
-            assertEquals(R.string.snack_device_info_failed, (items.message as UiText.StringResource).resourceId)
+            assertEquals(
+                R.string.snack_device_info_failed,
+                (items.message as UiText.StringResource).resourceId
+            )
             assertTrue(items.retryable)
             assertContains(telemetryRepository.loggedEvents.map { it.name }, "vm_op_error")
         }
@@ -280,7 +284,10 @@ class AboutViewModelTest {
             advance()
 
             val items = viewModel.state.value.items as Loadable.Failed
-            assertEquals(R.string.snack_device_info_failed, (items.message as UiText.StringResource).resourceId)
+            assertEquals(
+                R.string.snack_device_info_failed,
+                (items.message as UiText.StringResource).resourceId
+            )
             assertFalse(items.retryable)
         }
 
@@ -314,9 +321,16 @@ class AboutViewModelTest {
             advance()
 
             coVerify { seasonalThemes.unlockSeasonalThemes() }
-            assertEquals(R.string.snack_seasonal_themes_unlocked, viewModel.onlyMessage().resourceId)
-            val achievement = telemetryRepository.loggedEvents.single { it.name == "unlock_achievement" }
-            assertEquals(AnalyticsValue.Str("seasonal_themes"), achievement.params["achievement_id"])
+            assertEquals(
+                R.string.snack_seasonal_themes_unlocked,
+                viewModel.onlyMessage().resourceId
+            )
+            val achievement =
+                telemetryRepository.loggedEvents.single { it.name == "unlock_achievement" }
+            assertEquals(
+                AnalyticsValue.Str("seasonal_themes"),
+                achievement.params["achievement_id"]
+            )
         }
 
     @Test
@@ -331,6 +345,48 @@ class AboutViewModelTest {
         assertEquals(emptyList(), viewModel.messages.value)
         assertFalse("unlock_achievement" in telemetryRepository.loggedEvents.map { it.name })
     }
+
+    @Test
+    fun `a duplicate load during an active fetch shares the active load`() =
+        runTest(dispatcherExtension.testDispatcher) {
+            val gate = CompletableDeferred<AboutInfo>()
+            var requests = 0
+            val repository = object : AboutRepository {
+                override suspend fun getAboutInfo(): AboutInfo {
+                    requests += 1
+                    return gate.await()
+                }
+            }
+
+            val viewModel = createViewModel(repository = repository)
+            viewModel.onEvent(event = AboutEvent.Load)
+            advance()
+
+            assertEquals(1, requests)
+            assertIs<Loadable.Loading>(viewModel.state.value.items)
+
+            gate.complete(value = defaultAboutInfo)
+            advance()
+
+            assertIs<Loadable.Ready<*>>(viewModel.state.value.items)
+        }
+
+    @Test
+    fun `a failed easter egg unlock reports diagnostics without logging the achievement or showing a message`() =
+        runTest(dispatcherExtension.testDispatcher) {
+            coEvery { seasonalThemes.unlockSeasonalThemes() } throws StorageException(
+                reason = StorageException.Reason.FAILED,
+            )
+            val viewModel = createViewModel()
+            advance()
+
+            viewModel.onEvent(event = AboutEvent.EasterEggFound)
+            advance()
+
+            assertEquals(emptyList(), viewModel.messages.value)
+            assertContains(telemetryRepository.loggedEvents.map { it.name }, "vm_op_error")
+            assertFalse("unlock_achievement" in telemetryRepository.loggedEvents.map { it.name })
+        }
 
     /** Records each accepted copy; [accepts] and [confirmsCopies] set how the system behaves. */
     private class FakeClipboardRepository(

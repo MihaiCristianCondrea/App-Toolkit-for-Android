@@ -23,7 +23,7 @@ import androidx.navigation3.runtime.NavKey
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.icons.ToolkitIcon
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.PaneRole
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.ShellGraphBuilder
-import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.SettingsRoute
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.keys.SettingsScreen
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Assertions.assertTrue
@@ -41,6 +41,8 @@ class ShellNavigatorTest {
     private data object OtherPage : NavKey
     private data object Detail : NavKey
     private data object OtherDetail : NavKey
+    private data class Article(val id: Int) : NavKey
+    private data class Label(val name: String) : NavKey
 
     private val icon = ToolkitIcon.Vector(Icons.Outlined.Home)
 
@@ -49,11 +51,12 @@ class ShellNavigatorTest {
         tab(Second, 0, icon) {}
         tab(Third, 0, icon) {}
         child<Child>(title = { "" }) {}
+        child<Article>(title = { "" }, paneRole = PaneRole.Detail) {}
         page<Page> {}
         page<OtherPage> {}
         page<Detail>(paneRole = PaneRole.Detail) {}
         page<OtherDetail>(paneRole = PaneRole.Detail) {}
-        page<SettingsRoute>(paneRole = PaneRole.List) {}
+        page<SettingsScreen>(paneRole = PaneRole.List) {}
     }.build()
 
     private lateinit var pages: MutableList<NavKey>
@@ -63,7 +66,7 @@ class ShellNavigatorTest {
 
     @BeforeEach
     fun setUp() {
-        pages = mutableListOf(ShellHomeRoute)
+        pages = mutableListOf(ShellHomeScreen)
         tabs = graph.tabs.map { mutableListOf(it.key) }
         exits = 0
         navigator = ShellNavigator(graph, pages, tabs, mutableListOf(0)) { exits++ }
@@ -92,7 +95,7 @@ class ShellNavigatorTest {
 
         startNavigator.navigate(Second)
 
-        assertEquals(listOf<NavKey>(ShellHomeRoute), startPages)
+        assertEquals(listOf<NavKey>(ShellHomeScreen), startPages)
         assertTrue(startNavigator.inShell)
         assertEquals(1, startNavigator.currentTabIndex)
         startNavigator.goBack() // Second → First
@@ -117,7 +120,7 @@ class ShellNavigatorTest {
     fun `continuing the start from the shell opens a page`() {
         navigator.continueStart(Page)
 
-        assertEquals(listOf(ShellHomeRoute, Page), pages)
+        assertEquals(listOf(ShellHomeScreen, Page), pages)
     }
 
     @Test
@@ -262,11 +265,11 @@ class ShellNavigatorTest {
         navigator.navigate(Page)
         navigator.navigate(OtherPage)
 
-        assertEquals(listOf(ShellHomeRoute, Page, OtherPage), navigator.pages)
+        assertEquals(listOf(ShellHomeScreen, Page, OtherPage), navigator.pages)
 
         navigator.goBack()
         navigator.goBack()
-        assertEquals(listOf<NavKey>(ShellHomeRoute), navigator.pages)
+        assertEquals(listOf<NavKey>(ShellHomeScreen), navigator.pages)
         assertEquals(listOf(First, Child(1)), navigator.currentTabStack)
     }
 
@@ -275,26 +278,26 @@ class ShellNavigatorTest {
         navigator.navigate(Page)
         navigator.navigate(Page)
 
-        assertEquals(listOf(ShellHomeRoute, Page), navigator.pages)
+        assertEquals(listOf(ShellHomeScreen, Page), navigator.pages)
     }
 
     @Test
     fun `a detail replaces the detail already open`() {
-        navigator.navigate(SettingsRoute)
+        navigator.navigate(SettingsScreen)
         navigator.navigate(Detail)
         navigator.navigate(OtherDetail)
 
-        assertEquals(listOf(ShellHomeRoute, SettingsRoute, OtherDetail), navigator.pages)
+        assertEquals(listOf(ShellHomeScreen, SettingsScreen, OtherDetail), navigator.pages)
     }
 
     @Test
     fun `closing a list closes the detail beside it`() {
-        navigator.navigate(SettingsRoute)
+        navigator.navigate(SettingsScreen)
         navigator.navigate(Detail)
 
-        navigator.close(SettingsRoute)
+        navigator.close(SettingsScreen)
 
-        assertEquals(listOf<NavKey>(ShellHomeRoute), navigator.pages)
+        assertEquals(listOf<NavKey>(ShellHomeScreen), navigator.pages)
     }
 
     @Test
@@ -302,12 +305,12 @@ class ShellNavigatorTest {
         navigator.navigate(Page)
         navigator.navigate(Child(3))
 
-        assertEquals(listOf<NavKey>(ShellHomeRoute), navigator.pages)
+        assertEquals(listOf<NavKey>(ShellHomeScreen), navigator.pages)
         assertEquals(listOf(First, Child(3)), navigator.currentTabStack)
 
         navigator.navigate(Page)
         navigator.navigate(Second)
-        assertEquals(listOf<NavKey>(ShellHomeRoute), navigator.pages)
+        assertEquals(listOf<NavKey>(ShellHomeScreen), navigator.pages)
         assertEquals(1, navigator.currentTabIndex)
     }
 
@@ -316,7 +319,7 @@ class ShellNavigatorTest {
         assertFalse(navigator.popPage())
         navigator.navigate(Page)
         assertTrue(navigator.popPage())
-        assertEquals(listOf<NavKey>(ShellHomeRoute), navigator.pages)
+        assertEquals(listOf<NavKey>(ShellHomeScreen), navigator.pages)
     }
 
     @Test
@@ -324,9 +327,9 @@ class ShellNavigatorTest {
         navigator.navigate(Page)
         navigator.navigate(OtherPage)
 
-        navigator.navigate(ShellHomeRoute)
+        navigator.navigate(ShellHomeScreen)
 
-        assertEquals(listOf<NavKey>(ShellHomeRoute), navigator.pages)
+        assertEquals(listOf<NavKey>(ShellHomeScreen), navigator.pages)
     }
 
     @Test
@@ -377,5 +380,88 @@ class ShellNavigatorTest {
         assertThrows<IllegalArgumentException> {
             ShellGraphBuilder(appTitle = 0).apply { page<Page> {} }.build()
         }
+    }
+
+    @Test
+    fun `a detail child replaces the detail child open on the tab`() {
+        navigator.navigate(Article(1))
+        navigator.navigate(Article(2))
+
+        assertEquals(listOf(First, Article(2)), navigator.currentTabStack)
+
+        navigator.navigate(Article(2))
+        assertEquals(listOf(First, Article(2)), navigator.currentTabStack)
+
+        navigator.goBack()
+        assertEquals(listOf<NavKey>(First), navigator.currentTabStack)
+    }
+
+    @Test
+    fun `a detail child over a plain child is pushed`() {
+        navigator.navigate(Child(1))
+        navigator.navigate(Article(1))
+
+        assertEquals(listOf(First, Child(1), Article(1)), navigator.currentTabStack)
+    }
+
+    @Test
+    fun `navigating to another instance of a tab key fails clearly`() {
+        val labelGraph = ShellGraphBuilder(appTitle = 0).apply {
+            tab(Label("a"), 0, icon) {}
+        }.build()
+        val labelNavigator = ShellNavigator(labelGraph, mutableListOf(ShellHomeScreen), labelGraph.tabs.map { mutableListOf(it.key) }, mutableListOf(0)) { exits++ }
+
+        assertTrue(Label("a") in labelGraph.startOptions)
+        assertTrue(labelGraph.contains(Label("a")))
+        assertFalse(labelGraph.contains(Label("other")))
+        val failure = assertThrows<IllegalStateException> { labelNavigator.navigate(Label("other")) }
+        assertTrue(failure.message.orEmpty().contains("matched by instance"))
+        assertEquals(0, labelNavigator.currentTabIndex)
+    }
+
+    @Test
+    fun `a child in a graph of pages only fails clearly`() {
+        val entry = ShellGraphBuilder(appTitle = 0).apply {
+            page<Page> {}
+            child<Child>(title = { "" }) {}
+            start(Page)
+        }.build()
+        val entryPages = mutableListOf<NavKey>(Page)
+        val entryNavigator = ShellNavigator(entry, entryPages, emptyList(), mutableListOf()) { exits++ }
+
+        assertThrows<IllegalStateException> { entryNavigator.navigate(Child(1)) }
+
+        assertEquals(listOf<NavKey>(Page), entryPages)
+        assertEquals(0, exits)
+    }
+
+    @Test
+    fun `restored state for a different number of tabs is dropped`() {
+        val staleHistory = mutableListOf(0, 5)
+        val staleOpenings = mutableListOf(0, 1, 0, 0, 2, 3)
+        val staleTabs = graph.tabs.map { mutableListOf<NavKey>(it.key, Child(9)) }
+
+        val restored = ShellNavigator(graph, mutableListOf(ShellHomeScreen), staleTabs, staleHistory, staleOpenings) { exits++ }
+
+        assertEquals(0, restored.currentTabIndex)
+        assertEquals(listOf(0), restored.tabsInUse)
+        assertEquals(0, restored.timesOpened(2))
+        assertEquals(listOf<NavKey>(First), restored.tabStack(0))
+    }
+
+    @Test
+    fun `restored history with an index out of range is dropped`() {
+        val restored = ShellNavigator(graph, mutableListOf(ShellHomeScreen), tabs, mutableListOf(1, 7), mutableListOf(0, 1, 0)) { exits++ }
+
+        assertEquals(0, restored.currentTabIndex)
+        assertEquals(0, restored.timesOpened(1))
+    }
+
+    @Test
+    fun `restored state that still fits the tabs is kept`() {
+        val restored = ShellNavigator(graph, mutableListOf(ShellHomeScreen), tabs, mutableListOf(0, 2), mutableListOf(0, 1, 2)) { exits++ }
+
+        assertEquals(2, restored.currentTabIndex)
+        assertEquals(2, restored.timesOpened(2))
     }
 }

@@ -26,13 +26,13 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.ico
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.settings.SettingsSearchContext
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.settings.SettingsSearchEntry
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.display.R
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.display.ui.models.displayRows
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.display.ui.providers.DisplaySettingsProvider
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.display.ui.transformers.displayRows
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.ShellCapabilities
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.ShellGraph
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.shellGraph
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.layout.ShellLayoutPolicy
-import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.DisplaySettingsRoute
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.keys.DisplaySettingsScreen
 import org.junit.jupiter.api.Test
 import kotlin.test.assertEquals
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.R as CoreUiR
@@ -52,8 +52,8 @@ class DisplaySettingsSearchTest {
         if (tabs >= 1) tab(First, 0, icon) {}
         if (tabs >= 2) tab(Second, 0, icon) {}
         if (tabs >= 3) tab(Third, 0, icon) {}
-        page<DisplaySettingsRoute> {}
-        if (tabs == 0) start(DisplaySettingsRoute)
+        page<DisplaySettingsScreen> {}
+        if (tabs == 0) start(DisplaySettingsScreen)
     }
 
     private fun context(tabs: Int, policy: ShellLayoutPolicy = ShellLayoutPolicy()): SettingsSearchContext {
@@ -62,7 +62,7 @@ class DisplaySettingsSearchTest {
     }
 
     private fun entry(title: Int, summary: Int? = null) =
-        SettingsSearchEntry(title = title, section = R.string.display, destination = DisplaySettingsRoute, summary = summary)
+        SettingsSearchEntry(title = title, section = R.string.display, destination = DisplaySettingsScreen, summary = summary)
 
     @Test
     fun `the search lists exactly the rows the page shows, for every app`() {

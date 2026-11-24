@@ -93,4 +93,4 @@ interface ShellPreferencesRepository {
  * later release reaches only the people who never chose.
  */
 fun ShellPreferencesRepository(context: Context, defaults: ShellSettings = ShellSettings()): ShellPreferencesRepository =
-    DataStoreShellPreferencesRepository(context.applicationContext.shellDataStore, defaults)
+    DefaultShellPreferencesRepository.sharedFor(context.applicationContext.shellDataStore, defaults)

@@ -23,7 +23,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.UiText
  * User driven events from the About screen UI.
  */
 sealed interface AboutEvent {
-    /** Loads the screen's entries, on start and again from the failure screen's retry. */
+    /** Loads the About entries on entry or retries an unsuccessful load. */
     data object Load : AboutEvent
 
     /**
@@ -40,6 +40,6 @@ sealed interface AboutEvent {
         val successMessage: UiText? = null,
     ) : AboutEvent
 
-    /** The version was tapped enough times to set off the easter egg. */
+    /** Records discovery of the version-tap gesture and its unlock. */
     data object EasterEggFound : AboutEvent
 }

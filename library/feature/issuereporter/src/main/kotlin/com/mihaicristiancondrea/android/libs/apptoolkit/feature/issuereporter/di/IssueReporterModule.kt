@@ -20,6 +20,7 @@ package com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.d
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.di.AppToolkitDiConstants
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.di.models.AppToolkitHostBuildConfig
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.github.GithubConstants
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.string.toToken
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.di.DataStoreQualifiers
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.sheets.IssueReporterSheet
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.data.local.DefaultIssueReportHistoryDataSource
@@ -29,15 +30,14 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.da
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.data.models.GithubTarget
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.data.models.IssueReporterConfig
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.data.remote.IssueReporterRemoteDataSource
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.data.repositories.DefaultIssueReporterRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.data.repositories.DefaultIssueReportHistoryRepository
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.data.repositories.IssueReporterRepository
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.data.repositories.DefaultIssueReporterRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.data.repositories.IssueReportHistoryRepository
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.data.repositories.IssueReporterRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.domain.usecases.ValidateIssueReportUseCase
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.ui.IssueReporterBottomSheet
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.ui.IssueReporterViewModel
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.ui.utils.IssueReporterShakeManager
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.utils.extensions.toToken
 import org.koin.android.ext.koin.androidApplication
 import org.koin.core.module.dsl.viewModel
 import org.koin.core.module.Module

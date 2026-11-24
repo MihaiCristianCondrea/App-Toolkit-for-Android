@@ -17,25 +17,31 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.integration.ads.ui.utils
 
+import android.app.Activity
 import android.content.Context
 import android.util.Log
+import com.google.android.libraries.ads.mobile.sdk.appopen.AppOpenAd
 import com.google.android.libraries.ads.mobile.sdk.initialization.InitializationConfig
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.local.AdMobAppIdDataSource
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.BuildInfoRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.AdsSettingsRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.TestDispatchers
 import com.mihaicristiancondrea.android.libs.apptoolkit.integration.ads.data.remote.AdsSdkInitializer
 import io.mockk.every
 import io.mockk.mockk
+import io.mockk.mockkObject
 import io.mockk.mockkStatic
+import io.mockk.unmockkObject
 import io.mockk.unmockkStatic
 import io.mockk.verify
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertFalse
+import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
@@ -47,14 +53,19 @@ import org.junit.jupiter.api.Test
 class AppOpenAdControllerInitializationTest {
 
     private val adMobAppIdDataSource = AdMobAppIdDataSource { "ca-app-pub-1234567890123456~1234567890" }
+    private val controllers = mutableListOf<AppOpenAdController>()
 
     /** Counts initializations instead of touching the real SDK. */
     private class RecordingAdsSdkInitializer : AdsSdkInitializer {
         var initializations: Int = 0
             private set
 
+        var lastConfig: InitializationConfig? = null
+            private set
+
         override fun initialize(context: Context, config: InitializationConfig) {
             initializations++
+            lastConfig = config
         }
     }
 
@@ -67,7 +78,10 @@ class AppOpenAdControllerInitializationTest {
     }
 
     @AfterEach
-    fun unmockAndroidLog() {
+    fun tearDown() {
+        controllers.forEach(AppOpenAdController::close)
+        controllers.clear()
+        unmockkObject(AppOpenAd.Companion)
         unmockkStatic(Log::class)
     }
 
@@ -78,7 +92,7 @@ class AppOpenAdControllerInitializationTest {
     fun `ads enablement is read from the same flow the ad views observe`() = runTest {
         val dataStore = mockk<AdsSettingsRepository>()
         every { dataStore.adsEnabled } returns MutableStateFlow(true)
-        every { dataStore.observeReduceAds() } returns kotlinx.coroutines.flow.flowOf(false)
+        every { dataStore.observeReduceAds() } returns flowOf(false)
         val manager = managerWith(dataStore = dataStore)
 
         manager.initializeAds(appOpenUnitId = "unit")
@@ -91,7 +105,7 @@ class AppOpenAdControllerInitializationTest {
     fun `the SDK is initialized when ads are enabled`() = runTest {
         val dataStore = mockk<AdsSettingsRepository>()
         every { dataStore.adsEnabled } returns MutableStateFlow(true)
-        every { dataStore.observeReduceAds() } returns kotlinx.coroutines.flow.flowOf(false)
+        every { dataStore.observeReduceAds() } returns flowOf(false)
         val manager = managerWith(dataStore = dataStore)
 
         manager.initializeAds(appOpenUnitId = "unit")
@@ -104,7 +118,7 @@ class AppOpenAdControllerInitializationTest {
         val adsEnabled = MutableStateFlow(false)
         val dataStore = mockk<AdsSettingsRepository>()
         every { dataStore.adsEnabled } returns adsEnabled
-        every { dataStore.observeReduceAds() } returns kotlinx.coroutines.flow.flowOf(false)
+        every { dataStore.observeReduceAds() } returns flowOf(false)
         val manager = managerWith(dataStore = dataStore)
 
         manager.initializeAds(appOpenUnitId = "unit")
@@ -120,7 +134,7 @@ class AppOpenAdControllerInitializationTest {
         val adsEnabled = MutableStateFlow(true)
         val dataStore = mockk<AdsSettingsRepository>()
         every { dataStore.adsEnabled } returns adsEnabled
-        every { dataStore.observeReduceAds() } returns kotlinx.coroutines.flow.flowOf(false)
+        every { dataStore.observeReduceAds() } returns flowOf(false)
         val manager = managerWith(dataStore = dataStore)
 
         manager.initializeAds(appOpenUnitId = "unit")
@@ -134,7 +148,7 @@ class AppOpenAdControllerInitializationTest {
     fun `the SDK is not initialized when the host declares no AdMob app id`() = runTest {
         val dataStore = mockk<AdsSettingsRepository>()
         every { dataStore.adsEnabled } returns MutableStateFlow(true)
-        every { dataStore.observeReduceAds() } returns kotlinx.coroutines.flow.flowOf(false)
+        every { dataStore.observeReduceAds() } returns flowOf(false)
         val manager = managerWith(
             dataStore = dataStore,
             adMobAppIdDataSource = { null },
@@ -145,6 +159,51 @@ class AppOpenAdControllerInitializationTest {
         assertEquals(0, initializer.initializations)
     }
 
+    @Test
+    fun `a blank app open unit id initializes the SDK without registering an app open loader`() = runTest {
+        val dataStore = mockk<AdsSettingsRepository>()
+        every { dataStore.adsEnabled } returns MutableStateFlow(true)
+        every { dataStore.observeReduceAds() } returns flowOf(false)
+        val manager = managerWith(dataStore = dataStore)
+
+        mockkObject(AppOpenAd.Companion)
+        manager.initializeAds(appOpenUnitId = "   ")
+
+        assertEquals(1, initializer.initializations)
+        var completed = false
+        manager.showAdIfAvailable(
+            activity = mockk<Activity>(),
+            scope = backgroundScope,
+            onShowAdCompleteListener = { completed = true },
+        )
+        assertTrue(completed)
+        verify(exactly = 0) { AppOpenAd.load(any(), any()) }
+    }
+
+    @Test
+    fun `the native ad validator is disabled by default`() = runTest {
+        val dataStore = mockk<AdsSettingsRepository>()
+        every { dataStore.adsEnabled } returns MutableStateFlow(true)
+        every { dataStore.observeReduceAds() } returns flowOf(false)
+        val manager = managerWith(dataStore = dataStore)
+
+        manager.initializeAds(appOpenUnitId = "unit")
+
+        assertTrue(initializer.lastConfig?.nativeAdDebuggerDisabled == true)
+    }
+
+    @Test
+    fun `hosts can opt in to the native ad validator`() = runTest {
+        val dataStore = mockk<AdsSettingsRepository>()
+        every { dataStore.adsEnabled } returns MutableStateFlow(true)
+        every { dataStore.observeReduceAds() } returns flowOf(false)
+        val manager = managerWith(dataStore = dataStore)
+
+        manager.initializeAds(appOpenUnitId = "unit", disableNativeValidator = false)
+
+        assertFalse(initializer.lastConfig?.nativeAdDebuggerDisabled == true)
+    }
+
     private fun managerWith(
         dataStore: AdsSettingsRepository,
         adMobAppIdDataSource: AdMobAppIdDataSource = this.adMobAppIdDataSource,
@@ -153,12 +212,11 @@ class AppOpenAdControllerInitializationTest {
         every { context.applicationContext } returns context
 
         return AppOpenAdController(
-            context,
-            mockk<BuildInfoRepository>(),
-            TestDispatchers(UnconfinedTestDispatcher()),
-            adMobAppIdDataSource,
-            initializer,
+            context = context,
+            dispatchers = TestDispatchers(UnconfinedTestDispatcher()),
+            adMobAppIdDataSource = adMobAppIdDataSource,
+            adsSdkInitializer = initializer,
             adsSettingsRepository = dataStore,
-        )
+        ).also(controllers::add)
     }
 }
