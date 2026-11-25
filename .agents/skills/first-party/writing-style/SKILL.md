@@ -21,15 +21,11 @@ metadata:
   - code comments
 ---
 
-# Human Writing Style and Copywriting Guidelines
+# Writing style
 
-A core workspace writing standard for all code comments, Markdown documentation, campaign copy, social captions, commit messages, and PR descriptions.
-
-This skill ensures all generated text reads naturally, professionally, and cleanly, eliminating AI-like punctuation and buzzword cliches.
-
-This is the only place these rules are written. Every other marketing skill applies them by linking here; when a rule changes, change it here.
-
----
+Use these rules for project text, including code comments, Markdown, campaign and social copy,
+commit messages, and PR descriptions. Use [Humanizer](../../third-party/blader/humanizer/SKILL.md)
+to improve the wording while keeping the project's punctuation and documentation conventions.
 
 ## Core Writing Rules
 

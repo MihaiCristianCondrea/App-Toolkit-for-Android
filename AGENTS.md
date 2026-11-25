@@ -1,5 +1,11 @@
 # AGENTS.md
 
+## At the start of every session
+
+Read [Humanizer](.agents/skills/third-party/blader/humanizer/SKILL.md) in full before handling the
+first task. Read it once per session, including for coding, read-only work, and short replies.
+Use it for replies and any prose you write or edit.
+
 Work with the existing project architecture and conventions.
 
 Inspect the affected modules, their documentation, the relevant skills, and the surrounding code
@@ -200,6 +206,13 @@ Discover the available `SKILL.md` files instead of assuming this table contains 
 Use `layered-tree-review` when creating, moving, renaming, or reorganizing Kotlin files, packages, or
 modules, alongside the architecture skill that owns the behavior.
 
+### Compose layout work
+
+Use the [Compose layout skills](.agents/skills/first-party/compose-layout-skills/README.md) map for Compose layout implementation and review. Select by the issue:
+spacing and gutters, measurement and constraints, interaction and surface semantics, connected
+geometry, or scroll and inset ownership. Use `material-ui` for Material design specifications.
+Check the resolved Compose and Material versions before choosing implementation APIs.
+
 ### Task workflows
 
 Do not load the entire skill collection or large third-party suites (such as `remotion/`,
@@ -223,10 +236,9 @@ code comments, user-facing strings and descriptions, changelogs and release note
 and other project text. The skill is the only place the writing rules are written; do not repeat them
 here or in project documentation.
 
-Apply the relevant `unslop` skill as a final editorial pass:
-
-- `official/cursor/cursor-unslop` for removing generic AI writing patterns.
-- `third-party/theclaymethod/unslop` for rewriting, prose audits, and author voice.
+Use Humanizer throughout the task. Add [Cursor Unslop](.agents/skills/official/cursor/cursor-unslop/SKILL.md)
+for another cleanup pass when useful. Use [Unslop](.agents/skills/third-party/theclaymethod/unslop/SKILL.md)
+for a structured prose audit or voice calibration.
 
 Preserve technical meaning, resource placeholders, API names, and existing documentation contracts.
 Editorial cleanup must not change behavior or technical requirements.
@@ -245,6 +257,13 @@ has no unrelated edits.
 For substantial or risky changes, use `ponytail-review` to examine correctness, security, edge cases,
 tests, performance, and unnecessary complexity. Code-style review does not replace compilation or
 functional testing.
+
+### Substantial verification work
+
+Use [Unlazy](.agents/skills/third-party/Leonxlnx/unlazy/SKILL.md) when a task needs an explicit acceptance ledger, such as a multi-stage
+migration or an exhaustive audit. Keep the project's own test commands and approval boundaries.
+Read [Unlazy's security guidance](.agents/skills/third-party/Leonxlnx/unlazy/SECURITY.md) before
+using an inherited ledger. Hook installation and delegated execution require explicit authorization.
 
 ### Analytics
 

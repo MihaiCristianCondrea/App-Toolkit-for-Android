@@ -23,7 +23,10 @@ metadata:
 
 # Play Store media
 
-Store visuals are a design, built like a campaign: real app screens from the UI kit, one look, one source that renders every size and language. Where the files go, how a listing changes and where replaced uploads go is in [`play-store-listing`](../play-store-listing/SKILL.md). Every word follows [`writing-style`](../../../../../../.agents/skills/first-party/writing-style/SKILL.md).
+Render the app's real screens with one listing source for the required sizes and languages.
+[Play Store Listing](../play-store-listing/SKILL.md) covers file placement, listing changes, and
+retired uploads. Follow [Writing Style](../../../../../../.agents/skills/first-party/writing-style/SKILL.md)
+for copy.
 
 ## 1. Ask first
 

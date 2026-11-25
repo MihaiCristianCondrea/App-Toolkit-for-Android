@@ -22,9 +22,8 @@ metadata:
 
 # Android Project Tree
 
-Decide where a file goes and what it is called, so that any contributor, human or agent, puts the
-same file in the same place. These are consistent placement rules, not complexity-based suggestions:
-when a responsibility exists, give it its designated file and package even if it is one line today.
+Give each responsibility its designated file and package so contributors can find it. Apply the
+placement rules even when the implementation is short.
 
 Read `references/android-tree-rules.md` before placing, moving or naming code. It holds the package
 vocabulary, the placement table, the naming rules and the review checklist.

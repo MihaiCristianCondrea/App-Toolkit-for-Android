@@ -1,23 +1,14 @@
 # Marketing AGENTS.md
 
-This file defines the marketing, design exploration, and creative production workflow for Android
-applications, with or without App Toolkit.
+## Before you start
 
-It works alongside the repository's root `AGENTS.md`.
+Read the [root AGENTS.md](../AGENTS.md) if it has not been loaded. If Humanizer is still unread in
+this session, read [its full skill](../.agents/skills/third-party/blader/humanizer/SKILL.md) now. Apply it to replies and prose, including
+prototype copy, store text, and captions. Read each AGENTS file and Humanizer once per session.
 
-## Relationship with the root AGENTS.md
-
-Before starting a task, read `../AGENTS.md` if it has not already been loaded.
-
-The root file owns Android architecture, Compose implementation, code quality, build validation, and
-when Android tasks cross into design exploration. This file extends those instructions for design
-prototyping, motion and video production, Play Store assets, metadata, and campaigns.
-
-Read each `AGENTS.md` file at most once per session. Never reload either file recursively.
-
-When a marketing or design-first task affects Android code (reading Compose screens for parity, or
-implementing an approved prototype), follow the root `AGENTS.md` rules and Android development
-skills for the Android side.
+This file covers design exploration, marketing previews, motion and video, store assets, and
+campaigns. Follow the root instructions when checking Compose against a prototype or implementing
+an approved design.
 
 ## Design workflow
 
@@ -98,6 +89,11 @@ Each concern has one owner. Other skills link to it instead of repeating it.
 `official/` and `third-party/` skills stay as their authors published them, with one exception:
 `official/google/material-ui` is maintained in this repository. Its `documentation/` and `visuals/`
 mirror Google's material and are never edited.
+
+For an additional editorial review, see the [root writing guidance](../AGENTS.md#writing-and-documentation).
+For multi-stage production that needs an acceptance ledger, use the [root verification guidance](../AGENTS.md#substantial-verification-work).
+When implementing an approved prototype in Compose, use the [Compose layout map](../.agents/skills/first-party/compose-layout-skills/README.md) for
+layout and interaction rules. The prototype continues to follow Material UI and Marketing UI.
 
 ## Research and measurement
 

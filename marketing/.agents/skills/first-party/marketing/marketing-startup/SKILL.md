@@ -23,7 +23,9 @@ metadata:
 
 # Marketing startup
 
-The initialization entry point for marketing work in an app repository. It inspects the product and sets up the marketing folder and campaigns. Task routing is owned by [`marketing/AGENTS.md`](../../../../../AGENTS.md); prose rules by [`writing-style`](../../../../../../.agents/skills/first-party/writing-style/SKILL.md).
+Inspect the app before setting up its marketing folder or starting a campaign. Follow the
+[marketing routing table](../../../../../AGENTS.md) for the task and
+[Writing Style](../../../../../../.agents/skills/first-party/writing-style/SKILL.md) for project text.
 
 ## Always
 

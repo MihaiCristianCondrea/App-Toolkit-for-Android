@@ -21,7 +21,9 @@ metadata:
 
 # Marketing UI
 
-A marketing hub is a small web project in `marketing/ui` that renders the app's real screens from a state object. Videos, carousels, store graphics and press shots all mount the same screens, so they never show a fake or outdated app. Text in the kit follows [`writing-style`](../../../../../../.agents/skills/first-party/writing-style/SKILL.md).
+The hub in `marketing/ui` renders app screens from state. Mount the same screens in videos,
+carousels, store graphics, and press images. Use
+[Writing Style](../../../../../../.agents/skills/first-party/writing-style/SKILL.md) for copy.
 
 Built on [Material Web](https://github.com/material-components/material-web) (`@material/web`), Google's Material 3 web components, with [Lit](https://lit.dev). Component docs: https://material-web.dev.
 
@@ -252,4 +254,5 @@ A presentation page built from the kit follows the Pixel film rules translated t
 - The kit's `scrollArea` cancels the wheel over a screen. Hand the wheel back to the page when the
   screen did not move, or a phone traps page scroll.
 - With reduced motion, show every scene at its final state in normal flow.
+
 

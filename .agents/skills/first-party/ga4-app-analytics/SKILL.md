@@ -17,15 +17,9 @@ metadata:
 
 # GA4 App Analytics
 
-Use this skill when reviewing, planning, or implementing Google Analytics 4 instrumentation in an
-Android application.
-
-The goal is not to maximize event count. The goal is to measure meaningful product behavior with a
-clean, stable analytics vocabulary that helps with product decisions, marketing, experimentation,
-retention, and monetization analysis.
-
-This skill is designed for host applications that use App Toolkit, but the event design principles
-are general.
+Use this skill to review, plan, or implement GA4 in an Android app. Choose stable event names that
+answer questions about product use, marketing, experiments, retention, or monetization. The
+integration examples use App Toolkit, and the event design guidance applies to other Android apps.
 
 ## Core principles
 

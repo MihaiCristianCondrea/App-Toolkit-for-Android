@@ -64,6 +64,7 @@ Before implementation, identify the affected responsibilities and checks:
   `play-billing-library-version-upgrade` when changing Play Billing, and `r8-analyzer` for a
   published module's consumer keep rules.
 - Use `traceable-code` for Kotlin call sites and `writing-style` for KDoc, module READMEs and Mermaid diagrams. Apply the [code review checks](references/code-review.md) to the touched code.
+- For Compose layout implementation or review, use the [Compose layout map](../compose-layout-skills/README.md) to select the skills that cover the affected spacing, measurement, interaction, groups or insets. Check the consuming app's resolved dependencies.
 - For implementation, use `android-build-validation` to select checks. Use the existing test
   setup and the relevant specialist's testing guidance. Load `testing-setup` when the project
   needs a test strategy or infrastructure.

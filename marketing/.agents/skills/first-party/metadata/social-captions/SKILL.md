@@ -22,7 +22,8 @@ metadata:
 
 # Social captions
 
-One campaign, one set of facts, one file per platform. Every word follows [`writing-style`](../../../../../../.agents/skills/first-party/writing-style/SKILL.md).
+Use the campaign's verified facts and prepare one caption file per requested platform. Follow
+[Writing Style](../../../../../../.agents/skills/first-party/writing-style/SKILL.md).
 
 ## 1. Ask first
 

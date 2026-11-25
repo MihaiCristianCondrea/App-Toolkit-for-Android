@@ -20,7 +20,9 @@ metadata:
 
 # Store listing
 
-Every store listing lives in one place, and every listing has the same two parts: the source that makes it and the files that are uploaded. Text follows [`writing-style`](../../../../../../.agents/skills/first-party/writing-style/SKILL.md); visuals are made with [`play-store-media`](../play-store-media/SKILL.md).
+Keep each listing's render source and upload files together. Use
+[Writing Style](../../../../../../.agents/skills/first-party/writing-style/SKILL.md) for text and
+[Play Store Media](../play-store-media/SKILL.md) for visuals.
 
 ## Layout
 
