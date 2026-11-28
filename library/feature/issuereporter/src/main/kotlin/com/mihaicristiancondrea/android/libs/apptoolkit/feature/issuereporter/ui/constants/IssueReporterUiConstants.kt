@@ -17,13 +17,7 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.ui.constants
 
-import androidx.compose.ui.unit.Dp
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
-
 internal object IssueReporterUiConstants {
-    /** Outward-facing corner radius shared by every grouped block on the report screen. */
-    val GROUP_OUTER_RADIUS: Dp = SizeConstants.LargeMediumSize
-
     /** Minimum visible rows for the issue description field. */
     const val DESCRIPTION_MIN_LINES: Int = 5
 

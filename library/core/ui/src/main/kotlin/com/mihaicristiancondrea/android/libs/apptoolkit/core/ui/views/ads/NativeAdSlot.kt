@@ -17,19 +17,18 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.ads
 
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.platform.LocalInspectionMode
-import androidx.compose.ui.unit.Dp
 import com.google.android.libraries.ads.mobile.sdk.nativead.NativeAd
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.modifiers.componentEntrance
 import org.koin.compose.koinInject
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.GroupedItemPosition
 
 /**
  * The single entry point for rendering a native ad anywhere in the toolkit.
@@ -50,9 +49,10 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preference
  *
  * @param adUnitId the AdMob native ad unit to request.
  * @param presentation the shape the ad takes on screen.
- * @param position position inside a grouped list; affects the container's corners.
+ * @param shape container shape when [showContainer] is `true`. Pass a segmented shape from
+ * `PreferenceItemDefaults.segmentedShapes(index, count).shape` when placing the ad
+ * inside a connected list.
  * @param showContainer `false` renders the ad without a card behind it.
- * @param cornerRadius corner radius used when [position] is [GroupedItemPosition.SINGLE].
  * @param containerColor overrides the card container. The default is an unstyled card, so the ad
  * matches ordinary content; pass a colour on screens that build their cards differently, and in
  * consumer apps whose surfaces are their own. Ignored when [showContainer] is `false`.
@@ -70,9 +70,8 @@ fun NativeAdSlot(
     adUnitId: String,
     presentation: NativeAdPresentation,
     modifier: Modifier = Modifier,
-    position: GroupedItemPosition = GroupedItemPosition.SINGLE,
+    shape: Shape = MaterialTheme.shapes.extraLarge,
     showContainer: Boolean = true,
-    cornerRadius: Dp = SizeConstants.ExtraLargeSize,
     containerColor: Color = Color.Unspecified,
     style: NativeAdStyle = NativeAdStyle(),
     label: String? = null,
@@ -86,9 +85,8 @@ fun NativeAdSlot(
         NativeAdPlaceholder(
             presentation = presentation,
             modifier = modifier,
-            position = position,
+            shape = shape,
             showContainer = showContainer,
-            cornerRadius = cornerRadius,
             containerColor = containerColor,
         )
         return
@@ -124,9 +122,8 @@ fun NativeAdSlot(
 
     NativeAdSurface(
         modifier = modifier.componentEntrance(),
-        position = position,
+        shape = shape,
         showContainer = showContainer,
-        cornerRadius = cornerRadius,
         containerColor = containerColor,
     ) {
         NativeAdRenderer(

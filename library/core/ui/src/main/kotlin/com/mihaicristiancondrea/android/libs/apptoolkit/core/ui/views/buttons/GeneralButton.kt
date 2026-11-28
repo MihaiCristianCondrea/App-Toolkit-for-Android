@@ -31,6 +31,7 @@ import androidx.compose.material3.FilledTonalButton
 import androidx.compose.material3.FilledTonalIconButton
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.IconButtonDefaults
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedIconButton
 import androidx.compose.material3.Text
@@ -49,10 +50,9 @@ import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
-import androidx.compose.ui.unit.dp
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.icons.ToolkitIcon
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.style.bounceClick
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.style.spacing.spacing
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.analytics.Ga4EventData
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.analytics.LocalTelemetry
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.analytics.logGa4Event
@@ -74,7 +74,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.analytics.
  *
  * [iconSize] pins the glyph to one size instead. Left null, the default, it scales with
  * [measurements] (the labelled-button icon size beside a label, the icon-button size when this
- * renders icon-only. Pass [SizeConstants.ButtonIconSize] where an icon should stay the size toolkit
+ * renders icon-only. Pass [ButtonDefaults.IconSize] where an icon should stay the size toolkit
  * icons are drawn at everywhere else, which is what a row of small affordances such as a favourite,
  * share or expand button wants; pass any other [Dp] for a one-off such as a drawer hamburger.
  *
@@ -255,7 +255,7 @@ fun GeneralButton(
             else buttonModifier.size(size = measurements.iconButtonContainerSize),
             enabled = enabled,
             colors = colors,
-            contentPadding = if (hasLabel) labelledContentPadding else PaddingValues(all = 0.dp),
+            contentPadding = if (hasLabel) labelledContentPadding else PaddingValues(all = MaterialTheme.spacing.none),
             content = rowContent,
         )
     }

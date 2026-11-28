@@ -54,10 +54,11 @@ import androidx.compose.ui.text.rememberTextMeasurer
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.R
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.formatters.compassDirection
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.mappers.iconColors
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.models.ToolkitTileIcon
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.catalog.Cookie8Shape
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.style.spacing.spacing
 import kotlin.math.roundToInt
 
 /**
@@ -73,7 +74,7 @@ fun CompassTool(azimuth: Float, compact: Boolean = false) {
 
     Column(
         modifier = Modifier.fillMaxWidth(),
-        verticalArrangement = Arrangement.spacedBy(SizeConstants.MediumSize),
+        verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.medium),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         CompassRose(azimuth, Modifier.size(if (compact) 112.dp else 272.dp).clip(Cookie8Shape))
@@ -97,13 +98,6 @@ fun CompassTool(azimuth: Float, compact: Boolean = false) {
     }
 }
 
-/** The compass point the heading is closest to, such as "Northwest". */
-@Composable
-internal fun compassDirection(azimuth: Float): String {
-    val heading = azimuth.roundToInt().mod(FULL_TURN)
-    return stringResource(DIRECTIONS[((heading + 22) / 45) % DIRECTIONS.size])
-}
-
 /**
  * The turning rose on its own. [face] draws its disc and [degreeLabels] its numbers; the Quick Tools
  * widget leaves both out, as the marketing kit's `compassRose(..., { labels: false, face: false })` does,
@@ -112,7 +106,7 @@ internal fun compassDirection(azimuth: Float): String {
 @Composable
 internal fun CompassRose(azimuth: Float, modifier: Modifier = Modifier, face: Boolean = true, degreeLabels: Boolean = true) {
     val heading = azimuth.roundToInt().mod(FULL_TURN)
-    val direction = stringResource(DIRECTIONS[((heading + 22) / 45) % DIRECTIONS.size])
+    val direction = compassDirection(azimuth = azimuth)
     // The rose turns the short way round: 359° to 1° is a 2° turn, not 358°.
     val turnTracker = remember { floatArrayOf(azimuth) }
     val targetTurn = turnTracker[0] + ((azimuth - turnTracker[0]) % FULL_TURN + 540f) % FULL_TURN - 180f
@@ -257,16 +251,6 @@ private val CARDINALS = listOf(
     R.string.tool_compass_east,
     R.string.tool_compass_south,
     R.string.tool_compass_west,
-)
-private val DIRECTIONS = listOf(
-    R.string.tool_compass_north,
-    R.string.tool_compass_northeast,
-    R.string.tool_compass_east,
-    R.string.tool_compass_southeast,
-    R.string.tool_compass_south,
-    R.string.tool_compass_southwest,
-    R.string.tool_compass_west,
-    R.string.tool_compass_northwest,
 )
 
 @Preview(showBackground = true)

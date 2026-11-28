@@ -46,11 +46,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
-import androidx.compose.ui.unit.dp
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.style.size.size
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.style.spacing.spacing
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.R
-
-/** Height of the app bar's title slot, the search field's height, so the bar never resizes. */
-internal val SearchFieldHeight = 48.dp
 
 @Composable
 internal fun TopBarSearchField(search: TopBarSearch) {
@@ -60,7 +58,7 @@ internal fun TopBarSearchField(search: TopBarSearch) {
         color = MaterialTheme.colorScheme.surfaceContainerHigh,
         modifier = Modifier
             .fillMaxSize()
-            .padding(end = 8.dp),
+            .padding(end = MaterialTheme.spacing.small),
     ) {
         Row(verticalAlignment = Alignment.CenterVertically) {
             Icon(
@@ -68,8 +66,11 @@ internal fun TopBarSearchField(search: TopBarSearch) {
                 contentDescription = null,
                 tint = MaterialTheme.colorScheme.onSurfaceVariant,
                 modifier = Modifier
-                    .padding(start = 14.dp, end = 10.dp)
-                    .size(20.dp),
+                    .padding(
+                        start = MaterialTheme.spacing.mediumIncreased,
+                        end = MaterialTheme.spacing.smallIncreased,
+                    )
+                    .size(size = MaterialTheme.size.small),
             )
             Box(Modifier.weight(1f), contentAlignment = Alignment.CenterStart) {
                 if (state.query.isEmpty()) {

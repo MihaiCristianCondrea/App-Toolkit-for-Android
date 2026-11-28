@@ -9,7 +9,7 @@ metadata:
 
 # Play Store Changelog
 
-Turn engineering changes into release notes that tell users what actually changed. Prioritize clarity, factual accuracy, and fit over filling the character budget.
+Tell users what changed and why it matters to them. Keep each note factual and within the character limit.
 
 ## Non-negotiable requirements
 

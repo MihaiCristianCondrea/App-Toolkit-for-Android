@@ -29,6 +29,8 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.shape.ZeroCornerSize
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -36,7 +38,9 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.luminance
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
+import androidx.compose.ui.unit.dp
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.style.spacing.spacing
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.spacers.ExtraSmallVerticalSpacer
 
 @Composable
 fun MiniUiPreview(
@@ -46,19 +50,16 @@ fun MiniUiPreview(
     accent: Color,
     modifier: Modifier = Modifier,
 ) {
-    val deviceShape = RoundedCornerShape(
-        topStart = SizeConstants.LargeIncreasedSize,
-        topEnd = SizeConstants.LargeIncreasedSize,
-        bottomStart = SizeConstants.ZeroSize,
-        bottomEnd = SizeConstants.ZeroSize
+    val deviceShape = MaterialTheme.shapes.largeIncreased.copy(
+        bottomStart = ZeroCornerSize,
+        bottomEnd = ZeroCornerSize,
     )
 
-    val screenCorner = SizeConstants.MediumSize + SizeConstants.ExtraTinySize
     val screenShape = RoundedCornerShape(
-        topStart = screenCorner,
-        topEnd = screenCorner,
-        bottomStart = SizeConstants.ZeroSize,
-        bottomEnd = SizeConstants.ZeroSize
+        topStart = 14.dp,
+        topEnd = 14.dp,
+        bottomStart = 0.dp,
+        bottomEnd = 0.dp,
     )
 
     val isLight = surface.luminance() > 0.5f
@@ -77,26 +78,26 @@ fun MiniUiPreview(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(
-                    start = SizeConstants.ExtraSmallSize,
-                    end = SizeConstants.ExtraSmallSize,
-                    top = SizeConstants.ExtraSmallSize,
-                    bottom = SizeConstants.ZeroSize
+                    start = MaterialTheme.spacing.extraSmall,
+                    end = MaterialTheme.spacing.extraSmall,
+                    top = MaterialTheme.spacing.extraSmall,
+                    bottom = MaterialTheme.spacing.none,
                 )
                 .clip(screenShape)
                 .background(background)
-                .padding(SizeConstants.ExtraSmallSize),
+                .padding(MaterialTheme.spacing.extraSmall),
         ) {
-            Spacer(modifier = Modifier.height(SizeConstants.ExtraTinySize * 2))
+            ExtraSmallVerticalSpacer()
             PreviewPill(
                 surface = surface,
                 line = line,
-                modifier = Modifier.height(SizeConstants.LargeSize - SizeConstants.ExtraSmallSize)
+                modifier = Modifier.height(12.dp)
             )
-            Spacer(modifier = Modifier.height(SizeConstants.ExtraTinySize * 2))
+            ExtraSmallVerticalSpacer()
             PreviewRowItem(surface = surface, line = line, accent = accent)
-            Spacer(modifier = Modifier.height(SizeConstants.ExtraTinySize * 2))
+            ExtraSmallVerticalSpacer()
             PreviewRowItem(surface = surface, line = line, accent = accent)
-            Spacer(modifier = Modifier.height(SizeConstants.ExtraTinySize * 2))
+            ExtraSmallVerticalSpacer()
             PreviewRowItem(surface = surface, line = line, accent = accent, trailingDot = true)
         }
     }
@@ -113,22 +114,22 @@ private fun PreviewPill(
             .clip(CircleShape)
             .background(surface)
             .padding(
-                horizontal = SizeConstants.SmallSize,
-                vertical = SizeConstants.ExtraTinySize * 2
+                horizontal = MaterialTheme.spacing.small,
+                vertical = MaterialTheme.spacing.extraSmall,
             ),
-        horizontalArrangement = Arrangement.spacedBy(SizeConstants.ExtraTinySize * 2),
+        horizontalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.extraSmall),
     ) {
         Spacer(
             Modifier
-                .height(SizeConstants.SmallSize)
-                .width(SizeConstants.ExtraLargeIncreasedSize)
+                .height(8.dp)
+                .width(32.dp)
                 .clip(CircleShape)
                 .background(line.copy(alpha = 0.9f))
         )
         Spacer(
             Modifier
-                .height(SizeConstants.SmallSize)
-                .width(SizeConstants.LargeIncreasedSize)
+                .height(8.dp)
+                .width(20.dp)
                 .clip(CircleShape)
                 .background(line.copy(alpha = 0.6f))
         )
@@ -144,36 +145,36 @@ private fun PreviewRowItem(
 ) {
     Row(
         modifier = Modifier
-            .clip(RoundedCornerShape(SizeConstants.SmallSize))
+            .clip(MaterialTheme.shapes.small)
             .background(surface)
             .padding(
-                horizontal = SizeConstants.SmallSize,
-                vertical = SizeConstants.ExtraSmallSize + SizeConstants.ExtraTinySize
+                horizontal = MaterialTheme.spacing.small,
+                vertical = MaterialTheme.spacing.extraSmallIncreased,
             ),
-        horizontalArrangement = Arrangement.spacedBy(SizeConstants.SmallSize),
+        horizontalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.small),
     ) {
         Spacer(
             Modifier
-                .size(SizeConstants.SmallSize)
+                .size(8.dp)
                 .clip(CircleShape)
                 .background(accent)
         )
 
         Column(
-            verticalArrangement = Arrangement.spacedBy(SizeConstants.ExtraTinySize * 2),
+            verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.extraSmall),
             modifier = Modifier.weight(1f)
         ) {
             Spacer(
                 Modifier
-                    .height(SizeConstants.ExtraSmallSize)
-                    .width(SizeConstants.SeventyTwoSize)
+                    .height(4.dp)
+                    .width(72.dp)
                     .clip(CircleShape)
                     .background(line.copy(alpha = 0.95f))
             )
             Spacer(
                 Modifier
-                    .height(SizeConstants.ExtraSmallSize)
-                    .width(SizeConstants.FortyFourSize)
+                    .height(4.dp)
+                    .width(44.dp)
                     .clip(CircleShape)
                     .background(line.copy(alpha = 0.65f))
             )
@@ -182,7 +183,7 @@ private fun PreviewRowItem(
         if (trailingDot) {
             Spacer(
                 Modifier
-                    .size(SizeConstants.SmallSize)
+                    .size(8.dp)
                     .clip(CircleShape)
                     .background(line.copy(alpha = 0.75f))
             )

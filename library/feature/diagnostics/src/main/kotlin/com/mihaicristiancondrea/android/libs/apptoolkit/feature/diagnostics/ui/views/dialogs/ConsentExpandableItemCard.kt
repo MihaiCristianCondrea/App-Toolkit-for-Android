@@ -27,12 +27,12 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.OpenInNew
 import androidx.compose.material.icons.filled.Block
 import androidx.compose.material.icons.outlined.ExpandLess
 import androidx.compose.material.icons.outlined.ExpandMore
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -52,7 +52,9 @@ import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
+import androidx.compose.ui.unit.dp
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.style.spacing.spacing
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.spacers.MediumHorizontalSpacer
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.switches.CustomSwitch
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.diagnostics.R
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.diagnostics.ui.constants.DiagnosticsLinks
@@ -84,13 +86,13 @@ fun ConsentExpandableItemCard(
         modifier = modifier
             .fillMaxWidth()
             .animateContentSize(),
-        verticalArrangement = Arrangement.spacedBy(space = SizeConstants.ExtraSmallSize),
+        verticalArrangement = Arrangement.spacedBy(space = MaterialTheme.spacing.extraSmall),
     ) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(vertical = SizeConstants.SmallSize),
+                .padding(vertical = MaterialTheme.spacing.small),
         ) {
             Row(
                 modifier = Modifier
@@ -106,7 +108,7 @@ fun ConsentExpandableItemCard(
                     contentDescription = null,
                     // Drawn at the size of a button's glyph: the default 24dp reads as a control of
                     // its own beside a titleSmall label, rather than as the label's disclosure.
-                    modifier = Modifier.size(size = SizeConstants.ButtonIconSize),
+                    modifier = Modifier.size(size = ButtonDefaults.IconSize),
                 )
 
                 Text(
@@ -151,14 +153,14 @@ fun ConsentExpandableItemCard(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(
-                            horizontal = SizeConstants.MediumSize,
-                            vertical = SizeConstants.SmallSize
+                            horizontal = MaterialTheme.spacing.medium,
+                            vertical = MaterialTheme.spacing.small,
                         ),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Column(
                         modifier = Modifier.weight(1f),
-                        verticalArrangement = Arrangement.spacedBy(SizeConstants.ExtraTinySize)
+                        verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.extraTiny)
                     ) {
                         Text(
                             text = stringResource(R.string.provider_google),
@@ -173,7 +175,7 @@ fun ConsentExpandableItemCard(
                         )
                     }
 
-                    Spacer(modifier = Modifier.width(SizeConstants.MediumSize))
+                    MediumHorizontalSpacer()
 
                     Icon(
                         imageVector = Icons.AutoMirrored.Outlined.OpenInNew,
@@ -185,7 +187,7 @@ fun ConsentExpandableItemCard(
 
         HorizontalDivider(
             color = MaterialTheme.colorScheme.surfaceVariant,
-            thickness = SizeConstants.ExtraTinySize
+            thickness = 2.dp,
         )
     }
 }

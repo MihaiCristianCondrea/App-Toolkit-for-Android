@@ -22,14 +22,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalWindowInfo
 import androidx.compose.ui.unit.Dp
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
+import androidx.compose.ui.unit.dp
 
 object WindowItemFit {
     @Composable
     fun count(
         itemHeight: Dp,
-        itemSpacing: Dp = SizeConstants.ZeroSize,
-        paddingValues: PaddingValues = PaddingValues(all = SizeConstants.ZeroSize)
+        itemSpacing: Dp = 0.dp,
+        paddingValues: PaddingValues = PaddingValues(),
     ): Int {
         val windowInfo = LocalWindowInfo.current
         val density = LocalDensity.current

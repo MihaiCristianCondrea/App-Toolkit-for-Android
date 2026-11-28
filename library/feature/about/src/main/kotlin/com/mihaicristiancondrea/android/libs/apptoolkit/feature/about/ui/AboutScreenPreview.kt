@@ -22,7 +22,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.UiText
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.Loadable
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.GroupedItemPosition
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.ui.contracts.AboutItemAction
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.ui.models.AboutItem
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.ui.models.AboutItemKey
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.ui.states.AboutUiState
@@ -44,20 +44,18 @@ private fun AboutScreenContentPreview() {
                             key = AboutItemKey.APP_NAME,
                             title = UiText.DynamicString(content = "App name"),
                             summary = UiText.DynamicString(content = "App Toolkit Sample"),
-                            position = GroupedItemPosition.FIRST,
                         ),
                         AboutItem.Preference(
                             key = AboutItemKey.APP_BUILD_VERSION,
                             title = UiText.DynamicString(content = "Version"),
                             summary = UiText.DynamicString(content = "1.0.0 (100)"),
-                            position = GroupedItemPosition.LAST,
-                            countsVersionTap = true,
+                            action = AboutItemAction.VersionTap,
                         ),
-                    )
+                    ),
                 ),
             ),
-            onEvent = {},
-            onOpenLicenses = {},
+            onRetry = {},
+            onAction = {},
         )
     }
 }

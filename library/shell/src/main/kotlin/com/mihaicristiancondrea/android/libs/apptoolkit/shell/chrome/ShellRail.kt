@@ -23,7 +23,6 @@ import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.WindowInsetsSides
 import androidx.compose.foundation.layout.fillMaxHeight
@@ -57,12 +56,14 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.navigation3.runtime.NavKey
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.icons.AnimatedToolkitIcon
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.icons.ToolkitIcon
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.style.bounceClick
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.style.size.size
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.style.spacing.spacing
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.AnimatedIconButtonDirection
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.ButtonFeedback
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.spacers.SmallVerticalSpacer
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.DrawerEntry
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.ShellGraph
 import com.mihaicristiancondrea.android.libs.apptoolkit.shell.R
@@ -115,7 +116,7 @@ internal fun ShellRail(
                 modifier = Modifier
                     .align(Alignment.Start)
                     .height(64.dp)
-                    .padding(start = (CollapsedRailWidth - MenuButtonSize) / 2),
+                    .padding(start = (CollapsedRailWidth - MaterialTheme.size.extraExtraLarge) / 2),
                 verticalAlignment = Alignment.CenterVertically,
             ) {
                 AnimatedIconButtonDirection(
@@ -132,14 +133,17 @@ internal fun ShellRail(
                         style = MaterialTheme.typography.titleLarge,
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis,
-                        modifier = Modifier.padding(start = 8.dp, end = 16.dp),
+                        modifier = Modifier.padding(
+                            start = MaterialTheme.spacing.small,
+                            end = MaterialTheme.spacing.large,
+                        ),
                     )
                 }
             }
-            val itemModifier = Modifier.padding(horizontal = 12.dp * openness)
+            val itemModifier = Modifier.padding(horizontal = MaterialTheme.spacing.medium * openness)
             PinnedFooterColumn(
                 horizontalAlignment = alignment,
-                spacing = 4.dp * (1f - openness),
+                spacing = MaterialTheme.spacing.extraSmall * (1f - openness),
                 top = {
                     graph.tabs.forEachIndexed { index, tab ->
                         val selected = index == selectedIndex
@@ -182,7 +186,7 @@ internal fun ShellRail(
                             entry.opens(selectedEntry)
                         )
                     }
-                    Spacer(Modifier.size(8.dp))
+                    SmallVerticalSpacer()
                 },
             )
         }
@@ -198,8 +202,8 @@ private fun RailLabel(label: Int) {
 private fun RailDivider(expanded: Boolean) {
     HorizontalDivider(
         Modifier.padding(
-            horizontal = if (expanded) 28.dp else 24.dp,
-            vertical = 8.dp
+            horizontal = if (expanded) MaterialTheme.spacing.extraLarge else MaterialTheme.spacing.extraLargeCompact,
+            vertical = MaterialTheme.spacing.small,
         )
     )
 }
@@ -230,7 +234,7 @@ private fun RailEntry(
                     clickCount = clicks,
                     contentDescription = null,
                     modifier = Modifier
-                        .size(SizeConstants.TwentyFourSize)
+                        .size(size = MaterialTheme.size.medium)
                         .bounceClick(),
                 )
             }
@@ -244,5 +248,4 @@ private fun RailEntry(
 }
 
 internal val CollapsedRailWidth: Dp = 96.dp
-private val MenuButtonSize: Dp = 48.dp
 internal val ExpandedRailWidth: Dp = 280.dp

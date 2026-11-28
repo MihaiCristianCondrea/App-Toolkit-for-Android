@@ -31,7 +31,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import coil3.compose.AsyncImage
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.style.size.size
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.spacers.LargeHorizontalSpacer
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.spacers.LargeVerticalSpacer
 
@@ -84,7 +84,7 @@ fun VersionInfoAlertDialogContent(
         AsyncImage(
             model = appIcon,
             contentDescription = null,
-            modifier = Modifier.size(size = SizeConstants.LauncherIconSize),
+            modifier = Modifier.size(size = MaterialTheme.size.extraExtraLarge),
         )
         LargeHorizontalSpacer()
         Column {

@@ -48,7 +48,7 @@ import androidx.compose.ui.graphics.drawscope.translate
  * ```kotlin
  * Box(
  *     modifier = Modifier
- *         .size(SizeConstants.OneHundredSize)
+ *         .size(100.dp)
  *         .shimmerEffect()
  * )
  * ```

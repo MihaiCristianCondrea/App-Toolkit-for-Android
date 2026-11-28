@@ -56,7 +56,7 @@ import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.R
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.contracts.BillSplitterToolEvent
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.states.BillSplitterToolUiState
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.utils.extensions.toToolLongOrNull
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.style.spacing.spacing
 import java.text.NumberFormat
 
 @Composable
@@ -65,8 +65,8 @@ fun BillSplitterTool(state: BillSplitterToolUiState, onEvent: (BillSplitterToolE
     val money: (java.math.BigDecimal) -> String = { formatBillAmount(it, state.currency, locale) }
     var currenciesOpen by remember { mutableStateOf(false) }
     val people = state.people.toToolLongOrNull()
-    Column(verticalArrangement = Arrangement.spacedBy(SizeConstants.MediumSize)) {
-        Row(horizontalArrangement = Arrangement.spacedBy(SizeConstants.SmallSize), verticalAlignment = Alignment.CenterVertically) {
+    Column(verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.medium)) {
+        Row(horizontalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.small), verticalAlignment = Alignment.CenterVertically) {
             OutlinedTextField(value = state.bill, onValueChange = { onEvent(BillSplitterToolEvent.BillChanged(it)) },
                 label = { Text(stringResource(R.string.tool_bill_amount)) }, keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
                 singleLine = true, isError = state.invalidInput, modifier = Modifier.weight(1f))
@@ -98,7 +98,7 @@ fun BillSplitterTool(state: BillSplitterToolUiState, onEvent: (BillSplitterToolE
         }
         }
         Row(
-            horizontalArrangement = Arrangement.spacedBy(SizeConstants.SmallSize),
+            horizontalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.small),
             verticalAlignment = Alignment.CenterVertically,
         ) {
             IconButton(
@@ -131,19 +131,18 @@ fun BillSplitterTool(state: BillSplitterToolUiState, onEvent: (BillSplitterToolE
                 modifier = Modifier.fillMaxWidth(),
                 shape = MaterialTheme.shapes.extraLarge,
                 color = MaterialTheme.colorScheme.primaryContainer,
-                contentColor = MaterialTheme.colorScheme.onPrimaryContainer,
             ) {
                 Column(
-                    modifier = Modifier.padding(SizeConstants.LargeSize),
-                    verticalArrangement = Arrangement.spacedBy(SizeConstants.MediumSize),
+                    modifier = Modifier.padding(MaterialTheme.spacing.large),
+                    verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.medium),
                 ) {
                     Text(stringResource(R.string.tool_bill_per_person), style = MaterialTheme.typography.labelLarge)
                     Text(money(result.perPerson), style = MaterialTheme.typography.displayMedium)
-                    Row(horizontalArrangement = Arrangement.spacedBy(SizeConstants.MediumSize)) {
+                    Row(horizontalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.medium)) {
                         BillSummary(stringResource(R.string.tool_bill_total), money(result.total), Modifier.weight(1f))
                         BillSummary(stringResource(R.string.tool_bill_tip), money(result.tip), Modifier.weight(1f))
                     }
-                    Row(horizontalArrangement = Arrangement.spacedBy(SizeConstants.SmallSize)) {
+                    Row(horizontalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.small)) {
                         Icon(ToolSymbols.Info, contentDescription = null)
                         Text(stringResource(R.string.bill_rounding, state.currency.digits), style = MaterialTheme.typography.bodySmall)
                     }
@@ -155,7 +154,7 @@ fun BillSplitterTool(state: BillSplitterToolUiState, onEvent: (BillSplitterToolE
 
 @Composable
 private fun BillSummary(label: String, amount: String, modifier: Modifier = Modifier) {
-    Column(modifier, verticalArrangement = Arrangement.spacedBy(SizeConstants.ExtraTinySize)) {
+    Column(modifier, verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.extraTiny)) {
         Text(label, style = MaterialTheme.typography.labelMedium)
         Text(amount, style = MaterialTheme.typography.bodyLarge)
     }

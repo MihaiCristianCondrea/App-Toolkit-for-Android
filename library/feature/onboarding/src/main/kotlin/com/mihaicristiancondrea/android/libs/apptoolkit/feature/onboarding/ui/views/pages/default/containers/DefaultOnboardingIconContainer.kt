@@ -28,7 +28,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
+import androidx.compose.ui.unit.dp
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.style.spacing.spacing
 
 /** Displays [imageVector] centered inside an expressive decorative indicator container. */
 @OptIn(ExperimentalMaterial3ExpressiveApi::class)
@@ -38,17 +39,17 @@ fun DefaultOnboardingIconContainer(imageVector: ImageVector) {
         contentAlignment = Alignment.Center,
     ) {
         LoadingIndicator(
-            modifier = Modifier.size(size = SizeConstants.TwoHundredFiftySixSize),
+            modifier = Modifier.size(size = 256.dp),
         )
 
         Box(
-            modifier = Modifier.padding(all = SizeConstants.LargeSize),
+            modifier = Modifier.padding(all = MaterialTheme.spacing.large),
             contentAlignment = Alignment.Center,
         ) {
             Icon(
                 imageVector = imageVector,
                 contentDescription = null,
-                modifier = Modifier.size(size = SizeConstants.EightySize),
+                modifier = Modifier.size(size = 80.dp),
                 tint = MaterialTheme.colorScheme.onSecondary,
             )
         }

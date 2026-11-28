@@ -33,10 +33,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.dp
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.links.AppLinks
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.context.openUrl
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.icons.ToolkitIcon
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.style.spacing.spacing
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.GeneralButton
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.GeneralButtonStyle
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.spacers.MediumVerticalSpacer
@@ -52,8 +53,8 @@ fun PrivacyPolicySection() {
 
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
         HorizontalDivider(
-            modifier = Modifier.padding(vertical = SizeConstants.LargeSize),
-            thickness = SizeConstants.ExtraTinySize / 4,
+            modifier = Modifier.padding(vertical = MaterialTheme.spacing.large),
+            thickness = 0.5.dp,
         )
 
         Text(
@@ -61,7 +62,7 @@ fun PrivacyPolicySection() {
             style = MaterialTheme.typography.bodySmall,
             textAlign = TextAlign.Center,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
-            modifier = Modifier.padding(horizontal = SizeConstants.LargeIncreasedSize + SizeConstants.ExtraSmallSize),
+            modifier = Modifier.padding(horizontal = MaterialTheme.spacing.extraLargeCompact),
         )
 
         MediumVerticalSpacer()

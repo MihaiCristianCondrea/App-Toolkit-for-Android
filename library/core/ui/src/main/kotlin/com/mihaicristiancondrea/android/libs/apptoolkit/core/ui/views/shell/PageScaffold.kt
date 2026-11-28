@@ -26,7 +26,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.unit.dp
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.style.spacing.spacing
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.layout.ArticleTopBarHost
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.layout.ContentCardShape
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.layout.LocalArticleTopBarHost
@@ -200,7 +200,10 @@ fun PageScaffold(
         containerColor = if (carded) Color.Transparent else MaterialTheme.colorScheme.background,
         contentColor = MaterialTheme.colorScheme.onBackground,
         floatingActionButton = {
-            Column(horizontalAlignment = Alignment.End, verticalArrangement = Arrangement.spacedBy(16.dp)) {
+            Column(
+                horizontalAlignment = Alignment.End,
+                verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.large),
+            ) {
                 ToolkitFabColumn(fabs + fabHost.fabs, expanded = fabScroll.expanded)
                 floatingActionButton()
             }

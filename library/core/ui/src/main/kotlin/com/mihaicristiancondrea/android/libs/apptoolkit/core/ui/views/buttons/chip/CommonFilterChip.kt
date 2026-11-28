@@ -112,7 +112,11 @@ private fun FilterChipLeadingIcon(
     icon: ToolkitIcon?,
 ) {
     when {
-        selected -> Icon(imageVector = Icons.Filled.Check, contentDescription = null)
+        selected -> Icon(
+            imageVector = Icons.Filled.Check,
+            contentDescription = null,
+            modifier = Modifier.size(size = FilterChipDefaults.IconSize),
+        )
 
         icon != null -> AnimatedToolkitIcon(
             icon = icon,

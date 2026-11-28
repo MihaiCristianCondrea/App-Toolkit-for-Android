@@ -23,6 +23,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.PagerState
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
@@ -30,7 +31,8 @@ import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.Dp
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
+import androidx.compose.ui.unit.dp
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.style.spacing.spacing
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.modifiers.hapticPagerSwipe
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.spacers.LargeVerticalSpacer
 import kotlinx.collections.immutable.toImmutableList
@@ -70,7 +72,7 @@ import kotlin.math.absoluteValue
 fun <T> CustomCarousel(
     items: List<T>,
     sidePadding: Dp,
-    shapeSize: Dp = SizeConstants.MediumSize,
+    shapeSize: Dp = 12.dp,
     pagerState: PagerState,
     itemContent: @Composable (item: T) -> Unit
 ) {
@@ -104,8 +106,8 @@ fun <T> CustomCarousel(
             pagerState = pagerState,
             modifier = Modifier
                 .align(Alignment.CenterHorizontally)
-                .padding(bottom = SizeConstants.SmallSize),
-            dotSize = SizeConstants.MediumSize / 2,
+                .padding(bottom = MaterialTheme.spacing.small),
+            dotSize = 6.dp,
         )
     }
 }

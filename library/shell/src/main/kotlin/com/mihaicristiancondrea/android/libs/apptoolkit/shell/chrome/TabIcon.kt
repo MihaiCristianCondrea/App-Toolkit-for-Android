@@ -23,9 +23,10 @@ import androidx.compose.material3.BadgedBox
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
+import androidx.compose.material3.MaterialTheme
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.icons.AnimatedToolkitIcon
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.style.bounceClick
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.style.size.size
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.ShellTab
 
 /**
@@ -43,7 +44,7 @@ internal fun TabIcon(tab: ShellTab, selected: Boolean, clicks: Int) {
             clickCount = clicks,
             contentDescription = null,
             modifier = Modifier
-                .size(SizeConstants.TwentyFourSize)
+                .size(size = MaterialTheme.size.medium)
                 .bounceClick(),
         )
     }

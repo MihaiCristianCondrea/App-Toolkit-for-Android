@@ -22,12 +22,10 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Support
 import androidx.compose.material3.Card
@@ -41,64 +39,51 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.RectangleShape
+import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.hapticfeedback.HapticFeedback
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.GroupedItemPosition
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.groupedCorners
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.style.size.size
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.style.spacing.spacing
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.spacers.LargeHorizontalSpacer
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.R
 
 /**
  * Displays the FAQ contact action and delegates the contact flow to the caller.
  *
- * @param groupedPosition Optional position in a grouped FAQ content section.
+ * @param shape Shape applied to the card surface.
  */
 @OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
 fun ContactUsCard(
     onClick: () -> Unit,
-    groupedPosition: GroupedItemPosition? = null,
+    modifier: Modifier = Modifier,
+    shape: Shape = MaterialTheme.shapes.largeIncreased.copy(
+        topStart = MaterialTheme.shapes.extraSmall.topStart,
+        topEnd = MaterialTheme.shapes.extraSmall.topEnd,
+    ),
 ) {
     val hapticFeedback: HapticFeedback = LocalHapticFeedback.current
-    val cardModifier = Modifier
-        .fillMaxWidth()
-        .let { currentModifier ->
-            groupedPosition?.let {
-                currentModifier.groupedCorners(
-                    position = it,
-                    outerRadius = SizeConstants.ExtraLargeIncreasedSize,
-                )
-            } ?: currentModifier
-        }
     Card(
-        modifier = cardModifier,
+        modifier = modifier.fillMaxWidth(),
         onClick = {
             hapticFeedback.performHapticFeedback(hapticFeedbackType = HapticFeedbackType.ContextClick)
             onClick()
         },
-        shape = groupedPosition?.let { RectangleShape }
-            ?: RoundedCornerShape(
-                topStart = SizeConstants.ExtraSmallSize,
-                topEnd = SizeConstants.ExtraSmallSize,
-                bottomStart = SizeConstants.LargeIncreasedSize,
-                bottomEnd = SizeConstants.LargeIncreasedSize,
-            ),
+        shape = shape,
     ) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(all = SizeConstants.LargeSize),
+                .padding(all = MaterialTheme.spacing.large),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.Center,
         ) {
             Box(
                 contentAlignment = Alignment.Center,
-                modifier = Modifier.size(size = SizeConstants.LauncherIconSize)
+                modifier = Modifier.size(size = MaterialTheme.size.extraExtraLarge)
             ) {
                 Box(
                     modifier = Modifier
@@ -114,9 +99,7 @@ fun ContactUsCard(
             }
             LargeHorizontalSpacer()
             Column(
-                modifier = Modifier
-                    .weight(weight = 1f)
-                    .fillMaxHeight()
+                modifier = Modifier.weight(weight = 1f),
             ) {
                 Text(
                     text = stringResource(id = R.string.contact_us),

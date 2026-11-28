@@ -28,6 +28,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Close
 import androidx.compose.material.icons.outlined.Search
 import androidx.compose.material.icons.outlined.Settings
+import androidx.compose.material3.ListItemDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -41,8 +42,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.icons.ToolkitIcon
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.style.spacing.spacing
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.settings.SettingsCategory
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.settings.SettingsConfig
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.settings.SettingsPreference
@@ -56,9 +57,8 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.fields.Gen
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.modifiers.animatedItem
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.modifiers.animatedItemsIndexed
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.PreferenceCategoryItem
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.PreferenceItemDefaults
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.SettingsPreferenceItem
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.groupedItemPosition
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.groupedPreferenceItem
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.shell.contentPadding
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.spacers.LargeVerticalSpacer
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.settings.R
@@ -191,7 +191,7 @@ fun SettingsList(
     LazyColumn(
         contentPadding = paddingValues,
         modifier = modifier.fillMaxSize(),
-        verticalArrangement = Arrangement.spacedBy(space = SizeConstants.ExtraTinySize),
+        verticalArrangement = Arrangement.spacedBy(space = ListItemDefaults.SegmentedGap),
     ) {
         if (onQueryChange != null) {
             animatedItem(key = "settings_search") {
@@ -211,8 +211,8 @@ fun SettingsList(
                     singleLine = true,
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(horizontal = SizeConstants.LargeSize)
-                        .padding(top = SizeConstants.MediumSize),
+                        .padding(horizontal = MaterialTheme.spacing.large)
+                        .padding(top = MaterialTheme.spacing.medium),
                 )
             }
         }
@@ -241,11 +241,6 @@ fun SettingsList(
                         } ?: "settings_preference_${categoryIndex}_$index"
                     },
                 ) { index: Int, preference: SettingsPreference ->
-                    val position = groupedItemPosition(
-                        index = index,
-                        size = category.preferences.size,
-                    )
-
                     SettingsPreferenceItem(
                         icon = preference.icon,
                         title = preference.title,
@@ -253,13 +248,18 @@ fun SettingsList(
                         useIconContainer = preference.useIconContainer,
                         iconColor = preference.iconColor,
                         iconContainerColor = preference.iconContainerColor,
+                        shapes = PreferenceItemDefaults.segmentedShapes(
+                            index = index,
+                            count = category.preferences.size,
+                            outerShape = MaterialTheme.shapes.extraLarge,
+                        ),
                         ga4EventProvider = {
                             settingsPreferenceTapEvent(preferenceKey = preference.key)
                         },
                         onClick = { onPreferenceClick(preference) },
-                        modifier = Modifier.groupedPreferenceItem(
-                            position = position,
-                            outerRadius = SizeConstants.ExtraLargeSize,
+                        modifier = Modifier.padding(
+                            horizontal = MaterialTheme.spacing.large,
+                            vertical = if (category.preferences.size == 1) MaterialTheme.spacing.extraTiny else MaterialTheme.spacing.none,
                         ),
                     )
                 }
@@ -273,7 +273,9 @@ private fun LazyListScope.searchResults(
     results: List<SettingsPreference>,
     onPreferenceClick: (SettingsPreference) -> Unit,
 ) {
-    animatedItem(key = "settings_search_spacing") { LargeVerticalSpacer() }
+    animatedItem(key = "settings_search_spacing") {
+        LargeVerticalSpacer()
+    }
     if (results.isEmpty()) {
         animatedItem(key = "settings_search_empty") {
             Text(
@@ -283,7 +285,7 @@ private fun LazyListScope.searchResults(
                 textAlign = TextAlign.Center,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(all = SizeConstants.LargeSize),
+                    .padding(all = MaterialTheme.spacing.large),
             )
         }
         return
@@ -301,10 +303,15 @@ private fun LazyListScope.searchResults(
             useIconContainer = preference.useIconContainer,
             iconColor = preference.iconColor,
             iconContainerColor = preference.iconContainerColor,
+            shapes = PreferenceItemDefaults.segmentedShapes(
+                index = index,
+                count = results.size,
+                outerShape = MaterialTheme.shapes.extraLarge,
+            ),
             onClick = { onPreferenceClick(preference) },
-            modifier = Modifier.groupedPreferenceItem(
-                position = groupedItemPosition(index = index, size = results.size),
-                outerRadius = SizeConstants.ExtraLargeSize,
+            modifier = Modifier.padding(
+                horizontal = MaterialTheme.spacing.large,
+                vertical = if (results.size == 1) MaterialTheme.spacing.extraTiny else MaterialTheme.spacing.none,
             ),
         )
     }

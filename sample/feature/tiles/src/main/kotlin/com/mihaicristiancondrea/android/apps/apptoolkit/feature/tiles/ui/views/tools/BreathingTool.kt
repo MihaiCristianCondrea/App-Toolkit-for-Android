@@ -40,7 +40,8 @@ import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.R
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.models.BreathingPhase
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.models.BreathingState
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.ResultPill
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.style.size.size
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.style.spacing.spacing
 
 @Composable
 fun BreathingTool(state: BreathingState) {
@@ -51,14 +52,14 @@ fun BreathingTool(state: BreathingState) {
     )
 
     Column(
-        verticalArrangement = Arrangement.spacedBy(SizeConstants.MediumSize),
+        verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.medium),
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier.fillMaxWidth()
     ) {
 
         Box(
             modifier = Modifier
-                .size(SizeConstants.TwoHundredSize)
+                .size(200.dp)
                 .graphicsLayer {
                     val scale = scaleState.value
                     scaleX = scale
@@ -77,7 +78,7 @@ fun BreathingTool(state: BreathingState) {
             Icon(
                 imageVector = ToolSymbols.Favorite,
                 contentDescription = null,
-                modifier = Modifier.size(64.dp),
+                modifier = Modifier.size(size = MaterialTheme.size.huge),
                 tint = when (state.phase) {
                     BreathingPhase.INHALE -> MaterialTheme.colorScheme.primary
                     BreathingPhase.EXHALE -> MaterialTheme.colorScheme.secondary
@@ -86,7 +87,7 @@ fun BreathingTool(state: BreathingState) {
             )
         }
         Row(
-            horizontalArrangement = Arrangement.spacedBy(4.dp),
+            horizontalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.extraSmall),
             verticalAlignment = Alignment.CenterVertically
         ) {
             ResultPill(label = stringResource(when (state.phase) {

@@ -32,6 +32,7 @@ import androidx.compose.material.icons.outlined.FormatItalic
 import androidx.compose.material.icons.outlined.FormatListNumbered
 import androidx.compose.material.icons.outlined.FormatQuote
 import androidx.compose.material.icons.outlined.Link
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -43,8 +44,8 @@ import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.TextFieldValue
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.icons.ToolkitIcon
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.style.spacing.spacing
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.R
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.GeneralButton
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.GeneralButtonStyle
@@ -82,7 +83,7 @@ internal fun MarkdownFormattingBar(
             modifier = Modifier
                 .fillMaxWidth()
                 .horizontalScroll(state = rememberScrollState())
-                .padding(horizontal = SizeConstants.SmallSize),
+                .padding(horizontal = MaterialTheme.spacing.small),
             verticalAlignment = Alignment.CenterVertically,
         ) {
             FormattingAction(
@@ -216,7 +217,7 @@ internal fun MarkdownFormattingBar(
                 text = stringResource(id = R.string.markdown_supported),
                 style = MaterialTheme.typography.labelSmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
-                modifier = Modifier.padding(horizontal = SizeConstants.SmallSize),
+                modifier = Modifier.padding(horizontal = MaterialTheme.spacing.small),
             )
         }
     }
@@ -233,6 +234,6 @@ private fun FormattingAction(
         style = GeneralButtonStyle.Text,
         icon = ToolkitIcon.Vector(imageVector = icon),
         contentDescription = stringResource(id = descriptionResId),
-        iconSize = SizeConstants.ButtonIconSize,
+        iconSize = ButtonDefaults.IconSize,
     )
 }

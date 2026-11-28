@@ -20,7 +20,7 @@ package com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.ui.contra
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.UiText
 
 /**
- * Click interactions supported by About screen preference items.
+ * Click interactions supported by About screen preferences.
  */
 sealed interface AboutItemAction {
     /** Opens the shared open-source licenses destination. */
@@ -36,4 +36,7 @@ sealed interface AboutItemAction {
         val text: UiText,
         val successMessage: UiText? = null,
     ) : AboutItemAction
+
+    /** Counts a tap on the host build-version row. */
+    data object VersionTap : AboutItemAction
 }

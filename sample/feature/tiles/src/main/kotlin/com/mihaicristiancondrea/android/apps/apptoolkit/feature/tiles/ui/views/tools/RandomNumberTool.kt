@@ -18,7 +18,6 @@
 package com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.tools
 
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.icons.ToolSymbols
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.FlowRow
@@ -26,6 +25,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.icons.ToolkitIcon
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.style.spacing.spacing
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardOptions
@@ -56,7 +56,6 @@ import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.R
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.contracts.RandomNumberToolEvent
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.states.RandomNumberToolUiState
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.utils.extensions.toToolLongOrNull
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.GeneralButton
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.digits.AnimatedDigit
 import java.text.NumberFormat
@@ -65,22 +64,22 @@ import java.text.NumberFormat
 fun RandomNumberTool(state: RandomNumberToolUiState, onEvent: (RandomNumberToolEvent) -> Unit) {
     val locale = LocalConfiguration.current.locales[0]
     val numberFormat = remember(locale) { NumberFormat.getIntegerInstance(locale) }
-    Column(verticalArrangement = Arrangement.spacedBy(SizeConstants.MediumSize)) {
+    Column(verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.medium)) {
         Surface(
             modifier = Modifier.fillMaxWidth(),
             shape = MaterialTheme.shapes.extraLarge,
             color = MaterialTheme.colorScheme.primaryContainer,
         ) {
             Column(
-                modifier = Modifier.heightIn(min = 168.dp).padding(horizontal = 16.dp, vertical = 24.dp),
+                modifier = Modifier.heightIn(min = 168.dp).padding(horizontal = MaterialTheme.spacing.large, vertical = MaterialTheme.spacing.extraLargeCompact),
                 horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.spacedBy(8.dp),
+                verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.small),
             ) {
                 Text(stringResource(if (state.result == null) R.string.random_ready else R.string.random_result), style = MaterialTheme.typography.labelLarge)
                 val result = state.result?.let(numberFormat::format) ?: "?"
                 val textStyle = if (result.length > 12) MaterialTheme.typography.headlineLarge else MaterialTheme.typography.displayLarge.copy(fontSize = 76.sp, lineHeight = 88.sp)
                 if (state.result == null) {
-                    Text(result, style = textStyle, color = MaterialTheme.colorScheme.onPrimaryContainer)
+                    Text(result, style = textStyle)
                 } else {
                     // Keep signed, localized numbers in reading order and announce the complete value once.
                     CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Ltr) {
@@ -116,9 +115,9 @@ fun RandomNumberTool(state: RandomNumberToolUiState, onEvent: (RandomNumberToolE
                 ) { Text(stringResource(R.string.tool_random_range, 1, maximum)) }
             }
         }
-        Row(horizontalArrangement = Arrangement.spacedBy(4.dp)) {
+        Row(horizontalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.extraSmall)) {
             TextField(
-                shape = RoundedCornerShape(12.dp),
+                shape = MaterialTheme.shapes.medium,
                 value = state.minimum,
                 onValueChange = { onEvent(RandomNumberToolEvent.MinimumChanged(it)) },
                 label = { Text(stringResource(R.string.tool_random_minimum)) },
@@ -128,7 +127,7 @@ fun RandomNumberTool(state: RandomNumberToolUiState, onEvent: (RandomNumberToolE
                 modifier = Modifier.weight(1f),
             )
             TextField(
-                shape = RoundedCornerShape(12.dp),
+                shape = MaterialTheme.shapes.medium,
                 value = state.maximum,
                 onValueChange = { onEvent(RandomNumberToolEvent.MaximumChanged(it)) },
                 label = { Text(stringResource(R.string.tool_random_maximum)) },

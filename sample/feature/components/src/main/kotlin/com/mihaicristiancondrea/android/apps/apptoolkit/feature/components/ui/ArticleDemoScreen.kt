@@ -33,7 +33,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.mihaicristiancondrea.android.apps.apptoolkit.core.analytics.models.AppScreenTracking
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.components.R
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.style.spacing.spacing
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.ScreenHost
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.modifiers.animatedItem
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.modifiers.animatedItems
@@ -63,24 +63,25 @@ fun ArticleDemoScreen(branded: Boolean) {
         LazyColumn(state = listState, contentPadding = contentPadding()) {
             animatedItem(key = "headline") {
                 Column(
-                    modifier = Modifier.padding(all = SizeConstants.LargeSize),
-                    verticalArrangement = Arrangement.spacedBy(SizeConstants.MediumSize),
+                    modifier = Modifier.padding(all = MaterialTheme.spacing.large),
+                    verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.medium),
                 ) {
-                    if (brand != null) {
-                        Image(painter = brand, contentDescription = null, modifier = Modifier.height(32.dp))
+                    brand?.let { brandImage ->
+                        Image(painter = brandImage, contentDescription = null, modifier = Modifier.height(32.dp))
                     }
                     Text(text = headline, style = MaterialTheme.typography.headlineMedium)
                 }
             }
-            animatedItems(items = Paragraphs) {
+            animatedItems(items = List(size = 16) { it }) {
                 Text(
                     text = paragraph,
                     style = MaterialTheme.typography.bodyLarge,
-                    modifier = Modifier.padding(horizontal = SizeConstants.LargeSize, vertical = SizeConstants.SmallSize),
+                    modifier = Modifier.padding(
+                        horizontal = MaterialTheme.spacing.large,
+                        vertical = MaterialTheme.spacing.small,
+                    ),
                 )
             }
         }
     }
 }
-
-private val Paragraphs: List<Int> = List(size = 16) { it }

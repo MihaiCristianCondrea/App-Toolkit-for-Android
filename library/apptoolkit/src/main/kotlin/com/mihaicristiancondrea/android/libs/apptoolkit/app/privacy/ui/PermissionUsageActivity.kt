@@ -40,7 +40,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.shell.ShellHost
  * instead would bring the app's own task forward (or, for a `singleTask` activity, push the page
  * onto whatever the person had open) and back would then stay in the app.
  */
-class PermissionUsageActivity : ComponentActivity() {
+class PermissionUsageActivity : ComponentActivity() { // TODO: We need to see if these should be moved somewhere else like its own module
 
     override fun onCreate(savedInstanceState: Bundle?) {
         enableEdgeToEdge()

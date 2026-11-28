@@ -36,8 +36,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.unit.dp
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.style.spacing.spacing
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.dividers.HorizontalWavyDivider
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.changelog.R
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.changelog.data.models.ChangelogRelease
@@ -56,17 +55,17 @@ internal fun ChangelogReleaseList(releases: ImmutableList<ChangelogRelease>) {
                 .fillMaxSize()
                 .testTag(tag = ChangelogTestTags.RELEASES),
             state = listState,
-            contentPadding = PaddingValues(bottom = SizeConstants.LargeSize),
+            contentPadding = PaddingValues(bottom = MaterialTheme.spacing.large),
         ) {
             itemsIndexed(items = releases) { index, release ->
                 Column(modifier = Modifier.fillMaxWidth()) {
                     if (index > 0) {
-                        HorizontalWavyDivider(modifier = Modifier.padding(vertical = SizeConstants.LargeSize))
+                        HorizontalWavyDivider(modifier = Modifier.padding(vertical = MaterialTheme.spacing.large))
                     }
                     Row(
                         modifier = Modifier.fillMaxWidth(),
                         verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.spacedBy(space = SizeConstants.SmallSize),
+                        horizontalArrangement = Arrangement.spacedBy(space = MaterialTheme.spacing.small),
                     ) {
                         Column(modifier = Modifier.weight(weight = 1f)) {
                             if (release.heading.isNotEmpty()) {
@@ -86,14 +85,13 @@ internal fun ChangelogReleaseList(releases: ImmutableList<ChangelogRelease>) {
                             Surface(
                                 shape = MaterialTheme.shapes.small,
                                 color = MaterialTheme.colorScheme.secondaryContainer,
-                                contentColor = MaterialTheme.colorScheme.onSecondaryContainer,
                             ) {
                                 Text(
                                     text = stringResource(id = R.string.changelog_current),
                                     style = MaterialTheme.typography.labelMedium,
                                     modifier = Modifier.padding(
-                                        horizontal = SizeConstants.SmallSize,
-                                        vertical = SizeConstants.ExtraTinySize,
+                                        horizontal = MaterialTheme.spacing.small,
+                                        vertical = MaterialTheme.spacing.extraTiny,
                                     ),
                                 )
                             }
@@ -101,16 +99,16 @@ internal fun ChangelogReleaseList(releases: ImmutableList<ChangelogRelease>) {
                     }
                     release.sections.forEachIndexed { partIndex, part ->
                         if (partIndex > 0) {
-                            HorizontalWavyDivider(modifier = Modifier.padding(vertical = SizeConstants.LargeSize))
+                            HorizontalWavyDivider(modifier = Modifier.padding(vertical = MaterialTheme.spacing.large))
                         }
                         MarkdownText(
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .padding(
                                     top = if ((partIndex == 0) && release.heading.isNotEmpty()) {
-                                        SizeConstants.LargeSize
+                                        MaterialTheme.spacing.large
                                     } else {
-                                        0.dp
+                                        MaterialTheme.spacing.none
                                     },
                                 ),
                             markdown = part,

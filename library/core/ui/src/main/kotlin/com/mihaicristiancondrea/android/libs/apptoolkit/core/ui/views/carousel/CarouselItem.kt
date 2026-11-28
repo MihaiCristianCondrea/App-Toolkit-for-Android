@@ -28,14 +28,14 @@ import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.dp
 import androidx.compose.ui.util.lerp
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
 
 @Composable
 fun <T> CarouselItem(
     item: T,
     pageOffset: Float,
-    shapeSize: Dp = SizeConstants.MediumSize,
+    shapeSize: Dp = 12.dp,
     itemContent: @Composable (item: T) -> Unit,
 ) {
     val stableItem by rememberUpdatedState(newValue = item)

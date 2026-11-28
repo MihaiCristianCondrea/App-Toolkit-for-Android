@@ -21,7 +21,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
@@ -30,20 +29,16 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.RectangleShape
-import androidx.compose.ui.graphics.isSpecified
+import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.unit.Dp
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.style.spacing.spacing
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.R
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.GroupedItemPosition
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.groupedCorners
 
 /**
  * Compose container for a loaded native ad. Composed only after an ad is available to avoid
  * leaving an empty card when loading fails.
  *
- * @param position [GroupedItemPosition.SINGLE] uses standalone rounded corners.
+ * @param shape Container shape applied directly to the [Card].
  * @param showContainer `false` leaves the surface to the host.
  * @param containerColor [Color.Unspecified] uses Material card defaults; set a color to match a
  * custom host surface.
@@ -51,9 +46,8 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preference
 @Composable
 internal fun NativeAdSurface(
     modifier: Modifier = Modifier,
-    position: GroupedItemPosition = GroupedItemPosition.SINGLE,
+    shape: Shape = MaterialTheme.shapes.extraLarge,
     showContainer: Boolean = true,
-    cornerRadius: Dp = SizeConstants.ExtraLargeSize,
     containerColor: Color = Color.Unspecified,
     content: @Composable () -> Unit,
 ) {
@@ -62,22 +56,10 @@ internal fun NativeAdSurface(
         return
     }
 
-    val grouped: Boolean = position != GroupedItemPosition.SINGLE
     Card(
-        modifier = if (grouped) {
-            modifier.groupedCorners(
-                position = position,
-                outerRadius = SizeConstants.ExtraLargeIncreasedSize,
-            )
-        } else {
-            modifier
-        },
-        shape = if (grouped) RectangleShape else RoundedCornerShape(size = cornerRadius),
-        colors = if (containerColor.isSpecified) {
-            CardDefaults.cardColors(containerColor = containerColor)
-        } else {
-            CardDefaults.cardColors()
-        },
+        modifier = modifier,
+        shape = shape,
+        colors = CardDefaults.cardColors(containerColor = containerColor),
     ) {
         content()
     }
@@ -90,16 +72,14 @@ internal fun NativeAdSurface(
 internal fun NativeAdPlaceholder(
     presentation: NativeAdPresentation,
     modifier: Modifier = Modifier,
-    position: GroupedItemPosition = GroupedItemPosition.SINGLE,
+    shape: Shape = MaterialTheme.shapes.extraLarge,
     showContainer: Boolean = true,
-    cornerRadius: Dp = SizeConstants.ExtraLargeSize,
     containerColor: Color = Color.Unspecified,
 ) {
     NativeAdSurface(
         modifier = modifier,
-        position = position,
+        shape = shape,
         showContainer = showContainer,
-        cornerRadius = cornerRadius,
         containerColor = containerColor,
     ) {
         Box(
@@ -107,7 +87,7 @@ internal fun NativeAdPlaceholder(
                 Modifier.fillMaxSize()
             } else {
                 Modifier.fillMaxWidth()
-            }.padding(all = SizeConstants.LargeSize),
+            }.padding(all = MaterialTheme.spacing.large),
             contentAlignment = Alignment.Center,
         ) {
             Text(

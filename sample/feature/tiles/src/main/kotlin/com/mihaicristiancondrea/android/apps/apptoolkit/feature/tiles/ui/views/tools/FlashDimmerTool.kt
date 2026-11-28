@@ -47,7 +47,7 @@ import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.R
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.models.TorchPreset
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.models.TorchState
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.ResultPill
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.style.spacing.spacing
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.ButtonMeasurements
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.GeneralButton
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.GeneralButtonStyle
@@ -84,7 +84,7 @@ fun FlashDimmerTool(
     Column(
         modifier = Modifier.fillMaxWidth(),
         horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.spacedBy(SizeConstants.MediumSize),
+        verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.medium),
     ) {
         Text(
             text = levelDescription,
@@ -95,8 +95,8 @@ fun FlashDimmerTool(
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .height(SizeConstants.TwoHundredFortySize),
-            horizontalArrangement = Arrangement.spacedBy(SizeConstants.LargeSize),
+                .height(240.dp),
+            horizontalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.large),
             verticalAlignment = Alignment.CenterVertically,
         ) {
             PresetControls(
@@ -115,7 +115,7 @@ fun FlashDimmerTool(
                 modifier = Modifier
                     .weight(2f)
                     .fillMaxHeight()
-                    .padding(horizontal = SizeConstants.MediumSize),
+                    .padding(horizontal = MaterialTheme.spacing.medium),
             )
         }
     }
@@ -131,7 +131,7 @@ private fun PresetControls(
     val halfLevel = ((maximumLevel + 1) / 2).coerceAtLeast(1)
     Column(
         modifier = modifier,
-        verticalArrangement = Arrangement.spacedBy(SizeConstants.SmallSize),
+        verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.small),
     ) {
         PresetButton(
             label = stringResource(R.string.flash_dimmer_maximum),
@@ -239,7 +239,7 @@ private fun SegmentedLevelControl(
         val segmentHeight = (
                 (size.height - segmentGap * (maximumLevel - 1)) / maximumLevel
                 ).coerceAtLeast(1f)
-        val cornerRadius = CornerRadius(SizeConstants.SmallSize.toPx())
+        val cornerRadius = CornerRadius(8.dp.toPx())
 
         repeat(maximumLevel) { index ->
             val representedLevel = maximumLevel - index
@@ -265,7 +265,7 @@ private fun SimpleTorchControl(
     Column(
         modifier = Modifier.fillMaxWidth(),
         horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.spacedBy(SizeConstants.MediumSize),
+        verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.medium),
     ) {
         ResultPill(
             label = stringResource(

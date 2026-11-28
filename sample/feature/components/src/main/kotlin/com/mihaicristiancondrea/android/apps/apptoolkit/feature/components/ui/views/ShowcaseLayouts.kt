@@ -17,7 +17,6 @@
 
 package com.mihaicristiancondrea.android.apps.apptoolkit.feature.components.ui.views
 
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -28,19 +27,23 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.widthIn
+import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.Icon
+import androidx.compose.material3.ListItemDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.GroupedItemPosition
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.groupedCorners
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.style.elevation.elevation
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.style.size.size
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.style.spacing.spacing
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.PreferenceItemDefaults
 
 @Composable
 fun ShowcaseHeader(
@@ -50,22 +53,23 @@ fun ShowcaseHeader(
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(horizontal = SizeConstants.LargeSize)
-            .padding(top = SizeConstants.LargeSize, bottom = SizeConstants.SmallSize),
+            .padding(horizontal = MaterialTheme.spacing.large)
+            .padding(
+                top = MaterialTheme.spacing.large,
+                bottom = MaterialTheme.spacing.small,
+            ),
         verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.spacedBy(SizeConstants.MediumSize),
+        horizontalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.medium),
     ) {
         Surface(
             color = MaterialTheme.colorScheme.primaryContainer,
-            contentColor = MaterialTheme.colorScheme.onPrimaryContainer,
             shape = MaterialTheme.shapes.medium,
-            modifier = Modifier.size(40.dp),
+            modifier = Modifier.size(size = MaterialTheme.size.extraLarge),
         ) {
             Box(contentAlignment = Alignment.Center) {
                 Icon(
                     imageVector = icon,
                     contentDescription = null,
-                    modifier = Modifier.size(24.dp),
                 )
             }
         }
@@ -78,6 +82,7 @@ fun ShowcaseHeader(
     }
 }
 
+@OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
 fun ShowcaseSection(
     content: @Composable ColumnScope.() -> Unit,
@@ -86,10 +91,10 @@ fun ShowcaseSection(
         Column(
             modifier = Modifier
                 .align(Alignment.TopCenter)
-                .widthIn(max = SizeConstants.TwoHundredFiftySixSize * 3)
+                .widthIn(max = 768.dp)
                 .fillMaxWidth()
-                .padding(horizontal = SizeConstants.LargeSize),
-            verticalArrangement = Arrangement.spacedBy(SizeConstants.ExtraTinySize),
+                .padding(horizontal = MaterialTheme.spacing.large),
+            verticalArrangement = Arrangement.spacedBy(ListItemDefaults.SegmentedGap),
             content = content,
         )
     }
@@ -101,33 +106,40 @@ fun ShowcaseSection(
  * [contentPadding] insets the content from the card edges. Drop the horizontal inset for content
  * that scrolls sideways or is meant to bleed to the card edge, so it is not clipped short of it.
  */
+@OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
 fun ShowcaseSurface(
-    position: GroupedItemPosition,
     modifier: Modifier = Modifier,
-    contentPadding: PaddingValues = PaddingValues(all = SizeConstants.LargeSize),
+    shape: Shape = PreferenceItemDefaults.segmentedShapes(index = 0, count = 1).shape,
+    contentPadding: PaddingValues = PaddingValues(all = MaterialTheme.spacing.large),
     onClick: (() -> Unit)? = null,
     content: @Composable ColumnScope.() -> Unit,
 ) {
-    val surfaceModifier = modifier
-        .fillMaxWidth()
-        .groupedCorners(position = position)
-        .then(
-            if (onClick != null) {
-                Modifier.clickable(onClick = onClick)
-            } else {
-                Modifier
-            },
-        )
-
-    Surface(
-        modifier = surfaceModifier,
-        color = MaterialTheme.colorScheme.surfaceContainerLow,
-        tonalElevation = 1.dp,
-    ) {
-        Column(
-            modifier = Modifier.padding(paddingValues = contentPadding),
-            content = content,
-        )
+    val containerColor = MaterialTheme.colorScheme.surfaceContainerLow
+    if (onClick != null) {
+        Surface(
+            onClick = onClick,
+            modifier = modifier.fillMaxWidth(),
+            shape = shape,
+            color = containerColor,
+            tonalElevation = MaterialTheme.elevation.level1,
+        ) {
+            Column(
+                modifier = Modifier.padding(paddingValues = contentPadding),
+                content = content,
+            )
+        }
+    } else {
+        Surface(
+            modifier = modifier.fillMaxWidth(),
+            shape = shape,
+            color = containerColor,
+            tonalElevation = MaterialTheme.elevation.level1,
+        ) {
+            Column(
+                modifier = Modifier.padding(paddingValues = contentPadding),
+                content = content,
+            )
+        }
     }
 }

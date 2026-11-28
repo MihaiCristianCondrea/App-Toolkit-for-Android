@@ -17,47 +17,115 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences
 
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Card
+import androidx.compose.foundation.shape.CornerBasedShape
+import androidx.compose.material3.Icon
+import androidx.compose.material3.ListItem
+import androidx.compose.material3.ListItemColors
+import androidx.compose.material3.ListItemDefaults
+import androidx.compose.material3.ListItemShapes
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.SegmentedListItem
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.hapticfeedback.HapticFeedback
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.unit.Dp
-import androidx.compose.ui.unit.dp
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.colorscheme.darken
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.icons.ToolkitIcon
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.icons.ToolkitIconContent
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.style.size.size
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.style.spacing.spacing
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.analytics.Ga4EventData
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.analytics.logGa4Event
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.spacers.LargeHorizontalSpacer
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.analytics.LocalTelemetry
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.analytics.logGa4Event
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.modifiers.componentEntrance
 
 /**
- * Stateless preference row with Toolkit click feedback and analytics. Supply display-ready
- * text, with [title] meaningful on its own and [summary] adding context.
+ * Shapes and colors for Toolkit preference rows built on Material 3 [SegmentedListItem].
+ */
+object PreferenceItemDefaults {
+
+    /**
+     * Shapes for the row at [index] in a group of [count] rows, cut from the theme's shape tokens:
+     * [outerShape] rounds the outside of the group and [innerShape] the seams between rows. Unlike
+     * `ListItemDefaults.segmentedShapes`, which always rounds the outside with `shapes.large`, the
+     * outer shape is chosen per group. A selected or checked row takes [outerShape] on every corner,
+     * as Material's segmented lists do; the other interaction states keep the resting shape.
+     *
+     * Pass `.shape` of the result to a `Card` or `Surface` that sits in the same group.
+     */
+    @Composable
+    fun segmentedShapes(
+        index: Int,
+        count: Int,
+        outerShape: CornerBasedShape = MaterialTheme.shapes.largeIncreased,
+        innerShape: CornerBasedShape = MaterialTheme.shapes.extraSmall,
+    ): ListItemShapes {
+        val isFirst = index == 0
+        val isLast = index >= count - 1
+        val shape = remember(isFirst, isLast, outerShape, innerShape) {
+            innerShape.copy(
+                topStart = if (isFirst) outerShape.topStart else innerShape.topStart,
+                topEnd = if (isFirst) outerShape.topEnd else innerShape.topEnd,
+                bottomStart = if (isLast) outerShape.bottomStart else innerShape.bottomStart,
+                bottomEnd = if (isLast) outerShape.bottomEnd else innerShape.bottomEnd,
+            )
+        }
+        return ListItemDefaults.shapes(
+            shape = shape,
+            selectedShape = outerShape,
+            pressedShape = shape,
+            focusedShape = shape,
+            hoveredShape = shape,
+            draggedShape = shape,
+        )
+    }
+
+    /**
+     * Segmented list item colors whose resting surface matches Material 3 filled cards so grouped
+     * rows separate cleanly from a plain [MaterialTheme.colorScheme] surface. Icons, summaries and
+     * trailing content use [contentColor], and a selected or checked row keeps the resting colors;
+     * its control shows the state.
+     */
+    @Composable
+    fun colors(
+        containerColor: Color = MaterialTheme.colorScheme.surfaceContainerHighest,
+        contentColor: Color = MaterialTheme.colorScheme.onSurface,
+        disabledContainerColor: Color = containerColor,
+    ): ListItemColors = ListItemDefaults.segmentedColors(
+        containerColor = containerColor,
+        contentColor = contentColor,
+        leadingContentColor = contentColor,
+        trailingContentColor = contentColor,
+        supportingContentColor = contentColor,
+        disabledContainerColor = disabledContainerColor,
+        selectedContainerColor = containerColor,
+        selectedContentColor = contentColor,
+        selectedLeadingContentColor = contentColor,
+        selectedTrailingContentColor = contentColor,
+        selectedSupportingContentColor = contentColor,
+    )
+}
+
+/**
+ * Stateless preference row backed by Material 3 [ListItem], with Toolkit click feedback and
+ * analytics. Supply display-ready text, with [title] meaningful on its own and [summary] adding
+ * context.
  *
  * @param icon Any [ToolkitIcon]; an overload takes an [ImageVector].
  * @param ga4EventProvider Resolves analytics at click time, taking precedence over [ga4Event]
@@ -65,6 +133,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.modifiers.
  */
 @Composable
 fun PreferenceItem(
+    modifier: Modifier = Modifier,
     icon: ToolkitIcon? = null,
     title: String? = null,
     summary: String? = null,
@@ -72,77 +141,68 @@ fun PreferenceItem(
     iconColor: Color? = null,
     iconContainerColor: Color? = null,
     enabled: Boolean = true,
-    rippleEffectDp: Dp = SizeConstants.LargeSize,
+    shapes: ListItemShapes = ListItemDefaults.shapes(
+        shape = MaterialTheme.shapes.large,
+    ),
+    colors: ListItemColors = inheritedContentColors(),
     onClick: (() -> Unit)? = {},
     ga4Event: Ga4EventData? = null,
     ga4EventProvider: (() -> Ga4EventData?)? = null,
 ) {
     val telemetry = LocalTelemetry.current
     val hapticFeedback: HapticFeedback = LocalHapticFeedback.current
-    val rowModifier = Modifier
-        .fillMaxWidth()
-        .clip(shape = RoundedCornerShape(size = rippleEffectDp))
-        .let { base ->
-            if (onClick != null) {
-                base.clickable(enabled = enabled) {
-                    hapticFeedback.performHapticFeedback(hapticFeedbackType = HapticFeedbackType.ContextClick)
-                    telemetry.logGa4Event(ga4EventProvider?.invoke() ?: ga4Event)
-                    onClick()
-                }
-            } else {
-                base
-            }
+    val leadingContent: (@Composable () -> Unit)? = icon?.let {
+        {
+            PreferenceLeadingIcon(
+                icon = it,
+                useIconContainer = useIconContainer,
+                iconColor = iconColor,
+                iconContainerColor = iconContainerColor,
+            )
         }
-    Row(
-        modifier = rowModifier,
-        verticalAlignment = Alignment.CenterVertically,
-    ) {
-        icon?.let {
-            LargeHorizontalSpacer()
-            if (useIconContainer) {
-                val containerColor =
-                    iconContainerColor ?: MaterialTheme.colorScheme.secondaryContainer
-                val tint = iconColor ?: containerColor.darken(factor = 0.6f)
+    }
+    val supportingContent: (@Composable () -> Unit)? =
+        if (title != null && summary != null) {
+            { PreferenceSummaryText(text = summary) }
+        } else {
+            null
+        }
+    val mainContent: @Composable () -> Unit = {
+        when {
+            title != null -> PreferenceTitleText(text = title)
+            summary != null -> PreferenceSummaryText(text = summary)
+        }
+    }
 
-                Surface(
-                    modifier = Modifier.size(40.dp),
-                    shape = CircleShape,
-                    color = containerColor
-                ) {
-                    Box(contentAlignment = Alignment.Center) {
-                        ToolkitIconContent(
-                            icon = it,
-                            contentDescription = null,
-                            modifier = Modifier.size(24.dp),
-                            tint = if (iconColor == null && iconContainerColor == null) MaterialTheme.colorScheme.onSecondaryContainer else tint
-                        )
-                    }
-                }
-            } else {
-                ToolkitIconContent(icon = it, contentDescription = null, modifier = Modifier.size(24.dp))
-            }
-        }
-        Column(
-            modifier = Modifier.padding(all = SizeConstants.LargeSize)
-        ) {
-            title?.let {
-                Text(
-                    text = it,
-                    style = MaterialTheme.typography.titleMedium,
-                    fontWeight = FontWeight.SemiBold,
-                    color = if (!enabled) LocalContentColor.current.copy(alpha = 0.38f) else LocalContentColor.current,
-                    maxLines = 1,
-                    overflow = TextOverflow.Ellipsis
-                )
-            }
-            summary?.let {
-                Text(
-                    text = it,
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = if (!enabled) LocalContentColor.current.copy(alpha = 0.38f) else LocalContentColor.current
-                )
-            }
-        }
+    if (onClick != null) {
+        ListItem(
+            onClick = {
+                hapticFeedback.performHapticFeedback(hapticFeedbackType = HapticFeedbackType.ContextClick)
+                telemetry.logGa4Event(ga4EventProvider?.invoke() ?: ga4Event)
+                onClick()
+            },
+            modifier = modifier.fillMaxWidth(),
+            enabled = enabled,
+            shapes = shapes,
+            colors = colors,
+            verticalAlignment = Alignment.CenterVertically,
+            contentPadding = PaddingValues(all = MaterialTheme.spacing.large),
+            leadingContent = leadingContent,
+            supportingContent = supportingContent,
+            content = mainContent,
+        )
+    } else {
+        ListItem(
+            modifier = modifier.fillMaxWidth(),
+            enabled = enabled,
+            shapes = shapes,
+            colors = colors,
+            verticalAlignment = Alignment.CenterVertically,
+            contentPadding = PaddingValues(all = MaterialTheme.spacing.large),
+            leadingContent = leadingContent,
+            supportingContent = supportingContent,
+            content = mainContent,
+        )
     }
 }
 
@@ -150,26 +210,32 @@ fun PreferenceItem(
 @Composable
 fun PreferenceItem(
     icon: ImageVector,
+    modifier: Modifier = Modifier,
     title: String? = null,
     summary: String? = null,
     useIconContainer: Boolean = false,
     iconColor: Color? = null,
     iconContainerColor: Color? = null,
     enabled: Boolean = true,
-    rippleEffectDp: Dp = SizeConstants.LargeSize,
+    shapes: ListItemShapes = ListItemDefaults.shapes(
+        shape = MaterialTheme.shapes.large,
+    ),
+    colors: ListItemColors = inheritedContentColors(),
     onClick: (() -> Unit)? = {},
     ga4Event: Ga4EventData? = null,
     ga4EventProvider: (() -> Ga4EventData?)? = null,
 ) {
     PreferenceItem(
-        icon = ToolkitIcon.Vector(icon),
+        modifier = modifier,
+        icon = ToolkitIcon.Vector(imageVector = icon),
         title = title,
         summary = summary,
         useIconContainer = useIconContainer,
         iconColor = iconColor,
         iconContainerColor = iconContainerColor,
         enabled = enabled,
-        rippleEffectDp = rippleEffectDp,
+        shapes = shapes,
+        colors = colors,
         onClick = onClick,
         ga4Event = ga4Event,
         ga4EventProvider = ga4EventProvider,
@@ -177,7 +243,8 @@ fun PreferenceItem(
 }
 
 /**
- * Card container for [PreferenceItem], with the same click feedback and analytics contract.
+ * Segmented preference row backed by Material 3 [SegmentedListItem], with Toolkit click feedback
+ * and analytics. Pass [PreferenceItemDefaults.segmentedShapes] for grouped lists.
  */
 @Composable
 fun SettingsPreferenceItem(
@@ -188,60 +255,70 @@ fun SettingsPreferenceItem(
     useIconContainer: Boolean = false,
     iconColor: Color? = null,
     iconContainerColor: Color? = null,
-    rippleEffectDp: Dp = SizeConstants.ExtraTinySize,
+    enabled: Boolean = true,
+    shapes: ListItemShapes = PreferenceItemDefaults.segmentedShapes(index = 0, count = 1),
+    colors: ListItemColors = PreferenceItemDefaults.colors(),
     onClick: (() -> Unit)? = {},
     ga4Event: Ga4EventData? = null,
     ga4EventProvider: (() -> Ga4EventData?)? = null,
 ) {
-    SettingsPreferenceItem(
-        enabled = true,
-        modifier = modifier,
-        icon = icon,
-        title = title,
-        summary = summary,
-        useIconContainer = useIconContainer,
-        iconColor = iconColor,
-        iconContainerColor = iconContainerColor,
-        rippleEffectDp = rippleEffectDp,
-        onClick = onClick,
-        ga4Event = ga4Event,
-        ga4EventProvider = ga4EventProvider,
-    )
-}
+    val telemetry = LocalTelemetry.current
+    val hapticFeedback: HapticFeedback = LocalHapticFeedback.current
+    val leadingContent: (@Composable () -> Unit)? = icon?.let {
+        {
+            PreferenceLeadingIcon(
+                icon = it,
+                useIconContainer = useIconContainer,
+                iconColor = iconColor,
+                iconContainerColor = iconContainerColor,
+            )
+        }
+    }
+    val supportingContent: (@Composable () -> Unit)? =
+        if (title != null && summary != null) {
+            { PreferenceSummaryText(text = summary) }
+        } else {
+            null
+        }
+    val mainContent: @Composable () -> Unit = {
+        when {
+            title != null -> PreferenceTitleText(text = title)
+            summary != null -> PreferenceSummaryText(text = summary)
+        }
+    }
 
-/** Preference card that can be disabled while its action is running. */
-@Composable
-fun SettingsPreferenceItem(
-    enabled: Boolean,
-    modifier: Modifier = Modifier,
-    icon: ToolkitIcon? = null,
-    title: String? = null,
-    summary: String? = null,
-    useIconContainer: Boolean = false,
-    iconColor: Color? = null,
-    iconContainerColor: Color? = null,
-    rippleEffectDp: Dp = SizeConstants.ExtraTinySize,
-    onClick: (() -> Unit)? = {},
-    ga4Event: Ga4EventData? = null,
-    ga4EventProvider: (() -> Ga4EventData?)? = null,
-) {
-    Card(
-        modifier = modifier.componentEntrance()
-            .fillMaxWidth(),
-        shape = RectangleShape,
-    ) {
-        PreferenceItem(
-            rippleEffectDp = rippleEffectDp,
-            icon = icon,
-            title = title,
-            summary = summary,
-            useIconContainer = useIconContainer,
-            iconColor = iconColor,
-            iconContainerColor = iconContainerColor,
+    if (onClick != null) {
+        SegmentedListItem(
+            onClick = {
+                hapticFeedback.performHapticFeedback(hapticFeedbackType = HapticFeedbackType.ContextClick)
+                telemetry.logGa4Event(ga4EventProvider?.invoke() ?: ga4Event)
+                onClick()
+            },
+            shapes = shapes,
+            modifier = modifier
+                .componentEntrance()
+                .fillMaxWidth(),
             enabled = enabled,
-            onClick = onClick,
-            ga4Event = ga4Event,
-            ga4EventProvider = ga4EventProvider,
+            colors = colors,
+            verticalAlignment = Alignment.CenterVertically,
+            contentPadding = PaddingValues(all = MaterialTheme.spacing.large),
+            leadingContent = leadingContent,
+            supportingContent = supportingContent,
+            content = mainContent,
+        )
+    } else {
+        SegmentedListItem(
+            shapes = shapes,
+            modifier = modifier
+                .componentEntrance()
+                .fillMaxWidth(),
+            enabled = enabled,
+            colors = colors,
+            verticalAlignment = Alignment.CenterVertically,
+            contentPadding = PaddingValues(all = MaterialTheme.spacing.large),
+            leadingContent = leadingContent,
+            supportingContent = supportingContent,
+            content = mainContent,
         )
     }
 }
@@ -256,22 +333,112 @@ fun SettingsPreferenceItem(
     useIconContainer: Boolean = false,
     iconColor: Color? = null,
     iconContainerColor: Color? = null,
-    rippleEffectDp: Dp = SizeConstants.ExtraTinySize,
+    enabled: Boolean = true,
+    shapes: ListItemShapes = PreferenceItemDefaults.segmentedShapes(index = 0, count = 1),
+    colors: ListItemColors = PreferenceItemDefaults.colors(),
     onClick: (() -> Unit)? = {},
     ga4Event: Ga4EventData? = null,
     ga4EventProvider: (() -> Ga4EventData?)? = null,
 ) {
     SettingsPreferenceItem(
-        modifier = modifier.componentEntrance(),
-        icon = ToolkitIcon.Vector(icon),
+        modifier = modifier,
+        icon = ToolkitIcon.Vector(imageVector = icon),
         title = title,
         summary = summary,
         useIconContainer = useIconContainer,
         iconColor = iconColor,
         iconContainerColor = iconContainerColor,
-        rippleEffectDp = rippleEffectDp,
+        enabled = enabled,
+        shapes = shapes,
+        colors = colors,
         onClick = onClick,
         ga4Event = ga4Event,
         ga4EventProvider = ga4EventProvider,
     )
+}
+
+@Composable
+internal fun PreferenceTitleText(text: String) {
+    Text(
+        text = text,
+        style = MaterialTheme.typography.titleMedium,
+        fontWeight = FontWeight.SemiBold,
+        maxLines = 1,
+        overflow = TextOverflow.Ellipsis,
+    )
+}
+
+@Composable
+internal fun PreferenceSummaryText(text: String) {
+    Text(
+        text = text,
+        style = MaterialTheme.typography.bodyMedium,
+    )
+}
+
+/** Leading icon of a row with a trailing switch or checkbox. */
+@Composable
+internal fun ControlRowLeadingIcon(imageVector: ImageVector) {
+    Icon(
+        imageVector = imageVector,
+        contentDescription = null,
+        modifier = Modifier.padding(end = MaterialTheme.spacing.largeIncreased),
+    )
+}
+
+/** Transparent row colors that follow the parent's [LocalContentColor], as a plain row did. */
+@Composable
+private fun inheritedContentColors(): ListItemColors {
+    val contentColor = LocalContentColor.current
+    return ListItemDefaults.colors(
+        containerColor = Color.Transparent,
+        contentColor = contentColor,
+        leadingContentColor = contentColor,
+        trailingContentColor = contentColor,
+        supportingContentColor = contentColor,
+        disabledContainerColor = Color.Transparent,
+    )
+}
+
+/**
+ * Leading icon of a preference row. The end padding widens ListItem's 12 dp leading gap to the
+ * 16 dp the rows have always had between icon and text.
+ */
+@Composable
+private fun PreferenceLeadingIcon(
+    icon: ToolkitIcon,
+    useIconContainer: Boolean,
+    iconColor: Color?,
+    iconContainerColor: Color?,
+) {
+    val gapModifier = Modifier.padding(end = MaterialTheme.spacing.extraSmall)
+    if (useIconContainer) {
+        val containerColor = iconContainerColor ?: MaterialTheme.colorScheme.secondaryContainer
+        val tint = if (iconColor == null && iconContainerColor == null) {
+            MaterialTheme.colorScheme.onSecondaryContainer
+        } else {
+            iconColor ?: containerColor.darken(factor = 0.6f)
+        }
+
+        Surface(
+            modifier = gapModifier.size(size = MaterialTheme.size.extraLarge),
+            shape = CircleShape,
+            color = containerColor,
+        ) {
+            Box(contentAlignment = Alignment.Center) {
+                ToolkitIconContent(
+                    icon = icon,
+                    contentDescription = null,
+                    modifier = Modifier.size(size = MaterialTheme.size.medium),
+                    tint = tint,
+                )
+            }
+        }
+    } else {
+        ToolkitIconContent(
+            icon = icon,
+            contentDescription = null,
+            modifier = gapModifier.size(size = MaterialTheme.size.medium),
+        )
+    }
 }

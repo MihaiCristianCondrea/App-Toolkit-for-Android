@@ -17,39 +17,34 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences
 
-import android.view.View
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Card
+import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Checkbox
-import androidx.compose.material3.Icon
+import androidx.compose.material3.ListItemColors
+import androidx.compose.material3.ListItemShapes
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
+import androidx.compose.material3.SegmentedListItem
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.hapticfeedback.HapticFeedback
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.platform.LocalHapticFeedback
-import androidx.compose.ui.platform.LocalView
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextOverflow
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.style.size.size
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.style.spacing.spacing
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.analytics.Ga4EventData
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.analytics.logGa4Event
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.spacers.LargeHorizontalSpacer
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.analytics.LocalTelemetry
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.analytics.logGa4Event
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.modifiers.componentEntrance
 
 /**
- * Checkbox preference with caller-owned [checked] state. Row and checkbox taps emit
- * [onCheckedChange]; callers handle persistence. Provide a clear [title] and supporting
- * [summary].
+ * Checkbox preference backed by Material 3 [SegmentedListItem] with caller-owned [checked] state.
+ * The row owns the toggle interaction; callers handle persistence. Provide a clear [title] and
+ * supporting [summary].
  */
 @Composable
 fun CheckBoxPreferenceItem(
@@ -59,55 +54,61 @@ fun CheckBoxPreferenceItem(
     summary: String? = null,
     checked: Boolean,
     onCheckedChange: (Boolean) -> Unit,
+    enabled: Boolean = true,
+    shapes: ListItemShapes = PreferenceItemDefaults.segmentedShapes(index = 0, count = 1),
+    colors: ListItemColors = PreferenceItemDefaults.colors(),
     ga4Event: Ga4EventData? = null,
 ) {
     val telemetry = LocalTelemetry.current
     val hapticFeedback: HapticFeedback = LocalHapticFeedback.current
-    val view: View = LocalView.current
-    Card(
-        modifier = modifier.componentEntrance().fillMaxWidth(),
-        shape = RectangleShape,
-    ) {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .clickable {
-                    hapticFeedback.performHapticFeedback(hapticFeedbackType = HapticFeedbackType.ContextClick)
-                    telemetry.logGa4Event(ga4Event)
-                    onCheckedChange(!checked)
+
+    SegmentedListItem(
+        checked = checked,
+        onCheckedChange = { isChecked: Boolean ->
+            hapticFeedback.performHapticFeedback(
+                hapticFeedbackType = if (isChecked) {
+                    HapticFeedbackType.ToggleOn
+                } else {
+                    HapticFeedbackType.ToggleOff
                 },
-            verticalAlignment = Alignment.CenterVertically,
-        ) {
-            icon?.let {
-                LargeHorizontalSpacer()
-                Icon(imageVector = it, contentDescription = null)
-                LargeHorizontalSpacer()
-            }
-            Column(
-                modifier = Modifier
-                    .padding(all = SizeConstants.LargeSize)
-                    .weight(weight = 1f)
-            ) {
-                Text(
-                    text = title,
-                    style = MaterialTheme.typography.titleMedium,
-                    maxLines = 1,
-                    overflow = TextOverflow.Ellipsis,
-                    fontWeight = FontWeight.SemiBold
-                )
-                summary?.let {
-                    Text(text = it, style = MaterialTheme.typography.bodyMedium)
-                }
-            }
-            Checkbox(
-                checked = checked,
-                onCheckedChange = { isChecked: Boolean ->
-                    hapticFeedback.performHapticFeedback(hapticFeedbackType = HapticFeedbackType.ContextClick)
-                    telemetry.logGa4Event(ga4Event)
-                    onCheckedChange(isChecked)
-                },
-                modifier = Modifier.padding(start = SizeConstants.LargeSize),
             )
-        }
-    }
+            telemetry.logGa4Event(ga4Event)
+            onCheckedChange(isChecked)
+        },
+        shapes = shapes,
+        modifier = modifier
+            .componentEntrance()
+            .fillMaxWidth(),
+        enabled = enabled,
+        colors = colors,
+        verticalAlignment = Alignment.CenterVertically,
+        contentPadding = PaddingValues(
+            start = MaterialTheme.spacing.large,
+            top = MaterialTheme.spacing.large,
+            bottom = MaterialTheme.spacing.large,
+        ),
+        leadingContent = icon?.let { vector ->
+            { ControlRowLeadingIcon(imageVector = vector) }
+        },
+        supportingContent = summary?.let { text ->
+            { PreferenceSummaryText(text = text) }
+        },
+        trailingContent = {
+            Box(
+                modifier = Modifier
+                    .padding(start = MaterialTheme.spacing.largeIncreased)
+                    .width(width = MaterialTheme.size.extraExtraLarge),
+                contentAlignment = Alignment.Center,
+            ) {
+                Checkbox(
+                    checked = checked,
+                    onCheckedChange = null,
+                    enabled = enabled,
+                )
+            }
+        },
+        content = {
+            PreferenceTitleText(text = title)
+        },
+    )
 }

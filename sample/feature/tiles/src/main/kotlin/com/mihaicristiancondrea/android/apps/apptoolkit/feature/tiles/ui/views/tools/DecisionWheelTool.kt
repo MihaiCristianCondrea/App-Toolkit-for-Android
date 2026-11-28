@@ -30,7 +30,6 @@ import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
@@ -60,22 +59,25 @@ import androidx.compose.ui.unit.dp
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.R
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.contracts.WheelToolEvent
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.states.WheelToolUiState
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.style.spacing.spacing
 import kotlin.math.cos
 import kotlin.math.sin
 
 @Composable
 internal fun DecisionWheelTool(state: WheelToolUiState, onEvent: (WheelToolEvent) -> Unit) {
-    Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+    Column(verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.small)) {
         OutlinedTextField(value = state.text, onValueChange = { onEvent(WheelToolEvent.ChoicesChanged(it)) },
             label = { Text(stringResource(R.string.wheel_choices)) }, supportingText = { Text(stringResource(R.string.wheel_hint)) },
             enabled = !state.spinning, minLines = 3, maxLines = 5, isError = !state.valid && state.text.isNotBlank(), modifier = Modifier.fillMaxWidth())
-        Surface(shape = RoundedCornerShape(28.dp,28.dp,8.dp,8.dp), color = MaterialTheme.colorScheme.secondaryContainer) {
-            Box(Modifier.fillMaxWidth().padding(16.dp), contentAlignment = Alignment.Center) {
+        val outer = MaterialTheme.shapes.extraLarge
+        val inner = MaterialTheme.shapes.small
+        Surface(shape = outer.copy(bottomStart = inner.bottomStart, bottomEnd = inner.bottomEnd), color = MaterialTheme.colorScheme.secondaryContainer) {
+            Box(Modifier.fillMaxWidth().padding(MaterialTheme.spacing.large), contentAlignment = Alignment.Center) {
                 DecisionWheelVisual(state, onSettled = { onEvent(WheelToolEvent.Settled) })
             }
         }
-        Surface(shape = RoundedCornerShape(8.dp,8.dp,28.dp,28.dp), color = MaterialTheme.colorScheme.secondaryContainer) {
-            Column(Modifier.fillMaxWidth().padding(12.dp).semantics { liveRegion = LiveRegionMode.Polite }, horizontalAlignment = Alignment.CenterHorizontally) {
+        Surface(shape = outer.copy(topStart = inner.topStart, topEnd = inner.topEnd), color = MaterialTheme.colorScheme.secondaryContainer) {
+            Column(Modifier.fillMaxWidth().padding(MaterialTheme.spacing.medium).semantics { liveRegion = LiveRegionMode.Polite }, horizontalAlignment = Alignment.CenterHorizontally) {
                 Text(stringResource(if (state.spinning) R.string.wheel_spinning else R.string.wheel_result), style = MaterialTheme.typography.labelSmall)
                 Text(if (state.spinning) stringResource(R.string.wheel_spinning) else state.winner ?: stringResource(R.string.wheel_ready), style = MaterialTheme.typography.headlineSmall)
             }

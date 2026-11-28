@@ -33,6 +33,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.CheckCircle
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -56,9 +57,9 @@ import com.airbnb.lottie.compose.LottieCompositionSpec
 import com.airbnb.lottie.compose.LottieConstants
 import com.airbnb.lottie.compose.rememberLottieComposition
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.links.AppLinks
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.context.isSystemAnimationDisabled
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.style.bounceClick
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.style.spacing.spacing
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.R as CoreUiR
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.ScreenHost
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.StateContent
@@ -167,7 +168,7 @@ private fun StartupWelcome(
     val context = LocalContext.current
     val animationsDisabled: Boolean = remember(context) { context.isSystemAnimationDisabled() }
     val layoutDirection = LocalLayoutDirection.current
-    val sectionMargin: Dp = SizeConstants.MediumSize * 2
+    val sectionMargin: Dp = MaterialTheme.spacing.extraLargeCompact
     val listPadding = PaddingValues(
         start = paddingValues.calculateStartPadding(layoutDirection) + sectionMargin,
         top = paddingValues.calculateTopPadding() + sectionMargin,
@@ -199,7 +200,7 @@ private fun StartupWelcome(
                 .fillMaxHeight()
                 .widthIn(max = StartupContentMaxWidth),
             contentPadding = listPadding,
-            verticalArrangement = Arrangement.spacedBy(space = SizeConstants.LargeSize),
+            verticalArrangement = Arrangement.spacedBy(space = MaterialTheme.spacing.large),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             animatedItem(key = "startup_illustration") {

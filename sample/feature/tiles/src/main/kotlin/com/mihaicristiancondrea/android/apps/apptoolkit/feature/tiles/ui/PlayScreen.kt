@@ -29,7 +29,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.material3.Icon
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.lerp
@@ -90,6 +89,7 @@ import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.t
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.utils.requestQuickSettingsTile
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.utils.constants.ToolkitTileIds
 import com.mihaicristiancondrea.android.apps.apptoolkit.core.analytics.models.AppScreenTracking
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.style.spacing.spacing
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.ScreenHost
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.shell.contentPadding
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.LocalShellSearch
@@ -151,27 +151,34 @@ internal fun PlayScreenContent(coin: CoinFlipToolUiState, dice: DiceRollToolUiSt
             if (tools.any { it.id != ToolkitTileIds.BELL }) ToolSection(stringResource(R.string.section_chance), ToolSymbols.Rounded.Casino, Modifier) {
                 // The kit's Chance group (marketing/ui/src/screens/play.js): every card on the secondary container,
                 // 28 dp on the group's outer corners and 8 dp between cards.
-                Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
+                Column(verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.extraSmall)) {
                     val wheelTile = tools.firstOrNull { it.id == ToolkitTileIds.DECISION_WHEEL }
                     val randomTile = tools.firstOrNull { it.id == ToolkitTileIds.RANDOM_NUMBER }
                     val pair = tools.filter { it.id == ToolkitTileIds.COIN_FLIP || it.id == ToolkitTileIds.DICE_ROLL }
                     val rows = listOfNotNull(wheelTile, randomTile).size + if (pair.isEmpty()) 0 else 1
                     var row = 0
+                    val outer = MaterialTheme.shapes.extraLarge
+                    val inner = MaterialTheme.shapes.small
                     fun corners(): RoundedCornerShape {
                         val first = row == 0
                         val last = row == rows - 1
                         row++
-                        return RoundedCornerShape(if (first) 28.dp else 8.dp, if (first) 28.dp else 8.dp, if (last) 28.dp else 8.dp, if (last) 28.dp else 8.dp)
+                        return RoundedCornerShape(
+                            topStart = if (first) outer.topStart else inner.topStart,
+                            topEnd = if (first) outer.topEnd else inner.topEnd,
+                            bottomEnd = if (last) outer.bottomEnd else inner.bottomEnd,
+                            bottomStart = if (last) outer.bottomStart else inner.bottomStart,
+                        )
                     }
                     wheelTile?.let { tile ->
                         ChanceCard(onClick = { selectedId = tile.id }, shape = corners()) {
-                            Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(16.dp)) {
-                                Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(4.dp)) {
+                            Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.large)) {
+                                Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.extraSmall)) {
                                     WidgetLabel(stringResource(tile.titleResId), letterSpacing = 0.8f)
                                     Text(wheel.winner ?: stringResource(R.string.wheel_ready),
-                                        style = MaterialTheme.typography.headlineSmall.copy(fontSize = 26.sp, lineHeight = 32.sp), fontWeight = FontWeight.Medium)
+                                        style = MaterialTheme.typography.headlineSmall.copy(fontSize = 26.sp), fontWeight = FontWeight.Medium)
                                     val count = wheel.choices.size.takeIf { it >= 2 } ?: 2
-                                    Text(pluralStringResource(R.plurals.widget_wheel_choices, count, count), style = MaterialTheme.typography.bodySmall.copy(fontSize = 12.sp, lineHeight = 18.sp))
+                                    Text(pluralStringResource(R.plurals.widget_wheel_choices, count, count), style = MaterialTheme.typography.bodySmall.copy(lineHeight = 18.sp))
                                 }
                                 DecisionWheelVisual(wheel, compact = true)
                             }
@@ -180,8 +187,8 @@ internal fun PlayScreenContent(coin: CoinFlipToolUiState, dice: DiceRollToolUiSt
                     randomTile?.let { tile ->
                         val gold = tile.icon.iconColors()
                         ChanceCard(onClick = { selectedId = tile.id }, shape = corners()) {
-                            Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(16.dp)) {
-                                Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(4.dp)) {
+                            Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.large)) {
+                                Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.extraSmall)) {
                                     WidgetLabel(stringResource(tile.titleResId))
                                     AnimatedWidgetValue(random.result?.toString() ?: "?", size = 48)
                                     WidgetNote(stringResource(R.string.tool_random_range, random.minimum.toLongOrNull() ?: 1L, random.maximum.toLongOrNull() ?: 100L), ToolkitTileIcon.Compass.iconColors().content)
@@ -194,11 +201,11 @@ internal fun PlayScreenContent(coin: CoinFlipToolUiState, dice: DiceRollToolUiSt
                     }
                     if (pair.isNotEmpty()) {
                         val shape = corners()
-                        Row(Modifier.fillMaxWidth().height(IntrinsicSize.Min), horizontalArrangement = Arrangement.spacedBy(4.dp)) {
+                        Row(Modifier.fillMaxWidth().height(IntrinsicSize.Min), horizontalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.extraSmall)) {
                             pair.forEachIndexed { index, tile ->
                                 val cell = RoundedCornerShape(
-                                    topStart = if (index == 0) shape.topStart else CornerSize(8.dp), topEnd = if (index == pair.lastIndex) shape.topEnd else CornerSize(8.dp),
-                                    bottomEnd = if (index == pair.lastIndex) shape.bottomEnd else CornerSize(8.dp), bottomStart = if (index == 0) shape.bottomStart else CornerSize(8.dp),
+                                    topStart = if (index == 0) shape.topStart else inner.topStart, topEnd = if (index == pair.lastIndex) shape.topEnd else inner.topEnd,
+                                    bottomEnd = if (index == pair.lastIndex) shape.bottomEnd else inner.bottomEnd, bottomStart = if (index == 0) shape.bottomStart else inner.bottomStart,
                                 )
                                 ChanceCard(onClick = { selectedId = tile.id }, shape = cell, modifier = Modifier.weight(1f).fillMaxHeight(), centered = true) {
                                     WidgetLabel(stringResource(tile.titleResId), Modifier.align(Alignment.Start))
@@ -226,12 +233,12 @@ internal fun PlayScreenContent(coin: CoinFlipToolUiState, dice: DiceRollToolUiSt
                     Surface(
                         onClick = { selectedId = tile.id },
                         modifier = Modifier.fillMaxWidth().animateVisibility(),
-                        shape = RoundedCornerShape(28.dp),
+                        shape = MaterialTheme.shapes.extraLarge,
                         color = scheme.surfaceContainerHigh,
                     ) {
                         Column(
-                            modifier = Modifier.padding(16.dp),
-                            verticalArrangement = Arrangement.spacedBy(4.dp),
+                            modifier = Modifier.padding(MaterialTheme.spacing.large),
+                            verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.extraSmall),
                             horizontalAlignment = Alignment.CenterHorizontally,
                         ) {
                             WidgetLabel(stringResource(tile.titleResId), Modifier.align(Alignment.Start))
@@ -258,7 +265,7 @@ internal fun PlayScreenContent(coin: CoinFlipToolUiState, dice: DiceRollToolUiSt
 @Composable
 private fun ChanceCard(onClick: () -> Unit, shape: RoundedCornerShape, modifier: Modifier = Modifier, centered: Boolean = false, content: @Composable ColumnScope.() -> Unit) {
     Surface(onClick = onClick, modifier = modifier.fillMaxWidth().animateVisibility(), shape = shape, color = MaterialTheme.colorScheme.secondaryContainer) {
-        Column(Modifier.padding(24.dp), verticalArrangement = Arrangement.spacedBy(4.dp),
+        Column(Modifier.padding(MaterialTheme.spacing.extraLargeCompact), verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.extraSmall),
             horizontalAlignment = if (centered) Alignment.CenterHorizontally else Alignment.Start, content = content)
     }
 }

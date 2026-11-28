@@ -63,8 +63,7 @@ No internal Gradle modules. This is the bottom shared runtime dependency for mos
 - `:library:integration:ads`, `:library:integration:billing`, `:library:integration:consent`,
   `:library:integration:firebase`, `:library:integration:review`, and `:library:integration:update`.
 
-`:library:navigation` also depends on this module for shared sizing constants. The implicit
-`:library:core` parent has no dependencies.
+The implicit `:library:core` parent has no dependencies.
 
 ## Flow chart
 

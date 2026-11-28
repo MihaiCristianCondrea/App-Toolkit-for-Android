@@ -31,6 +31,7 @@ import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.animation.togetherWith
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
+import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -40,7 +41,6 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.Dp
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.icons.ToolkitIcon
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.analytics.Ga4EventData
 
@@ -72,7 +72,7 @@ fun AnimatedIconButtonDirection(
     autoAnimate: Boolean = true,
     feedback: ButtonFeedback = ButtonFeedback(),
     fromRight: Boolean = false,
-    iconSize: Dp = SizeConstants.TwentyFourSize,
+    iconSize: Dp = IconButtonDefaults.smallIconSize,
     ga4Event: Ga4EventData? = null,
 ) {
     val animatedVisibility: MutableState<Boolean> =

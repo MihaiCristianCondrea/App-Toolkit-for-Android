@@ -17,14 +17,15 @@
 
 package com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui
 
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SegmentedButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.unit.dp
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.runtime.getValue
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.style.spacing.spacing
 import androidx.lifecycle.compose.LifecycleStartEffect
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.contracts.BillSplitterToolEvent
@@ -164,7 +165,7 @@ internal fun SosToolSheet(viewModel: SosToolViewModel = koinViewModel(), morse: 
             morse.onEvent(MorseToolEvent.Dismiss)
         }
     }
-    androidx.compose.foundation.layout.Column(verticalArrangement = androidx.compose.foundation.layout.Arrangement.spacedBy(8.dp)) {
+    androidx.compose.foundation.layout.Column(verticalArrangement = androidx.compose.foundation.layout.Arrangement.spacedBy(MaterialTheme.spacing.small)) {
         androidx.compose.material3.SingleChoiceSegmentedButtonRow(androidx.compose.ui.Modifier.fillMaxWidth()) {
             listOf(false,true).forEachIndexed { index, selected ->
                 SegmentedButton(selected = messageMode == selected, enabled = !state.isActive && !message.playback.isActive,

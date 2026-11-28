@@ -33,6 +33,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.catalog.AnimatedToolNumber
@@ -43,8 +44,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.R
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.icons.ToolkitIcon
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.style.size.size
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.style.spacing.spacing
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.ButtonMeasurements
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.GeneralButton
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.ButtonFeedback
@@ -56,18 +58,17 @@ fun CounterTool(count: Int, onIncrement: () -> Unit, onDecrement: () -> Unit, on
     Column(
         modifier = Modifier.fillMaxWidth(),
         horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.spacedBy(SizeConstants.MediumSize),
+        verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.medium),
     ) {
         Surface(
             shape = CircleShape,
             color = MaterialTheme.colorScheme.primaryContainer,
-            contentColor = MaterialTheme.colorScheme.onPrimaryContainer,
-            modifier = Modifier.padding(vertical = SizeConstants.SmallSize),
+            modifier = Modifier.padding(vertical = MaterialTheme.spacing.small),
         ) {
             Box(
                 modifier = Modifier.padding(
-                    horizontal = SizeConstants.ExtraLargeIncreasedSize,
-                    vertical = SizeConstants.LargeSize,
+                    horizontal = MaterialTheme.spacing.extraLargeIncreased,
+                    vertical = MaterialTheme.spacing.large,
                 ),
                 contentAlignment = Alignment.Center,
             ) {
@@ -91,7 +92,7 @@ fun CounterTool(count: Int, onIncrement: () -> Unit, onDecrement: () -> Unit, on
 
         Row(
             modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.spacedBy(SizeConstants.SmallSize),
+            horizontalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.small),
         ) {
             GeneralButton(
                 style = GeneralButtonStyle.Outlined,
@@ -139,21 +140,24 @@ private fun CounterToolPreview() {
 /** The overview counter fills the space between two 64 dp controls, including long counts. */
 @Composable
 internal fun CounterControls(count: Int, onIncrement: () -> Unit, onDecrement: () -> Unit) {
-    Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-        Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+    Column(verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.small)) {
+        Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.small)) {
             GeneralButton(
                 onClick = onDecrement,
                 style = GeneralButtonStyle.Outlined,
                 enabled = count > 0,
-                modifier = Modifier.size(64.dp),
+                modifier = Modifier.size(size = MaterialTheme.size.huge),
                 measurements = ButtonMeasurements.Large,
-                iconSize = 24.dp,
+                iconSize = IconButtonDefaults.smallIconSize,
                 icon = ToolkitIcon.Vector(ToolSymbols.Remove),
                 contentDescription = stringResource(R.string.tool_counter_decrement),
                 feedback = ButtonFeedback(hapticFeedbackType = HapticFeedbackType.TextHandleMove),
             )
             Surface(Modifier.weight(1f), shape = CircleShape, color = MaterialTheme.colorScheme.primaryContainer) {
-                BoxWithConstraints(Modifier.padding(horizontal = 12.dp, vertical = 16.dp), contentAlignment = Alignment.Center) {
+                BoxWithConstraints(
+                    modifier = Modifier.padding(horizontal = MaterialTheme.spacing.medium, vertical = MaterialTheme.spacing.large),
+                    contentAlignment = Alignment.Center,
+                ) {
                     val density = LocalDensity.current
                     val fit = with(density) { (maxWidth.toPx() / (count.toString().length * .75f)).toSp() }
                     AnimatedToolNumber(
@@ -168,9 +172,9 @@ internal fun CounterControls(count: Int, onIncrement: () -> Unit, onDecrement: (
             GeneralButton(
                 onClick = onIncrement,
                 enabled = count < Int.MAX_VALUE,
-                modifier = Modifier.size(64.dp),
+                modifier = Modifier.size(size = MaterialTheme.size.huge),
                 measurements = ButtonMeasurements.Large,
-                iconSize = 24.dp,
+                iconSize = IconButtonDefaults.smallIconSize,
                 icon = ToolkitIcon.Vector(ToolSymbols.Add),
                 contentDescription = stringResource(R.string.tool_counter_increment),
                 feedback = ButtonFeedback(hapticFeedbackType = HapticFeedbackType.TextHandleMove),

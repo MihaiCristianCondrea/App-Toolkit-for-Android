@@ -43,10 +43,11 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.models.ThemePreferencesState
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.context.openDisplaySettings
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.style.spacing.spacing
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.R
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.ScreenHost
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.ScreenStateHandler
@@ -187,7 +188,7 @@ private fun ThemeSettingsList(
 ) {
     LazyColumn(
         contentPadding = contentPadding,
-        verticalArrangement = Arrangement.spacedBy(SizeConstants.LargeSize),
+        verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.large),
         modifier = modifier.fillMaxSize(),
     ) {
         animatedItem(key = "theme_preview_illustration") {
@@ -196,8 +197,8 @@ private fun ThemeSettingsList(
                 contentDescription = null,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(SizeConstants.TwoHundredTwentySize)
-                    .clip(RoundedCornerShape(size = SizeConstants.LargeSize + SizeConstants.SmallSize)),
+                    .height(220.dp)
+                    .clip(RoundedCornerShape(size = 24.dp)),
             )
         }
 
@@ -224,7 +225,7 @@ private fun ThemeSettingsList(
             ThemeModePicker(
                 selectedMode = preferences.themeMode,
                 onSelected = onThemeModeSelected,
-                modifier = Modifier.padding(horizontal = SizeConstants.LargeSize),
+                modifier = Modifier.padding(horizontal = MaterialTheme.spacing.large),
             )
         }
 
@@ -232,7 +233,7 @@ private fun ThemeSettingsList(
             SwitchCardItem(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(horizontal = SizeConstants.MediumSize * 2),
+                    .padding(horizontal = MaterialTheme.spacing.extraLargeCompact),
                 title = stringResource(id = R.string.amoled_mode),
                 enabled = isAmoledAllowed(preferences.themeMode),
                 switchState = rememberUpdatedState(preferences.amoledMode),
@@ -245,7 +246,7 @@ private fun ThemeSettingsList(
             InfoMessageSection(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(all = SizeConstants.MediumSize * 2),
+                    .padding(all = MaterialTheme.spacing.extraLargeCompact),
                 message = stringResource(id = R.string.summary_dark_theme),
                 newLine = false,
                 learnMoreText = stringResource(id = R.string.screen_and_display_settings),
@@ -257,13 +258,13 @@ private fun ThemeSettingsList(
 
 @Composable
 private fun SectionDivider() {
-    HorizontalDivider(modifier = Modifier.padding(all = SizeConstants.SmallSize))
+    HorizontalDivider(modifier = Modifier.padding(all = MaterialTheme.spacing.small))
 }
 
 @Composable
 private fun SectionTitle(@StringRes title: Int) {
     Text(
-        modifier = Modifier.padding(horizontal = SizeConstants.LargeSize),
+        modifier = Modifier.padding(horizontal = MaterialTheme.spacing.large),
         text = stringResource(id = title),
         style = MaterialTheme.typography.titleLarge,
         fontWeight = FontWeight.SemiBold,

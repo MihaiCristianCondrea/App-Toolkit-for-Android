@@ -24,20 +24,19 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Email
 import androidx.compose.material.icons.outlined.Title
+import androidx.compose.material3.ListItemDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.input.KeyboardType
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.icons.ToolkitIcon
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.fields.GeneralTextField
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.fields.GeneralTextFieldStyle
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.fields.markdown.MarkdownFormatAction
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.GroupedItemPosition
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.PreferenceItemDefaults
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.R
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.ui.constants.IssueReporterUiConstants
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.ui.contracts.IssueReporterEvent
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.ui.mappers.toUiText
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.ui.states.IssueReporterUiState
@@ -67,14 +66,13 @@ internal fun IssueReportForm(
 ) {
     Column(
         modifier = modifier.fillMaxWidth(),
-        verticalArrangement = Arrangement.spacedBy(space = SizeConstants.ExtraTinySize),
+        verticalArrangement = Arrangement.spacedBy(space = ListItemDefaults.SegmentedGap),
     ) {
         GeneralTextField(
             value = data.title,
             onValueChange = { value -> onEvent(IssueReporterEvent.UpdateTitle(value = value)) },
             style = GeneralTextFieldStyle.Grouped,
-            position = GroupedItemPosition.FIRST,
-            groupedOuterRadius = IssueReporterUiConstants.GROUP_OUTER_RADIUS,
+            shape = PreferenceItemDefaults.segmentedShapes(index = 0, count = 3).shape,
             placeholder = stringResource(id = R.string.issue_title_label),
             leadingIcon = ToolkitIcon.Vector(imageVector = Icons.Outlined.Title),
             leadingIconContentDescription = stringResource(id = R.string.issue_title_label),
@@ -103,8 +101,7 @@ internal fun IssueReportForm(
             value = data.email,
             onValueChange = { value -> onEvent(IssueReporterEvent.UpdateEmail(value = value)) },
             style = GeneralTextFieldStyle.Grouped,
-            position = GroupedItemPosition.LAST,
-            groupedOuterRadius = IssueReporterUiConstants.GROUP_OUTER_RADIUS,
+            shape = PreferenceItemDefaults.segmentedShapes(index = 2, count = 3).shape,
             placeholder = stringResource(id = R.string.issue_email_label),
             leadingIcon = ToolkitIcon.Vector(imageVector = Icons.Outlined.Email),
             leadingIconContentDescription = stringResource(id = R.string.issue_email_label),

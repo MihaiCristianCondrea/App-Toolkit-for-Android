@@ -15,11 +15,15 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences
+package com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.constants
 
-/**
- * Position of an item inside a grouped list.
- */
-enum class GroupedItemPosition {
-    FIRST, MIDDLE, LAST, SINGLE
+import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.dp
+
+internal object ThemeChoiceCardConstants {
+    /**
+     * Lift of a selected theme choice card. It sits between Material's level 2 (3dp) and level 3
+     * (6dp), so it is not on `MaterialTheme.elevation`.
+     */
+    val SELECTED_ELEVATION: Dp = 4.dp
 }

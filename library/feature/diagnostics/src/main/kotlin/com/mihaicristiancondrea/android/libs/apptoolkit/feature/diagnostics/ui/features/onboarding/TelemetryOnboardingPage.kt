@@ -46,8 +46,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.icons.ToolkitIcon
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.style.size.size
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.style.spacing.spacing
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.R as CoreUiR
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.Loadable
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.MessageHost
@@ -56,10 +57,9 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.Ge
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.shell.LocalPageSnackbarHostState
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.shell.rememberPageSnackbarHostState
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.snackbar.DefaultSnackbarHost
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.spacers.ExtraLargeIncreasedVerticalSpacer
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.spacers.ExtraLargeVerticalSpacer
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.spacers.LargeVerticalSpacer
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.spacers.SmallVerticalSpacer
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.spacers.ExtraExtraLargeCompactVerticalSpacer
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.diagnostics.R
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.diagnostics.data.models.UsageAndDiagnosticsSettings
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.diagnostics.ui.UsageAndDiagnosticsViewModel
@@ -133,7 +133,7 @@ internal fun TelemetryOnboardingPageContent(
     Column(
         modifier = modifier
             .fillMaxSize()
-            .padding(horizontal = SizeConstants.LargeSize)
+            .padding(horizontal = MaterialTheme.spacing.large)
             .verticalScroll(state = rememberScrollState()),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.SpaceBetween,
@@ -142,7 +142,7 @@ internal fun TelemetryOnboardingPageContent(
             Icon(
                 imageVector = Icons.Outlined.Analytics,
                 contentDescription = null,
-                modifier = Modifier.size(size = SizeConstants.LauncherIconSize + SizeConstants.LargeSize),
+                modifier = Modifier.size(size = MaterialTheme.size.huge),
                 tint = MaterialTheme.colorScheme.primary,
             )
 
@@ -165,11 +165,10 @@ internal fun TelemetryOnboardingPageContent(
                 style = MaterialTheme.typography.bodyLarge,
                 textAlign = TextAlign.Center,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
-                modifier = Modifier.padding(horizontal = SizeConstants.LargeSize),
+                modifier = Modifier.padding(horizontal = MaterialTheme.spacing.large),
             )
 
-            ExtraLargeIncreasedVerticalSpacer()
-            SmallVerticalSpacer()
+            ExtraExtraLargeCompactVerticalSpacer()
 
             if (failedState != null) {
                 Text(
@@ -177,7 +176,7 @@ internal fun TelemetryOnboardingPageContent(
                     style = MaterialTheme.typography.bodyMedium,
                     textAlign = TextAlign.Center,
                     color = MaterialTheme.colorScheme.error,
-                    modifier = Modifier.padding(horizontal = SizeConstants.LargeSize),
+                    modifier = Modifier.padding(horizontal = MaterialTheme.spacing.large),
                 )
 
                 if (failedState.retryable) {

@@ -14,6 +14,9 @@ page frame, state handling, analytics hooks, and shared components.
   and `MessageHost`. `MessageToastHost` presents the same queue above modal sheets when a
   snackbar would be obscured. Toasts have no actions; errors default to a long duration. See
   [Screen state](#screen-state) and [Screen visits](#screen-visits).
+- `ScreenActionHandler` gives content an action callback. The screen handles UI actions and sends
+  ViewModel events through the supplied dispatcher. `rememberTapThreshold` saves a cumulative tap
+  count and invokes a callback on each threshold multiple.
 - The shell's page frame, in `views/shell`: `PageScaffold`, `ShellTopAppBar` and
   `rememberTopBarScrollBehavior`, the app bar's search field, `LocalContentPadding` and
   `contentPadding`, `ContentWidthBox`, the pane placeholders, and the page's snackbar host
@@ -36,6 +39,8 @@ page frame, state handling, analytics hooks, and shared components.
 - `ChoicePreferenceItem`, the settings row that shows the chosen option and opens a radio-list
   dialog to change it. Its `icon` is optional; the Toolkit's settings rows go without one, while
   their dialogs keep an icon on top through `dialogIcon`.
+- `CelebrationConfetti`, the shared particle overlay for About and onboarding. Each feature
+  controls when it mounts and removes the overlay.
 - Reusable buttons, fields, preferences, layouts, grids, dialogs, snackbars, ads slots, effects, and
   adaptive-window helpers.
 - `MainTopAppBar`, the host main-screen app bar, its optional centre-aligned title, and its
@@ -112,6 +117,13 @@ flowchart TD
 - Global UI preferences arrive through the design-system root. Reusable components must not start
   their own persistence collectors; `collectDataStoreState` and `persistChanges` are helpers for a
   screen that does collect a preference, and neither lets a storage failure escape the effect.
+- Prefer native Material and Compose defaults (`MaterialTheme.shapes`, `ButtonDefaults`,
+  `SwitchDefaults`, `DividerDefaults`, `ListItemDefaults`) and `MaterialTheme.spacing` (from
+  `:library:core:designsystem`) or explicit `dp` dimensions for layout spacing. Introduce a custom
+  dimension object only when it defines a meaningful, reusable component contract.
+  `views/spacers/SystemBarsSpacers.kt` wraps `WindowInsets` spacing, and
+  `views/spacers/VerticalSpacers.kt` and `views/spacers/HorizontalSpacers.kt` provide themed
+  spacers backed by `MaterialTheme.spacing`.
 
 ## Public contracts
 
@@ -135,7 +147,15 @@ flowchart TD
 - `SettingsConfig`, `SettingsCategory` and `SettingsPreference`. A row opens its `destination` key
   unless its `action` returns `true`. Its `icon` is a `ToolkitIcon`, so a row can show an animated,
   Lottie or drawable icon as the navigation does; the `ImageVector` constructor is deprecated.
-  `PreferenceItem` and `SettingsPreferenceItem` take either.
+  `PreferenceItem` and `SettingsPreferenceItem` take either. Preference rows (`SettingsPreferenceItem`,
+  `SwitchPreferenceItem`, `CheckBoxPreferenceItem`, `RadioButtonPreferenceItem`,
+  `SwitchPreferenceItemWithDivider`) render through Material 3 `SegmentedListItem` with
+  `PreferenceItemDefaults.segmentedShapes(index, count, outerShape, innerShape)` and
+  `PreferenceItemDefaults.colors()`. The shapes are cut from `MaterialTheme.shapes` tokens
+  (`largeIncreased` outside, `extraSmall` at the seams by default); a selected or checked row
+  rounds every corner with the outer shape, and the other interaction states keep the resting
+  corners. The colors keep a checked or selected row on its resting container.
+  Rows pad their content by `MaterialTheme.spacing.large` on every side.
 - `SettingsSearchEntry` and `SettingsSearchProvider`, the settings search's contract: each settings
   page's module binds a provider in Koin listing its rows (title, the page they live on, the key
   they open), and the settings list collects them all with `getAll`, depending on none of the
@@ -242,21 +262,22 @@ part of the state a screen owns.
 |---|---|
 | `Filled` (default) | The Material `TextField` |
 | `Outlined` | The Material `OutlinedTextField` |
-| `Grouped` | A filled field with no indicator line, cut to `position` in a grouped block |
+| `Grouped` | A filled field with no indicator line, shaped to match a grouped block via `shape` |
 | `Search` | The Material search input, pill-shaped, leading with a search icon |
 | `SearchOutlined` | The outlined field, fully rounded, leading with a search icon |
 
-`Grouped` is the form treatment: a column of fields two dp apart reads as one card, so the indicator
-line is dropped (it would cut the block into strips) and `position` plus `groupedOuterRadius` cut the
-corners. Such a field usually carries no `label` either, because a floating label reserves height
-whether or not it is showing; `placeholder` and a described `leadingIcon` name it instead.
+`Grouped` is the form treatment: a column of fields spaced by `ListItemDefaults.SegmentedGap` reads
+as one card, so the indicator line is dropped (it would cut the block into strips) and `shape`
+rounds the outer corners. Such a field usually carries no `label` either, because a floating label
+reserves height whether or not it is showing; `placeholder` and a described `leadingIcon` name it
+instead.
 
 `Search` is the odd one out, and deliberately so: it is `SearchBarDefaults.InputField` rather than a
 rounded text field, for a box that filters the content behind it as it is typed, such as a top app bar that
 swaps its title for a search field, say. It is used on its own rather than inside a `SearchBar`
 because the collapsed bar intercepts the soft keyboard and only accepts typing once it expands into
 a surface that reserves 240dp for results this kind of field does not have. The parameters that
-describe a form field (label, supportingText, errorText, minLines, markdown, position)
+describe a form field (label, supportingText, errorText, minLines, markdown, shape)
 do not apply to it, and the `TextFieldValue` overload rejects it outright, because the Material input
 owns its text state and has no caret to hand over. `onSearch` reports the keyboard's search action;
 focus is dropped first either way.
@@ -279,7 +300,7 @@ the field gains focus, since a field is not a button, and a per-keystroke event 
 - `Editor` adds the formatting bar underneath (bold, italic, inline code, code fences, bulleted and
   numbered lists, quotes and links) which edits the Markdown source and places the caret between the
   markers it inserts. The bar is cut and filled to match the style above it, so field and bar read as
-  one block; a grouped field hands the lower half of its `position` to the bar.
+  one block; a grouped field hands the bottom corners of its `shape` to the bar.
 
 Either mode replaces `visualTransformation`, since the field draws the source itself.
 `onMarkdownFormat` reports which action was used, as a `MarkdownFormatAction` whose `analyticsName`

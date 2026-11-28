@@ -197,7 +197,7 @@ the disclosure label, the failure reporting, and the debug placeholder.
 NativeAdSlot(
     adUnitId = adUnitId,
     presentation = NativeAdPresentation.Compact,
-    position = GroupedItemPosition.MIDDLE,
+    shape = PreferenceItemDefaults.segmentedShapes(index = 1, count = 3).shape,
     containerColor = MaterialTheme.colorScheme.surfaceContainerLow,
     onAdLoaded = { visible -> },
 )
@@ -220,7 +220,7 @@ NativeAdSlot(
     style = NativeAdStyle(
         badgeShape = rememberNativeAdBadgeShape(
             shape = MaterialShapes.Cookie12Sided.toShape(),
-            size = SizeConstants.LauncherIconSize,
+            size = 48.dp,
         ),
         badgeColor = MaterialTheme.colorScheme.primaryContainer,
         iconInsetDp = 12,

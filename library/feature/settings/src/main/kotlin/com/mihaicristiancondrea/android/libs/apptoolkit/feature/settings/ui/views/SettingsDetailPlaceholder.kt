@@ -26,7 +26,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.ContactSupport
@@ -39,8 +38,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
+import androidx.compose.ui.unit.dp
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.icons.ToolkitIcon
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.style.spacing.spacing
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.GeneralButton
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.GeneralButtonStyle
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.shell.contentPadding
@@ -66,23 +66,23 @@ fun SettingsDetailPlaceholder(
             .verticalScroll(state = rememberScrollState())
             .padding(
                 paddingValues = contentPadding(
-                    extra = PaddingValues(all = SizeConstants.LargeSize),
+                    extra = PaddingValues(all = MaterialTheme.spacing.large),
                 ),
             ),
         contentAlignment = Alignment.Center,
     ) {
         Card(
             modifier = Modifier.widthIn(max = PlaceholderMaxWidth),
-            shape = RoundedCornerShape(size = SizeConstants.ExtraLargeSize),
+            shape = MaterialTheme.shapes.extraLarge,
         ) {
             Column(
-                modifier = Modifier.padding(all = SizeConstants.MediumSize * 2),
+                modifier = Modifier.padding(all = MaterialTheme.spacing.extraLargeCompact),
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
                 Image(
                     painter = painterResource(id = R.drawable.il_settings),
                     contentDescription = null,
-                    modifier = Modifier.size(size = SizeConstants.TwoHundredFiftyEightSize),
+                    modifier = Modifier.size(size = 258.dp),
                 )
                 LargeVerticalSpacer()
                 Text(
@@ -101,9 +101,9 @@ fun SettingsDetailPlaceholder(
                 style = GeneralButtonStyle.Outlined,
                 modifier = Modifier
                     .padding(
-                        start = SizeConstants.MediumSize * 2,
-                        end = SizeConstants.MediumSize * 2,
-                        bottom = SizeConstants.MediumSize * 2,
+                        start = MaterialTheme.spacing.extraLargeCompact,
+                        end = MaterialTheme.spacing.extraLargeCompact,
+                        bottom = MaterialTheme.spacing.extraLargeCompact,
                     )
                     .align(alignment = Alignment.Start),
                 onClick = { navigator.navigate(key = HelpScreen) },
@@ -114,4 +114,4 @@ fun SettingsDetailPlaceholder(
     }
 }
 
-private val PlaceholderMaxWidth = SizeConstants.TwoHundredFiftyEightSize * 2
+private val PlaceholderMaxWidth = 516.dp

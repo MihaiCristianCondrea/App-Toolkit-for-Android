@@ -22,7 +22,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.UiText
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.Loadable
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.GroupedItemPosition
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.privacy.ui.contracts.PrivacyItemAction
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.privacy.ui.models.PrivacyItem
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.privacy.ui.models.PrivacyItemKey
@@ -45,14 +44,12 @@ private fun PrivacyScreenContentPreview() {
                             key = PrivacyItemKey.PRIVACY_POLICY,
                             title = UiText.DynamicString(content = "Privacy policy"),
                             summary = UiText.DynamicString(content = "How the app handles your data"),
-                            position = GroupedItemPosition.FIRST,
                             action = PrivacyItemAction.OpenUrl(url = "https://example.com/privacy"),
                         ),
                         PrivacyItem.Preference(
                             key = PrivacyItemKey.PERMISSIONS,
                             title = UiText.DynamicString(content = "Permissions"),
                             summary = UiText.DynamicString(content = "What the app asks for and why"),
-                            position = GroupedItemPosition.LAST,
                             action = PrivacyItemAction.OpenPermissions,
                         ),
                     ),

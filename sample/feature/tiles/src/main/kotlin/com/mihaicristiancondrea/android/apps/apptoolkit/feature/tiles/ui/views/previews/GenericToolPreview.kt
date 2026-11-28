@@ -28,11 +28,11 @@ import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.model
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.mappers.previewTextResId
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.models.ToolkitTile
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.ResultPill
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.style.spacing.spacing
 
 @Composable
 fun GenericToolPreview(tile: ToolkitTile) {
-    Column(verticalArrangement = Arrangement.spacedBy(SizeConstants.MediumSize)) {
+    Column(verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.medium)) {
         ResultPill(label = stringResource(id = tile.previewTextResId()))
         Text(
             text = if (tile.status == ToolkitTileStatus.Available) {

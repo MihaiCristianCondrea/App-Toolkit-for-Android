@@ -33,8 +33,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.context.openUrl
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.style.spacing.spacing
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.spacers.SmallVerticalSpacer
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.diagnostics.R
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.diagnostics.data.models.UsageAndDiagnosticsSettings
@@ -55,7 +55,7 @@ fun DetailsPage(
         modifier = Modifier
             .fillMaxWidth()
             .verticalScroll(state = rememberScrollState()),
-        verticalArrangement = Arrangement.spacedBy(space = SizeConstants.SmallSize),
+        verticalArrangement = Arrangement.spacedBy(space = MaterialTheme.spacing.small),
     ) {
         Text(
             text = stringResource(id = R.string.privacy_choices_details_intro),

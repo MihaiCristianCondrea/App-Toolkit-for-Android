@@ -26,9 +26,6 @@ import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -45,6 +42,9 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.models.StatusColors
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.style.spacing.spacing
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.spacers.MediumVerticalSpacer
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.spacers.SmallVerticalSpacer
 
 /*
  * The live widgets of the overview tabs, as the marketing kit draws them (`.qt-live` in
@@ -63,7 +63,7 @@ internal fun WidgetLabel(
 ) {
     Text(
         text = text.uppercase(),
-        modifier = modifier.padding(start = 4.dp),
+        modifier = modifier.padding(start = MaterialTheme.spacing.extraSmall),
         style = WidgetLabelStyle.copy(letterSpacing = letterSpacing.sp),
         color = color,
     )
@@ -114,7 +114,7 @@ internal fun LiveWidget(
     note: String,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
-    shape: Shape = RoundedCornerShape(28.dp),
+    shape: Shape = MaterialTheme.shapes.extraLarge,
     signal: Boolean = false,
     faceModifier: Modifier = Modifier,
     face: @Composable BoxScope.() -> Unit,
@@ -127,12 +127,12 @@ internal fun LiveWidget(
     Surface(onClick = onClick, modifier = modifier.animateVisibility(), shape = shape, color = container, contentColor = scheme.onSurface) {
         Column(
             modifier = Modifier.padding(
-                start = if (signal) 16.dp else 12.dp,
-                end = if (signal) 16.dp else 12.dp,
-                top = 16.dp,
-                bottom = 20.dp,
+                start = if (signal) MaterialTheme.spacing.large else MaterialTheme.spacing.medium,
+                end = if (signal) MaterialTheme.spacing.large else MaterialTheme.spacing.medium,
+                top = MaterialTheme.spacing.large,
+                bottom = MaterialTheme.spacing.largeIncreased,
             ),
-            verticalArrangement = Arrangement.spacedBy(4.dp),
+            verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.extraSmall),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             WidgetLabel(
@@ -140,13 +140,13 @@ internal fun LiveWidget(
                 modifier = Modifier.align(Alignment.Start),
                 color = if (signal) accent.content else scheme.onSurfaceVariant,
             )
-            Spacer(Modifier.height(8.dp))
+            SmallVerticalSpacer()
             Box(
                 modifier = faceModifier.size(faceSize).clip(faceShape).background(faceColor),
                 contentAlignment = Alignment.Center,
                 content = face,
             )
-            Spacer(Modifier.height(if (signal) 12.dp else 8.dp))
+            if (signal) MediumVerticalSpacer() else SmallVerticalSpacer()
             WidgetValue(value, size = if (signal) 24 else 28, modifier = if (signal) Modifier.align(Alignment.Start) else Modifier)
             WidgetNote(note, accent.content, modifier = if (signal) Modifier.align(Alignment.Start) else Modifier)
         }
@@ -155,8 +155,5 @@ internal fun LiveWidget(
 
 private val WidgetLabelStyle: TextStyle
     @Composable get() = MaterialTheme.typography.labelMedium.copy(
-        fontSize = 12.sp,
-        lineHeight = 16.sp,
         fontWeight = FontWeight.SemiBold,
-        letterSpacing = 0.5.sp,
     )

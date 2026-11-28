@@ -17,13 +17,12 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.privacy.ui.mappers
 
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.GroupedItemPosition
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.privacy.ui.contracts.PrivacyItemAction
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.privacy.ui.models.PrivacyItem
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.privacy.ui.models.PrivacyItemKey
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.privacy.ui.providers.PrivacySettingsProvider
-import kotlin.test.assertEquals
 import org.junit.jupiter.api.Test
+import kotlin.test.assertEquals
 
 class PrivacyMappersTest {
 
@@ -57,17 +56,6 @@ class PrivacyMappersTest {
     }
 
     @Test
-    fun `assigns card positions per group rather than across the whole list`() {
-        val items = provider.toPrivacyItems()
-
-        assertEquals(GroupedItemPosition.FIRST, items.preference(PrivacyItemKey.PRIVACY_POLICY).position)
-        assertEquals(GroupedItemPosition.MIDDLE, items.preference(PrivacyItemKey.ADS).position)
-        assertEquals(GroupedItemPosition.LAST, items.preference(PrivacyItemKey.USAGE_AND_DIAGNOSTICS).position)
-        assertEquals(GroupedItemPosition.FIRST, items.preference(PrivacyItemKey.LEGAL_NOTICES).position)
-        assertEquals(GroupedItemPosition.LAST, items.preference(PrivacyItemKey.LICENSE).position)
-    }
-
-    @Test
     fun `link rows carry the provider's urls and host rows carry their destination`() {
         val items = provider.toPrivacyItems()
 
@@ -85,6 +73,18 @@ class PrivacyMappersTest {
             PrivacyItemAction.OpenUsageAndDiagnostics,
             items.preference(PrivacyItemKey.USAGE_AND_DIAGNOSTICS).action,
         )
+    }
+
+    @Test
+    fun `each row knows its place within its own group`() {
+        val items = provider.toPrivacyItems()
+
+        val policy = items.preference(PrivacyItemKey.PRIVACY_POLICY)
+        assertEquals(0 to 6, policy.index to policy.count)
+        val diagnostics = items.preference(PrivacyItemKey.USAGE_AND_DIAGNOSTICS)
+        assertEquals(5 to 6, diagnostics.index to diagnostics.count)
+        val notices = items.preference(PrivacyItemKey.LEGAL_NOTICES)
+        assertEquals(0 to 2, notices.index to notices.count)
     }
 
     private fun List<PrivacyItem>.preference(key: String): PrivacyItem.Preference =

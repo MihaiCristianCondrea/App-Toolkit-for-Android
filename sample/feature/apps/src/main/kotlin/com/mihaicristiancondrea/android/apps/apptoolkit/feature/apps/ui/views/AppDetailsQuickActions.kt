@@ -42,8 +42,8 @@ import androidx.compose.ui.text.font.FontWeight
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.data.models.AppSummary
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.R
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.ui.contracts.AppActionLauncher
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.icons.ToolkitIcon
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.style.spacing.spacing
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.grid.GroupedGrid
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.grid.GroupedGridItem
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.grid.GroupedGridMeasurements
@@ -145,12 +145,12 @@ internal fun AppDetailsQuickActions(
         fontWeight = FontWeight.SemiBold,
         modifier = Modifier
             .fillMaxWidth()
-            .padding(horizontal = SizeConstants.LargeSize),
+            .padding(horizontal = MaterialTheme.spacing.large),
     )
     ExtraSmallVerticalSpacer()
     GroupedGrid(
         items = quickActions,
-        modifier = Modifier.padding(horizontal = SizeConstants.LargeSize),
+        modifier = Modifier.padding(horizontal = MaterialTheme.spacing.large),
         measurements = GroupedGridMeasurements.Small,
         iconShape = badgeShape,
     )

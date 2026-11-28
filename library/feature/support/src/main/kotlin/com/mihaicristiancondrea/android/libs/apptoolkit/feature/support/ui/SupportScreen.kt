@@ -24,12 +24,9 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.MoneyOff
 import androidx.compose.material.icons.outlined.Paid
@@ -43,9 +40,9 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ads.AdsQualifiers
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.context.openUrl
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.icons.ToolkitIcon
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.style.spacing.spacing
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.ads.AdsConfig
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.ScreenHost
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.ScreenStateHandler
@@ -53,6 +50,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.Ge
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.GeneralButtonStyle
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.modifiers.animatedItem
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.shell.contentPadding
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.spacers.MediumHorizontalSpacer
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.support.R
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.support.data.models.DonationProductIds
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.support.ui.analytics.SUPPORT_SCREEN
@@ -166,8 +164,8 @@ private fun SupportList(
             Text(
                 text = stringResource(id = R.string.paid_support),
                 modifier = Modifier.padding(
-                    start = SizeConstants.LargeSize,
-                    top = SizeConstants.LargeSize,
+                    start = MaterialTheme.spacing.large,
+                    top = MaterialTheme.spacing.large,
                 ),
                 style = MaterialTheme.typography.titleLarge,
             )
@@ -176,18 +174,18 @@ private fun SupportList(
             OutlinedCard(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(all = SizeConstants.LargeSize),
-                shape = RoundedCornerShape(size = SizeConstants.ExtraLargeSize),
+                    .padding(all = MaterialTheme.spacing.large),
+                shape = MaterialTheme.shapes.extraLarge,
             ) {
                 Column {
                     Text(
                         text = stringResource(id = R.string.summary_donations),
-                        modifier = Modifier.padding(all = SizeConstants.LargeSize),
+                        modifier = Modifier.padding(all = MaterialTheme.spacing.large),
                     )
                     Row(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(horizontal = SizeConstants.LargeSize),
+                            .padding(horizontal = MaterialTheme.spacing.large),
                         horizontalArrangement = Arrangement.SpaceEvenly,
                     ) {
                         DonationButton(
@@ -198,7 +196,7 @@ private fun SupportList(
                             onDonate = onDonate,
                             modifier = Modifier.weight(1f),
                         )
-                        Spacer(modifier = Modifier.width(SizeConstants.MediumSize))
+                        MediumHorizontalSpacer()
                         DonationButton(
                             productId = DonationProductIds.NORMAL_DONATION,
                             preferenceKey = SupportPreferenceKeys.DONATE_NORMAL,
@@ -211,7 +209,7 @@ private fun SupportList(
                     Row(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(all = SizeConstants.LargeSize),
+                            .padding(all = MaterialTheme.spacing.large),
                         horizontalArrangement = Arrangement.SpaceEvenly,
                     ) {
                         DonationButton(
@@ -222,7 +220,7 @@ private fun SupportList(
                             onDonate = onDonate,
                             modifier = Modifier.weight(1f),
                         )
-                        Spacer(modifier = Modifier.width(SizeConstants.MediumSize))
+                        MediumHorizontalSpacer()
                         DonationButton(
                             productId = DonationProductIds.EXTREME_DONATION,
                             preferenceKey = SupportPreferenceKeys.DONATE_EXTREME,
@@ -238,7 +236,7 @@ private fun SupportList(
         animatedItem(key = "support_non_paid_header") {
             Text(
                 text = stringResource(id = R.string.non_paid_support),
-                modifier = Modifier.padding(start = SizeConstants.LargeSize),
+                modifier = Modifier.padding(start = MaterialTheme.spacing.large),
                 style = MaterialTheme.typography.titleLarge,
             )
         }
@@ -247,7 +245,7 @@ private fun SupportList(
                 style = GeneralButtonStyle.Tonal,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(all = SizeConstants.LargeSize),
+                    .padding(all = MaterialTheme.spacing.large),
                 onClick = onOpenWebAd,
                 ga4Event = supportPreferenceTapEvent(
                     preferenceKey = SupportPreferenceKeys.WEB_AD,
@@ -262,7 +260,7 @@ private fun SupportList(
             item(key = "support_native_ad") {
                 SupportNativeAdCard(
                     modifier = Modifier
-                        .padding(all = SizeConstants.LargeSize)
+                        .padding(all = MaterialTheme.spacing.large)
                         .animateItem(),
                     adUnitId = adUnitId,
                 )

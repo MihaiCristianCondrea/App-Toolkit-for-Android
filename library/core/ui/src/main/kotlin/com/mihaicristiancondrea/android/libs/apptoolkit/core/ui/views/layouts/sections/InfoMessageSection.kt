@@ -64,11 +64,9 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.text.Learn
  *
  * Example Usage:
  * ```
- * import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
- *
  * InfoMessageSection(
  *     message = "This is an important information message.",
- *     modifier = Modifier.padding(SizeConstants.LargeSize),
+ *     modifier = Modifier.padding(16.dp),
  *     learnMoreText = "Learn More",
  *     learnMoreUrl = "https://www.example.com"
  * )

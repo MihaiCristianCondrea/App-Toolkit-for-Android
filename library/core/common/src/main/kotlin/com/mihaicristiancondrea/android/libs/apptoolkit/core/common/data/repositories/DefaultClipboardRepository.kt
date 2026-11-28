@@ -29,7 +29,7 @@ class DefaultClipboardRepository(context: Context) : ClipboardRepository {
 
     private val appContext: Context = context.applicationContext
 
-    override val confirmsCopies: Boolean
+    override val confirmsCopies: Boolean // FIXME: This method should be annotated with `@ChecksSdkIntAtLeast(api=android.os.Build.VERSION_CODES.TIRAMISU)`
         get() = Build.VERSION.SDK_INT > Build.VERSION_CODES.S_V2
 
     override fun copyText(label: String, text: String, isSensitive: Boolean) {

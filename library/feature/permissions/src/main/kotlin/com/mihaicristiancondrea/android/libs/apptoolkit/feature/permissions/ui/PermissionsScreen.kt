@@ -20,12 +20,15 @@ package com.mihaicristiancondrea.android.libs.apptoolkit.feature.permissions.ui
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.material3.ListItemDefaults
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.telemetry.models.TrackedScreen
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.style.spacing.spacing
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.settings.SettingsCategory
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.settings.SettingsConfig
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.settings.SettingsPreference
@@ -33,9 +36,8 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.ScreenHos
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.modifiers.animatedItem
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.modifiers.animatedItemsIndexed
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.PreferenceCategoryItem
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.PreferenceItemDefaults
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.SettingsPreferenceItem
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.groupedItemPosition
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.groupedPreferenceItem
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.shell.contentPadding
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.permissions.R
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.permissions.ui.constants.PermissionKeys
@@ -134,7 +136,7 @@ fun PermissionsContent(
     LazyColumn(
         contentPadding = paddingValues,
         modifier = modifier.fillMaxSize(),
-        verticalArrangement = Arrangement.spacedBy(space = SizeConstants.ExtraTinySize),
+        verticalArrangement = Arrangement.spacedBy(space = ListItemDefaults.SegmentedGap),
     ) {
         settingsConfig.categories.forEachIndexed { categoryIndex, category ->
             category.title?.let { title ->
@@ -161,13 +163,14 @@ fun PermissionsContent(
                     iconContainerColor = preference.iconContainerColor,
                     title = preference.title,
                     summary = preference.summary,
+                    shapes = PreferenceItemDefaults.segmentedShapes(
+                        index = index,
+                        count = category.preferences.size,
+                    ),
                     onClick = preference.action?.let { action -> { action() } },
-                    modifier = Modifier.groupedPreferenceItem(
-                        position = groupedItemPosition(
-                            index = index,
-                            size = category.preferences.size,
-                        ),
-                        outerRadius = SizeConstants.LargeMediumSize,
+                    modifier = Modifier.padding(
+                        horizontal = MaterialTheme.spacing.large,
+                        vertical = if (category.preferences.size == 1) MaterialTheme.spacing.extraTiny else MaterialTheme.spacing.none,
                     ),
                 )
             }

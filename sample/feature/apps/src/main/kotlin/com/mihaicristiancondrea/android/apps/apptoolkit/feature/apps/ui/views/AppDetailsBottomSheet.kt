@@ -34,7 +34,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.OpenInNew
@@ -44,7 +43,6 @@ import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material.icons.outlined.Share
 import androidx.compose.material.icons.outlined.Verified
 import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularWavyProgressIndicator
 import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.Icon
@@ -62,6 +60,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.R
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.data.models.AppDetails
@@ -70,9 +69,9 @@ import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.ui.contract
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.ui.models.AppInfoChipUi
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.ui.parsers.toDisplayRatio
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.models.AppVersionMetadata
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.icons.ToolkitIcon
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.style.bounceClick
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.style.spacing.spacing
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.R as CoreUiR
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.GeneralButton
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.GeneralButtonStyle
@@ -81,6 +80,16 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.spacers.La
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.spacers.MediumHorizontalSpacer
 import kotlinx.coroutines.launch
 
+/**
+ * Content of the app details sheet: header, install actions, metadata chips, the quick-action grid
+ * (which owns the sheet's ad placement), then the description and screenshots once [appDetails]
+ * has loaded. `AppDetails.links` is parsed but not shown.
+ *
+ * @param appDetails the loaded details, or null while they load or after they fail.
+ * @param isAppInstalled whether the app is installed; null while that is still being checked.
+ * @param installedVersionInfo the installed version, shown beside the latest one.
+ * @param onRetryDetails called from the retry button shown when [hasDetailsError] is true.
+ */
 @Composable
 fun AppDetailsBottomSheet(
     appInfo: AppSummary,
@@ -119,7 +128,6 @@ fun AppDetailsBottomSheet(
             installedVersionInfo = installedVersionInfo,
         )
         LargeVerticalSpacer()
-        // The grouped quick-action grid owns the sheet's ad placement.
         AppDetailsQuickActions(
             appInfo = appInfo,
             isFavorite = isFavorite,
@@ -132,7 +140,7 @@ fun AppDetailsBottomSheet(
             isDetailsLoading -> Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(SizeConstants.ExtraLargeSize),
+                    .padding(MaterialTheme.spacing.extraLarge),
                 contentAlignment = Alignment.Center,
             ) {
                 CircularWavyProgressIndicator()
@@ -141,9 +149,9 @@ fun AppDetailsBottomSheet(
             hasDetailsError -> Column(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(SizeConstants.LargeSize),
+                    .padding(MaterialTheme.spacing.large),
                 horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.spacedBy(SizeConstants.MediumSize),
+                verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.medium),
             ) {
                 Text(text = stringResource(id = R.string.error_failed_to_load_apps))
                 GeneralButton(
@@ -170,31 +178,29 @@ fun AppDetailsBottomSheet(
                     text = stringResource(id = R.string.app_details_screenshots_title),
                     style = MaterialTheme.typography.titleMedium,
                     fontWeight = FontWeight.SemiBold,
-                    modifier = Modifier.padding(horizontal = SizeConstants.LargeSize),
+                    modifier = Modifier.padding(horizontal = MaterialTheme.spacing.large),
                 )
                 LargeVerticalSpacer()
                 LazyRow(
-                    contentPadding = PaddingValues(horizontal = SizeConstants.LargeSize),
-                    horizontalArrangement = Arrangement.spacedBy(SizeConstants.LargeSize),
+                    contentPadding = PaddingValues(horizontal = MaterialTheme.spacing.large),
+                    horizontalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.large),
                 ) {
                     items(appDetails.screenshots) { screenshot ->
-                        Card(shape = RoundedCornerShape(SizeConstants.LargeSize)) {
+                        Card(shape = MaterialTheme.shapes.large) {
                             AsyncImage(
                                 model = screenshot.url,
                                 contentDescription = null,
                                 contentScale = ContentScale.Crop,
                                 modifier = Modifier
-                                    .height(SizeConstants.TwoHundredFortySize)
+                                    .height(240.dp)
                                     .aspectRatio(screenshot.aspectRatio.toDisplayRatio())
-                                    .clip(RoundedCornerShape(SizeConstants.LargeSize)),
+                                    .clip(MaterialTheme.shapes.large),
                             )
                         }
                     }
                 }
             }
         }
-        // Links are deliberately not rendered for now. `AppDetails.links` is still parsed and
-        // carried, so restoring this is re-adding the section rather than re-plumbing the data.
         LargeVerticalSpacer()
     }
 }
@@ -206,15 +212,15 @@ private fun AppDetailsHeader(
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(horizontal = SizeConstants.LargeSize),
+            .padding(horizontal = MaterialTheme.spacing.large),
         verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.spacedBy(SizeConstants.MediumSize),
+        horizontalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.medium),
     ) {
-        Card(shape = RoundedCornerShape(SizeConstants.LargeSize)) {
+        Card(shape = MaterialTheme.shapes.large) {
             AsyncImage(
                 model = appInfo.iconUrl,
                 contentDescription = appInfo.name,
-                modifier = Modifier.size(SizeConstants.LauncherIconSize * 2),
+                modifier = Modifier.size(96.dp),
             )
         }
         Column(modifier = Modifier.weight(1f)) {
@@ -252,8 +258,8 @@ private fun AppDetailsActions(
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(horizontal = SizeConstants.LargeSize),
-        horizontalArrangement = Arrangement.spacedBy(SizeConstants.MediumSize),
+            .padding(horizontal = MaterialTheme.spacing.large),
+        horizontalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.medium),
         verticalAlignment = Alignment.CenterVertically,
     ) {
         when (isAppInstalled) {
@@ -280,7 +286,7 @@ private fun AppDetailsActions(
                     contentDescription = stringResource(R.string.app_details_view_on_play_store),
                     contentScale = ContentScale.Fit,
                     modifier = Modifier
-                        .height(SizeConstants.LauncherIconSize)
+                        .height(48.dp) // FIXME: Use the MaterialTheme.size
                         .bounceClick()
                         .clickable(
                             interactionSource = remember { MutableInteractionSource() },
@@ -330,8 +336,8 @@ private fun AppMetadataChips(
 
     LazyRow(
         modifier = Modifier.fillMaxWidth(),
-        contentPadding = PaddingValues(horizontal = SizeConstants.LargeSize),
-        horizontalArrangement = Arrangement.spacedBy(SizeConstants.MediumSize),
+        contentPadding = PaddingValues(horizontal = MaterialTheme.spacing.large),
+        horizontalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.medium),
     ) {
         items(chipItems) { chipItem ->
             AppInfoChip(icon = chipItem.icon, label = chipItem.label)
@@ -345,18 +351,15 @@ private fun AppInfoChip(
     label: String,
 ) {
     ElevatedCard(
-        colors = CardDefaults.elevatedCardColors(
-            containerColor = MaterialTheme.colorScheme.surfaceContainerLow,
-        ),
-        shape = RoundedCornerShape(SizeConstants.ExtraLargeSize),
+        shape = MaterialTheme.shapes.extraLarge,
     ) {
         Row(
             modifier = Modifier.padding(
-                horizontal = SizeConstants.MediumSize,
-                vertical = SizeConstants.SmallSize,
+                horizontal = MaterialTheme.spacing.medium,
+                vertical = MaterialTheme.spacing.small,
             ),
             verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(SizeConstants.SmallSize),
+            horizontalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.small),
         ) {
             Icon(imageVector = icon, contentDescription = null)
             Text(text = label, style = MaterialTheme.typography.bodyMedium)
@@ -374,7 +377,7 @@ private fun AppSection(
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(horizontal = SizeConstants.LargeSize),
+            .padding(horizontal = MaterialTheme.spacing.large),
     ) {
         Row(verticalAlignment = Alignment.CenterVertically) {
             Icon(imageVector = icon, contentDescription = null)

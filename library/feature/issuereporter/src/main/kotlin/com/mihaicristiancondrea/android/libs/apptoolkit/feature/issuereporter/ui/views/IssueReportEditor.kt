@@ -29,8 +29,8 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.icons.ToolkitIcon
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.style.spacing.spacing
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.ButtonMeasurements
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.GeneralButton
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.GeneralButtonStyle
@@ -56,7 +56,7 @@ internal fun IssueReportEditor(
 ) {
     Column(
         modifier = modifier.fillMaxWidth(),
-        verticalArrangement = Arrangement.spacedBy(space = SizeConstants.MediumSize),
+        verticalArrangement = Arrangement.spacedBy(space = MaterialTheme.spacing.medium),
     ) {
         Text(
             text = stringResource(id = R.string.bug_report),
@@ -68,7 +68,7 @@ internal fun IssueReportEditor(
                 .fillMaxWidth()
                 .weight(weight = 1f, fill = false)
                 .verticalScroll(state = rememberScrollState()),
-            verticalArrangement = Arrangement.spacedBy(space = SizeConstants.ExtraTinySize),
+            verticalArrangement = Arrangement.spacedBy(space = MaterialTheme.spacing.extraTiny),
         ) {
             IssueReportForm(
                 data = state,

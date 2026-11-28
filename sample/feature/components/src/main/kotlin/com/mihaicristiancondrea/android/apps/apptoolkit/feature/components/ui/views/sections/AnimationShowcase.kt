@@ -28,12 +28,12 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Animation
 import androidx.compose.material.icons.rounded.ArrowDropDown
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -47,25 +47,28 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.components.R
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.components.ui.mappers.labelResId
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.components.ui.views.ShowcaseHeader
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.components.ui.views.ShowcaseSection
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.components.ui.views.ShowcaseSurface
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.icons.AnimatedToolkitIcon
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.icons.ToolkitIcon
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.icons.ToolkitIconLoopTrigger
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.icons.ToolkitIconReplayMode
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.style.size.size
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.style.spacing.spacing
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.ButtonIconPosition
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.GeneralButton
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.GeneralButtonStyle
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.dropdown.CommonDropdownMenuItem
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.GroupedItemPosition
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.PreferenceItemDefaults
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.R as DesignSystemR
@@ -142,6 +145,7 @@ private val loopTriggers: ImmutableList<ToolkitIconLoopTrigger> =
  *
  * Changing any of them resets the previews to their initial frame.
  */
+@OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
 fun AnimationShowcase() {
     var replayMode: ToolkitIconReplayMode by rememberSaveable {
@@ -152,6 +156,7 @@ fun AnimationShowcase() {
         mutableStateOf(value = ToolkitIconLoopTrigger.OnInteraction)
     }
     val hapticFeedback = LocalHapticFeedback.current
+    val totalCards = animationSamples.size + 1
 
     ShowcaseHeader(
         title = stringResource(R.string.components_section_animations),
@@ -163,15 +168,15 @@ fun AnimationShowcase() {
             style = MaterialTheme.typography.bodyMedium,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
             modifier = Modifier.padding(
-                start = SizeConstants.SmallSize,
-                bottom = SizeConstants.ExtraSmallSize,
+                start = MaterialTheme.spacing.small,
+                bottom = MaterialTheme.spacing.extraSmall,
             ),
         )
         ShowcaseSurface(
-            position = GroupedItemPosition.FIRST,
+            shape = PreferenceItemDefaults.segmentedShapes(index = 0, count = totalCards).shape,
             contentPadding = PaddingValues(
-                horizontal = SizeConstants.LargeSize,
-                vertical = SizeConstants.SmallSize,
+                horizontal = MaterialTheme.spacing.large,
+                vertical = MaterialTheme.spacing.small,
             ),
         ) {
             val replayLabel = stringResource(R.string.components_animation_replay)
@@ -193,7 +198,7 @@ fun AnimationShowcase() {
                     loop = !loop
                 },
             ) {
-                Checkbox(checked = loop, onCheckedChange = { loop = it })
+                Checkbox(checked = loop, onCheckedChange = null)
             }
             AnimatedVisibility(visible = loop) {
                 val startLabel = stringResource(R.string.components_animation_loop_start)
@@ -209,16 +214,15 @@ fun AnimationShowcase() {
             }
         }
         animationSamples.forEachIndexed { index, (name, resource) ->
-            val position = if (index == animationSamples.lastIndex) {
-                GroupedItemPosition.LAST
-            } else {
-                GroupedItemPosition.MIDDLE
-            }
+            val cardShape = PreferenceItemDefaults.segmentedShapes(
+                index = index + 1,
+                count = totalCards,
+            ).shape
             key(name, replayMode, loop, loopTrigger) {
                 AnimationPreviewCard(
                     name = name,
                     resource = resource,
-                    position = position,
+                    shape = cardShape,
                     replayMode = replayMode,
                     loop = loop,
                     loopTrigger = loopTrigger,
@@ -226,18 +230,6 @@ fun AnimationShowcase() {
             }
         }
     }
-}
-
-/** Label of the replay mode as it is offered in the menu. */
-private fun ToolkitIconReplayMode.labelResId(): Int = when (this) {
-    ToolkitIconReplayMode.Restart -> R.string.components_animation_replay_restart
-    ToolkitIconReplayMode.Reverse -> R.string.components_animation_replay_reverse
-}
-
-/** Label of the loop trigger as it is offered in the menu. */
-private fun ToolkitIconLoopTrigger.labelResId(): Int = when (this) {
-    ToolkitIconLoopTrigger.Immediately -> R.string.components_animation_loop_start_immediately
-    ToolkitIconLoopTrigger.OnInteraction -> R.string.components_animation_loop_start_on_tap
 }
 
 /**
@@ -255,10 +247,10 @@ private fun AnimationControlRow(
     Row(
         modifier = modifier
             .fillMaxWidth()
-            .heightIn(min = SizeConstants.FortyFourSize)
+            .heightIn(min = 44.dp)
             .then(if (onClick != null) Modifier.clickable(onClick = onClick) else Modifier),
         verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.spacedBy(SizeConstants.SmallSize),
+        horizontalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.small),
     ) {
         Text(
             text = label,
@@ -319,7 +311,7 @@ private fun <T> AnimationOptionMenu(
 private fun AnimationPreviewCard(
     name: String,
     @DrawableRes resource: Int,
-    position: GroupedItemPosition,
+    shape: Shape,
     replayMode: ToolkitIconReplayMode,
     loop: Boolean,
     loopTrigger: ToolkitIconLoopTrigger,
@@ -339,7 +331,7 @@ private fun AnimationPreviewCard(
     }
 
     ShowcaseSurface(
-        position = position,
+        shape = shape,
         modifier = modifier,
         onClick = {
             hapticFeedback.performHapticFeedback(HapticFeedbackType.ContextClick)
@@ -358,9 +350,8 @@ private fun AnimationPreviewCard(
                 modifier = Modifier.weight(1f),
             )
             Surface(
-                shape = RoundedCornerShape(16.dp),
+                shape = MaterialTheme.shapes.large,
                 color = MaterialTheme.colorScheme.secondaryContainer,
-                contentColor = MaterialTheme.colorScheme.onSecondaryContainer,
                 modifier = Modifier.size(52.dp),
             ) {
                 Box(contentAlignment = Alignment.Center) {
@@ -368,8 +359,7 @@ private fun AnimationPreviewCard(
                         icon = icon,
                         clickCount = clickCount,
                         contentDescription = name,
-                        tint = MaterialTheme.colorScheme.onSecondaryContainer,
-                        modifier = Modifier.size(24.dp),
+                        modifier = Modifier.size(size = MaterialTheme.size.medium),
                     )
                 }
             }

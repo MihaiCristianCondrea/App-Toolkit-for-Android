@@ -30,7 +30,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.fields.Gen
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.fields.GeneralTextFieldMarkdown
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.fields.GeneralTextFieldStyle
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.fields.markdown.MarkdownFormatAction
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.GroupedItemPosition
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.PreferenceItemDefaults
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.R
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.ui.constants.IssueReporterUiConstants
 
@@ -63,8 +63,7 @@ internal fun IssueDescriptionField(
         modifier = modifier,
         errorText = errorText,
         style = GeneralTextFieldStyle.Grouped,
-        position = GroupedItemPosition.MIDDLE,
-        groupedOuterRadius = IssueReporterUiConstants.GROUP_OUTER_RADIUS,
+        shape = PreferenceItemDefaults.segmentedShapes(index = 1, count = 3).shape,
         placeholder = stringResource(id = R.string.issue_description_placeholder),
         leadingIcon = ToolkitIcon.Vector(imageVector = Icons.Outlined.Description),
         leadingIconContentDescription = stringResource(id = R.string.issue_description_label),

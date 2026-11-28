@@ -34,7 +34,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.style.spacing.spacing
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.MessageHost
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.theme.ThemeModePicker
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.theme.ThemePalettePicker
@@ -84,11 +84,11 @@ internal fun ThemeOnboardingPageTabContent(
             .fillMaxSize()
             .verticalScroll(state = scrollState)
             .padding(
-                horizontal = SizeConstants.LargeSize,
-                vertical = SizeConstants.MediumSize,
+                horizontal = MaterialTheme.spacing.large,
+                vertical = MaterialTheme.spacing.medium,
             ),
         horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.spacedBy(space = SizeConstants.LargeSize),
+        verticalArrangement = Arrangement.spacedBy(space = MaterialTheme.spacing.large),
     ) {
         Text(
             text = stringResource(id = R.string.onboarding_theme_title),
@@ -105,7 +105,7 @@ internal fun ThemeOnboardingPageTabContent(
             style = MaterialTheme.typography.bodyLarge,
             textAlign = TextAlign.Center,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
-            modifier = Modifier.padding(horizontal = SizeConstants.LargeSize),
+            modifier = Modifier.padding(horizontal = MaterialTheme.spacing.large),
         )
 
         ThemeModePicker(
@@ -131,7 +131,7 @@ internal fun ThemeOnboardingPageTabContent(
             onStaticPaletteSelected = { id, _ ->
                 onEvent(OnboardingThemeEvent.SelectStaticPalette(id = id))
             },
-            horizontalPadding = SizeConstants.ZeroSize,
+            horizontalPadding = MaterialTheme.spacing.none,
         )
     }
 }

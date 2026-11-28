@@ -21,20 +21,23 @@ import android.content.Context
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.material3.ListItemDefaults
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.context.openUrl
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.style.spacing.spacing
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.ScreenHost
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.ScreenStateHandler
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.modifiers.animatedItems
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.PreferenceCategoryItem
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.PreferenceItemDefaults
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.SettingsPreferenceItem
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.groupedPreferenceItem
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.shell.contentPadding
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.privacy.ui.analytics.PRIVACY_SCREEN
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.privacy.ui.analytics.privacyPreferenceTapEvent
@@ -116,7 +119,7 @@ internal fun PrivacyScreenContent(
         LazyColumn(
             contentPadding = contentPadding,
             modifier = Modifier.fillMaxSize(),
-            verticalArrangement = Arrangement.spacedBy(space = SizeConstants.ExtraTinySize),
+            verticalArrangement = Arrangement.spacedBy(space = ListItemDefaults.SegmentedGap),
         ) {
             animatedItems(
                 items = ready.value,
@@ -128,12 +131,10 @@ internal fun PrivacyScreenContent(
                     is PrivacyItem.Preference -> SettingsPreferenceItem(
                         title = item.title.asString(),
                         summary = item.summary.asString(),
+                        shapes = PreferenceItemDefaults.segmentedShapes(index = item.index, count = item.count),
                         onClick = { onPreferenceClick(item = item) },
                         ga4Event = privacyPreferenceTapEvent(preferenceKey = item.key),
-                        modifier = Modifier.groupedPreferenceItem(
-                            position = item.position,
-                            outerRadius = SizeConstants.LargeMediumSize,
-                        ),
+                        modifier = Modifier.padding(horizontal = MaterialTheme.spacing.large),
                     )
                 }
             }

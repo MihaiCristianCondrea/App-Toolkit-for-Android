@@ -18,7 +18,7 @@
 package com.mihaicristiancondrea.android.libs.apptoolkit.core.common.di
 
 /** Named DI qualifiers used across AppToolkit modules. */
-object AppToolkitDiConstants {
+object AppToolkitDiConstants { // TODO: Maybe some of these constants belong in their dedicated modules.
     const val GITHUB_REPOSITORY = "github_repository"
     const val GITHUB_CHANGELOG = "github_changelog"
     const val ANDROID_APPS_METADATA_API_BASE_URL = "android_apps_metadata_api_base_url"

@@ -1099,28 +1099,6 @@ mnw-android-screen,
   width: 100%;
 }
 
-/* HowToAddTilesCard (TileInfoCards.kt): 28dp radius, surfaceContainerLow, NO border */
-.qt-howto-card {
-  border-radius: 28px;
-  padding: 16px;
-  background: var(--md-sys-color-surface-container-low);
-  color: var(--md-sys-color-on-surface);
-  display: flex;
-  gap: 16px;
-  align-items: flex-start;
-}
-.qt-howto-steps {
-  margin: 8px 0 0;
-  padding: 0;
-  list-style: none;
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-  font: 400 14px/20px var(--md-ref-typeface-plain);
-  letter-spacing: 0.25px;
-  color: var(--md-sys-color-on-surface-variant);
-}
-
 /* Apps Catalog (AppsList.kt & AppCard.kt):
    2-column square aspect-ratio cards on Compact, 3 on Medium, 4 on Expanded;
    28dp radius, tonal filled card surface, NO border. */
@@ -1363,9 +1341,6 @@ mnw-android-screen,
 .qt-tile[data-accent="magenta"] .qt-tile__status { color: var(--tk-magenta-content); }
 .qt-tile[data-accent="red"] .qt-tile__status { color: var(--tk-red-content); }
 .qt-tile[data-accent="amber"] .qt-tile__status { color: var(--tk-amber-content); }
-.qt-howto-card { background: var(--md-sys-color-surface-container-low); border-radius: 28px; padding: 16px 20px; display: block; }
-.qt-howto-title { font: 600 16px/24px var(--md-ref-typeface-plain); }
-.qt-howto-text { margin: 4px 0 0; font: 400 14px/20px var(--md-ref-typeface-plain); color: var(--md-sys-color-on-surface-variant); }
 
 /* Dials */
 .tk-dial { flex-shrink: 0; color: var(--tk-teal-content); }

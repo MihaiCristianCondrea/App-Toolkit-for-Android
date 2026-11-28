@@ -23,9 +23,10 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.style.spacing.spacing
 
 /**
  * Simple grid that measures and places all items without lazy behaviour.
@@ -57,7 +58,7 @@ fun NonLazyGrid(
                         Box(
                             modifier = Modifier
                                 .weight(weight = 1f)
-                                .padding(all = SizeConstants.SmallSize)
+                                .padding(all = MaterialTheme.spacing.small)
                                 .aspectRatio(ratio = 1f)
                         ) {
                             content(index)

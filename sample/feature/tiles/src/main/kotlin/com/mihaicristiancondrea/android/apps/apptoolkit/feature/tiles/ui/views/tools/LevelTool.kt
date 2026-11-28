@@ -39,6 +39,7 @@ import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.mappers
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.models.ToolkitTileIcon
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.ResultPill
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.catalog.Cookie16Shape
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.style.spacing.spacing
 import kotlin.math.abs
 
 @Composable
@@ -55,7 +56,7 @@ fun LevelTool(pitch: Float, roll: Float, compact: Boolean = false) {
         label = "level-roll",
     )
     Column(Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.spacedBy(12.dp)) {
+        verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.medium)) {
         Canvas(Modifier.size(if (compact) 112.dp else 200.dp).clip(Cookie16Shape)) {
             val currentPitch = animatedPitch.value
             val currentRoll = animatedRoll.value
@@ -68,7 +69,7 @@ fun LevelTool(pitch: Float, roll: Float, compact: Boolean = false) {
         }
         if (compact) {
             Text("P: "+pitch.toInt()+"° · R: "+roll.toInt()+"°", style = MaterialTheme.typography.bodySmall)
-        } else Row(horizontalArrangement = Arrangement.spacedBy(4.dp)) {
+        } else Row(horizontalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.extraSmall)) {
             ResultPill("P: "+pitch.toInt()+"°", start = true)
             ResultPill("R: "+roll.toInt()+"°", start = false)
         }

@@ -66,6 +66,7 @@ import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.contrac
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.states.ProtractorToolUiState
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.models.protractorGeometry
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.icons.ToolkitIcon
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.style.spacing.spacing
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.GeneralButton
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.GeneralButtonStyle
 import kotlin.math.cos
@@ -140,7 +141,7 @@ fun ProtractorTool(state: ProtractorToolUiState, onEvent: (ProtractorToolEvent) 
                     drawCircle(accent, 8.dp.toPx(), endpoint)
                     drawCircle(surfaceColor, 8.dp.toPx(), endpoint, style = Stroke(3.dp.toPx()))
                 }
-                Row(Modifier.fillMaxWidth().statusBarsPadding().padding(16.dp), verticalAlignment = Alignment.CenterVertically) {
+                Row(Modifier.fillMaxWidth().statusBarsPadding().padding(MaterialTheme.spacing.large), verticalAlignment = Alignment.CenterVertically) {
                     Text(title, style = MaterialTheme.typography.headlineSmall, modifier = Modifier.weight(1f))
                     GeneralButton(
                         style = GeneralButtonStyle.Text,
@@ -150,9 +151,9 @@ fun ProtractorTool(state: ProtractorToolUiState, onEvent: (ProtractorToolEvent) 
                     )
                 }
                 // In landscape the three-button navigation sits at the side: the dock keeps clear of it.
-                val dock = if (geometry.landscape) Modifier.align(Alignment.CenterEnd).navigationBarsPadding().displayCutoutPadding().width(280.dp).padding(24.dp)
-                    else Modifier.align(Alignment.BottomCenter).fillMaxWidth().navigationBarsPadding().padding(20.dp)
-                Column(dock.verticalScroll(rememberScrollState()), verticalArrangement = Arrangement.spacedBy(12.dp)) {
+                val dock = if (geometry.landscape) Modifier.align(Alignment.CenterEnd).navigationBarsPadding().displayCutoutPadding().width(280.dp).padding(MaterialTheme.spacing.extraLargeCompact)
+                    else Modifier.align(Alignment.BottomCenter).fillMaxWidth().navigationBarsPadding().padding(MaterialTheme.spacing.largeIncreased)
+                Column(dock.verticalScroll(rememberScrollState()), verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.medium)) {
                     HorizontalDivider()
                     Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically) {
                         Text(stringResource(R.string.tool_angle_value, state.angle), style = MaterialTheme.typography.displayMedium, color = accent)
@@ -163,7 +164,7 @@ fun ProtractorTool(state: ProtractorToolUiState, onEvent: (ProtractorToolEvent) 
                             state.angle == 180f -> R.string.angle_straight
                             state.angle < 90f -> R.string.angle_acute
                             else -> R.string.angle_obtuse
-                        }), style = MaterialTheme.typography.labelLarge, modifier = Modifier.padding(horizontal = 12.dp, vertical = 8.dp))
+                        }), style = MaterialTheme.typography.labelLarge, modifier = Modifier.padding(horizontal = MaterialTheme.spacing.medium, vertical = MaterialTheme.spacing.small))
                         }
                     }
                     val sliderState = rememberSliderState(value = state.angle, trackRange = 0f..180f)

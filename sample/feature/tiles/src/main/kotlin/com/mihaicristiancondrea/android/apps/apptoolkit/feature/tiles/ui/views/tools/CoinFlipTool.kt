@@ -41,9 +41,7 @@ import androidx.compose.ui.graphics.lerp
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -68,10 +66,11 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.R
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.models.CoinSide
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.icons.ToolkitIcon
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.style.spacing.spacing
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.ButtonMeasurements
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.GeneralButton
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.spacers.SmallVerticalSpacer
 
 
 @Composable
@@ -106,7 +105,7 @@ fun CoinFlipTool(side: CoinSide, flipRequest: Int, onFlip: () -> Unit, compact: 
     val maxLiftPx = with(density) { -24.dp.toPx() }
 
     Column(
-        verticalArrangement = Arrangement.spacedBy(SizeConstants.SmallSize),
+        verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.small),
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier.fillMaxWidth()
     ) {
@@ -149,7 +148,7 @@ fun CoinFlipTool(side: CoinSide, flipRequest: Int, onFlip: () -> Unit, compact: 
             color = MaterialTheme.colorScheme.onSurfaceVariant,
         )
 
-        if (!compact) Spacer(modifier = Modifier.height(SizeConstants.SmallSize))
+        if (!compact) SmallVerticalSpacer()
 
         if (!compact) GeneralButton(
             onClick = {

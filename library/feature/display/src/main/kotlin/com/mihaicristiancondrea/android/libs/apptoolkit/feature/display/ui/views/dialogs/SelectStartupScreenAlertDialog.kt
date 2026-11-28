@@ -22,8 +22,10 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.selection.selectableGroup
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Home
+import androidx.compose.material3.ListItemDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -34,15 +36,13 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.di.AppToolkitDiConstants
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.R
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.dialogs.BasicAlertDialog
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.dialogs.DialogContentSizing
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.dialogs.dialogContentHeight
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.layouts.sections.InfoMessageSection
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.PreferenceItemDefaults
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.RadioButtonPreferenceItem
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.groupedItemPosition
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.groupedPreferenceItem
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.spacers.MediumVerticalSpacer
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
@@ -129,22 +129,19 @@ fun SelectStartupScreenAlertDialogContent(
                 .fillMaxWidth(),
         ) {
             LazyColumn(
-                verticalArrangement = Arrangement.spacedBy(space = SizeConstants.ExtraTinySize),
+                modifier = Modifier.selectableGroup(),
+                verticalArrangement = Arrangement.spacedBy(space = ListItemDefaults.SegmentedGap),
             ) {
                 items(count = count) { index ->
                     val currentValue = startupValues[index]
                     RadioButtonPreferenceItem(
-                        modifier = Modifier.groupedPreferenceItem(
-                            position = groupedItemPosition(
-                                index = index,
-                                size = count,
-                            ),
-                            outerRadius = SizeConstants.LargeMediumSize,
-                            horizontalPadding = SizeConstants.ZeroSize,
-                        ),
                         text = startupEntries[index],
-                        isChecked = selectedPage == currentValue,
-                        onCheckedChange = { onSelectedPageChange(currentValue) },
+                        selected = selectedPage == currentValue,
+                        shapes = PreferenceItemDefaults.segmentedShapes(
+                            index = index,
+                            count = count,
+                        ),
+                        onSelect = { onSelectedPageChange(currentValue) },
                     )
                 }
             }

@@ -24,11 +24,12 @@ import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.LocalTextStyle
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.derivedStateOf
@@ -42,6 +43,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.style.spacing.spacing
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.motion.LocalShellMotion
 import kotlin.math.roundToInt
 
@@ -67,12 +69,11 @@ fun ArticleTopBarTitle(
         exit = fadeOut(tween(exit)) + slideOutVertically(tween(exit)) { it / 3 },
         label = "ArticleTitle",
     ) {
-        Row(verticalAlignment = Alignment.CenterVertically) {
-            val brand = host.brand
-            if (brand != null) {
-                ArticleBrand(brand, host.brandContentDescription)
-                Spacer(Modifier.width(BrandSpacing))
-            }
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(space = MaterialTheme.spacing.small),
+        ) {
+            host.brand?.let { brand -> ArticleBrand(brand, host.brandContentDescription) }
             Text(
                 text = host.title,
                 style = textStyle,
@@ -103,7 +104,6 @@ private fun ArticleBrand(painter: Painter, contentDescription: String?) {
 }
 
 private val BrandHeight = 24.dp
-private val BrandSpacing = 8.dp
 private const val MaxBrandRatio = 4f
 internal const val EnterMillis = 220
 internal const val ExitMillis = 120

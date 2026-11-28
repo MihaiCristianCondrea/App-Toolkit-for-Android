@@ -18,7 +18,6 @@
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.ui.mappers
 
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.UiText
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.groupedItemPosition
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.R
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.data.models.AboutInfo
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.ui.contracts.AboutItemAction
@@ -29,7 +28,7 @@ import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.R as CommonR
 
-/** Maps About metadata to rows and assigns grouped positions after filtering unavailable values. */
+/** Maps About metadata to ordered rows, omitting unavailable values. */
 internal fun AboutInfo.toAboutItems(): ImmutableList<AboutItem> {
     val appInfoPreferences = buildList {
         val appNameTitle = UiText.StringResource(resourceId = CommonR.string.app_full_name)
@@ -42,7 +41,7 @@ internal fun AboutInfo.toAboutItems(): ImmutableList<AboutItem> {
                     label = appNameTitle,
                     text = appNameTitle,
                 ),
-            )
+            ),
         )
         add(
             AboutItem.Preference(
@@ -51,8 +50,8 @@ internal fun AboutInfo.toAboutItems(): ImmutableList<AboutItem> {
                 summary = UiText.DynamicString(
                     content = formatAboutBuildVersion(versionName = appVersion, versionCode = appVersionCode),
                 ),
-                countsVersionTap = true,
-            )
+                action = AboutItemAction.VersionTap,
+            ),
         )
         if (appToolkitVersion.isNotBlank()) {
             val title = UiText.StringResource(resourceId = R.string.app_toolkit_version)
@@ -65,7 +64,7 @@ internal fun AboutInfo.toAboutItems(): ImmutableList<AboutItem> {
                         label = title,
                         text = UiText.DynamicString(content = appToolkitVersion),
                     ),
-                )
+                ),
             )
         }
         if (!googlePlayServicesVersion.isNullOrBlank()) {
@@ -79,7 +78,7 @@ internal fun AboutInfo.toAboutItems(): ImmutableList<AboutItem> {
                         label = title,
                         text = UiText.DynamicString(content = googlePlayServicesVersion),
                     ),
-                )
+                ),
             )
         }
         add(
@@ -88,9 +87,9 @@ internal fun AboutInfo.toAboutItems(): ImmutableList<AboutItem> {
                 title = UiText.StringResource(resourceId = R.string.oss_license_title),
                 summary = UiText.StringResource(resourceId = R.string.summary_preference_settings_oss),
                 action = AboutItemAction.OpenLicenses,
-            )
+            ),
         )
-    }.assignPositions()
+    }
 
     val deviceInfoPreferences = buildList {
         if (deviceInfo.isNotBlank()) {
@@ -107,32 +106,30 @@ internal fun AboutInfo.toAboutItems(): ImmutableList<AboutItem> {
                             resourceId = R.string.snack_device_info_copied,
                         ),
                     ),
-                )
+                ),
             )
         }
-    }.assignPositions()
+    }
 
     return buildList {
         add(
             AboutItem.Header(
                 key = AboutItemKey.HEADER_APP_INFO,
                 title = UiText.StringResource(resourceId = R.string.app_info),
-            )
+            ),
         )
-        addAll(elements = appInfoPreferences)
+        addAll(elements = appInfoPreferences.withSectionPositions())
         if (deviceInfoPreferences.isNotEmpty()) {
             add(
                 AboutItem.Header(
                     key = AboutItemKey.HEADER_DEVICE_INFO,
                     title = UiText.StringResource(resourceId = R.string.device_info),
-                )
+                ),
             )
-            addAll(elements = deviceInfoPreferences)
+            addAll(elements = deviceInfoPreferences.withSectionPositions())
         }
     }.toImmutableList()
 }
 
-private fun List<AboutItem.Preference>.assignPositions(): List<AboutItem.Preference> =
-    mapIndexed { index, item ->
-        item.copy(position = groupedItemPosition(index = index, size = size))
-    }
+private fun List<AboutItem.Preference>.withSectionPositions(): List<AboutItem.Preference> =
+    mapIndexed { index, item -> item.copy(index = index, count = size) }

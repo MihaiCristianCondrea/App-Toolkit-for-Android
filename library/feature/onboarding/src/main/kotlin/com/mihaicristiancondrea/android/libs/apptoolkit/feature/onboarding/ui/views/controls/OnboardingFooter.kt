@@ -39,8 +39,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
+import androidx.compose.ui.unit.dp
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.icons.ToolkitIcon
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.style.spacing.spacing
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.GeneralButton
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.GeneralButtonStyle
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.carousel.AospPageIndicator
@@ -71,8 +72,8 @@ fun OnboardingFooter(
     val motion = MaterialTheme.motionScheme
     FlexibleBottomAppBar(
         contentPadding = PaddingValues(
-            horizontal = SizeConstants.LargeSize,
-            vertical = SizeConstants.SmallSize,
+            horizontal = MaterialTheme.spacing.large,
+            vertical = MaterialTheme.spacing.small,
         ),
         horizontalArrangement = Arrangement.SpaceBetween,
     ) {
@@ -110,7 +111,7 @@ fun OnboardingFooter(
         ) {
             AospPageIndicator(
                 pagerState = pagerState,
-                dotSize = SizeConstants.SmallSize,
+                dotSize = 8.dp,
             )
         }
 

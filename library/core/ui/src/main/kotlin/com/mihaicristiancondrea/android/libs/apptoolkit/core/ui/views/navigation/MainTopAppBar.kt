@@ -42,7 +42,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.icons.ToolkitIcon
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.R
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.AnimatedIconButtonDirection
@@ -106,7 +105,6 @@ fun MainTopAppBar(
                 contentDescription = stringResource(id = R.string.go_back),
                 onClick = onNavigationIconClick,
                 feedback = ButtonFeedback(hapticFeedbackType = null),
-                iconSize = SizeConstants.TwentyFourSize,
             )
         }
     }
@@ -154,7 +152,6 @@ fun SupportMenuAction(onSupportClick: () -> Unit) {
         icon = ToolkitIcon.Vector(imageVector = Icons.Outlined.MoreVert),
         contentDescription = stringResource(id = R.string.content_description_more_options),
         onClick = { setExpandedMenu(true) },
-        iconSize = SizeConstants.TwentyFourSize,
     )
 
     DropdownMenu(

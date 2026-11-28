@@ -44,9 +44,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.context.openUrl
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.icons.ToolkitIcon
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.style.spacing.spacing
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.Loadable
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.ScreenHost
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.ScreenStateHandler
@@ -131,15 +131,15 @@ internal fun ChangelogDialogContent(
         modifier = modifier
             .fillMaxHeight()
             .padding(
-                start = SizeConstants.LargeSize,
-                end = SizeConstants.LargeSize,
-                bottom = SizeConstants.LargeSize,
+                start = MaterialTheme.spacing.large,
+                end = MaterialTheme.spacing.large,
+                bottom = MaterialTheme.spacing.large,
             ),
     ) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(bottom = SizeConstants.LargeSize),
+                .padding(bottom = MaterialTheme.spacing.large),
             verticalAlignment = Alignment.CenterVertically,
         ) {
             Icon(imageVector = Icons.Outlined.NewReleases, contentDescription = null)

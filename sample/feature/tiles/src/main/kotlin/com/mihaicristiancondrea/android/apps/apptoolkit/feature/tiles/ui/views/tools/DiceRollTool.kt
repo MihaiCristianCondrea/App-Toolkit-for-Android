@@ -29,7 +29,6 @@ import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -61,10 +60,10 @@ import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.R
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.models.DiceCubeFace
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.models.DiceFaceDefinition
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.models.Vec3
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.icons.ToolkitIcon
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.ButtonMeasurements
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.GeneralButton
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.spacers.ExtraLargeVerticalSpacer
 import kotlin.math.PI
 import kotlin.math.cos
 import kotlin.math.min
@@ -229,7 +228,7 @@ fun DiceRollTool(
                 },
         )
 
-        if (!compact) Spacer(modifier = Modifier.height(SizeConstants.ExtraLargeSize))
+        if (!compact) ExtraLargeVerticalSpacer()
 
         if (!compact) GeneralButton(
             onClick = {

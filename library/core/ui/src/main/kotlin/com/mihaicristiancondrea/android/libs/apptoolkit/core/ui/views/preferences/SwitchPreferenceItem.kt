@@ -17,38 +17,38 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences
 
-import android.view.View
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Card
-import androidx.compose.material3.Icon
+import androidx.compose.material3.ListItemColors
+import androidx.compose.material3.ListItemShapes
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
+import androidx.compose.material3.SegmentedListItem
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.hapticfeedback.HapticFeedback
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.platform.LocalHapticFeedback
-import androidx.compose.ui.platform.LocalView
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextOverflow
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
+import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.semantics.role
+import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.semantics.toggleableState
+import androidx.compose.ui.state.ToggleableState
+import androidx.compose.ui.unit.dp
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.style.spacing.spacing
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.analytics.Ga4EventData
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.analytics.logGa4Event
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.spacers.LargeHorizontalSpacer
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.switches.CustomSwitch
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.analytics.LocalTelemetry
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.analytics.logGa4Event
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.modifiers.componentEntrance
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.switches.CustomSwitch
 
 /**
- * Switch preference with caller-owned [checked] state. Row and switch taps emit
- * [onCheckedChange]; callers handle persistence. Use [summary] to explain the setting's effect.
+ * Switch preference backed by Material 3 [SegmentedListItem] with caller-owned [checked] state.
+ * The whole row owns the toggle interaction and exposes [Role.Switch] semantics; callers handle
+ * persistence. Use [summary] to explain the setting's effect.
  */
 @Composable
 fun SwitchPreferenceItem(
@@ -58,55 +58,56 @@ fun SwitchPreferenceItem(
     summary: String? = null,
     checked: Boolean,
     onCheckedChange: (Boolean) -> Unit,
+    enabled: Boolean = true,
+    shapes: ListItemShapes = PreferenceItemDefaults.segmentedShapes(index = 0, count = 1),
+    colors: ListItemColors = PreferenceItemDefaults.colors(),
     ga4Event: Ga4EventData? = null,
 ) {
     val telemetry = LocalTelemetry.current
     val hapticFeedback: HapticFeedback = LocalHapticFeedback.current
-    val view: View = LocalView.current
-    Card(
-        modifier = modifier.componentEntrance()
-            .fillMaxWidth(),
-        shape = RectangleShape,
-    ) {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .clickable(onClick = {
-                    hapticFeedback.performHapticFeedback(hapticFeedbackType = HapticFeedbackType.ContextClick)
-                    telemetry.logGa4Event(ga4Event)
-                    onCheckedChange(!checked)
-                }),
-            verticalAlignment = Alignment.CenterVertically,
-        ) {
-            icon?.let {
-                LargeHorizontalSpacer()
-                Icon(imageVector = it, contentDescription = null)
-                LargeHorizontalSpacer()
-            }
-            Column(
-                modifier = Modifier
-                    .padding(all = SizeConstants.LargeSize)
-                    .weight(weight = 1f),
-            ) {
-                Text(
-                    text = title,
-                    style = MaterialTheme.typography.titleMedium,
-                    fontWeight = FontWeight.SemiBold,
-                    maxLines = 1,
-                    overflow = TextOverflow.Ellipsis
-                )
-                summary?.let {
-                    Text(text = it, style = MaterialTheme.typography.bodyMedium)
-                }
-            }
+
+    SegmentedListItem(
+        onClick = {
+            val updatedChecked = !checked
+            hapticFeedback.performHapticFeedback(
+                hapticFeedbackType = if (updatedChecked) {
+                    HapticFeedbackType.ToggleOn
+                } else {
+                    HapticFeedbackType.ToggleOff
+                },
+            )
+            telemetry.logGa4Event(ga4Event)
+            onCheckedChange(updatedChecked)
+        },
+        shapes = shapes,
+        modifier = modifier
+            .componentEntrance()
+            .fillMaxWidth()
+            .heightIn(min = 80.dp)
+            .semantics {
+                role = Role.Switch
+                toggleableState = ToggleableState(value = checked)
+            },
+        enabled = enabled,
+        colors = colors,
+        verticalAlignment = Alignment.CenterVertically,
+        contentPadding = PaddingValues(all = MaterialTheme.spacing.large),
+        leadingContent = icon?.let { vector ->
+            { ControlRowLeadingIcon(imageVector = vector) }
+        },
+        supportingContent = summary?.let { text ->
+            { PreferenceSummaryText(text = text) }
+        },
+        trailingContent = {
             CustomSwitch(
                 checked = checked,
-                onCheckedChange = { isChecked ->
-                    telemetry.logGa4Event(ga4Event)
-                    onCheckedChange(isChecked)
-                },
-                modifier = Modifier.padding(all = SizeConstants.LargeSize)
+                onCheckedChange = null,
+                enabled = enabled,
+                modifier = Modifier.padding(start = MaterialTheme.spacing.largeIncreased),
             )
-        }
-    }
+        },
+        content = {
+            PreferenceTitleText(text = title)
+        },
+    )
 }

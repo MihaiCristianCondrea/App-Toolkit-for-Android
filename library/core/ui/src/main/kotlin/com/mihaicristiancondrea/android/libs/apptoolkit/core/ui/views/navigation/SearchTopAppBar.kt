@@ -35,6 +35,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Close
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
@@ -49,8 +50,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.icons.ToolkitIcon
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.style.size.size
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.R
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.AnimatedIconButtonDirection
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.ButtonFeedback
@@ -61,8 +62,6 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.fields.Gen
 
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.R as CommonR
 
-/** Height the search field is pinned to, so the bar does not grow when the field appears. */
-private val SearchFieldHeight = SizeConstants.FortyFourSize + SizeConstants.ExtraSmallSize
 
 /**
  * A top app bar whose title slot swaps for a search field.
@@ -135,7 +134,7 @@ fun SearchTopAppBar(
             targetState = showSearch,
             modifier = Modifier
                 .fillMaxWidth()
-                .height(height = SearchFieldHeight),
+                .height(height = MaterialTheme.size.extraExtraLarge),
             contentAlignment = if (centerTitle) Alignment.Center else Alignment.CenterStart,
             // Fade within fixed bounds so the placeholder stays aligned with its final position.
             transitionSpec = { motion.textSwap(initialScale = 0.96f, targetScale = 0.98f).using(sizeTransform = null) },
@@ -162,7 +161,7 @@ fun SearchTopAppBar(
                                 onClick = { onSearchQueryChange("") },
                                 icon = ToolkitIcon.Vector(imageVector = Icons.Outlined.Close),
                                 contentDescription = clearSearchContentDescription,
-                                iconSize = SizeConstants.ButtonIconSize,
+                                iconSize = ButtonDefaults.IconSize,
                             )
                         }
                     },
@@ -186,7 +185,6 @@ fun SearchTopAppBar(
                 contentDescription = stringResource(id = R.string.go_back),
                 onClick = onNavigationIconClick,
                 feedback = ButtonFeedback(hapticFeedbackType = null),
-                iconSize = SizeConstants.TwentyFourSize,
             )
         }
     }
@@ -279,7 +277,7 @@ fun SearchFilterAction(
             style = if (active) GeneralButtonStyle.Tonal else GeneralButtonStyle.Text,
             icon = ToolkitIcon.Vector(imageVector = if (active) activeIcon else icon),
             contentDescription = contentDescription,
-            iconSize = SizeConstants.ButtonIconSize,
+            iconSize = ButtonDefaults.IconSize,
         )
     }
 }

@@ -26,11 +26,11 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ExpandMore
 import androidx.compose.material.icons.outlined.QuestionAnswer
 import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -38,17 +38,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.RectangleShape
+import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.hapticfeedback.HapticFeedback
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.platform.LocalHapticFeedback
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.icons.ToolkitIcon
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.GeneralButton
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.GeneralButtonStyle
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.GroupedItemPosition
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.groupedCorners
+import androidx.compose.ui.unit.dp
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.style.size.size
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.style.spacing.spacing
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.spacers.LargeHorizontalSpacer
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.spacers.SmallVerticalSpacer
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.text.HtmlText
@@ -58,9 +55,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.text.HtmlT
  *
  * @param summary Answer rendered as HTML when the entry is expanded.
  * @param onToggleExpand Requests an expansion state change.
- *
- * @param groupedPosition Optional position in the FAQ content group. When supplied, the card
- * uses grouped corners and a compact layout; when omitted, the standalone shape is kept.
+ * @param shape Shape applied to the card surface.
  */
 @Composable
 fun QuestionCard(
@@ -69,29 +64,19 @@ fun QuestionCard(
     isExpanded: Boolean,
     onToggleExpand: () -> Unit,
     modifier: Modifier = Modifier,
-    groupedPosition: GroupedItemPosition? = null,
+    shape: Shape = CardDefaults.shape,
 ) {
     val hapticFeedback: HapticFeedback = LocalHapticFeedback.current
     val expandIconRotation by animateFloatAsState(
         targetValue = if (isExpanded) 180f else 0f,
         label = "ExpandIconRotation",
     )
-    val cardModifier = modifier
-        .fillMaxWidth()
-        .let { currentModifier ->
-            groupedPosition?.let {
-                currentModifier.groupedCorners(
-                    position = it,
-                    outerRadius = SizeConstants.ExtraLargeIncreasedSize,
-                )
-            } ?: currentModifier
-        }
-        .animateContentSize()
 
     Card(
-        modifier = cardModifier,
-        shape = groupedPosition?.let { RectangleShape }
-            ?: RoundedCornerShape(size = SizeConstants.MediumSize),
+        modifier = modifier
+            .fillMaxWidth()
+            .animateContentSize(),
+        shape = shape,
         onClick = {
             hapticFeedback.performHapticFeedback(hapticFeedbackType = HapticFeedbackType.ContextClick)
             onToggleExpand()
@@ -100,22 +85,23 @@ fun QuestionCard(
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(all = SizeConstants.MediumSize)
+                .padding(all = MaterialTheme.spacing.large)
         ) {
             Row(
-                verticalAlignment = Alignment.CenterVertically, modifier = Modifier.fillMaxWidth()
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier.fillMaxWidth()
             ) {
                 Icon(
                     imageVector = Icons.Outlined.QuestionAnswer,
                     contentDescription = null,
                     tint = MaterialTheme.colorScheme.primary,
                     modifier = Modifier
-                        .size(size = SizeConstants.LauncherIconSize)
+                        .size(size = MaterialTheme.size.extraExtraLarge)
                         .background(
                             color = MaterialTheme.colorScheme.primaryContainer,
                             shape = CircleShape
                         )
-                        .padding(all = SizeConstants.SmallSize)
+                        .padding(all = MaterialTheme.spacing.small)
                 )
 
                 LargeHorizontalSpacer()
@@ -126,13 +112,12 @@ fun QuestionCard(
                     modifier = Modifier.weight(weight = 1f)
                 )
 
-                GeneralButton(
-                    style = GeneralButtonStyle.Text,
-                    onClick = onToggleExpand,
+                Icon(
+                    imageVector = Icons.Filled.ExpandMore,
                     contentDescription = null,
-                    iconSize = SizeConstants.ButtonIconSize,
-                    icon = ToolkitIcon.Vector(imageVector = Icons.Filled.ExpandMore),
-                    modifier = Modifier.graphicsLayer { rotationZ = expandIconRotation },
+                    modifier = Modifier
+                        .padding(start = MaterialTheme.spacing.small)
+                        .graphicsLayer { rotationZ = expandIconRotation },
                 )
             }
             if (isExpanded) {

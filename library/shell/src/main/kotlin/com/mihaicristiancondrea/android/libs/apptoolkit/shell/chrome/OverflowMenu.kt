@@ -19,6 +19,7 @@ package com.mihaicristiancondrea.android.libs.apptoolkit.shell.chrome
 
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.MoreVert
 import androidx.compose.material3.DropdownMenu
@@ -36,6 +37,7 @@ import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.res.stringResource
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.icons.AnimatedToolkitIcon
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.icons.ToolkitIcon
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.style.size.size
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.AnimatedIconButtonDirection
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.DrawerEntry
 
@@ -78,7 +80,12 @@ internal fun OverflowMenu(
                 DropdownMenuItem(
                     text = { Text(stringResource(label)) },
                     leadingIcon = {
-                        AnimatedToolkitIcon(icon = icon, clickCount = 0, contentDescription = null)
+                        AnimatedToolkitIcon(
+                            icon = icon,
+                            clickCount = 0,
+                            contentDescription = null,
+                            modifier = Modifier.size(size = MaterialTheme.size.medium),
+                        )
                     },
                     onClick = {
                         feedback()

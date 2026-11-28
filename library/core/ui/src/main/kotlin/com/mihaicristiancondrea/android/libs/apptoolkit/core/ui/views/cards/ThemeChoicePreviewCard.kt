@@ -27,13 +27,11 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.shape.ZeroCornerSize
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
@@ -59,9 +57,13 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.style.bounceClick
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.style.elevation.elevation
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.style.spacing.spacing
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.constants.ThemeChoiceCardConstants
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.spacers.ExtraSmallVerticalSpacer
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.spacers.ExtraTinyVerticalSpacer
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.spacers.SmallVerticalSpacer
 
 /**
  * Displays a selectable theme choice card with optional preview content and description.
@@ -91,17 +93,15 @@ fun ThemeChoicePreviewCard(
     }
 
     val cardElevation = if (isSelected) {
-        SizeConstants.ExtraSmallSize
+        ThemeChoiceCardConstants.SELECTED_ELEVATION
     } else {
-        SizeConstants.ExtraTinySize / 2
+        MaterialTheme.elevation.level1
     }
 
-    val cardShape = RoundedCornerShape(SizeConstants.LargeSize)
-    val previewShape = RoundedCornerShape(
-        topStart = SizeConstants.MediumSize,
-        topEnd = SizeConstants.MediumSize,
-        bottomStart = 0.dp,
-        bottomEnd = 0.dp
+    val cardShape = MaterialTheme.shapes.large
+    val previewShape = MaterialTheme.shapes.medium.copy(
+        bottomStart = ZeroCornerSize,
+        bottomEnd = ZeroCornerSize,
     )
 
     Column(
@@ -125,9 +125,9 @@ fun ThemeChoicePreviewCard(
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(horizontal = SizeConstants.SmallSize),
+                    .padding(horizontal = MaterialTheme.spacing.small),
                 horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.spacedBy(SizeConstants.SmallSize),
+                verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.small),
             ) {
                 ExtraSmallVerticalSpacer()
 
@@ -161,19 +161,17 @@ fun ThemeChoicePreviewCard(
                         modifier = Modifier
                             .clip(CircleShape)
                             .background(iconBg)
-                            .padding(SizeConstants.ExtraSmallSize),
+                            .padding(MaterialTheme.spacing.extraSmall),
                         contentAlignment = Alignment.Center
                     ) {
                         Icon(
                             imageVector = icon,
                             contentDescription = title,
                             tint = iconTint,
-                            modifier = Modifier
-                                .size(SizeConstants.LargeSize + SizeConstants.SmallSize)
-                                .graphicsLayer {
-                                    scaleX = iconScale
-                                    scaleY = iconScale
-                                }
+                            modifier = Modifier.graphicsLayer {
+                                scaleX = iconScale
+                                scaleY = iconScale
+                            }
                         )
                     }
                 }
@@ -181,13 +179,13 @@ fun ThemeChoicePreviewCard(
                 Box(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .height(SizeConstants.NinetySixSize)
+                        .height(96.dp)
                         .clip(previewShape)
                         .padding(
-                            start = SizeConstants.ExtraTinySize * 2,
-                            end = SizeConstants.ExtraTinySize * 2,
-                            top = SizeConstants.ExtraTinySize * 2,
-                            bottom = SizeConstants.ZeroSize
+                            start = MaterialTheme.spacing.extraSmall,
+                            end = MaterialTheme.spacing.extraSmall,
+                            top = MaterialTheme.spacing.extraSmall,
+                            bottom = MaterialTheme.spacing.none,
                         ),
                     contentAlignment = Alignment.Center,
                 ) {
@@ -196,7 +194,7 @@ fun ThemeChoicePreviewCard(
             }
         }
 
-        Spacer(modifier = Modifier.height(SizeConstants.SmallSize))
+        SmallVerticalSpacer()
 
         Text(
             text = title,
@@ -209,7 +207,7 @@ fun ThemeChoicePreviewCard(
         )
 
         if (!description.isNullOrBlank()) {
-            Spacer(modifier = Modifier.height(SizeConstants.ExtraTinySize))
+            ExtraTinyVerticalSpacer()
 
             Text(
                 text = description,

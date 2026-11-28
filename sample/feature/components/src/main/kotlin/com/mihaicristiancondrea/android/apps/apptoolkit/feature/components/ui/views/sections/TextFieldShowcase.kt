@@ -29,6 +29,9 @@ import androidx.compose.material.icons.outlined.Person
 import androidx.compose.material.icons.outlined.TextFields
 import androidx.compose.material.icons.outlined.Title
 import androidx.compose.material.icons.rounded.Close
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
+import androidx.compose.material3.ListItemDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -46,7 +49,6 @@ import com.mihaicristiancondrea.android.apps.apptoolkit.feature.components.R
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.components.ui.views.ShowcaseHeader
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.components.ui.views.ShowcaseSection
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.components.ui.views.ShowcaseSurface
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.icons.ToolkitIcon
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.analytics.Ga4EventData
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.GeneralButton
@@ -54,7 +56,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.Ge
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.fields.GeneralTextField
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.fields.GeneralTextFieldMarkdown
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.fields.GeneralTextFieldStyle
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.GroupedItemPosition
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.PreferenceItemDefaults
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.spacers.MediumVerticalSpacer
 
 /** Rows the Markdown preview grows to before it scrolls its own content. */
@@ -69,6 +71,7 @@ private const val MARKDOWN_MAX_LINES: Int = 10
  * in the screen: nothing else reads it, and a preview that forgets what was typed in it on rotation
  * would look broken.
  */
+@OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
 fun TextFieldShowcase(
     onLogEvent: (String, String?) -> Ga4EventData,
@@ -80,13 +83,14 @@ fun TextFieldShowcase(
     var search: String by rememberSaveable { mutableStateOf(value = "") }
     var outlinedSearch: String by rememberSaveable { mutableStateOf(value = "") }
     var markdown: String by rememberSaveable { mutableStateOf(value = "") }
+    val groupCount = 6
 
     ShowcaseHeader(
         title = stringResource(id = R.string.components_section_text_fields),
         icon = Icons.Outlined.TextFields,
     )
     ShowcaseSection {
-        ShowcaseSurface(position = GroupedItemPosition.FIRST) {
+        ShowcaseSurface(shape = PreferenceItemDefaults.segmentedShapes(index = 0, count = groupCount).shape) {
             CardTitle(text = stringResource(id = R.string.components_text_field_filled))
             MediumVerticalSpacer()
             GeneralTextField(
@@ -117,7 +121,7 @@ fun TextFieldShowcase(
             )
         }
 
-        ShowcaseSurface(position = GroupedItemPosition.MIDDLE) {
+        ShowcaseSurface(shape = PreferenceItemDefaults.segmentedShapes(index = 1, count = groupCount).shape) {
             CardTitle(text = stringResource(id = R.string.components_text_field_outlined))
             MediumVerticalSpacer()
             // The error state carries its message, so the two cannot drift apart.
@@ -148,18 +152,18 @@ fun TextFieldShowcase(
             )
         }
 
-        ShowcaseSurface(position = GroupedItemPosition.MIDDLE) {
+        ShowcaseSurface(shape = PreferenceItemDefaults.segmentedShapes(index = 2, count = groupCount).shape) {
             CardTitle(text = stringResource(id = R.string.components_text_field_grouped))
             MediumVerticalSpacer()
             Column(
                 modifier = Modifier.fillMaxWidth(),
-                verticalArrangement = Arrangement.spacedBy(space = SizeConstants.ExtraTinySize),
+                verticalArrangement = Arrangement.spacedBy(space = ListItemDefaults.SegmentedGap),
             ) {
                 GeneralTextField(
                     value = name,
                     onValueChange = { name = it },
                     style = GeneralTextFieldStyle.Grouped,
-                    position = GroupedItemPosition.FIRST,
+                    shape = PreferenceItemDefaults.segmentedShapes(index = 0, count = 2).shape,
                     placeholder = stringResource(
                         id = R.string.components_text_field_name_placeholder,
                     ),
@@ -178,7 +182,7 @@ fun TextFieldShowcase(
                     value = note,
                     onValueChange = { note = it },
                     style = GeneralTextFieldStyle.Grouped,
-                    position = GroupedItemPosition.LAST,
+                    shape = PreferenceItemDefaults.segmentedShapes(index = 1, count = 2).shape,
                     placeholder = stringResource(
                         id = R.string.components_text_field_note_placeholder,
                     ),
@@ -195,7 +199,7 @@ fun TextFieldShowcase(
             }
         }
 
-        ShowcaseSurface(position = GroupedItemPosition.MIDDLE) {
+        ShowcaseSurface(shape = PreferenceItemDefaults.segmentedShapes(index = 3, count = groupCount).shape) {
             CardTitle(text = stringResource(id = R.string.components_text_field_search))
             MediumVerticalSpacer()
             GeneralTextField(
@@ -218,7 +222,7 @@ fun TextFieldShowcase(
                             contentDescription = stringResource(
                                 id = R.string.components_text_field_clear,
                             ),
-                            iconSize = SizeConstants.ButtonIconSize,
+                            iconSize = ButtonDefaults.IconSize,
                         )
                     }
                 },
@@ -226,7 +230,7 @@ fun TextFieldShowcase(
             )
         }
 
-        ShowcaseSurface(position = GroupedItemPosition.MIDDLE) {
+        ShowcaseSurface(shape = PreferenceItemDefaults.segmentedShapes(index = 4, count = groupCount).shape) {
             CardTitle(text = stringResource(id = R.string.components_text_field_search_outlined))
             MediumVerticalSpacer()
             GeneralTextField(
@@ -250,7 +254,7 @@ fun TextFieldShowcase(
             )
         }
 
-        ShowcaseSurface(position = GroupedItemPosition.LAST) {
+        ShowcaseSurface(shape = PreferenceItemDefaults.segmentedShapes(index = 5, count = groupCount).shape) {
             CardTitle(text = stringResource(id = R.string.components_text_field_markdown))
             MediumVerticalSpacer()
             GeneralTextField(

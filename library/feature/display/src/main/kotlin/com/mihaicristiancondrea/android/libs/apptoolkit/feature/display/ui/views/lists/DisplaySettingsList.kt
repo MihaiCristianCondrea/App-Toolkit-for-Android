@@ -21,21 +21,23 @@ import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.material3.ListItemDefaults
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.datastore.DataStoreNamesConstants
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.style.spacing.spacing
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.modifiers.animatedItem
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.modifiers.animatedItemsIndexed
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.PreferenceCategoryItem
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.SettingsPreferenceItem
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.PreferenceItemDefaults
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.SwitchPreferenceItem
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.SwitchPreferenceItemWithDivider
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.groupedItemPosition
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.groupedPreferenceItem
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.display.R
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.display.ui.analytics.DisplayActionNames
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.display.ui.analytics.DisplayPreferenceKeys
@@ -82,7 +84,7 @@ internal fun DisplaySettingsList(
     LazyColumn(
         contentPadding = contentPadding,
         modifier = modifier.fillMaxHeight(),
-        verticalArrangement = Arrangement.spacedBy(space = SizeConstants.ExtraTinySize),
+        verticalArrangement = Arrangement.spacedBy(space = ListItemDefaults.SegmentedGap),
     ) {
         categories.forEach { (category, categoryRows) ->
             animatedItem(key = "category_${category.name}") {
@@ -92,9 +94,13 @@ internal fun DisplaySettingsList(
                 items = categoryRows,
                 key = { _, row -> "row_${row.name}" },
             ) { index, row ->
-                val rowModifier = Modifier.groupedPreferenceItem(
-                    position = groupedItemPosition(index = index, size = categoryRows.size),
-                    outerRadius = SizeConstants.LargeMediumSize,
+                val rowModifier = Modifier.padding(
+                    horizontal = MaterialTheme.spacing.large,
+                    vertical = if (categoryRows.size == 1) MaterialTheme.spacing.extraTiny else MaterialTheme.spacing.none,
+                )
+                val rowShapes = PreferenceItemDefaults.segmentedShapes(
+                    index = index,
+                    count = categoryRows.size,
                 )
                 when (row) {
                     DisplayRow.DarkTheme -> SwitchPreferenceItemWithDivider(
@@ -102,8 +108,8 @@ internal fun DisplaySettingsList(
                         summary = themeSummary,
                         checked = isDarkThemeActive,
                         onCheckedChange = onDarkThemeChanged,
-                        onSwitchClick = {},
                         onClick = onOpenThemeSettings,
+                        shapes = rowShapes,
                         modifier = rowModifier,
                     )
 
@@ -114,6 +120,7 @@ internal fun DisplaySettingsList(
                         onCheckedChange = { isChecked ->
                             onEvent(DisplaySettingsEvent.DynamicColorsChanged(enabled = isChecked))
                         },
+                        shapes = rowShapes,
                         modifier = rowModifier,
                     )
 
@@ -124,6 +131,7 @@ internal fun DisplaySettingsList(
                         onCheckedChange = { isChecked ->
                             onEvent(DisplaySettingsEvent.BouncyButtonsChanged(enabled = isChecked))
                         },
+                        shapes = rowShapes,
                         modifier = rowModifier,
                     )
 
@@ -131,6 +139,7 @@ internal fun DisplaySettingsList(
                         title = stringResource(id = row.title),
                         summary = row.summaryText(),
                         onClick = onOpenStartupPage,
+                        shapes = rowShapes,
                         ga4Event = displayActionGa4Event(
                             actionName = DisplayActionNames.OPEN_STARTUP_DIALOG,
                             preferenceKey = DisplayPreferenceKeys.STARTUP_PAGE,
@@ -145,6 +154,7 @@ internal fun DisplaySettingsList(
                         onCheckedChange = { isChecked ->
                             onEvent(DisplaySettingsEvent.BottomBarLabelsChanged(show = isChecked))
                         },
+                        shapes = rowShapes,
                         modifier = rowModifier,
                     )
 
@@ -152,6 +162,7 @@ internal fun DisplaySettingsList(
                         title = stringResource(id = row.title),
                         summary = row.summaryText(),
                         onClick = onOpenLanguage,
+                        shapes = rowShapes,
                         modifier = rowModifier,
                     )
                 }

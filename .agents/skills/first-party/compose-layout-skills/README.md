@@ -7,6 +7,7 @@ this project's conventions alongside official Android guidance.
 
 | Skill | Load when |
 |---|---|
+| [`compose-material3-native-tokens`](compose-material3-native-tokens/SKILL.md) | Choosing public component defaults and theme roles, or reviewing duplicate tokens and style overrides. |
 | `compose-layout-spacing` | Choosing padding, sibling gaps, screen gutters, component content padding, or spacing tokens. |
 | `compose-layout-constraints` | Working with Row, Column, Box, alignment, weights, size modifiers, adaptive layouts, or custom measurement. |
 | `compose-interactive-surfaces` | Creating or reviewing any list-shaped entry (static or interactive), clickable cards, touch targets, ripples, shape clipping, selectable or toggleable elements. |
@@ -32,7 +33,7 @@ Connected layout implementations that duplicate an available native API without 
 
 ## Discovery and use
 
-The five skills are registered in the [root manifest](../../../skills.json). Select only the skills that
+The six skills are registered in the [root manifest](../../../skills.json). Select only the skills that
 cover the affected behavior. Read each relevant skill once, even when another skill refers back to it.
 Use the Material UI skill for design specifications and follow the project's resolved version and
 compatibility policy for implementation.

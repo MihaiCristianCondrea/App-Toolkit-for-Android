@@ -27,7 +27,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.AcUnit
 import androidx.compose.material3.Icon
@@ -38,11 +37,14 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.unit.Dp
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
+import androidx.compose.ui.unit.dp
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.models.WallpaperSwatchColors
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.style.bounceClick
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.style.size.size
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.style.spacing.spacing
 
 @Composable
 fun WallpaperColorOptionCard(
@@ -50,9 +52,9 @@ fun WallpaperColorOptionCard(
     selected: Boolean,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
-    cardSize: Dp = SizeConstants.SeventyTwoSize,
-    swatchSize: Dp = SizeConstants.FortyFourSize,
-    shape: RoundedCornerShape = RoundedCornerShape(SizeConstants.LargeSize),
+    cardSize: Dp = 72.dp,
+    swatchSize: Dp = 44.dp,
+    shape: Shape = MaterialTheme.shapes.large,
     showSeasonalBadge: Boolean = false,
 ) {
     val borderColor = animateColorAsState(
@@ -72,25 +74,25 @@ fun WallpaperColorOptionCard(
             ),
         shape = shape,
         color = MaterialTheme.colorScheme.surfaceContainer,
-        border = BorderStroke(SizeConstants.ExtraTinySize, borderColor),
+        border = BorderStroke(2.dp, borderColor),
     ) {
         Box(modifier = Modifier.fillMaxSize()) {
             if (showSeasonalBadge) {
                 Box(
                     modifier = Modifier
                         .align(Alignment.TopEnd)
-                        .padding(all = SizeConstants.ExtraTinySize)
+                        .padding(all = MaterialTheme.spacing.extraTiny)
                         .background(
                             color = MaterialTheme.colorScheme.secondaryContainer,
                             shape = CircleShape
                         )
-                        .padding(all = SizeConstants.ExtraTinySize + SizeConstants.ExtraTinySize / 2)
+                        .padding(all = 3.dp)
                 ) {
                     Icon(
                         imageVector = Icons.Outlined.AcUnit,
                         contentDescription = null,
                         tint = MaterialTheme.colorScheme.onSecondaryContainer,
-                        modifier = Modifier.size(SizeConstants.LargeSize)
+                        modifier = Modifier.size(size = MaterialTheme.size.extraSmall)
                     )
                 }
             }

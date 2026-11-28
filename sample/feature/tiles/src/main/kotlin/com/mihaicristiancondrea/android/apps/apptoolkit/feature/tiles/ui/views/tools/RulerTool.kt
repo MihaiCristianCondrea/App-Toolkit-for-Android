@@ -91,8 +91,8 @@ import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.contrac
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.mappers.rulerScales
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.models.RulerGeometry
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.states.RulerToolUiState
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.icons.ToolkitIcon
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.style.spacing.spacing
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.GeneralButton
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.GeneralButtonStyle
 import kotlinx.collections.immutable.ImmutableList
@@ -207,10 +207,10 @@ fun RulerTool(
             val reading = (if (settings.advanced) state.end - state.start else state.marker) * lengthPx / pixelsPerMillimetre
             val edges = scales.map { it.second }.toSet()
             val inset = Modifier.padding(
-                start = if (!landscape && RulerEdge.Start in edges) RulerStripWidth else 0.dp,
-                end = if (!landscape && RulerEdge.End in edges) RulerStripWidth else 0.dp,
-                top = if (landscape && RulerEdge.Start in edges) RulerStripWidth else 0.dp,
-                bottom = if (landscape && RulerEdge.End in edges) RulerStripWidth else 0.dp,
+                start = if (!landscape && RulerEdge.Start in edges) RulerStripWidth else MaterialTheme.spacing.none,
+                end = if (!landscape && RulerEdge.End in edges) RulerStripWidth else MaterialTheme.spacing.none,
+                top = if (landscape && RulerEdge.Start in edges) RulerStripWidth else MaterialTheme.spacing.none,
+                bottom = if (landscape && RulerEdge.End in edges) RulerStripWidth else MaterialTheme.spacing.none,
             )
             Box(Modifier.fillMaxSize().then(inset).safeDrawingPadding()) {
                 RulerPanel(state, reading, landscape, onEvent, onClose)
@@ -260,8 +260,8 @@ private fun RulerPanel(
             .fillMaxSize()
             .background(background)
             .verticalScroll(rememberScrollState(), enabled = settings.advanced)
-            .padding(SizeConstants.MediumSize),
-        verticalArrangement = Arrangement.spacedBy(SizeConstants.MediumSize),
+            .padding(MaterialTheme.spacing.medium),
+        verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.medium),
     ) {
         Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
             Text(
@@ -287,7 +287,7 @@ private fun RulerPanel(
             modifier = Modifier.fillMaxWidth(),
         ) {
             Column(
-                modifier = Modifier.padding(horizontal = 24.dp, vertical = 16.dp),
+                modifier = Modifier.padding(horizontal = MaterialTheme.spacing.extraLargeCompact, vertical = MaterialTheme.spacing.large),
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
                 RulerReading(settings.units, millimetres)
@@ -297,7 +297,7 @@ private fun RulerPanel(
                         style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
                         textAlign = TextAlign.Center,
-                        modifier = Modifier.padding(top = 4.dp).widthIn(max = 200.dp),
+                        modifier = Modifier.padding(top = MaterialTheme.spacing.extraSmall).widthIn(max = 200.dp),
                     )
                 }
             }
@@ -342,7 +342,7 @@ private fun RulerSettingsPanel(
     val zeroFirst = stringResource(if (landscape) R.string.tool_ruler_left else R.string.tool_ruler_top)
     val zeroSecond = stringResource(if (landscape) R.string.tool_ruler_right else R.string.tool_ruler_bottom)
 
-    Column(verticalArrangement = Arrangement.spacedBy(SizeConstants.MediumSize)) {
+    Column(verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.medium)) {
         RulerSetting(stringResource(R.string.tool_ruler_units)) {
             RulerChoice(
                 options = persistentListOf(
@@ -397,8 +397,8 @@ private fun RulerSettingsPanel(
             modifier = Modifier.fillMaxWidth(),
         ) {
             Column(
-                modifier = Modifier.padding(SizeConstants.MediumSize),
-                verticalArrangement = Arrangement.spacedBy(SizeConstants.SmallSize),
+                modifier = Modifier.padding(MaterialTheme.spacing.medium),
+                verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.small),
             ) {
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     Text(calibrationLabel, style = MaterialTheme.typography.titleSmall, modifier = Modifier.weight(1f))
@@ -431,7 +431,7 @@ private fun RulerSettingsPanel(
 
 @Composable
 private fun RulerSetting(title: String, content: @Composable () -> Unit) {
-    Column(verticalArrangement = Arrangement.spacedBy(SizeConstants.SmallSize)) {
+    Column(verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.small)) {
         Text(title, style = MaterialTheme.typography.titleSmall)
         content()
     }

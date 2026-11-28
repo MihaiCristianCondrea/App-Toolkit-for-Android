@@ -51,6 +51,4 @@ dependencies {
     api(project(":library:core:datastore"))
     api(project(":library:core:ui"))
     api(project(":library:navigation"))
-
-    api(libs.konfetti.compose)
 }

@@ -31,6 +31,7 @@ import androidx.compose.material.icons.outlined.Favorite
 import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material.icons.outlined.StarOutline
 import androidx.compose.material.icons.outlined.ViewCarousel
+import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -41,23 +42,23 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.unit.dp
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.components.R
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.components.ui.views.ShowcaseHeader
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.components.ui.views.ShowcaseSection
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.components.ui.views.ShowcaseSurface
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.style.size.size
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.style.spacing.spacing
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.carousel.CustomCarousel
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.layouts.sections.InfoMessageSection
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.lists.GroupedAction
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.lists.GroupedActionList
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.GroupedItemPosition
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.groupedCorners
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.PreferenceItemDefaults
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.spacers.MediumHorizontalSpacer
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.spacers.SmallVerticalSpacer
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 
+@OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
 fun LayoutShowcase(
     dropdownOptions: ImmutableList<String>,
@@ -98,26 +99,24 @@ fun LayoutShowcase(
             text = "Grouped Actions",
             style = MaterialTheme.typography.titleMedium,
             fontWeight = FontWeight.SemiBold,
-            modifier = Modifier.padding(horizontal = SizeConstants.SmallSize),
+            modifier = Modifier.padding(horizontal = MaterialTheme.spacing.small),
         )
         GroupedActionList(
             actions = groupedActions,
-            modifier = Modifier.groupedCorners(GroupedItemPosition.FIRST),
             containerColor = Color.Transparent,
         )
         ShowcaseSurface(
-            position = GroupedItemPosition.MIDDLE,
-            contentPadding = PaddingValues(vertical = SizeConstants.LargeSize),
+            shape = PreferenceItemDefaults.segmentedShapes(index = 1, count = 3).shape,
+            contentPadding = PaddingValues(vertical = MaterialTheme.spacing.large),
         ) {
             Row(
                 verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier.padding(horizontal = SizeConstants.LargeSize),
+                modifier = Modifier.padding(horizontal = MaterialTheme.spacing.large),
             ) {
                 Icon(
                     imageVector = Icons.Outlined.ViewCarousel,
                     contentDescription = null,
                     tint = MaterialTheme.colorScheme.primary,
-                    modifier = Modifier.size(24.dp),
                 )
                 MediumHorizontalSpacer()
                 Text(
@@ -129,13 +128,13 @@ fun LayoutShowcase(
             SmallVerticalSpacer()
             CustomCarousel(
                 items = dropdownOptions,
-                sidePadding = SizeConstants.LargeSize,
+                sidePadding = MaterialTheme.spacing.large,
                 pagerState = carouselState,
             ) { option ->
                 Box(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(SizeConstants.LargeSize),
+                        .padding(MaterialTheme.spacing.large),
                     contentAlignment = Alignment.Center,
                 ) {
                     Column(horizontalAlignment = Alignment.CenterHorizontally) {
@@ -146,7 +145,7 @@ fun LayoutShowcase(
                                 else -> Icons.Outlined.Info
                             },
                             contentDescription = null,
-                            modifier = Modifier.size(48.dp),
+                            modifier = Modifier.size(size = MaterialTheme.size.extraExtraLarge),
                             tint = MaterialTheme.colorScheme.primary,
                         )
                         SmallVerticalSpacer()
@@ -164,7 +163,7 @@ fun LayoutShowcase(
                 }
             }
         }
-        ShowcaseSurface(position = GroupedItemPosition.LAST) {
+        ShowcaseSurface(shape = PreferenceItemDefaults.segmentedShapes(index = 2, count = 3).shape) {
             InfoMessageSection(
                 message = "This info section demonstrates integrated learning actions.",
                 learnMoreText = "Documentation",

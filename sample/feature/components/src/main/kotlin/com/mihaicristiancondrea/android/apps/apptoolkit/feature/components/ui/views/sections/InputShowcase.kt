@@ -28,6 +28,7 @@ import androidx.compose.material.icons.outlined.Favorite
 import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material.icons.outlined.Tune
 import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -50,11 +51,12 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.Ge
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.dropdown.CommonDropdownMenuItem
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.fields.DatePickerTextField
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.fields.DropdownMenuBox
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.GroupedItemPosition
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.PreferenceItemDefaults
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.spacers.MediumVerticalSpacer
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.spacers.SmallVerticalSpacer
 import kotlinx.collections.immutable.ImmutableList
 
+@OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
 fun InputShowcase(
     onLogEvent: (String, String?) -> Ga4EventData,
@@ -72,7 +74,7 @@ fun InputShowcase(
         icon = Icons.Outlined.Tune,
     )
     ShowcaseSection {
-        ShowcaseSurface(position = GroupedItemPosition.FIRST) {
+        ShowcaseSurface(shape = PreferenceItemDefaults.segmentedShapes(index = 0, count = 2).shape) {
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 verticalAlignment = Alignment.CenterVertically,
@@ -121,7 +123,7 @@ fun InputShowcase(
                 }
             }
         }
-        ShowcaseSurface(position = GroupedItemPosition.LAST) {
+        ShowcaseSurface(shape = PreferenceItemDefaults.segmentedShapes(index = 1, count = 2).shape) {
             Text(
                 text = stringResource(id = R.string.components_data_selection),
                 style = MaterialTheme.typography.titleMedium,

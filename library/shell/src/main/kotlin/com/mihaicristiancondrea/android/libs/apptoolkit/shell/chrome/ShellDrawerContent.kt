@@ -19,16 +19,13 @@ package com.mihaicristiancondrea.android.libs.apptoolkit.shell.chrome
 
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.WindowInsetsSides
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationDrawerItem
@@ -47,11 +44,14 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.navigation3.runtime.NavKey
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.icons.AnimatedToolkitIcon
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.icons.ToolkitIcon
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.icons.ToolkitIconContent
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.style.bounceClick
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.style.size.size
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.style.spacing.spacing
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.spacers.MediumHorizontalSpacer
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.spacers.MediumVerticalSpacer
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.DrawerEntry
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.ShellGraph
 
@@ -85,14 +85,19 @@ internal fun ColumnScope.ShellDrawerContent(
                     )
                 }
                 if (top.isNotEmpty()) {
-                    HorizontalDivider(Modifier.padding(horizontal = 28.dp, vertical = 8.dp))
+                    HorizontalDivider(
+                        Modifier.padding(
+                            horizontal = MaterialTheme.spacing.extraLarge,
+                            vertical = MaterialTheme.spacing.small,
+                        ),
+                    )
                 }
             }
             top.forEach { entry -> DrawerEntryRow(entry, callbacks, entry.opens(selectedEntry)) }
         },
         footer = {
             footer.forEach { entry -> DrawerEntryRow(entry, callbacks, entry.opens(selectedEntry)) }
-            Spacer(Modifier.size(12.dp))
+            MediumVerticalSpacer()
         },
     )
 }
@@ -135,7 +140,7 @@ private fun DrawerRow(
                 selected = selected,
                 clickCount = clicks,
                 contentDescription = null,
-                modifier = Modifier.size(SizeConstants.TwentyFourSize),
+                modifier = Modifier.size(size = MaterialTheme.size.medium),
             )
         },
         badge = badge?.let { text -> { TabBadge(text) } },
@@ -157,7 +162,10 @@ private fun DrawerHeader(graph: ShellGraph) {
         modifier = Modifier
             .fillMaxWidth()
             .padding(NavigationDrawerItemDefaults.ItemPadding)
-            .padding(horizontal = SizeConstants.MediumSize, vertical = 16.dp),
+            .padding(
+                horizontal = MaterialTheme.spacing.medium,
+                vertical = MaterialTheme.spacing.large,
+            ),
         verticalAlignment = Alignment.CenterVertically,
     ) {
         graph.appIcon?.let { logo ->
@@ -167,7 +175,7 @@ private fun DrawerHeader(graph: ShellGraph) {
                 modifier = Modifier.size(logoSize),
                 tint = Color.Unspecified,
             )
-            Spacer(Modifier.width(SizeConstants.MediumSize))
+            MediumHorizontalSpacer()
         }
         Text(
             text = stringResource(graph.appTitle),

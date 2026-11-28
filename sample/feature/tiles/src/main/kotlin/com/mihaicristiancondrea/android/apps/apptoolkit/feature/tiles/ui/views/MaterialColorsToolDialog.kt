@@ -26,7 +26,6 @@ import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.fillMaxHeight
@@ -38,7 +37,6 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
@@ -52,6 +50,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.graphics.compositeOver
 import androidx.compose.ui.graphics.luminance
 import androidx.compose.ui.platform.LocalContext
@@ -70,13 +69,14 @@ import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.models.
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.catalog.TileIconBadge
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.icons.ToolSymbols
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.utils.constants.ToolkitTileIds
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.context.copyTextToClipboard
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.icons.ToolkitIcon
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.style.spacing.spacing
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.analytics.LocalTelemetry
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.GeneralButton
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.GeneralButtonStyle
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.modifiers.animateVisibility
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.spacers.LargeHorizontalSpacer
 import java.util.Locale
 
 /** Full-height expanded tool that previews the current app and Android Material You palettes. */
@@ -112,16 +112,16 @@ fun MaterialColorsToolDialog(
         Column(
             modifier = Modifier
                 .fillMaxHeight()
-                .padding(horizontal = SizeConstants.LargeSize)
-                .padding(top = 16.dp),
-            verticalArrangement = Arrangement.spacedBy(SizeConstants.MediumSize),
+                .padding(horizontal = MaterialTheme.spacing.large)
+                .padding(top = MaterialTheme.spacing.large),
+            verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.medium),
         ) {
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 verticalAlignment = Alignment.CenterVertically,
             ) {
                 TileIconBadge(icon = ToolkitTileIcon.Palette, large = true)
-                Spacer(modifier = Modifier.width(16.dp))
+                LargeHorizontalSpacer()
                 Text(
                     text = stringResource(id = R.string.tool_material_colors_title),
                     style = MaterialTheme.typography.headlineSmall,
@@ -137,9 +137,9 @@ fun MaterialColorsToolDialog(
             LazyColumn(
                 modifier = Modifier.weight(1f),
                 contentPadding = PaddingValues(
-                    bottom = WindowInsets.navigationBars.asPaddingValues().calculateBottomPadding() + 24.dp,
+                    bottom = WindowInsets.navigationBars.asPaddingValues().calculateBottomPadding() + MaterialTheme.spacing.extraLargeCompact,
                 ),
-                verticalArrangement = Arrangement.spacedBy(SizeConstants.MediumSize),
+                verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.medium),
             ) {
                 item(contentType = "description") {
                     Text(
@@ -176,7 +176,7 @@ fun MaterialColorsToolDialog(
 /** Real scheme roles arranged as one connected bento, rather than nested cards. */
 @Composable
 private fun AppColorBento(table: ColorTable) {
-    Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
+    Column(verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.medium)) {
         Text(table.title, style = MaterialTheme.typography.titleMedium)
         BoxWithConstraints {
             // Wider fonts use fewer columns instead of clipping role names or ARGB values.
@@ -186,28 +186,29 @@ private fun AppColorBento(table: ColorTable) {
                 maxWidth < 360.dp || fontScale > 1.2f -> 2
                 else -> 3
             }
-            Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
+            val outer = MaterialTheme.shapes.extraLarge
+            val inner = MaterialTheme.shapes.small
+            Column(verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.extraSmall)) {
                 table.colors.firstOrNull()?.let { color ->
                     ColorSwatch(
                         name = color.name,
                         color = color.color,
                         hero = true,
-                        shape = RoundedCornerShape(28.dp, 28.dp, 8.dp, 8.dp),
+                        shape = outer.copy(bottomStart = inner.bottomStart, bottomEnd = inner.bottomEnd),
                         modifier = Modifier.fillMaxWidth().animateVisibility(index = 0),
                     )
                 }
                 val rows = table.colors.drop(1).chunked(columns)
                 rows.forEachIndexed { rowIndex, row ->
-                    Row(horizontalArrangement = Arrangement.spacedBy(4.dp)) {
+                    Row(horizontalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.extraSmall)) {
                         row.forEachIndexed { columnIndex, color ->
                             val lastRow = rowIndex == rows.lastIndex
                             ColorSwatch(
                                 name = color.name,
                                 color = color.color,
-                                shape = RoundedCornerShape(
-                                    topStart = 8.dp, topEnd = 8.dp,
-                                    bottomEnd = if (lastRow && columnIndex == row.lastIndex) 28.dp else 8.dp,
-                                    bottomStart = if (lastRow && columnIndex == 0) 28.dp else 8.dp,
+                                shape = inner.copy(
+                                    bottomEnd = if (lastRow && columnIndex == row.lastIndex) outer.bottomEnd else inner.bottomEnd,
+                                    bottomStart = if (lastRow && columnIndex == 0) outer.bottomStart else inner.bottomStart,
                                 ),
                                 modifier = Modifier.weight(1f)
                                     .animateVisibility(index = 1 + rowIndex * columns + columnIndex),
@@ -222,19 +223,21 @@ private fun AppColorBento(table: ColorTable) {
 
 @Composable
 private fun AndroidToneStrip(table: AndroidColorTable) {
-    Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
+    Column(verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.medium)) {
         Text(table.title, style = MaterialTheme.typography.titleMedium)
         val tileWidth = 116.dp * LocalDensity.current.fontScale.coerceAtLeast(1f)
-        LazyRow(horizontalArrangement = Arrangement.spacedBy(4.dp)) {
+        val outer = MaterialTheme.shapes.extraLarge
+        val inner = MaterialTheme.shapes.small
+        LazyRow(horizontalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.extraSmall)) {
             items(table.colors, key = AndroidColorData::name, contentType = { "swatch" }) { color ->
                 ColorSwatch(
                     name = color.name,
                     color = colorResource(color.colorResId),
-                    shape = RoundedCornerShape(
-                        topStart = if (color == table.colors.first()) 28.dp else 8.dp,
-                        bottomStart = if (color == table.colors.first()) 28.dp else 8.dp,
-                        topEnd = if (color == table.colors.last()) 28.dp else 8.dp,
-                        bottomEnd = if (color == table.colors.last()) 28.dp else 8.dp,
+                    shape = inner.copy(
+                        topStart = if (color == table.colors.first()) outer.topStart else inner.topStart,
+                        bottomStart = if (color == table.colors.first()) outer.bottomStart else inner.bottomStart,
+                        topEnd = if (color == table.colors.last()) outer.topEnd else inner.topEnd,
+                        bottomEnd = if (color == table.colors.last()) outer.bottomEnd else inner.bottomEnd,
                     ),
                     modifier = Modifier.width(tileWidth).animateVisibility(),
                 )
@@ -249,7 +252,7 @@ private fun ColorSwatch(
     color: Color,
     modifier: Modifier = Modifier,
     hero: Boolean = false,
-    shape: RoundedCornerShape = RoundedCornerShape(8.dp),
+    shape: Shape = MaterialTheme.shapes.small,
 ) {
     val context = LocalContext.current
     val hexString = color.toHexString()
@@ -269,7 +272,7 @@ private fun ColorSwatch(
         contentColor = contentColor,
     ) {
         Column(
-            modifier = Modifier.heightIn(min = if (hero) 140.dp else 104.dp).padding(16.dp),
+            modifier = Modifier.heightIn(min = if (hero) 140.dp else 104.dp).padding(MaterialTheme.spacing.large),
             verticalArrangement = Arrangement.SpaceBetween,
         ) {
             Text(name.uppercase(Locale.ENGLISH), style = MaterialTheme.typography.labelMedium)

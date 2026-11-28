@@ -24,6 +24,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.HorizontalRule
+import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Slider
 import androidx.compose.material3.Text
@@ -38,11 +39,10 @@ import com.mihaicristiancondrea.android.apps.apptoolkit.feature.components.R
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.components.ui.views.ShowcaseHeader
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.components.ui.views.ShowcaseSection
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.components.ui.views.ShowcaseSurface
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.dividers.HorizontalWavyDivider
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.dividers.VerticalWavyDivider
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.dividers.WavyDividerDefaults
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.GroupedItemPosition
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.PreferenceItemDefaults
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.spacers.LargeVerticalSpacer
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.spacers.SmallVerticalSpacer
 
@@ -53,6 +53,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.spacers.Sm
  * keeps its shape and ends cleanly on both sides. Its line thickens with the wave, as `il_wavy_line`'s
  * does, so a tall wave is not drawn as a hairline. Each slider's saveable state holds its value.
  */
+@OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
 fun DividerShowcase() {
     ShowcaseHeader(
@@ -67,13 +68,13 @@ fun DividerShowcase() {
     )
 
     ShowcaseSection {
-        ShowcaseSurface(position = GroupedItemPosition.FIRST) {
+        ShowcaseSurface(shape = PreferenceItemDefaults.segmentedShapes(index = 0, count = 3).shape) {
             DividerLabel(text = stringResource(id = R.string.components_divider_wavy))
             LargeVerticalSpacer()
             HorizontalWavyDivider()
         }
 
-        ShowcaseSurface(position = GroupedItemPosition.MIDDLE) {
+        ShowcaseSurface(shape = PreferenceItemDefaults.segmentedShapes(index = 1, count = 3).shape) {
             val thickness: Float =
                 (waveHeight.value / WavyDividerDefaults.WaveSize.value).coerceAtLeast(minimumValue = 1f)
             Box(
@@ -101,13 +102,13 @@ fun DividerShowcase() {
             )
         }
 
-        ShowcaseSurface(position = GroupedItemPosition.LAST) {
+        ShowcaseSurface(shape = PreferenceItemDefaults.segmentedShapes(index = 2, count = 3).shape) {
             DividerLabel(text = stringResource(id = R.string.components_divider_vertical))
             LargeVerticalSpacer()
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(SizeConstants.ExtraLargeIncreasedSize * 2),
+                    .height(64.dp),
                 horizontalArrangement = Arrangement.SpaceEvenly,
                 verticalAlignment = Alignment.CenterVertically,
             ) {

@@ -23,8 +23,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Campaign
 import androidx.compose.material3.CardDefaults
@@ -37,12 +35,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
-
-/** Floor that keeps the placeholder about the size of the ad it stands in for. */
-private val PlaceholderMinHeight: Dp = 120.dp
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.style.spacing.spacing
 
 /**
  * What an empty ad slot looks like on a debug build.
@@ -69,8 +63,8 @@ fun AdSlotDebugPlaceholder(
     OutlinedCard(
         modifier = modifier
             .fillMaxWidth()
-            .heightIn(min = PlaceholderMinHeight),
-        shape = RoundedCornerShape(size = SizeConstants.ExtraLargeSize),
+            .heightIn(min = 120.dp),
+        shape = MaterialTheme.shapes.extraLarge,
         colors = CardDefaults.outlinedCardColors(
             containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.25f),
         ),
@@ -78,22 +72,21 @@ fun AdSlotDebugPlaceholder(
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(all = SizeConstants.LargeSize),
-            verticalArrangement = Arrangement.spacedBy(space = SizeConstants.ExtraSmallSize),
+                .padding(all = MaterialTheme.spacing.large),
+            verticalArrangement = Arrangement.spacedBy(space = MaterialTheme.spacing.extraSmall),
         ) {
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Icon(
                     imageVector = Icons.Outlined.Campaign,
                     contentDescription = null,
                     tint = MaterialTheme.colorScheme.onSurfaceVariant,
-                    modifier = Modifier.size(size = SizeConstants.LargeSize),
                 )
                 Text(
                     text = "Ad slot: $slotName",
                     style = MaterialTheme.typography.titleSmall,
                     fontWeight = FontWeight.SemiBold,
                     color = MaterialTheme.colorScheme.onSurface,
-                    modifier = Modifier.padding(start = SizeConstants.SmallSize),
+                    modifier = Modifier.padding(start = MaterialTheme.spacing.small),
                 )
             }
 

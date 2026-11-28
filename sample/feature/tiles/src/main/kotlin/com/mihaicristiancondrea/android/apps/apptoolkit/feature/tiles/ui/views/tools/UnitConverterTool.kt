@@ -44,6 +44,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExposedDropdownMenu
 import androidx.compose.material3.FilterChip
+import androidx.compose.material3.FilterChipDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
@@ -54,6 +55,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.style.bounceClick
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.style.size.size
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.style.spacing.spacing
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.R
@@ -63,12 +66,11 @@ import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.contrac
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.formatters.displayName
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.mappers.labelResId
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.states.UnitConverterToolUiState
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
 
 @Composable
 fun UnitConverterTool(state: UnitConverterToolUiState, onEvent: (UnitConverterToolEvent) -> Unit) {
-    Column(verticalArrangement = Arrangement.spacedBy(SizeConstants.MediumSize)) {
-        LazyRow(horizontalArrangement = Arrangement.spacedBy(SizeConstants.SmallSize)) {
+    Column(verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.medium)) {
+        LazyRow(horizontalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.small)) {
             items(ConversionCategory.entries.size) { index ->
                 val category = ConversionCategory.entries[index]
                 FilterChip(
@@ -76,18 +78,24 @@ fun UnitConverterTool(state: UnitConverterToolUiState, onEvent: (UnitConverterTo
                     onClick = { onEvent(UnitConverterToolEvent.CategorySelected(category)) },
                     label = { Text(stringResource(category.labelResId())) },
                     // A selected chip trades its icon for a check mark, as the kit's filter chips do.
-                    leadingIcon = { Icon(if (category == state.category) ToolSymbols.Check else when(category) {
-                        ConversionCategory.Length -> ToolSymbols.Rounded.Straighten
-                        ConversionCategory.Mass -> ToolSymbols.Rounded.Weight
-                        ConversionCategory.Temperature -> ToolSymbols.Rounded.Thermostat
-                        ConversionCategory.Volume -> ToolSymbols.Rounded.WaterDrop
-                        ConversionCategory.Data -> ToolSymbols.Rounded.Storage
-                    }, null) },
+                    leadingIcon = {
+                        Icon(
+                            imageVector = if (category == state.category) ToolSymbols.Check else when (category) {
+                                ConversionCategory.Length -> ToolSymbols.Rounded.Straighten
+                                ConversionCategory.Mass -> ToolSymbols.Rounded.Weight
+                                ConversionCategory.Temperature -> ToolSymbols.Rounded.Thermostat
+                                ConversionCategory.Volume -> ToolSymbols.Rounded.WaterDrop
+                                ConversionCategory.Data -> ToolSymbols.Rounded.Storage
+                            },
+                            contentDescription = null,
+                            modifier = Modifier.size(FilterChipDefaults.IconSize),
+                        )
+                    },
                 )
             }
         }
         Box {
-            Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+            Column(verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.small)) {
                 ConversionInput(state.left, state.from, R.string.tool_converter_from, state.invalidInput && state.editingLeft,
                     onInput = { onEvent(UnitConverterToolEvent.InputChanged(it, left = true)) },
                     onUnit = { onEvent(UnitConverterToolEvent.UnitSelected(it, left = true)) })
@@ -96,20 +104,19 @@ fun UnitConverterTool(state: UnitConverterToolUiState, onEvent: (UnitConverterTo
                     onUnit = { onEvent(UnitConverterToolEvent.UnitSelected(it, left = false)) })
             }
             FilledTonalIconButton(onClick = { onEvent(UnitConverterToolEvent.Swap) },
-                shape = CircleShape,
                 colors = IconButtonDefaults.filledTonalIconButtonColors(
                     containerColor = MaterialTheme.colorScheme.primaryContainer,
                     contentColor = MaterialTheme.colorScheme.onPrimaryContainer,
                 ),
-                modifier = Modifier.align(Alignment.CenterEnd).padding(end = 20.dp)
-                    .size(48.dp).bounceClick().border(4.dp, MaterialTheme.colorScheme.surface, CircleShape).padding(4.dp)) {
+                modifier = Modifier.align(Alignment.CenterEnd).padding(end = MaterialTheme.spacing.largeIncreased)
+                    .size(size = MaterialTheme.size.extraExtraLarge).bounceClick().border(4.dp, MaterialTheme.colorScheme.surface, CircleShape).padding(MaterialTheme.spacing.extraSmall)) {
                 Icon(ToolSymbols.SwapVert, stringResource(R.string.swap_units))
             }
         }
         if (state.invalidInput) {
             Text(stringResource(R.string.tool_converter_invalid), color = MaterialTheme.colorScheme.error)
         } else {
-            Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+            Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.small)) {
                 Icon(ToolSymbols.Edit, null, Modifier.size(18.dp), tint = MaterialTheme.colorScheme.onSurfaceVariant)
                 Text(stringResource(R.string.tool_converter_hint), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
             }
@@ -132,7 +139,7 @@ private fun ConversionInput(
         shape = if (result) RoundedCornerShape(8.dp, 8.dp, 24.dp, 24.dp) else RoundedCornerShape(24.dp, 24.dp, 8.dp, 8.dp),
         color = if (result) MaterialTheme.colorScheme.secondaryContainer else MaterialTheme.colorScheme.surfaceContainerHigh,
     ) {
-        Column(Modifier.fillMaxWidth().padding(20.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+        Column(Modifier.fillMaxWidth().padding(MaterialTheme.spacing.largeIncreased), verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.small)) {
             Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
                 Text(unit.displayName(), style = MaterialTheme.typography.titleMedium, modifier = Modifier.weight(1f))
                 UnitPicker(unit, onUnit)
@@ -166,7 +173,7 @@ private fun UnitPicker(unit: ConversionUnit, onUnit: (ConversionUnit) -> Unit) {
             singleLine = true,
             label = { Text(stringResource(R.string.tool_converter_unit)) },
             trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded) },
-            shape = RoundedCornerShape(28.dp),
+            shape = MaterialTheme.shapes.extraLarge,
             modifier = Modifier.width(140.dp).menuAnchor(ExposedDropdownMenuAnchorType.PrimaryNotEditable),
         )
         ExposedDropdownMenu(expanded = expanded, onDismissRequest = { expanded = false }) {

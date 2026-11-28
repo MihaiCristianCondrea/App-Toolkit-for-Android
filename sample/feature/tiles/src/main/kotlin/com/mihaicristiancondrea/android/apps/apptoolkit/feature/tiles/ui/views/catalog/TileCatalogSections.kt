@@ -17,60 +17,22 @@
 
 package com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.catalog
 
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.icons.ToolSymbols
-import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.key
-import androidx.compose.runtime.remember
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.RectangleShape
-import androidx.compose.ui.res.pluralStringResource
-import androidx.compose.ui.res.stringResource
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.R
+import androidx.compose.ui.unit.DpSize
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.contracts.ToolkitTilesEvent
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.models.ToolkitTile
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.models.ToolkitTileCategory
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.models.ToolkitTilesFilterItem
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.models.ToolkitTilesListItem
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.states.ToolkitTilesFilter
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.ads.QuickToolsNativeAdCard
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.icons.ToolkitIcon
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.GeneralButton
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.GeneralButtonStyle
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.layouts.sections.FilterChipItem
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.layouts.sections.TopListFilters
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.modifiers.animateVisibility
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.GroupedItemPosition
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.groupedCorners
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.groupedItemPosition
 import kotlinx.collections.immutable.ImmutableList
-import kotlinx.collections.immutable.persistentListOf
-import kotlinx.collections.immutable.toImmutableList
 
 @Composable
 internal fun HiddenAdPreloaders(
     adItems: ImmutableList<ToolkitTilesListItem.Ad>,
     onEvent: (ToolkitTilesEvent) -> Unit,
 ) {
-    Box(modifier = Modifier.size(SizeConstants.ZeroSize)) {
+    Box(modifier = Modifier.size(size = DpSize.Zero)) {
         adItems.forEach { item ->
             QuickToolsNativeAdCard(
                 adUnitId = item.adUnitId,
@@ -81,193 +43,3 @@ internal fun HiddenAdPreloaders(
         }
     }
 }
-
-@Composable
-internal fun TilesFilters(
-    categories: ImmutableList<ToolkitTileCategory>,
-    selectedFilter: ToolkitTilesFilter,
-    onFilterSelected: (ToolkitTilesFilter) -> Unit,
-) {
-    val filters = remember(categories) {
-        val categoryIds = categories.filter { it.tiles.isNotEmpty() }.mapTo(mutableSetOf()) { it.id }
-
-        ToolkitTilesFilterItems.filter { item ->
-            val categoryId = item.filter.categoryId
-            categoryId == null || categoryId in categoryIds
-        }.toImmutableList()
-    }
-
-    if (filters.size > 1) {
-        val chips = filters.map { item ->
-            FilterChipItem(
-                value = item.filter,
-                label = stringResource(id = item.labelResId),
-                icon = ToolkitIcon.Vector(item.icon),
-            )
-        }.toImmutableList()
-
-        TopListFilters(
-            filters = chips,
-            selectedFilter = selectedFilter,
-            onFilterSelected = onFilterSelected,
-            contentPadding = PaddingValues(),
-        )
-    }
-}
-
-@Composable
-internal fun TileCategorySection(
-    category: ToolkitTileCategory,
-    position: GroupedItemPosition,
-    expanded: Boolean,
-    collapsible: Boolean,
-    modifier: Modifier = Modifier,
-    selectedFilter: ToolkitTilesFilter = ToolkitTilesFilter.All,
-    onToggle: () -> Unit,
-    onPreviewTile: (ToolkitTile) -> Unit,
-) {
-    Surface(
-        modifier = modifier
-            .fillMaxWidth()
-            .groupedCorners(
-                position = position,
-                outerRadius = SizeConstants.ExtraLargeIncreasedSize,
-            ),
-        color = MaterialTheme.colorScheme.surfaceContainerLow,
-        shape = RectangleShape,
-    ) {
-        Column(modifier = Modifier.padding(SizeConstants.MediumSize)) {
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                verticalAlignment = Alignment.CenterVertically,
-            ) {
-                TileIconBadge(icon = category.icon)
-                Spacer(modifier = Modifier.width(SizeConstants.MediumSize))
-                Text(
-                    text = stringResource(id = category.titleResId),
-                    style = MaterialTheme.typography.titleMedium,
-                    modifier = Modifier.weight(1f),
-                )
-                Text(
-                    text = pluralStringResource(
-                        id = R.plurals.tiles_count_format,
-                        count = category.tiles.size,
-                        category.tiles.size,
-                    ),
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
-                )
-                if (collapsible) {
-                    GeneralButton(
-                        style = GeneralButtonStyle.Text,
-                        onClick = onToggle,
-                        iconSize = SizeConstants.ButtonIconSize,
-                        icon = ToolkitIcon.Vector(if (expanded) ToolSymbols.ExpandLess else ToolSymbols.ExpandMore),
-                        contentDescription = stringResource(
-                            id = if (expanded) R.string.tiles_collapse_category else R.string.tiles_expand_category,
-                        ),
-                    )
-                }
-            }
-            AnimatedVisibility(visible = expanded) {
-                Column(verticalArrangement = Arrangement.spacedBy(SizeConstants.ExtraTinySize)) {
-                    Spacer(modifier = Modifier.height(SizeConstants.ExtraTinySize))
-                    category.tiles.forEachIndexed { index, tile ->
-                        ToolkitTileCard(
-                            tile = tile,
-                            position = groupedItemPosition(index, category.tiles.size),
-                            modifier = Modifier.animateVisibility(index = index),
-                            key = "${selectedFilter}_${tile.id}",
-                            onPreviewTile = { onPreviewTile(tile) },
-                        )
-                    }
-                }
-            }
-        }
-    }
-}
-
-@Composable
-internal fun ToolkitTileCard(
-    tile: ToolkitTile,
-    position: GroupedItemPosition,
-    modifier: Modifier = Modifier,
-    key: String? = null,
-    onPreviewTile: () -> Unit,
-) {
-    key(key) {
-        Card(
-            onClick = onPreviewTile,
-            modifier = modifier
-                .fillMaxWidth()
-                .groupedCorners(
-                    position = position,
-                    outerRadius = SizeConstants.LargeExpandedSize,
-                ),
-            shape = RectangleShape,
-            colors = CardDefaults.cardColors(
-                containerColor = MaterialTheme.colorScheme.surfaceContainerHigh,
-            ),
-        ) {
-            Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(SizeConstants.LargeSize),
-                verticalArrangement = Arrangement.spacedBy(SizeConstants.SmallSize),
-            ) {
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    verticalAlignment = Alignment.CenterVertically,
-                ) {
-                    TileIconBadge(icon = tile.icon, large = true)
-                    Spacer(modifier = Modifier.width(SizeConstants.LargeSize))
-                    Column(
-                        modifier = Modifier.weight(1f),
-                        verticalArrangement = Arrangement.spacedBy(SizeConstants.ExtraTinySize),
-                ) {
-                        Text(
-                            text = stringResource(id = tile.titleResId),
-                            style = MaterialTheme.typography.titleMedium,
-                            color = MaterialTheme.colorScheme.onSurface,
-                        )
-                        Text(
-                            text = stringResource(id = tile.summaryResId),
-                            style = MaterialTheme.typography.bodyMedium,
-                            color = MaterialTheme.colorScheme.onSurfaceVariant,
-                        )
-                    }
-                }
-                ToolkitToolChips(tile = tile)
-            }
-        }
-    }
-}
-
-/** Returns stable UI chip metadata for every Toolkit Tiles filter. */
-private val ToolkitTilesFilterItems: ImmutableList<ToolkitTilesFilterItem> = persistentListOf(
-    ToolkitTilesFilterItem(
-        ToolkitTilesFilter.All,
-        R.string.tiles_filter_all,
-        ToolSymbols.GridView,
-    ),
-    ToolkitTilesFilterItem(
-        ToolkitTilesFilter.Sensors,
-        R.string.tiles_category_sensors,
-        ToolSymbols.Explore,
-    ),
-    ToolkitTilesFilterItem(
-        ToolkitTilesFilter.Utilities,
-        R.string.tiles_category_utilities,
-        ToolSymbols.Casino,
-    ),
-    ToolkitTilesFilterItem(
-        ToolkitTilesFilter.System,
-        R.string.tiles_category_system,
-        ToolSymbols.FlashlightOn,
-    ),
-    ToolkitTilesFilterItem(
-        ToolkitTilesFilter.Wellbeing,
-        R.string.tiles_category_wellbeing,
-        ToolSymbols.Favorite,
-    ),
-)

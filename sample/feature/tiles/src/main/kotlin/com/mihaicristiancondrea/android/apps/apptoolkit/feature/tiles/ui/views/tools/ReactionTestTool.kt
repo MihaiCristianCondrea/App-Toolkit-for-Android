@@ -31,7 +31,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.AssistChip
 import androidx.compose.material3.AssistChipDefaults
 import androidx.compose.material3.Card
@@ -55,8 +54,8 @@ import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.R
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.states.ReactionRating
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.states.ReactionTestPhase
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.states.ReactionTestToolUiState
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.icons.ToolkitIcon
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.style.spacing.spacing
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.ButtonMeasurements
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.GeneralButton
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.GeneralButtonStyle
@@ -97,12 +96,12 @@ fun ReactionTestTool(
         else -> MaterialTheme.colorScheme.onSurface
     }
 
-    Column(verticalArrangement = Arrangement.spacedBy(SizeConstants.MediumSize)) {
+    Column(verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.medium)) {
         Box(
             modifier = Modifier
                 .fillMaxWidth()
                 .height(160.dp)
-                .clip(RoundedCornerShape(SizeConstants.LargeSize))
+                .clip(MaterialTheme.shapes.large)
                 .background(containerColor)
                 .clickable(
                     interactionSource = remember { MutableInteractionSource() },
@@ -114,7 +113,7 @@ fun ReactionTestTool(
         ) {
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.spacedBy(SizeConstants.ExtraTinySize),
+                verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.extraTiny),
             ) {
                 when (state.phase) {
                     ReactionTestPhase.Idle -> {
@@ -188,7 +187,7 @@ fun ReactionTestTool(
 
         Row(
             modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.spacedBy(SizeConstants.SmallSize),
+            horizontalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.small),
         ) {
             GeneralButton(
                 modifier = Modifier.weight(1f),
@@ -223,8 +222,8 @@ fun ReactionTestTool(
                 ),
             ) {
                 Column(
-                    modifier = Modifier.padding(SizeConstants.MediumSize),
-                    verticalArrangement = Arrangement.spacedBy(SizeConstants.SmallSize),
+                    modifier = Modifier.padding(MaterialTheme.spacing.medium),
+                    verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.small),
                 ) {
                     Row(
                         modifier = Modifier.fillMaxWidth(),
@@ -259,8 +258,8 @@ fun ReactionTestTool(
                             color = MaterialTheme.colorScheme.onSurfaceVariant,
                         )
                         FlowRow(
-                            horizontalArrangement = Arrangement.spacedBy(SizeConstants.ExtraTinySize),
-                            verticalArrangement = Arrangement.spacedBy(SizeConstants.ExtraTinySize),
+                            horizontalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.extraTiny),
+                            verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.extraTiny),
                         ) {
                             state.history.forEach { score ->
                                 AssistChip(

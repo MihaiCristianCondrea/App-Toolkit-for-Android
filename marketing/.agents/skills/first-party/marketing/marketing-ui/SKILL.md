@@ -255,4 +255,3 @@ A presentation page built from the kit follows the Pixel film rules translated t
   screen did not move, or a phone traps page scroll.
 - With reduced motion, show every scene at its final state in normal flow.
 
-

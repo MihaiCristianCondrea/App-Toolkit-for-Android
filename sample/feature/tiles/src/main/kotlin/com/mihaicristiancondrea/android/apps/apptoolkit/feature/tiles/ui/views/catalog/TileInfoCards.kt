@@ -18,71 +18,27 @@
 
 package com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.catalog
 
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.icons.ToolSymbols
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ElevatedCard
-import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.R
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.style.spacing.spacing
 
 @Composable
 internal fun EmptyFilterCard() {
     ElevatedCard(
         modifier = Modifier.fillMaxWidth(),
-        shape = RoundedCornerShape(SizeConstants.LargeSize),
+        shape = MaterialTheme.shapes.large,
     ) {
         Text(
-            modifier = Modifier.padding(SizeConstants.LargeSize),
+            modifier = Modifier.padding(MaterialTheme.spacing.large),
             text = stringResource(id = R.string.tiles_filter_empty),
             style = MaterialTheme.typography.bodyLarge,
         )
-    }
-}
-
-@Composable
-internal fun HowToAddTilesCard() {
-    Surface(
-        modifier = Modifier.fillMaxWidth(),
-        shape = RoundedCornerShape(SizeConstants.ExtraLargeIncreasedSize),
-        color = MaterialTheme.colorScheme.tertiaryContainer,
-    ) {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(SizeConstants.LargeSize),
-            verticalAlignment = Alignment.CenterVertically,
-        ) {
-            Icon(
-                imageVector = ToolSymbols.Info,
-                contentDescription = null,
-                tint = MaterialTheme.colorScheme.onTertiaryContainer,
-            )
-            Spacer(modifier = Modifier.width(SizeConstants.LargeSize))
-            Column(modifier = Modifier.weight(1f)) {
-                Text(
-                    text = stringResource(id = R.string.tiles_how_to_add_title),
-                    style = MaterialTheme.typography.titleMedium,
-                    color = MaterialTheme.colorScheme.onTertiaryContainer,
-                )
-                Text(
-                    text = stringResource(id = R.string.tiles_how_to_add_summary),
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.onTertiaryContainer,
-                )
-            }
-        }
     }
 }

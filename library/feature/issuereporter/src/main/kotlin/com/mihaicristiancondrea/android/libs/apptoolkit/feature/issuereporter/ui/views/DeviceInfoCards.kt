@@ -33,11 +33,12 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.ExpandMore
 import androidx.compose.material3.Card
 import androidx.compose.material3.Icon
+import androidx.compose.material3.ListItemDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -50,12 +51,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.Dp
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
+import androidx.compose.ui.unit.dp
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.style.spacing.spacing
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.Loadable
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.GroupedItemPosition
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.getGroupedShape
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.PreferenceItemDefaults
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.R
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.ui.constants.IssueReporterUiConstants
 
 /**
  * What will be attached to the report, as two grouped components: a header and its content.
@@ -74,7 +74,7 @@ internal fun DeviceInfoSection(
 
     Column(
         modifier = modifier.fillMaxWidth(),
-        verticalArrangement = Arrangement.spacedBy(space = SizeConstants.ExtraTinySize),
+        verticalArrangement = Arrangement.spacedBy(space = ListItemDefaults.SegmentedGap),
     ) {
         DeviceInfoHeaderCard(
             expanded = expanded,
@@ -107,32 +107,25 @@ private fun DeviceInfoHeaderCard(
         targetValue = if (expanded) 180f else 0f,
         label = "DeviceInfoArrowRotation",
     )
+    // Shape tokens expose no Dp to animate, so these mirror shapes.extraSmall and
+    // shapes.largeIncreased, the seam and outer corners segmentedShapes gives the rest of the group.
     val bottomRadius: Dp by animateDpAsState(
-        targetValue = if (expanded) {
-            SizeConstants.ExtraTinySize
-        } else {
-            IssueReporterUiConstants.GROUP_OUTER_RADIUS
-        },
+        targetValue = if (expanded) 4.dp else 20.dp,
         label = "DeviceInfoHeaderCorners",
     )
 
     Card(
         modifier = modifier.fillMaxWidth(),
-        shape = RoundedCornerShape(
-            topStart = IssueReporterUiConstants.GROUP_OUTER_RADIUS,
-            topEnd = IssueReporterUiConstants.GROUP_OUTER_RADIUS,
-            bottomStart = bottomRadius,
-            bottomEnd = bottomRadius,
+        shape = MaterialTheme.shapes.largeIncreased.copy(
+            bottomStart = CornerSize(size = bottomRadius),
+            bottomEnd = CornerSize(size = bottomRadius),
         ),
         onClick = onToggle,
     ) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(
-                    horizontal = SizeConstants.LargeSize,
-                    vertical = SizeConstants.LargeSize,
-                ),
+                .padding(all = MaterialTheme.spacing.large),
             verticalAlignment = Alignment.CenterVertically,
         ) {
             Text(
@@ -169,16 +162,13 @@ private fun DeviceInfoContentCard(
             modifier = modifier
                 .fillMaxWidth()
                 .animateContentSize(),
-            shape = getGroupedShape(
-                position = GroupedItemPosition.LAST,
-                outerRadius = IssueReporterUiConstants.GROUP_OUTER_RADIUS,
-            ),
+            shape = PreferenceItemDefaults.segmentedShapes(index = 1, count = 2).shape,
         ) {
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
                     .horizontalScroll(state = rememberScrollState())
-                    .padding(all = SizeConstants.LargeSize),
+                    .padding(all = MaterialTheme.spacing.large),
             ) {
                 Text(
                     text = when (deviceInfo) {

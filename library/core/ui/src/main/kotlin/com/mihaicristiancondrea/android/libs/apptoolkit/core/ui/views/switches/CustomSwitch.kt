@@ -17,7 +17,6 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.switches
 
-import android.view.View
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.SizeTransform
 import androidx.compose.animation.fadeIn
@@ -31,41 +30,41 @@ import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Switch
+import androidx.compose.material3.SwitchDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.hapticfeedback.HapticFeedback
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.platform.LocalHapticFeedback
-import androidx.compose.ui.platform.LocalView
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
 
 @Composable
 fun CustomSwitch(
     modifier: Modifier = Modifier,
     checked: Boolean,
-    onCheckedChange: (Boolean) -> Unit,
+    onCheckedChange: ((Boolean) -> Unit)? = null,
     enabled: Boolean = true,
     checkIcon: ImageVector = Icons.Filled.Check,
-    uncheckIcon: ImageVector = Icons.Filled.Close
+    uncheckIcon: ImageVector = Icons.Filled.Close,
 ) {
     val hapticFeedback: HapticFeedback = LocalHapticFeedback.current
-    val view: View = LocalView.current
 
     Switch(
         modifier = modifier,
         checked = checked,
         enabled = enabled,
-        onCheckedChange = { isChecked ->
-            if (!enabled) return@Switch
-            hapticFeedback.performHapticFeedback(
-                hapticFeedbackType = if (checked) {
-                    HapticFeedbackType.ToggleOn
-                } else {
-                    HapticFeedbackType.ToggleOff
-                }
-            )
-            onCheckedChange(isChecked)
+        onCheckedChange = onCheckedChange?.let { callback ->
+            { isChecked: Boolean ->
+                if (!enabled) return@let
+                hapticFeedback.performHapticFeedback(
+                    hapticFeedbackType = if (isChecked) {
+                        HapticFeedbackType.ToggleOn
+                    } else {
+                        HapticFeedbackType.ToggleOff
+                    },
+                )
+                callback(isChecked)
+            }
         },
         thumbContent = {
             AnimatedContent(
@@ -73,20 +72,20 @@ fun CustomSwitch(
                 transitionSpec = {
                     if (targetState) {
                         slideInVertically { height: Int -> height } + fadeIn() togetherWith
-                                slideOutVertically { height: Int -> -height } + fadeOut()
+                            slideOutVertically { height: Int -> -height } + fadeOut()
                     } else {
                         slideInVertically { height: Int -> -height } + fadeIn() togetherWith
-                                slideOutVertically { height: Int -> height } + fadeOut()
+                            slideOutVertically { height: Int -> height } + fadeOut()
                     } using SizeTransform(clip = false)
                 },
-                label = "SwitchIconAnimation"
+                label = "SwitchIconAnimation",
             ) { targetChecked: Boolean ->
                 Icon(
                     imageVector = if (targetChecked) checkIcon else uncheckIcon,
                     contentDescription = null,
-                    modifier = Modifier.size(size = SizeConstants.SwitchIconSize),
+                    modifier = Modifier.size(size = SwitchDefaults.IconSize),
                 )
             }
-        }
+        },
     )
 }

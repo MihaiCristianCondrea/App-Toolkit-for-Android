@@ -27,14 +27,13 @@ import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.DrawerDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.unit.LayoutDirection
-import androidx.compose.ui.unit.dp
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.ShellBackHandler
 
 @Composable
@@ -45,7 +44,7 @@ internal fun RailOverlay(open: Boolean, onDismiss: () -> Unit, rail: @Composable
         Box(
             Modifier
                 .fillMaxSize()
-                .background(MaterialTheme.colorScheme.scrim.copy(alpha = 0.32f))
+                .background(DrawerDefaults.scrimColor)
                 .pointerInput(Unit) { detectTapGestures { onDismiss() } },
         )
     }
@@ -59,7 +58,7 @@ internal fun RailOverlay(open: Boolean, onDismiss: () -> Unit, rail: @Composable
                 .fillMaxHeight()
                 .background(
                     MaterialTheme.colorScheme.surfaceContainerLow,
-                    RoundedCornerShape(topEnd = 16.dp, bottomEnd = 16.dp),
+                    DrawerDefaults.shape,
                 ),
         ) {
             rail()

@@ -31,6 +31,7 @@ import androidx.compose.material.icons.outlined.Favorite
 import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material.icons.outlined.SmartButton
 import androidx.compose.material.icons.outlined.StarOutline
+import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SnackbarData
@@ -41,15 +42,18 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.dp
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.components.R
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.components.ui.views.ShowcaseHeader
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.components.ui.views.ShowcaseSection
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.components.ui.views.ShowcaseSurface
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.icons.ToolkitIcon
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.style.elevation.elevation
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.style.spacing.spacing
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.ToolkitSnackbarColors
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.ToolkitSnackbarStyle
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.analytics.Ga4EventData
@@ -58,12 +62,13 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.Bu
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.ButtonMeasurements
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.GeneralButton
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.GeneralButtonStyle
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.GroupedItemPosition
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.PreferenceItemDefaults
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.snackbar.rememberScaffoldSnackbars
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.spacers.SmallVerticalSpacer
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 
+@OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
 fun ButtonShowcase(
     onLogEvent: (String, String?) -> Ga4EventData,
@@ -123,8 +128,9 @@ fun ButtonShowcase(
         title = stringResource(id = R.string.components_section_buttons),
         icon = Icons.Outlined.SmartButton,
     )
+    val groupCount = 8
     ShowcaseSection {
-        ShowcaseSurface(position = GroupedItemPosition.FIRST) {
+        ShowcaseSurface(shape = PreferenceItemDefaults.segmentedShapes(index = 0, count = groupCount).shape) {
             Text(
                 text = stringResource(id = R.string.components_button_group_standard),
                 style = MaterialTheme.typography.labelLarge,
@@ -134,8 +140,8 @@ fun ButtonShowcase(
             SmallVerticalSpacer()
             FlowRow(
                 modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(SizeConstants.MediumSize),
-                verticalArrangement = Arrangement.spacedBy(SizeConstants.MediumSize),
+                horizontalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.medium),
+                verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.medium),
             ) {
                 GeneralButton(
                     label = stringResource(id = R.string.components_button_primary),
@@ -163,7 +169,7 @@ fun ButtonShowcase(
                 )
             }
         }
-        ShowcaseSurface(position = GroupedItemPosition.MIDDLE) {
+        ShowcaseSurface(shape = PreferenceItemDefaults.segmentedShapes(index = 1, count = groupCount).shape) {
             Text(
                 text = stringResource(id = R.string.components_button_group_tonal),
                 style = MaterialTheme.typography.labelLarge,
@@ -173,8 +179,8 @@ fun ButtonShowcase(
             SmallVerticalSpacer()
             FlowRow(
                 modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(SizeConstants.MediumSize),
-                verticalArrangement = Arrangement.spacedBy(SizeConstants.MediumSize),
+                horizontalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.medium),
+                verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.medium),
             ) {
                 GeneralButton(
                     style = GeneralButtonStyle.Tonal,
@@ -199,7 +205,7 @@ fun ButtonShowcase(
                 )
             }
         }
-        ShowcaseSurface(position = GroupedItemPosition.MIDDLE) {
+        ShowcaseSurface(shape = PreferenceItemDefaults.segmentedShapes(index = 2, count = groupCount).shape) {
             Text(
                 text = stringResource(id = R.string.components_button_group_outlined),
                 style = MaterialTheme.typography.labelLarge,
@@ -209,8 +215,8 @@ fun ButtonShowcase(
             SmallVerticalSpacer()
             FlowRow(
                 modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(SizeConstants.MediumSize),
-                verticalArrangement = Arrangement.spacedBy(SizeConstants.MediumSize),
+                horizontalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.medium),
+                verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.medium),
             ) {
                 GeneralButton(
                     style = GeneralButtonStyle.Outlined,
@@ -235,7 +241,7 @@ fun ButtonShowcase(
                 )
             }
         }
-        ShowcaseSurface(position = GroupedItemPosition.MIDDLE) {
+        ShowcaseSurface(shape = PreferenceItemDefaults.segmentedShapes(index = 3, count = groupCount).shape) {
             Text(
                 text = stringResource(id = R.string.components_button_group_text_and_icon),
                 style = MaterialTheme.typography.labelLarge,
@@ -245,8 +251,8 @@ fun ButtonShowcase(
             SmallVerticalSpacer()
             FlowRow(
                 modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(SizeConstants.MediumSize),
-                verticalArrangement = Arrangement.spacedBy(SizeConstants.MediumSize),
+                horizontalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.medium),
+                verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.medium),
             ) {
                 GeneralButton(
                     style = GeneralButtonStyle.Text,
@@ -283,7 +289,7 @@ fun ButtonShowcase(
         ButtonSizeGroup(
             titleResId = R.string.components_button_group_icon_sizes,
             titleColor = MaterialTheme.colorScheme.primary,
-            position = GroupedItemPosition.MIDDLE,
+            shape = PreferenceItemDefaults.segmentedShapes(index = 4, count = groupCount).shape,
         ) { measurements, sizeLabel ->
             val customMessage = stringResource(id = R.string.components_snackbar_custom, sizeLabel)
             GeneralButton(
@@ -297,7 +303,7 @@ fun ButtonShowcase(
         ButtonSizeGroup(
             titleResId = R.string.components_button_group_text_sizes,
             titleColor = MaterialTheme.colorScheme.secondary,
-            position = GroupedItemPosition.MIDDLE,
+            shape = PreferenceItemDefaults.segmentedShapes(index = 5, count = groupCount).shape,
         ) { measurements, sizeLabel ->
             val customMessage = stringResource(id = R.string.components_snackbar_custom, sizeLabel)
             GeneralButton(
@@ -311,7 +317,7 @@ fun ButtonShowcase(
         ButtonSizeGroup(
             titleResId = R.string.components_button_group_text_icon_sizes,
             titleColor = MaterialTheme.colorScheme.tertiary,
-            position = GroupedItemPosition.MIDDLE,
+            shape = PreferenceItemDefaults.segmentedShapes(index = 6, count = groupCount).shape,
         ) { measurements, sizeLabel ->
             val customMessage = stringResource(id = R.string.components_snackbar_custom, sizeLabel)
             GeneralButton(
@@ -326,7 +332,7 @@ fun ButtonShowcase(
         ButtonSizeGroup(
             titleResId = R.string.components_button_group_trailing_icon_sizes,
             titleColor = MaterialTheme.colorScheme.primary,
-            position = GroupedItemPosition.LAST,
+            shape = PreferenceItemDefaults.segmentedShapes(index = 7, count = groupCount).shape,
         ) { measurements, sizeLabel ->
             val customMessage = stringResource(id = R.string.components_snackbar_custom, sizeLabel)
             GeneralButton(
@@ -352,10 +358,10 @@ fun ButtonShowcase(
 private fun ButtonSizeGroup(
     titleResId: Int,
     titleColor: Color,
-    position: GroupedItemPosition,
+    shape: Shape,
     button: @Composable (ButtonMeasurements, String) -> Unit,
 ) {
-    ShowcaseSurface(position = position) {
+    ShowcaseSurface(shape = shape) {
         Text(
             text = stringResource(id = titleResId),
             style = MaterialTheme.typography.labelLarge,
@@ -365,8 +371,8 @@ private fun ButtonSizeGroup(
         SmallVerticalSpacer()
         FlowRow(
             modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.spacedBy(SizeConstants.MediumSize),
-            verticalArrangement = Arrangement.spacedBy(SizeConstants.MediumSize),
+            horizontalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.medium),
+            verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.medium),
             itemVerticalAlignment = Alignment.CenterVertically,
         ) {
             ButtonSizes.forEach { (measurements, labelResId) ->
@@ -393,16 +399,19 @@ private val ButtonSizes: ImmutableList<Pair<ButtonMeasurements, Int>> = persiste
 private fun ShowcaseCustomSnackbar(data: SnackbarData) {
     Surface(
         modifier = Modifier
-            .padding(all = SizeConstants.LargeSize)
+            .padding(all = MaterialTheme.spacing.large)
             .fillMaxWidth(),
         shape = MaterialTheme.shapes.extraLarge,
         color = MaterialTheme.colorScheme.primaryContainer,
         contentColor = MaterialTheme.colorScheme.onPrimaryContainer,
-        tonalElevation = SizeConstants.ExtraSmallSize,
-        shadowElevation = SizeConstants.SmallSize,
+        tonalElevation = 4.dp,
+        shadowElevation = MaterialTheme.elevation.level4,
     ) {
         Row(
-            modifier = Modifier.padding(start = SizeConstants.LargeSize, end = SizeConstants.SmallSize),
+            modifier = Modifier.padding(
+                start = MaterialTheme.spacing.large,
+                end = MaterialTheme.spacing.small,
+            ),
             verticalAlignment = Alignment.CenterVertically,
         ) {
             Icon(imageVector = Icons.Outlined.AutoAwesome, contentDescription = null)
@@ -411,7 +420,10 @@ private fun ShowcaseCustomSnackbar(data: SnackbarData) {
                 style = MaterialTheme.typography.bodyMedium,
                 modifier = Modifier
                     .weight(1f)
-                    .padding(horizontal = SizeConstants.MediumSize, vertical = SizeConstants.LargeSize),
+                    .padding(
+                        horizontal = MaterialTheme.spacing.medium,
+                        vertical = MaterialTheme.spacing.large,
+                    ),
             )
             GeneralButton(
                 style = GeneralButtonStyle.Text,

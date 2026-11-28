@@ -18,7 +18,6 @@
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.ui.mappers
 
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.UiText
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.GroupedItemPosition
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.R
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.data.models.AboutInfo
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.ui.contracts.AboutItemAction
@@ -26,7 +25,6 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.ui.models.
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.ui.models.AboutItemKey
 import org.junit.jupiter.api.Test
 import kotlin.test.assertEquals
-import kotlin.test.assertNull
 import kotlin.test.assertTrue
 
 class AboutMappersTest {
@@ -57,14 +55,10 @@ class AboutMappersTest {
             items.map { it.key },
         )
 
-        val appName = items.preference(AboutItemKey.APP_NAME)
-        assertEquals(GroupedItemPosition.FIRST, appName.position)
-
         val buildVersion = items.preference(AboutItemKey.APP_BUILD_VERSION)
         assertEquals("1.0 (1)", (buildVersion.summary as UiText.DynamicString).content)
 
         val licenses = items.preference(AboutItemKey.OSS_LICENSES)
-        assertEquals(GroupedItemPosition.LAST, licenses.position)
         assertEquals(AboutItemAction.OpenLicenses, licenses.action)
     }
 
@@ -73,7 +67,6 @@ class AboutMappersTest {
         val deviceInfoItem = aboutInfo.toAboutItems().preference(AboutItemKey.DEVICE_INFO)
 
         assertEquals("device-info", (deviceInfoItem.summary as UiText.DynamicString).content)
-        assertEquals(GroupedItemPosition.SINGLE, deviceInfoItem.position)
         assertEquals(
             AboutItemAction.CopyToClipboard(
                 label = UiText.StringResource(R.string.device_info),
@@ -109,7 +102,10 @@ class AboutMappersTest {
         val items = aboutInfo.copy(googlePlayServicesVersion = null).toAboutItems()
 
         assertTrue(items.none { it.key == AboutItemKey.GOOGLE_PLAY_SERVICES_VERSION })
-        assertEquals(GroupedItemPosition.LAST, items.preference(AboutItemKey.OSS_LICENSES).position)
+        assertEquals(
+            AboutItemKey.OSS_LICENSES,
+            items.takeWhile { it.key != AboutItemKey.HEADER_DEVICE_INFO }.last().key,
+        )
     }
 
     @Test
@@ -144,7 +140,7 @@ class AboutMappersTest {
         )
         assertEquals(
             AboutItemAction.OpenLicenses,
-            preferences.first { it.key == AboutItemKey.OSS_LICENSES }.action
+            preferences.first { it.key == AboutItemKey.OSS_LICENSES }.action,
         )
     }
 
@@ -162,14 +158,14 @@ class AboutMappersTest {
 
         assertTrue(buildVersion.countsVersionTap)
         assertEquals(UiText.DynamicString("1.0 (1)"), buildVersion.summary)
-        assertNull(buildVersion.action)
+        assertEquals(AboutItemAction.VersionTap, buildVersion.action)
     }
 
     @Test
     fun `no other row feeds the version tap counter`() {
         val counting = aboutInfo.toAboutItems()
             .filterIsInstance<AboutItem.Preference>()
-            .filter { it.countsVersionTap }
+            .filter { it.action == AboutItemAction.VersionTap }
             .map { it.key }
 
         assertEquals(listOf(AboutItemKey.APP_BUILD_VERSION), counting)

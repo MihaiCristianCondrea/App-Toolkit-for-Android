@@ -30,6 +30,7 @@ import androidx.compose.material.icons.filled.Close
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -37,8 +38,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.icons.ToolkitIcon
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.style.spacing.spacing
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.GeneralButton
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.GeneralButtonStyle
 
@@ -95,11 +96,11 @@ fun BasicFullScreenDialog(
                     .fillMaxSize()
                     .padding(paddingValues = innerPadding)
                     .padding(
-                        horizontal = SizeConstants.LargeSize,
-                        vertical = SizeConstants.SmallSize
+                        horizontal = MaterialTheme.spacing.large,
+                        vertical = MaterialTheme.spacing.small,
                     )
                     .verticalScroll(state = rememberScrollState()),
-                verticalArrangement = Arrangement.spacedBy(space = SizeConstants.MediumSize)
+                verticalArrangement = Arrangement.spacedBy(space = MaterialTheme.spacing.medium)
             ) {
                 content()
             }

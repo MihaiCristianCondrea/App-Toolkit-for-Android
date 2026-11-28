@@ -40,10 +40,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.dp
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ads.AdsQualifiers
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.icons.ToolkitIcon
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.icons.ToolkitIconContent
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.style.spacing.spacing
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.R
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.ads.AdsConfig
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.ads.NoDataNativeAdCard
@@ -98,7 +99,7 @@ fun NoDataScreen(
             contentAlignment = Alignment.Center
         ) {
             LoadingIndicator(
-                modifier = Modifier.size(size = SizeConstants.OneFortyFourSize),
+                modifier = Modifier.size(size = 144.dp),
                 color = if (isError) MaterialTheme.colorScheme.errorContainer else LoadingIndicatorDefaults.indicatorColor
             )
 
@@ -106,7 +107,7 @@ fun NoDataScreen(
                 icon = icon,
                 contentDescription = null,
                 modifier = Modifier
-                    .size(size = SizeConstants.LauncherIconSize + SizeConstants.SmallSize + SizeConstants.ExtraTinySize),
+                    .size(size = 58.dp),
                 tint = if (isError) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.primaryContainer
             )
         }
@@ -132,7 +133,7 @@ fun NoDataScreen(
             NoDataNativeAdCard(
                 adUnitId = koinInject<AdsConfig>(qualifier = named(name = AdsQualifiers.NO_DATA_NATIVE_AD)).bannerAdUnitId,
                 modifier = Modifier
-                    .padding(all = SizeConstants.MediumSize),
+                    .padding(all = MaterialTheme.spacing.medium),
             )
         }
 

@@ -74,6 +74,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.icons.ToolkitIcon
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.style.spacing.spacing
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.AnimatedIconButtonDirection
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.ButtonFeedback
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.fab.ToolkitFabColumn
@@ -320,7 +321,7 @@ internal fun ShellBody(
                             .offset { IntOffset(0, -(bottomInsets.getBottom(this) - bottomBarHeight).coerceAtLeast(0)) }
                             .graphicsLayer { alpha = 1f - playerExpansion() },
                         horizontalAlignment = Alignment.End,
-                        verticalArrangement = Arrangement.spacedBy(16.dp),
+                        verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.large),
                     ) {
                         ToolkitFabColumn(described, expanded = fabScroll.expanded)
                         fab?.invoke(key)

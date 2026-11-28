@@ -56,6 +56,8 @@ import androidx.compose.foundation.layout.width
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.GeneralButton
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.GeneralButtonStyle
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.icons.ToolkitIcon
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.style.spacing.spacing
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -173,20 +175,25 @@ internal fun NumbersScreenContent(
             sections.forEach { (title, icon, ids) ->
                 val visible = tools.filter { it.id in ids }
                 if (visible.isNotEmpty()) ToolSection(stringResource(title), icon, Modifier) {
-                    if (title == R.string.section_count) Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
+                    if (title == R.string.section_count) Column(verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.extraSmall)) {
                         visible.forEachIndexed { index, tile ->
                             val shape = toolCorners(0, 1, top = index == 0, bottom = index == visible.lastIndex)
                             if (tile.id == ToolkitTileIds.COUNTER) {
                                 ToolWidget(tile, { selectedId = tile.id; startReaction = false }, Modifier.fillMaxWidth(), shape,
                                     headerAction = {
                                         TextButton(onClick = { onCounter(CounterToolEvent.Reset) }, enabled = counterState.count > 0) {
-                                            Icon(ToolSymbols.Refresh, null, Modifier.size(18.dp))
-                                            Spacer(Modifier.width(8.dp))
+                                            Icon(ToolSymbols.Refresh, null, Modifier.size(ButtonDefaults.IconSize))
+                                            Spacer(Modifier.width(ButtonDefaults.IconSpacing))
                                             Text(stringResource(R.string.tool_counter_reset))
                                         }
                                     },
-                                    padding = PaddingValues(start = 16.dp, end = 16.dp, top = 12.dp, bottom = 16.dp),
-                                    spacing = 8.dp) {
+                                    padding = PaddingValues(
+                                        start = MaterialTheme.spacing.large,
+                                        end = MaterialTheme.spacing.large,
+                                        top = MaterialTheme.spacing.medium,
+                                        bottom = MaterialTheme.spacing.large,
+                                    ),
+                                    spacing = MaterialTheme.spacing.small) {
                                     CounterControls(counterState.count,
                                         onIncrement = { onCounter(CounterToolEvent.Increment) },
                                         onDecrement = { onCounter(CounterToolEvent.Decrement) })
@@ -212,7 +219,7 @@ internal fun NumbersScreenContent(
                                     MeasureDetail(stringResource(R.string.tile_service_azimuth_format, protractorAngle.roundToInt()), stringResource(R.string.widget_protractor_note))
                                 }
                                 ToolkitTileIds.UNIT_CONVERTER -> {
-                                    Column(Modifier.weight(1f, fill = false), verticalArrangement = Arrangement.spacedBy(6.dp)) {
+                                    Column(Modifier.weight(1f, fill = false), verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.extraSmallIncreased)) {
                                         ConversionLine(converter.left, converter.from.symbol)
                                         Icon(ToolSymbols.SwapVert, null, Modifier.size(20.dp))
                                         ConversionLine(converter.right, converter.to.symbol)
@@ -220,9 +227,9 @@ internal fun NumbersScreenContent(
                                     Text(stringResource(converter.category.labelResId()), style = WidgetDetailStyle)
                                 }
                                 ToolkitTileIds.BILL_SPLITTER -> {
-                                    Icon(ToolSymbols.Rounded.Group, null, Modifier.padding(bottom = 4.dp).size(40.dp))
+                                    Icon(ToolSymbols.Rounded.Group, null, Modifier.padding(bottom = MaterialTheme.spacing.extraSmall).size(40.dp))
                                     Text(bill.result?.let { formatBillAmount(it.perPerson, bill.currency, locale) } ?: "—",
-                                        style = MaterialTheme.typography.headlineLarge.copy(fontSize = 32.sp, lineHeight = 38.sp), fontWeight = FontWeight.Medium, maxLines = 1)
+                                        style = MaterialTheme.typography.headlineLarge.copy(lineHeight = 38.sp), fontWeight = FontWeight.Medium, maxLines = 1)
                                     Text(stringResource(R.string.tool_bill_per_person).lowercase(locale), style = WidgetDetailStyle)
                                     Text(
                                         text = (if (bill.tipEnabled) stringResource(R.string.tool_tip_percent, bill.tipPercent) + " " + stringResource(R.string.tool_bill_tip).lowercase(locale) else stringResource(R.string.no_tip)) +
@@ -250,16 +257,16 @@ internal fun NumbersScreenContent(
 /** The reading under a Measure visual: the value in the primary colour, then what to do with it. */
 @Composable
 private fun MeasureDetail(value: String, note: String) {
-    Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
-        Text(value, style = MaterialTheme.typography.headlineMedium.copy(fontSize = 28.sp, lineHeight = 34.sp), fontWeight = FontWeight.Medium, color = MaterialTheme.colorScheme.primary, maxLines = 1)
+    Column(verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.extraSmall)) {
+        Text(value, style = MaterialTheme.typography.headlineMedium.copy(lineHeight = 34.sp), fontWeight = FontWeight.Medium, color = MaterialTheme.colorScheme.primary, maxLines = 1)
         Text(note, style = WidgetDetailStyle, color = MaterialTheme.colorScheme.onSurfaceVariant)
     }
 }
 
 @Composable
 private fun ConversionLine(value: String, unit: String) {
-    Row(verticalAlignment = Alignment.Bottom, horizontalArrangement = Arrangement.spacedBy(4.dp)) {
-        Text(value, style = MaterialTheme.typography.headlineSmall.copy(fontSize = 26.sp, lineHeight = 32.sp), fontWeight = FontWeight.Medium, maxLines = 1)
+    Row(verticalAlignment = Alignment.Bottom, horizontalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.extraSmall)) {
+        Text(value, style = MaterialTheme.typography.headlineSmall.copy(fontSize = 26.sp), fontWeight = FontWeight.Medium, maxLines = 1)
         Text(unit, style = MaterialTheme.typography.bodyLarge, fontWeight = FontWeight.Medium, modifier = Modifier.padding(bottom = 3.dp))
     }
 }
@@ -268,13 +275,17 @@ private fun ConversionLine(value: String, unit: String) {
 @Composable
 private fun ReactionWidget(tile: ToolkitTile, bestMs: Long?, shape: Shape, onOpen: () -> Unit, onStart: () -> Unit) {
     Surface(onClick = onOpen, modifier = Modifier.fillMaxWidth().animateVisibility(), shape = shape, color = MaterialTheme.colorScheme.surfaceContainerHigh) {
-        Row(Modifier.padding(horizontal = 20.dp, vertical = 16.dp), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(16.dp)) {
-            Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(4.dp)) {
+        Row(
+            modifier = Modifier.padding(horizontal = MaterialTheme.spacing.largeIncreased, vertical = MaterialTheme.spacing.large),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.large),
+        ) {
+            Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.extraSmall)) {
                 Text(stringResource(tile.titleResId), style = WidgetTitleStyle)
-                Row(verticalAlignment = Alignment.Bottom, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                Row(verticalAlignment = Alignment.Bottom, horizontalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.small)) {
                     Text(
                         text = bestMs?.let { stringResource(R.string.tool_reaction_test_time_format, it.toInt()) } ?: stringResource(R.string.widget_reaction_ready),
-                        style = MaterialTheme.typography.headlineSmall.copy(fontSize = 24.sp, lineHeight = 32.sp, fontFeatureSettings = "tnum"),
+                        style = MaterialTheme.typography.headlineSmall.copy(fontFeatureSettings = "tnum"),
                         fontWeight = FontWeight.Medium,
                     )
                     Text(
@@ -289,7 +300,7 @@ private fun ReactionWidget(tile: ToolkitTile, bestMs: Long?, shape: Shape, onOpe
                 onClick = onStart,
                 style = GeneralButtonStyle.Tonal,
                 icon = ToolkitIcon.Vector(ToolSymbols.PlayArrow),
-                iconSize = 18.dp,
+                iconSize = ButtonDefaults.IconSize,
                 label = stringResource(R.string.tool_reaction_test_start),
             )
         }
@@ -343,9 +354,9 @@ private fun MeasureFace(protractor: Boolean, angle: Float = 45f) {
 
 // Copied from the theme's styles so the widget type stays in the app font.
 private val WidgetTitleStyle: TextStyle
-    @Composable get() = MaterialTheme.typography.titleMedium.copy(fontSize = 16.sp, lineHeight = 22.sp, fontWeight = FontWeight.SemiBold)
+    @Composable get() = MaterialTheme.typography.titleMedium.copy(lineHeight = 22.sp, fontWeight = FontWeight.SemiBold)
 private val WidgetDetailStyle: TextStyle
-    @Composable get() = MaterialTheme.typography.bodySmall.copy(fontSize = 12.sp, lineHeight = 18.sp)
+    @Composable get() = MaterialTheme.typography.bodySmall.copy(lineHeight = 18.sp)
 
 internal val NumbersCalculateTools = MeasureTools.filter { it.id == ToolkitTileIds.UNIT_CONVERTER || it.id == ToolkitTileIds.BILL_SPLITTER }
 internal val NumbersChanceTools = MeasureTools.filter { it.id == ToolkitTileIds.COUNTER || it.id == ToolkitTileIds.REACTION_TEST }

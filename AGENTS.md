@@ -206,12 +206,27 @@ Discover the available `SKILL.md` files instead of assuming this table contains 
 Use `layered-tree-review` when creating, moving, renaming, or reorganizing Kotlin files, packages, or
 modules, alongside the architecture skill that owns the behavior.
 
+### Google developer tools and Rust migrations
+
+| Task | Skill |
+| --- | --- |
+| Choose or set up a Google service when the stack is open, or find guidance for a named Google product | [`finding-google-skills`](.agents/skills/official/google/google-developers/finding-google-skills/SKILL.md) |
+| Look up official Google API behavior, CLI syntax, permissions, or platform guidance | [`retrieving-developer-knowledge`](.agents/skills/official/google/google-developers/retrieving-developer-knowledge/SKILL.md) |
+| Inspect or manage a change hosted on Gerrit | [`gerrit-code-review`](.agents/skills/official/google/google-developers/gerrit-code-review/SKILL.md) |
+| Port a legacy codebase to safe Rust with baseline benchmarks, parity checks, and profile-guided optimization | [`migrate-to-rust`](.agents/skills/official/google/google-developers/migrate-to-rust/SKILL.md) |
+| Port a function, module, or app in stages using the Rust Anything CLI or MCP tools | [`rust-anything`](.agents/skills/third-party/erkamyaman/rust-anything/SKILL.md) |
+
+Choose the Rust workflow that fits the requested scope and tools. For routine Android work, use
+the project's configured stack and the relevant Android skills.
+
 ### Compose layout work
 
 Use the [Compose layout skills](.agents/skills/first-party/compose-layout-skills/README.md) map for Compose layout implementation and review. Select by the issue:
 spacing and gutters, measurement and constraints, interaction and surface semantics, connected
 geometry, or scroll and inset ownership. Use `material-ui` for Material design specifications.
-Check the resolved Compose and Material versions before choosing implementation APIs.
+Use [compose-material3-native-tokens](.agents/skills/first-party/compose-layout-skills/compose-material3-native-tokens/SKILL.md)
+when choosing Material 3 defaults or reviewing style overrides. Check the resolved Compose and
+Material versions before choosing implementation APIs.
 
 ### Task workflows
 

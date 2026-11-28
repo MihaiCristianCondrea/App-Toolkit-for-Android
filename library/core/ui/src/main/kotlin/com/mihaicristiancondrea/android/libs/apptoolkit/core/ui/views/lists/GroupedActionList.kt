@@ -17,40 +17,40 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.lists
 
-import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
+import androidx.compose.material3.ListItemDefaults
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.SegmentedListItem
 import androidx.compose.material3.Text
+import androidx.compose.material3.contentColorFor
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.unit.dp
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.style.spacing.spacing
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.modifiers.componentEntrance
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.PreferenceItemDefaults
 import kotlinx.collections.immutable.ImmutableList
 
 /**
  * A card of tappable rows rendered as one visual group.
  *
- * The outer card holds inner cards whose corners round only at the ends of the group, so the rows
- * read as a single unit rather than as separate cards. It is the layout the help screen's feedback
- * sheet uses, extracted so other apps can present their own actions the same way.
+ * The outer card holds Material 3 [SegmentedListItem] rows whose corners round only at the ends of
+ * the group, so the rows read as a single unit rather than as separate cards. It is the layout the
+ * help screen's feedback sheet uses, extracted so other apps can present their own actions the same
+ * way.
  *
- * Corner rounding is derived from each item's index rather than passed in. A caller cannot label a
- * middle row as the last one, and a single-item list correctly rounds both ends, a case the
- * previous hand-passed first/middle/last enum could not express.
+ * Corner rounding is derived from each item's index through
+ * [PreferenceItemDefaults.segmentedShapes], so a single-item list rounds both ends and callers
+ * cannot mislabel row positions.
  *
  * @param actions Rows to render, in order. An empty list renders nothing.
  */
@@ -64,21 +64,43 @@ fun GroupedActionList(
     if (actions.isEmpty()) return
 
     Card(
-        modifier = modifier.componentEntrance().fillMaxWidth(),
+        modifier = modifier
+            .componentEntrance()
+            .fillMaxWidth(),
         shape = MaterialTheme.shapes.extraLarge,
         colors = CardDefaults.cardColors(containerColor = containerColor),
     ) {
-        Column(modifier = Modifier.padding(all = GROUP_PADDING)) {
+        Column(
+            modifier = Modifier.padding(all = MaterialTheme.spacing.extraSmallIncreased),
+            verticalArrangement = Arrangement.spacedBy(space = MaterialTheme.spacing.extraSmall),
+        ) {
             actions.forEachIndexed { index, action ->
-                GroupedActionRow(
-                    action = action,
-                    isFirst = index == 0,
-                    isLast = index == actions.lastIndex,
-                    itemColor = itemColor,
+                SegmentedListItem(
+                    onClick = action.onClick,
+                    shapes = PreferenceItemDefaults.segmentedShapes(
+                        index = index,
+                        count = actions.size,
+                    ),
+                    modifier = Modifier.fillMaxWidth(),
+                    colors = ListItemDefaults.segmentedColors(
+                        containerColor = itemColor,
+                        leadingContentColor = contentColorFor(backgroundColor = itemColor),
+                    ),
+                    verticalAlignment = Alignment.CenterVertically,
+                    contentPadding = PaddingValues(
+                        horizontal = MaterialTheme.spacing.large,
+                        vertical = MaterialTheme.spacing.medium,
+                    ),
+                    leadingContent = {
+                        Icon(imageVector = action.icon, contentDescription = null)
+                    },
+                    supportingContent = {
+                        Text(text = action.description)
+                    },
+                    content = {
+                        Text(text = action.title)
+                    },
                 )
-                if (index != actions.lastIndex) {
-                    Spacer(modifier = Modifier.height(ITEM_SPACING))
-                }
             }
         }
     }
@@ -97,65 +119,15 @@ fun GroupedActionList(
     content: @Composable ColumnScope.() -> Unit,
 ) {
     Card(
-        modifier = modifier.componentEntrance().fillMaxWidth(),
+        modifier = modifier
+            .componentEntrance()
+            .fillMaxWidth(),
         shape = MaterialTheme.shapes.extraLarge,
         colors = CardDefaults.cardColors(containerColor = containerColor),
     ) {
-        Column(modifier = Modifier.padding(all = GROUP_PADDING), content = content)
+        Column(
+            modifier = Modifier.padding(all = MaterialTheme.spacing.extraSmallIncreased),
+            content = content,
+        )
     }
 }
-
-@Composable
-private fun GroupedActionRow(
-    action: GroupedAction,
-    isFirst: Boolean,
-    isLast: Boolean,
-    itemColor: Color,
-) {
-    val topCorner = if (isFirst) SizeConstants.LargeSize else SizeConstants.ExtraTinySize
-    val bottomCorner = if (isLast) SizeConstants.LargeSize else SizeConstants.ExtraTinySize
-
-    Card(
-        modifier = Modifier.fillMaxWidth(),
-        shape = RoundedCornerShape(
-            topStart = topCorner,
-            topEnd = topCorner,
-            bottomStart = bottomCorner,
-            bottomEnd = bottomCorner,
-        ),
-        colors = CardDefaults.cardColors(containerColor = itemColor),
-    ) {
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier
-                .fillMaxWidth()
-                .clickable(onClick = action.onClick)
-                .padding(horizontal = ROW_HORIZONTAL_PADDING, vertical = ROW_VERTICAL_PADDING),
-        ) {
-            Icon(imageVector = action.icon, contentDescription = null)
-            Spacer(modifier = Modifier.width(ROW_ICON_SPACING))
-            Column {
-                Text(text = action.title)
-                Text(
-                    text = action.description,
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
-                )
-            }
-        }
-    }
-}
-
-
-
-
-
-
-
-
-
-private val GROUP_PADDING = 6.dp
-private val ITEM_SPACING = 4.dp
-private val ROW_HORIZONTAL_PADDING = 16.dp
-private val ROW_VERTICAL_PADDING = 12.dp
-private val ROW_ICON_SPACING = 12.dp

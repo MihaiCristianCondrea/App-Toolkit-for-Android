@@ -23,7 +23,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.TextUnitType
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
+import androidx.compose.ui.unit.dp
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.style.spacing.SpacingDefaults
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.ads.NativeAdBadgeShape
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.ads.NativeAdCallToActionStyle
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.ads.NativeAdPresentation
@@ -57,51 +58,51 @@ enum class GroupedGridMeasurements {
  */
 val GroupedGridMeasurements.cellHeight: Dp
     get() = when (this) {
-        GroupedGridMeasurements.ExtraSmall -> SizeConstants.LauncherIconSize + SizeConstants.SmallSize
-        GroupedGridMeasurements.Small -> SizeConstants.LauncherIconSize + SizeConstants.LargeSize
-        GroupedGridMeasurements.Medium -> SizeConstants.EightySize
-        GroupedGridMeasurements.Large -> SizeConstants.NinetySixSize
-        GroupedGridMeasurements.ExtraLarge -> SizeConstants.NinetySixSize + SizeConstants.LargeSize
+        GroupedGridMeasurements.ExtraSmall -> 56.dp
+        GroupedGridMeasurements.Small -> 64.dp
+        GroupedGridMeasurements.Medium -> 80.dp
+        GroupedGridMeasurements.Large -> 96.dp
+        GroupedGridMeasurements.ExtraLarge -> 112.dp
     }
 
 val GroupedGridMeasurements.iconContainerSize: Dp
     get() = when (this) {
-        GroupedGridMeasurements.ExtraSmall -> SizeConstants.ExtraLargeIncreasedSize
-        GroupedGridMeasurements.Small -> SizeConstants.ExtraLargeSize + SizeConstants.MediumSize
-        GroupedGridMeasurements.Medium -> SizeConstants.LauncherIconSize
-        GroupedGridMeasurements.Large -> SizeConstants.LauncherIconSize + SizeConstants.SmallSize
-        GroupedGridMeasurements.ExtraLarge -> SizeConstants.LauncherIconSize + SizeConstants.LargeSize
+        GroupedGridMeasurements.ExtraSmall -> 32.dp
+        GroupedGridMeasurements.Small -> 40.dp
+        GroupedGridMeasurements.Medium -> 48.dp
+        GroupedGridMeasurements.Large -> 56.dp
+        GroupedGridMeasurements.ExtraLarge -> 64.dp
     }
 
 internal val GroupedGridMeasurements.iconSize: Dp
     get() = when (this) {
-        GroupedGridMeasurements.ExtraSmall -> SizeConstants.LargeMediumSize
-        GroupedGridMeasurements.Small -> SizeConstants.LargeIncreasedSize
-        GroupedGridMeasurements.Medium -> SizeConstants.TwentyFourSize
-        GroupedGridMeasurements.Large -> SizeConstants.ExtraLargeSize
-        GroupedGridMeasurements.ExtraLarge -> SizeConstants.ExtraLargeIncreasedSize
+        GroupedGridMeasurements.ExtraSmall -> 18.dp
+        GroupedGridMeasurements.Small -> 20.dp
+        GroupedGridMeasurements.Medium -> 24.dp
+        GroupedGridMeasurements.Large -> 28.dp
+        GroupedGridMeasurements.ExtraLarge -> 32.dp
     }
 
 internal val GroupedGridMeasurements.contentPadding: PaddingValues
     get() = when (this) {
         GroupedGridMeasurements.ExtraSmall -> PaddingValues(
-            horizontal = SizeConstants.MediumSize,
-            vertical = SizeConstants.SmallSize,
+            horizontal = SpacingDefaults.Medium,
+            vertical = SpacingDefaults.Small,
         )
 
-        GroupedGridMeasurements.Small -> PaddingValues(all = SizeConstants.MediumSize)
-        GroupedGridMeasurements.Medium -> PaddingValues(all = SizeConstants.LargeSize)
-        GroupedGridMeasurements.Large -> PaddingValues(all = SizeConstants.LargeSize)
-        GroupedGridMeasurements.ExtraLarge -> PaddingValues(all = SizeConstants.ExtraLargeCompactSize)
+        GroupedGridMeasurements.Small -> PaddingValues(all = SpacingDefaults.Medium)
+        GroupedGridMeasurements.Medium -> PaddingValues(all = SpacingDefaults.Large)
+        GroupedGridMeasurements.Large -> PaddingValues(all = SpacingDefaults.Large)
+        GroupedGridMeasurements.ExtraLarge -> PaddingValues(all = SpacingDefaults.ExtraLargeCompact)
     }
 
 internal val GroupedGridMeasurements.iconSpacing: Dp
     get() = when (this) {
-        GroupedGridMeasurements.ExtraSmall -> SizeConstants.SmallSize
-        GroupedGridMeasurements.Small -> SizeConstants.MediumSize
-        GroupedGridMeasurements.Medium -> SizeConstants.MediumSize
-        GroupedGridMeasurements.Large -> SizeConstants.LargeSize
-        GroupedGridMeasurements.ExtraLarge -> SizeConstants.LargeSize
+        GroupedGridMeasurements.ExtraSmall -> SpacingDefaults.Small
+        GroupedGridMeasurements.Small -> SpacingDefaults.Medium
+        GroupedGridMeasurements.Medium -> SpacingDefaults.Medium
+        GroupedGridMeasurements.Large -> SpacingDefaults.Large
+        GroupedGridMeasurements.ExtraLarge -> SpacingDefaults.Large
     }
 
 @Composable

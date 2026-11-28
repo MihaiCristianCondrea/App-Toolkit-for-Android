@@ -50,6 +50,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.style.bounceClick
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.style.spacing.spacing
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.R
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.layout.ArticleReadingProgress
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.layout.ArticleTopBarHost
@@ -96,7 +97,7 @@ internal fun ListDetailTopBar(
                             onCloseList()
                         },
                         modifier = Modifier
-                            .padding(start = 4.dp)
+                            .padding(start = MaterialTheme.spacing.extraSmall)
                             .bounceClick(),
                     ) {
                         Icon(Icons.AutoMirrored.Filled.ArrowBack, stringResource(R.string.shell_navigate_back))
@@ -105,7 +106,10 @@ internal fun ListDetailTopBar(
                 PaneTitle(
                     title = listChrome?.title?.invoke().orEmpty(),
                     article = listArticle,
-                    modifier = Modifier.padding(start = if (showsBack) 4.dp else 16.dp, end = 16.dp),
+                    modifier = Modifier.padding(
+                        start = if (showsBack) MaterialTheme.spacing.extraSmall else MaterialTheme.spacing.large,
+                        end = MaterialTheme.spacing.large,
+                    ),
                     titleModifier = listTitleModifier,
                 )
             }
@@ -132,7 +136,7 @@ internal fun ListDetailTopBar(
                         article = article,
                         modifier = Modifier
                             .weight(1f)
-                            .padding(start = 8.dp),
+                            .padding(start = MaterialTheme.spacing.small),
                     )
                     chrome?.actions?.invoke(this)
                 }

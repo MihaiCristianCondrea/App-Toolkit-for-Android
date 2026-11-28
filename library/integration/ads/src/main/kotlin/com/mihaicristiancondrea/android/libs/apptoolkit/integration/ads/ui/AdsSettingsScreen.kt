@@ -26,6 +26,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
@@ -36,8 +37,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.BuildInfoRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.links.AppLinks
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.context.openUrl
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.style.spacing.spacing
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.ScreenHost
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.ScreenStateHandler
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.analytics.LocalTelemetry
@@ -144,13 +145,13 @@ private fun AdsSettingsList(
     LazyColumn(
         contentPadding = contentPadding,
         modifier = Modifier.fillMaxSize(),
-        verticalArrangement = Arrangement.spacedBy(space = SizeConstants.LargeSize),
+        verticalArrangement = Arrangement.spacedBy(space = MaterialTheme.spacing.large),
     ) {
         animatedItem {
             SwitchCardItem(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(horizontal = SizeConstants.LargeSize),
+                    .padding(horizontal = MaterialTheme.spacing.large),
                 title = stringResource(
                     id = if (showDisplayAdsSwitch) R.string.display_ads else R.string.reduce_ads,
                 ),
@@ -170,7 +171,7 @@ private fun AdsSettingsList(
         }
 
         animatedItem {
-            Box(modifier = Modifier.padding(horizontal = SizeConstants.SmallSize)) {
+            Box(modifier = Modifier.padding(horizontal = MaterialTheme.spacing.small)) {
                 PreferenceItem(
                     title = stringResource(id = R.string.personalized_ads),
                     enabled = preferences.adsEnabled,
@@ -185,7 +186,7 @@ private fun AdsSettingsList(
             InfoMessageSection(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(horizontal = SizeConstants.MediumSize * 2),
+                    .padding(horizontal = MaterialTheme.spacing.extraLargeCompact),
                 message = stringResource(id = R.string.summary_ads),
                 learnMoreText = stringResource(id = CoreUiR.string.learn_more),
                 learnMoreAction = onLearnMore,

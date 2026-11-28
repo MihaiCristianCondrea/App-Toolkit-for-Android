@@ -19,30 +19,26 @@ package com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.ui
 
 import android.content.Context
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.material3.ListItemDefaults
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.key
-import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.context.isSystemAnimationDisabled
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.style.spacing.spacing
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.Loadable
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.ScreenActionHandler
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.ScreenHost
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.ScreenStateHandler
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.modifiers.animatedItems
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.PreferenceCategoryItem
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.PreferenceItemDefaults
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.SettingsPreferenceItem
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.groupedPreferenceItem
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.shell.contentPadding
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.ui.analytics.ABOUT_SCREEN
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.ui.analytics.aboutPreferenceTapEvent
@@ -51,18 +47,12 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.ui.contrac
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.ui.contracts.AboutItemAction
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.ui.models.AboutItem
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.ui.states.AboutUiState
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.ui.views.effects.TapCelebration
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.LocalShellNavigator
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.ShellNavigator
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.keys.LicensesScreen
-import kotlinx.coroutines.delay
-import nl.dionsegijn.konfetti.compose.KonfettiView
-import nl.dionsegijn.konfetti.core.Angle
-import nl.dionsegijn.konfetti.core.Party
-import nl.dionsegijn.konfetti.core.Position
-import nl.dionsegijn.konfetti.core.Spread
-import nl.dionsegijn.konfetti.core.emitter.Emitter
+import kotlinx.collections.immutable.ImmutableList
 import org.koin.compose.viewmodel.koinViewModel
-import java.util.concurrent.TimeUnit
-import kotlin.time.Duration.Companion.milliseconds
 
 /**
  * Displays the host and Toolkit versions, the device report and the open-source licenses link.
@@ -75,142 +65,91 @@ fun AboutScreen(
 ) {
     val viewModel: AboutViewModel = koinViewModel()
     val state: AboutUiState by viewModel.state.collectAsStateWithLifecycle()
-    val navigator = LocalShellNavigator.current
+    val navigator: ShellNavigator = LocalShellNavigator.current
 
+    val context: Context = LocalContext.current
     ScreenHost(screen = ABOUT_SCREEN, status = state.items, viewModel = viewModel) {
-        AboutScreenContent(
-            state = state,
-            onEvent = viewModel::onEvent,
-            onOpenLicenses = { navigator.navigate(key = LicensesScreen) },
-            contentPadding = contentPadding(),
-            onVersionTap = onVersionTap,
-        )
+        TapCelebration(
+            threshold = AboutEasterEggConstants.EASTER_EGG_TAPS,
+            onTap = onVersionTap,
+            onThresholdReached = { viewModel.onEvent(event = AboutEvent.EasterEggFound) },
+            modifier = Modifier.fillMaxHeight(),
+        ) { onBuildVersionTap ->
+            ScreenActionHandler(
+                onEvent = viewModel::onEvent,
+                handleAction = { action, dispatch ->
+                    when (action) {
+                        is AboutItemAction.CopyToClipboard -> dispatch(
+                            AboutEvent.CopyToClipboard(
+                                label = action.label.asString(context = context),
+                                text = action.text.asString(context = context),
+                                successMessage = action.successMessage,
+                            ),
+                        )
+
+                        is AboutItemAction.OpenLicenses -> navigator.navigate(key = LicensesScreen)
+                        is AboutItemAction.VersionTap -> onBuildVersionTap()
+                    }
+                },
+            ) { onAction ->
+                AboutScreenContent(
+                    state = state,
+                    contentPadding = contentPadding(),
+                    onRetry = { viewModel.onEvent(event = AboutEvent.Load) },
+                    onAction = onAction,
+                )
+            }
+        }
     }
 }
 
 /**
- * Renders the About entries and owns the visual version-tap gesture.
+ * Renders the About entries and reports preference clicks and retry requests.
  *
- * @param onOpenLicenses Handles the licenses row action.
  * @param contentPadding Shell insets applied inside the list and load-state surfaces.
  */
 @Composable
 internal fun AboutScreenContent(
     state: AboutUiState,
-    onEvent: (AboutEvent) -> Unit,
-    onOpenLicenses: () -> Unit,
+    onRetry: () -> Unit,
+    onAction: (AboutItemAction) -> Unit,
     modifier: Modifier = Modifier,
     contentPadding: PaddingValues = PaddingValues(),
-    onVersionTap: (Int) -> Unit = {},
 ) {
-    val context: Context = LocalContext.current
-    var konfettiBurstId: Int by remember { mutableIntStateOf(value = 0) }
-    var versionTapCount: Int by rememberSaveable { mutableIntStateOf(value = 0) }
-    var versionTotalTapCount: Int by rememberSaveable { mutableIntStateOf(value = 0) }
+    ScreenStateHandler(
+        state = state.items,
+        modifier = modifier.fillMaxHeight(),
+        contentPadding = contentPadding,
+        onRetry = onRetry,
+        onSuccess = { ready: Loadable.Ready<ImmutableList<AboutItem>> ->
+            LazyColumn(
+                modifier = Modifier.fillMaxHeight(),
+                contentPadding = contentPadding,
+                verticalArrangement = Arrangement.spacedBy(space = ListItemDefaults.SegmentedGap),
+            ) {
+                animatedItems(
+                    items = ready.value,
+                    key = { it.key },
+                ) { item ->
+                    when (item) {
+                        is AboutItem.Header -> PreferenceCategoryItem(title = item.title.asString())
 
-    LaunchedEffect(key1 = konfettiBurstId) {
-        if (konfettiBurstId > 0) {
-            delay(duration = AboutEasterEggConstants.KONFETTI_DURATION_MILLIS.milliseconds)
-            konfettiBurstId = 0
-        }
-    }
+                        is AboutItem.Preference -> SettingsPreferenceItem(
+                            title = item.title.asString(),
+                            summary = item.summary.asString(),
+                            shapes = PreferenceItemDefaults.segmentedShapes(index = item.index, count = item.count),
+                            onClick = item.action?.let { action -> { onAction(action) } },
+                            ga4Event = when (item.action) {
+                                is AboutItemAction.CopyToClipboard,
+                                is AboutItemAction.OpenLicenses -> aboutPreferenceTapEvent(preferenceKey = item.key)
 
-    Box(modifier = modifier.fillMaxHeight()) {
-        ScreenStateHandler(
-            state = state.items,
-            contentPadding = contentPadding,
-            onRetry = { onEvent(AboutEvent.Load) },
-            onSuccess = { ready ->
-                LazyColumn(
-                    modifier = Modifier.fillMaxHeight(),
-                    contentPadding = contentPadding,
-                    verticalArrangement = Arrangement.spacedBy(space = SizeConstants.ExtraTinySize),
-                ) {
-                    animatedItems(
-                        items = ready.value,
-                        key = { it.key },
-                    ) { item ->
-                        when (item) {
-                            is AboutItem.Header -> PreferenceCategoryItem(title = item.title.asString())
-
-                            is AboutItem.Preference -> SettingsPreferenceItem(
-                                title = item.title.asString(),
-                                summary = item.summary.asString(),
-                                onClick = {
-                                    if (item.countsVersionTap) {
-                                        versionTotalTapCount += 1
-                                        onVersionTap(versionTotalTapCount)
-                                        versionTapCount += 1
-                                        if (versionTapCount >= AboutEasterEggConstants.EASTER_EGG_TAPS) {
-                                            versionTapCount = 0
-                                            if (!context.isSystemAnimationDisabled()) {
-                                                konfettiBurstId += 1
-                                            }
-                                            onEvent(AboutEvent.EasterEggFound)
-                                        }
-                                    }
-
-                                    when (val action = item.action) {
-                                        is AboutItemAction.CopyToClipboard -> onEvent(
-                                            AboutEvent.CopyToClipboard(
-                                                label = action.label.asString(context = context),
-                                                text = action.text.asString(context = context),
-                                                successMessage = action.successMessage,
-                                            ),
-                                        )
-
-                                        is AboutItemAction.OpenLicenses -> onOpenLicenses()
-                                        null -> Unit
-                                    }
-                                },
-                                ga4Event = item.action?.let {
-                                    aboutPreferenceTapEvent(preferenceKey = item.key)
-                                },
-                                modifier = Modifier.groupedPreferenceItem(
-                                    position = item.position,
-                                    outerRadius = SizeConstants.LargeMediumSize,
-                                ),
-                            )
-                        }
+                                is AboutItemAction.VersionTap, null -> null
+                            },
+                            modifier = Modifier.padding(horizontal = MaterialTheme.spacing.large),
+                        )
                     }
                 }
-            },
-        )
-
-        if (konfettiBurstId > 0) {
-            key(konfettiBurstId) {
-                KonfettiView(
-                    modifier = Modifier.fillMaxSize(),
-                    parties = remember {
-                        listOf(
-                            Party(
-                                speed = 0f,
-                                maxSpeed = 30f,
-                                damping = 0.9f,
-                                spread = Spread.ROUND,
-                                position = Position.Relative(x = 0.5, y = 0.3),
-                                emitter = Emitter(
-                                    duration = AboutEasterEggConstants.KONFETTI_BURST_DURATION_MILLIS,
-                                    timeUnit = TimeUnit.MILLISECONDS,
-                                ).max(amount = 100),
-                            ),
-                            Party(
-                                emitter = Emitter(
-                                    duration = AboutEasterEggConstants.KONFETTI_RAIN_DURATION_SECONDS,
-                                    timeUnit = TimeUnit.SECONDS,
-                                ).perSecond(amount = 60),
-                                angle = Angle.BOTTOM,
-                                spread = Spread.SMALL,
-                                speed = 5f,
-                                maxSpeed = 15f,
-                                timeToLive = AboutEasterEggConstants.KONFETTI_DURATION_MILLIS,
-                                position = Position.Relative(x = 0.0, y = 0.0)
-                                    .between(value = Position.Relative(x = 1.0, y = 0.0)),
-                            ),
-                        )
-                    },
-                )
             }
-        }
-    }
+        },
+    )
 }

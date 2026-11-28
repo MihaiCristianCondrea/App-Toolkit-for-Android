@@ -17,8 +17,6 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.theme.ui.features.seasonal.views
 
-import androidx.annotation.DrawableRes
-import androidx.annotation.StringRes
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.detectTapGestures
@@ -34,14 +32,12 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawingPadding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberUpdatedState
@@ -50,7 +46,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Brush
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.layout.Layout
@@ -64,14 +59,18 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Constraints
 import androidx.compose.ui.unit.Dp
-import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.min
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.models.HolidaySeason
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.style.elevation.elevation
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.style.spacing.spacing
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.GeneralButton
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.GeneralButtonStyle
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.theme.R
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.theme.ui.features.seasonal.constants.HolidayGreetingLayoutConstants
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.theme.ui.features.seasonal.mappers.toHolidayGreetingStyle
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.theme.ui.features.seasonal.models.HolidayGreetingStyle
 import kotlin.math.roundToInt
 
 /**
@@ -83,7 +82,9 @@ import kotlin.math.roundToInt
  * over it look the same, and stay readable, in light and dark mode.
  *
  * The filled button takes the holiday theme; the outlined one, back, and a tap outside the card
- * keep the current theme, since nothing was confirmed.
+ * keep the current theme, since nothing was confirmed. The window spans the screen, because the card
+ * sizes itself from it and a tap beside the card has to reach [HolidayGreetingContent] rather than
+ * the platform's outside check.
  *
  * @param onAnswer Called once with whether the holiday theme should be applied.
  */
@@ -95,8 +96,6 @@ fun HolidayGreetingDialog(
     val answer = rememberSingleAnswer(onAnswer)
     Dialog(
         onDismissRequest = { answer(false) },
-        // The card sizes itself from the window, so the window spans the screen and a tap beside
-        // the card reaches [HolidayGreetingContent] rather than the platform's outside check.
         properties = DialogProperties(usePlatformDefaultWidth = false),
     ) {
         HolidayGreetingContent(season = season, onAnswer = answer)
@@ -107,6 +106,12 @@ fun HolidayGreetingDialog(
  * The greeting inside its window: the card centred, and the space around it, which declines the
  * theme when tapped. Sized from the space it is given, so previews and tests render it without a
  * dialog window.
+ *
+ * The space around the card takes a tap gesture rather than a click, so TalkBack does not announce
+ * it as a button; back dismisses the dialog instead. Taps on the card stay on it. In a short window,
+ * such as a phone on its side, spacing tightens and less of the scene is kept clear so both choices
+ * fit; with large fonts the card keeps its full height and scrolls. Below the illustration the card
+ * continues the art's bottom edge colour.
  */
 @Composable
 internal fun HolidayGreetingContent(
@@ -114,42 +119,49 @@ internal fun HolidayGreetingContent(
     onAnswer: (useHolidayTheme: Boolean) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val style = remember(season) { season.greetingStyle() }
+    val style = remember(season) { season.toHolidayGreetingStyle() }
     val currentOnAnswer by rememberUpdatedState(onAnswer)
     BoxWithConstraints(
         modifier = modifier
             .fillMaxSize()
-            // A tap beside the card dismisses it. A gesture rather than a click, so the space around
-            // the card is not announced as a button; back dismisses it for TalkBack users.
             .pointerInput(Unit) { detectTapGestures { currentOnAnswer(false) } }
             .safeDrawingPadding(),
         contentAlignment = Alignment.Center,
     ) {
-        val cardWidth: Dp = min(maxWidth - WindowMargin, MaxCardWidth).coerceAtLeast(min(maxWidth, MinCardWidth))
-        val maxCardHeight: Dp = (maxHeight - WindowMargin).coerceAtLeast(min(maxHeight, MinCardHeight))
-        val preferredHeight: Dp = min(min(maxHeight * PreferredHeightFraction, MaxPreferredCardHeight), maxCardHeight)
-        // A short window, such as a phone on its side: tighter spacing and less of the scene kept
-        // clear, so both choices fit without scrolling.
-        val compact: Boolean = maxCardHeight < CompactCardHeight
+        val windowMargin: Dp = MaterialTheme.spacing.extraExtraLargeCompact
+        val cardWidth: Dp = min(maxWidth - windowMargin, HolidayGreetingLayoutConstants.MAX_CARD_WIDTH)
+            .coerceAtLeast(min(maxWidth, HolidayGreetingLayoutConstants.MIN_CARD_WIDTH))
+        val maxCardHeight: Dp = (maxHeight - windowMargin)
+            .coerceAtLeast(min(maxHeight, HolidayGreetingLayoutConstants.MIN_CARD_HEIGHT))
+        val preferredHeight: Dp = min(
+            min(
+                maxHeight * HolidayGreetingLayoutConstants.PREFERRED_HEIGHT_FRACTION,
+                HolidayGreetingLayoutConstants.MAX_PREFERRED_CARD_HEIGHT,
+            ),
+            maxCardHeight,
+        )
+        val compact: Boolean = maxCardHeight < HolidayGreetingLayoutConstants.COMPACT_CARD_HEIGHT
         val title = stringResource(style.title)
+        val cardShape = MaterialTheme.shapes.extraLarge
         Box(
             modifier = Modifier
                 .width(cardWidth)
                 .heightIn(max = maxCardHeight)
-                .shadow(elevation = 8.dp, shape = CardShape)
-                .clip(CardShape)
-                // Below the illustration the card continues its bottom edge.
+                .shadow(elevation = MaterialTheme.elevation.level4, shape = cardShape)
+                .clip(cardShape)
                 .background(style.bottomEdge)
-                // Taps on the card itself stay on it instead of reaching the space around it.
                 .pointerInput(Unit) { detectTapGestures { } }
                 .semantics { paneTitle = title }
-                // Large fonts or a short window: the card keeps its full height and scrolls.
                 .verticalScroll(rememberScrollState()),
         ) {
             GreetingLayout(
                 style = style,
                 preferredHeight = preferredHeight,
-                minVisibleArt = if (compact) MIN_VISIBLE_ART_COMPACT else MIN_VISIBLE_ART,
+                minVisibleArt = if (compact) {
+                    HolidayGreetingLayoutConstants.MIN_VISIBLE_ART_COMPACT
+                } else {
+                    HolidayGreetingLayoutConstants.MIN_VISIBLE_ART
+                },
                 header = { GreetingHeader(style = style, title = title, compact = compact) },
                 actions = {
                     GreetingActions(
@@ -172,6 +184,10 @@ internal fun HolidayGreetingContent(
  * taller still, it continues the art's top and bottom edges. The card is at least
  * [preferredHeight], and grows when the text and buttons need more, always leaving most of the
  * scene in view.
+ *
+ * The art is decorative, since the title and message say what it shows. It fills its slot with
+ * `ContentScale.FillBounds`: the slot already has the art's aspect ratio, and `Fit` would leave a
+ * pixel of background beside it when the height rounds down.
  */
 @Composable
 private fun GreetingLayout(
@@ -189,10 +205,7 @@ private fun GreetingLayout(
             {
                 Image(
                     painter = painterResource(style.illustration),
-                    // Decorative: the title and message say what the art shows.
                     contentDescription = null,
-                    // The slot already has the art's aspect ratio; filling it exactly avoids the
-                    // pixel of background Fit leaves beside the art when the height rounds down.
                     contentScale = ContentScale.FillBounds,
                 )
             },
@@ -204,10 +217,10 @@ private fun GreetingLayout(
         val fullWidth = Constraints(minWidth = width, maxWidth = width)
         val headPlaceable = head.first().measure(fullWidth)
         val actPlaceable = act.first().measure(fullWidth)
-        val artHeight = (width / ILLUSTRATION_ASPECT_RATIO).roundToInt()
+        val artHeight = (width / HolidayGreetingLayoutConstants.ILLUSTRATION_ASPECT_RATIO).roundToInt()
         val artPlaceable = art.first().measure(Constraints.fixed(width, artHeight))
-        val sceneTop = (artHeight * SCENE_TOP_FRACTION).roundToInt()
-        val sceneHeight = (artHeight * SCENE_HEIGHT_FRACTION).roundToInt()
+        val sceneTop = (artHeight * HolidayGreetingLayoutConstants.SCENE_TOP_FRACTION).roundToInt()
+        val sceneHeight = (artHeight * HolidayGreetingLayoutConstants.SCENE_HEIGHT_FRACTION).roundToInt()
         val minArtGap = (sceneHeight * minVisibleArt).roundToInt()
         val height = maxOf(
             preferredHeightPx,
@@ -226,15 +239,16 @@ private fun GreetingLayout(
     }
 }
 
-/** The title and message on the top scrim, which fades into the illustration. */
+/**
+ * The title and message on the top scrim. The scrim eases out over its lower part, so it melts into
+ * the illustration without a visible edge.
+ */
 @Composable
 private fun GreetingHeader(style: HolidayGreetingStyle, title: String, compact: Boolean) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
             .background(
-                // Eased out over its lower part, so the scrim melts into the art without a line where
-                // it ends.
                 Brush.verticalGradient(
                     0f to style.topScrim,
                     0.5f to style.topScrim.copy(alpha = 0.92f),
@@ -244,13 +258,13 @@ private fun GreetingHeader(style: HolidayGreetingStyle, title: String, compact: 
                 ),
             )
             .padding(
-                start = 24.dp,
-                top = if (compact) 20.dp else 28.dp,
-                end = 24.dp,
-                bottom = if (compact) 28.dp else 48.dp,
+                start = MaterialTheme.spacing.extraLargeCompact,
+                top = if (compact) MaterialTheme.spacing.largeIncreased else MaterialTheme.spacing.extraLarge,
+                end = MaterialTheme.spacing.extraLargeCompact,
+                bottom = if (compact) MaterialTheme.spacing.extraLarge else MaterialTheme.spacing.extraExtraLarge,
             ),
         horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.spacedBy(8.dp),
+        verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.small),
     ) {
         Text(
             text = title,
@@ -272,7 +286,8 @@ private fun GreetingHeader(style: HolidayGreetingStyle, title: String, compact: 
 /**
  * The two choices on the bottom scrim, as a dialog's buttons: end-aligned, the main one last,
  * moving to a line of their own only when long translations or large fonts leave no room beside
- * each other.
+ * each other. The theme's outline colours are replaced with the season's, because the outlined
+ * button draws its border from them.
  */
 @Composable
 private fun GreetingActions(
@@ -281,7 +296,6 @@ private fun GreetingActions(
     onAccept: () -> Unit,
     onDecline: () -> Unit,
 ) {
-    // The outlined button draws its border from the theme's outline colours.
     MaterialTheme(
         colorScheme = MaterialTheme.colorScheme.copy(
             outline = style.secondaryOutline,
@@ -300,9 +314,14 @@ private fun GreetingActions(
                             1f to style.bottomScrim,
                         ),
                     )
-                    .padding(start = 24.dp, top = if (compact) 28.dp else 40.dp, end = 24.dp, bottom = if (compact) 20.dp else 24.dp),
-                horizontalArrangement = Arrangement.spacedBy(8.dp, Alignment.End),
-                verticalArrangement = Arrangement.spacedBy(8.dp),
+                    .padding(
+                        start = MaterialTheme.spacing.extraLargeCompact,
+                        top = if (compact) MaterialTheme.spacing.extraLarge else MaterialTheme.spacing.extraExtraLargeCompact,
+                        end = MaterialTheme.spacing.extraLargeCompact,
+                        bottom = if (compact) MaterialTheme.spacing.largeIncreased else MaterialTheme.spacing.extraLargeCompact,
+                    ),
+                horizontalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.small, Alignment.End),
+                verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.small),
             ) {
                 GeneralButton(
                     onClick = onDecline,
@@ -339,90 +358,3 @@ private fun rememberSingleAnswer(onAnswer: (Boolean) -> Unit): (Boolean) -> Unit
         }
     }
 }
-
-/**
- * One season's greeting: its art, words and colours. The edges are the colours along the top and
- * bottom of the art, so the card continues it seamlessly; every text and button colour meets
- * WCAG AA against what it is drawn over.
- */
-@Immutable
-private data class HolidayGreetingStyle(
-    @param:DrawableRes val illustration: Int,
-    @param:StringRes val title: Int,
-    @param:StringRes val message: Int,
-    @param:StringRes val accept: Int,
-    val topEdge: Color,
-    val bottomEdge: Color,
-    val topScrim: Color,
-    val bottomScrim: Color,
-    val titleColor: Color,
-    val messageColor: Color,
-    val primaryContainer: Color,
-    val primaryContent: Color,
-    val secondaryContent: Color,
-    val secondaryOutline: Color,
-)
-
-private fun HolidaySeason.greetingStyle(): HolidayGreetingStyle = when (this) {
-    // A frosty night: navy sky under white text, snow fading to frost white under icy-blue buttons.
-    HolidaySeason.CHRISTMAS -> HolidayGreetingStyle(
-        illustration = R.drawable.il_christmas_season,
-        title = R.string.holiday_greeting_christmas_title,
-        message = R.string.holiday_greeting_christmas_message,
-        accept = R.string.holiday_greeting_christmas_accept,
-        topEdge = Color(0xFF0A1F3A),
-        bottomEdge = Color(0xFFF2F8FF),
-        topScrim = Color(0xFF0A1F3A),
-        bottomScrim = Color(0xFFF2F8FF),
-        titleColor = Color.White,
-        messageColor = Color(0xFFDCEEFF),
-        primaryContainer = Color(0xFF1658B8),
-        primaryContent = Color.White,
-        secondaryContent = Color(0xFF0F3F80),
-        secondaryOutline = Color(0xFF5C87C2),
-    )
-
-    // A moonlit night: deep purple above and below, a glowing orange button.
-    HolidaySeason.HALLOWEEN -> HolidayGreetingStyle(
-        illustration = R.drawable.il_halloween_season,
-        title = R.string.holiday_greeting_halloween_title,
-        message = R.string.holiday_greeting_halloween_message,
-        accept = R.string.holiday_greeting_halloween_accept,
-        topEdge = Color(0xFF1C1233),
-        bottomEdge = Color(0xFF1E1233),
-        topScrim = Color(0xFF1F1438),
-        bottomScrim = Color(0xFF1E1233),
-        titleColor = Color.White,
-        messageColor = Color(0xFFE6DAF7),
-        primaryContainer = Color(0xFFFF8C1A),
-        primaryContent = Color(0xFF2B1000),
-        secondaryContent = Color(0xFFFFC58A),
-        secondaryOutline = Color(0xFFFF9E40),
-    )
-}
-
-/** The illustrations' viewport, 360 by 480. */
-private const val ILLUSTRATION_ASPECT_RATIO: Float = 360f / 480f
-
-/** Where the scene, the art's middle band, starts: 140 units down, under the extra sky. */
-private const val SCENE_TOP_FRACTION: Float = 140f / 480f
-
-/** How tall the scene is: 200 units, with ground running on below it. */
-private const val SCENE_HEIGHT_FRACTION: Float = 200f / 480f
-
-/** How much of the scene's height stays clear of the scrims at least, when the text needs room. */
-private const val MIN_VISIBLE_ART: Float = 0.55f
-
-/** The same in a short window, where the choices matter more than the whole of the art. */
-private const val MIN_VISIBLE_ART_COMPACT: Float = 0.3f
-
-/** Cards that may be no taller than this lay out compactly. */
-private val CompactCardHeight: Dp = 420.dp
-
-private const val PreferredHeightFraction: Float = 0.65f
-private val WindowMargin: Dp = 40.dp
-private val MaxCardWidth: Dp = 400.dp
-private val MinCardWidth: Dp = 280.dp
-private val MaxPreferredCardHeight: Dp = 500.dp
-private val MinCardHeight: Dp = 240.dp
-private val CardShape = RoundedCornerShape(28.dp)

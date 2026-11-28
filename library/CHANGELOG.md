@@ -2,6 +2,20 @@
 
 ---
 
+# Unreleased
+
+### Added
+
+- `ScreenActionHandler` connects Compose content to a screen action handler and its ViewModel
+  event dispatcher. `rememberTapThreshold` provides a saveable counter for repeated taps.
+
+### Changed
+
+- About's build-version row uses `AboutItemAction.VersionTap`. Handle this case in exhaustive
+  `when` expressions over `AboutItemAction`.
+
+---
+
 # November 24, 2026
 
 **Version:** `3.0.0-rc1`

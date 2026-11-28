@@ -22,7 +22,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Tonality
 import androidx.compose.material.icons.outlined.Contrast
@@ -39,8 +38,9 @@ import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
+import androidx.compose.ui.unit.dp
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.style.bounceClick
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.style.spacing.spacing
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.spacers.LargeHorizontalSpacer
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.switches.CustomSwitch
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.onboarding.R
@@ -60,9 +60,7 @@ fun AmoledModeToggleCard(
     onCheckedChange: (Boolean) -> Unit,
 ) {
     val hapticFeedback: HapticFeedback = LocalHapticFeedback.current
-    val elevation =
-        if (isAmoledMode) SizeConstants.ExtraSmallSize else SizeConstants.ExtraTinySize / 2
-    val shape = RoundedCornerShape(size = SizeConstants.LargeSize)
+    val elevation = if (isAmoledMode) 4.dp else 1.dp
 
     Card(
         onClick = {
@@ -76,18 +74,15 @@ fun AmoledModeToggleCard(
         modifier = (if (enabled) Modifier.bounceClick() else Modifier)
             .fillMaxWidth()
             .alpha(alpha = if (enabled) 1f else 0.55f),
-        shape = shape,
-        colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.surfaceContainerHighest,
-        ),
+        shape = MaterialTheme.shapes.large,
         elevation = CardDefaults.cardElevation(defaultElevation = elevation),
     ) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(
-                    horizontal = SizeConstants.MediumSize,
-                    vertical = SizeConstants.LargeSize,
+                    horizontal = MaterialTheme.spacing.medium,
+                    vertical = MaterialTheme.spacing.large,
                 ),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween,

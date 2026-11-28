@@ -38,10 +38,10 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.OpenInNew
 import androidx.compose.material.icons.outlined.Apps
 import androidx.compose.material.icons.outlined.Store
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularWavyProgressIndicator
-import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -67,6 +67,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.min
 import coil3.compose.AsyncImage
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.icons.ToolkitIcon
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.style.size.size
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.style.spacing.spacing
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.R
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.GeneralButton
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.GeneralButtonStyle
@@ -134,14 +136,14 @@ fun AppShowcase(
     onViewAll: () -> Unit,
     onRetry: () -> Unit,
     modifier: Modifier = Modifier,
-    contentPadding: PaddingValues = PaddingValues(0.dp),
+    contentPadding: PaddingValues = PaddingValues(MaterialTheme.spacing.none),
     onCardsVisibilityChanged: (Boolean) -> Unit = {},
 ) {
-    Column(modifier, verticalArrangement = Arrangement.spacedBy(12.dp)) {
+    Column(modifier, verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.medium)) {
         AppShowcaseHeading(labels, icon, onViewAll, Modifier.padding(contentPadding))
         when (state) {
             AppShowcaseState.Loading -> ShowcaseMessage(Modifier.padding(contentPadding)) {
-                ShowcaseProgress()
+                CircularWavyProgressIndicator()
                 Text(labels.loading, style = MaterialTheme.typography.bodyMedium)
             }
             AppShowcaseState.Empty -> ShowcaseMessage(Modifier.padding(contentPadding)) {
@@ -164,11 +166,11 @@ fun AppShowcase(
 @Composable
 private fun AppShowcaseHeading(labels: AppShowcaseLabels, icon: ImageVector, onViewAll: () -> Unit, modifier: Modifier) {
     Row(
-        modifier = modifier.animateVisibility().fillMaxWidth().padding(start = 4.dp),
+        modifier = modifier.animateVisibility().fillMaxWidth().padding(start = MaterialTheme.spacing.extraSmall),
         verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.spacedBy(8.dp),
+        horizontalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.small),
     ) {
-        Icon(icon, contentDescription = null, tint = MaterialTheme.colorScheme.primary, modifier = Modifier.size(20.dp))
+        Icon(icon, contentDescription = null, tint = MaterialTheme.colorScheme.primary, modifier = Modifier.size(size = MaterialTheme.size.small))
         Text(
             text = labels.title,
             style = MaterialTheme.typography.titleMedium,
@@ -183,7 +185,9 @@ private fun AppShowcaseHeading(labels: AppShowcaseLabels, icon: ImageVector, onV
             Icon(
                 Icons.AutoMirrored.Outlined.OpenInNew,
                 contentDescription = null,
-                modifier = Modifier.padding(start = 8.dp).size(18.dp),
+                modifier = Modifier
+                    .padding(start = ButtonDefaults.IconSpacing)
+                    .size(ButtonDefaults.IconSize),
             )
         }
     }
@@ -194,15 +198,9 @@ private fun ShowcaseMessage(modifier: Modifier, content: @Composable androidx.co
     Row(
         modifier = modifier.fillMaxWidth().heightIn(min = 96.dp).semantics { liveRegion = LiveRegionMode.Polite },
         verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.spacedBy(12.dp),
+        horizontalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.medium),
         content = content,
     )
-}
-
-@OptIn(ExperimentalMaterial3ExpressiveApi::class)
-@Composable
-private fun ShowcaseProgress() {
-    CircularWavyProgressIndicator(modifier = Modifier.size(32.dp))
 }
 
 @Composable
@@ -215,18 +213,16 @@ private fun ShowcaseRow(
     onCardsVisibilityChanged: (Boolean) -> Unit,
 ) {
     BoxWithConstraints(Modifier.fillMaxWidth()) {
-        val gap = 12.dp
-        val cardWidth = showcaseCardWidth(maxWidth, gap)
         val listState = rememberLazyListState()
         LazyRow(
             modifier = Modifier.onVisibilityChanged(minFractionVisible = 0.5f, callback = onCardsVisibilityChanged),
             state = listState,
             contentPadding = contentPadding,
-            horizontalArrangement = Arrangement.spacedBy(gap),
+            horizontalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.medium),
             flingBehavior = rememberSnapFlingBehavior(listState, SnapPosition.Start),
         ) {
             animatedItems(apps, key = { it.key }) { app ->
-                ShowcaseAppCard(app, labels, { onAppClick(app) }, { onAppAction(app) }, Modifier.width(cardWidth))
+                ShowcaseAppCard(app, labels, { onAppClick(app) }, { onAppAction(app) }, Modifier.width(showcaseCardWidth(maxWidth, MaterialTheme.spacing.medium)))
             }
         }
     }
@@ -236,7 +232,7 @@ private fun ShowcaseRow(
  * A card's width for a row [available] wide: on a phone, most of the row so the next card peeks
  * in; wider, as many whole cards of at least [MinCardWidth] as fit.
  */
-internal fun showcaseCardWidth(available: Dp, gap: Dp): Dp {
+internal fun showcaseCardWidth(available: Dp, gap: Dp): Dp { // FIXME: Probably wrong here
     if (available < 600.dp) return min(available * 0.86f, 360.dp)
     val columns = ((available + gap) / (MinCardWidth + gap)).toInt().coerceAtLeast(1)
     return (available - gap * (columns - 1)) / columns
@@ -260,26 +256,29 @@ fun ShowcaseAppCard(
     Card(
         onClick = onClick,
         modifier = modifier,
-        shape = RoundedCornerShape(28.dp),
+        shape = MaterialTheme.shapes.extraLarge,
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerHigh),
     ) {
         Column(
-            Modifier.padding(horizontal = 16.dp, vertical = 20.dp),
-            verticalArrangement = Arrangement.spacedBy(12.dp),
+            Modifier.padding(
+                horizontal = MaterialTheme.spacing.large,
+                vertical = MaterialTheme.spacing.largeIncreased,
+            ),
+            verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.medium),
         ) {
             Row(
-                horizontalArrangement = Arrangement.spacedBy(16.dp),
+                horizontalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.large),
                 verticalAlignment = Alignment.CenterVertically,
             ) {
                 Surface(
                     shape = RoundedCornerShape(18.dp),
                     color = MaterialTheme.colorScheme.surfaceContainerHighest,
                     contentColor = MaterialTheme.colorScheme.primary,
-                    modifier = Modifier.size(64.dp),
+                    modifier = Modifier.size(size = MaterialTheme.size.huge),
                 ) {
                     Box(contentAlignment = Alignment.Center) {
                         if (app.iconUrl.isBlank()) {
-                            Icon(Icons.Outlined.Apps, contentDescription = null, modifier = Modifier.size(32.dp))
+                            Icon(Icons.Outlined.Apps, contentDescription = null, modifier = Modifier.size(size = MaterialTheme.size.large))
                         } else {
                             AsyncImage(
                                 model = app.iconUrl,
@@ -290,7 +289,7 @@ fun ShowcaseAppCard(
                         }
                     }
                 }
-                Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(4.dp)) {
+                Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.extraSmall)) {
                     Text(
                         text = app.name,
                         style = MaterialTheme.typography.titleMedium,

@@ -25,7 +25,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.unit.Dp
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
+import androidx.compose.ui.unit.dp
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.style.spacing.SpacingDefaults
 
 /** Values a [GroupedGrid] falls back to when a caller does not choose its own. */
 object GroupedGridDefaults {
@@ -47,13 +48,13 @@ object GroupedGridDefaults {
     const val MinItemsForAd: Int = 2
 
     /** Radius of the four corners at the outside of the group. */
-    val OuterRadius: Dp = SizeConstants.LargeIncreasedSize
+    val OuterRadius: Dp = 20.dp
 
     /** Radius of every corner inside the group, where two cells meet. */
-    val InnerRadius: Dp = SizeConstants.ExtraTinySize
+    val InnerRadius: Dp = 2.dp
 
     /** Gap between neighbouring cells, horizontally and vertically. */
-    val ItemSpacing: Dp = SizeConstants.ExtraTinySize
+    val ItemSpacing: Dp = SpacingDefaults.ExtraTiny
 
     val Measurements: GroupedGridMeasurements = GroupedGridMeasurements.Medium
 

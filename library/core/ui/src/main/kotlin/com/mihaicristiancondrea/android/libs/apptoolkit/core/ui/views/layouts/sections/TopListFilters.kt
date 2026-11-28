@@ -37,11 +37,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.LayoutDirection
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.style.spacing.spacing
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.analytics.Ga4EventData
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.chip.CommonFilterChip
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.modifiers.componentEntrance
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.spacers.LargeHorizontalSpacer
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
@@ -56,10 +55,10 @@ import kotlinx.coroutines.launch
  * @param filters Chips to render, in display order.
  * @param selectedFilter Value of the currently selected chip.
  * @param onFilterSelected Invoked with the chip's value when one is chosen.
- * @param modifier The [Modifier] applied to the row.
  * @param leadingLabel Caption before the chips, such as "Sort by". Omitted by default, and a null,
  *   empty, or blank value leaves neither the caption nor the gap after it, so the chips start where
- *   they would in a row that never had one.
+ *   they would in a row that never had one. When shown, the caption takes the start inset of
+ *   [contentPadding] and the chips do not repeat it.
  * @param contentPadding Inset around the row. It is applied to the scrolling area rather than to
  *   the row itself, so chips scroll under the edges instead of being clipped short of them. Pass
  *   `PaddingValues()` when the parent already insets this row.
@@ -73,7 +72,7 @@ fun <T> TopListFilters(
     onFilterSelected: (T) -> Unit,
     modifier: Modifier = Modifier,
     leadingLabel: String? = null,
-    contentPadding: PaddingValues = PaddingValues(horizontal = SizeConstants.LargeSize),
+    contentPadding: PaddingValues = PaddingValues(horizontal = MaterialTheme.spacing.large),
     hasAnimation: Boolean = true,
     ga4EventProvider: ((T) -> Ga4EventData)? = null,
 ) {
@@ -83,7 +82,11 @@ fun <T> TopListFilters(
     val startPadding = contentPadding.calculateStartPadding(layoutDirection)
     val endPadding = contentPadding.calculateEndPadding(layoutDirection)
     val hasLeadingLabel = !leadingLabel.isNullOrBlank()
-    Row(modifier = modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
+    Row(
+        modifier = modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.spacedBy(space = MaterialTheme.spacing.large),
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
         if (hasLeadingLabel) {
             Text(
                 text = leadingLabel.orEmpty(),
@@ -91,18 +94,15 @@ fun <T> TopListFilters(
                 fontWeight = FontWeight.SemiBold,
                 modifier = Modifier.padding(start = startPadding),
             )
-            LargeHorizontalSpacer()
         }
         LazyRow(
             modifier = Modifier.weight(1f),
             state = listState,
-            // The caption already carries the start inset when there is one, so it is not applied
-            // twice; without one the chips take it and the row shows no gap where it would sit.
             contentPadding = PaddingValues(
-                start = if (hasLeadingLabel) SizeConstants.ZeroSize else startPadding,
+                start = if (hasLeadingLabel) MaterialTheme.spacing.none else startPadding,
                 end = endPadding,
             ),
-            horizontalArrangement = Arrangement.spacedBy(SizeConstants.SmallSize),
+            horizontalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.small),
         ) {
             itemsIndexed(
                 items = filters,

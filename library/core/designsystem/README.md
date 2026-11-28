@@ -7,7 +7,10 @@ theme-selection visuals, and the shared icon slot used by navigation items and b
 
 ## Owns
 
-- `AppTheme`, theme configuration, typography, and palette selection.
+- `AppTheme`, theme configuration, typography, spacing scale (`Spacing`, `SpacingDefaults`,
+  `LocalSpacing`, `MaterialTheme.spacing`), size scale (`Size`, `SizeDefaults`, `LocalSize`,
+  `MaterialTheme.size`), elevation levels (`Elevation`, `MaterialTheme.elevation`), and palette
+  selection.
 - Static, seasonal, monochrome, rose, and Material You color definitions.
 - `ColorPalette` and wallpaper swatch models. The individual color values behind each palette are
   internal; hosts take a palette through `ThemePaletteProvider` or its `*Palette` value.
@@ -90,6 +93,27 @@ flowchart TD
   softer, slower springs for a calmer feel. The shell installs the scheme through
   `MaterialExpressiveTheme`, so every animation that reads `MaterialTheme.motionScheme`
   (entrances, app bar buttons, title and search swaps, `bounceClick`, state cross-fades) follows it.
+- `Spacing`, `SpacingDefaults`, `LocalSpacing`, and `MaterialTheme.spacing`, the Toolkit's one
+  spacing scale. Material 3 has no spacing tokens, so the steps take the names of its shape corner
+  scale: `none`, `extraSmall`, `small`, `medium`, `large`, `largeIncreased`, `extraLarge`,
+  `extraLargeIncreased` and `extraExtraLarge` have the dp value of the `MaterialTheme.shapes`
+  corner of the same name. Toolkit steps fill the gaps: `Increased` is the step just above its base
+  name, `Compact` the step just below (`extraLargeCompact` 24dp, `extraExtraLargeCompact` 40dp),
+  and `extraTiny` (2dp), `huge` (64dp) and `extraHuge` (72dp) extend the ends. Call sites use the
+  names only; there are no numeric `space*` steps.
+- `Size`, `SizeDefaults`, `LocalSize`, and `MaterialTheme.size`, the size scale for images,
+  avatars and other graphics: `extraSmall` 16dp, `small` 20dp, `medium` 24dp, `large` 32dp,
+  `extraLarge` 40dp, `extraExtraLarge` 48dp and `huge` 64dp, following the icon sizes of Material's
+  icon buttons. The order of preference for a size is:
+  1. a Material component token when one fits (`ButtonDefaults.IconSize`,
+     `IconButtonDefaults.mediumIconSize`, `SwitchDefaults.IconSize`), or `Icon`'s own 24dp default;
+  2. `MaterialTheme.size` for an image or graphic that is not a component's icon, such as a 24dp
+     illustration (`MaterialTheme.size.medium`);
+  3. a named constant in the owning module's `ui/constants` for a size outside the scale.
+- `Elevation`, `ElevationDefaults`, `LocalElevation`, and `MaterialTheme.elevation`, Material 3's
+  elevation levels (`level0` 0dp, `level1` 1dp, `level2` 3dp, `level3` 6dp, `level4` 8dp, `level5`
+  12dp), which Compose Material keeps internal. A component's own default, such as
+  `CardDefaults.cardElevation()`, comes first.
 
 ## Toolkit Icon API
 

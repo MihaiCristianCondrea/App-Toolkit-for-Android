@@ -20,14 +20,18 @@ package com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.ui.views.li
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ExpandMore
 import androidx.compose.material3.Card
+import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.Icon
+import androidx.compose.material3.ListItemDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -38,13 +42,11 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.res.stringResource
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
+import androidx.compose.ui.unit.dp
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.style.spacing.spacing
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.modifiers.animatedItem
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.groupedCorners
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.groupedItemPosition
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.spacers.ExtraLargeVerticalSpacer
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.PreferenceItemDefaults
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.R
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.data.models.FaqItem
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.ui.constants.FaqConstants
@@ -59,6 +61,7 @@ import kotlinx.collections.immutable.ImmutableList
  * @param onQuestionToggled Reports the question, its zero-based list position and its new state.
  * @param adUnitId Native ad unit, or `null` to omit the ad row.
  */
+@OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
 internal fun FaqList(
     questions: ImmutableList<FaqItem>,
@@ -84,10 +87,10 @@ internal fun FaqList(
         contentPadding = PaddingValues(
             top = contentPadding.calculateTopPadding(),
             bottom = contentPadding.calculateBottomPadding(),
-            start = SizeConstants.LargeSize,
-            end = SizeConstants.LargeSize,
+            start = MaterialTheme.spacing.large,
+            end = MaterialTheme.spacing.large,
         ),
-        verticalArrangement = Arrangement.spacedBy(space = SizeConstants.ExtraTinySize),
+        verticalArrangement = Arrangement.spacedBy(space = ListItemDefaults.SegmentedGap),
     ) {
         animatedItem {
             Text(text = stringResource(id = R.string.popular_help_resources))
@@ -102,10 +105,11 @@ internal fun FaqList(
                     title = question.question,
                     summary = question.answer,
                     isExpanded = isExpanded,
-                    groupedPosition = groupedItemPosition(
+                    shape = PreferenceItemDefaults.segmentedShapes(
                         index = index,
-                        size = popularGroupItemCount,
-                    ),
+                        count = popularGroupItemCount,
+                        outerShape = MaterialTheme.shapes.extraLargeIncreased,
+                    ).shape,
                     onToggleExpand = {
                         val expanded = !isExpanded
                         onQuestionToggled(question, index, expanded)
@@ -118,16 +122,12 @@ internal fun FaqList(
         if (hasMoreToReveal) {
             animatedItem(key = "show_more_questions") {
                 Card(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .groupedCorners(
-                            position = groupedItemPosition(
-                                index = popularGroupItemCount - 1,
-                                size = popularGroupItemCount,
-                            ),
-                            outerRadius = SizeConstants.ExtraLargeIncreasedSize,
-                        ),
-                    shape = RectangleShape,
+                    modifier = Modifier.fillMaxWidth(),
+                    shape = PreferenceItemDefaults.segmentedShapes(
+                        index = popularGroupItemCount - 1,
+                        count = popularGroupItemCount,
+                        outerShape = MaterialTheme.shapes.extraLargeIncreased,
+                    ).shape,
                     onClick = {
                         onShowMoreQuestions()
                         showAllQuestions = true
@@ -137,8 +137,8 @@ internal fun FaqList(
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(
-                                horizontal = SizeConstants.LargeSize,
-                                vertical = SizeConstants.MediumSize,
+                                horizontal = MaterialTheme.spacing.large,
+                                vertical = MaterialTheme.spacing.medium,
                             ),
                         horizontalArrangement = Arrangement.Center,
                         verticalAlignment = Alignment.CenterVertically,
@@ -150,7 +150,7 @@ internal fun FaqList(
                         Icon(
                             imageVector = Icons.Filled.ExpandMore,
                             contentDescription = null,
-                            modifier = Modifier.padding(start = SizeConstants.SmallSize),
+                            modifier = Modifier.padding(start = MaterialTheme.spacing.small),
                         )
                     }
                 }
@@ -165,10 +165,11 @@ internal fun FaqList(
             item {
                 FaqNativeAdCard(
                     adUnitId = adUnitId,
-                    groupedPosition = groupedItemPosition(
+                    shape = PreferenceItemDefaults.segmentedShapes(
                         index = 0,
-                        size = supportGroupItemCount,
-                    ),
+                        count = supportGroupItemCount,
+                        outerShape = MaterialTheme.shapes.extraLargeIncreased,
+                    ).shape,
                     modifier = Modifier.animateItem(),
                 ) { loaded ->
                     isAdLoaded = loaded
@@ -178,13 +179,14 @@ internal fun FaqList(
 
         animatedItem {
             ContactUsCard(
-                groupedPosition = groupedItemPosition(
+                shape = PreferenceItemDefaults.segmentedShapes(
                     index = supportGroupItemCount - 1,
-                    size = supportGroupItemCount,
-                ),
+                    count = supportGroupItemCount,
+                    outerShape = MaterialTheme.shapes.extraLargeIncreased,
+                ).shape,
                 onClick = onContactUs,
             )
-            repeat(times = 3) { ExtraLargeVerticalSpacer() }
+            Spacer(modifier = Modifier.height(height = 84.dp))
         }
     }
 }

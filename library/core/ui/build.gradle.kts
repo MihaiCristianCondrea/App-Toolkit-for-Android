@@ -80,6 +80,7 @@ dependencies {
     api(libs.bundles.koin)
     api(libs.kotlinx.collections.immutable)
     api(libs.androidx.window)
+    implementation(libs.konfetti.compose)
 
     // Declares the Material theme attributes (colorPrimaryContainer, colorSecondaryContainer,
     // colorTertiary, …) that vector drawables in the feature modules reference as ?attr/. AppCompat

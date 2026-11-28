@@ -38,17 +38,17 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.R
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.states.WaterEjectToolUiState
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.contracts.WaterEjectToolEvent
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.style.spacing.spacing
 
 @Composable
 internal fun WaterEjectTool(state: WaterEjectToolUiState, onEvent: (WaterEjectToolEvent) -> Unit) {
-    Column(Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.spacedBy(16.dp)) {
+    Column(Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.large)) {
         WaterEjectVisual(state.running)
         Text(if (state.running) state.seconds.toString()+" s" else "165 Hz", style = MaterialTheme.typography.displayMedium)
         Text(stringResource(R.string.water_guidance), style = MaterialTheme.typography.bodyMedium)
@@ -74,7 +74,7 @@ internal fun WaterEjectVisual(running: Boolean, compact: Boolean = false) {
         Canvas(Modifier.fillMaxSize()) {
             val phase = phaseState?.value ?: 0f
             val radius = size.minDimension * .3f
-            for (offset in SPEAKER_WAVE_OFFSETS) {
+            for (offset in floatArrayOf(0f, .5f)) {
                 val wave = (phase + offset) % 1f
                 drawCircle(colors.primary.copy(alpha = if (running) (1f - wave) * .4f else .12f), radius * (1f + wave * .5f), style = Stroke(2.dp.toPx()))
             }
@@ -84,4 +84,3 @@ internal fun WaterEjectVisual(running: Boolean, compact: Boolean = false) {
     }
 }
 
-private val SPEAKER_WAVE_OFFSETS = floatArrayOf(0f, .5f)

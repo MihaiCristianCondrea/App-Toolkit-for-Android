@@ -48,9 +48,10 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Dp
-import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.models.ToolkitTile
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.style.size.size
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.style.spacing.spacing
 
 /**
  * A tab's scrolling body. The viewport extends edge-to-edge so cards scroll behind the bottom bar,
@@ -74,12 +75,12 @@ internal fun ToolWorkspace(
             .verticalScroll(rememberScrollState())
             .padding(padding)
             .navigationBarsPadding()
-            .padding(top = 8.dp, bottom = 16.dp),
-        verticalArrangement = Arrangement.spacedBy(24.dp),
+            .padding(top = MaterialTheme.spacing.small, bottom = MaterialTheme.spacing.large),
+        verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.extraLargeCompact),
     ) {
         Column(
-            modifier = Modifier.padding(horizontal = 16.dp),
-            verticalArrangement = Arrangement.spacedBy(24.dp),
+            modifier = Modifier.padding(horizontal = MaterialTheme.spacing.large),
+            verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.extraLargeCompact),
             content = content,
         )
         footer()
@@ -88,22 +89,27 @@ internal fun ToolWorkspace(
 
 @Composable
 internal fun ToolSection(title: String, icon: ImageVector, modifier: Modifier = Modifier, content: @Composable ColumnScope.() -> Unit) {
-    Column(modifier, verticalArrangement = Arrangement.spacedBy(12.dp)) {
-        Row(Modifier.animateVisibility().padding(start = 4.dp), verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-            Icon(icon, null, tint = MaterialTheme.colorScheme.primary, modifier = Modifier.size(20.dp))
+    Column(modifier, verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.medium)) {
+        Row(Modifier.animateVisibility().padding(start = MaterialTheme.spacing.extraSmall), verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.small)) {
+            Icon(icon, null, tint = MaterialTheme.colorScheme.primary, modifier = Modifier.size(size = MaterialTheme.size.small))
             Text(title, style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold)
         }
         content()
     }
 }
 
-internal fun toolCorners(index: Int, size: Int, top: Boolean = true, bottom: Boolean = true): Shape = RoundedCornerShape(
-    topStart = if (top && index == 0) 28.dp else 8.dp,
-    topEnd = if (top && index == size - 1) 28.dp else 8.dp,
-    bottomStart = if (bottom && index == 0) 28.dp else 8.dp,
-    bottomEnd = if (bottom && index == size - 1) 28.dp else 8.dp,
-)
+@Composable
+internal fun toolCorners(index: Int, size: Int, top: Boolean = true, bottom: Boolean = true): Shape {
+    val outer = MaterialTheme.shapes.extraLarge
+    val inner = MaterialTheme.shapes.small
+    return RoundedCornerShape(
+        topStart = if (top && index == 0) outer.topStart else inner.topStart,
+        topEnd = if (top && index == size - 1) outer.topEnd else inner.topEnd,
+        bottomStart = if (bottom && index == 0) outer.bottomStart else inner.bottomStart,
+        bottomEnd = if (bottom && index == size - 1) outer.bottomEnd else inner.bottomEnd,
+    )
+}
 
 /**
  * A Measure card (the marketing kit's `.mw-widget`): the tool's name, then its own [content].
@@ -111,10 +117,10 @@ internal fun toolCorners(index: Int, size: Int, top: Boolean = true, bottom: Boo
  */
 @Composable
 internal fun ToolWidget(tile: ToolkitTile, onOpen: () -> Unit, modifier: Modifier = Modifier,
-    shape: Shape = RoundedCornerShape(28.dp), color: Color = MaterialTheme.colorScheme.surfaceContainerHigh,
+    shape: Shape = MaterialTheme.shapes.extraLarge, color: Color = MaterialTheme.colorScheme.surfaceContainerHigh,
     headerAction: @Composable (() -> Unit)? = null,
-    padding: PaddingValues = PaddingValues(horizontal = 16.dp, vertical = 20.dp),
-    spacing: Dp = 12.dp,
+    padding: PaddingValues = PaddingValues(horizontal = MaterialTheme.spacing.large, vertical = MaterialTheme.spacing.largeIncreased),
+    spacing: Dp = MaterialTheme.spacing.medium,
     content: @Composable ColumnScope.() -> Unit,
 ) {
     Surface(onClick = onOpen, modifier = modifier.animateVisibility(), shape = shape, color = color) {
@@ -122,7 +128,7 @@ internal fun ToolWidget(tile: ToolkitTile, onOpen: () -> Unit, modifier: Modifie
             Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
                 Text(
                     text = stringResource(tile.titleResId),
-                    modifier = Modifier.weight(1f).padding(start = if (headerAction != null) 4.dp else 0.dp),
+                    modifier = Modifier.weight(1f).padding(start = if (headerAction != null) MaterialTheme.spacing.extraSmall else MaterialTheme.spacing.none),
                     style = MaterialTheme.typography.titleMedium.copy(lineHeight = 22.sp),
                     fontWeight = FontWeight.SemiBold,
                 )
@@ -136,7 +142,7 @@ internal fun ToolWidget(tile: ToolkitTile, onOpen: () -> Unit, modifier: Modifie
 @Composable
 internal fun ToolPair(tools: List<ToolkitTile>, top: Boolean = true, bottom: Boolean = true,
     content: @Composable RowScope.(ToolkitTile, Shape) -> Unit) {
-    Row(Modifier.fillMaxWidth().height(IntrinsicSize.Min), horizontalArrangement = Arrangement.spacedBy(4.dp)) {
+    Row(Modifier.fillMaxWidth().height(IntrinsicSize.Min), horizontalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.extraSmall)) {
         tools.forEachIndexed { index, tile -> content(tile, toolCorners(index, tools.size, top, bottom)) }
     }
 }

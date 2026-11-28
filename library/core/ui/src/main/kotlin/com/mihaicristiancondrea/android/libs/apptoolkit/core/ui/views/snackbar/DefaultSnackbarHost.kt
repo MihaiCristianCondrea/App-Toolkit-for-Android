@@ -23,6 +23,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Close
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Snackbar
 import androidx.compose.material3.SnackbarData
 import androidx.compose.material3.SnackbarHost
@@ -32,10 +33,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.unit.dp
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.icons.ToolkitIcon
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.icons.ToolkitIconContent
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.style.size.size
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.style.spacing.spacing
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.CustomSnackbarVisuals
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.ToolkitSnackbarStyle
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.GeneralButton
@@ -71,7 +72,7 @@ fun ToolkitSnackbar(data: SnackbarData, modifier: Modifier = Modifier) {
     val colors = custom?.colors ?: ToolkitSnackbarDefaults.colors(custom?.style ?: ToolkitSnackbarStyle.Normal)
     val actionLabel = visuals.actionLabel
     Snackbar(
-        modifier = modifier.padding(all = SizeConstants.LargeSize),
+        modifier = modifier.padding(all = MaterialTheme.spacing.large),
         containerColor = colors.containerColor,
         contentColor = colors.contentColor,
         action = actionLabel?.let { label ->
@@ -104,8 +105,8 @@ fun ToolkitSnackbar(data: SnackbarData, modifier: Modifier = Modifier) {
                     icon = icon,
                     contentDescription = null,
                     modifier = Modifier
-                        .padding(end = 12.dp)
-                        .size(20.dp),
+                        .padding(end = MaterialTheme.spacing.medium)
+                        .size(size = MaterialTheme.size.small),
                     tint = colors.contentColor,
                 )
             }

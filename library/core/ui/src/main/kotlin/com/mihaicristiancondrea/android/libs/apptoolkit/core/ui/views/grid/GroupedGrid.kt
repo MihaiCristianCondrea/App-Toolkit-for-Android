@@ -24,9 +24,11 @@ import androidx.compose.foundation.basicMarquee
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
@@ -67,10 +69,10 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.icons.ToolkitIcon
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.icons.ToolkitIconContent
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.style.bounceClick
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.style.spacing.spacing
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.ads.NativeAdPresentation
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.ads.rememberNativeAdBadgeShape
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.ads.NativeAdSlot
@@ -170,8 +172,11 @@ fun GroupedGrid(
                     Spacer(modifier = Modifier.height(height = itemSpacing))
                 }
 
+                val hasAdCell: Boolean = row.cells.any { cell -> cell.isAd }
                 Row(
-                    modifier = Modifier.fillMaxWidth(),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .then(if (hasAdCell) Modifier else Modifier.height(IntrinsicSize.Min)),
                     horizontalArrangement = Arrangement.spacedBy(space = itemSpacing),
                     verticalAlignment = Alignment.CenterVertically,
                 ) {
@@ -227,6 +232,7 @@ private fun RowScope.GroupedGridCard(
     Card(
         modifier = Modifier
             .weight(weight = 1f)
+            .fillMaxHeight()
             .bounceClick(animationEnabled = bounceOnClick && item.enabled),
         onClick = {
             feedback.performClick(view = view, hapticFeedback = hapticFeedback)
@@ -242,6 +248,7 @@ private fun RowScope.GroupedGridCard(
         Row(
             modifier = Modifier
                 .fillMaxWidth()
+                .fillMaxHeight()
                 .heightIn(min = measurements.cellHeight)
                 .padding(paddingValues = measurements.contentPadding),
             verticalAlignment = Alignment.CenterVertically,
@@ -374,7 +381,7 @@ private fun GroupedGridPreview() {
     MaterialTheme {
         GroupedGrid(
             items = items,
-            modifier = Modifier.padding(all = SizeConstants.LargeSize),
+            modifier = Modifier.padding(all = MaterialTheme.spacing.large),
         )
     }
 }

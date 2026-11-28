@@ -17,6 +17,7 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.ui.views.ads
 
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.MaterialShapes
 import androidx.compose.material3.MaterialTheme
@@ -24,20 +25,20 @@ import androidx.compose.material3.toShape
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.ads.NativeAdPresentation
+import androidx.compose.ui.graphics.Shape
+import androidx.compose.ui.unit.dp
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.ads.NativeAdCallToActionStyle
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.ads.NativeAdPresentation
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.ads.NativeAdSlot
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.ads.NativeAdStyle
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.ads.rememberNativeAdBadgeShape
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.GroupedItemPosition
 
 /**
  * Displays a compact native ad styled for the FAQ question and support cards.
  * [NativeAdSlot] owns the ad lifecycle.
  *
  * @param adUnitId Native ad unit configured by the host.
- * @param groupedPosition Position in a grouped FAQ section, or `null` when standalone.
+ * @param shape Shape applied to the card surface.
  * @param containerColor Optional host surface override.
  * @param onAdLoaded Reports whether an ad is currently displayed.
  */
@@ -46,14 +47,14 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preference
 fun FaqNativeAdCard(
     modifier: Modifier = Modifier,
     adUnitId: String,
-    groupedPosition: GroupedItemPosition? = null,
+    shape: Shape = CardDefaults.shape,
     containerColor: Color = Color.Unspecified,
     onAdLoaded: (Boolean) -> Unit = {},
 ) {
     val style = NativeAdStyle(
         badgeShape = rememberNativeAdBadgeShape(
             shape = MaterialShapes.Cookie12Sided.toShape(),
-            size = SizeConstants.LauncherIconSize,
+            size = 48.dp,
         ),
         badgeColor = MaterialTheme.colorScheme.primaryContainer,
         iconInsetDp = 12,
@@ -67,8 +68,7 @@ fun FaqNativeAdCard(
         adUnitId = adUnitId,
         presentation = NativeAdPresentation.Compact,
         modifier = modifier,
-        position = groupedPosition ?: GroupedItemPosition.SINGLE,
-        cornerRadius = SizeConstants.MediumSize,
+        shape = shape,
         containerColor = containerColor,
         style = style,
         onAdLoaded = onAdLoaded,

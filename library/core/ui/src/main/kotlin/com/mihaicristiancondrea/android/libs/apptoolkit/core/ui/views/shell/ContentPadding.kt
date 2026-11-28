@@ -18,13 +18,15 @@
 package com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.shell
 
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.ReadOnlyComposable
 import androidx.compose.runtime.Stable
 import androidx.compose.runtime.compositionLocalOf
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.LayoutDirection
-import androidx.compose.ui.unit.dp
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.style.spacing.SpacingDefaults
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.style.spacing.spacing
 
 /**
  * The part of a screen the shell draws over: the system navigation bar, and on a tab the bottom
@@ -35,7 +37,7 @@ import androidx.compose.ui.unit.dp
  * [contentPadding], so its last item can still scroll clear; a screen that does not scroll pads
  * itself by it instead. It changes as the bars appear, hide and grow.
  */
-val LocalContentPadding = compositionLocalOf { PaddingValues(0.dp) }
+val LocalContentPadding = compositionLocalOf { PaddingValues(SpacingDefaults.None) }
 
 /**
  * [LocalContentPadding] plus [extra], for the content padding of a scrolling container.
@@ -46,7 +48,7 @@ val LocalContentPadding = compositionLocalOf { PaddingValues(0.dp) }
  */
 @Composable
 @ReadOnlyComposable
-fun contentPadding(extra: PaddingValues = PaddingValues(0.dp)): PaddingValues =
+fun contentPadding(extra: PaddingValues = PaddingValues(MaterialTheme.spacing.none)): PaddingValues =
     LocalContentPadding.current + extra
 
 /** Two paddings added side by side, resolved against the layout direction when used. */
@@ -78,5 +80,5 @@ fun PaddingValues.withoutBottom(): PaddingValues = object : PaddingValues {
     override fun calculateLeftPadding(layoutDirection: LayoutDirection) = this@withoutBottom.calculateLeftPadding(layoutDirection)
     override fun calculateTopPadding() = this@withoutBottom.calculateTopPadding()
     override fun calculateRightPadding(layoutDirection: LayoutDirection) = this@withoutBottom.calculateRightPadding(layoutDirection)
-    override fun calculateBottomPadding() = 0.dp
+    override fun calculateBottomPadding() = SpacingDefaults.None
 }

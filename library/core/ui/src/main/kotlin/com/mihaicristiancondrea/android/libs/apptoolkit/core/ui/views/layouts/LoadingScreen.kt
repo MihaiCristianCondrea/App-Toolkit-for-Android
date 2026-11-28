@@ -33,7 +33,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.Dp
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
+import androidx.compose.ui.unit.dp
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.style.spacing.spacing
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.R
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.spacers.MediumVerticalSpacer
 
@@ -53,8 +54,8 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.spacers.Me
 @Composable
 fun LoadingScreen(
     modifier: Modifier = Modifier,
-    paddingValues: PaddingValues = PaddingValues(SizeConstants.ZeroSize),
-    indicatorSize: Dp = SizeConstants.NinetySixSize,
+    paddingValues: PaddingValues = PaddingValues(MaterialTheme.spacing.none),
+    indicatorSize: Dp = 96.dp,
     showText: Boolean = true
 ) {
     Column(

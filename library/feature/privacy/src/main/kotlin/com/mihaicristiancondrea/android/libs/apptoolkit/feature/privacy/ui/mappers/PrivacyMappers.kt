@@ -18,7 +18,6 @@
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.privacy.ui.mappers
 
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.UiText
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.groupedItemPosition
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.privacy.R
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.privacy.ui.contracts.PrivacyItemAction
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.privacy.ui.models.PrivacyItem
@@ -29,9 +28,6 @@ import kotlinx.collections.immutable.toImmutableList
 
 /**
  * Builds the ordered privacy entries from the host-supplied [PrivacySettingsProvider].
- *
- * Card positions are assigned after the list is assembled, so they always describe the grouping the
- * user actually sees.
  */
 internal fun PrivacySettingsProvider.toPrivacyItems(): ImmutableList<PrivacyItem> {
     val privacyPreferences = listOf(
@@ -71,7 +67,7 @@ internal fun PrivacySettingsProvider.toPrivacyItems(): ImmutableList<PrivacyItem
             summary = UiText.StringResource(resourceId = R.string.summary_preference_settings_usage_and_diagnostics),
             action = PrivacyItemAction.OpenUsageAndDiagnostics,
         ),
-    ).assignPositions()
+    )
 
     val legalPreferences = listOf(
         PrivacyItem.Preference(
@@ -86,27 +82,25 @@ internal fun PrivacySettingsProvider.toPrivacyItems(): ImmutableList<PrivacyItem
             summary = UiText.StringResource(resourceId = R.string.summary_preference_settings_license),
             action = PrivacyItemAction.OpenUrl(url = licenseUrl),
         ),
-    ).assignPositions()
+    )
 
     return buildList {
         add(
             PrivacyItem.Header(
                 key = PrivacyItemKey.HEADER_PRIVACY,
                 title = UiText.StringResource(resourceId = R.string.privacy),
-            )
+            ),
         )
-        addAll(elements = privacyPreferences)
+        addAll(elements = privacyPreferences.withGroupPositions())
         add(
             PrivacyItem.Header(
                 key = PrivacyItemKey.HEADER_LEGAL,
                 title = UiText.StringResource(resourceId = R.string.legal),
-            )
+            ),
         )
-        addAll(elements = legalPreferences)
+        addAll(elements = legalPreferences.withGroupPositions())
     }.toImmutableList()
 }
 
-private fun List<PrivacyItem.Preference>.assignPositions(): List<PrivacyItem.Preference> =
-    mapIndexed { index, item ->
-        item.copy(position = groupedItemPosition(index = index, size = size))
-    }
+private fun List<PrivacyItem.Preference>.withGroupPositions(): List<PrivacyItem.Preference> =
+    mapIndexed { index, item -> item.copy(index = index, count = size) }

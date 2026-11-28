@@ -23,8 +23,10 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.selection.selectableGroup
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Language
+import androidx.compose.material3.ListItemDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
@@ -34,13 +36,11 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringArrayResource
 import androidx.compose.ui.res.stringResource
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.R
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.dialogs.BasicAlertDialog
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.layouts.sections.InfoMessageSection
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.PreferenceItemDefaults
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.RadioButtonPreferenceItem
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.groupedItemPosition
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.groupedPreferenceItem
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.spacers.MediumVerticalSpacer
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
@@ -121,22 +121,19 @@ fun SelectLanguageAlertDialogContent(
                 .weight(weight = 1f),
         ) {
             LazyColumn(
-                verticalArrangement = Arrangement.spacedBy(space = SizeConstants.ExtraTinySize),
+                modifier = Modifier.selectableGroup(),
+                verticalArrangement = Arrangement.spacedBy(space = ListItemDefaults.SegmentedGap),
             ) {
                 items(count = count) { index: Int ->
                     val languageValue: String = languageValues[index]
                     RadioButtonPreferenceItem(
-                        modifier = Modifier.groupedPreferenceItem(
-                            position = groupedItemPosition(
-                                index = index,
-                                size = count,
-                            ),
-                            outerRadius = SizeConstants.LargeMediumSize,
-                            horizontalPadding = SizeConstants.ZeroSize,
-                        ),
                         text = languageEntries[index],
-                        isChecked = selectedLanguage.value == languageValue,
-                        onCheckedChange = {
+                        selected = selectedLanguage.value == languageValue,
+                        shapes = PreferenceItemDefaults.segmentedShapes(
+                            index = index,
+                            count = count,
+                        ),
+                        onSelect = {
                             selectedLanguage.value = languageValue
                         },
                     )

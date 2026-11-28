@@ -39,8 +39,8 @@ import androidx.compose.ui.text.font.FontWeight
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.components.R
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.components.ui.views.ShowcaseHeader
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.components.ui.views.ShowcaseSection
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.icons.ToolkitIcon
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.style.spacing.spacing
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.grid.GroupedGrid
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.grid.GroupedGridItem
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.grid.GroupedGridMeasurements
@@ -159,6 +159,8 @@ private fun GridGroupLabel(text: String) {
         text = text,
         style = MaterialTheme.typography.titleMedium,
         fontWeight = FontWeight.SemiBold,
-        modifier = Modifier.padding(horizontal = SizeConstants.SmallSize),
+        modifier = Modifier
+            .padding(horizontal = MaterialTheme.spacing.small)
+            .padding(bottom = MaterialTheme.spacing.extraSmallIncreased),
     )
 }

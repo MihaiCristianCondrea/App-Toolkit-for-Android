@@ -37,7 +37,6 @@ import androidx.compose.material3.MediumFloatingActionButton
 import androidx.compose.material3.SmallExtendedFloatingActionButton
 import androidx.compose.material3.SmallFloatingActionButton
 import androidx.compose.material3.Text
-import androidx.compose.material3.contentColorFor
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.key
@@ -51,12 +50,12 @@ import androidx.compose.ui.graphics.TransformOrigin
 import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.unit.Dp
-import androidx.compose.ui.unit.dp
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.icons.AnimatedToolkitIcon
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.models.fab.FabColor
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.models.fab.FabSize
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.models.fab.ToolkitFab
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.style.bounceClick
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.style.spacing.spacing
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.ButtonFeedback
 
 /**
@@ -71,7 +70,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.Bu
 fun ToolkitFabColumn(
     fabs: List<ToolkitFab>,
     modifier: Modifier = Modifier,
-    spacing: Dp = 16.dp,
+    spacing: Dp = MaterialTheme.spacing.large,
     feedback: ButtonFeedback = ButtonFeedback(),
     /**
      * False folds every extended button to its icon, as the Toolkit's scaffolds do while content
@@ -119,7 +118,6 @@ fun ToolkitFloatingActionButton(
         fab.onClick()
     }
     val containerColor = fab.color.containerColor()
-    val contentColor = contentColorFor(containerColor)
     val modifier = Modifier.bounceClick()
     val iconSize = when (fab.size) {
         FabSize.Small, FabSize.Regular -> null
@@ -139,18 +137,18 @@ fun ToolkitFloatingActionButton(
     val label = fab.label
     if (label == null) {
         when (fab.size) {
-            FabSize.Small -> SmallFloatingActionButton(onClick, modifier, containerColor = containerColor, contentColor = contentColor, content = icon)
-            FabSize.Regular -> FloatingActionButton(onClick, modifier, containerColor = containerColor, contentColor = contentColor, content = icon)
-            FabSize.Medium -> MediumFloatingActionButton(onClick, modifier, containerColor = containerColor, contentColor = contentColor, content = icon)
-            FabSize.Large -> LargeFloatingActionButton(onClick, modifier, containerColor = containerColor, contentColor = contentColor, content = icon)
+            FabSize.Small -> SmallFloatingActionButton(onClick, modifier, containerColor = containerColor, content = icon)
+            FabSize.Regular -> FloatingActionButton(onClick, modifier, containerColor = containerColor, content = icon)
+            FabSize.Medium -> MediumFloatingActionButton(onClick, modifier, containerColor = containerColor, content = icon)
+            FabSize.Large -> LargeFloatingActionButton(onClick, modifier, containerColor = containerColor, content = icon)
         }
     } else {
         val text: @Composable () -> Unit = { Text(label) }
         when (fab.size) {
-            FabSize.Small -> SmallExtendedFloatingActionButton(text, icon, onClick, modifier, extended, containerColor = containerColor, contentColor = contentColor)
-            FabSize.Regular -> ExtendedFloatingActionButton(text, icon, onClick, modifier, extended, containerColor = containerColor, contentColor = contentColor)
-            FabSize.Medium -> MediumExtendedFloatingActionButton(text, icon, onClick, modifier, extended, containerColor = containerColor, contentColor = contentColor)
-            FabSize.Large -> LargeExtendedFloatingActionButton(text, icon, onClick, modifier, extended, containerColor = containerColor, contentColor = contentColor)
+            FabSize.Small -> SmallExtendedFloatingActionButton(text, icon, onClick, modifier, extended, containerColor = containerColor)
+            FabSize.Regular -> ExtendedFloatingActionButton(text, icon, onClick, modifier, extended, containerColor = containerColor)
+            FabSize.Medium -> MediumExtendedFloatingActionButton(text, icon, onClick, modifier, extended, containerColor = containerColor)
+            FabSize.Large -> LargeExtendedFloatingActionButton(text, icon, onClick, modifier, extended, containerColor = containerColor)
         }
     }
 }

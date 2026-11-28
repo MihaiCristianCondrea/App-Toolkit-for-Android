@@ -17,8 +17,6 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.ui.views.sheets
 
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Lightbulb
@@ -32,9 +30,11 @@ import androidx.compose.material3.rememberBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.style.spacing.spacing
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.lists.GroupedAction
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.lists.GroupedActionList
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.spacers.SmallVerticalSpacer
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.spacers.ExtraLargeCompactVerticalSpacer
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.faq.R
 import kotlinx.collections.immutable.persistentListOf
 
@@ -57,12 +57,12 @@ internal fun FaqFeedbackSheet(
         Text(
             text = stringResource(id = R.string.help_feedback_sheet_title),
             style = MaterialTheme.typography.headlineSmall,
-            modifier = Modifier.padding(horizontal = SizeConstants.ExtraLargeCompactSize),
+            modifier = Modifier.padding(horizontal = MaterialTheme.spacing.extraLargeCompact),
         )
-        Spacer(modifier = Modifier.height(height = SizeConstants.SmallSize))
+        SmallVerticalSpacer()
 
         GroupedActionList(
-            modifier = Modifier.padding(horizontal = SizeConstants.MediumSize),
+            modifier = Modifier.padding(horizontal = MaterialTheme.spacing.medium),
             actions = persistentListOf(
                 GroupedAction(
                     title = stringResource(id = R.string.help_feedback_sheet_feature_request_title),
@@ -79,6 +79,6 @@ internal fun FaqFeedbackSheet(
             ),
         )
 
-        Spacer(modifier = Modifier.height(height = SizeConstants.ExtraLargeCompactSize))
+        ExtraLargeCompactVerticalSpacer()
     }
 }

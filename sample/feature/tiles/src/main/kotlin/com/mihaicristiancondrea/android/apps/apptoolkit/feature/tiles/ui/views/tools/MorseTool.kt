@@ -30,11 +30,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardCapitalization
+import androidx.compose.ui.unit.dp
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.R
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.states.MorseInputError
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.states.MorseToolUiState
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.ResultPill
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.style.spacing.spacing
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.ButtonMeasurements
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.GeneralButton
 
@@ -58,7 +59,7 @@ fun MorseTool(
     Column(
         modifier = Modifier.fillMaxWidth(),
         horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.spacedBy(SizeConstants.MediumSize),
+        verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.medium),
     ) {
         SignalPanel(playback.isActive, stringResource(R.string.morse_mode), state.previewCode.ifEmpty { "—" })
 
@@ -71,7 +72,7 @@ fun MorseTool(
             supportingText = errorMessage?.let { { Text(it) } },
             isError = errorMessage != null,
             keyboardOptions = KeyboardOptions(capitalization = KeyboardCapitalization.Characters),
-            shape = RoundedCornerShape(SizeConstants.ExtraLargeCompactSize),
+            shape = RoundedCornerShape(24.dp),
             minLines = 2,
             maxLines = 3,
         )

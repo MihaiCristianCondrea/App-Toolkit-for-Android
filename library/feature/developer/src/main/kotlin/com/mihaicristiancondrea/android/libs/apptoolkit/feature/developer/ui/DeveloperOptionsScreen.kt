@@ -22,6 +22,8 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.material3.ListItemDefaults
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
@@ -29,19 +31,17 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.UiText
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.style.spacing.spacing
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.ScreenHost
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.modifiers.animatedItem
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.modifiers.animatedItemsIndexed
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.GroupedItemPosition
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.PreferenceCategoryItem
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.PreferenceItemDefaults
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.SettingsPreferenceItem
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.groupedItemPosition
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.shell.contentPadding
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.developer.R
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.developer.ui.analytics.DEVELOPER_OPTIONS_SCREEN
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.developer.ui.contracts.DeveloperOptionsEvent
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.developer.ui.extensions.groupedDeveloperPreference
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.developer.ui.formatters.describeNavigationStack
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.developer.ui.formatters.layoutModeLabel
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.developer.ui.models.DeveloperCategory
@@ -128,7 +128,7 @@ fun DeveloperOptionsScreen() {
             graph = graph,
             capabilities = capabilities,
             liveState = liveState,
-            contentPadding = contentPadding(extra = PaddingValues(bottom = SizeConstants.LargeSize)),
+            contentPadding = contentPadding(extra = PaddingValues(bottom = MaterialTheme.spacing.large)),
             onReset = { viewModel.onEvent(event = DeveloperOptionsEvent.Reset) },
             onChange = viewModel::onEvent,
         )
@@ -157,14 +157,19 @@ internal fun DeveloperOptionsScreenContent(
     LazyColumn(
         contentPadding = contentPadding,
         modifier = modifier.fillMaxHeight(),
-        verticalArrangement = Arrangement.spacedBy(space = SizeConstants.ExtraTinySize),
+        verticalArrangement = Arrangement.spacedBy(space = ListItemDefaults.SegmentedGap),
     ) {
         animatedItem { PreferenceCategoryItem(title = categoryLiveState) }
         animatedItemsIndexed(items = liveState) { index, line ->
             DeveloperStateItem(
                 line = line,
-                modifier = Modifier.groupedDeveloperPreference(
-                    position = groupedItemPosition(index = index, size = liveState.size),
+                shapes = PreferenceItemDefaults.segmentedShapes(
+                    index = index,
+                    count = liveState.size,
+                ),
+                modifier = Modifier.padding(
+                    horizontal = MaterialTheme.spacing.large,
+                    vertical = if (liveState.size == 1) MaterialTheme.spacing.extraTiny else MaterialTheme.spacing.none,
                 ),
             )
         }
@@ -182,8 +187,13 @@ internal fun DeveloperOptionsScreenContent(
                     onChange = onChange,
                     graph = graph,
                     capabilities = capabilities,
-                    modifier = Modifier.groupedDeveloperPreference(
-                        position = groupedItemPosition(index = index, size = options.size),
+                    shapes = PreferenceItemDefaults.segmentedShapes(
+                        index = index,
+                        count = options.size,
+                    ),
+                    modifier = Modifier.padding(
+                        horizontal = MaterialTheme.spacing.large,
+                        vertical = if (options.size == 1) MaterialTheme.spacing.extraTiny else MaterialTheme.spacing.none,
                     ),
                 )
             }
@@ -191,8 +201,15 @@ internal fun DeveloperOptionsScreenContent(
         animatedItem {
             SettingsPreferenceItem(
                 modifier = Modifier
-                    .padding(top = SizeConstants.LargeSize)
-                    .groupedDeveloperPreference(position = GroupedItemPosition.SINGLE),
+                    .padding(top = MaterialTheme.spacing.large)
+                    .padding(
+                        horizontal = MaterialTheme.spacing.large,
+                        vertical = MaterialTheme.spacing.extraTiny,
+                    ),
+                shapes = PreferenceItemDefaults.segmentedShapes(
+                    index = 0,
+                    count = 1,
+                ),
                 title = resetTitle,
                 summary = resetSummary,
                 onClick = onReset,

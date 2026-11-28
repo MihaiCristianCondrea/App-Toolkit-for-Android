@@ -57,7 +57,6 @@ import androidx.compose.ui.unit.Dp
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.models.ThemePreferencesState
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.colorscheme.DynamicPaletteVariant
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.colorscheme.StaticPaletteIds
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.colorscheme.applyDynamicVariant
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.date.isChristmasSeason
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.date.isHalloweenSeason
@@ -65,6 +64,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.fil
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.mappers.toSwatchColors
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.models.WallpaperSwatchColors
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.style.colors.ThemePaletteProvider.paletteById
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.style.spacing.spacing
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.views.WallpaperColorOptionCard
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.R
 import java.time.LocalDate
@@ -113,7 +113,7 @@ fun ThemePalettePicker(
     modifier: Modifier = Modifier,
     onPaletteTabSelected: (page: Int) -> Unit = {},
     supportsDynamicColors: Boolean = Build.VERSION.SDK_INT >= Build.VERSION_CODES.S,
-    horizontalPadding: Dp = SizeConstants.LargeSize,
+    horizontalPadding: Dp = MaterialTheme.spacing.large,
 ) {
     val context: Context = LocalContext.current
     val isDynamicColors: Boolean = preferences.dynamicColors
@@ -215,7 +215,7 @@ fun ThemePalettePicker(
 
     Column(
         modifier = modifier.fillMaxWidth(),
-        verticalArrangement = Arrangement.spacedBy(SizeConstants.LargeSize),
+        verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.large),
     ) {
         if (supportsDynamicColors) {
             PaletteTabs(
@@ -263,7 +263,7 @@ private fun PaletteTabs(
             ) {
                 Text(
                     text = stringResource(id = title),
-                    modifier = Modifier.padding(vertical = SizeConstants.LargeSize),
+                    modifier = Modifier.padding(vertical = MaterialTheme.spacing.large),
                 )
             }
         }
@@ -282,7 +282,10 @@ private fun DynamicPaletteRow(
     LazyRow(
         state = state,
         contentPadding = contentPadding,
-        horizontalArrangement = PaletteRowArrangement,
+        horizontalArrangement = Arrangement.spacedBy(
+            space = MaterialTheme.spacing.medium,
+            alignment = Alignment.CenterHorizontally,
+        ),
     ) {
         itemsIndexed(items = swatches, key = { index, _ -> index }) { index, colors ->
             WallpaperColorOptionCard(
@@ -312,7 +315,10 @@ private fun StaticPaletteRow(
     LazyRow(
         state = state,
         contentPadding = contentPadding,
-        horizontalArrangement = PaletteRowArrangement,
+        horizontalArrangement = Arrangement.spacedBy(
+            space = MaterialTheme.spacing.medium,
+            alignment = Alignment.CenterHorizontally,
+        ),
     ) {
         itemsIndexed(items = options, key = { _, id -> id }) { index, id ->
             val seasonal: Boolean = (isChristmasSeason && id == StaticPaletteIds.CHRISTMAS) ||
@@ -326,11 +332,6 @@ private fun StaticPaletteRow(
         }
     }
 }
-
-private val PaletteRowArrangement: Arrangement.Horizontal = Arrangement.spacedBy(
-    space = SizeConstants.MediumSize,
-    alignment = Alignment.CenterHorizontally,
-)
 
 /**
  * A row state that opens with [selectedIndex] in view and then centers it, once, so a later pick

@@ -15,11 +15,15 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.models
+package com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.mappers
 
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.GroupedItemPosition
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.R
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.models.ToolkitTile
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.utils.constants.ToolkitTileIds
 
-internal data class PositionedToolkitTilesListItem(
-    val item: ToolkitTilesListItem,
-    val position: GroupedItemPosition,
-)
+internal fun ToolkitTile.previewTextResId(): Int = when (id) {
+    ToolkitTileIds.COIN_FLIP -> R.string.tile_preview_coin_result
+    ToolkitTileIds.COMPASS -> R.string.tile_preview_compass_result
+    ToolkitTileIds.BUBBLE_LEVEL -> R.string.tile_preview_level_result
+    else -> R.string.tile_preview_default_result
+}

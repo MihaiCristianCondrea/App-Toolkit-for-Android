@@ -17,41 +17,48 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.developer.ui.views
 
-import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.ListItemShapes
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.SegmentedListItem
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.text.font.FontWeight
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.style.spacing.spacing
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.PreferenceItemDefaults
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.developer.ui.models.DeveloperStateLine
 
 @Composable
 internal fun DeveloperStateItem(
     line: DeveloperStateLine,
     modifier: Modifier = Modifier,
+    shapes: ListItemShapes = PreferenceItemDefaults.segmentedShapes(index = 0, count = 1),
 ) {
-    Card(
+    SegmentedListItem(
+        shapes = shapes,
         modifier = modifier.fillMaxWidth(),
-        shape = RectangleShape,
         colors = if (line.selected) {
-            CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.secondaryContainer)
+            PreferenceItemDefaults.colors(
+                containerColor = MaterialTheme.colorScheme.secondaryContainer,
+                contentColor = MaterialTheme.colorScheme.onSecondaryContainer,
+            )
         } else {
-            CardDefaults.cardColors()
+            PreferenceItemDefaults.colors()
         },
-    ) {
-        Column(modifier = Modifier.padding(all = SizeConstants.LargeSize)) {
+        verticalAlignment = Alignment.CenterVertically,
+        contentPadding = PaddingValues(all = MaterialTheme.spacing.large),
+        supportingContent = {
+            Text(text = line.summary, style = MaterialTheme.typography.bodyMedium)
+        },
+        content = {
             Text(
                 text = line.title,
                 style = MaterialTheme.typography.titleMedium,
                 fontWeight = FontWeight.SemiBold,
             )
-            Text(text = line.summary, style = MaterialTheme.typography.bodyMedium)
-        }
-    }
+        },
+    )
 }

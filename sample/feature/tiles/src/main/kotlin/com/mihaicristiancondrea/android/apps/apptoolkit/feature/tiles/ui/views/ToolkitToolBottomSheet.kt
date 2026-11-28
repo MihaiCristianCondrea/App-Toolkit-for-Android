@@ -23,14 +23,10 @@ import android.os.Build
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -47,7 +43,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.unit.dp
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.R
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.models.ToolkitTileStatus
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.mappers.helperSummaryResId
@@ -80,11 +75,12 @@ import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.c
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.catalog.ToolAccentTheme
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.previews.GenericToolPreview
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.utils.constants.ToolkitTileIds
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.icons.ToolkitIcon
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.style.spacing.spacing
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.ButtonMeasurements
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.GeneralButton
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.GeneralButtonStyle
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.spacers.LargeHorizontalSpacer
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.ui.utils.SuppressShakeToReport
 
 /**
@@ -133,8 +129,8 @@ fun ToolkitToolBottomSheet(
                     .verticalScroll(rememberScrollState())
                     // The sheet reaches behind the system navigation; its last control stays above it.
                     .navigationBarsPadding()
-                    .padding(SizeConstants.LargeSize),
-                verticalArrangement = Arrangement.spacedBy(SizeConstants.LargeSize),
+                    .padding(MaterialTheme.spacing.large),
+                verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.large),
             ) {
                 if (tile.id == ToolkitTileIds.BELL) {
                     val bell: BellToolViewModel = koinViewModel()
@@ -173,10 +169,10 @@ private fun ToolSheetHeader(
         verticalAlignment = Alignment.CenterVertically,
     ) {
         TileIconBadge(icon = tile.icon, large = true)
-        Spacer(modifier = Modifier.width(SizeConstants.LargeSize))
+        LargeHorizontalSpacer()
         Column(
             modifier = Modifier.weight(1f),
-            verticalArrangement = Arrangement.spacedBy(SizeConstants.ExtraTinySize),
+            verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.extraTiny),
         ) {
             Text(
                 text = stringResource(id = tile.titleResId),
@@ -204,16 +200,13 @@ private fun ToolStatusSummary(tile: ToolkitTile) {
 
     ElevatedCard(
         modifier = Modifier.fillMaxWidth(),
-        shape = RoundedCornerShape(SizeConstants.LargeSize),
-        colors = CardDefaults.elevatedCardColors(
-            containerColor = MaterialTheme.colorScheme.surfaceContainerLow,
-        ),
+        shape = MaterialTheme.shapes.large,
     ) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(SizeConstants.MediumSize),
-            horizontalArrangement = Arrangement.spacedBy(SizeConstants.MediumSize),
+                .padding(MaterialTheme.spacing.medium),
+            horizontalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.medium),
             verticalAlignment = Alignment.CenterVertically,
         ) {
             Icon(
@@ -221,7 +214,7 @@ private fun ToolStatusSummary(tile: ToolkitTile) {
                 contentDescription = null,
                 tint = MaterialTheme.colorScheme.primary,
             )
-            Column(verticalArrangement = Arrangement.spacedBy(SizeConstants.ExtraTinySize)) {
+            Column(verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.extraTiny)) {
                 Text(
                     text = helperTitle,
                     style = MaterialTheme.typography.titleSmall,
@@ -272,7 +265,7 @@ private fun ToolIntegrationSection(
     val isUnsupported = tile.status == ToolkitTileStatus.Unsupported
 
     if (isUnsupported) {
-        Column(verticalArrangement = Arrangement.spacedBy(SizeConstants.LargeSize)) {
+        Column(verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.large)) {
             ToolStatusSummary(tile = tile)
             GeneralButton(
                 style = GeneralButtonStyle.Outlined,
@@ -305,44 +298,39 @@ private fun QuickSettingsIntegrationCard(
 
     Column(
         modifier = Modifier.fillMaxWidth(),
-        verticalArrangement = Arrangement.spacedBy(SizeConstants.ExtraSmallSize),
+        verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.extraSmall),
     ) {
-        val infoShape = RoundedCornerShape(
-            topStart = 28.dp,
-            topEnd = 28.dp,
-            bottomStart = 8.dp,
-            bottomEnd = 8.dp,
+        val outer = MaterialTheme.shapes.extraLarge
+        val inner = MaterialTheme.shapes.small
+        val infoShape = outer.copy(
+            bottomStart = inner.bottomStart,
+            bottomEnd = inner.bottomEnd,
         )
-
-        val actionShape = RoundedCornerShape(
-            topStart = 8.dp,
-            topEnd = 8.dp,
-            bottomStart = 28.dp,
-            bottomEnd = 28.dp,
+        val actionShape = outer.copy(
+            topStart = inner.topStart,
+            topEnd = inner.topEnd,
         )
 
         val containerColor = MaterialTheme.colorScheme.secondaryContainer
         val contentColor = MaterialTheme.colorScheme.onSecondaryContainer
 
         Surface(
-            shape = if (hasAddAction && !isAdded) infoShape else RoundedCornerShape(28.dp),
+            shape = if (hasAddAction && !isAdded) infoShape else outer,
             color = containerColor,
-            contentColor = contentColor,
             modifier = Modifier.fillMaxWidth()
         ) {
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(SizeConstants.LargeSize),
-                horizontalArrangement = Arrangement.spacedBy(SizeConstants.MediumSize),
+                    .padding(MaterialTheme.spacing.large),
+                horizontalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.medium),
                 verticalAlignment = Alignment.CenterVertically,
             ) {
                 Icon(
                     imageVector = ToolSymbols.Widgets,
                     contentDescription = null,
-                    tint = contentColor
                 )
-                Column(verticalArrangement = Arrangement.spacedBy(SizeConstants.ExtraTinySize)) {
+                Column(verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.extraTiny)) {
                     val title = if (isAdded) {
                         stringResource(id = R.string.tool_status_added_title)
                     } else {

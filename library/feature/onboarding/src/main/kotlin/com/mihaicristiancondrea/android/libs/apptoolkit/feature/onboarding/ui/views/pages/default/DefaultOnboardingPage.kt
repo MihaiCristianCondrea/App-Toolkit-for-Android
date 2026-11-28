@@ -29,11 +29,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.sp
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.style.spacing.spacing
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.spacers.LargeVerticalSpacer
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.onboarding.ui.models.OnboardingPage
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.onboarding.ui.views.pages.default.containers.DefaultOnboardingIconContainer
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.spacers.LargeVerticalSpacer
 
 /** Renders a standard onboarding [page] with a centered icon, title, and description. */
 @Composable
@@ -42,7 +41,7 @@ fun DefaultOnboardingPage(page: OnboardingPage.DefaultPage) {
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(horizontal = SizeConstants.LargeSize)
+            .padding(horizontal = MaterialTheme.spacing.large)
             .verticalScroll(state = scrollState),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center,
@@ -51,7 +50,7 @@ fun DefaultOnboardingPage(page: OnboardingPage.DefaultPage) {
 
         Text(
             text = page.title,
-            style = MaterialTheme.typography.headlineLarge.copy(fontSize = 32.sp),
+            style = MaterialTheme.typography.headlineLarge,
             textAlign = TextAlign.Center,
         )
         LargeVerticalSpacer()
@@ -59,7 +58,7 @@ fun DefaultOnboardingPage(page: OnboardingPage.DefaultPage) {
             text = page.description,
             style = MaterialTheme.typography.bodyLarge,
             textAlign = TextAlign.Center,
-            modifier = Modifier.padding(horizontal = SizeConstants.ExtraLargeIncreasedSize),
+            modifier = Modifier.padding(horizontal = MaterialTheme.spacing.extraLargeIncreased),
         )
     }
 }

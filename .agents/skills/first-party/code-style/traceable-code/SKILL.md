@@ -15,7 +15,7 @@ metadata:
 
 ## Goal
 
-Write code a developer can understand by reading from top to bottom and following what happens to each value. Optimize for **low mental effort**, not minimum lines of code. Keep the implementation idiomatic, concise, and faithful to the project's conventions.
+Write code a developer can follow from top to bottom. Keep each value's source and use easy to find, and follow the project's conventions.
 
 ## Rules
 

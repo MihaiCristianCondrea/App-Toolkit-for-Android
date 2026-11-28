@@ -28,7 +28,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.style.spacing.spacing
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.diagnostics.R
 
 /** Displays the informational about tab inside [com.mihaicristiancondrea.android.libs.apptoolkit.feature.diagnostics.ui.views.dialogs.FirebaseConsentDialog]. */
@@ -38,7 +38,7 @@ fun AboutPage() {
         modifier = Modifier
             .fillMaxSize()
             .verticalScroll(state = rememberScrollState()),
-        verticalArrangement = Arrangement.spacedBy(space = SizeConstants.SmallSize),
+        verticalArrangement = Arrangement.spacedBy(space = MaterialTheme.spacing.small),
     ) {
         Text(
             text = stringResource(id = R.string.privacy_choices_about_title),

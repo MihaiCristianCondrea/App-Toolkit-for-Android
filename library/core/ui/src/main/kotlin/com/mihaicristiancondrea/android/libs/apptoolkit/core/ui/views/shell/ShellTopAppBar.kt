@@ -58,6 +58,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.style.size.size
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.navigation.textSwap
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.graph.TopBarStyle
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.layout.ArticleReadingProgress
@@ -190,7 +191,7 @@ fun ShellTopAppBar(
             },
             modifier = Modifier
                 .then(if (centred) Modifier.animateContentSize() else Modifier.fillMaxWidth())
-                .height(SearchFieldHeight),
+                .height(height = MaterialTheme.size.extraExtraLarge),
             contentAlignment = titleAlignment,
             transitionSpec = {
                 if (initialState.article != targetState.article) {

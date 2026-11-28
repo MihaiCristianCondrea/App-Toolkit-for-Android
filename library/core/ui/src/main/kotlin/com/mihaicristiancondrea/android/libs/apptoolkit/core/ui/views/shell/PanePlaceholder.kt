@@ -19,16 +19,12 @@ package com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.shell
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.R
 import androidx.compose.material.icons.automirrored.outlined.ViewSidebar
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -41,6 +37,11 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.style.size.size
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.style.spacing.spacing
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.R
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.spacers.SmallVerticalSpacer
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.spacers.ExtraLargeCompactVerticalSpacer
 
 /** What the detail side of a list page shows before anything is chosen: an icon, a title, a hint. */
 @Composable
@@ -49,32 +50,31 @@ fun PanePlaceholder(icon: ImageVector, title: String?, message: String) {
         Modifier
             .fillMaxSize()
             .padding(LocalContentPadding.current)
-            .padding(24.dp),
+            .padding(MaterialTheme.spacing.extraLargeCompact),
         contentAlignment = Alignment.Center,
     ) {
         Surface(
-            shape = RoundedCornerShape(28.dp),
+            shape = MaterialTheme.shapes.extraLarge,
             color = MaterialTheme.colorScheme.surfaceContainerLow,
             modifier = Modifier.widthIn(max = 420.dp),
         ) {
             Column(
-                modifier = Modifier.padding(32.dp),
+                modifier = Modifier.padding(MaterialTheme.spacing.extraLargeIncreased),
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
                 Surface(
                     shape = CircleShape,
                     color = MaterialTheme.colorScheme.primaryContainer,
-                    contentColor = MaterialTheme.colorScheme.onPrimaryContainer,
                     modifier = Modifier.size(96.dp),
                 ) {
                     Box(contentAlignment = Alignment.Center) {
-                        Icon(icon, contentDescription = null, modifier = Modifier.size(48.dp))
+                        Icon(icon, contentDescription = null, modifier = Modifier.size(MaterialTheme.size.extraExtraLarge))
                     }
                 }
-                Spacer(Modifier.height(24.dp))
+                ExtraLargeCompactVerticalSpacer()
                 if (title != null) {
                     Text(title, style = MaterialTheme.typography.titleLarge, textAlign = TextAlign.Center)
-                    Spacer(Modifier.height(8.dp))
+                    SmallVerticalSpacer()
                 }
                 Text(
                     message,

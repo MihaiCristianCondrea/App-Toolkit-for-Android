@@ -24,22 +24,11 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.graphics.luminance
 import androidx.compose.ui.graphics.vector.ImageVector
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.R
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.models.ToolkitTileStatus
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.models.StatusColors
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.models.ToolkitTile
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.models.ToolkitTileIcon
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.catalog.Cookie16Shape
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.catalog.Cookie8Shape
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.catalog.KitShape
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.utils.constants.ToolkitTileIds
-
-internal fun ToolkitTile.previewTextResId(): Int = when (id) {
-    ToolkitTileIds.COIN_FLIP -> R.string.tile_preview_coin_result
-    ToolkitTileIds.COMPASS -> R.string.tile_preview_compass_result
-    ToolkitTileIds.BUBBLE_LEVEL -> R.string.tile_preview_level_result
-    else -> R.string.tile_preview_default_result
-}
 
 internal fun ToolkitTileIcon.imageVector(): ImageVector = when (this) {
     ToolkitTileIcon.Wheel -> ToolSymbols.RotateRight
@@ -91,20 +80,6 @@ internal fun ToolkitTileIcon.badgeShape(): Shape = when (this) {
     else -> backgroundShape()
 }
 
-internal fun ToolkitTileStatus.labelResId(): Int = when (this) {
-    ToolkitTileStatus.Added -> R.string.tiles_status_added
-    ToolkitTileStatus.Available -> R.string.tiles_status_available
-    ToolkitTileStatus.NotAdded -> R.string.tiles_status_not_added
-    ToolkitTileStatus.Unsupported -> R.string.tiles_status_unsupported
-}
-
-internal fun ToolkitTileStatus.icon(): ImageVector = when (this) {
-    ToolkitTileStatus.Added -> ToolSymbols.CheckCircle
-    ToolkitTileStatus.Available -> ToolSymbols.Info
-    ToolkitTileStatus.NotAdded -> ToolSymbols.AddCircle
-    ToolkitTileStatus.Unsupported -> ToolSymbols.Close
-}
-
 /**
  * The tool accents of marketing/ui/src/kit/kit.css (--tk-teal, --tk-blue, --tk-orange, --tk-red, --tk-magenta,
  * --tk-gold), light and dark. Sensors are teal, Water Eject blue, Breathe orange, SOS and Morse red, the bill
@@ -143,29 +118,4 @@ internal fun ToolkitTileIcon.hasToolAccent(): Boolean = when (this) {
     ToolkitTileIcon.Level, ToolkitTileIcon.Water, ToolkitTileIcon.Breathing,
     ToolkitTileIcon.Sos, ToolkitTileIcon.Morse, ToolkitTileIcon.BillSplitter -> true
     else -> false
-}
-
-@Composable
-internal fun ToolkitTileStatus.statusColors(): StatusColors = when (this) {
-    ToolkitTileStatus.Added -> StatusColors(
-        container = MaterialTheme.colorScheme.primaryContainer,
-        content = MaterialTheme.colorScheme.onPrimaryContainer,
-    )
-
-    ToolkitTileStatus.Available -> StatusColors(
-        container = MaterialTheme.colorScheme.secondaryContainer,
-        content = MaterialTheme.colorScheme.onSecondaryContainer,
-    )
-
-    // Neutral on purpose: adding the Quick Settings tile is optional, so the chip must not read
-    // like a warning or like work the tool is waiting for.
-    ToolkitTileStatus.NotAdded -> StatusColors(
-        container = MaterialTheme.colorScheme.surfaceContainerHighest,
-        content = MaterialTheme.colorScheme.onSurfaceVariant,
-    )
-
-    ToolkitTileStatus.Unsupported -> StatusColors(
-        container = MaterialTheme.colorScheme.errorContainer,
-        content = MaterialTheme.colorScheme.onErrorContainer,
-    )
 }

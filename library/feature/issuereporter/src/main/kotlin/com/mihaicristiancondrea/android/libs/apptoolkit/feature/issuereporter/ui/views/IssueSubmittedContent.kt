@@ -36,7 +36,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
+import androidx.compose.ui.unit.dp
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.style.size.size
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.style.spacing.spacing
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.ButtonMeasurements
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.GeneralButton
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.GeneralButtonStyle
@@ -63,13 +65,13 @@ internal fun IssueSubmittedContent(
     Column(
         modifier = modifier
             .fillMaxWidth()
-            .padding(vertical = SizeConstants.ExtraLargeSize),
+            .padding(vertical = MaterialTheme.spacing.extraLarge),
         horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.spacedBy(space = SizeConstants.MediumSize),
+        verticalArrangement = Arrangement.spacedBy(space = MaterialTheme.spacing.medium),
     ) {
         Box(
             modifier = Modifier
-                .size(size = SizeConstants.EightySize)
+                .size(size = 80.dp)
                 .clip(shape = CircleShape)
                 .background(color = MaterialTheme.colorScheme.primaryContainer),
             contentAlignment = Alignment.Center,
@@ -79,7 +81,7 @@ internal fun IssueSubmittedContent(
                 // The heading says what happened; a description here would repeat it.
                 contentDescription = null,
                 tint = MaterialTheme.colorScheme.onPrimaryContainer,
-                modifier = Modifier.size(size = SizeConstants.ExtraLargeIncreasedSize),
+                modifier = Modifier.size(size = MaterialTheme.size.large),
             )
         }
 
@@ -94,7 +96,7 @@ internal fun IssueSubmittedContent(
             style = MaterialTheme.typography.bodyMedium,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
             textAlign = TextAlign.Center,
-            modifier = Modifier.padding(horizontal = SizeConstants.LargeSize),
+            modifier = Modifier.padding(horizontal = MaterialTheme.spacing.large),
         )
 
         LargeVerticalSpacer()

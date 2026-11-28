@@ -24,7 +24,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.style.spacing.spacing
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.modifiers.componentEntrance
 
 /**
@@ -36,8 +36,10 @@ fun PreferenceCategoryItem(title: String) {
         text = title,
         color = MaterialTheme.colorScheme.primary,
         style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.SemiBold),
-        modifier = Modifier.componentEntrance().padding(start = SizeConstants.LargeSize, top = SizeConstants.LargeSize),
+        modifier = Modifier
+            .componentEntrance()
+            .padding(start = MaterialTheme.spacing.large, top = MaterialTheme.spacing.large),
         maxLines = 1,
-        overflow = TextOverflow.Ellipsis
+        overflow = TextOverflow.Ellipsis,
     )
 }

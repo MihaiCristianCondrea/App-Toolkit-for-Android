@@ -18,12 +18,12 @@
 package com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons
 
 import androidx.compose.foundation.layout.size
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.Dp
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.icons.AnimatedToolkitIcon
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.icons.ToolkitIcon
 
@@ -44,7 +44,7 @@ internal fun IconContent(
     icon: ToolkitIcon,
     clickCount: Int,
     contentDescription: String?,
-    size: Dp = SizeConstants.ButtonIconSize,
+    size: Dp = ButtonDefaults.IconSize,
     tint: Color? = null,
 ) {
     AnimatedToolkitIcon(

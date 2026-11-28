@@ -25,12 +25,17 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.CornerBasedShape
+import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.shape.ZeroCornerSize
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Search
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
@@ -57,10 +62,10 @@ import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.input.VisualTransformation
-import androidx.compose.ui.unit.Dp
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.icons.ToolkitIcon
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.icons.ToolkitIconContent
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.style.size.size
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.style.spacing.spacing
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.mappers.toTextFieldValue
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.analytics.Ga4EventData
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.GeneralButton
@@ -69,8 +74,6 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.fields.mar
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.fields.markdown.MarkdownFormattingBar
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.fields.markdown.rememberMarkdownVisualTransformation
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.modifiers.logFocusGain
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.GroupedItemPosition
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.getGroupedShape
 
 /**
  * The toolkit's text field: a Material field with the toolkit's grouped styling, icon slot and
@@ -132,9 +135,9 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preference
  *   typography stays consistent before and after typing begins.
  * @param markdown Markdown support; see [GeneralTextFieldMarkdown].
  * @param onMarkdownFormat Reports which formatting action was used, for hosts that log them.
- * @param position Where this field sits in a [GeneralTextFieldStyle.Grouped] block.
- * @param groupedOuterRadius Corner radius at the outside of that block.
- * @param shape Overrides the resting shape of the field.
+ * @param shape Overrides the resting shape of the field. For [GeneralTextFieldStyle.Grouped], pass
+ *   a [CornerBasedShape] (such as a segmented shape or custom [RoundedCornerShape]) so a Markdown
+ *   formatting bar inherits its lower corners seamlessly.
  * @param colors Overrides the colors of the field.
  * @param ga4Event Optional GA4 event data, logged when the field gains focus.
  */
@@ -167,8 +170,6 @@ fun GeneralTextField(
     textStyle: TextStyle = LocalTextStyle.current,
     markdown: GeneralTextFieldMarkdown = GeneralTextFieldMarkdown.None,
     onMarkdownFormat: (MarkdownFormatAction) -> Unit = {},
-    position: GroupedItemPosition = GroupedItemPosition.SINGLE,
-    groupedOuterRadius: Dp = SizeConstants.LargeMediumSize,
     shape: Shape? = null,
     colors: TextFieldColors? = null,
     ga4Event: Ga4EventData? = null,
@@ -252,8 +253,6 @@ fun GeneralTextField(
             textStyle = textStyle,
             markdown = markdown,
             onMarkdownFormat = onMarkdownFormat,
-            position = position,
-            groupedOuterRadius = groupedOuterRadius,
             shape = shape,
             colors = colors,
             ga4Event = ga4Event,
@@ -263,8 +262,6 @@ fun GeneralTextField(
 
     val skin: GeneralTextFieldSkin = rememberGeneralTextFieldSkin(
         style = style,
-        position = position,
-        groupedOuterRadius = groupedOuterRadius,
         hasFormattingBar = false,
         shapeOverride = shape,
     )
@@ -379,8 +376,6 @@ fun GeneralTextField(
     textStyle: TextStyle = LocalTextStyle.current,
     markdown: GeneralTextFieldMarkdown = GeneralTextFieldMarkdown.None,
     onMarkdownFormat: (MarkdownFormatAction) -> Unit = {},
-    position: GroupedItemPosition = GroupedItemPosition.SINGLE,
-    groupedOuterRadius: Dp = SizeConstants.LargeMediumSize,
     shape: Shape? = null,
     colors: TextFieldColors? = null,
     ga4Event: Ga4EventData? = null,
@@ -391,8 +386,6 @@ fun GeneralTextField(
     val hasFormattingBar: Boolean = markdown == GeneralTextFieldMarkdown.Editor
     val skin: GeneralTextFieldSkin = rememberGeneralTextFieldSkin(
         style = style,
-        position = position,
-        groupedOuterRadius = groupedOuterRadius,
         hasFormattingBar = hasFormattingBar,
         shapeOverride = shape,
     )
@@ -420,7 +413,7 @@ fun GeneralTextField(
 
     Column(
         modifier = modifier.fillMaxWidth(),
-        verticalArrangement = Arrangement.spacedBy(space = SizeConstants.ExtraTinySize),
+        verticalArrangement = Arrangement.spacedBy(space = MaterialTheme.spacing.extraTiny),
     ) {
         if (style.isOutlined()) {
             OutlinedTextField(
@@ -503,43 +496,50 @@ private data class GeneralTextFieldSkin(
 /**
  * Cuts the field, and the formatting bar under it, to the style they are drawn in.
  *
- * A grouped field that carries a bar hands the lower half of its position to it, so the pair still
- * reads as the single block the position describes.
+ * A grouped field that carries a bar hands the lower corners of its shape to the bar and cuts the
+ * seam between them to `shapes.extraSmall`, so the pair still reads as one block.
  */
 @Composable
 private fun rememberGeneralTextFieldSkin(
     style: GeneralTextFieldStyle,
-    position: GroupedItemPosition,
-    groupedOuterRadius: Dp,
     hasFormattingBar: Boolean,
     shapeOverride: Shape?,
 ): GeneralTextFieldSkin {
     val filledShape: Shape = TextFieldDefaults.shape
     val outlinedShape: Shape = OutlinedTextFieldDefaults.shape
+    val groupedShape: CornerBasedShape = MaterialTheme.shapes.largeIncreased
+    val seamCorner: CornerSize = MaterialTheme.shapes.extraSmall.topStart
     val filledBarColor: Color = MaterialTheme.colorScheme.surfaceContainerHighest
+    val filledBarShape: Shape = MaterialTheme.shapes.extraSmall.copy(
+        topStart = ZeroCornerSize,
+        topEnd = ZeroCornerSize,
+    )
 
-    return remember(style, position, groupedOuterRadius, hasFormattingBar, shapeOverride,
-        filledShape, outlinedShape, filledBarColor) {
+    return remember(
+        style,
+        hasFormattingBar,
+        shapeOverride,
+        filledShape,
+        outlinedShape,
+        groupedShape,
+        seamCorner,
+        filledBarColor,
+        filledBarShape,
+    ) {
         when (style) {
             GeneralTextFieldStyle.Grouped -> {
-                val fieldPosition: GroupedItemPosition = if (!hasFormattingBar) position else when (position) {
-                    GroupedItemPosition.SINGLE -> GroupedItemPosition.FIRST
-                    GroupedItemPosition.LAST -> GroupedItemPosition.MIDDLE
-                    else -> position
+                val baseShape: Shape = shapeOverride ?: groupedShape
+                val fieldShape: Shape = if (hasFormattingBar && baseShape is CornerBasedShape) {
+                    baseShape.copy(bottomStart = seamCorner, bottomEnd = seamCorner)
+                } else {
+                    baseShape
                 }
-                val barPosition: GroupedItemPosition = when (position) {
-                    GroupedItemPosition.SINGLE, GroupedItemPosition.LAST -> GroupedItemPosition.LAST
-                    else -> GroupedItemPosition.MIDDLE
-                }
+                val barBaseShape: CornerBasedShape = baseShape as? CornerBasedShape ?: groupedShape
+                val formattingBarShape: Shape =
+                    barBaseShape.copy(topStart = seamCorner, topEnd = seamCorner)
                 GeneralTextFieldSkin(
-                    fieldShape = shapeOverride ?: getGroupedShape(
-                        position = fieldPosition,
-                        outerRadius = groupedOuterRadius,
-                    ),
-                    formattingBarShape = getGroupedShape(
-                        position = barPosition,
-                        outerRadius = groupedOuterRadius,
-                    ),
+                    fieldShape = fieldShape,
+                    formattingBarShape = formattingBarShape,
                     formattingBarColor = filledBarColor,
                 )
             }
@@ -567,10 +567,7 @@ private fun rememberGeneralTextFieldSkin(
             GeneralTextFieldStyle.Filled -> GeneralTextFieldSkin(
                 fieldShape = shapeOverride ?: filledShape,
                 // Round the bar's lower corners to complete the filled field's container.
-                formattingBarShape = RoundedCornerShape(
-                    bottomStart = SizeConstants.ExtraSmallSize,
-                    bottomEnd = SizeConstants.ExtraSmallSize,
-                ),
+                formattingBarShape = filledBarShape,
                 formattingBarColor = filledBarColor,
             )
         }
@@ -647,6 +644,7 @@ private class GeneralTextFieldSlots(
             ToolkitIconContent(
                 icon = icon,
                 contentDescription = leadingIconContentDescription,
+                modifier = Modifier.size(size = MaterialTheme.size.medium),
             )
         }
     }
@@ -659,6 +657,7 @@ private class GeneralTextFieldSlots(
             ToolkitIconContent(
                 icon = icon,
                 contentDescription = trailingIconContentDescription,
+                modifier = Modifier.size(size = MaterialTheme.size.medium),
             )
         }
         return {
@@ -667,7 +666,7 @@ private class GeneralTextFieldSlots(
                 style = GeneralButtonStyle.Text,
                 icon = icon,
                 contentDescription = trailingIconContentDescription,
-                iconSize = SizeConstants.ButtonIconSize,
+                iconSize = ButtonDefaults.IconSize,
             )
         }
     }

@@ -33,7 +33,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -63,8 +62,10 @@ import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.models.
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.states.LiveToolsUiState
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.tools.CompassRose
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.tools.LevelFace
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.tools.compassDirection
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.formatters.compassDirection
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.utils.constants.ToolkitTileIds
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.style.size.size
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.style.spacing.spacing
 import kotlin.math.abs
 import kotlin.math.roundToInt
 
@@ -185,7 +186,7 @@ private fun FlashlightWidget(
         Icon(
             imageVector = if (torch.isEnabled) ToolSymbols.FlashlightOn else ToolSymbols.FlashlightOff,
             contentDescription = null,
-            modifier = Modifier.size(48.dp),
+            modifier = Modifier.size(size = MaterialTheme.size.extraExtraLarge),
             tint = MaterialTheme.colorScheme.onSurface,
         )
     }
@@ -202,7 +203,7 @@ private fun WaterEjectWidget(tile: ToolkitTile, modifier: Modifier, onOpen: () -
         onClick = onOpen,
         modifier = modifier,
     ) {
-        Icon(ToolSymbols.WaterDrop, null, Modifier.size(48.dp), tint = MaterialTheme.colorScheme.onSurface)
+        Icon(ToolSymbols.WaterDrop, null, Modifier.size(size = MaterialTheme.size.extraExtraLarge), tint = MaterialTheme.colorScheme.onSurface)
     }
 }
 
@@ -216,14 +217,18 @@ private fun BreatheCard(tile: ToolkitTile, onOpen: () -> Unit) {
         R.string.breathe_exhale to BreathingRepository.DURATION_EXHALE,
         R.string.breathe_hold to BreathingRepository.DURATION_HOLD_EMPTY,
     )
-    Surface(onClick = onOpen, modifier = Modifier.fillMaxWidth().animateVisibility(), shape = RoundedCornerShape(28.dp), color = MaterialTheme.colorScheme.surfaceContainerHigh) {
-        Row(Modifier.padding(horizontal = 20.dp, vertical = 16.dp), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(16.dp)) {
+    Surface(onClick = onOpen, modifier = Modifier.fillMaxWidth().animateVisibility(), shape = MaterialTheme.shapes.extraLarge, color = MaterialTheme.colorScheme.surfaceContainerHigh) {
+        Row(
+            modifier = Modifier.padding(horizontal = MaterialTheme.spacing.largeIncreased, vertical = MaterialTheme.spacing.large),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.large),
+        ) {
             Box(Modifier.size(72.dp).clip(tile.icon.backgroundShape()).background(accent.container.copy(alpha = 0.22f)), contentAlignment = Alignment.Center) {
-                Icon(tile.icon.imageVector(), null, Modifier.size(32.dp), tint = accent.content)
+                Icon(tile.icon.imageVector(), null, Modifier.size(size = MaterialTheme.size.large), tint = accent.content)
             }
-            Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(4.dp)) {
-                Text(stringResource(tile.titleResId), style = MaterialTheme.typography.titleMedium.copy(fontSize = 18.sp, lineHeight = 24.sp), fontWeight = FontWeight.SemiBold)
-                FlowRow(horizontalArrangement = Arrangement.spacedBy(12.dp), verticalArrangement = Arrangement.spacedBy(4.dp)) {
+            Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.extraSmall)) {
+                Text(stringResource(tile.titleResId), style = MaterialTheme.typography.titleMedium.copy(fontSize = 18.sp), fontWeight = FontWeight.SemiBold)
+                FlowRow(horizontalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.medium), verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.extraSmall)) {
                     steps.forEach { (name, millis) ->
                         Text(
                             text = stringResource(R.string.widget_breathe_step, stringResource(name), (millis / 1000L).toInt()),
@@ -246,17 +251,25 @@ private fun MaterialColorsCard(tile: ToolkitTile, onOpen: () -> Unit) {
         scheme.primary, scheme.primaryContainer, scheme.secondary,
         scheme.secondaryContainer, scheme.tertiary, scheme.tertiaryContainer,
     )
-    Surface(onClick = onOpen, modifier = Modifier.fillMaxWidth().animateVisibility(), shape = RoundedCornerShape(28.dp), color = scheme.surfaceContainerHigh) {
-        Column(Modifier.padding(start = 16.dp, end = 16.dp, top = 16.dp, bottom = 20.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
+    Surface(onClick = onOpen, modifier = Modifier.fillMaxWidth().animateVisibility(), shape = MaterialTheme.shapes.extraLarge, color = scheme.surfaceContainerHigh) {
+        Column(
+            modifier = Modifier.padding(
+                start = MaterialTheme.spacing.large,
+                end = MaterialTheme.spacing.large,
+                top = MaterialTheme.spacing.large,
+                bottom = MaterialTheme.spacing.largeIncreased,
+            ),
+            verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.medium),
+        ) {
             WidgetLabel(stringResource(tile.titleResId))
-            Row(Modifier.fillMaxWidth().height(56.dp), horizontalArrangement = Arrangement.spacedBy(4.dp)) {
+            Row(Modifier.fillMaxWidth().height(56.dp), horizontalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.extraSmall)) {
                 strip.forEachIndexed { index, color ->
                     Box(Modifier.weight(1f).fillMaxHeight().clip(toolCorners(index, strip.size)).background(color))
                 }
             }
             Text(
                 text = stringResource(R.string.widget_colors_note),
-                modifier = Modifier.padding(start = 4.dp),
+                modifier = Modifier.padding(start = MaterialTheme.spacing.extraSmall),
                 style = MaterialTheme.typography.bodyMedium,
                 fontWeight = FontWeight.Medium,
                 color = scheme.onSurfaceVariant,

@@ -20,7 +20,10 @@ package com.mihaicristiancondrea.android.libs.apptoolkit.feature.advanced.ui
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.material3.ListItemDefaults
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -30,13 +33,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.UiText
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.style.spacing.spacing
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.ScreenHost
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.modifiers.animatedItem
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.GroupedItemPosition
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.PreferenceCategoryItem
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.PreferenceItemDefaults
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.SettingsPreferenceItem
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.groupedPreferenceItem
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.sheets.IssueReporterSheet
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.shell.contentPadding
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.advanced.R
@@ -51,7 +53,6 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.keys.Develope
 import org.koin.compose.getKoin
 import org.koin.compose.viewmodel.koinViewModel
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.R as CoreUiR
-
 
 /**
  * Displays cache management and unlocked developer options.
@@ -107,10 +108,19 @@ internal fun AdvancedSettingsScreenContent(
     contentPadding: PaddingValues = PaddingValues(),
     showBugReport: Boolean = false,
 ) {
+    val rowModifier = Modifier.padding(
+        horizontal = MaterialTheme.spacing.large,
+        vertical = MaterialTheme.spacing.extraTiny,
+    )
+    val rowShapes = PreferenceItemDefaults.segmentedShapes(
+        index = 0,
+        count = 1,
+    )
+
     LazyColumn(
         contentPadding = contentPadding,
         modifier = modifier.fillMaxHeight(),
-        verticalArrangement = Arrangement.spacedBy(space = SizeConstants.ExtraTinySize),
+        verticalArrangement = Arrangement.spacedBy(space = ListItemDefaults.SegmentedGap),
     ) {
         if (showBugReport) {
             animatedItem {
@@ -123,10 +133,8 @@ internal fun AdvancedSettingsScreenContent(
                     summary = stringResource(id = R.string.summary_preference_settings_bug_report),
                     onClick = onReportBug,
                     ga4Event = advancedPreferenceTapEvent(preferenceKey = AdvancedPreferenceKeys.BUG_REPORT),
-                    modifier = Modifier.groupedPreferenceItem(
-                        position = GroupedItemPosition.SINGLE,
-                        outerRadius = SizeConstants.LargeMediumSize,
-                    ),
+                    shapes = rowShapes,
+                    modifier = rowModifier,
                 )
             }
         }
@@ -145,10 +153,8 @@ internal fun AdvancedSettingsScreenContent(
                 ),
                 onClick = { onEvent(AdvancedSettingsEvent.ClearCache) },
                 ga4Event = advancedPreferenceTapEvent(preferenceKey = AdvancedPreferenceKeys.CLEAR_CACHE),
-                modifier = Modifier.groupedPreferenceItem(
-                    position = GroupedItemPosition.SINGLE,
-                    outerRadius = SizeConstants.LargeMediumSize,
-                ),
+                shapes = rowShapes,
+                modifier = rowModifier,
             )
         }
 
@@ -163,10 +169,8 @@ internal fun AdvancedSettingsScreenContent(
                     summary = stringResource(id = R.string.summary_preference_settings_developer_options),
                     onClick = onOpenDeveloperOptions,
                     ga4Event = advancedPreferenceTapEvent(preferenceKey = AdvancedPreferenceKeys.DEVELOPER_OPTIONS),
-                    modifier = Modifier.groupedPreferenceItem(
-                        position = GroupedItemPosition.SINGLE,
-                        outerRadius = SizeConstants.LargeMediumSize,
-                    ),
+                    shapes = rowShapes,
+                    modifier = rowModifier,
                 )
             }
         }

@@ -27,6 +27,7 @@ import androidx.compose.material.icons.outlined.SmartDisplay
 import androidx.compose.material.icons.outlined.SwapHoriz
 import androidx.compose.material.icons.outlined.Swipe
 import androidx.compose.material.icons.outlined.Web
+import androidx.compose.material3.ListItemShapes
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -34,6 +35,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.sty
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen.EntranceReplay
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.modifiers.EntranceStyle
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.ChoicePreferenceItem
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.PreferenceItemDefaults
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.SwitchPreferenceItem
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.developer.R
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.developer.ui.contracts.DeveloperOptionsEvent
@@ -77,6 +79,7 @@ internal fun DeveloperOptionItem(
     graph: ShellGraph,
     capabilities: ShellCapabilities,
     modifier: Modifier = Modifier,
+    shapes: ListItemShapes = PreferenceItemDefaults.segmentedShapes(index = 0, count = 1),
 ) {
     when (option) {
         DeveloperOption.Layout -> ChoicePreferenceItem(
@@ -86,6 +89,7 @@ internal fun DeveloperOptionItem(
             optionLabel = { layoutModeLabel(mode = it) },
             onSelect = { onChange(DeveloperOptionsEvent.SetLayout(value = it)) },
             dialogIcon = Icons.Outlined.Dashboard,
+            shapes = shapes,
             modifier = modifier,
         )
 
@@ -96,6 +100,7 @@ internal fun DeveloperOptionItem(
             optionLabel = { topBarLabel(value = it) },
             onSelect = { onChange(DeveloperOptionsEvent.SetTopBarStyle(value = it)) },
             dialogIcon = Icons.Outlined.Web,
+            shapes = shapes,
             modifier = modifier,
         )
 
@@ -104,6 +109,7 @@ internal fun DeveloperOptionItem(
             title = stringResource(id = R.string.shell_hide_top_bar),
             summary = stringResource(id = R.string.shell_hide_top_bar_summary),
             checked = settings.hideTopBarOnScroll,
+            shapes = shapes,
             onCheckedChange = { onChange(DeveloperOptionsEvent.SetHideTopBarOnScroll(value = it)) },
         )
 
@@ -114,6 +120,7 @@ internal fun DeveloperOptionItem(
             optionLabel = { navigationBarLabel(value = it) },
             onSelect = { onChange(DeveloperOptionsEvent.SetNavigationBarStyle(value = it)) },
             dialogIcon = Icons.Outlined.CallToAction,
+            shapes = shapes,
             modifier = modifier,
         )
 
@@ -122,6 +129,7 @@ internal fun DeveloperOptionItem(
             title = stringResource(id = R.string.shell_hide_bottom_bar),
             summary = stringResource(id = R.string.shell_hide_bottom_bar_summary),
             checked = settings.hideBottomBarOnScroll,
+            shapes = shapes,
             onCheckedChange = { onChange(DeveloperOptionsEvent.SetHideBottomBarOnScroll(value = it)) },
         )
 
@@ -132,6 +140,7 @@ internal fun DeveloperOptionItem(
             optionLabel = { navigationTintLabel(value = it) },
             onSelect = { onChange(DeveloperOptionsEvent.SetNavigationTint(value = it)) },
             dialogIcon = Icons.Outlined.FormatColorFill,
+            shapes = shapes,
             modifier = modifier,
         )
 
@@ -140,6 +149,7 @@ internal fun DeveloperOptionItem(
             title = stringResource(id = R.string.shell_limit_width),
             summary = stringResource(id = R.string.shell_limit_width_summary),
             checked = settings.limitContentWidth,
+            shapes = shapes,
             onCheckedChange = { onChange(DeveloperOptionsEvent.SetContentWidth(value = it)) },
         )
 
@@ -154,6 +164,7 @@ internal fun DeveloperOptionItem(
             optionLabel = { index -> startLabel(graph = graph, index = index) },
             onSelect = { onChange(DeveloperOptionsEvent.SetStartOverride(value = it)) },
             dialogIcon = Icons.Outlined.RocketLaunch,
+            shapes = shapes,
             modifier = modifier,
         )
 
@@ -164,6 +175,7 @@ internal fun DeveloperOptionItem(
             optionLabel = { tabTransitionLabel(value = it) },
             onSelect = { onChange(DeveloperOptionsEvent.SetTabTransition(value = it)) },
             dialogIcon = Icons.Outlined.SwapHoriz,
+            shapes = shapes,
             modifier = modifier,
         )
 
@@ -174,6 +186,7 @@ internal fun DeveloperOptionItem(
             optionLabel = { backEdgeLabel(value = it) },
             onSelect = { onChange(DeveloperOptionsEvent.SetBackEdge(value = it)) },
             dialogIcon = Icons.Outlined.Swipe,
+            shapes = shapes,
             modifier = modifier,
         )
 
@@ -184,6 +197,7 @@ internal fun DeveloperOptionItem(
             optionLabel = { animationSpeedLabel(value = it) },
             onSelect = { onChange(DeveloperOptionsEvent.SetAnimationSpeed(value = it)) },
             dialogIcon = Icons.Outlined.Animation,
+            shapes = shapes,
             modifier = modifier,
         )
 
@@ -194,6 +208,7 @@ internal fun DeveloperOptionItem(
             optionLabel = { entranceStyleLabel(value = it) },
             onSelect = { onChange(DeveloperOptionsEvent.SetEntranceStyle(value = it)) },
             dialogIcon = Icons.Outlined.Animation,
+            shapes = shapes,
             modifier = modifier,
         )
 
@@ -204,6 +219,7 @@ internal fun DeveloperOptionItem(
             optionLabel = { motionTempoLabel(value = it) },
             onSelect = { onChange(DeveloperOptionsEvent.SetMotionTempo(value = it)) },
             dialogIcon = Icons.Outlined.Animation,
+            shapes = shapes,
             modifier = modifier,
         )
 
@@ -214,6 +230,7 @@ internal fun DeveloperOptionItem(
             optionLabel = { entranceReplayLabel(value = it) },
             onSelect = { onChange(DeveloperOptionsEvent.SetEntranceReplay(value = it)) },
             dialogIcon = Icons.Outlined.Animation,
+            shapes = shapes,
             modifier = modifier,
         )
 
@@ -227,6 +244,7 @@ internal fun DeveloperOptionItem(
             optionLabel = { accessoryLabel(value = it, capabilities = capabilities) },
             onSelect = { onChange(DeveloperOptionsEvent.SetBottomAccessory(value = it)) },
             dialogIcon = Icons.Outlined.SmartDisplay,
+            shapes = shapes,
             modifier = modifier,
         )
     }

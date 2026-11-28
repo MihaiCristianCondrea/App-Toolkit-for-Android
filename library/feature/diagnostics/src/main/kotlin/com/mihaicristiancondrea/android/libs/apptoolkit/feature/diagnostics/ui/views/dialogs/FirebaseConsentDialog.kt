@@ -49,10 +49,12 @@ import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.platform.LocalWindowInfo
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.style.bounceClick
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.style.elevation.elevation
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.style.spacing.spacing
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.GeneralButton
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.GeneralButtonStyle
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.spacers.MediumHorizontalSpacer
@@ -95,7 +97,7 @@ fun FirebaseConsentDialog(
     val density = LocalDensity.current
 
     val dialogHeight = with(receiver = density) {
-        (windowInfo.containerSize.height.toDp() * 0.78f).coerceAtLeast(minimumValue = SizeConstants.TwoHundredFiftySixSize)
+        (windowInfo.containerSize.height.toDp() * 0.78f).coerceAtLeast(minimumValue = 256.dp)
     }
 
     Dialog(
@@ -108,14 +110,14 @@ fun FirebaseConsentDialog(
                 .height(height = dialogHeight),
             shape = MaterialTheme.shapes.extraLarge,
             color = MaterialTheme.colorScheme.surface,
-            tonalElevation = SizeConstants.ExtraTinySize,
-            shadowElevation = SizeConstants.SmallSize,
+            tonalElevation = 2.dp,
+            shadowElevation = MaterialTheme.elevation.level4,
         ) {
             Column(
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(all = SizeConstants.LargeSize),
-                verticalArrangement = Arrangement.spacedBy(space = SizeConstants.MediumSize),
+                    .padding(all = MaterialTheme.spacing.large),
+                verticalArrangement = Arrangement.spacedBy(space = MaterialTheme.spacing.medium),
             ) {
                 Row(
                     modifier = Modifier.fillMaxWidth(),
@@ -139,7 +141,6 @@ fun FirebaseConsentDialog(
                     selectedTabIndex = pagerState.currentPage,
                     containerColor = MaterialTheme.colorScheme.surface,
                     contentColor = MaterialTheme.colorScheme.primary,
-                    divider = { HorizontalDivider(thickness = SizeConstants.ExtraTinySize / 2) },
                 ) {
                     tabs.forEachIndexed { index, labelResId ->
                         Tab(
@@ -187,7 +188,7 @@ fun FirebaseConsentDialog(
 
                 Column(
                     modifier = Modifier.fillMaxWidth(),
-                    verticalArrangement = Arrangement.spacedBy(space = SizeConstants.ExtraTinySize),
+                    verticalArrangement = Arrangement.spacedBy(space = MaterialTheme.spacing.extraTiny),
                 ) {
                     GeneralButton(
                         modifier = Modifier.fillMaxWidth(),
@@ -200,7 +201,7 @@ fun FirebaseConsentDialog(
 
                     Row(
                         modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.spacedBy(space = SizeConstants.ExtraSmallSize),
+                        horizontalArrangement = Arrangement.spacedBy(space = MaterialTheme.spacing.extraSmall),
                     ) {
                         GeneralButton(
                             style = GeneralButtonStyle.Outlined,

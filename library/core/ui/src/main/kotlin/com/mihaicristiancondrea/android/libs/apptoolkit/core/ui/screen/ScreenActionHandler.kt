@@ -15,12 +15,20 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.mihaicristiancondrea.android.libs.apptoolkit.feature.developer.ui.extensions
+package com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.screen
 
-import androidx.compose.ui.Modifier
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.GroupedItemPosition
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.groupedPreferenceItem
+import androidx.compose.runtime.Composable
 
-internal fun Modifier.groupedDeveloperPreference(position: GroupedItemPosition): Modifier =
-    groupedPreferenceItem(position = position, outerRadius = SizeConstants.LargeMediumSize)
+/**
+ * Connects UI actions from [content] to a screen's action handler and event dispatcher.
+ *
+ * [handleAction] performs UI work and can call the supplied [onEvent] to send a ViewModel event.
+ */
+@Composable
+fun <Action, Event> ScreenActionHandler(
+    onEvent: (Event) -> Unit,
+    handleAction: (Action, (Event) -> Unit) -> Unit,
+    content: @Composable (onAction: (Action) -> Unit) -> Unit,
+) {
+    content { action -> handleAction(action, onEvent) }
+}

@@ -17,38 +17,33 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.theme.ui
 
-import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.AcUnit
-import androidx.compose.material.icons.outlined.AutoAwesome
-import androidx.compose.material.icons.outlined.CloudOff
-import androidx.compose.material.icons.outlined.WaterDrop
+import androidx.compose.foundation.selection.selectableGroup
+import androidx.compose.material3.ListItemDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.models.WeatherEffect
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.icons.ToolkitIcon
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.R as CoreUiR
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.AnimatedIconButtonDirection
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.dialogs.BasicAlertDialog
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.layouts.sections.InfoMessageSection
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.PreferenceItemDefaults
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.RadioButtonPreferenceItem
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.groupedItemPosition
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.groupedPreferenceItem
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.spacers.MediumVerticalSpacer
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.theme.R
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.theme.ui.contracts.ThemeSettingsEvent
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.theme.ui.mappers.iconImageVector
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.theme.ui.mappers.labelResId
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.theme.ui.states.ThemeSettingsUiState
 import org.koin.compose.viewmodel.koinViewModel
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.R as CoreUiR
 
 /**
  * The theme page's app bar action, once the About screen's easter egg is found: a button showing
@@ -67,7 +62,7 @@ internal fun WeatherEffectAction() {
 
     AnimatedIconButtonDirection(
         fromRight = true,
-        icon = ToolkitIcon.Vector(state.weatherEffect.icon),
+        icon = ToolkitIcon.Vector(state.weatherEffect.iconImageVector()),
         contentDescription = stringResource(R.string.weather_effect),
         onClick = { open = true },
     )
@@ -102,23 +97,27 @@ internal fun WeatherEffectDialog(
             }
             onDismiss()
         },
-        icon = selected.icon,
+        icon = selected.iconImageVector(),
         showDismissButton = false,
         confirmButtonText = stringResource(id = CoreUiR.string.done_button_content_description),
         title = stringResource(id = R.string.weather_effect),
         content = {
-            Column(verticalArrangement = Arrangement.spacedBy(SizeConstants.ExtraTinySize)) {
-                options.forEachIndexed { index, effect ->
-                    RadioButtonPreferenceItem(
-                        modifier = Modifier.groupedPreferenceItem(
-                            position = groupedItemPosition(index = index, size = options.size),
-                            outerRadius = SizeConstants.LargeMediumSize,
-                            horizontalPadding = SizeConstants.ZeroSize,
-                        ),
-                        text = stringResource(id = effect.label),
-                        isChecked = selected == effect,
-                        onCheckedChange = { selected = effect },
-                    )
+            Column(verticalArrangement = Arrangement.spacedBy(space = ListItemDefaults.SegmentedGap)) {
+                Column(
+                    modifier = Modifier.selectableGroup(),
+                    verticalArrangement = Arrangement.spacedBy(space = ListItemDefaults.SegmentedGap),
+                ) {
+                    options.forEachIndexed { index, effect ->
+                        RadioButtonPreferenceItem(
+                            text = stringResource(id = effect.labelResId()),
+                            selected = selected == effect,
+                            shapes = PreferenceItemDefaults.segmentedShapes(
+                                index = index,
+                                count = options.size,
+                            ),
+                            onSelect = { selected = effect },
+                        )
+                    }
                 }
                 MediumVerticalSpacer()
                 InfoMessageSection(message = stringResource(id = R.string.weather_effect_info))
@@ -126,20 +125,3 @@ internal fun WeatherEffectDialog(
         },
     )
 }
-
-private val WeatherEffect.icon: ImageVector
-    get() = when (this) {
-        WeatherEffect.Automatic -> Icons.Outlined.AutoAwesome
-        WeatherEffect.Snow -> Icons.Outlined.AcUnit
-        WeatherEffect.Rain -> Icons.Outlined.WaterDrop
-        WeatherEffect.Off -> Icons.Outlined.CloudOff
-    }
-
-@get:StringRes
-private val WeatherEffect.label: Int
-    get() = when (this) {
-        WeatherEffect.Automatic -> R.string.weather_effect_automatic
-        WeatherEffect.Snow -> R.string.weather_effect_snow
-        WeatherEffect.Rain -> R.string.weather_effect_rain
-        WeatherEffect.Off -> R.string.weather_effect_off
-    }

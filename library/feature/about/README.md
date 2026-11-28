@@ -57,8 +57,9 @@ flowchart TD
     Entry["aboutScreen()"] -->|"AboutScreen"| Screen["AboutScreen"]
     Screen --> Host["ScreenHost"]
     Host --> Content["AboutScreenContent"]
-    Content -->|"Version gesture, copy or retry"| VM["AboutViewModel"]
-    Content -->|"Licenses action"| Licenses["LicensesScreen"]
+    Content -->|"AboutItemAction"| Screen
+    Screen -->|"Licenses action"| Licenses["LicensesScreen"]
+    Screen -->|"Load, copy resolved text or unlock"| VM["AboutViewModel"]
     VM -->|"AboutUiState and messages"| Host
     VM --> Repo["AboutRepository / DefaultAboutRepository"]
     Repo --> Build["BuildInfoRepository"]
@@ -73,8 +74,8 @@ flowchart TD
 
 - About screen presentation is data-driven: `AboutRepository` returns the raw `AboutInfo` metadata
   and `ui/mappers` turns it into an ordered list of `AboutItem` models (headers and grouped
-  preferences) with titles, summaries, actions, and card positions, so `AboutScreen` remains purely
-  declarative and the data layer stays free of rendering concerns.
+  preferences) with titles, summaries, actions, and card positions. `AboutScreenContent` renders
+  the rows and forwards their actions to `ScreenActionHandler`.
 - The clipboard is a platform data source, so `AboutViewModel` writes it through
   `ClipboardRepository` from `:library:core:common` and holds no `Context`. The write runs on the
   main dispatcher, where `viewModelScope` already is, because it is a system UI interaction.
@@ -87,12 +88,12 @@ flowchart TD
   displays rather than a second lookup resolved under a different configuration. Both texts are
   `UiText`, so a row whose value is a string resource copies as readily as one holding a
   formatted value.
-- The build-version row counts taps toward the easter egg. Clipboard actions on other rows copy the
-  displayed value. The licenses row opens `LicensesScreen`.
-- The fifth tap plays konfetti when system animations are enabled and raises
-  `AboutEvent.EasterEggFound`. `AboutViewModel` records the unlock through
-  `SeasonalThemeRepository`, which keeps the holiday palettes and snowfall available all year.
-  Only the first unlock shows a snackbar.
+- The action handler resolves clipboard text in the current screen locale and dispatches
+  `AboutEvent.CopyToClipboard`. It opens the licenses page through the screen's navigator.
+- `TapCelebration` keeps the cumulative build-version tap count across recreation.
+  Every fifth tap sends `AboutEvent.EasterEggFound` and plays confetti if system animations are
+  enabled. The ViewModel persists the unlock through `SeasonalThemeRepository` and shows a
+  snackbar on the first unlock.
 - The page takes its content as a parameter. `aboutScreen(about = ...)` lets an app wrap
   `AboutScreen` (to react to version taps, say) and keep the Toolkit's key and pane role, instead of
   re-declaring the page.

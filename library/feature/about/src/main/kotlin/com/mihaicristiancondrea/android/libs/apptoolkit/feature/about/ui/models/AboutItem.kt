@@ -18,7 +18,6 @@
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.ui.models
 
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.UiText
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.GroupedItemPosition
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.ui.contracts.AboutItemAction
 
 /**
@@ -35,16 +34,19 @@ sealed interface AboutItem {
     ) : AboutItem
 
     /**
-     * A preference row with a grouped position and an optional action.
+     * A preference row with an optional action.
      *
      * @property countsVersionTap Whether taps on this row count toward the version gesture.
+     * @property index Position of the row in its section, which picks its segmented shape.
+     * @property count Number of rows in its section.
      */
     data class Preference(
         override val key: String,
         val title: UiText,
         val summary: UiText,
-        val position: GroupedItemPosition = GroupedItemPosition.MIDDLE,
         val action: AboutItemAction? = null,
-        val countsVersionTap: Boolean = false,
+        val countsVersionTap: Boolean = action == AboutItemAction.VersionTap,
+        val index: Int = 0,
+        val count: Int = 1,
     ) : AboutItem
 }

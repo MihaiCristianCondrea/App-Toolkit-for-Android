@@ -45,21 +45,16 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.context.isSystemAnimationDisabled
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.style.spacing.spacing
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.effects.CelebrationConfetti
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.spacers.ExtraLargeIncreasedVerticalSpacer
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.spacers.LargeVerticalSpacer
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.onboarding.R
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.onboarding.ui.utils.FinalOnboardingKonfettiState
 import kotlinx.coroutines.delay
-import nl.dionsegijn.konfetti.compose.KonfettiView
-import nl.dionsegijn.konfetti.core.Angle
-import nl.dionsegijn.konfetti.core.Party
-import nl.dionsegijn.konfetti.core.Position
-import nl.dionsegijn.konfetti.core.Spread
-import nl.dionsegijn.konfetti.core.emitter.Emitter
-import java.util.concurrent.TimeUnit
 import kotlin.time.Duration.Companion.milliseconds
 
 /**
@@ -74,30 +69,6 @@ fun FinishOnboardingPage(isSelected: Boolean = true) {
     val scrollState = rememberScrollState()
     val iconVisible = remember { mutableStateOf(value = false) }
     val showKonfetti = remember { mutableStateOf(value = false) }
-
-    val parties = remember {
-        val party = Party(
-            speed = 0f,
-            maxSpeed = 30f,
-            damping = 0.9f,
-            spread = Spread.ROUND,
-            position = Position.Relative(x = 0.5, y = 0.3),
-            emitter = Emitter(duration = 200, timeUnit = TimeUnit.MILLISECONDS).max(amount = 100),
-        )
-
-        val partyRain = Party(
-            emitter = Emitter(duration = 3, timeUnit = TimeUnit.SECONDS).perSecond(amount = 60),
-            angle = Angle.BOTTOM,
-            spread = Spread.SMALL,
-            speed = 5f,
-            maxSpeed = 15f,
-            timeToLive = 3000L,
-            position = Position.Relative(x = 0.0, y = 0.0)
-                .between(value = Position.Relative(x = 1.0, y = 0.0)),
-        )
-
-        listOf(party, partyRain)
-    }
 
     val transition = updateTransition(
         targetState = iconVisible.value,
@@ -141,8 +112,8 @@ fun FinishOnboardingPage(isSelected: Boolean = true) {
                 .fillMaxSize()
                 .verticalScroll(state = scrollState)
                 .padding(
-                    horizontal = SizeConstants.MediumSize * 2,
-                    vertical = SizeConstants.ExtraLargeIncreasedSize,
+                    horizontal = MaterialTheme.spacing.extraLargeCompact,
+                    vertical = MaterialTheme.spacing.extraLargeIncreased,
                 ),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center,
@@ -151,7 +122,7 @@ fun FinishOnboardingPage(isSelected: Boolean = true) {
                 imageVector = Icons.Filled.CheckCircle,
                 contentDescription = stringResource(id = R.string.onboarding_complete_icon_desc),
                 modifier = Modifier
-                    .size(size = SizeConstants.LauncherIconSize + SizeConstants.ExtraLargeIncreasedSize)
+                    .size(size = 80.dp)
                     .graphicsLayer {
                         scaleX = iconSettleScale
                         scaleY = iconSettleScale
@@ -180,15 +151,12 @@ fun FinishOnboardingPage(isSelected: Boolean = true) {
                 style = MaterialTheme.typography.bodyLarge,
                 textAlign = TextAlign.Center,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
-                modifier = Modifier.padding(horizontal = SizeConstants.LargeSize),
+                modifier = Modifier.padding(horizontal = MaterialTheme.spacing.large),
             )
         }
 
         if (showKonfetti.value) {
-            KonfettiView(
-                modifier = Modifier.fillMaxSize(),
-                parties = parties,
-            )
+            CelebrationConfetti(modifier = Modifier.fillMaxSize())
         }
     }
 }
